@@ -1,124 +1,138 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.entity.*;
+import net.minecraft.client.renderer.vertex.*;
+import net.minecraft.client.*;
+import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.item.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
 
-import org.lwjgl.opengl.GL11;
-
-import ckathode.weaponmod.WeaponModResources;
-import ckathode.weaponmod.entity.projectile.EntityBoomerang;
-
-public class RenderBoomerang extends Render
+public class RenderBoomerang extends Render<EntityBoomerang>
 {
-	private void renderBoomerang(EntityBoomerang entityarrow, double d, double d1, double d2, float f, float f1)
-	{
-		bindEntityTexture(entityarrow);
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d, (float) d1, (float) d2);
-		GL11.glRotatef(entityarrow.prevRotationPitch + (entityarrow.rotationPitch - entityarrow.prevRotationPitch) * f1, 0.0F, 0.0F, 1.0F);
-		GL11.glRotatef((entityarrow.prevRotationYaw + (entityarrow.rotationYaw - entityarrow.prevRotationYaw) * f1) - 90F, 0.0F, 1.0F, 0.0F);
-		Tessellator tess = Tessellator.instance;
-		
-		int mat = entityarrow.getWeaponMaterialId();
-		float[] color = entityarrow.getMaterialColor();
-		float ft0 = 0.0F;
-		float ft1 = 0.5F;
-		float ft2 = 1.0F;
-		
-		float fh = 0.08F;
-		float f2 = 0.2F;
-		float f3 = 0.9F;
-		float f4 = 1F - f2;
-		
-		float ft3 = 0.5F;
-		float ft4 = 0.65625F;
-		
-		GL11.glTranslatef(-0.5F, 0F, -0.5F);
-		GL11.glColor3f(1F, 1F, 1F);
-		GL11.glNormal3f(0F, 1F, 0F);
-		tess.startDrawingQuads();
-		tess.setColorOpaque_F(1F, 1F, 1F);
-		tess.addVertexWithUV(0D, 0D, 1D, ft1, ft0);
-		tess.addVertexWithUV(1D, 0D, 1D, ft0, ft0);
-		tess.addVertexWithUV(1D, 0D, 0D, ft0, ft1);
-		tess.addVertexWithUV(0D, 0D, 0D, ft1, ft1);
-		
-		if (mat != 0)
-		{
-			tess.setColorOpaque_F(color[0], color[1], color[2]);
-			tess.addVertexWithUV(0D, 0D, 1D, ft2, ft0);
-			tess.addVertexWithUV(1D, 0D, 1D, ft1, ft0);
-			tess.addVertexWithUV(1D, 0D, 0D, ft1, ft1);
-			tess.addVertexWithUV(0D, 0D, 0D, ft2, ft1);
-		}
-		tess.draw();
-		GL11.glNormal3f(0F, -1F, 0F);
-		tess.startDrawingQuads();
-		tess.setColorOpaque_F(1F, 1F, 1F);
-		tess.addVertexWithUV(1D, 0D, 0D, ft0, ft1);
-		tess.addVertexWithUV(1D, 0D, 1D, ft1, ft1);
-		tess.addVertexWithUV(0D, 0D, 1D, ft1, ft0);
-		tess.addVertexWithUV(0D, 0D, 0D, ft0, ft0);
-		
-		if (mat != 0)
-		{
-			tess.setColorOpaque_F(color[0], color[1], color[2]);
-			tess.addVertexWithUV(1D, 0D, 0D, ft1, ft1);
-			tess.addVertexWithUV(1D, 0D, 1D, ft2, ft1);
-			tess.addVertexWithUV(0D, 0D, 1D, ft2, ft0);
-			tess.addVertexWithUV(0D, 0D, 0D, ft1, ft0);
-		}
-		tess.draw();
-		
-		float sqrt2 = (float) Math.sqrt(2);
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glNormal3f(-sqrt2, 0F, sqrt2);
-		tess.startDrawingQuads();
-		tess.setColorOpaque_F(1F, 1F, 1F);
-		tess.addVertexWithUV(f2, -fh, f4, ft1, ft3);
-		tess.addVertexWithUV(f2, fh, f4, ft1, ft4);
-		tess.addVertexWithUV(f3, fh, f4, ft0, ft4);
-		tess.addVertexWithUV(f3, -fh, f4, ft0, ft3);
-		
-		if (mat != 0)
-		{
-			tess.setColorOpaque_F(color[0], color[1], color[2]);
-			tess.addVertexWithUV(f2, -fh, f4, ft2, ft3);
-			tess.addVertexWithUV(f2, fh, f4, ft2, ft4);
-			tess.addVertexWithUV(f3, fh, f4, ft1, ft4);
-			tess.addVertexWithUV(f3, -fh, f4, ft1, ft3);
-		}
-		
-		tess.setColorOpaque_F(1F, 1F, 1F);
-		tess.addVertexWithUV(f2, -fh, f4, ft1, ft3);
-		tess.addVertexWithUV(f2, fh, f4, ft1, ft4);
-		tess.addVertexWithUV(f2, fh, f2, ft0, ft4);
-		tess.addVertexWithUV(f2, -fh, f2, ft0, ft3);
-		
-		if (mat != 0)
-		{
-			tess.setColorOpaque_F(color[0], color[1], color[2]);
-			tess.addVertexWithUV(f2, -fh, f4, ft2, ft3);
-			tess.addVertexWithUV(f2, fh, f4, ft2, ft4);
-			tess.addVertexWithUV(f2, fh, f2, ft1, ft4);
-			tess.addVertexWithUV(f2, -fh, f2, ft1, ft3);
-		}
-		tess.draw();
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glPopMatrix();
-	}
-	
-	@Override
-	public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
-	{
-		renderBoomerang((EntityBoomerang) var1, var2, var4, var6, var8, var9);
-	}
-	
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
-	{
-		return WeaponModResources.Textures.BOOMERANG;
-	}
+    public RenderBoomerang(final RenderManager renderManager) {
+        super(renderManager);
+    }
+    
+    public void doRender(final EntityBoomerang entityboomerang, final double d, final double d1, final double d2, final float f, final float f1) {
+        if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
+            this.bindEntityTexture(entityboomerang);
+            GlStateManager.pushMatrix();
+            GlStateManager.disableLighting();
+            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.rotate(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
+            GlStateManager.rotate(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+            final Tessellator tessellator = Tessellator.getInstance();
+            final BufferBuilder vertexbuffer = tessellator.getBuffer();
+            final int mat = entityboomerang.getWeaponMaterialId();
+            final float[] color = entityboomerang.getMaterialColor();
+            final float ft0 = 0.0f;
+            final float ft2 = 0.5f;
+            final float ft3 = 1.0f;
+            final float fh = 0.08f;
+            final float f2 = 0.2f;
+            final float f3 = 0.9f;
+            final float f4 = 0.8f;
+            final float ft4 = 0.5f;
+            final float ft5 = 0.65625f;
+            GlStateManager.translate(-0.5f, 0.0f, -0.5f);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            if (this.renderOutlines) {
+                GlStateManager.enableColorMaterial();
+                GlStateManager.enableOutlineMode(this.getTeamColor(entityboomerang));
+            }
+            GlStateManager.glNormal3f(0.0f, 1.0f, 0.0f);
+            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+            vertexbuffer.pos(0.0, 0.0, 1.0).tex(0.5, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(1.0, 0.0, 1.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(1.0, 0.0, 0.0).tex(0.0, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.0, 0.0, 0.0).tex(0.5, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            if (mat != 0) {
+                vertexbuffer.pos(0.0, 0.0, 1.0).tex(1.0, 0.0).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(1.0, 0.0, 1.0).tex(0.5, 0.0).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(1.0, 0.0, 0.0).tex(0.5, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.0, 0.0, 0.0).tex(1.0, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+            }
+            tessellator.draw();
+            GlStateManager.glNormal3f(0.0f, -1.0f, 0.0f);
+            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+            vertexbuffer.pos(1.0, 0.0, 0.0).tex(0.0, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(1.0, 0.0, 1.0).tex(0.5, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.0, 0.0, 1.0).tex(0.5, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.0, 0.0, 0.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            if (mat != 0) {
+                vertexbuffer.pos(1.0, 0.0, 0.0).tex(0.5, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(1.0, 0.0, 1.0).tex(1.0, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.0, 0.0, 1.0).tex(1.0, 0.0).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.0, 0.0, 0.0).tex(0.5, 0.0).color(color[0], color[1], color[2], 1.0f).endVertex();
+            }
+            tessellator.draw();
+            final float sqrt2 = (float)Math.sqrt(2.0);
+            GlStateManager.disableCull();
+            GlStateManager.glNormal3f(-sqrt2, 0.0f, sqrt2);
+            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+            vertexbuffer.pos(0.2, -0.08, 0.8).tex(0.5, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.2, 0.08, 0.8).tex(0.5, 0.65625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.9, 0.08, 0.8).tex(0.0, 0.65625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.9, -0.08, 0.8).tex(0.0, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            if (mat != 0) {
+                vertexbuffer.pos(0.2, -0.08, 0.8).tex(1.0, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.2, 0.08, 0.8).tex(1.0, 0.65625).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.9, 0.08, 0.8).tex(0.5, 0.65625).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.9, -0.08, 0.8).tex(0.5, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+            }
+            vertexbuffer.pos(0.2, -0.08, 0.8).tex(0.5, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.2, 0.08, 0.8).tex(0.5, 0.65625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.2, 0.08, 0.2).tex(0.0, 0.65625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            vertexbuffer.pos(0.2, -0.08, 0.2).tex(0.0, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
+            if (mat != 0) {
+                vertexbuffer.pos(0.2, -0.08, 0.8).tex(1.0, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.2, 0.08, 0.8).tex(1.0, 0.65625).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.2, 0.08, 0.2).tex(0.5, 0.65625).color(color[0], color[1], color[2], 1.0f).endVertex();
+                vertexbuffer.pos(0.2, -0.08, 0.2).tex(0.5, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
+            }
+            tessellator.draw();
+            if (this.renderOutlines) {
+                GlStateManager.disableOutlineMode();
+                GlStateManager.disableColorMaterial();
+            }
+            GlStateManager.enableCull();
+            GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
+        }
+        else {
+            final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+            GlStateManager.pushMatrix();
+            this.bindEntityTexture(entityboomerang);
+            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.enableRescaleNormal();
+            GlStateManager.scale(0.85f, 0.85f, 0.85f);
+            GlStateManager.rotate(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
+            GlStateManager.rotate(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+            GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+            if (this.renderOutlines) {
+                GlStateManager.enableColorMaterial();
+                GlStateManager.enableOutlineMode(this.getTeamColor(entityboomerang));
+            }
+            itemRender.renderItem(this.getStackToRender(entityboomerang), ItemCameraTransforms.TransformType.NONE);
+            if (this.renderOutlines) {
+                GlStateManager.disableOutlineMode();
+                GlStateManager.disableColorMaterial();
+            }
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.popMatrix();
+        }
+        super.doRender(entityboomerang, d, d1, d2, f, f1);
+    }
+    
+    public ItemStack getStackToRender(final EntityBoomerang entity) {
+        return entity.getWeapon();
+    }
+    
+    protected ResourceLocation getEntityTexture(final EntityBoomerang entity) {
+        return WeaponModResources.Textures.BOOMERANG;
+    }
 }

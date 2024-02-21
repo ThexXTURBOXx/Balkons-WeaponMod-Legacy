@@ -1,278 +1,238 @@
 package ckathode.weaponmod.entity.projectile;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.World;
-import ckathode.weaponmod.WeaponDamageSource;
-import ckathode.weaponmod.item.IItemWeapon;
+import net.minecraft.world.*;
+import net.minecraft.item.*;
+import net.minecraft.entity.*;
+import net.minecraft.init.*;
+import ckathode.weaponmod.*;
+import ckathode.weaponmod.item.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
+import net.minecraft.block.state.*;
+import net.minecraft.network.datasync.*;
 
 public class EntityBoomerang extends EntityMaterialProjectile
 {
-	public static final double	RETURN_STRENGTH		= 0.05D;
-	public static final float	MIN_FLOAT_STRENGTH	= 0.4F;
-	
-	private float				soundTimer;
-	public float				floatStrength;
-	
-	public EntityBoomerang(World world)
-	{
-		super(world);
-	}
-	
-	public EntityBoomerang(World world, double x, double y, double z)
-	{
-		this(world);
-		setPosition(x, y, z);
-	}
-	
-	public EntityBoomerang(World world, EntityLivingBase entityliving, ItemStack itemstack, float f)
-	{
-		this(world);
-		shootingEntity = entityliving;
-		setPickupModeFromEntity(entityliving);
-		setThrownItemStack(itemstack);
-		setLocationAndAngles(entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
-		posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * 0.16F;
-		posY -= 0.1D;
-		posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * 0.16F;
-		setPosition(posX, posY, posZ);
-		yOffset = 0.0F;
-		motionX = -MathHelper.sin((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);
-		motionZ = MathHelper.cos((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);
-		motionY = -MathHelper.sin((rotationPitch / 180F) * 3.141593F);
-		setThrowableHeading(motionX, motionY, motionZ, f, 5.0F);
-		soundTimer = 0;
-		floatStrength = Math.min(1.5F, f);
-		dataWatcher.updateObject(29, Integer.valueOf(Float.floatToRawIntBits(floatStrength)));
-	}
-	
-	@Override
-	public void entityInit()
-	{
-		super.entityInit();
-		dataWatcher.addObject(29, Integer.valueOf(Float.floatToRawIntBits(0F)));
-	}
-	
-	@Override
-	public void onUpdate()
-	{
-		super.onUpdate();
-		floatStrength = Float.intBitsToFloat(dataWatcher.getWatchableObjectInt(29));
-		
-		if (inGround) return;
-		
-		floatStrength *= 0.994F;
-		if (floatStrength < MIN_FLOAT_STRENGTH)
-		{
-			if (getIsCritical())
-			{
-				setIsCritical(false);
-			}
-			floatStrength = 0F;
-		}
-		float limitedStrength = Math.min(1F, floatStrength);
-		
-		if (!beenInGround)
-		{
-			rotationYaw += 20F * floatStrength;
-		}
-		
-		if (!beenInGround && shootingEntity != null && floatStrength > 0F)
-		{
-			double dx;
-			double dy;
-			double dz;
-			dx = posX - shootingEntity.posX;
-			dy = posY - shootingEntity.posY - shootingEntity.getEyeHeight();
-			dz = posZ - shootingEntity.posZ;
-			
-			double d = Math.sqrt(dx * dx + dy * dy + dz * dz);
-			dx /= d;
-			dy /= d;
-			dz /= d;
-			
-			motionX -= RETURN_STRENGTH * dx;
-			motionY -= RETURN_STRENGTH * dy;
-			motionZ -= RETURN_STRENGTH * dz;
-			
-			soundTimer += limitedStrength;
-			if (soundTimer > 3F)
-			{
-				worldObj.playSoundAtEntity(this, "random.bow", 0.6F, 1.0F / (rand.nextFloat() * 0.2F + 2.2F - limitedStrength));
-				soundTimer %= 3F;
-			}
-		}
-		
-		dataWatcher.updateObject(29, Integer.valueOf(Float.floatToRawIntBits(floatStrength)));
-	}
-	
-	@Override
-	public void onEntityHit(Entity entity)
-	{
-		if (worldObj.isRemote || floatStrength < MIN_FLOAT_STRENGTH) return;
-		
-		if (entity == shootingEntity)
-		{
-			if (entity instanceof EntityPlayer)
-			{
-				EntityPlayer player = (EntityPlayer) entity;
-				ItemStack item = getPickupItem();
-				if (item == null) return;
-				
-				if (player.capabilities.isCreativeMode || player.inventory.addItemStackToInventory(item))
-				{
-					worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-					onItemPickup(player);
-					setDead();
-					return;
-				}
-			}
-			return;
-		}
-		
-		DamageSource damagesource = null;
-		if (shootingEntity == null)
-		{
-			damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-		} else
-		{
-			damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, shootingEntity);
-		}
-		float damage = ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 2 + extraDamage;
-		damage += getMeleeHitDamage(entity);
-		if (getIsCritical())
-		{
-			damage += 2;
-		}
-		if (entity.attackEntityFrom(damagesource, damage))
-		{
-			applyEntityHitEffects(entity);
-			playHitSound();
-			if (thrownItem.getItemDamage() + 1 > thrownItem.getMaxDamage())
-			{
-				thrownItem.stackSize--;
-				setDead();
-			} else
-			{
-				if (shootingEntity instanceof EntityLivingBase)
-				{
-					thrownItem.damageItem(1, (EntityLivingBase) shootingEntity);
-				} else
-				{
-					thrownItem.attemptDamageItem(1, rand);
-				}
-				setVelocity(0D, 0D, 0D);
-			}
-		} else
-		{
-			bounceBack();
-		}
-	}
-	
-	@Override
-	public void onGroundHit(MovingObjectPosition mop)
-	{
-		xTile = mop.blockX;
-		yTile = mop.blockY;
-		zTile = mop.blockZ;
-		inTile = worldObj.getBlock(xTile, yTile, zTile);
-		motionX = (float) (mop.hitVec.xCoord - posX);
-		motionY = (float) (mop.hitVec.yCoord - posY);
-		motionZ = (float) (mop.hitVec.zCoord - posZ);
-		float f1 = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
-		posX -= (motionX / f1) * 0.05D;
-		posY -= (motionY / f1) * 0.05D;
-		posZ -= (motionZ / f1) * 0.05D;
-		
-		motionX *= -rand.nextFloat() * 0.5F;
-		motionZ *= -rand.nextFloat() * 0.5F;
-		motionY = rand.nextFloat() * 0.1F;
-		if (mop.sideHit == 1)
-		{
-			inGround = true;
-		} else
-		{
-			inGround = false;
-		}
-		setIsCritical(false);
-		beenInGround = true;
-		floatStrength = 0F;
-		
-		if (inTile != null)
-		{
-			inTile.onEntityCollidedWithBlock(worldObj, xTile, yTile, zTile, this);
-		}
-	}
-	
-	@Override
-	public void playHitSound()
-	{
-		worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.9F));
-	}
-	
-	@Override
-	public boolean aimRotation()
-	{
-		return beenInGround || floatStrength < MIN_FLOAT_STRENGTH;
-	}
-	
-	@Override
-	public int getMaxLifetime()
-	{
-		return pickupMode == PICKUP_ALL || pickupMode == PICKUP_OWNER ? 0 : 1200;
-	}
-	
-	@Override
-	public boolean canBeCritical()
-	{
-		return true;
-	}
-	
-	@Override
-	public int getMaxArrowShake()
-	{
-		return 0;
-	}
-	
-	@Override
-	public float getGravity()
-	{
-		return beenInGround || floatStrength < MIN_FLOAT_STRENGTH ? 0.05F : 0F;
-	}
-	
-	@Override
-	public float getAirResistance()
-	{
-		return 0.98F;
-	}
-	
-	@Override
-	public void onCollideWithPlayer(EntityPlayer entityplayer)
-	{
-		//While flying, the boomerang can only be picked up by the owner player.
-		if (!beenInGround && ticksInAir > 5 && floatStrength >= MIN_FLOAT_STRENGTH)
-		{
-			if (entityplayer == shootingEntity)
-			{
-				ItemStack item = getPickupItem();
-				if (item == null) return;
-				
-				if (entityplayer.capabilities.isCreativeMode || entityplayer.inventory.addItemStackToInventory(item))
-				{
-					worldObj.playSoundAtEntity(this, "random.pop", 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-					onItemPickup(entityplayer);
-					setDead();
-					return;
-				}
-			}
-		}
-		
-		//So if not flying, handle picking up as normal.
-		super.onCollideWithPlayer(entityplayer);
-	}
+    private static final DataParameter<Integer> BOOMERANG;
+    public static final double RETURN_STRENGTH = 0.05;
+    public static final float MIN_FLOAT_STRENGTH = 0.4f;
+    private float soundTimer;
+    public float floatStrength;
+
+    public EntityBoomerang(final World world) {
+        super(world);
+    }
+
+    public EntityBoomerang(final World world, final double x, final double y, final double z) {
+        this(world);
+        this.setPosition(x, y, z);
+    }
+
+    public EntityBoomerang(final World world, final EntityLivingBase shooter, final ItemStack itemstack) {
+        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
+        this.setPickupModeFromEntity((EntityLivingBase)(this.shootingEntity = shooter));
+        this.setThrownItemStack(itemstack);
+        this.soundTimer = 0.0f;
+    }
+
+    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3, final float f4) {
+        final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        final float y = -MathHelper.sin(f * 0.017453292f);
+        final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        this.shoot(x, y, z, f3, f4);
+        this.motionX += entity.motionX;
+        this.motionZ += entity.motionZ;
+        if (!entity.onGround) {
+            this.motionY += entity.motionY;
+        }
+        this.floatStrength = Math.min(1.5f, f3);
+        this.dataManager.set(EntityBoomerang.BOOMERANG, Float.floatToRawIntBits(this.floatStrength));
+    }
+
+    @Override
+    public void entityInit() {
+        super.entityInit();
+        this.dataManager.register(EntityBoomerang.BOOMERANG, Float.floatToRawIntBits(0.0f));
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        this.floatStrength = Float.intBitsToFloat(this.dataManager.get(EntityBoomerang.BOOMERANG));
+        if (this.inGround) {
+            return;
+        }
+        this.floatStrength *= 0.994f;
+        if (this.floatStrength < 0.4f) {
+            if (this.getIsCritical()) {
+                this.setIsCritical(false);
+            }
+            this.floatStrength = 0.0f;
+        }
+        final float limitedStrength = Math.min(1.0f, this.floatStrength);
+        if (!this.beenInGround) {
+            this.rotationYaw += 20.0f * this.floatStrength;
+        }
+        if (!this.beenInGround && this.shootingEntity != null && this.floatStrength > 0.0f) {
+            double dx = this.posX - this.shootingEntity.posX;
+            double dy = this.posY - this.shootingEntity.posY - this.shootingEntity.getEyeHeight();
+            double dz = this.posZ - this.shootingEntity.posZ;
+            final double d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            dx /= d;
+            dy /= d;
+            dz /= d;
+            this.motionX -= 0.05 * dx;
+            this.motionY -= 0.05 * dy;
+            this.motionZ -= 0.05 * dz;
+            this.soundTimer += limitedStrength;
+            if (this.soundTimer > 3.0f) {
+                this.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 0.6f, 1.0f / (this.rand.nextFloat() * 0.2f + 2.2f - limitedStrength));
+                this.soundTimer %= 3.0f;
+            }
+        }
+        this.dataManager.set(EntityBoomerang.BOOMERANG, Float.floatToRawIntBits(this.floatStrength));
+    }
+
+    @Override
+    public void onEntityHit(final Entity entity) {
+        if (this.world.isRemote || this.floatStrength < 0.4f) {
+            return;
+        }
+        if (entity == this.shootingEntity) {
+            if (entity instanceof EntityPlayer) {
+                final EntityPlayer player = (EntityPlayer)entity;
+                final ItemStack item = this.getPickupItem();
+                if (item.isEmpty()) {
+                    return;
+                }
+                if (player.capabilities.isCreativeMode || player.inventory.addItemStackToInventory(item)) {
+                    this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                    this.onItemPickup(player);
+                    this.setDead();
+                }
+            }
+            return;
+        }
+        DamageSource damagesource;
+        if (this.shootingEntity == null) {
+            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
+        }
+        else {
+            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
+        }
+        float damage = ((IItemWeapon)this.thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 3.0f + this.extraDamage;
+        damage += this.getMeleeHitDamage(entity);
+        if (this.getIsCritical()) {
+            damage += 2.0f;
+        }
+        if (entity.attackEntityFrom(damagesource, damage)) {
+            this.applyEntityHitEffects(entity);
+            this.playHitSound();
+            if (this.thrownItem.getItemDamage() + 1 > this.thrownItem.getMaxDamage()) {
+                this.thrownItem.shrink(1);
+                this.setDead();
+            }
+            else {
+                if (this.shootingEntity instanceof EntityLivingBase) {
+                    this.thrownItem.damageItem(1, (EntityLivingBase)this.shootingEntity);
+                }
+                else {
+                    this.thrownItem.attemptDamageItem(1, this.rand, null);
+                }
+                this.setVelocity(0.0, 0.0, 0.0);
+            }
+        }
+        else {
+            this.bounceBack();
+        }
+    }
+
+    @Override
+    public void onGroundHit(final RayTraceResult raytraceResult) {
+        final BlockPos blockpos = raytraceResult.getBlockPos();
+        this.xTile = blockpos.getX();
+        this.yTile = blockpos.getY();
+        this.zTile = blockpos.getZ();
+        final IBlockState iblockstate = this.world.getBlockState(blockpos);
+        this.inTile = iblockstate.getBlock();
+        this.motionX = raytraceResult.hitVec.x - this.posX;
+        this.motionY = raytraceResult.hitVec.y - this.posY;
+        this.motionZ = raytraceResult.hitVec.z - this.posZ;
+        final float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+        this.posX -= this.motionX / f1 * 0.05;
+        this.posY -= this.motionY / f1 * 0.05;
+        this.posZ -= this.motionZ / f1 * 0.05;
+        this.motionX *= -this.rand.nextFloat() * 0.5f;
+        this.motionZ *= -this.rand.nextFloat() * 0.5f;
+        this.motionY = this.rand.nextFloat() * 0.1f;
+        if (raytraceResult.sideHit == EnumFacing.UP) {
+            this.inGround = true;
+        }
+        else {
+            this.inGround = false;
+        }
+        this.setIsCritical(false);
+        this.beenInGround = true;
+        this.floatStrength = 0.0f;
+        if (this.inTile != null) {
+            this.inTile.onEntityCollision(this.world, blockpos, iblockstate, this);
+        }
+    }
+
+    @Override
+    public void playHitSound() {
+        this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.9f));
+    }
+
+    @Override
+    public boolean aimRotation() {
+        return this.beenInGround || this.floatStrength < 0.4f;
+    }
+
+    @Override
+    public int getMaxLifetime() {
+        return (this.pickupMode == 1 || this.pickupMode == 3) ? 0 : 1200;
+    }
+
+    @Override
+    public boolean canBeCritical() {
+        return true;
+    }
+
+    @Override
+    public int getMaxArrowShake() {
+        return 0;
+    }
+
+    @Override
+    public float getGravity() {
+        return (this.beenInGround || this.floatStrength < 0.4f) ? 0.05f : 0.0f;
+    }
+
+    @Override
+    public float getAirResistance() {
+        return 0.98f;
+    }
+
+    @Override
+    public void onCollideWithPlayer(final EntityPlayer entityplayer) {
+        if (!this.beenInGround && this.ticksInAir > 5 && this.floatStrength >= 0.4f && entityplayer == this.shootingEntity) {
+            final ItemStack item = this.getPickupItem();
+            if (item == null) {
+                return;
+            }
+            if (entityplayer.capabilities.isCreativeMode || entityplayer.inventory.addItemStackToInventory(item)) {
+                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                this.onItemPickup(entityplayer);
+                this.setDead();
+                return;
+            }
+        }
+        super.onCollideWithPlayer(entityplayer);
+    }
+
+    static {
+        BOOMERANG = EntityDataManager.createKey(EntityBoomerang.class, DataSerializers.VARINT);
+    }
 }

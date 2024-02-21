@@ -1,22 +1,22 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.entity.IProjectile;
-import net.minecraft.world.World;
-import ckathode.weaponmod.entity.projectile.EntityDynamite;
+import net.minecraft.world.*;
+import net.minecraft.item.*;
+import net.minecraft.entity.*;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.dispenser.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.init.*;
+import net.minecraft.util.*;
 
 public class DispenseDynamite extends DispenseWeaponProjectile
 {
-	@Override
-	protected IProjectile getProjectileEntity(World world, IPosition pos)
-	{
-		return new EntityDynamite(world, pos.getX(), pos.getY(), pos.getZ());
-	}
-	
-	@Override
-	protected void playDispenseSound(IBlockSource blocksource)
-	{
-		blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(), "random.fuse", 1.0F, 1.2F);
-	}
+    protected IProjectile getProjectileEntity(final World world, final IPosition pos, final ItemStack stack) {
+        return new EntityDynamite(world, pos.getX(), pos.getY(), pos.getZ());
+    }
+    
+    @Override
+    protected void playDispenseSound(final IBlockSource blocksource) {
+        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.NEUTRAL, 1.0f, 1.2f);
+    }
 }

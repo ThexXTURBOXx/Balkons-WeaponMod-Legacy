@@ -1,0 +1,6 @@
+{
+    "parent": "weaponmod:item/flail.wood",
+    "textures": {
+        "layer0": "weaponmod:items/flail-thrown"
+    }
+}

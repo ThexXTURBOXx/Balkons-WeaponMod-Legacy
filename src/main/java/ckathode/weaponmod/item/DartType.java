@@ -1,52 +1,40 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.IIcon;
+import net.minecraft.potion.*;
+import net.minecraft.item.*;
+import net.minecraft.init.*;
 
 public class DartType
 {
-	public static DartType[]	dartTypes	= new DartType[128];
-	public static DartType		damage, hunger, slow, damage2;
-	
-	static
-	{
-		damage = new DartType(0, "dart", Blocks.cactus, new PotionEffect(Potion.poison.id, 120, 0));
-		hunger = new DartType(1, "dart_hunger", Items.rotten_flesh, new PotionEffect(Potion.hunger.id, 360, 0));
-		slow = new DartType(2, "dart_slow", Items.slime_ball, new PotionEffect(Potion.moveSlowdown.id, 360, 1));
-		damage2 = new DartType(3, "dart_damage", Items.spider_eye, new PotionEffect(Potion.poison.id, 120, 1));
-	}
-	
-	public static DartType getDartTypeFromStack(ItemStack itemstack)
-	{
-		int damage = itemstack.getItemDamage();
-		if (damage >= 0 && damage < dartTypes.length)
-		{
-			return dartTypes[damage];
-		}
-		return null;
-	}
-	
-	public final int	typeID;
-	public final String	typeName;
-	
-	public Object		craftItem;
-	public PotionEffect	potionEffect;
-	
-	public IIcon		itemIcon;
-	
-	public DartType(int id, String typename, Object craftitem, PotionEffect potioneffect)
-	{
-		dartTypes[id] = this;
-		typeID = id;
-		typeName = typename;
-		craftItem = craftitem;
-		potionEffect = potioneffect;
-		
-		itemIcon = null;
-	}
-	
+    public static DartType[] dartTypes;
+    public static DartType damage;
+    public static DartType hunger;
+    public static DartType slow;
+    public static DartType damage2;
+    public final int typeID;
+    public final String typeName;
+    public PotionEffect potionEffect;
+    
+    public static DartType getDartTypeFromStack(final ItemStack itemstack) {
+        final int damage = itemstack.getItemDamage();
+        if (damage >= 0 && damage < DartType.dartTypes.length) {
+            return DartType.dartTypes[damage];
+        }
+        return null;
+    }
+    
+    public DartType(final int id, final String typename, final PotionEffect potioneffect) {
+        DartType.dartTypes[id] = this;
+        this.typeID = id;
+        this.typeName = typename;
+        this.potionEffect = potioneffect;
+    }
+    
+    static {
+        DartType.dartTypes = new DartType[128];
+        DartType.damage = new DartType(0, "dart", new PotionEffect(MobEffects.POISON, 120, 0));
+        DartType.hunger = new DartType(1, "dart_hunger", new PotionEffect(MobEffects.HUNGER, 360, 0));
+        DartType.slow = new DartType(2, "dart_slow", new PotionEffect(MobEffects.SLOWNESS, 360, 1));
+        DartType.damage2 = new DartType(3, "dart_damage", new PotionEffect(MobEffects.POISON, 120, 1));
+    }
 }

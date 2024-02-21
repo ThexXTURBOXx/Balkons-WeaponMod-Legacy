@@ -1,161 +1,141 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.vertex.*;
+import net.minecraft.entity.*;
+import net.minecraft.client.*;
+import net.minecraft.util.math.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
 
-import org.lwjgl.opengl.GL11;
-
-import ckathode.weaponmod.WeaponModResources;
-import ckathode.weaponmod.entity.projectile.EntityFlail;
-
-public class RenderFlail extends Render
+public class RenderFlail extends Render<EntityFlail>
 {
-	public void renderFlail(EntityFlail entityarrow, double d, double d1, double d2, float f, float f1)
-	{
-		bindEntityTexture(entityarrow);
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d, (float) d1, (float) d2);
-		GL11.glRotatef((entityarrow.prevRotationYaw + (entityarrow.rotationYaw - entityarrow.prevRotationYaw) * f1) - 90F, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(entityarrow.prevRotationPitch + (entityarrow.rotationPitch - entityarrow.prevRotationPitch) * f1, 0.0F, 0.0F, 1.0F);
-		Tessellator tessellator = Tessellator.instance;
-		
-		// ===============FLAIL BALL===============
-		float[] color = entityarrow.getMaterialColor();
-		int i = 0;
-		float f2 = 0.0F;
-		float f3 = 0.5F;
-		float f4 = (0 + i * 10) / 32F;
-		float f5 = (5 + i * 10) / 32F;
-		float f6 = 0.0F;
-		float f7 = 0.15625F;
-		float f8 = (5 + i * 10) / 32F;
-		float f9 = (10 + i * 10) / 32F;
-		float f10 = 0.15F;
-		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		float f11 = -f1;
-		if (f11 > 0.0F)
-		{
-			float f12 = -MathHelper.sin(f11 * 3F) * f11;
-			GL11.glRotatef(f12, 0.0F, 0.0F, 1.0F);
-		}
-		
-		GL11.glColor3f(color[0], color[1], color[2]);
-		GL11.glRotatef(45F, 1.0F, 0.0F, 0.0F);
-		GL11.glScalef(f10, f10, f10);
-		GL11.glTranslatef(-4F, 0.0F, 0.0F);
-		GL11.glNormal3f(f10, 0.0F, 0.0F);
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(1.5D, -2D, -2D, f6, f8);
-		tessellator.addVertexWithUV(1.5D, -2D, 2D, f7, f8);
-		tessellator.addVertexWithUV(1.5D, 2D, 2D, f7, f9);
-		tessellator.addVertexWithUV(1.5D, 2D, -2D, f6, f9);
-		tessellator.draw();
-		GL11.glNormal3f(-f10, 0.0F, 0.0F);
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(1.5D, 2D, -2D, f6, f8);
-		tessellator.addVertexWithUV(1.5D, 2D, 2D, f7, f8);
-		tessellator.addVertexWithUV(1.5D, -2D, 2D, f7, f9);
-		tessellator.addVertexWithUV(1.5D, -2D, -2D, f6, f9);
-		tessellator.draw();
-		for (int j = 0; j < 4; j++)
-		{
-			GL11.glRotatef(90F, 1.0F, 0.0F, 0.0F);
-			GL11.glNormal3f(0.0F, 0.0F, f10);
-			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(-8D, -2D, 0.0D, f2, f4);
-			tessellator.addVertexWithUV(8D, -2D, 0.0D, f3, f4);
-			tessellator.addVertexWithUV(8D, 2D, 0.0D, f3, f5);
-			tessellator.addVertexWithUV(-8D, 2D, 0.0D, f2, f5);
-			tessellator.draw();
-		}
-		
-		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		GL11.glPopMatrix();
-		// =====================END========================
-		
-		// =====================FISH LINE========================
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d, (float) d1, (float) d2);
-		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		GL11.glScalef(0.5F, 0.5F, 0.5F);
-		byte byte0 = 2;
-		float f13 = (i * 8 + 0) / 128F; // 2
-		float f14 = (i * 8 + 8) / 128F; // 3
-		float f15 = (byte0 * 8 + 0) / 128F; // 4
-		float f16 = (byte0 * 8 + 8) / 128F; // 5
-		float f17 = 1.0F; // 6
-		float f18 = 0.5F; // 7
-		float f19 = 0.5F; // 8
-		GL11.glRotatef(180F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		tessellator.addVertexWithUV(0.0F - f18, 0.0F - f19, 0.0D, f13, f16);
-		tessellator.addVertexWithUV(f17 - f18, 0.0F - f19, 0.0D, f14, f16);
-		tessellator.addVertexWithUV(f17 - f18, 1.0F - f19, 0.0D, f14, f15);
-		tessellator.addVertexWithUV(0.0F - f18, 1.0F - f19, 0.0D, f13, f15);
-		tessellator.draw();
-		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		GL11.glPopMatrix();
-		if (entityarrow.shootingEntity instanceof EntityLivingBase)
-		{
-			float f22 = ((EntityLivingBase) entityarrow.shootingEntity).getSwingProgress(f1); // 11
-			float f23 = MathHelper.sin(MathHelper.sqrt_float(f22) * 3.141593F); // 12
-			Vec3 vec3d = Vec3.createVectorHelper(-0.5D, 0.03D, 0.8D);
-			vec3d.rotateAroundX((-(entityarrow.shootingEntity.prevRotationPitch + (entityarrow.shootingEntity.rotationPitch - entityarrow.shootingEntity.prevRotationPitch) * f1) * 3.141593F) / 180F);
-			vec3d.rotateAroundY((-(entityarrow.shootingEntity.prevRotationYaw + (entityarrow.shootingEntity.rotationYaw - entityarrow.shootingEntity.prevRotationYaw) * f1) * 3.141593F) / 180F);
-			vec3d.rotateAroundY(f23 * 0.5F);
-			vec3d.rotateAroundX(-f23 * 0.7F);
-			double d7 = entityarrow.shootingEntity.prevPosX + (entityarrow.shootingEntity.posX - entityarrow.shootingEntity.prevPosX) * f1 + vec3d.xCoord;
-			double d8 = entityarrow.shootingEntity.prevPosY + (entityarrow.shootingEntity.posY - entityarrow.shootingEntity.prevPosY) * f1 + vec3d.yCoord;
-			double d9 = entityarrow.shootingEntity.prevPosZ + (entityarrow.shootingEntity.posZ - entityarrow.shootingEntity.prevPosZ) * f1 + vec3d.zCoord;
-			if (renderManager.options.thirdPersonView > 0)
-			{
-				float f21 = ((((EntityLivingBase) entityarrow.shootingEntity).prevRenderYawOffset + (((EntityLivingBase) entityarrow.shootingEntity).renderYawOffset - ((EntityLivingBase) entityarrow.shootingEntity).prevRenderYawOffset) * f1) * 3.141593F) / 180F;
-				double d4 = MathHelper.sin(f21);
-				double d6 = MathHelper.cos(f21);
-				d7 = (entityarrow.shootingEntity.prevPosX + (entityarrow.shootingEntity.posX - entityarrow.shootingEntity.prevPosX) * f1) - d6 * 0.35D - d4 * 0.85D;
-				d8 = (entityarrow.shootingEntity.prevPosY + (entityarrow.shootingEntity.posY - entityarrow.shootingEntity.prevPosY) * f1) - 0.45D;
-				d9 = ((entityarrow.shootingEntity.prevPosZ + (entityarrow.shootingEntity.posZ - entityarrow.shootingEntity.prevPosZ) * f1) - d4 * 0.35D) + d6 * 0.85D;
-			}
-			double d10 = entityarrow.prevPosX + (entityarrow.posX - entityarrow.prevPosX) * f1;
-			double d11 = entityarrow.prevPosY + (entityarrow.posY - entityarrow.prevPosY) * f1 + 0.25D;
-			double d12 = entityarrow.prevPosZ + (entityarrow.posZ - entityarrow.prevPosZ) * f1;
-			double d13 = (float) (d7 - d10);
-			double d14 = (float) (d8 - d11);
-			double d15 = (float) (d9 - d12);
-			GL11.glDisable(3553 /* GL_TEXTURE_2D */);
-			GL11.glDisable(2896 /* GL_LIGHTING */);
-			tessellator.startDrawing(GL11.GL_LINE_STRIP);
-			tessellator.setColorOpaque_I(0);
-			int j = 16;
-			for (int k = 0; k <= j; k++)
-			{
-				float f24 = (float) k / (float) j;
-				tessellator.addVertex(d + d13 * f24, d1 + d14 * (f24 * f24 + f24) * 0.5D + 0.25D, d2 + d15 * f24);
-			}
-			
-			tessellator.draw();
-			GL11.glEnable(2896 /* GL_LIGHTING */);
-			GL11.glEnable(3553 /* GL_TEXTURE_2D */);
-		}
-		// =====================END========================
-	}
-	
-	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
-	{
-		renderFlail((EntityFlail) entity, d, d1, d2, f, f1);
-	}
-	
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
-	{
-		return WeaponModResources.Textures.FLAIL;
-	}
+    public RenderFlail(final RenderManager renderManager) {
+        super(renderManager);
+    }
+    
+    public void doRender(final EntityFlail entityflail, final double d, final double d1, final double d2, final float f, final float f1) {
+        this.bindEntityTexture(entityflail);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.pushMatrix();
+        GlStateManager.disableLighting();
+        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        GlStateManager.rotate(entityflail.prevRotationYaw + (entityflail.rotationYaw - entityflail.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(entityflail.prevRotationPitch + (entityflail.rotationPitch - entityflail.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder vertexbuffer = tessellator.getBuffer();
+        final float[] color = entityflail.getMaterialColor();
+        final int i = 0;
+        final float f2 = 0.0f;
+        final float f3 = 0.5f;
+        final float f4 = 0.0f;
+        final float f5 = 0.15625f;
+        final float f6 = 0.0f;
+        final float f7 = 0.15625f;
+        final float f8 = 0.15625f;
+        final float f9 = 0.3125f;
+        final float f10 = 0.15f;
+        GlStateManager.enableRescaleNormal();
+        final float f11 = -f1;
+        if (f11 > 0.0f) {
+            final float f12 = -MathHelper.sin(f11 * 3.0f) * f11;
+            GlStateManager.rotate(f12, 0.0f, 0.0f, 1.0f);
+        }
+        GlStateManager.color(color[0], color[1], color[2]);
+        GlStateManager.rotate(45.0f, 1.0f, 0.0f, 0.0f);
+        GlStateManager.scale(0.15f, 0.15f, 0.15f);
+        GlStateManager.translate(-4.0f, 0.0f, 0.0f);
+        if (this.renderOutlines) {
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(this.getTeamColor(entityflail));
+        }
+        GlStateManager.glNormal3f(0.15f, 0.0f, 0.0f);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(1.5, -2.0, -2.0).tex(0.0, 0.15625).endVertex();
+        vertexbuffer.pos(1.5, -2.0, 2.0).tex(0.15625, 0.15625).endVertex();
+        vertexbuffer.pos(1.5, 2.0, 2.0).tex(0.15625, 0.3125).endVertex();
+        vertexbuffer.pos(1.5, 2.0, -2.0).tex(0.0, 0.3125).endVertex();
+        tessellator.draw();
+        GlStateManager.glNormal3f(-0.15f, 0.0f, 0.0f);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(1.5, 2.0, -2.0).tex(0.0, 0.15625).endVertex();
+        vertexbuffer.pos(1.5, 2.0, 2.0).tex(0.15625, 0.15625).endVertex();
+        vertexbuffer.pos(1.5, -2.0, 2.0).tex(0.15625, 0.3125).endVertex();
+        vertexbuffer.pos(1.5, -2.0, -2.0).tex(0.0, 0.3125).endVertex();
+        tessellator.draw();
+        for (int j = 0; j < 4; ++j) {
+            GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+            GlStateManager.glNormal3f(0.0f, 0.0f, 0.15f);
+            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+            vertexbuffer.pos(-8.0, -2.0, 0.0).tex(0.0, 0.0).endVertex();
+            vertexbuffer.pos(8.0, -2.0, 0.0).tex(0.5, 0.0).endVertex();
+            vertexbuffer.pos(8.0, 2.0, 0.0).tex(0.5, 0.15625).endVertex();
+            vertexbuffer.pos(-8.0, 2.0, 0.0).tex(0.0, 0.15625).endVertex();
+            tessellator.draw();
+        }
+        if (this.renderOutlines) {
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
+        if (entityflail.shootingEntity instanceof EntityLivingBase && !this.renderOutlines) {
+            final int k = (((EntityLivingBase)entityflail.shootingEntity).getPrimaryHand() == EnumHandSide.RIGHT) ? 1 : -1;
+            final float f13 = ((EntityLivingBase)entityflail.shootingEntity).getSwingProgress(f1);
+            final float f14 = MathHelper.sin(MathHelper.sqrt(f13) * 3.1415927f);
+            final float f15 = (((EntityLivingBase)entityflail.shootingEntity).prevRenderYawOffset + (((EntityLivingBase)entityflail.shootingEntity).renderYawOffset - ((EntityLivingBase)entityflail.shootingEntity).prevRenderYawOffset) * f1) * 0.017453292f;
+            final double d3 = MathHelper.sin(f15);
+            final double d4 = MathHelper.cos(f15);
+            final double d5 = k * 0.35;
+            final double d6 = 0.8;
+            double d7;
+            double d8;
+            double d9;
+            double d10;
+            if ((this.renderManager.options == null || this.renderManager.options.thirdPersonView <= 0) && entityflail.shootingEntity == Minecraft.getMinecraft().player) {
+                float f16 = this.renderManager.options.fovSetting;
+                f16 /= 100.0f;
+                Vec3d vec3d = new Vec3d(k * -0.36 * f16, -0.045 * f16, 0.4);
+                vec3d = vec3d.rotatePitch(-(entityflail.shootingEntity.prevRotationPitch + (entityflail.shootingEntity.rotationPitch - entityflail.shootingEntity.prevRotationPitch) * f1) * 0.017453292f);
+                vec3d = vec3d.rotateYaw(-(entityflail.shootingEntity.prevRotationYaw + (entityflail.shootingEntity.rotationYaw - entityflail.shootingEntity.prevRotationYaw) * f1) * 0.017453292f);
+                vec3d = vec3d.rotateYaw(f14 * 0.5f);
+                vec3d = vec3d.rotatePitch(-f14 * 0.7f);
+                d7 = entityflail.shootingEntity.prevPosX + (entityflail.shootingEntity.posX - entityflail.shootingEntity.prevPosX) * f1 + vec3d.x;
+                d8 = entityflail.shootingEntity.prevPosY + (entityflail.shootingEntity.posY - entityflail.shootingEntity.prevPosY) * f1 + vec3d.y;
+                d9 = entityflail.shootingEntity.prevPosZ + (entityflail.shootingEntity.posZ - entityflail.shootingEntity.prevPosZ) * f1 + vec3d.z;
+                d10 = entityflail.shootingEntity.getEyeHeight();
+            }
+            else {
+                d7 = entityflail.shootingEntity.prevPosX + (entityflail.shootingEntity.posX - entityflail.shootingEntity.prevPosX) * f1 - d4 * d5 - d3 * 0.8;
+                d8 = entityflail.shootingEntity.prevPosY + entityflail.shootingEntity.getEyeHeight() + (entityflail.shootingEntity.posY - entityflail.shootingEntity.prevPosY) * f1 - 0.45;
+                d9 = entityflail.shootingEntity.prevPosZ + (entityflail.shootingEntity.posZ - entityflail.shootingEntity.prevPosZ) * f1 - d3 * d5 + d4 * 0.8;
+                d10 = (entityflail.shootingEntity.isSneaking() ? -0.1875 : 0.0);
+            }
+            final double d11 = entityflail.prevPosX + (entityflail.posX - entityflail.prevPosX) * f1;
+            final double d12 = entityflail.prevPosY + (entityflail.posY - entityflail.prevPosY) * f1 + 0.25;
+            final double d13 = entityflail.prevPosZ + (entityflail.posZ - entityflail.prevPosZ) * f1;
+            final double d14 = (float)(d7 - d11);
+            final double d15 = (float)(d8 - d12) + d10;
+            final double d16 = (float)(d9 - d13);
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableLighting();
+            vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+            final int l = 16;
+            for (int i2 = 0; i2 <= 16; ++i2) {
+                final float f17 = i2 / 16.0f;
+                vertexbuffer.pos(d + d14 * f17, d1 + d15 * (f17 * f17 + f17) * 0.5 + 0.25, d2 + d16 * f17).color(0, 0, 0, 255).endVertex();
+            }
+            tessellator.draw();
+            GlStateManager.enableLighting();
+            GlStateManager.enableTexture2D();
+            super.doRender(entityflail, d, d1, d2, f, f1);
+        }
+    }
+    
+    protected ResourceLocation getEntityTexture(final EntityFlail entity) {
+        return WeaponModResources.Textures.FLAIL;
+    }
 }

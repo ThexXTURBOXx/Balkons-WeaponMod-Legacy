@@ -71,3 +71,7 @@ item.boomerang.stone.name=Bumerang de Piedra
 item.boomerang.iron.name=Bumerang de Hierro
 item.boomerang.diamond.name=Bumerang de Diamante
 item.boomerang.gold.name=Bumerang de Oro
+
+item.mortar.name=Mortero de Mano
+item.mortar-ironpart.name=Cañon del Mortero
+item.shell.name=Proyectil de Mortero

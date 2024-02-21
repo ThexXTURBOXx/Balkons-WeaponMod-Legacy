@@ -1,0 +1,14 @@
+{
+    "parent": "weaponmod:item/handheld_rod",
+    "textures": {
+        "layer0": "weaponmod:items/flail.gold"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "thrown": 1
+            },
+            "model": "weaponmod:item/flail.gold-thrown"
+        }
+    ]
+}

@@ -80,3 +80,7 @@ item.katana.stone.name=Handsome Cutlass o' Rock
 item.katana.iron.name=Handsome Cutlass o' Metal
 item.katana.diamond.name=Handsome Bejeweled Cutlass
 item.katana.gold.name=Handsome Golden Cutlass
+
+item.mortar.name=Hand Monkey
+item.mortar-ironpart.name=Hand Monkey's Barrrrel
+item.shell.name=Monkey's Shell

@@ -1,51 +1,46 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.entity.IProjectile;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
+import net.minecraft.world.*;
+import net.minecraft.item.*;
+import net.minecraft.entity.*;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.dispenser.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.init.*;
+import net.minecraft.block.*;
+import net.minecraft.util.*;
 
 public class DispenseMusketBullet extends DispenseWeaponProjectile
 {
-	@Override
-	protected IProjectile getProjectileEntity(World world, IPosition pos)
-	{
-		return new EntityMusketBullet(world, pos.getX(), pos.getY(), pos.getZ());
-	}
-	
-	@Override
-	public double getYVel()
-	{
-		return 0D;
-	}
-	
-	@Override
-	public float getDeviation()
-	{
-		return 3F;
-	}
-	
-	@Override
-	public float getVelocity()
-	{
-		return 5F;
-	}
-	
-	@Override
-	protected void playDispenseSound(IBlockSource blocksource)
-	{
-		blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(), "random.explode", 3.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.7F));
-		blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(), "ambient.weather.thunder", 3.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.4F));
-	}
-	
-	@Override
-	protected void spawnDispenseParticles(IBlockSource blocksource, EnumFacing face)
-	{
-		super.spawnDispenseParticles(blocksource, face);
-		IPosition pos = BlockDispenser.func_149939_a(blocksource);
-		blocksource.getWorld().spawnParticle("flame", pos.getX() + face.getFrontOffsetX(), pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), 0.0D, 0.2D, 0.0D);
-	}
+    protected IProjectile getProjectileEntity(final World world, final IPosition pos, final ItemStack stack) {
+        return new EntityMusketBullet(world, pos.getX(), pos.getY(), pos.getZ());
+    }
+    
+    @Override
+    public double getYVel() {
+        return 0.0;
+    }
+    
+    @Override
+    public float getDeviation() {
+        return 3.0f;
+    }
+    
+    @Override
+    public float getVelocity() {
+        return 5.0f;
+    }
+    
+    @Override
+    protected void playDispenseSound(final IBlockSource blocksource) {
+        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 3.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.7f));
+        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.NEUTRAL, 3.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.4f));
+    }
+    
+    @Override
+    protected void spawnDispenseParticles(final IBlockSource blocksource, final EnumFacing face) {
+        super.spawnDispenseParticles(blocksource, face);
+        final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getXOffset(), pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.2, 0.0, new int[0]);
+    }
 }

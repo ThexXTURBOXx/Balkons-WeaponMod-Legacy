@@ -1,0 +1,26 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "weaponmod:items/halberd.diamond"
+    },
+	"display": {
+        "thirdperson_righthand": {
+            "rotation": [ 20, -90, 55 ],
+            "translation": [ 0, 3.0, 2.0 ],
+            "scale": [ 1.7, 1.7, 1.7 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 20, 90, -55 ],
+            "translation": [ 0, 3.0, 2.0 ],
+            "scale": [ 1.7, 1.7, 1.7 ]
+        }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "state": 1
+            },
+            "model": "weaponmod:item/halberd.diamond_state"
+        }
+    ]
+}

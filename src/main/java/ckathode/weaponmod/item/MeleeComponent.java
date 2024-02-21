@@ -1,245 +1,204 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
-import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import ckathode.weaponmod.PhysHelper;
-import ckathode.weaponmod.WeaponModAttributes;
-
-import com.google.common.collect.Multimap;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.state.*;
+import net.minecraft.block.material.*;
+import net.minecraft.init.*;
+import net.minecraft.block.*;
+import net.minecraft.world.*;
+import net.minecraft.util.math.*;
+import com.google.common.collect.*;
+import net.minecraft.entity.ai.attributes.*;
+import ckathode.weaponmod.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.entity.*;
+import net.minecraft.item.*;
+import net.minecraft.util.*;
 
 public class MeleeComponent extends AbstractWeaponComponent
 {
-	public final MeleeSpecs			meleeSpecs;
-	public final Item.ToolMaterial	weaponMaterial;
-	
-	public MeleeComponent(MeleeSpecs meleespecs, Item.ToolMaterial toolmaterial)
-	{
-		meleeSpecs = meleespecs;
-		weaponMaterial = toolmaterial;
-	}
-	
-	@Override
-	protected void onSetItem()
-	{
-	}
-	
-	@Override
-	public void setThisItemProperties()
-	{
-		if (weaponMaterial == null)
-		{
-			item.setMaxDamage(meleeSpecs.durabilityBase);
-		} else
-		{
-			item.setMaxDamage((int) (meleeSpecs.durabilityBase + weaponMaterial.getMaxUses() * meleeSpecs.damageMult));
-		}
-		item.setMaxStackSize(meleeSpecs.stackSize);
-	}
-	
-	@Override
-	public float getEntityDamageMaterialPart()
-	{
-		if (weaponMaterial == null)
-		{
-			return 0F;
-		}
-		return weaponMaterial.getDamageVsEntity() * meleeSpecs.damageMult;
-	}
-	
-	@Override
-	public float getEntityDamage()
-	{
-		return meleeSpecs.damageBase + getEntityDamageMaterialPart();
-	}
-	
-	@Override
-	public float getBlockDamage(ItemStack itemstack, Block block)
-	{
-		if (canHarvestBlock(block))
-		{
-			return meleeSpecs.blockDamage * 10F;
-		}
-		Material material = block.getMaterial();
-		return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : meleeSpecs.blockDamage;
-	}
-	
-	@Override
-	public boolean canHarvestBlock(Block block)
-	{
-		return block == Blocks.web;
-	}
-	
-	@Override
-	public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int j, int k, int l, EntityLivingBase entityliving)
-	{
-		if ((meleeSpecs.blockDamage > 1F || canHarvestBlock(block)) && block.getBlockHardness(world, j, k, l) != 0F)
-		{
-			itemstack.damageItem(meleeSpecs.dmgFromBlock, entityliving);
-		}
-		return true;
-	}
-	
-	@Override
-	public boolean hitEntity(ItemStack itemstack, EntityLivingBase entityliving, EntityLivingBase attacker)
-	{
-		if (entityliving.hurtResistantTime == entityliving.maxHurtResistantTime)
-		{
-			float kb = getKnockBack(itemstack, entityliving, attacker);
-			//if (entityliving.onGround)
-			{
-				PhysHelper.knockBack(entityliving, attacker, kb);
-			}
-			entityliving.hurtResistantTime += getAttackDelay(itemstack, entityliving, attacker);
-		}
-		itemstack.damageItem(meleeSpecs.dmgFromEntity, attacker);
-		return true;
-	}
-	
-	@Override
-	public int getAttackDelay(ItemStack itemstack, EntityLivingBase entityliving, EntityLivingBase attacker)
-	{
-		return meleeSpecs.attackDelay;
-	}
-	
-	@Override
-	public float getKnockBack(ItemStack itemstack, EntityLivingBase entityliving, EntityLivingBase attacker)
-	{
-		return meleeSpecs.getKnockBack(weaponMaterial);
-	}
-	
-	@Override
-	public int getItemEnchantability()
-	{
-		return weaponMaterial == null ? 1 : weaponMaterial.getEnchantability();
-	}
-	
-	@Override
-	public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap)
-	{
-		float dmg = getEntityDamage();
-		if (dmg > 0F || meleeSpecs.damageMult > 0F)
-		{
-			multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(weapon.getUUID(), "Weapon modifier", dmg, 0));
-		}
-		multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getAttributeUnlocalizedName(), new AttributeModifier(weapon.getUUID(), "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4F, 0));
-		multimap.put(WeaponModAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(weapon.getUUID(), "Weapon attack speed modifier", -meleeSpecs.attackDelay, 0));
-		if (this instanceof IExtendedReachItem)
-		{
-			try
-			{
-				multimap.put(WeaponModAttributes.WEAPON_REACH.getAttributeUnlocalizedName(), new AttributeModifier(weapon.getUUID(), "Weapon reach modifier", ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3F, 0));
-			} catch (NullPointerException e)
-			{}
-		}
-	}
-	
-	@Override
-	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity)
-	{
-		if (entity instanceof EntityLivingBase)
-		{
-			PhysHelper.prepareKnockbackOnEntity(player, (EntityLivingBase) entity);
-		}
-		return false;
-	}
-	
-	@Override
-	public EnumAction getItemUseAction(ItemStack itemstack)
-	{
-		return EnumAction.block;
-	}
-	
-	@Override
-	public int getMaxItemUseDuration(ItemStack itemstack)
-	{
-		return 72000;
-	}
-	
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
-		entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
-		return itemstack;
-	}
-	
-	@Override
-	public void onUsingTick(ItemStack itemstack, EntityPlayer entityplayer, int count)
-	{
-	}
-	
-	@Override
-	public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityplayer, int i)
-	{
-	}
-	
-	@Override
-	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
-	{
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean shouldRotateAroundWhenRendering()
-	{
-		return false;
-	}
-	
-	public static enum MeleeSpecs
-	{
-		//NAME db, dm, edb, edm, bd, kb, dfe, dfb, mss, ad
-		SPEAR(0, 1F, 3, 1F, 1F, 0.2F, 1, 2, 1, 0),
-		HALBERD(0, 1F, 4, 1F, 1.5F, 0.6F, 1, 2, 1, 8),
-		BATTLEAXE(0, 1F, 3, 1F, 1.5F, 0.5F, 1, 2, 1, 5),
-		WARHAMMER(0, 1F, 4, 1F, 1F, 0.7F, 1, 2, 1, 5),
-		KNIFE(0, 0.5F, 3, 1F, 1.5F, 0.2F, 1, 2, 1, 0),
-		KATANA(0, 1F, 1, 1F, 1F, 0F, 1, 2, 1, -6),
-		FIREROD(1, 0F, 1, 0F, 1F, 0.4F, 2, 0, 1, 0),
-		BOOMERANG(0, 0.5F, 2, 1F, 1F, 0.4F, 1, 1, 1, 0),
-		NONE(0, 0F, 1, 0F, 1F, 0.4F, 0, 0, 1, 0);
-		
-		private MeleeSpecs(int durbase, float durmult, float dmgbase, float dmgmult, float blockdmg, float knockback, int dmgfromentity, int dmgfromblock, int stacksize, int attackdelay)
-		{
-			durabilityBase = durbase;
-			durabilityMult = durmult;
-			
-			damageBase = dmgbase;
-			damageMult = dmgmult;
-			blockDamage = blockdmg;
-			this.knockback = knockback;
-			
-			dmgFromEntity = dmgfromentity;
-			dmgFromBlock = dmgfromblock;
-			
-			stackSize = stacksize;
-			attackDelay = attackdelay;
-		}
-		
-		public float getKnockBack(ToolMaterial material)
-		{
-			return material == ToolMaterial.GOLD ? knockback * 1.5F : knockback;
-		}
-		
-		public final int	durabilityBase;
-		public final float	durabilityMult;
-		
-		public final float	damageBase, damageMult, blockDamage, knockback;
-		
-		public final int	dmgFromEntity, dmgFromBlock;
-		
-		public final int	stackSize, attackDelay;
-	}
+    public final MeleeSpecs meleeSpecs;
+    public final Item.ToolMaterial weaponMaterial;
+    
+    public MeleeComponent(final MeleeSpecs meleespecs, final Item.ToolMaterial toolmaterial) {
+        this.meleeSpecs = meleespecs;
+        this.weaponMaterial = toolmaterial;
+    }
+    
+    @Override
+    protected void onSetItem() {
+    }
+    
+    @Override
+    public void setThisItemProperties() {
+        if (this.weaponMaterial == null) {
+            this.item.setMaxDamage(this.meleeSpecs.durabilityBase);
+        }
+        else {
+            this.item.setMaxDamage((int)(this.meleeSpecs.durabilityBase + this.weaponMaterial.getMaxUses() * this.meleeSpecs.durabilityMult));
+        }
+        this.item.setMaxStackSize(this.meleeSpecs.stackSize);
+    }
+    
+    @Override
+    public float getEntityDamageMaterialPart() {
+        if (this.weaponMaterial == null) {
+            return 0.0f;
+        }
+        return this.weaponMaterial.getAttackDamage() * this.meleeSpecs.damageMult;
+    }
+    
+    @Override
+    public float getEntityDamage() {
+        return this.meleeSpecs.damageBase + this.getEntityDamageMaterialPart();
+    }
+    
+    @Override
+    public float getBlockDamage(final ItemStack itemstack, final IBlockState block) {
+        if (this.canHarvestBlock(block)) {
+            return this.meleeSpecs.blockDamage * 10.0f;
+        }
+        final Material material = block.getMaterial();
+        return (material != Material.PLANTS && material != Material.VINE && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD) ? 1.0f : this.meleeSpecs.blockDamage;
+    }
+    
+    @Override
+    public boolean canHarvestBlock(final IBlockState state) {
+        final Block block = state.getBlock();
+        return block == Blocks.WEB;
+    }
+    
+    @Override
+    public boolean onBlockDestroyed(final ItemStack itemstack, final World world, final IBlockState block, final BlockPos pos, final EntityLivingBase entityliving) {
+        if (block.getBlockHardness(world, pos) != 0.0f) {
+            itemstack.damageItem(this.meleeSpecs.dmgFromBlock, entityliving);
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean hitEntity(final ItemStack itemstack, final EntityLivingBase entityliving, final EntityLivingBase attacker) {
+        if (entityliving.hurtResistantTime == entityliving.maxHurtResistantTime) {
+            final float kb = this.getKnockBack(itemstack, entityliving, attacker);
+            PhysHelper.knockBack(entityliving, attacker, kb);
+            if (this.meleeSpecs.attackDelay >= 3.0f) {
+                entityliving.hurtResistantTime += (int)this.getAttackDelay(itemstack, entityliving, attacker);
+            }
+            else {
+                final float f = (this.meleeSpecs.attackDelay < 1.0f) ? 1.2f : 2.0f;
+                entityliving.hurtResistantTime -= (int)(f / this.getAttackDelay(itemstack, entityliving, attacker));
+            }
+        }
+        itemstack.damageItem(this.meleeSpecs.dmgFromEntity, attacker);
+        return true;
+    }
+    
+    @Override
+    public float getAttackDelay(final ItemStack itemstack, final EntityLivingBase entityliving, final EntityLivingBase attacker) {
+        return this.meleeSpecs.attackDelay;
+    }
+    
+    @Override
+    public float getKnockBack(final ItemStack itemstack, final EntityLivingBase entityliving, final EntityLivingBase attacker) {
+        return this.meleeSpecs.getKnockBack(this.weaponMaterial);
+    }
+    
+    @Override
+    public int getItemEnchantability() {
+        return (this.weaponMaterial == null) ? 1 : this.weaponMaterial.getEnchantability();
+    }
+    
+    @Override
+    public void addItemAttributeModifiers(final Multimap<String, AttributeModifier> multimap) {
+        final float dmg = this.getEntityDamage();
+        if (dmg > 0.0f || this.meleeSpecs.damageMult > 0.0f) {
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(this.weapon.getUUIDDamage(), "Weapon attack damage modifier", dmg, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(this.weapon.getUUIDSpeed(), "Weapon attack speed modifier", -this.meleeSpecs.attackDelay, 0));
+        }
+        if (this.meleeSpecs.getKnockBack(this.weaponMaterial) != 0.4f) {
+            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getName(), new AttributeModifier(this.weapon.getUUID(), "Weapon knockback modifier", this.meleeSpecs.getKnockBack(this.weaponMaterial) - 0.4f, 0));
+        }
+        if (this instanceof IExtendedReachItem) {
+            try {
+                multimap.put(WeaponModAttributes.WEAPON_REACH.getName(), new AttributeModifier(this.weapon.getUUID(), "Weapon reach modifier", ((IExtendedReachItem)this).getExtendedReach(null, null, null) - 3.0f, 0));
+            }
+            catch (final NullPointerException ex) {}
+        }
+    }
+    
+    @Override
+    public boolean onLeftClickEntity(final ItemStack itemstack, final EntityPlayer player, final Entity entity) {
+        if (entity instanceof EntityLivingBase) {
+            PhysHelper.prepareKnockbackOnEntity(player, (EntityLivingBase)entity);
+        }
+        return false;
+    }
+    
+    @Override
+    public EnumAction getItemUseAction(final ItemStack itemstack) {
+        return EnumAction.NONE;
+    }
+    
+    @Override
+    public int getMaxItemUseDuration(final ItemStack itemstack) {
+        return 0;
+    }
+    
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer, final EnumHand hand) {
+        final ItemStack itemstack = entityplayer.getHeldItem(hand);
+        return (ActionResult<ItemStack>)new ActionResult(EnumActionResult.PASS, itemstack);
+    }
+    
+    @Override
+    public void onUsingTick(final ItemStack itemstack, final EntityLivingBase entityliving, final int count) {
+    }
+    
+    @Override
+    public void onPlayerStoppedUsing(final ItemStack itemstack, final World world, final EntityLivingBase entityliving, final int i) {
+    }
+    
+    @Override
+    public void onUpdate(final ItemStack itemstack, final World world, final Entity entity, final int i, final boolean flag) {
+    }
+    
+    public enum MeleeSpecs
+    {
+        SPEAR(0, 1.0f, 2.0f, 1.0f, 1.0f, 0.2f, 1, 2, 1, 2.7f), 
+        HALBERD(0, 1.0f, 3.0f, 1.0f, 1.5f, 0.6f, 1, 2, 1, 3.2f), 
+        BATTLEAXE(0, 1.0f, 2.0f, 1.0f, 1.5f, 0.5f, 1, 2, 1, 3.0f), 
+        WARHAMMER(0, 1.0f, 3.0f, 1.0f, 1.0f, 0.7f, 1, 2, 1, 3.0f), 
+        KNIFE(0, 0.5f, 2.0f, 1.0f, 1.5f, 0.2f, 1, 2, 1, 2.0f), 
+        KATANA(0, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1, 2, 1, 0.2f), 
+        FIREROD(1, 0.0f, 0.0f, 0.0f, 1.0f, 0.4f, 2, 0, 1, 0.0f), 
+        BOOMERANG(0, 0.5f, 1.0f, 1.0f, 1.0f, 0.4f, 1, 1, 1, 2.0f), 
+        NONE(0, 1.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 1, 0.0f);
+        
+        public final int durabilityBase;
+        public final float durabilityMult;
+        public final float damageBase;
+        public final float damageMult;
+        public final float blockDamage;
+        public final float knockback;
+        public final float attackDelay;
+        public final int dmgFromEntity;
+        public final int dmgFromBlock;
+        public final int stackSize;
+        
+        private MeleeSpecs(final int durbase, final float durmult, final float dmgbase, final float dmgmult, final float blockdmg, final float knockback, final int dmgfromentity, final int dmgfromblock, final int stacksize, final float attackdelay) {
+            this.durabilityBase = durbase;
+            this.durabilityMult = durmult;
+            this.damageBase = dmgbase;
+            this.damageMult = dmgmult;
+            this.blockDamage = blockdmg;
+            this.knockback = knockback;
+            this.dmgFromEntity = dmgfromentity;
+            this.dmgFromBlock = dmgfromblock;
+            this.stackSize = stacksize;
+            this.attackDelay = attackdelay;
+        }
+        
+        public float getKnockBack(final Item.ToolMaterial material) {
+            return (material == Item.ToolMaterial.GOLD) ? (this.knockback * 1.5f) : this.knockback;
+        }
+    }
 }

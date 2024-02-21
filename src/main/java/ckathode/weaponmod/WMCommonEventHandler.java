@@ -1,17 +1,15 @@
 package ckathode.weaponmod;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.EntityEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.event.entity.*;
+import net.minecraft.entity.player.*;
+import net.minecraftforge.fml.common.eventhandler.*;
 
 public class WMCommonEventHandler
 {
-	@SubscribeEvent
-	public void onEntityConstructed(EntityEvent.EntityConstructing event)
-	{
-		if (event.entity instanceof EntityPlayer)
-		{
-			PlayerWeaponData.initPlayerWeaponData((EntityPlayer) event.entity);
-		}
-	}
+    @SubscribeEvent
+    public void onEntityConstructed(final EntityEvent.EntityConstructing event) {
+        if (event.getEntity() instanceof EntityPlayer) {
+            PlayerWeaponData.initPlayerWeaponData((EntityPlayer)event.getEntity());
+        }
+    }
 }

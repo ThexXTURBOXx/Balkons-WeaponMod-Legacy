@@ -1,69 +1,62 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import ckathode.weaponmod.ReloadHelper;
-import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
+import net.minecraft.item.*;
+import net.minecraft.world.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.init.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
+import net.minecraft.entity.*;
+import ckathode.weaponmod.entity.projectile.*;
 
 public class RangedCompCrossbow extends RangedComponent
 {
-	public RangedCompCrossbow()
-	{
-		super(RangedSpecs.CROSSBOW);
-	}
-	
-	@Override
-	public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
-		entityplayer.swingItem();
-		world.playSoundAtEntity(entityplayer, "random.click", 0.8F, 1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.4F));
-	}
-	
-	public void resetReload(World world, ItemStack itemstack)
-	{
-		setReloadState(itemstack, ReloadHelper.STATE_NONE);
-	}
-	
-	@Override
-	public void fire(ItemStack itemstack, World world, EntityPlayer entityplayer, int i)
-	{
-		int j = getMaxItemUseDuration(itemstack) - i;
-		float f = j / 20F;
-		f = (f * f + f * 2.0F) / 3F;
-		if (f > 1.0F)
-		{
-			f = 1.0F;
-		}
-		f += 0.02F;
-		
-		if (!world.isRemote)
-		{
-			EntityCrossbowBolt entity = new EntityCrossbowBolt(world, entityplayer, 1.5F / f);
-			applyProjectileEnchantments(entity, itemstack);
-			world.spawnEntityInWorld(entity);
-		}
-		
-		int damage = 1;
-		if (itemstack.getItemDamage() + damage <= itemstack.getMaxDamage())
-		{
-			resetReload(world, itemstack);
-		}
-		itemstack.damageItem(damage, entityplayer);
-		
-		postShootingEffects(itemstack, entityplayer, world);
-		resetReload(world, itemstack);
-	}
-	
-	@Override
-	public void effectPlayer(ItemStack itemstack, EntityPlayer entityplayer, World world)
-	{
-		entityplayer.rotationPitch -= entityplayer.isSneaking() ? 4F : 8F;
-	}
-	
-	@Override
-	public void effectShoot(World world, double x, double y, double z, float yaw, float pitch)
-	{
-		world.playSoundEffect(x, y, z, "random.bow", 1.0F, 1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.8F));
-	}
+    public RangedCompCrossbow() {
+        super(RangedSpecs.CROSSBOW);
+    }
+    
+    @Override
+    public void effectReloadDone(final ItemStack itemstack, final World world, final EntityPlayer entityplayer) {
+        entityplayer.swingArm(EnumHand.MAIN_HAND);
+        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.PLAYERS, 0.8f, 1.0f / (this.weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
+    }
+    
+    public void resetReload(final World world, final ItemStack itemstack) {
+        RangedComponent.setReloadState(itemstack, ReloadHelper.STATE_NONE);
+    }
+    
+    @Override
+    public void fire(final ItemStack itemstack, final World world, final EntityLivingBase entityliving, final int i) {
+        final EntityPlayer entityplayer = (EntityPlayer)entityliving;
+        final int j = this.getMaxItemUseDuration(itemstack) - i;
+        float f = j / 20.0f;
+        f = (f * f + f * 2.0f) / 3.0f;
+        if (f > 1.0f) {
+            f = 1.0f;
+        }
+        f += 0.02f;
+        if (!world.isRemote) {
+            final EntityCrossbowBolt entitybolt = new EntityCrossbowBolt(world, entityplayer);
+            entitybolt.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 1.5f / f);
+            this.applyProjectileEnchantments(entitybolt, itemstack);
+            world.spawnEntity(entitybolt);
+        }
+        final int damage = 1;
+        if (itemstack.getItemDamage() + damage <= itemstack.getMaxDamage()) {
+            this.resetReload(world, itemstack);
+        }
+        itemstack.damageItem(damage, entityplayer);
+        this.postShootingEffects(itemstack, entityplayer, world);
+        this.resetReload(world, itemstack);
+    }
+    
+    @Override
+    public void effectPlayer(final ItemStack itemstack, final EntityPlayer entityplayer, final World world) {
+        entityplayer.rotationPitch -= (entityplayer.isSneaking() ? 4.0f : 8.0f);
+    }
+    
+    @Override
+    public void effectShoot(final World world, final double x, final double y, final double z, final float yaw, final float pitch) {
+        world.playSound(null, x, y, z, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f, 1.0f / (this.weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+    }
 }

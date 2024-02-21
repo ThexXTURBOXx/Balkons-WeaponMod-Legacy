@@ -77,3 +77,8 @@ item.katana.stone.name=Katana en pierre
 item.katana.iron.name=Katana de fer 
 item.katana.diamond.name=Katana de diamant 
 item.katana.gold.name=Katana d'or
+
+item.mortar.name=Mortier à la main
+item.mortar-ironpart.name=Canon du mortier
+item.shell.name=Obus de mortier
+

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "O",
+    "X"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:feather"
+    },
+    "O": {
+      "item": "minecraft:spider_eye"
+    }
+  },
+  "result": {
+    "item": "weaponmod:dart",
+	"data": 3,
+	"count": 4
+  }
+}

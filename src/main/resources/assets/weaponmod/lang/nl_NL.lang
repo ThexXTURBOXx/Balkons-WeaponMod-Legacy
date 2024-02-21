@@ -83,6 +83,10 @@ item.katana.gold.name=Gouden katana
 
 item.flintlock.name=Vuursteenslot pistool
 
+item.mortar.name=Handmortel
+item.mortar-ironpart.name=Mortiervat
+item.shell.name=Mortel schaal
+
 attribute.name.weaponmod.ignoreArmour=Negeer pantser
 attribute.name.weaponmod.knockback=Terugslag
 attribute.name.weaponmod.attackSpeed=Aanvalssnelheid

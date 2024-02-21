@@ -1,0 +1,14 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "weaponmod:items/boomerang.iron"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "readyToThrow": 1
+            },
+            "model": "weaponmod:item/boomerang.iron_ready"
+        }
+    ]
+}

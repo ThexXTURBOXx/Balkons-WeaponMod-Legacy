@@ -1,34 +1,32 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
-import net.minecraft.entity.IProjectile;
-import net.minecraft.world.World;
-import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
+import net.minecraft.world.*;
+import net.minecraft.item.*;
+import net.minecraft.entity.*;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.dispenser.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.init.*;
+import net.minecraft.util.*;
 
 public class DispenseCrossbowBolt extends DispenseWeaponProjectile
 {
-	@Override
-	protected IProjectile getProjectileEntity(World world, IPosition pos)
-	{
-		return new EntityCrossbowBolt(world, pos.getX(), pos.getY(), pos.getZ());
-	}
-	
-	@Override
-	public float getVelocity()
-	{
-		return 3.0F;
-	}
-	
-	@Override
-	public float getDeviation()
-	{
-		return 2.0F;
-	}
-	
-	@Override
-	protected void playDispenseSound(IBlockSource blocksource)
-	{
-		blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(), "random.bow", 1.0F, 1.2F);
-	}
+    protected IProjectile getProjectileEntity(final World world, final IPosition pos, final ItemStack stack) {
+        return new EntityCrossbowBolt(world, pos.getX(), pos.getY(), pos.getZ());
+    }
+    
+    @Override
+    public float getVelocity() {
+        return 3.0f;
+    }
+    
+    @Override
+    public float getDeviation() {
+        return 2.0f;
+    }
+    
+    @Override
+    protected void playDispenseSound(final IBlockSource blocksource) {
+        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 1.2f);
+    }
 }

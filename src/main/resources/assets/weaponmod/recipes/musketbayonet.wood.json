@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "weaponmod:musket"
+    },
+	{
+      "item": "weaponmod:knife.wood"
+    }
+  ],
+  "result": {
+    "item": "weaponmod:musketbayonet.wood"
+  }
+}

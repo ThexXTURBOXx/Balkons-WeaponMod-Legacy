@@ -1,74 +1,22 @@
-/*
- * build.gradle - gradle build file for forge mod projects
- *
- *    I intend, eventually, to expand support; including multi-project builds, however, for the
- *    time being the intent is simply to provide a simple way to take existing mod projects (or
- *    to create new ones, to be distributed via, e.g. git.
- *
- *    Note that the intent is also to make use external configuration in order to allow this file
- *    to remain the same for various projects; if you want to contribute to the project, please
- *    keep that in mind. I still have not done most of the legwork necessary to make a complex
- *    build possible this way. for now, a simple build seems to be working.
- *
- * original project: playlaughlovelearn/LisasForgeGradleTemplate
- */
- 
-/*
- * to use this project, run the following commands; with 'gradlew' if you want to use gradle
- * wrapper included in the project, or with 'gradle' to use a local installation of gradle
- *
- * to clean the project (optional, not necessary on initial builds):
- *     gradlew clean cleanCache
- *
- * setup Minecraft decompilation workspace, where necessary (ok to try without; use if failed):
- *     gradlew setupDecompWorkspace --refreshDependencies
- *
- * to build (build output will be in 'build/libs'):
- *     gradlew build
- *
- * to setup for development:
- *     gradlew setupDevWorkspace
- *
- * and, for idea/eclipse development:
- *     gradlew [idea|eclipse]
- */
- 
 buildscript {
     repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://files.minecraftforge.net/maven/' }
         mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:4.+'
     }
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
 
-// this is a properties file which contains various settings about the build, including, among 
-// other things, the Minecraft version, the Forge version, and a token that can be added to 
-// build outputs signifying the originator of the build
-ext.configFile = file "build.properties"
-
-// reads the configuration from the configuration file. to use these properties elsewhere
-// you will either use 'config.<property>' or 'project.config.<property>' depending on where
-configFile.withReader {
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-
-apply plugin: 'forge'
-
-// this is a properties file which contains various settings about the build, including, among 
-// other things, the Minecraft version, the Forge version, and a token that can be added to 
+// this is a properties file which contains various settings about the build, including, among
+// other things, the Minecraft version, the Forge version, and a token that can be added to
 // build outputs signifying the originator of the build
 ext.configFile = file "build.properties"
 
@@ -84,159 +32,112 @@ version = config.mod_version
 group = config.mod_author
 archivesBaseName = config.mod_basename
 
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version
-    runDir = "run"
-}
+    // The mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   Snapshot are built nightly.
+    // stable_#            Stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+    //mappings channel: 'snapshot', version: '20180808'
+    mappings channel: 'stable', version: '39'
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-// creates a timestamp to be appended to the end of the build; a simple way to keep track of dev
-// builds and not intended to be the end-all be-all; rather, a temporary solution
-def getTimestampSuffix() {
-	   def date = new Date()
-       return date.format('yyyy-MM-dd_HH-mm-ss')
-}
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-version = "${config.mod_version}-${config.mod_builder_tok}-${getTimestampSuffix()}"
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
 
-// uses 'maven central' for resolving your dependencies; any Maven/Ivy/file repository can be given
-repositories {
-    mavenCentral()
-}
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-processResources
-{
-    // rebuild if either of the versions below change
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+        }
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        exclude 'version.properties'
+        server {
 
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-    
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/mcmod.info'
-        exclude '**/version.properties'
-    }
-}
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-// properties that instruct gradle on how to create the .jar outputs
-jar {
-	// create a version plate for the beginning of the mod name to avoid confusion as to which
-	// version of minecraft/forge this build was for; at some point in the future would like to 
-	// expand this to create multiple builds as necessary for different Minecraft/Forge versions
-	baseName = "[${config.minecraft_version}-${config.forge_version}]${config.mod_basename}"
-	appendix = 'universal'
-	
-	// don't put in the version.properties file if it exists, and definitely leave out the MCP 
-	// (i.e. Minecraft) sources
-	exclude 'mcp'
-	exclude 'version.properties'
-}
-
-// instructions to gradle on which source to use
-sourceSets {
-    main {
-	    java {
-	        srcDir '${config.mod_basename} mod src/main/java' exclude('net/minecraft/**')
-	    }
-        resources {
-            srcDir '${config.mod_basename} mod src/main/resources' include('assets/**','*.cfg','*.png','*.mcmeta','*.info')
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
         }
     }
 }
 
+dependencies {
+    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+    minecraft "net.minecraftforge:forge:${config.minecraft_version}-${config.forge_version}"
 
-/*
- *------------------------------------------------------------------------------------------------
- *
- * this is a work in progress
- *
- * all content in this project is dedicated to the public domain, by PlayLaughLoveLearn, and by the
- * author, lisa; 
- *
- * or, should this not be possible in your jurisdiction, and with the understanding that
- * attribution, being valuable consideration for your acceptance of the license, may be provided
- * through one of the attribution statements below, or simply attributed to 'anonymous, with love',
- * or 'someone', or even simply admiration and sending out good vibes, while thinking over the 
- * statement of attribution. ;)
- *
- * should none of these be possible, you can use any of the attribution-only licenses accepted as
- * following the definition of open-source given by the Open Source Initiative (or its heirs) which
- * at the time of this writing maintains a list of such licenses at:
- *
- * http://opensource.org/licenses
- *
- * or, should the organization no longer exist, then, under this license: 'Use this if you want, 
- * commercially or no, for whatever reason, under whatever conditions are necessary to provide a 
- * valid license in your jurisdiction.'
- *
- * Phew.
- *
- * Be aware that, regardless of the conditions or license under which you use this software, there
- * is  no warranty or guarantee, whatsoever, provided; including: express, implied, pledged upon a
- * rabid blockling's soul, etc., no matter the kind of the purpose or use.
- *
- * requested attribution:
- *   to all, from my <3, lisa
- *   playlaughlovelearn
- * 
- * or, in contexts where <3 is not possible:
- *   to all, from my heart, lisa
- *   playlaughlovelearn
- *
- * anyone giving credit to PlayLaughLoveLearn as above may also represent that whatever you use 
- * in your project from playlaughlovelearn is 'Creator Endorsed'; but, only in a way that makes
- * clear that any 'Creator Endorsed' words, mark, or other indication of such only applies to the
- * provided materials, does not suggest I am receiving compensation from you, and that it is not
- * claiming to be for any derivatives or other things we didn't create.
- *
- * (in other words: don't try to represent that we are endorsing or supporting your project, or
- * your modifications to ours; unless, of course, you have arranged with us separately to do so.
- * 'cause, well... that would be dishonest.)
- *
- * for more information, on Creator Endorsed, including proposed marks, check out: 
- * http://questioncopyright.org/creator_endorsed
- *
- *------------------------------------------------------------------------------------------------
- * 
- * and finally: want to change the world? you can only do that by changing yourself. join me and
- * other true believers in Love, and, you too, will save the world! 
- * 
- * how, you ask? if you want, start by putting this blurb, or something like it, in the whatever
- * you give the world from your heart! :)
- * 
- * it's easy! be faithful to others, even if it's hard. love and forgive everyone (yourself, your
- * friends, and even enemies!) do your best to be yourself, and to be happy. and be sure to do your
- * best to help other people you come into contact with do that stuff too.
- *
- * that, true believers, is real salvation: not in the far-off empty promises of an afterlife, at 
- * the expense of this one, but, instead, in the here and now, from the hell that you make for 
- * yourself as you try to be someone other than who you truly are, and when you don't try to open
- * up your plans and focus on bringing the things that *you* value into this world.
- *
- * and that is my message. my prophecy is this: it is our time! and we will save the world...
- *
- * together, on our own,
- * (false?) prophetess lisa, PlayLaughLoveLearn, <3 here+now
- *
- *------------------------------------------------------------------------------------------------
- */
- 
-/*
- * thank You!
- * 
- * this configuration is fairly generic and more-or-less relies on gradle standard configuration
- * locations; however, in addition to the gradle web help, I also learned from and took a few of
- * the configuration items from build.gradle files from the following ForgeGradle-based projects:
- * ExtrabiomesXL, BattleGear 2, Cauldron, and Forge/ForgeGradle. 
- *
- * I do not believe any of what is contained here rises to the level of taking creative content 
- * from any of those projects' respective authors, due to the limited nature of this build, and the
- * limited nature of the commands that can be used to attain the desired results, although I am 
- * willing to revisit it if any of the authors of the aforementioned projects wishes me to do so.
- *
- * [pl3.lsb] lisa @ playlaughlovelearn <playlaughlovelearn@thebutterflieseffect.org>
- */
+    // You may put jars on which you depend on in ./libs or you may define them like so..
+    // compile "some.group:artifact:version:classifier"
+    // compile "some.group:artifact:version"
+
+    // Real examples
+    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
+    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+
+    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
+    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // These dependencies get remapped to your current MCP mappings
+    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+
+    // For more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+}
+
+// creates a timestamp to be appended to the end of the build; a simple way to keep track of dev
+// builds and not intended to be the end-all be-all; rather, a temporary solution
+/*def getTimestampSuffix() {
+    def date = new Date()
+    return date.format('yyyy-MM-dd_HH-mm-ss')
+}
+
+version = "${config.mod_version}-${config.mod_builder_tok}-${getTimestampSuffix()}"*/
+
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "Balkon's WeaponMod",
+            "Specification-Vendor": "${config.mod_author}",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${config.mod_version}",
+            "Implementation-Vendor" :"${config.mod_author}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+// Example configuration to allow publishing using the maven-publish task
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar')
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+//publish.dependsOn('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+// Semi-nice fix for assets not being present in dev
+sourceSets { main { output.resourcesDir = output.classesDirs.files.first() } }

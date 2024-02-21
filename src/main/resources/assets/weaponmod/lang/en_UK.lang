@@ -83,8 +83,15 @@ item.katana.gold.name=Golden Katana
 
 item.flintlock.name=Flintlock Pistol
 
+item.mortar.name=Hand Mortar
+item.mortar-ironpart.name=Mortar Barrel
+item.shell.name=Mortar Shell
+
 attribute.name.weaponmod.ignoreArmour=Ignore Armour
 attribute.name.weaponmod.knockback=Knockback
 attribute.name.weaponmod.attackSpeed=Attack Speed
 attribute.name.weaponmod.reloadTime=Reload Time
 attribute.name.weaponmod.reach=Reach
+
+death.attack.weapon=%1$s is no more.
+death.attack.weapon.player=%1$s died running away from %2$s.

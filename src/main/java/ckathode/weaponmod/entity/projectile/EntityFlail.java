@@ -1,244 +1,212 @@
 package ckathode.weaponmod.entity.projectile;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import ckathode.weaponmod.WeaponDamageSource;
-import ckathode.weaponmod.item.ItemFlail;
+import net.minecraft.world.*;
+import net.minecraft.item.*;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.init.*;
+import net.minecraft.util.math.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
+import ckathode.weaponmod.item.*;
+import net.minecraft.nbt.*;
 
 public class EntityFlail extends EntityMaterialProjectile
 {
-	public boolean	isSwinging;
-	private float	flailDamage;
-	private double	distanceTotal;
-	private double	distanceX;
-	private double	distanceY;
-	private double	distanceZ;
-	
-	public EntityFlail(World world)
-	{
-		super(world);
-		ignoreFrustumCheck = true;
-		flailDamage = 1F;
-		distanceTotal = 0D;
-		distanceX = distanceY = distanceZ = 0D;
-	}
-	
-	public EntityFlail(World world, double d, double d1, double d2)
-	{
-		this(world);
-		setPosition(d, d1, d2);
-	}
-	
-	public EntityFlail(World world, EntityLivingBase entityliving, ItemStack itemstack)
-	{
-		this(world);
-		shootingEntity = entityliving;
-		setPickupModeFromEntity(entityliving);
-		setThrownItemStack(itemstack);
-		distanceTotal = 0F;
-		setLocationAndAngles(entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);
-		posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * 0.16F;
-		posY -= 0.4D;
-		posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * 0.16F;
-		setPosition(posX, posY, posZ);
-		swing();
-	}
-	
-	@Override
-	public void entityInit()
-	{
-		super.entityInit();
-	}
-	
-	@Override
-	public void onUpdate()
-	{
-		super.onUpdate();
-		
-		if (shootingEntity != null)
-		{
-			distanceX = shootingEntity.posX - posX;
-			distanceY = shootingEntity.posY - posY;
-			distanceZ = shootingEntity.posZ - posZ;
-			
-			distanceTotal = Math.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
-			
-			if (distanceTotal > 3.0D)
-			{
-				returnToOwner(shootingEntity, true);
-			}
-			
-			if (shootingEntity instanceof EntityPlayer)
-			{
-				ItemStack itemstack = ((EntityPlayer) shootingEntity).getCurrentEquippedItem();
-				if (itemstack == null || thrownItem != null && itemstack.getItem() != thrownItem.getItem())
-				{
-					pickUpByOwner();
-				}
-			}
-		}
-		
-		if (inGround)
-		{
-			inGround = false;
-			return;
-		}
-		
-		returnToOwner(shootingEntity, false);
-	}
-	
-	public void returnToOwner(Entity entity, boolean looseFromGround)
-	{
-		if (entity == null) return;
-		
-		if (looseFromGround)
-		{
-			inGround = false;
-		}
-		
-		double targetPosX = shootingEntity.posX;
-		double targetPosY = shootingEntity.boundingBox.minY + 0.4F;
-		double targetPosZ = shootingEntity.posZ;
-		
-		float f = 27F;
-		float f1 = 2F;
-		targetPosX += -Math.sin(((shootingEntity.rotationYaw + f) / 180F) * Math.PI) * Math.cos((shootingEntity.rotationPitch / 180F) * Math.PI) * f1;
-		targetPosZ += Math.cos(((shootingEntity.rotationYaw + f) / 180F) * Math.PI) * Math.cos((shootingEntity.rotationPitch / 180F) * Math.PI) * f1;
-		
-		distanceX = targetPosX - posX;
-		distanceY = targetPosY - posY;
-		distanceZ = targetPosZ - posZ;
-		
-		distanceTotal = Math.sqrt(distanceX * distanceX + distanceY * distanceY + distanceZ * distanceZ);
-		
-		if (distanceTotal > 3.0D)
-		{
-			posX = targetPosX;
-			posY = targetPosY;
-			posZ = targetPosZ;
-		} else if (distanceTotal > 2.5D)
-		{
-			isSwinging = false;
-			motionX *= -0.5F;
-			motionY *= -0.5F;
-			motionZ *= -0.5F;
-		}
-		
-		if (!isSwinging)
-		{
-			float f6 = 0.2F;
-			motionX = distanceX * f6 * (distanceTotal);
-			motionY = distanceY * f6 * (distanceTotal);
-			motionZ = distanceZ * f6 * (distanceTotal);
-		}
-	}
-	
-	public void pickUpByOwner()
-	{
-		setDead();
-		if (shootingEntity instanceof EntityPlayer && thrownItem != null)
-		{
-			((ItemFlail) thrownItem.getItem()).setThrown((EntityPlayer) shootingEntity, false);
-		}
-	}
-	
-	public void swing()
-	{
-		if (isSwinging) return;
-		worldObj.playSoundAtEntity(shootingEntity, "random.bow", 0.5F, 0.4F / (rand.nextFloat() * 0.4F + 0.8F));
-		motionX = -MathHelper.sin(((shootingEntity.rotationYaw) / 180F) * 3.141593F) * MathHelper.cos((shootingEntity.rotationPitch / 180F) * 3.141593F);
-		motionY = -MathHelper.sin((shootingEntity.rotationPitch / 180F) * 3.141593F);
-		motionZ = MathHelper.cos(((shootingEntity.rotationYaw) / 180F) * 3.141593F) * MathHelper.cos((shootingEntity.rotationPitch / 180F) * 3.141593F);
-		setThrowableHeading(motionX, motionY, motionZ, 0.75F, 3.0F);
-		isSwinging = true;
-		inGround = false;
-	}
-	
-	@Override
-	public void onEntityHit(Entity entity)
-	{
-		if (entity == shootingEntity) return;
-		
-		DamageSource damagesource = null;
-		if (shootingEntity instanceof EntityLivingBase)
-		{
-			damagesource = DamageSource.causeMobDamage((EntityLivingBase) shootingEntity);
-		} else
-		{
-			damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-		}
-		if (entity.attackEntityFrom(damagesource, flailDamage + extraDamage))
-		{
-			playHitSound();
-			returnToOwner(shootingEntity, true);
-		} else
-		{
-			bounceBack();
-		}
-	}
-	
-	@Override
-	public void bounceBack()
-	{
-		motionX *= -0.8D;
-		motionY *= -0.8D;
-		motionZ *= -0.8D;
-		rotationYaw += 180F;
-		prevRotationYaw += 180F;
-		ticksInAir = 0;
-	}
-	
-	@Override
-	public void playHitSound()
-	{
-		if (inGround) return;
-		
-		worldObj.playSoundAtEntity(this, "damage.hurtflesh", 1.0F, rand.nextFloat() * 0.4F + 0.8F);
-	}
-	
-	@Override
-	public void setThrownItemStack(ItemStack itemstack)
-	{
-		if (!(itemstack.getItem() instanceof ItemFlail)) return;
-		
-		super.setThrownItemStack(itemstack);
-		flailDamage = ((ItemFlail) itemstack.getItem()).getFlailDamage();
-	}
-	
-	@Override
-	public void writeEntityToNBT(NBTTagCompound nbttagcompound)
-	{
-		super.writeEntityToNBT(nbttagcompound);
-		nbttagcompound.setFloat("fDmg", flailDamage);
-	}
-	
-	@Override
-	public void readEntityFromNBT(NBTTagCompound nbttagcompound)
-	{
-		super.readEntityFromNBT(nbttagcompound);
-		flailDamage = nbttagcompound.getFloat("fDmg");
-	}
-	
-	@Override
-	public void onCollideWithPlayer(EntityPlayer entityplayer)
-	{
-	}
-	
-	@Override
-	public int getMaxArrowShake()
-	{
-		return 0;
-	}
-	
-	@Override
-	public float getShadowSize()
-	{
-		return 0.2F;
-	}
+    public boolean isSwinging;
+    private float flailDamage;
+    private double distanceTotal;
+    private double distanceX;
+    private double distanceY;
+    private double distanceZ;
+    
+    public EntityFlail(final World world) {
+        super(world);
+        this.ignoreFrustumCheck = true;
+        this.flailDamage = 1.0f;
+        this.distanceTotal = 0.0;
+        final double distanceX = 0.0;
+        this.distanceZ = distanceX;
+        this.distanceY = distanceX;
+        this.distanceX = distanceX;
+    }
+    
+    public EntityFlail(final World world, final double d, final double d1, final double d2) {
+        this(world);
+        this.setPosition(d, d1, d2);
+    }
+    
+    public EntityFlail(final World worldIn, final EntityLivingBase shooter, final ItemStack itemstack) {
+        this(worldIn, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.3, shooter.posZ);
+        this.setPickupModeFromEntity((EntityLivingBase)(this.shootingEntity = shooter));
+        this.setThrownItemStack(itemstack);
+        this.distanceTotal = 0.0;
+    }
+    
+    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3, final float f4) {
+        this.motionX += entity.motionX;
+        this.motionZ += entity.motionZ;
+        if (!entity.onGround) {
+            this.motionY += entity.motionY;
+        }
+        this.swing(f, f1, f3, f4);
+    }
+    
+    @Override
+    public void entityInit() {
+        super.entityInit();
+    }
+    
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (this.shootingEntity != null) {
+            this.distanceX = this.shootingEntity.posX - this.posX;
+            this.distanceY = this.shootingEntity.posY - this.posY;
+            this.distanceZ = this.shootingEntity.posZ - this.posZ;
+            this.distanceTotal = Math.sqrt(this.distanceX * this.distanceX + this.distanceY * this.distanceY + this.distanceZ * this.distanceZ);
+            if (this.distanceTotal > 3.0) {
+                this.returnToOwner(this.shootingEntity, true);
+            }
+            if (this.shootingEntity instanceof EntityPlayer) {
+                final ItemStack itemstack = ((EntityPlayer)this.shootingEntity).getHeldItemMainhand();
+                if (itemstack.isEmpty() || (this.thrownItem != null && itemstack.getItem() != this.thrownItem.getItem()) || !this.shootingEntity.isEntityAlive()) {
+                    this.pickUpByOwner();
+                }
+            }
+        }
+        else {
+            this.setDead();
+        }
+        if (this.inGround) {
+            this.inGround = false;
+            return;
+        }
+        this.returnToOwner(this.shootingEntity, false);
+    }
+    
+    public void returnToOwner(final Entity entity, final boolean looseFromGround) {
+        if (entity == null) {
+            return;
+        }
+        if (looseFromGround) {
+            this.inGround = false;
+        }
+        double targetPosX = this.shootingEntity.posX;
+        final double targetPosY = this.shootingEntity.getEntityBoundingBox().minY + 0.4000000059604645;
+        double targetPosZ = this.shootingEntity.posZ;
+        final float f = 27.0f;
+        final float f2 = 2.0f;
+        targetPosX += -Math.sin((this.shootingEntity.rotationYaw + f) * 0.017453292f) * Math.cos(this.shootingEntity.rotationPitch * 0.017453292f) * f2;
+        targetPosZ += Math.cos((this.shootingEntity.rotationYaw + f) * 0.017453292f) * Math.cos(this.shootingEntity.rotationPitch * 0.017453292f) * f2;
+        this.distanceX = targetPosX - this.posX;
+        this.distanceY = targetPosY - this.posY;
+        this.distanceZ = targetPosZ - this.posZ;
+        this.distanceTotal = Math.sqrt(this.distanceX * this.distanceX + this.distanceY * this.distanceY + this.distanceZ * this.distanceZ);
+        if (this.distanceTotal > 3.0) {
+            this.posX = targetPosX;
+            this.posY = targetPosY;
+            this.posZ = targetPosZ;
+        }
+        else if (this.distanceTotal > 2.5) {
+            this.isSwinging = false;
+            this.motionX *= -0.5;
+            this.motionY *= -0.5;
+            this.motionZ *= -0.5;
+        }
+        if (!this.isSwinging) {
+            final float f3 = 0.2f;
+            this.motionX = this.distanceX * f3 * this.distanceTotal;
+            this.motionY = this.distanceY * f3 * this.distanceTotal;
+            this.motionZ = this.distanceZ * f3 * this.distanceTotal;
+        }
+    }
+    
+    public void pickUpByOwner() {
+        this.setDead();
+        if (this.shootingEntity instanceof EntityPlayer && this.thrownItem != null) {
+            PlayerWeaponData.setFlailThrown((EntityPlayer)this.shootingEntity, false);
+        }
+    }
+    
+    public void swing(final float f, final float f1, final float f2, final float f3) {
+        if (this.isSwinging) {
+            return;
+        }
+        this.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 0.5f, 0.4f / (this.rand.nextFloat() * 0.4f + 0.8f));
+        final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        final float y = -MathHelper.sin(f * 0.017453292f);
+        final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        this.shoot(x, y, z, f2, f3);
+        this.isSwinging = true;
+        this.inGround = false;
+    }
+    
+    @Override
+    public void onEntityHit(final Entity entity) {
+        if (entity == this.shootingEntity) {
+            return;
+        }
+        DamageSource damagesource;
+        if (this.shootingEntity instanceof EntityLivingBase) {
+            damagesource = DamageSource.causeMobDamage((EntityLivingBase)this.shootingEntity);
+        }
+        else {
+            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
+        }
+        if (entity.attackEntityFrom(damagesource, this.flailDamage + this.extraDamage)) {
+            this.playHitSound();
+            this.returnToOwner(this.shootingEntity, true);
+        }
+        else {
+            this.bounceBack();
+        }
+    }
+    
+    public void bounceBack() {
+        this.motionX *= -0.8;
+        this.motionY *= -0.8;
+        this.motionZ *= -0.8;
+        this.rotationYaw += 180.0f;
+        this.prevRotationYaw += 180.0f;
+        this.ticksInAir = 0;
+    }
+    
+    @Override
+    public void playHitSound() {
+        if (this.inGround) {
+            return;
+        }
+        this.playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, this.rand.nextFloat() * 0.4f + 0.8f);
+    }
+    
+    @Override
+    public void setThrownItemStack(final ItemStack itemstack) {
+        if (!(itemstack.getItem() instanceof ItemFlail)) {
+            return;
+        }
+        super.setThrownItemStack(itemstack);
+        this.flailDamage = ((ItemFlail)itemstack.getItem()).getFlailDamage();
+    }
+    
+    @Override
+    public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setFloat("fDmg", this.flailDamage);
+    }
+    
+    @Override
+    public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+        super.readEntityFromNBT(nbttagcompound);
+        this.flailDamage = nbttagcompound.getFloat("fDmg");
+    }
+    
+    @Override
+    public void onCollideWithPlayer(final EntityPlayer entityplayer) {
+    }
+    
+    @Override
+    public int getMaxArrowShake() {
+        return 0;
+    }
 }

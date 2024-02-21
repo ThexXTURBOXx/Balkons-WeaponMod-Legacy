@@ -1,56 +1,52 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
+import ckathode.weaponmod.entity.*;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.util.math.*;
+import net.minecraft.entity.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
 
-import org.lwjgl.opengl.GL11;
-
-import ckathode.weaponmod.WeaponModResources;
-import ckathode.weaponmod.entity.EntityDummy;
-
-public class RenderDummy extends Render
+public class RenderDummy extends Render<EntityDummy>
 {
-	private ModelDummy	modelDummy;
-	
-	public RenderDummy()
-	{
-		shadowSize = 1.0F;
-		modelDummy = new ModelDummy();
-	}
-	
-	public void renderDummy(EntityDummy entitydummy, double d, double d1, double d2, float f, float f1)
-	{
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d, (float) d1 - 0.4F, (float) d2);
-		GL11.glRotatef(180F - f, 0.0F, 1.0F, 0.0F);
-		float f3 = entitydummy.getTimeSinceHit() - f1;
-		float f4 = entitydummy.getCurrentDamage() - f1;
-		if (f4 < 0.0F)
-		{
-			f4 = 0.0F;
-		}
-		if (f3 > 0.0F)
-		{
-			GL11.glRotatef((((MathHelper.sin(f3) * f3 * f4) / 10F) * entitydummy.getRockDirection()) / 5, 0.0F, 0.0F, 1.0F);
-		}
-		bindEntityTexture(entitydummy);
-		GL11.glScalef(-1F, -1F, 1.0F);
-		GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F);
-		modelDummy.render(entitydummy, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GL11.glPopMatrix();
-	}
-	
-	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
-	{
-		renderDummy((EntityDummy) entity, d, d1, d2, f, f1);
-	}
-	
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
-	{
-		return WeaponModResources.Textures.DUMMY;
-	}
+    private ModelDummy modelDummy;
+    
+    public RenderDummy(final RenderManager renderManager) {
+        super(renderManager);
+        this.modelDummy = new ModelDummy();
+        this.shadowSize = 1.0f;
+    }
+    
+    public void doRender(final EntityDummy entitydummy, final double d, final double d1, final double d2, final float f, final float f1) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float)d, (float)d1 - 0.025f, (float)d2);
+        GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
+        final float f2 = entitydummy.getTimeSinceHit() - f1;
+        float f3 = entitydummy.getCurrentDamage() - f1;
+        if (f3 < 0.0f) {
+            f3 = 0.0f;
+        }
+        if (f2 > 0.0f) {
+            GlStateManager.rotate(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f, 0.0f, 0.0f, 1.0f);
+        }
+        this.bindEntityTexture(entitydummy);
+        GlStateManager.scale(-1.0f, -1.0f, 1.0f);
+        GlStateManager.rotate(180.0f, 1.0f, 0.0f, 0.0f);
+        if (this.renderOutlines) {
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(this.getTeamColor(entitydummy));
+        }
+        this.modelDummy.render(entitydummy, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        if (this.renderOutlines) {
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+        GlStateManager.popMatrix();
+        super.doRender(entitydummy, d, d1, d2, f, f1);
+    }
+    
+    protected ResourceLocation getEntityTexture(final EntityDummy entity) {
+        return WeaponModResources.Textures.DUMMY;
+    }
 }

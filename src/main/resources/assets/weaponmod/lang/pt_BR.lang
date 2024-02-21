@@ -83,6 +83,10 @@ item.katana.gold.name=Katana de Ouro
 
 item.flintlock.name=Garrucha
 
+item.mortar.name=Argamassa à Mão
+item.mortar-ironpart.name=Culatra do Argamassa
+item.shell.name=Casca de Morteiro
+
 attribute.name.weaponmod.ignoreArmour=Ignora Armadura
 attribute.name.weaponmod.knockback=Tranco
 attribute.name.weaponmod.attackSpeed=Velocidade de Ataque

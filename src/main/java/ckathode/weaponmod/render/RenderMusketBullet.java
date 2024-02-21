@@ -1,1 +1,71 @@
-package ckathode.weaponmod.render;import net.minecraft.client.renderer.Tessellator;import net.minecraft.client.renderer.entity.Render;import net.minecraft.entity.Entity;import net.minecraft.util.ResourceLocation;import org.lwjgl.opengl.GL11;import ckathode.weaponmod.WeaponModResources;import ckathode.weaponmod.entity.projectile.EntityMusketBullet;public class RenderMusketBullet extends Render{	public void renderMusketBullet(EntityMusketBullet entityarrow, double d, double d1, double d2, float f, float f1)	{		bindEntityTexture(entityarrow);		GL11.glPushMatrix();		GL11.glTranslatef((float) d, (float) d1, (float) d2);		Tessellator tessellator = Tessellator.instance;		float f2 = 0.0F;		float f3 = 5F / 16F;		float f10 = 0.05625F;		GL11.glEnable(32826 /*GL_RESCALE_NORMAL_EXT*/);		GL11.glScalef(0.07F, 0.07F, 0.07F);		GL11.glNormal3f(f10, 0.0F, 0.0F);		tessellator.startDrawingQuads();		tessellator.addVertexWithUV(0D, -1D, -1D, f2, f2);		tessellator.addVertexWithUV(0D, -1D, 1D, f3, f2);		tessellator.addVertexWithUV(0D, 1D, 1D, f3, f3);		tessellator.addVertexWithUV(0D, 1D, -1D, f2, f3);		tessellator.draw();		GL11.glNormal3f(-f10, 0.0F, 0.0F);		tessellator.startDrawingQuads();		tessellator.addVertexWithUV(0D, 1D, -1D, f2, f2);		tessellator.addVertexWithUV(0D, 1D, 1D, f3, f2);		tessellator.addVertexWithUV(0D, -1D, 1D, f3, f3);		tessellator.addVertexWithUV(0D, -1D, -1D, f2, f3);		tessellator.draw();		for (int j = 0; j < 4; j++)		{			GL11.glRotatef(90F, 1.0F, 0.0F, 0.0F);			GL11.glNormal3f(0.0F, 0.0F, f10);			tessellator.startDrawingQuads();			tessellator.addVertexWithUV(-1D, -1D, 0.0D, f2, f2);			tessellator.addVertexWithUV(1D, -1D, 0.0D, f3, f2);			tessellator.addVertexWithUV(1D, 1D, 0.0D, f3, f3);			tessellator.addVertexWithUV(-1D, 1D, 0.0D, f2, f3);			tessellator.draw();		}				GL11.glDisable(32826 /*GL_RESCALE_NORMAL_EXT*/);		GL11.glPopMatrix();	}		@Override	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)	{		renderMusketBullet((EntityMusketBullet) entity, d, d1, d2, f, f1);	}		@Override	protected ResourceLocation getEntityTexture(Entity entity)	{		return WeaponModResources.Textures.BULLET;	}}
+package ckathode.weaponmod.render;
+
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.entity.*;
+import net.minecraft.client.renderer.vertex.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
+
+public class RenderMusketBullet extends Render<EntityMusketBullet>
+{
+    public RenderMusketBullet(final RenderManager renderManager) {
+        super(renderManager);
+    }
+    
+    public void doRender(final EntityMusketBullet entitymusketbullet, final double d, final double d1, final double d2, final float f, final float f1) {
+        this.bindEntityTexture(entitymusketbullet);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.pushMatrix();
+        GlStateManager.disableLighting();
+        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder vertexbuffer = tessellator.getBuffer();
+        final float f2 = 0.0f;
+        final float f3 = 0.3125f;
+        final float f4 = 0.05625f;
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.scale(0.07f, 0.07f, 0.07f);
+        if (this.renderOutlines) {
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(this.getTeamColor(entitymusketbullet));
+        }
+        GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.0).endVertex();
+        vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.3125).endVertex();
+        vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.3125).endVertex();
+        tessellator.draw();
+        GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.0).endVertex();
+        vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.3125).endVertex();
+        vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.3125).endVertex();
+        tessellator.draw();
+        for (int j = 0; j < 4; ++j) {
+            GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+            GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
+            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+            vertexbuffer.pos(-1.0, -1.0, 0.0).tex(0.0, 0.0).endVertex();
+            vertexbuffer.pos(1.0, -1.0, 0.0).tex(0.3125, 0.0).endVertex();
+            vertexbuffer.pos(1.0, 1.0, 0.0).tex(0.3125, 0.3125).endVertex();
+            vertexbuffer.pos(-1.0, 1.0, 0.0).tex(0.0, 0.3125).endVertex();
+            tessellator.draw();
+        }
+        if (this.renderOutlines) {
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+        GlStateManager.disableRescaleNormal();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
+        super.doRender(entitymusketbullet, d, d1, d2, f, f1);
+    }
+    
+    protected ResourceLocation getEntityTexture(final EntityMusketBullet entity) {
+        return WeaponModResources.Textures.BULLET;
+    }
+}

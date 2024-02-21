@@ -1,80 +1,71 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
+import ckathode.weaponmod.entity.*;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.util.math.*;
+import net.minecraft.entity.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
 
-import org.lwjgl.opengl.GL11;
-
-import ckathode.weaponmod.WeaponModResources;
-import ckathode.weaponmod.entity.EntityCannon;
-
-public class RenderCannon extends Render
+public class RenderCannon extends Render<EntityCannon>
 {
-	protected ModelCannon			modelCannon;
-	protected ModelCannonBarrel		modelBarrel;
-	protected ModelCannonStandard	modelStandard;
-	
-	public RenderCannon()
-	{
-		shadowSize = 1.0F;
-		modelCannon = new ModelCannon();
-		modelBarrel = new ModelCannonBarrel();
-		modelStandard = new ModelCannonStandard();
-	}
-	
-	private void renderCannon(EntityCannon entitycannon, double d, double d1, double d2, float f, float f1)
-	{
-		GL11.glPushMatrix();
-		
-		float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
-		rot = Math.min(rot, 20F);
-		
-		GL11.glTranslatef((float) d, (float) d1 + 1.9F, (float) d2);
-		GL11.glRotatef(-f, 0.0F, 1.0F, 0.0F);
-		float f3 = entitycannon.getTimeSinceHit() - f1;
-		float f4 = entitycannon.getCurrentDamage() - f1;
-		if (f4 < 0.0F)
-		{
-			f4 = 0.0F;
-		}
-		if (f3 > 0.0F)
-		{
-			GL11.glRotatef((((MathHelper.sin(f3) * f3 * f4) / 10F) * entitycannon.getRockDirection()) / 5, 0.0F, 0.0F, 1.0F);
-		}
-		bindEntityTexture(entitycannon);
-		GL11.glScalef(-1.6F, -1.6F, 1.6F);
-		if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2)
-		{
-			float f5 = 1.5F;
-			GL11.glColor3f(entitycannon.getBrightness(0F) * f5, entitycannon.getBrightness(0F) * f5, entitycannon.getBrightness(0F) * f5);
-		}
-		
-		GL11.glPushMatrix();
-		GL11.glTranslatef(0F, 1F, 0F);
-		GL11.glRotatef(rot, 1F, 0F, 0F);
-		GL11.glTranslatef(0F, -1F, 0F);
-		modelBarrel.render(entitycannon, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GL11.glPopMatrix();
-		
-		float yaw = -(float) Math.toRadians(f);
-		modelStandard.base_1.rotateAngleY = yaw;
-		modelStandard.base_2.rotateAngleY = yaw;
-		modelStandard.base_stand.rotateAngleY = yaw;
-		modelStandard.render(entitycannon, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		GL11.glPopMatrix();
-	}
-	
-	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
-	{
-		renderCannon((EntityCannon) entity, d, d1, d2, f, f1);
-	}
-	
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
-	{
-		return WeaponModResources.Textures.CANNON;
-	}
+    protected ModelCannon modelCannon;
+    protected ModelCannonBarrel modelBarrel;
+    protected ModelCannonStandard modelStandard;
+    
+    public RenderCannon(final RenderManager renderManager) {
+        super(renderManager);
+        this.modelCannon = new ModelCannon();
+        this.modelBarrel = new ModelCannonBarrel();
+        this.modelStandard = new ModelCannonStandard();
+        this.shadowSize = 1.0f;
+    }
+    
+    public void doRender(final EntityCannon entitycannon, final double d, final double d1, final double d2, final float f, final float f1) {
+        GlStateManager.pushMatrix();
+        float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
+        rot = Math.min(rot, 20.0f);
+        GlStateManager.translate((float)d, (float)d1 + 2.375f, (float)d2);
+        GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
+        final float f2 = entitycannon.getTimeSinceHit() - f1;
+        float f3 = entitycannon.getCurrentDamage() - f1;
+        if (f3 < 0.0f) {
+            f3 = 0.0f;
+        }
+        if (f2 > 0.0f) {
+            GlStateManager.rotate(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f, 0.0f, 0.0f, 1.0f);
+        }
+        this.bindEntityTexture(entitycannon);
+        GlStateManager.scale(-1.6f, -1.6f, 1.6f);
+        if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
+            final float f4 = 1.5f;
+            GlStateManager.color(entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4);
+        }
+        if (this.renderOutlines) {
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(rot, 1.0f, 0.0f, 0.0f);
+        GlStateManager.translate(0.0f, -1.0f, 0.0f);
+        this.modelBarrel.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        GlStateManager.popMatrix();
+        final float yaw = -(float)Math.toRadians(f);
+        this.modelStandard.base_1.rotateAngleY = yaw;
+        this.modelStandard.base_2.rotateAngleY = yaw;
+        this.modelStandard.base_stand.rotateAngleY = yaw;
+        this.modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        if (this.renderOutlines) {
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(this.getTeamColor(entitycannon));
+        }
+        GlStateManager.popMatrix();
+        super.doRender(entitycannon, d, d1, d2, f, f1);
+    }
+    
+    protected ResourceLocation getEntityTexture(final EntityCannon entity) {
+        return WeaponModResources.Textures.CANNON;
+    }
 }

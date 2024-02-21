@@ -1,1 +1,177 @@
-package ckathode.weaponmod.entity.projectile;import net.minecraft.entity.Entity;import net.minecraft.entity.EntityLivingBase;import net.minecraft.item.ItemStack;import net.minecraft.nbt.NBTTagCompound;import net.minecraft.util.DamageSource;import net.minecraft.util.MathHelper;import net.minecraft.util.MovingObjectPosition;import net.minecraft.world.World;import ckathode.weaponmod.BalkonsWeaponMod;import ckathode.weaponmod.PhysHelper;import ckathode.weaponmod.WeaponDamageSource;public class EntityDynamite extends EntityProjectile{	private int		explodefuse;	private boolean	extinguished;		public EntityDynamite(World world)	{		super(world);		setPickupMode(NO_PICKUP);		extinguished = false;		explodefuse = rand.nextInt(30) + 20;	}		public EntityDynamite(World world, double d, double d1, double d2)	{		this(world);		setPosition(d, d1, d2);	}		public EntityDynamite(World world, EntityLivingBase entityliving, int i)	{		this(world);		shootingEntity = entityliving;		setLocationAndAngles(entityliving.posX, entityliving.posY + entityliving.getEyeHeight(), entityliving.posZ, entityliving.rotationYaw, entityliving.rotationPitch);		posX -= MathHelper.cos((rotationYaw / 180F) * 3.141593F) * 0.16F;		posY -= 0.1D;		posZ -= MathHelper.sin((rotationYaw / 180F) * 3.141593F) * 0.16F;		setPosition(posX, posY, posZ);		motionX = -MathHelper.sin((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);		motionZ = MathHelper.cos((rotationYaw / 180F) * 3.141593F) * MathHelper.cos((rotationPitch / 180F) * 3.141593F);		motionY = -MathHelper.sin((rotationPitch / 180F) * 3.141593F);		setThrowableHeading(motionX, motionY, motionZ, 0.7F, 4.0F);		explodefuse = i;	}		@Override	protected void entityInit()	{	}		@Override	public void onUpdate()	{		super.onUpdate();				if (!inGround && !beenInGround)		{			rotationPitch -= 50F;		} else		{			rotationPitch = 180F;		}				if (isInWater()) if (!extinguished)		{			extinguished = true;			worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));			for (int k = 0; k < 8; k++)			{				float f6 = 0.25F;				worldObj.spawnParticle("explode", posX - motionX * f6, posY - motionY * f6, posZ - motionZ * f6, motionX, motionY, motionZ);			}		}				explodefuse--;		if (!extinguished) if (explodefuse <= 0)		{			detonate();			setDead();		} else if (explodefuse > 0)		{			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, 0.0D);		}	}		@Override	public void onEntityHit(Entity entity)	{		DamageSource damagesource = null;		if (shootingEntity == null)		{			damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);		} else		{			damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, shootingEntity);		}		if (entity.attackEntityFrom(damagesource, 1))		{			applyEntityHitEffects(entity);			playHitSound();			setVelocity(0D, 0D, 0D);			ticksInAir = 0;		}	}		@Override	public void onGroundHit(MovingObjectPosition mop)	{		xTile = mop.blockX;		yTile = mop.blockY;		zTile = mop.blockZ;		inTile = worldObj.getBlock(xTile, yTile, zTile);		motionX = (float) (mop.hitVec.xCoord - posX);		motionY = (float) (mop.hitVec.yCoord - posY);		motionZ = (float) (mop.hitVec.zCoord - posZ);		float f1 = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);		posX -= (motionX / f1) * 0.05D;		posY -= (motionY / f1) * 0.05D;		posZ -= (motionZ / f1) * 0.05D;				motionX *= -0.2D;		motionZ *= -0.2D;		if (mop.sideHit == 1)		{			inGround = true;			beenInGround = true;		} else		{			inGround = false;			worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));		}				if (inTile != null)		{			inTile.onEntityCollidedWithBlock(worldObj, xTile, yTile, zTile, this);		}	}		private void detonate()	{		if (worldObj.isRemote) return;		if (extinguished) if (ticksInGround >= 200 || ticksInAir >= 200)		{			setDead();		}		float f = 2.0F;		PhysHelper.createAdvancedExplosion(worldObj, this, posX, posY, posZ, f, BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage, true);	}		@Override	public boolean aimRotation()	{		return false;	}		@Override	public int getMaxArrowShake()	{		return 0;	}		@Override	public ItemStack getPickupItem()	{		return new ItemStack(BalkonsWeaponMod.dynamite, 1);	}		@Override	public float getShadowSize()	{		return 0.2F;	}		@Override	public void playHitSound()	{		worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));	}		@Override	public void writeEntityToNBT(NBTTagCompound nbttagcompound)	{		super.writeEntityToNBT(nbttagcompound);		nbttagcompound.setByte("fuse", (byte) explodefuse);		nbttagcompound.setBoolean("off", extinguished);	}		@Override	public void readEntityFromNBT(NBTTagCompound nbttagcompound)	{		super.readEntityFromNBT(nbttagcompound);		explodefuse = nbttagcompound.getByte("fuse");		extinguished = nbttagcompound.getBoolean("off");	}}
+package ckathode.weaponmod.entity.projectile;
+
+import net.minecraft.world.*;
+import net.minecraft.entity.*;
+import net.minecraft.init.*;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
+import net.minecraft.block.state.*;
+import ckathode.weaponmod.*;
+import net.minecraft.item.*;
+import net.minecraft.nbt.*;
+
+public class EntityDynamite extends EntityProjectile
+{
+    private int explodefuse;
+    private boolean extinguished;
+    
+    public EntityDynamite(final World world) {
+        super(world);
+        this.setPickupMode(0);
+        this.extinguished = false;
+        this.explodefuse = this.rand.nextInt(30) + 20;
+    }
+    
+    public EntityDynamite(final World world, final double d, final double d1, final double d2) {
+        this(world);
+        this.setPosition(d, d1, d2);
+    }
+    
+    public EntityDynamite(final World world, final EntityLivingBase shooter, final int i) {
+        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
+        this.shootingEntity = shooter;
+        this.explodefuse = i;
+    }
+    
+    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3, final float f4) {
+        final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        final float y = -MathHelper.sin(f * 0.017453292f);
+        final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        this.shoot(x, y, z, f3, f4);
+        this.motionX += entity.motionX;
+        this.motionZ += entity.motionZ;
+        if (!entity.onGround) {
+            this.motionY += entity.motionY;
+        }
+    }
+    
+    @Override
+    protected void entityInit() {
+    }
+    
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (!this.inGround && !this.beenInGround) {
+            this.rotationPitch -= 50.0f;
+        }
+        else {
+            this.rotationPitch = 180.0f;
+        }
+        if (this.isInWater() && !this.extinguished) {
+            this.extinguished = true;
+            this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
+            for (int k = 0; k < 8; ++k) {
+                final float f6 = 0.25f;
+                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX - this.motionX * f6, this.posY - this.motionY * f6, this.posZ - this.motionZ * f6, this.motionX, this.motionY, this.motionZ, new int[0]);
+            }
+        }
+        --this.explodefuse;
+        if (!this.extinguished) {
+            if (this.explodefuse <= 0) {
+                this.detonate();
+                this.setDead();
+            }
+            else if (this.explodefuse > 0) {
+                this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0, 0.0, 0.0, new int[0]);
+            }
+        }
+    }
+    
+    @Override
+    public void onEntityHit(final Entity entity) {
+        DamageSource damagesource;
+        if (this.shootingEntity == null) {
+            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
+        }
+        else {
+            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
+        }
+        if (entity.attackEntityFrom(damagesource, 1.0f)) {
+            this.applyEntityHitEffects(entity);
+            this.playHitSound();
+            this.setVelocity(0.0, 0.0, 0.0);
+            this.ticksInAir = 0;
+        }
+    }
+    
+    @Override
+    public void onGroundHit(final RayTraceResult raytraceResult) {
+        final BlockPos blockpos = raytraceResult.getBlockPos();
+        this.xTile = blockpos.getX();
+        this.yTile = blockpos.getY();
+        this.zTile = blockpos.getZ();
+        final IBlockState iblockstate = this.world.getBlockState(blockpos);
+        this.inTile = iblockstate.getBlock();
+        this.motionX = raytraceResult.hitVec.x - this.posX;
+        this.motionY = raytraceResult.hitVec.y - this.posY;
+        this.motionZ = raytraceResult.hitVec.z - this.posZ;
+        final float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+        this.posX -= this.motionX / f1 * 0.05;
+        this.posY -= this.motionY / f1 * 0.05;
+        this.posZ -= this.motionZ / f1 * 0.05;
+        this.motionX *= -0.2;
+        this.motionZ *= -0.2;
+        if (raytraceResult.sideHit == EnumFacing.UP) {
+            this.inGround = true;
+            this.beenInGround = true;
+        }
+        else {
+            this.inGround = false;
+            this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
+        }
+        if (this.inTile != null) {
+            this.inTile.onEntityCollision(this.world, blockpos, iblockstate, this);
+        }
+    }
+    
+    private void detonate() {
+        if (this.world.isRemote) {
+            return;
+        }
+        if (this.extinguished && (this.ticksInGround >= 200 || this.ticksInAir >= 200)) {
+            this.setDead();
+        }
+        final float f = 2.0f;
+        PhysHelper.createAdvancedExplosion(this.world, this, this.posX, this.posY, this.posZ, f, BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage, true, false, false);
+    }
+    
+    @Override
+    public boolean aimRotation() {
+        return false;
+    }
+    
+    @Override
+    public int getMaxArrowShake() {
+        return 0;
+    }
+    
+    @Override
+    public ItemStack getPickupItem() {
+        return new ItemStack(BalkonsWeaponMod.dynamite, 1);
+    }
+    
+    @Override
+    protected ItemStack getArrowStack() {
+        return new ItemStack(BalkonsWeaponMod.dynamite);
+    }
+    
+    @Override
+    public void playHitSound() {
+        this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
+    }
+    
+    @Override
+    public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setByte("fuse", (byte)this.explodefuse);
+        nbttagcompound.setBoolean("off", this.extinguished);
+    }
+    
+    @Override
+    public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+        super.readEntityFromNBT(nbttagcompound);
+        this.explodefuse = nbttagcompound.getByte("fuse");
+        this.extinguished = nbttagcompound.getBoolean("off");
+    }
+}

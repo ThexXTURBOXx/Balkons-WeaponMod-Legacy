@@ -1,0 +1,28 @@
+{
+    "parent": "weaponmod:item/halberd.wood",
+    "textures": {
+        "layer0": "weaponmod:items/halberd.wood"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, 90, 35 ],
+            "translation": [ 0, 3.0, 1 ],
+            "scale": [ 1.7, 1.7, 1.7 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, -90, -35 ],
+            "translation": [ 0, 3.0, 1 ],
+            "scale": [ 1.7, 1.7, 1.7 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 90, 25 ],
+            "translation": [ 0.50, 3.2, 0.0 ],
+            "scale": [ 0.68, 0.68, 0.68 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, -90, -25 ],
+            "translation": [ 0.50, 3.2, 0.0 ],
+            "scale": [ 0.68, 0.68, 0.68 ]
+        }
+    }
+}

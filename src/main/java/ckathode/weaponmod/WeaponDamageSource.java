@@ -1,35 +1,29 @@
 package ckathode.weaponmod;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import ckathode.weaponmod.entity.projectile.EntityProjectile;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.entity.*;
+import net.minecraft.util.*;
 
 public class WeaponDamageSource extends EntityDamageSourceIndirect
 {
-	private EntityProjectile	projectileEntity;
-	private Entity				shooterEntity;
-	
-	public WeaponDamageSource(String s, EntityProjectile projectile, Entity entity)
-	{
-		super(s, projectile, entity);
-		projectileEntity = projectile;
-		shooterEntity = entity;
-	}
-	
-	public Entity getProjectile()
-	{
-		return projectileEntity;
-	}
-	
-	@Override
-	public Entity getEntity()
-	{
-		return shooterEntity;
-	}
-	
-	public static DamageSource causeProjectileWeaponDamage(EntityProjectile projectile, Entity entity)
-	{
-		return (new WeaponDamageSource("weapon", projectile, entity)).setProjectile();
-	}
+    private EntityProjectile projectileEntity;
+    private Entity shooterEntity;
+    
+    public WeaponDamageSource(final String s, final EntityProjectile projectile, final Entity entity) {
+        super(s, projectile, entity);
+        this.projectileEntity = projectile;
+        this.shooterEntity = entity;
+    }
+    
+    public Entity getProjectile() {
+        return this.projectileEntity;
+    }
+    
+    public Entity getTrueSource() {
+        return this.shooterEntity;
+    }
+    
+    public static DamageSource causeProjectileWeaponDamage(final EntityProjectile projectile, final Entity entity) {
+        return new WeaponDamageSource("weapon", projectile, entity).setProjectile();
+    }
 }

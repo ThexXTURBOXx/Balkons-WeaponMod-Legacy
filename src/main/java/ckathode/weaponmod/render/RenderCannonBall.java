@@ -1,75 +1,71 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.client.renderer.entity.*;
+import net.minecraft.entity.*;
+import net.minecraft.client.renderer.vertex.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.util.*;
+import ckathode.weaponmod.*;
 
-import org.lwjgl.opengl.GL11;
-
-import ckathode.weaponmod.WeaponModResources;
-import ckathode.weaponmod.entity.projectile.EntityCannonBall;
-
-public class RenderCannonBall extends Render
+public class RenderCannonBall extends Render<EntityCannonBall>
 {
-	public RenderCannonBall()
-	{
-		shadowSize = 0.5F;
-	}
-	
-	public void renderCannonBall(EntityCannonBall entitycannonball, double d, double d1, double d2, float f, float f1)
-	{
-		Tessellator tessellator = Tessellator.instance;
-		GL11.glPushMatrix();
-		bindEntityTexture(entitycannonball);
-		GL11.glTranslatef((float) d, (float) d1, (float) d2);
-		GL11.glRotatef(180F - f, 0.0F, 1.0F, 0.0F);
-		GL11.glScalef(-1F, -1F, 1.0F);
-		GL11.glScalef(0.7F, 0.7F, 0.7F);
-		GL11.glRotatef(180F, 1.0F, 0.0F, 0.0F);
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(-0.5F, +0.5F, -0.5F, 0F, 1F);
-		tessellator.addVertexWithUV(+0.5F, +0.5F, -0.5F, 1F, 1F);
-		tessellator.addVertexWithUV(+0.5F, -0.5F, -0.5F, 1F, 0F);
-		tessellator.addVertexWithUV(-0.5F, -0.5F, -0.5F, 0F, 0F);
-		
-		tessellator.addVertexWithUV(-0.5F, -0.5F, +0.5F, 0F, 0F);
-		tessellator.addVertexWithUV(+0.5F, -0.5F, +0.5F, 1F, 0F);
-		tessellator.addVertexWithUV(+0.5F, +0.5F, +0.5F, 1F, 1F);
-		tessellator.addVertexWithUV(-0.5F, +0.5F, +0.5F, 0F, 1F);
-		
-		tessellator.addVertexWithUV(-0.5F, -0.5F, -0.5F, 0F, 0F);
-		tessellator.addVertexWithUV(+0.5F, -0.5F, -0.5F, 1F, 0F);
-		tessellator.addVertexWithUV(+0.5F, -0.5F, +0.5F, 1F, 1F);
-		tessellator.addVertexWithUV(-0.5F, -0.5F, +0.5F, 0F, 1F);
-		
-		tessellator.addVertexWithUV(-0.5F, +0.5F, +0.5F, 0F, 1F);
-		tessellator.addVertexWithUV(+0.5F, +0.5F, +0.5F, 1F, 1F);
-		tessellator.addVertexWithUV(+0.5F, +0.5F, -0.5F, 1F, 0F);
-		tessellator.addVertexWithUV(-0.5F, +0.5F, -0.5F, 0F, 0F);
-		
-		tessellator.addVertexWithUV(-0.5F, -0.5F, +0.5F, 0F, 0F);
-		tessellator.addVertexWithUV(-0.5F, +0.5F, +0.5F, 1F, 0F);
-		tessellator.addVertexWithUV(-0.5F, +0.5F, -0.5F, 1F, 1F);
-		tessellator.addVertexWithUV(-0.5F, -0.5F, -0.5F, 0F, 1F);
-		
-		tessellator.addVertexWithUV(+0.5F, -0.5F, -0.5F, 0F, 0F);
-		tessellator.addVertexWithUV(+0.5F, +0.5F, -0.5F, 1F, 0F);
-		tessellator.addVertexWithUV(+0.5F, +0.5F, +0.5F, 1F, 1F);
-		tessellator.addVertexWithUV(+0.5F, -0.5F, +0.5F, 0F, 1F);
-		tessellator.draw();
-		GL11.glPopMatrix();
-	}
-	
-	@Override
-	public void doRender(Entity entity, double d, double d1, double d2, float f, float f1)
-	{
-		renderCannonBall((EntityCannonBall) entity, d, d1, d2, f, f1);
-	}
-	
-	@Override
-	protected ResourceLocation getEntityTexture(Entity entity)
-	{
-		return WeaponModResources.Textures.CANNONBALL;
-	}
+    public RenderCannonBall(final RenderManager renderManager) {
+        super(renderManager);
+        this.shadowSize = 0.5f;
+    }
+    
+    public void doRender(final EntityCannonBall entitycannonball, final double d, final double d1, final double d2, final float f, final float f1) {
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder vertexbuffer = tessellator.getBuffer();
+        GlStateManager.pushMatrix();
+        this.bindEntityTexture(entitycannonball);
+        GlStateManager.disableLighting();
+        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.scale(-1.0f, -1.0f, 1.0f);
+        GlStateManager.scale(0.7f, 0.7f, 0.7f);
+        GlStateManager.rotate(180.0f, 1.0f, 0.0f, 0.0f);
+        if (this.renderOutlines) {
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(this.getTeamColor(entitycannonball));
+        }
+        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        vertexbuffer.pos(-0.5, 0.5, -0.5).tex(0.0, 1.0).endVertex();
+        vertexbuffer.pos(0.5, 0.5, -0.5).tex(1.0, 1.0).endVertex();
+        vertexbuffer.pos(0.5, -0.5, -0.5).tex(1.0, 0.0).endVertex();
+        vertexbuffer.pos(-0.5, -0.5, -0.5).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(-0.5, -0.5, 0.5).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(0.5, -0.5, 0.5).tex(1.0, 0.0).endVertex();
+        vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
+        vertexbuffer.pos(-0.5, 0.5, 0.5).tex(0.0, 1.0).endVertex();
+        vertexbuffer.pos(-0.5, -0.5, -0.5).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(0.5, -0.5, -0.5).tex(1.0, 0.0).endVertex();
+        vertexbuffer.pos(0.5, -0.5, 0.5).tex(1.0, 1.0).endVertex();
+        vertexbuffer.pos(-0.5, -0.5, 0.5).tex(0.0, 1.0).endVertex();
+        vertexbuffer.pos(-0.5, 0.5, 0.5).tex(0.0, 1.0).endVertex();
+        vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
+        vertexbuffer.pos(0.5, 0.5, -0.5).tex(1.0, 0.0).endVertex();
+        vertexbuffer.pos(-0.5, 0.5, -0.5).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(-0.5, -0.5, 0.5).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(-0.5, 0.5, 0.5).tex(1.0, 0.0).endVertex();
+        vertexbuffer.pos(-0.5, 0.5, -0.5).tex(1.0, 1.0).endVertex();
+        vertexbuffer.pos(-0.5, -0.5, -0.5).tex(0.0, 1.0).endVertex();
+        vertexbuffer.pos(0.5, -0.5, -0.5).tex(0.0, 0.0).endVertex();
+        vertexbuffer.pos(0.5, 0.5, -0.5).tex(1.0, 0.0).endVertex();
+        vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
+        vertexbuffer.pos(0.5, -0.5, 0.5).tex(0.0, 1.0).endVertex();
+        tessellator.draw();
+        if (this.renderOutlines) {
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
+        super.doRender(entitycannonball, d, d1, d2, f, f1);
+    }
+    
+    protected ResourceLocation getEntityTexture(final EntityCannonBall entity) {
+        return WeaponModResources.Textures.CANNONBALL;
+    }
 }

@@ -1,155 +1,117 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import ckathode.weaponmod.PlayerWeaponData;
-import ckathode.weaponmod.entity.projectile.EntityFlail;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.*;
+import net.minecraft.world.*;
+import javax.annotation.*;
+import net.minecraft.entity.player.*;
+import ckathode.weaponmod.*;
+import net.minecraftforge.fml.relauncher.*;
+import net.minecraft.entity.*;
+import ckathode.weaponmod.entity.projectile.*;
+import net.minecraft.init.*;
+import net.minecraft.util.*;
 
-public class ItemFlail extends WMItem
+public class ItemFlail extends ItemMelee
 {
-	public IIcon	iconIndexThrown;
-	private float	flailDamage;
-	
-	public ItemFlail(String id, Item.ToolMaterial toolmaterial)
-	{
-		super(id);
-		setMaxDamage(toolmaterial.getMaxUses());
-		flailDamage = 4F + toolmaterial.getDamageVsEntity() * 1F;
-	}
-	
-	@Override
-	public int getItemEnchantability()
-	{
-		return 0;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldRotateAroundWhenRendering()
-	{
-		return true;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean isFull3D()
-	{
-		return true;
-	}
-	
-	@Override
-	public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag)
-	{
-		if (!(entity instanceof EntityPlayer)) return;
-		EntityPlayer player = ((EntityPlayer) entity);
-		if (!PlayerWeaponData.isFlailThrown(player)) return;
-		
-		ItemStack itemstack2 = player.getCurrentEquippedItem();
-		if (itemstack2 == null || itemstack2.getItem() != this)
-		{
-			setThrown(player, false);
-		} else
-		{
-			int id = PlayerWeaponData.getFlailEntityId(player);
-			if (id != 0)
-			{
-				Entity entity1 = world.getEntityByID(id);
-				if (entity1 instanceof EntityFlail)
-				{
-					((EntityFlail) entity1).shootingEntity = player;
-					((EntityFlail) entity1).setThrownItemStack(itemstack);
-				}
-			}
-		}
-	}
-	
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
-		removePreviousFlail(world, entityplayer);
-		
-		if (itemstack.stackSize > 0)
-		{
-			entityplayer.swingItem();
-			
-			itemstack.damageItem(1, entityplayer);
-			throwFlail(itemstack, world, entityplayer);
-		}
-		
-		return itemstack;
-	}
-	
-	@Override
-	public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer entityplayer, Entity entity)
-	{
-		onItemRightClick(itemstack, entityplayer.worldObj, entityplayer);
-		return false;
-	}
-	
-	public void throwFlail(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
-		world.playSoundAtEntity(entityplayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-		if (!world.isRemote)
-		{
-			EntityFlail entity = new EntityFlail(world, entityplayer, itemstack);
-			PlayerWeaponData.setFlailEntityId(entityplayer, entity.getEntityId());
-			world.spawnEntityInWorld(entity);
-		}
-		
-		setThrown(entityplayer, true);
-	}
-	
-	public void setThrown(EntityPlayer entityplayer, boolean flag)
-	{
-		PlayerWeaponData.setFlailThrown(entityplayer, flag);
-	}
-	
-	private void removePreviousFlail(World world, EntityPlayer entityplayer)
-	{
-		int id = PlayerWeaponData.getFlailEntityId(entityplayer);
-		if (id != 0)
-		{
-			Entity entity = world.getEntityByID(id);
-			if (entity instanceof EntityFlail)
-			{
-				entity.setDead();
-			}
-		}
-	}
-	
-	public boolean getThrown(EntityPlayer entityplayer)
-	{
-		return PlayerWeaponData.isFlailThrown(entityplayer);
-	}
-	
-	public float getFlailDamage()
-	{
-		return flailDamage;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-	{
-		if (PlayerWeaponData.isFlailThrown(player))
-		{
-			return iconIndexThrown;
-		}
-		return super.getIcon(stack, renderPass, player, usingItem, useRemaining);
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconregister)
-	{
-		super.registerIcons(iconregister);
-		iconIndexThrown = iconregister.registerIcon("weaponmod:flail-thrown");
-	}
+    private float flailDamage;
+    
+    public ItemFlail(final String id, final MeleeComponent meleecomponent) {
+        super(id, meleecomponent);
+        this.flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamage() * 1.0f;
+        this.addPropertyOverride(new ResourceLocation("thrown"), new IItemPropertyGetter() {
+            @SideOnly(Side.CLIENT)
+            public float apply(final ItemStack stack, @Nullable final World worldIn, @Nullable final EntityLivingBase entityIn) {
+                return (entityIn == null) ? 0.0f : ((entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && PlayerWeaponData.isFlailThrown((EntityPlayer)entityIn)) ? 1.0f : 0.0f);
+            }
+        });
+    }
+    
+    @Override
+    public int getItemEnchantability() {
+        return 0;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public boolean isFull3D() {
+        return true;
+    }
+    
+    @Override
+    public void onUpdate(final ItemStack itemstack, final World world, final Entity entity, final int i, final boolean flag) {
+        if (!(entity instanceof EntityPlayer)) {
+            return;
+        }
+        final EntityPlayer player = (EntityPlayer)entity;
+        if (!PlayerWeaponData.isFlailThrown(player)) {
+            return;
+        }
+        final ItemStack itemstack2 = player.getHeldItemMainhand();
+        if (itemstack2.isEmpty() || itemstack2.getItem() != this) {
+            this.setThrown(player, false);
+        }
+        else {
+            final int id = PlayerWeaponData.getFlailEntityId(player);
+            if (id != 0) {
+                final Entity entity2 = world.getEntityByID(id);
+                if (entity2 instanceof EntityFlail) {
+                    ((EntityFlail)entity2).shootingEntity = player;
+                    ((EntityFlail)entity2).setThrownItemStack(itemstack);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer, final EnumHand hand) {
+        final ItemStack itemstack = entityplayer.getHeldItem(hand);
+        if (hand != EnumHand.MAIN_HAND) {
+            return (ActionResult<ItemStack>)new ActionResult(EnumActionResult.FAIL, itemstack);
+        }
+        this.removePreviousFlail(world, entityplayer);
+        if (!itemstack.isEmpty()) {
+            entityplayer.swingArm(hand);
+            itemstack.damageItem(1, entityplayer);
+            this.throwFlail(itemstack, world, entityplayer);
+        }
+        return (ActionResult<ItemStack>)new ActionResult(EnumActionResult.SUCCESS, itemstack);
+    }
+    
+    @Override
+    public boolean hitEntity(final ItemStack itemstack, final EntityLivingBase entityliving, final EntityLivingBase attacker) {
+        this.onItemRightClick(attacker.world, (EntityPlayer)attacker, EnumHand.MAIN_HAND);
+        return true;
+    }
+    
+    public void throwFlail(final ItemStack itemstack, final World world, final EntityPlayer entityplayer) {
+        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.5f, 0.4f / (ItemFlail.itemRand.nextFloat() * 0.4f + 0.8f));
+        if (!world.isRemote) {
+            final EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
+            entityflail.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
+            PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getEntityId());
+            world.spawnEntity(entityflail);
+        }
+        this.setThrown(entityplayer, true);
+    }
+    
+    public void setThrown(final EntityPlayer entityplayer, final boolean flag) {
+        PlayerWeaponData.setFlailThrown(entityplayer, flag);
+    }
+    
+    private void removePreviousFlail(final World world, final EntityPlayer entityplayer) {
+        final int id = PlayerWeaponData.getFlailEntityId(entityplayer);
+        if (id != 0) {
+            final Entity entity = world.getEntityByID(id);
+            if (entity instanceof EntityFlail) {
+                entity.setDead();
+            }
+        }
+    }
+    
+    public boolean getThrown(final EntityPlayer entityplayer) {
+        return PlayerWeaponData.isFlailThrown(entityplayer);
+    }
+    
+    public float getFlailDamage() {
+        return this.flailDamage;
+    }
 }

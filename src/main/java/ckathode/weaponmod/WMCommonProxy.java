@@ -1,28 +1,22 @@
 package ckathode.weaponmod;
 
-import net.minecraftforge.common.MinecraftForge;
-import ckathode.weaponmod.network.MsgCannonFire;
-import ckathode.weaponmod.network.MsgExplosion;
-import ckathode.weaponmod.network.WMMessagePipeline;
+import net.minecraftforge.common.*;
+import ckathode.weaponmod.network.*;
 
 public class WMCommonProxy
 {
-	public void registerEventHandlers()
-	{
-		MinecraftForge.EVENT_BUS.register(new WMCommonEventHandler());
-	}
-	
-	public void registerPackets(WMMessagePipeline pipeline)
-	{
-		pipeline.registerPacket(MsgCannonFire.class);
-		pipeline.registerPacket(MsgExplosion.class);
-	}
-	
-	public void registerIcons()
-	{
-	}
-	
-	public void registerRenderers(WeaponModConfig config)
-	{
-	}
+    public void registerEventHandlers() {
+        MinecraftForge.EVENT_BUS.register(new WMCommonEventHandler());
+    }
+    
+    public void registerPackets(final WMMessagePipeline pipeline) {
+        pipeline.registerPacket(MsgCannonFire.class);
+        pipeline.registerPacket(MsgExplosion.class);
+    }
+    
+    public void registerRenderersItem(final WeaponModConfig config) {
+    }
+    
+    public void registerRenderersEntity(final WeaponModConfig config) {
+    }
 }

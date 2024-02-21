@@ -83,6 +83,10 @@ item.katana.gold.name=金のカタナ
 
 item.flintlock.name=フリントロック式ピストル
 
+item.mortar.name=手モルタル
+item.mortar-ironpart.name=モルタル銃の銃身
+item.shell.name=モルタルシェル
+
 attribute.name.weaponmod.ignoreArmour=アーマー無効
 attribute.name.weaponmod.knockback=ノックバック
 attribute.name.weaponmod.attackSpeed=攻撃速度

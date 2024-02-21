@@ -83,6 +83,10 @@ item.katana.gold.name=金武士刀
 
 item.flintlock.name=燧发手枪
 
+item.mortar.name=手砂浆
+item.mortar-ironpart.name=砂浆枪管
+item.shell.name=砂浆外壳
+
 attribute.name.weaponmod.ignoreArmour=无视护甲
 attribute.name.weaponmod.knockback=击退
 attribute.name.weaponmod.attackSpeed=攻击速度

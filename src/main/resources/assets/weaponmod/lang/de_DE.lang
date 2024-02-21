@@ -56,9 +56,9 @@ item.firerod.name=Feuerstab
 item.cannon.name=Kanone
 item.cannonball.name=Kanonenkugel
 
-item.blunderbuss.name=Donnerbüchse
-item.blunder-ironpart.name=Donnerbüchsenlauf
-item.shot.name=Donnerbüchsenschrot
+item.blunderbuss.name=DonnerbÃ¼chse
+item.blunder-ironpart.name=DonnerbÃ¼chsenlauf
+item.shot.name=DonnerbÃ¼chsenschrot
 
 item.dummy.name=Trainingspuppe
 
@@ -69,3 +69,7 @@ item.boomerang.stone.name=Steinbumerang
 item.boomerang.iron.name=Eisenbumerang
 item.boomerang.diamond.name=Diamantbumerang
 item.boomerang.gold.name=Goldener Bumerang
+
+item.mortar.name=Handmorser
+item.mortar-ironpart.name=Morserfass
+item.shell.name=Morsergranate
