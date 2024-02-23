@@ -1,10 +1,11 @@
 package ckathode.weaponmod;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.network.datasync.*;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 
-public abstract class PlayerWeaponData
-{
+public abstract class PlayerWeaponData {
     private static final DataParameter<Integer> BOOLEANS;
     private static final DataParameter<Integer> WARHAMMER_LAST_SMASH_TICKS;
     private static final DataParameter<Integer> FLAIL_ENTITY_ID;
@@ -18,51 +19,40 @@ public abstract class PlayerWeaponData
         try {
             dataManager.get(PlayerWeaponData.BOOLEANS);
             BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + PlayerWeaponData.BOOLEANS.getId());
-        }
-        catch (final NullPointerException ex) {}
-        finally {
+        } catch (final NullPointerException ignored) {
+        } finally {
             dataManager.register(PlayerWeaponData.BOOLEANS, 0);
         }
         try {
             dataManager.get(PlayerWeaponData.WARHAMMER_LAST_SMASH_TICKS);
             BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + PlayerWeaponData.WARHAMMER_LAST_SMASH_TICKS.getId());
-        }
-        catch (final NullPointerException ex2) {}
-        finally {
+        } catch (final NullPointerException ignored) {
+        } finally {
             dataManager.register(PlayerWeaponData.WARHAMMER_LAST_SMASH_TICKS, player.ticksExisted);
         }
         try {
             dataManager.get(PlayerWeaponData.FLAIL_ENTITY_ID);
             BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + PlayerWeaponData.FLAIL_ENTITY_ID.getId());
-        }
-        catch (final NullPointerException ex3) {}
-        finally {
+        } catch (final NullPointerException ignored) {
+        } finally {
             dataManager.register(PlayerWeaponData.FLAIL_ENTITY_ID, 0);
         }
     }
 
     private static String getPlayerName(final EntityPlayer player) {
-        String playername;
-        if (player.getGameProfile() != null) {
-            playername = player.getName();
-        }
-        else {
-            playername = "[unknown]";
-        }
-        playername = "player:" + playername;
-        return playername;
+        return "player:" + player.getName();
     }
 
     private static void unavailableError(final EntityPlayer player, final int id) {
-        BalkonsWeaponMod.modLog.error("DataManager ID " + id + " for " + getPlayerName(player) + " unavailable, trying to reinitialize");
+        BalkonsWeaponMod.modLog.error("DataManager ID " + id + " for " + getPlayerName(player) + " unavailable, "
+                                      + "trying to reinitialize");
         initPlayerWeaponData(player);
     }
 
     public static void setFlailEntityId(final EntityPlayer player, final int id) {
         try {
             player.getDataManager().set(PlayerWeaponData.FLAIL_ENTITY_ID, id);
-        }
-        catch (final NullPointerException e) {
+        } catch (final NullPointerException e) {
             unavailableError(player, PlayerWeaponData.FLAIL_ENTITY_ID.getId());
         }
     }
@@ -70,8 +60,7 @@ public abstract class PlayerWeaponData
     public static int getFlailEntityId(final EntityPlayer player) {
         try {
             return player.getDataManager().get(PlayerWeaponData.FLAIL_ENTITY_ID);
-        }
-        catch (final NullPointerException e) {
+        } catch (final NullPointerException e) {
             unavailableError(player, PlayerWeaponData.FLAIL_ENTITY_ID.getId());
             return 0;
         }
@@ -80,8 +69,7 @@ public abstract class PlayerWeaponData
     public static int getLastWarhammerSmashTicks(final EntityPlayer player) {
         try {
             return player.getDataManager().get(PlayerWeaponData.WARHAMMER_LAST_SMASH_TICKS);
-        }
-        catch (final NullPointerException e) {
+        } catch (final NullPointerException e) {
             unavailableError(player, PlayerWeaponData.WARHAMMER_LAST_SMASH_TICKS.getId());
             return 0;
         }
@@ -90,8 +78,7 @@ public abstract class PlayerWeaponData
     public static void setLastWarhammerSmashTicks(final EntityPlayer player, final int age) {
         try {
             player.getDataManager().set(PlayerWeaponData.WARHAMMER_LAST_SMASH_TICKS, age);
-        }
-        catch (final NullPointerException e) {
+        } catch (final NullPointerException e) {
             unavailableError(player, PlayerWeaponData.WARHAMMER_LAST_SMASH_TICKS.getId());
         }
     }
@@ -109,8 +96,7 @@ public abstract class PlayerWeaponData
             int i = player.getDataManager().get(PlayerWeaponData.BOOLEANS);
             i = setBoolean(i, state, flag);
             player.getDataManager().set(PlayerWeaponData.BOOLEANS, i);
-        }
-        catch (final NullPointerException e) {
+        } catch (final NullPointerException e) {
             unavailableError(player, PlayerWeaponData.BOOLEANS.getId());
         }
     }
@@ -118,8 +104,7 @@ public abstract class PlayerWeaponData
     public static boolean getBoolean(final EntityPlayer player, final int state) {
         try {
             return getBoolean(player.getDataManager().get(PlayerWeaponData.BOOLEANS), state);
-        }
-        catch (final NullPointerException e) {
+        } catch (final NullPointerException e) {
             unavailableError(player, PlayerWeaponData.BOOLEANS.getId());
             return false;
         }

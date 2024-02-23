@@ -1,29 +1,34 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
-import java.util.*;
-import net.minecraft.item.*;
-import net.minecraft.block.*;
-import net.minecraft.util.*;
-import net.minecraft.block.properties.*;
-import net.minecraft.world.*;
-import net.minecraft.dispenser.*;
-import net.minecraft.entity.*;
+import java.util.Random;
+import javax.annotation.Nonnull;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.dispenser.BehaviorProjectileDispense;
+import net.minecraft.dispenser.IBlockSource;
+import net.minecraft.dispenser.IPosition;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.IProjectile;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
-public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispense
-{
-    protected Random rand;
+public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispense {
+    protected final Random rand;
 
     public DispenseWeaponProjectile() {
         this.rand = new Random();
     }
 
-    public ItemStack dispenseStack(final IBlockSource blocksource, final ItemStack itemstack) {
+    @Nonnull
+    @Override
+    public ItemStack dispenseStack(final IBlockSource blocksource, @Nonnull final ItemStack itemstack) {
         final World world = blocksource.getWorld();
         final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         final EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
         final IProjectile projectile = this.getProjectileEntity(world, pos, itemstack);
-        projectile.shoot(face.getXOffset(), face.getYOffset() + this.getYVel(), face.getZOffset(), this.getVelocity(), this.getDeviation());
-        world.spawnEntity((Entity)projectile);
+        projectile.shoot(face.getXOffset(), face.getYOffset() + this.getYVel(), face.getZOffset(), this.getVelocity()
+                , this.getDeviation());
+        world.spawnEntity((Entity) projectile);
         itemstack.splitStack(1);
         return itemstack;
     }
@@ -44,11 +49,13 @@ public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispens
         return this.getProjectileInaccuracy();
     }
 
-    protected void playDispenseSound(final IBlockSource blocksource) {
+    @Override
+    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
         super.playDispenseSound(blocksource);
     }
 
-    protected void spawnDispenseParticles(final IBlockSource blocksource, final EnumFacing facing) {
+    @Override
+    protected void spawnDispenseParticles(@Nonnull final IBlockSource blocksource, @Nonnull final EnumFacing facing) {
         super.spawnDispenseParticles(blocksource, facing);
     }
 }

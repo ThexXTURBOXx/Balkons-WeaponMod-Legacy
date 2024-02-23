@@ -1,18 +1,22 @@
 package ckathode.weaponmod.entity.projectile;
 
-import net.minecraft.item.*;
-import net.minecraft.world.*;
-import net.minecraft.entity.*;
-import net.minecraft.enchantment.*;
-import net.minecraft.util.math.*;
-import ckathode.weaponmod.*;
-import ckathode.weaponmod.item.*;
-import net.minecraftforge.fml.relauncher.*;
-import net.minecraft.nbt.*;
-import net.minecraft.network.datasync.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.ItemFlail;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityMaterialProjectile extends EntityProjectile
-{
+public abstract class EntityMaterialProjectile extends EntityProjectile {
     private static final DataParameter<Byte> WEAPON_MATERIAL;
     private static final DataParameter<ItemStack> WEAPON_ITEM;
     private static final float[][] MATERIAL_COLORS;
@@ -22,6 +26,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile
         super(world);
     }
 
+    @Override
     public void entityInit() {
         super.entityInit();
         this.dataManager.register(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) 0);
@@ -30,7 +35,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile
 
     public float getMeleeHitDamage(final Entity entity) {
         if (this.shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase)this.shootingEntity).getHeldItemMainhand(), ((EntityLivingBase)entity).getCreatureAttribute());
+            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) this.shootingEntity).getHeldItemMainhand(), ((EntityLivingBase) entity).getCreatureAttribute());
         }
         return 0.0f;
     }
@@ -39,11 +44,13 @@ public abstract class EntityMaterialProjectile extends EntityProjectile
     public void applyEntityHitEffects(final Entity entity) {
         super.applyEntityHitEffects(entity);
         if (this.shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase)this.shootingEntity);
+            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) this.shootingEntity);
             if (i != 0) {
-                ((EntityLivingBase)entity).knockBack(this, i * 0.4f, -MathHelper.sin(this.rotationYaw * 0.017453292f), -MathHelper.cos(this.rotationYaw * 0.017453292f));
+                ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
+                        -MathHelper.sin(this.rotationYaw * 0.017453292f),
+                        -MathHelper.cos(this.rotationYaw * 0.017453292f));
             }
-            i = EnchantmentHelper.getFireAspectModifier((EntityLivingBase)this.shootingEntity);
+            i = EnchantmentHelper.getFireAspectModifier((EntityLivingBase) this.shootingEntity);
             if (i > 0 && !entity.isBurning()) {
                 entity.setFire(1);
             }
@@ -54,8 +61,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile
         this.thrownItem = itemstack;
         if ((this.thrownItem != null && this.thrownItem.getItem() instanceof ItemFlail) || !BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             this.updateWeaponMaterial();
-        }
-        else if (this.thrownItem != null && !(this.thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
+        } else if (this.thrownItem != null && !(this.thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             this.dataManager.set(EntityMaterialProjectile.WEAPON_ITEM, itemstack);
             this.dataManager.setDirty(EntityMaterialProjectile.WEAPON_ITEM);
         }
@@ -75,12 +81,12 @@ public abstract class EntityMaterialProjectile extends EntityProjectile
     }
 
     protected final void updateWeaponMaterial() {
-        if (this.thrownItem != null && this.thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon)this.thrownItem.getItem()).getMeleeComponent() != null) {
+        if (this.thrownItem != null && this.thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) this.thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(this.thrownItem);
             if (material < 0) {
-                material = ((IItemWeapon)this.thrownItem.getItem()).getMeleeComponent().weaponMaterial.ordinal();
+                material = ((IItemWeapon) this.thrownItem.getItem()).getMeleeComponent().weaponMaterial.ordinal();
             }
-            this.dataManager.set(EntityMaterialProjectile.WEAPON_MATERIAL, (byte)(material & 0xFF));
+            this.dataManager.set(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) (material & 0xFF));
         }
     }
 
@@ -110,6 +116,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile
     static {
         WEAPON_MATERIAL = EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
         WEAPON_ITEM = EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEM_STACK);
-        MATERIAL_COLORS = new float[][] { { 0.6f, 0.4f, 0.1f }, { 0.5f, 0.5f, 0.5f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 0.8f, 0.7f }, { 1.0f, 0.9f, 0.0f } };
+        MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f,
+                0.7f}, {1.0f, 0.9f, 0.0f}};
     }
 }

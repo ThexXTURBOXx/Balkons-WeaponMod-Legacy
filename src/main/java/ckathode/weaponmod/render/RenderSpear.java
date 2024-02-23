@@ -1,30 +1,36 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.*;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntitySpear;
+import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
-public class RenderSpear extends Render<EntitySpear>
-{
+public class RenderSpear extends Render<EntitySpear> {
     public RenderSpear(final RenderManager renderManager) {
         super(renderManager);
     }
-    
-    public void doRender(final EntitySpear entityspear, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntitySpear entityspear, final double d, final double d1, final double d2,
+                         final float f, final float f1) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             this.bindEntityTexture(entityspear);
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.rotate(entityspear.prevRotationYaw + (entityspear.rotationYaw - entityspear.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(entityspear.prevRotationPitch + (entityspear.rotationPitch - entityspear.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             final Tessellator tessellator = Tessellator.getInstance();
@@ -91,12 +97,11 @@ public class RenderSpear extends Render<EntitySpear>
             GlStateManager.disableRescaleNormal();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
-        }
-        else {
+        } else {
             final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             GlStateManager.pushMatrix();
             this.bindEntityTexture(entityspear);
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.enableRescaleNormal();
             GlStateManager.scale(1.7f, 1.7f, 1.7f);
             GlStateManager.rotate(entityspear.prevRotationYaw + (entityspear.rotationYaw - entityspear.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
@@ -121,12 +126,13 @@ public class RenderSpear extends Render<EntitySpear>
         }
         super.doRender(entityspear, d, d1, d2, f, f1);
     }
-    
+
     public ItemStack getStackToRender(final EntitySpear entity) {
         return entity.getWeapon();
     }
-    
-    protected ResourceLocation getEntityTexture(final EntitySpear entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntitySpear entity) {
         return WeaponModResources.Textures.SPEAR;
     }
 }

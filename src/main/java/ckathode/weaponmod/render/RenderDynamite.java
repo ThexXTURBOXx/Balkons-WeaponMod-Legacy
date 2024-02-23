@@ -1,29 +1,33 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityDynamite;
+import javax.annotation.Nonnull;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
-public class RenderDynamite extends Render<EntityDynamite>
-{
-    public float pitch;
-    
+public class RenderDynamite extends Render<EntityDynamite> {
+    public final float pitch;
+
     public RenderDynamite(final RenderManager renderManager) {
         super(renderManager);
         this.pitch = 40.0f;
     }
-    
-    public void doRender(final EntityDynamite entitydynamite, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityDynamite entitydynamite, final double d, final double d1,
+                         final double d2, final float f, final float f1) {
         this.bindEntityTexture(entitydynamite);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
-        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        GlStateManager.translate((float) d, (float) d1, (float) d2);
         GlStateManager.rotate(entitydynamite.rotationYaw + 90.0f, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(entitydynamite.prevRotationPitch + (entitydynamite.rotationPitch - entitydynamite.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         final Tessellator tessellator = Tessellator.getInstance();
@@ -84,8 +88,9 @@ public class RenderDynamite extends Render<EntityDynamite>
         GlStateManager.popMatrix();
         super.doRender(entitydynamite, d, d1, d2, f, f1);
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityDynamite entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityDynamite entity) {
         return WeaponModResources.Textures.DYNAMITE;
     }
 }

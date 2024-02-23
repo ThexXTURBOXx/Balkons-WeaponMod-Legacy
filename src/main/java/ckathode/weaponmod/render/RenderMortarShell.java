@@ -1,27 +1,31 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityMortarShell;
+import javax.annotation.Nonnull;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 
-public class RenderMortarShell extends Render<EntityMortarShell>
-{
+public class RenderMortarShell extends Render<EntityMortarShell> {
     public RenderMortarShell(final RenderManager renderManager) {
         super(renderManager);
         this.shadowSize = 0.3f;
     }
-    
-    public void doRender(final EntityMortarShell entitymortarshell, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityMortarShell entitymortarshell, final double d, final double d1,
+                         final double d2, final float f, final float f1) {
         final Tessellator tessellator = Tessellator.getInstance();
         final BufferBuilder vertexbuffer = tessellator.getBuffer();
         GlStateManager.pushMatrix();
         this.bindEntityTexture(entitymortarshell);
         GlStateManager.disableLighting();
-        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        GlStateManager.translate((float) d, (float) d1, (float) d2);
         GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
         GlStateManager.scale(-1.0f, -1.0f, 1.0f);
         GlStateManager.scale(0.2f, 0.2f, 0.2f);
@@ -64,8 +68,9 @@ public class RenderMortarShell extends Render<EntityMortarShell>
         GlStateManager.popMatrix();
         super.doRender(entitymortarshell, d, d1, d2, f, f1);
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityMortarShell entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityMortarShell entity) {
         return WeaponModResources.Textures.CANNONBALL;
     }
 }

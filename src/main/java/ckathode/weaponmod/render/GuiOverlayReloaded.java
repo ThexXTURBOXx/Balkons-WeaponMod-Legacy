@@ -1,24 +1,25 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.gui.*;
-import net.minecraftforge.fml.relauncher.*;
-import net.minecraft.client.*;
-import net.minecraftforge.client.event.*;
-import net.minecraft.client.renderer.*;
-import ckathode.weaponmod.item.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraftforge.fml.common.eventhandler.*;
+import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.RangedComponent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiOverlayReloaded extends Gui
-{
-    private Minecraft mc;
-    
+public class GuiOverlayReloaded extends Gui {
+    private final Minecraft mc;
+
     public GuiOverlayReloaded(final Minecraft minecraft) {
         this.mc = minecraft;
     }
-    
+
     @SubscribeEvent
     public void renderGUIOverlay(final RenderGameOverlayEvent e) {
         if (e instanceof RenderGameOverlayEvent.Post || e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR) {
@@ -27,9 +28,9 @@ public class GuiOverlayReloaded extends Gui
         final EntityPlayer p = this.mc.player;
         if (p != null) {
             final ItemStack is = p.getHeldItemMainhand();
-            if (!is.isEmpty() && is.getItem() instanceof IItemWeapon && ((IItemWeapon)is.getItem()).getRangedComponent() != null) {
+            if (!is.isEmpty() && is.getItem() instanceof IItemWeapon && ((IItemWeapon) is.getItem()).getRangedComponent() != null) {
                 GlStateManager.pushAttrib();
-                final RangedComponent rc = ((IItemWeapon)is.getItem()).getRangedComponent();
+                final RangedComponent rc = ((IItemWeapon) is.getItem()).getRangedComponent();
                 final boolean rld = RangedComponent.isReloaded(is);
                 GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
                 GlStateManager.disableLighting();
@@ -39,24 +40,22 @@ public class GuiOverlayReloaded extends Gui
                     f = 1.0f;
                     if (p.getActiveItemStack() == is && RangedComponent.isReadyToFire(is)) {
                         color = 1623588864;
-                    }
-                    else {
+                    } else {
                         color = 1614056960;
                     }
-                }
-                else if (p.getActiveItemStack() == is) {
-                    f = Math.min(p.getItemInUseMaxCount() / (float)rc.getReloadDuration(is), 1.0f);
+                } else if (p.getActiveItemStack() == is) {
+                    f = Math.min(p.getItemInUseMaxCount() / (float) rc.getReloadDuration(is), 1.0f);
                     color = 1625991168;
-                }
-                else {
+                } else {
                     f = 0.0f;
                     color = 0;
                 }
                 int i;
-                for (i = 0; i < 9 && p.inventory.getStackInSlot(i) != is; ++i) {}
+                for (i = 0; i < 9 && p.inventory.getStackInSlot(i) != is; ++i) {
+                }
                 final int x0 = e.getResolution().getScaledWidth() / 2 - 88 + i * 20;
                 final int y0 = e.getResolution().getScaledHeight() - 3;
-                drawRect(x0, y0, x0 + 16, y0 - (int)(f * 16.0f), color);
+                drawRect(x0, y0, x0 + 16, y0 - (int) (f * 16.0f), color);
                 GlStateManager.popAttrib();
             }
         }

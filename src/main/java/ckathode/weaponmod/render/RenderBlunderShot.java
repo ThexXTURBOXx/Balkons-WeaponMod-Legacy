@@ -1,25 +1,29 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
+import javax.annotation.Nonnull;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 
-public class RenderBlunderShot extends Render<EntityBlunderShot>
-{
+public class RenderBlunderShot extends Render<EntityBlunderShot> {
     public RenderBlunderShot(final RenderManager renderManager) {
         super(renderManager);
     }
-    
-    public void doRender(final EntityBlunderShot entityblundershot, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityBlunderShot entityblundershot, final double d, final double d1,
+                         final double d2, final float f, final float f1) {
         this.bindEntityTexture(entityblundershot);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
-        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        GlStateManager.translate((float) d, (float) d1, (float) d2);
         final Tessellator tessellator = Tessellator.getInstance();
         final BufferBuilder vertexbuffer = tessellator.getBuffer();
         final float f2 = 0.0f;
@@ -76,8 +80,9 @@ public class RenderBlunderShot extends Render<EntityBlunderShot>
         GlStateManager.popMatrix();
         super.doRender(entityblundershot, d, d1, d2, f, f1);
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityBlunderShot entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityBlunderShot entity) {
         return WeaponModResources.Textures.BULLET;
     }
 }

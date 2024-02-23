@@ -1,39 +1,49 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.world.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.item.*;
-import net.minecraft.init.*;
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.*;
-import net.minecraftforge.fml.relauncher.*;
+import ckathode.weaponmod.entity.projectile.EntityDynamite;
+import javax.annotation.Nonnull;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemDynamite extends WMItem
-{
+public class ItemDynamite extends WMItem {
     public ItemDynamite(final String id) {
         super(id);
         this.maxStackSize = 64;
     }
-    
+
+    @Override
     public int getItemEnchantability() {
         return 0;
     }
-    
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer, final EnumHand hand) {
+
+    @Nonnull
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull final World world, final EntityPlayer entityplayer,
+                                                    @Nonnull final EnumHand hand) {
         final ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (!entityplayer.capabilities.isCreativeMode) {
             itemstack.shrink(1);
         }
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.PLAYERS, 1.0f, 1.0f / (ItemDynamite.itemRand.nextFloat() * 0.4f + 0.8f));
+        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED,
+                SoundCategory.PLAYERS, 1.0f, 1.0f / (ItemDynamite.itemRand.nextFloat() * 0.4f + 0.8f));
         if (!world.isRemote) {
-            final EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer, 40 + ItemDynamite.itemRand.nextInt(10));
+            final EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
+                    40 + ItemDynamite.itemRand.nextInt(10));
             entitydynamite.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.7f, 4.0f);
             world.spawnEntity(entitydynamite);
         }
-        return (ActionResult<ItemStack>)new ActionResult(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }
-    
+
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;

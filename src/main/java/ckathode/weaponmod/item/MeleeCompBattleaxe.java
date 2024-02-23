@@ -1,37 +1,38 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.item.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.*;
-import net.minecraft.block.state.*;
-import net.minecraft.block.material.*;
-import com.google.common.collect.*;
-import net.minecraft.entity.ai.attributes.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.DamageSourceAxe;
+import ckathode.weaponmod.WeaponModAttributes;
+import com.google.common.collect.Multimap;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class MeleeCompBattleaxe extends MeleeComponent
-{
+public class MeleeCompBattleaxe extends MeleeComponent {
     public static final int[] DEFAULT_IGNORES;
     public int ignoreArmourAmount;
-    
+
     public MeleeCompBattleaxe(final Item.ToolMaterial toolmaterial) {
         super(MeleeSpecs.BATTLEAXE, toolmaterial);
         if (toolmaterial.ordinal() < MeleeCompBattleaxe.DEFAULT_IGNORES.length) {
             this.ignoreArmourAmount = MeleeCompBattleaxe.DEFAULT_IGNORES[toolmaterial.ordinal()];
         }
     }
-    
+
     @Override
     public boolean onLeftClickEntity(final ItemStack itemstack, final EntityPlayer player, final Entity entity) {
         if (entity instanceof EntityLivingBase) {
-            final EntityLivingBase living = (EntityLivingBase)entity;
+            final EntityLivingBase living = (EntityLivingBase) entity;
             final double mx = entity.motionX;
             final double my = entity.motionY;
             final double mz = entity.motionZ;
             final int prevhurtres = living.hurtResistantTime;
             final int prevhurt = living.hurtTime;
-            living.attackEntityFrom(new DamageSourceAxe(), (float)this.ignoreArmourAmount);
+            living.attackEntityFrom(new DamageSourceAxe(), (float) this.ignoreArmourAmount);
             entity.motionX = mx;
             entity.motionY = my;
             entity.motionZ = mz;
@@ -40,24 +41,26 @@ public class MeleeCompBattleaxe extends MeleeComponent
         }
         return super.onLeftClickEntity(itemstack, player, entity);
     }
-    
+
     @Override
     public float getBlockDamage(final ItemStack itemstack, final IBlockState block) {
-        return (block.getMaterial() == Material.WOOD) ? (this.weaponMaterial.getEfficiency() * 0.75f) : super.getBlockDamage(itemstack, block);
+        return (block.getMaterial() == Material.WOOD) ? (this.weaponMaterial.getEfficiency() * 0.75f) :
+                super.getBlockDamage(itemstack, block);
     }
-    
+
     @Override
     public boolean canHarvestBlock(final IBlockState block) {
         return block.getMaterial() == Material.WOOD;
     }
-    
+
     @Override
     public void addItemAttributeModifiers(final Multimap<String, AttributeModifier> multimap) {
         super.addItemAttributeModifiers(multimap);
-        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getName(), new AttributeModifier(this.weapon.getUUID(), "Weapon ignore armour modifier", this.ignoreArmourAmount, 0));
+        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getName(), new AttributeModifier(this.weapon.getUUID(),
+                "Weapon ignore armour modifier", this.ignoreArmourAmount, 0));
     }
-    
+
     static {
-        DEFAULT_IGNORES = new int[] { 1, 1, 1, 1, 1 };
+        DEFAULT_IGNORES = new int[]{1, 1, 1, 1, 1};
     }
 }

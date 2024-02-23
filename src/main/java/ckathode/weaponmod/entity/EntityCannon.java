@@ -1,22 +1,36 @@
 package ckathode.weaponmod.entity;
 
-import net.minecraft.entity.item.*;
-import net.minecraft.world.*;
-import net.minecraft.entity.player.*;
-import ckathode.weaponmod.*;
-import net.minecraft.entity.*;
-import java.util.*;
-import net.minecraft.init.*;
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.util.math.*;
-import net.minecraft.nbt.*;
-import net.minecraft.util.*;
-import net.minecraft.item.*;
-import net.minecraft.entity.effect.*;
-import net.minecraft.network.datasync.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.entity.projectile.EntityCannonBall;
+import java.util.List;
+import javax.annotation.Nonnull;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
-public class EntityCannon extends EntityBoat
-{
+public class EntityCannon extends EntityBoat {
     private static final DataParameter<Integer> TIME_SINCE_HIT;
     private static final DataParameter<Byte> ROCK_DIRECTION;
     private static final DataParameter<Integer> CURRENT_DAMAGE;
@@ -43,32 +57,38 @@ public class EntityCannon extends EntityBoat
         this.prevPosZ = d2;
     }
 
+    @Override
     protected void entityInit() {
         this.dataManager.register(EntityCannon.TIME_SINCE_HIT, 0);
-        this.dataManager.register(EntityCannon.ROCK_DIRECTION, (byte)1);
+        this.dataManager.register(EntityCannon.ROCK_DIRECTION, (byte) 1);
         this.dataManager.register(EntityCannon.CURRENT_DAMAGE, 0);
-        this.dataManager.register(EntityCannon.LOADED, (byte)0);
+        this.dataManager.register(EntityCannon.LOADED, (byte) 0);
         this.dataManager.register(EntityCannon.LOAD_TIMER, 0);
-        this.dataManager.register(EntityCannon.SUPER_POWERED, (byte)0);
+        this.dataManager.register(EntityCannon.SUPER_POWERED, (byte) 0);
     }
 
+    @Override
     public AxisAlignedBB getCollisionBox(final Entity entity) {
         return entity.getEntityBoundingBox();
     }
 
+    @Override
     public AxisAlignedBB getCollisionBoundingBox() {
         return this.getEntityBoundingBox();
     }
 
+    @Override
     public boolean canBePushed() {
         return false;
     }
 
+    @Override
     public double getMountedYOffset() {
         return 0.35;
     }
 
-    public boolean attackEntityFrom(final DamageSource damagesource, final float damage) {
+    @Override
+    public boolean attackEntityFrom(@Nonnull final DamageSource damagesource, final float damage) {
         if (this.world.isRemote || this.isDead) {
             return true;
         }
@@ -76,8 +96,7 @@ public class EntityCannon extends EntityBoat
             if (this.isPassenger(damagesource.getTrueSource())) {
                 return true;
             }
-        }
-        else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
+        } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
             final EntityPlayer player = (EntityPlayer) damagesource.getTrueSource();
             if (player.inventory.getCurrentItem().isEmpty()) {
                 if (!player.capabilities.isCreativeMode) {
@@ -93,14 +112,14 @@ public class EntityCannon extends EntityBoat
         }
         this.setRockDirection(-this.getRockDirection());
         this.setTimeSinceHit(10);
-        this.setCurrentDamage(this.getCurrentDamage() + (int)damage * 5);
+        this.setCurrentDamage(this.getCurrentDamage() + (int) damage * 5);
         this.markVelocityChanged();
         if (this.getCurrentDamage() > 100) {
             for (int j = 0; j < 6; ++j) {
-                this.dropItemWithChance(Items.IRON_INGOT, (int)damage, 1);
+                this.dropItemWithChance(Items.IRON_INGOT, (int) damage, 1);
             }
-            this.dropItemWithChance(Items.FLINT, (int)damage, 1);
-            this.dropItemWithChance(Item.getItemFromBlock(Blocks.LOG), (int)damage, 1);
+            this.dropItemWithChance(Items.FLINT, (int) damage, 1);
+            this.dropItemWithChance(Item.getItemFromBlock(Blocks.LOG), (int) damage, 1);
             if (this.isLoaded() || this.isLoading()) {
                 this.dropItem(BalkonsWeaponMod.cannonBall, 1);
                 this.dropItem(Items.GUNPOWDER, 1);
@@ -116,20 +135,24 @@ public class EntityCannon extends EntityBoat
         }
     }
 
+    @Override
     public void performHurtAnimation() {
         this.setRockDirection(-this.getRockDirection());
         this.setTimeSinceHit(10);
         this.setCurrentDamage(this.getCurrentDamage() + 10);
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return !this.isDead;
     }
 
+    @Override
     public void onUpdate() {
         this.onEntityUpdate();
     }
 
+    @Override
     public void onEntityUpdate() {
         super.onEntityUpdate();
         int i = this.getTimeSinceHit();
@@ -149,10 +172,10 @@ public class EntityCannon extends EntityBoat
         this.motionY *= 0.98;
         this.motionZ *= 0.98;
         if (!this.onGround) {
-            this.fallDistance += (float)(-this.motionY);
+            this.fallDistance += (float) (-this.motionY);
         }
         if (this.isBeingRidden()) {
-            final EntityLivingBase entitylivingbase = (EntityLivingBase)this.getControllingPassenger();
+            final EntityLivingBase entitylivingbase = (EntityLivingBase) this.getControllingPassenger();
             final float yaw = entitylivingbase.rotationYaw;
             final float pitch = entitylivingbase.rotationPitch;
             this.rotationYaw = yaw % 360.0f;
@@ -160,7 +183,8 @@ public class EntityCannon extends EntityBoat
         }
         this.setRotation(this.rotationYaw, this.rotationPitch);
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2, 0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
+        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2,
+                0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
         if (!list.isEmpty()) {
             for (final Entity entity : list) {
                 if (!entity.isPassenger(this) && !entity.isRiding()) {
@@ -174,11 +198,12 @@ public class EntityCannon extends EntityBoat
         }
     }
 
+    @Override
     public void fall(final float f, final float f1) {
         super.fall(f, f1);
         int i = MathHelper.floor(f);
         i *= 2;
-        this.attackEntityFrom(DamageSource.FALL, (float)i);
+        this.attackEntityFrom(DamageSource.FALL, (float) i);
     }
 
     public void handleReloadTime() {
@@ -186,12 +211,10 @@ public class EntityCannon extends EntityBoat
         if (l > 0) {
             if (l == 80 || l == 70 || l == 60) {
                 this.playSound(SoundEvents.BLOCK_PISTON_CONTRACT, 0.5f, 1.2f / (this.rand.nextFloat() * 0.8f + 0.6f));
-            }
-            else if (l == 40) {
+            } else if (l == 40) {
                 this.playSound(SoundEvents.ENTITY_PLAYER_BREATH, 0.7f, 1.2f / (this.rand.nextFloat() * 0.2f + 10.0f));
             }
-        }
-        else {
+        } else {
             this.setReloadInfo(true, 0);
         }
     }
@@ -202,7 +225,8 @@ public class EntityCannon extends EntityBoat
         }
         final Entity entityPassenger = this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
         if (!this.world.isRemote) {
-            final EntityCannonBall entitycannonball = new EntityCannonBall(this.world, this, entityPassenger.rotationPitch, entityPassenger.rotationYaw, this.isSuperPowered());
+            final EntityCannonBall entitycannonball = new EntityCannonBall(this.world, this,
+                    entityPassenger.rotationPitch, entityPassenger.rotationYaw, this.isSuperPowered());
             this.world.spawnEntity(entitycannonball);
         }
         this.setReloadInfo(false, 0);
@@ -212,15 +236,17 @@ public class EntityCannon extends EntityBoat
     public void fireEffects() {
         this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 8.0f, 1.0f / (this.rand.nextFloat() * 0.8f + 0.9f));
         this.playSound(SoundEvents.ENTITY_LIGHTNING_THUNDER, 8.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.6f));
-        final float yaw = (float)Math.toRadians(this.rotationYaw);
+        final float yaw = (float) Math.toRadians(this.rotationYaw);
         final double d = -MathHelper.sin(yaw) * -1.0f;
         final double d2 = MathHelper.cos(yaw) * -1.0f;
         for (int i = 0; i < 20; ++i) {
-            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + d + this.rand.nextDouble() * 0.5 - 0.25, this.posY + this.rand.nextDouble() * 0.5, this.posZ + d2 + this.rand.nextDouble() * 0.5 - 0.25, this.rand.nextDouble() * 0.1 - 0.05, this.rand.nextDouble() * 0.1 - 0.05, this.rand.nextDouble() * 0.1 - 0.05, new int[0]);
+            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,
+                    this.posX + d + this.rand.nextDouble() * 0.5 - 0.25, this.posY + this.rand.nextDouble() * 0.5,
+                    this.posZ + d2 + this.rand.nextDouble() * 0.5 - 0.25, this.rand.nextDouble() * 0.1 - 0.05,
+                    this.rand.nextDouble() * 0.1 - 0.05, this.rand.nextDouble() * 0.1 - 0.05);
         }
         if (this.isBeingRidden()) {
             for (final Entity entity2 : this.getPassengers()) {
-                final Entity entity = entity2;
                 entity2.rotationPitch += 10.0f;
             }
         }
@@ -239,21 +265,24 @@ public class EntityCannon extends EntityBoat
         this.setReloadInfo(false, 100);
     }
 
-    public void updatePassenger(final Entity passenger) {
+    @Override
+    public void updatePassenger(@Nonnull final Entity passenger) {
         if (this.isPassenger(passenger)) {
             final float f = -0.85f;
-            final float f2 = (float)((this.isDead ? 0.01 : this.getMountedYOffset()) + passenger.getYOffset());
+            final float f2 = (float) ((this.isDead ? 0.01 : this.getMountedYOffset()) + passenger.getYOffset());
             final Vec3d vec3d = new Vec3d(f, 0.0, 0.0).rotateYaw(-this.rotationYaw * 0.017453292f - 1.5707964f);
             passenger.setPosition(this.posX + vec3d.x, this.posY + f2, this.posZ + vec3d.z);
         }
     }
 
+    @Override
     protected void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
         nbttagcompound.setFloat("falld", this.fallDistance);
         nbttagcompound.setBoolean("load", this.isLoaded());
-        nbttagcompound.setShort("ldtime", (short)this.getLoadTimer());
+        nbttagcompound.setShort("ldtime", (short) this.getLoadTimer());
     }
 
+    @Override
     protected void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
         this.setPosition(this.posX, this.posY, this.posZ);
         this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -262,17 +291,18 @@ public class EntityCannon extends EntityBoat
         this.setLoadTimer(nbttagcompound.getShort("ldtime"));
     }
 
-    public boolean processInitialInteract(final EntityPlayer entityplayer, final EnumHand hand) {
+    @Override
+    public boolean processInitialInteract(final EntityPlayer entityplayer, @Nonnull final EnumHand hand) {
         final ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !this.isLoaded() && !this.isLoading() && (entityplayer.capabilities.isCreativeMode || this.consumeAmmo(entityplayer, Items.GUNPOWDER))) {
-            if (entityplayer.capabilities.isCreativeMode || this.consumeAmmo(entityplayer, BalkonsWeaponMod.cannonBall)) {
+            if (entityplayer.capabilities.isCreativeMode || this.consumeAmmo(entityplayer,
+                    BalkonsWeaponMod.cannonBall)) {
                 this.startLoadingCannon();
                 return true;
             }
             this.dropItem(Items.GUNPOWDER, 1);
             return true;
-        }
-        else {
+        } else {
             if (this.isBeingRidden() && this.riddenByPlayer() && this.notThisPlayer(entityplayer)) {
                 return true;
             }
@@ -319,13 +349,14 @@ public class EntityCannon extends EntityBoat
         return entity != player;
     }
 
-    public void onStruckByLightning(final EntityLightningBolt entitylightningbolt) {
+    @Override
+    public void onStruckByLightning(@Nonnull final EntityLightningBolt entitylightningbolt) {
         this.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 100.0f);
         this.setSuperPowered(true);
     }
 
     public void setLoaded(final boolean flag) {
-        this.dataManager.set(EntityCannon.LOADED, (byte)(flag ? 1 : 0));
+        this.dataManager.set(EntityCannon.LOADED, (byte) (flag ? 1 : 0));
     }
 
     public void setLoadTimer(final int time) {
@@ -333,7 +364,7 @@ public class EntityCannon extends EntityBoat
     }
 
     public void setSuperPowered(final boolean flag) {
-        this.dataManager.set(EntityCannon.SUPER_POWERED, (byte)(flag ? 1 : 0));
+        this.dataManager.set(EntityCannon.SUPER_POWERED, (byte) (flag ? 1 : 0));
     }
 
     public boolean isLoading() {
@@ -352,18 +383,20 @@ public class EntityCannon extends EntityBoat
         return this.dataManager.get(EntityCannon.SUPER_POWERED) != 0;
     }
 
+    @Override
     public void setTimeSinceHit(final int i) {
         this.dataManager.set(EntityCannon.TIME_SINCE_HIT, i);
     }
 
     public void setRockDirection(final int i) {
-        this.dataManager.set(EntityCannon.ROCK_DIRECTION, (byte)i);
+        this.dataManager.set(EntityCannon.ROCK_DIRECTION, (byte) i);
     }
 
     public void setCurrentDamage(final int i) {
         this.dataManager.set(EntityCannon.CURRENT_DAMAGE, i);
     }
 
+    @Override
     public int getTimeSinceHit() {
         return this.dataManager.get(EntityCannon.TIME_SINCE_HIT);
     }

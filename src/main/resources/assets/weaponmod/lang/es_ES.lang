@@ -42,7 +42,7 @@ item.javelin.name=Javalina
 
 item.musket.name=Mosquete
 item.musketbayonet.name=Mosquete con Bayoneta
-item.musket-ironpart.name=Cañon del Mosquete
+item.musket-ironpart.name=CaÃ±on del Mosquete
 item.bullet.name=Balas de Mosquete
 
 item.crossbow.name=Ballesta
@@ -55,14 +55,14 @@ item.dynamite.name=Dinamita
 
 item.firerod.name=Lanza de Fuego
 
-item.cannon.name=Cañon
-item.cannonball.name=Bola de Cañon
+item.cannon.name=CaÃ±on
+item.cannonball.name=Bola de CaÃ±on
 
 item.blunderbuss.name=Trabuco
-item.blunder-ironpart.name=Cañon del Trabuco
+item.blunder-ironpart.name=CaÃ±on del Trabuco
 item.shot.name=Bala de Trabuco
 
-item.dummy.name=Muñeco de Entrenamiento
+item.dummy.name=MuÃ±eco de Entrenamiento
 
 item.gun-stock.name=Base de Arma
 
@@ -73,5 +73,5 @@ item.boomerang.diamond.name=Bumerang de Diamante
 item.boomerang.gold.name=Bumerang de Oro
 
 item.mortar.name=Mortero de Mano
-item.mortar-ironpart.name=Cañon del Mortero
+item.mortar-ironpart.name=CaÃ±on del Mortero
 item.shell.name=Proyectil de Mortero

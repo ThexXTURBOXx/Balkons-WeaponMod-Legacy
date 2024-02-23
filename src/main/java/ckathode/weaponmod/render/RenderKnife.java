@@ -1,30 +1,36 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.*;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityKnife;
+import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
-public class RenderKnife extends Render<EntityKnife>
-{
+public class RenderKnife extends Render<EntityKnife> {
     public RenderKnife(final RenderManager renderManager) {
         super(renderManager);
     }
-    
-    public void doRender(final EntityKnife entityknife, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityKnife entityknife, final double d, final double d1, final double d2,
+                         final float f, final float f1) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             this.bindEntityTexture(entityknife);
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.rotate(entityknife.prevRotationYaw + (entityknife.rotationYaw - entityknife.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(entityknife.prevRotationPitch + (entityknife.rotationPitch - entityknife.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             final Tessellator tessellator = Tessellator.getInstance();
@@ -90,12 +96,11 @@ public class RenderKnife extends Render<EntityKnife>
             GlStateManager.disableRescaleNormal();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
-        }
-        else {
+        } else {
             final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             GlStateManager.pushMatrix();
             this.bindEntityTexture(entityknife);
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.enableRescaleNormal();
             GlStateManager.scale(0.85f, 0.85f, 0.85f);
             GlStateManager.rotate(entityknife.prevRotationYaw + (entityknife.rotationYaw - entityknife.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
@@ -120,12 +125,13 @@ public class RenderKnife extends Render<EntityKnife>
         }
         super.doRender(entityknife, d, d1, d2, f, f1);
     }
-    
+
     public ItemStack getStackToRender(final EntityKnife entity) {
         return entity.getWeapon();
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityKnife entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityKnife entity) {
         return WeaponModResources.Textures.KNIFE;
     }
 }

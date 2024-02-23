@@ -1,28 +1,34 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.*;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityBoomerang;
+import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
-public class RenderBoomerang extends Render<EntityBoomerang>
-{
+public class RenderBoomerang extends Render<EntityBoomerang> {
     public RenderBoomerang(final RenderManager renderManager) {
         super(renderManager);
     }
-    
-    public void doRender(final EntityBoomerang entityboomerang, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityBoomerang entityboomerang, final double d, final double d1,
+                         final double d2, final float f, final float f1) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             this.bindEntityTexture(entityboomerang);
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.rotate(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotate(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             final Tessellator tessellator = Tessellator.getInstance();
@@ -70,7 +76,7 @@ public class RenderBoomerang extends Render<EntityBoomerang>
                 vertexbuffer.pos(0.0, 0.0, 0.0).tex(0.5, 0.0).color(color[0], color[1], color[2], 1.0f).endVertex();
             }
             tessellator.draw();
-            final float sqrt2 = (float)Math.sqrt(2.0);
+            final float sqrt2 = (float) Math.sqrt(2.0);
             GlStateManager.disableCull();
             GlStateManager.glNormal3f(-sqrt2, 0.0f, sqrt2);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -102,12 +108,11 @@ public class RenderBoomerang extends Render<EntityBoomerang>
             GlStateManager.enableCull();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
-        }
-        else {
+        } else {
             final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             GlStateManager.pushMatrix();
             this.bindEntityTexture(entityboomerang);
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.enableRescaleNormal();
             GlStateManager.scale(0.85f, 0.85f, 0.85f);
             GlStateManager.rotate(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
@@ -127,12 +132,13 @@ public class RenderBoomerang extends Render<EntityBoomerang>
         }
         super.doRender(entityboomerang, d, d1, d2, f, f1);
     }
-    
+
     public ItemStack getStackToRender(final EntityBoomerang entity) {
         return entity.getWeapon();
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityBoomerang entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityBoomerang entity) {
         return WeaponModResources.Textures.BOOMERANG;
     }
 }

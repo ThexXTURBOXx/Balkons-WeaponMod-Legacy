@@ -1,26 +1,30 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
+import javax.annotation.Nonnull;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
-public class RenderCrossbowBolt extends Render<EntityCrossbowBolt>
-{
+public class RenderCrossbowBolt extends Render<EntityCrossbowBolt> {
     public RenderCrossbowBolt(final RenderManager renderManager) {
         super(renderManager);
     }
-    
-    public void doRender(final EntityCrossbowBolt entitybolt, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityCrossbowBolt entitybolt, final double d, final double d1,
+                         final double d2, final float f, final float f1) {
         this.bindEntityTexture(entitybolt);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
-        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        GlStateManager.translate((float) d, (float) d1, (float) d2);
         GlStateManager.rotate(entitybolt.prevRotationYaw + (entitybolt.rotationYaw - entitybolt.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(entitybolt.prevRotationPitch + (entitybolt.rotationPitch - entitybolt.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         final Tessellator tessellator = Tessellator.getInstance();
@@ -81,8 +85,9 @@ public class RenderCrossbowBolt extends Render<EntityCrossbowBolt>
         GlStateManager.popMatrix();
         super.doRender(entitybolt, d, d1, d2, f, f1);
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityCrossbowBolt entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityCrossbowBolt entity) {
         return WeaponModResources.Textures.BOLT;
     }
 }

@@ -1,18 +1,19 @@
 package ckathode.weaponmod.item;
 
-import net.minecraftforge.fml.relauncher.*;
-import net.minecraft.client.*;
-import net.minecraft.util.*;
-import net.minecraft.entity.*;
-import javax.annotation.*;
-import com.google.common.base.*;
-import java.util.*;
-import net.minecraft.util.math.*;
-import net.minecraftforge.fml.client.*;
+import com.google.common.base.Predicates;
+import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class ExtendedReachHelper
-{
+public abstract class ExtendedReachHelper {
     private static Minecraft mc;
 
     public static RayTraceResult getMouseOver(final float frame, final float dist) {
@@ -30,7 +31,8 @@ public abstract class ExtendedReachHelper
             final Vec3d var3 = pos.add(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2);
             Entity pointedEntity = null;
             final float var4 = 1.0f;
-            final List<Entity> list = ExtendedReachHelper.mc.world.getEntitiesInAABBexcluding(ExtendedReachHelper.mc.getRenderViewEntity(), ExtendedReachHelper.mc.getRenderViewEntity().getEntityBoundingBox().expand(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2).grow(var4, var4, var4), Predicates.and(EntitySelectors.NOT_SPECTATING, entity -> entity != null && entity.canBeCollidedWith()));
+            final List<Entity> list =
+                    ExtendedReachHelper.mc.world.getEntitiesInAABBexcluding(ExtendedReachHelper.mc.getRenderViewEntity(), ExtendedReachHelper.mc.getRenderViewEntity().getEntityBoundingBox().expand(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2).grow(var4, var4, var4), Predicates.and(EntitySelectors.NOT_SPECTATING, entity -> entity != null && entity.canBeCollidedWith()));
             double d = calcdist;
             for (final Entity entity : list) {
                 final AxisAlignedBB aabb = entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize());
@@ -41,8 +43,7 @@ public abstract class ExtendedReachHelper
                     }
                     pointedEntity = entity;
                     d = 0.0;
-                }
-                else {
+                } else {
                     if (raytraceResult2 == null) {
                         continue;
                     }

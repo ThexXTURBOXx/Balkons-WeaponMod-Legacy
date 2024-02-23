@@ -1,25 +1,32 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.item.*;
-import net.minecraft.world.*;
-import net.minecraft.entity.player.*;
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.entity.*;
-import net.minecraft.enchantment.*;
-import net.minecraft.init.*;
-import net.minecraft.util.*;
+import ckathode.weaponmod.entity.projectile.EntityBoomerang;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.world.World;
 
-public class MeleeCompBoomerang extends MeleeComponent
-{
+public class MeleeCompBoomerang extends MeleeComponent {
     public MeleeCompBoomerang(final Item.ToolMaterial toolmaterial) {
         super(MeleeSpecs.BOOMERANG, toolmaterial);
     }
-    
+
     @Override
-    public void onPlayerStoppedUsing(final ItemStack itemstack, final World world, final EntityLivingBase entityliving, final int i) {
+    public void onPlayerStoppedUsing(final ItemStack itemstack, final World world,
+                                     final EntityLivingBase entityliving, final int i) {
         if (entityliving instanceof EntityPlayer) {
-            final EntityPlayer entityplayer = (EntityPlayer)entityliving;
-            if (!itemstack.isEmpty()) {}
+            final EntityPlayer entityplayer = (EntityPlayer) entityliving;
+            if (itemstack.isEmpty()) {
+                return;
+            }
             final int j = this.getMaxItemUseDuration(itemstack) - i;
             float f = j / 20.0f;
             f = (f * f + f * 2.0f) / 3.0f;
@@ -34,15 +41,19 @@ public class MeleeCompBoomerang extends MeleeComponent
             f *= 1.5f;
             if (!world.isRemote) {
                 final EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack);
-                entityboomerang.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f, 5.0f);
+                entityboomerang.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f,
+                        5.0f);
                 entityboomerang.setIsCritical(crit);
-                entityboomerang.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
+                entityboomerang.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK,
+                        itemstack));
                 if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                     entityboomerang.setFire(100);
                 }
                 world.spawnEntity(entityboomerang);
             }
-            world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f, 1.0f / (this.weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
+            world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
+                    SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
+                    1.0f / (this.weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
             if (!entityplayer.capabilities.isCreativeMode) {
                 ItemStack itemstack2 = itemstack.copy();
                 itemstack2.shrink(1);
@@ -53,22 +64,23 @@ public class MeleeCompBoomerang extends MeleeComponent
             }
         }
     }
-    
+
     @Override
     public int getMaxItemUseDuration(final ItemStack itemstack) {
         return 72000;
     }
-    
+
     @Override
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer, final EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer,
+                                                    final EnumHand hand) {
         final ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (hand != EnumHand.MAIN_HAND) {
-            return (ActionResult<ItemStack>)new ActionResult(EnumActionResult.FAIL, itemstack);
+            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         if (!entityplayer.capabilities.isCreativeMode && itemstack.isEmpty()) {
-            return (ActionResult<ItemStack>)new ActionResult(EnumActionResult.FAIL, itemstack);
+            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);
-        return (ActionResult<ItemStack>)new ActionResult(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }
 }

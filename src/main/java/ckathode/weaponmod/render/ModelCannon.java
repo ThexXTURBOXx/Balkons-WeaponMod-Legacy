@@ -1,26 +1,27 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.model.*;
-import net.minecraft.entity.*;
+import javax.annotation.Nonnull;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 
-public class ModelCannon extends ModelBase
-{
-    public ModelRenderer swiwel_front;
-    public ModelRenderer swivel_back;
-    public ModelRenderer swivel_main;
-    public ModelRenderer axis;
-    public ModelRenderer seal;
-    public ModelRenderer handcrap;
-    public ModelRenderer fronttip;
-    public ModelRenderer backtip;
-    public ModelRenderer console_main_;
-    public ModelRenderer console_side_l1;
-    public ModelRenderer console_side_r1;
-    public ModelRenderer base_1;
-    public ModelRenderer base_2;
-    public ModelRenderer base_stand;
-    public ModelRenderer axis1;
-    
+public class ModelCannon extends ModelBase {
+    public final ModelRenderer swiwel_front;
+    public final ModelRenderer swivel_back;
+    public final ModelRenderer swivel_main;
+    public final ModelRenderer axis;
+    public final ModelRenderer seal;
+    public final ModelRenderer handcrap;
+    public final ModelRenderer fronttip;
+    public final ModelRenderer backtip;
+    public final ModelRenderer console_main_;
+    public final ModelRenderer console_side_l1;
+    public final ModelRenderer console_side_r1;
+    public final ModelRenderer base_1;
+    public final ModelRenderer base_2;
+    public final ModelRenderer base_stand;
+    public final ModelRenderer axis1;
+
     public ModelCannon() {
         this.textureWidth = 32;
         this.textureHeight = 32;
@@ -100,8 +101,10 @@ public class ModelCannon extends ModelBase
         this.axis1.mirror = true;
         this.setRotation(this.axis1, 0.0f, 0.0f, 0.0f);
     }
-    
-    public void render(final Entity entity, final float f, final float f1, final float f2, final float f3, final float f4, final float f5) {
+
+    @Override
+    public void render(@Nonnull final Entity entity, final float f, final float f1, final float f2, final float f3,
+                       final float f4, final float f5) {
         super.render(entity, f, f1, f2, f3, f4, f5);
         this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.swiwel_front.render(f5);
@@ -120,14 +123,16 @@ public class ModelCannon extends ModelBase
         this.base_stand.render(f5);
         this.axis1.render(f5);
     }
-    
+
     public void setRotation(final ModelRenderer model, final float x, final float y, final float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
     }
-    
-    public void setRotationAngles(final float f, final float f1, final float f2, final float f3, final float f4, final float f5, final Entity entity) {
+
+    @Override
+    public void setRotationAngles(final float f, final float f1, final float f2, final float f3, final float f4,
+                                  final float f5, @Nonnull final Entity entity) {
         super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
     }
 }

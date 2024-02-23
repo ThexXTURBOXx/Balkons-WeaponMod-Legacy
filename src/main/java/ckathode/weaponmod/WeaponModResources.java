@@ -1,13 +1,12 @@
 package ckathode.weaponmod;
 
-import net.minecraftforge.fml.relauncher.*;
-import net.minecraft.util.*;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public abstract class WeaponModResources
-{
-    public abstract static class Textures
-    {
+public abstract class WeaponModResources {
+    public abstract static class Textures {
         public static final ResourceLocation DART;
         public static final ResourceLocation BOOMERANG;
         public static final ResourceLocation CANNON;
@@ -22,7 +21,7 @@ public abstract class WeaponModResources
         public static final ResourceLocation SPEAR;
         public static final ResourceLocation ENCHANTMENT_GLINT;
         public static final ResourceLocation ICONS;
-        
+
         static {
             DART = new ResourceLocation("weaponmod", "textures/entity/blowgun_dart.png");
             BOOMERANG = new ResourceLocation("weaponmod", "textures/entity/boomerang.png");

@@ -1,30 +1,36 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.*;
-import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityJavelin;
+import javax.annotation.Nonnull;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
-public class RenderJavelin extends Render<EntityJavelin>
-{
+public class RenderJavelin extends Render<EntityJavelin> {
     public RenderJavelin(final RenderManager renderManager) {
         super(renderManager);
     }
-    
-    public void doRender(final EntityJavelin entityjavelin, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityJavelin entityjavelin, final double d, final double d1, final double d2
+            , final float f, final float f1) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             this.bindEntityTexture(entityjavelin);
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.rotate(entityjavelin.prevRotationYaw + (entityjavelin.rotationYaw - entityjavelin.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(entityjavelin.prevRotationPitch + (entityjavelin.rotationPitch - entityjavelin.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             final Tessellator tessellator = Tessellator.getInstance();
@@ -84,12 +90,11 @@ public class RenderJavelin extends Render<EntityJavelin>
             GlStateManager.disableRescaleNormal();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
-        }
-        else {
+        } else {
             final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             GlStateManager.pushMatrix();
             this.bindEntityTexture(entityjavelin);
-            GlStateManager.translate((float)d, (float)d1, (float)d2);
+            GlStateManager.translate((float) d, (float) d1, (float) d2);
             GlStateManager.enableRescaleNormal();
             GlStateManager.scale(1.7f, 1.7f, 1.7f);
             GlStateManager.rotate(entityjavelin.prevRotationYaw + (entityjavelin.rotationYaw - entityjavelin.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
@@ -115,12 +120,13 @@ public class RenderJavelin extends Render<EntityJavelin>
         }
         super.doRender(entityjavelin, d, d1, d2, f, f1);
     }
-    
+
     public ItemStack getStackToRender(final EntityJavelin entity) {
         return new ItemStack(BalkonsWeaponMod.javelin);
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityJavelin entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityJavelin entity) {
         return WeaponModResources.Textures.JAVELIN;
     }
 }

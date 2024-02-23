@@ -1,26 +1,28 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.math.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.EntityDummy;
+import javax.annotation.Nonnull;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
-public class RenderDummy extends Render<EntityDummy>
-{
-    private ModelDummy modelDummy;
-    
+public class RenderDummy extends Render<EntityDummy> {
+    private final ModelDummy modelDummy;
+
     public RenderDummy(final RenderManager renderManager) {
         super(renderManager);
         this.modelDummy = new ModelDummy();
         this.shadowSize = 1.0f;
     }
-    
-    public void doRender(final EntityDummy entitydummy, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(final EntityDummy entitydummy, final double d, final double d1, final double d2,
+                         final float f, final float f1) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)d, (float)d1 - 0.025f, (float)d2);
+        GlStateManager.translate((float) d, (float) d1 - 0.025f, (float) d2);
         GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
         final float f2 = entitydummy.getTimeSinceHit() - f1;
         float f3 = entitydummy.getCurrentDamage() - f1;
@@ -28,7 +30,8 @@ public class RenderDummy extends Render<EntityDummy>
             f3 = 0.0f;
         }
         if (f2 > 0.0f) {
-            GlStateManager.rotate(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f, 0.0f, 0.0f, 1.0f);
+            GlStateManager.rotate(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f, 0.0f,
+                    0.0f, 1.0f);
         }
         this.bindEntityTexture(entitydummy);
         GlStateManager.scale(-1.0f, -1.0f, 1.0f);
@@ -45,8 +48,9 @@ public class RenderDummy extends Render<EntityDummy>
         GlStateManager.popMatrix();
         super.doRender(entitydummy, d, d1, d2, f, f1);
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityDummy entity) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityDummy entity) {
         return WeaponModResources.Textures.DUMMY;
     }
 }

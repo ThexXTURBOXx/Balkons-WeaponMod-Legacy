@@ -1,10 +1,9 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.world.*;
-import net.minecraft.entity.*;
-import net.minecraft.item.*;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
-public interface IExtendedReachItem
-{
+public interface IExtendedReachItem {
     float getExtendedReach(final World p0, final EntityLivingBase p1, final ItemStack p2);
 }

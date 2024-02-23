@@ -1,17 +1,18 @@
 package ckathode.weaponmod.render;
 
-import net.minecraft.client.model.*;
-import net.minecraft.entity.*;
+import javax.annotation.Nonnull;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 
-public class ModelDummy extends ModelBase
-{
-    public ModelRenderer armLeft;
-    public ModelRenderer armRight;
-    public ModelRenderer body;
-    public ModelRenderer head;
-    public ModelRenderer stick;
-    public ModelRenderer inside;
-    
+public class ModelDummy extends ModelBase {
+    public final ModelRenderer armLeft;
+    public final ModelRenderer armRight;
+    public final ModelRenderer body;
+    public final ModelRenderer head;
+    public final ModelRenderer stick;
+    public final ModelRenderer inside;
+
     public ModelDummy() {
         (this.armLeft = new ModelRenderer(this, 0, 24)).addBox(0.0f, 0.0f, 0.0f, 10, 4, 4);
         this.armLeft.setRotationPoint(6.0f, 18.0f, -2.0f);
@@ -26,8 +27,10 @@ public class ModelDummy extends ModelBase
         (this.stick = new ModelRenderer(this, 24, 0)).addBox(0.0f, 0.0f, 0.0f, 4, 10, 4);
         this.stick.setRotationPoint(-2.0f, 0.0f, -2.0f);
     }
-    
-    public void render(final Entity entity, final float f, final float f1, final float f2, final float f3, final float f4, final float f5) {
+
+    @Override
+    public void render(@Nonnull final Entity entity, final float f, final float f1, final float f2, final float f3,
+                       final float f4, final float f5) {
         this.armLeft.render(f5);
         this.armRight.render(f5);
         this.body.render(f5);

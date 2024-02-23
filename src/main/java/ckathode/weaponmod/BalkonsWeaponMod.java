@@ -1,28 +1,74 @@
 package ckathode.weaponmod;
 
-import org.apache.logging.log4j.*;
-import net.minecraftforge.fml.common.*;
-import ckathode.weaponmod.network.*;
-import net.minecraftforge.common.config.*;
-import net.minecraftforge.fml.common.event.*;
-import ckathode.weaponmod.item.*;
-import net.minecraft.init.*;
-import net.minecraft.item.*;
-import net.minecraft.util.*;
-import net.minecraftforge.fml.common.registry.*;
-import ckathode.weaponmod.entity.*;
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.block.*;
-import ckathode.weaponmod.entity.projectile.dispense.*;
-import java.util.*;
-import net.minecraftforge.event.*;
-import net.minecraftforge.registries.*;
-import net.minecraftforge.fml.common.eventhandler.*;
-import net.minecraftforge.client.event.*;
+import ckathode.weaponmod.entity.EntityCannon;
+import ckathode.weaponmod.entity.EntityDummy;
+import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
+import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
+import ckathode.weaponmod.entity.projectile.EntityBoomerang;
+import ckathode.weaponmod.entity.projectile.EntityCannonBall;
+import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
+import ckathode.weaponmod.entity.projectile.EntityDynamite;
+import ckathode.weaponmod.entity.projectile.EntityFlail;
+import ckathode.weaponmod.entity.projectile.EntityJavelin;
+import ckathode.weaponmod.entity.projectile.EntityKnife;
+import ckathode.weaponmod.entity.projectile.EntityMortarShell;
+import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
+import ckathode.weaponmod.entity.projectile.EntitySpear;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseBlowgunDart;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseBlunderShot;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseCannonBall;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseCrossbowBolt;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseDynamite;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseJavelin;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseMortarShell;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseMusketBullet;
+import ckathode.weaponmod.item.ItemBlowgunDart;
+import ckathode.weaponmod.item.ItemCannon;
+import ckathode.weaponmod.item.ItemDummy;
+import ckathode.weaponmod.item.ItemDynamite;
+import ckathode.weaponmod.item.ItemFlail;
+import ckathode.weaponmod.item.ItemJavelin;
+import ckathode.weaponmod.item.ItemMelee;
+import ckathode.weaponmod.item.ItemMusket;
+import ckathode.weaponmod.item.ItemShooter;
+import ckathode.weaponmod.item.MeleeCompBattleaxe;
+import ckathode.weaponmod.item.MeleeCompBoomerang;
+import ckathode.weaponmod.item.MeleeCompFirerod;
+import ckathode.weaponmod.item.MeleeCompHalberd;
+import ckathode.weaponmod.item.MeleeCompKnife;
+import ckathode.weaponmod.item.MeleeCompNone;
+import ckathode.weaponmod.item.MeleeCompSpear;
+import ckathode.weaponmod.item.MeleeCompWarhammer;
+import ckathode.weaponmod.item.MeleeComponent;
+import ckathode.weaponmod.item.RangedCompBlowgun;
+import ckathode.weaponmod.item.RangedCompBlunderbuss;
+import ckathode.weaponmod.item.RangedCompCrossbow;
+import ckathode.weaponmod.item.RangedCompFlintlock;
+import ckathode.weaponmod.item.RangedCompMortar;
+import ckathode.weaponmod.item.WMItem;
+import ckathode.weaponmod.network.WMMessagePipeline;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = "weaponmod", name = "Balkon's WeaponMod", version = "v1.19.2.5", acceptedMinecraftVersions = "[1.12.2]")
-public class BalkonsWeaponMod
-{
+public class BalkonsWeaponMod {
     public static final List<Item> MOD_ITEMS;
     public static final String MOD_ID = "weaponmod";
     public static final String MOD_NAME = "Balkon's WeaponMod";
@@ -100,11 +146,11 @@ public class BalkonsWeaponMod
     public static Item mortar_iron_part;
     public WeaponModConfig modConfig;
     public WMMessagePipeline messagePipeline;
-    
+
     public BalkonsWeaponMod() {
         this.messagePipeline = new WMMessagePipeline();
     }
-    
+
     @Mod.EventHandler
     public void preInitMod(final FMLPreInitializationEvent event) {
         BalkonsWeaponMod.modLog = event.getModLog();
@@ -137,7 +183,7 @@ public class BalkonsWeaponMod
         this.addModItems();
         BalkonsWeaponMod.proxy.registerRenderersEntity(this.modConfig);
     }
-    
+
     @Mod.EventHandler
     public void initMod(final FMLInitializationEvent event) {
         this.messagePipeline.initalize();
@@ -146,68 +192,93 @@ public class BalkonsWeaponMod
         this.registerWeapons();
         this.registerDispenseBehavior();
     }
-    
+
     @Mod.EventHandler
     public void postInitMod(final FMLPostInitializationEvent event) {
         this.messagePipeline.postInitialize();
     }
-    
+
     private void addModItems() {
         if (this.modConfig.isEnabled("spear")) {
             BalkonsWeaponMod.spearWood = new ItemMelee("spear.wood", new MeleeCompSpear(Item.ToolMaterial.WOOD));
             BalkonsWeaponMod.spearStone = new ItemMelee("spear.stone", new MeleeCompSpear(Item.ToolMaterial.STONE));
             BalkonsWeaponMod.spearSteel = new ItemMelee("spear.iron", new MeleeCompSpear(Item.ToolMaterial.IRON));
             BalkonsWeaponMod.spearGold = new ItemMelee("spear.gold", new MeleeCompSpear(Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.spearDiamond = new ItemMelee("spear.diamond", new MeleeCompSpear(Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.spearDiamond = new ItemMelee("spear.diamond",
+                    new MeleeCompSpear(Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("halberd")) {
             BalkonsWeaponMod.halberdWood = new ItemMelee("halberd.wood", new MeleeCompHalberd(Item.ToolMaterial.WOOD));
-            BalkonsWeaponMod.halberdStone = new ItemMelee("halberd.stone", new MeleeCompHalberd(Item.ToolMaterial.STONE));
+            BalkonsWeaponMod.halberdStone = new ItemMelee("halberd.stone",
+                    new MeleeCompHalberd(Item.ToolMaterial.STONE));
             BalkonsWeaponMod.halberdSteel = new ItemMelee("halberd.iron", new MeleeCompHalberd(Item.ToolMaterial.IRON));
             BalkonsWeaponMod.halberdGold = new ItemMelee("halberd.gold", new MeleeCompHalberd(Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.halberdDiamond = new ItemMelee("halberd.diamond", new MeleeCompHalberd(Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.halberdDiamond = new ItemMelee("halberd.diamond",
+                    new MeleeCompHalberd(Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("battleaxe")) {
-            BalkonsWeaponMod.battleaxeWood = new ItemMelee("battleaxe.wood", new MeleeCompBattleaxe(Item.ToolMaterial.WOOD));
-            BalkonsWeaponMod.battleaxeStone = new ItemMelee("battleaxe.stone", new MeleeCompBattleaxe(Item.ToolMaterial.STONE));
-            BalkonsWeaponMod.battleaxeSteel = new ItemMelee("battleaxe.iron", new MeleeCompBattleaxe(Item.ToolMaterial.IRON));
-            BalkonsWeaponMod.battleaxeGold = new ItemMelee("battleaxe.gold", new MeleeCompBattleaxe(Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.battleaxeDiamond = new ItemMelee("battleaxe.diamond", new MeleeCompBattleaxe(Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.battleaxeWood = new ItemMelee("battleaxe.wood",
+                    new MeleeCompBattleaxe(Item.ToolMaterial.WOOD));
+            BalkonsWeaponMod.battleaxeStone = new ItemMelee("battleaxe.stone",
+                    new MeleeCompBattleaxe(Item.ToolMaterial.STONE));
+            BalkonsWeaponMod.battleaxeSteel = new ItemMelee("battleaxe.iron",
+                    new MeleeCompBattleaxe(Item.ToolMaterial.IRON));
+            BalkonsWeaponMod.battleaxeGold = new ItemMelee("battleaxe.gold",
+                    new MeleeCompBattleaxe(Item.ToolMaterial.GOLD));
+            BalkonsWeaponMod.battleaxeDiamond = new ItemMelee("battleaxe.diamond",
+                    new MeleeCompBattleaxe(Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("knife")) {
             BalkonsWeaponMod.knifeWood = new ItemMelee("knife.wood", new MeleeCompKnife(Item.ToolMaterial.WOOD));
             BalkonsWeaponMod.knifeStone = new ItemMelee("knife.stone", new MeleeCompKnife(Item.ToolMaterial.STONE));
             BalkonsWeaponMod.knifeSteel = new ItemMelee("knife.iron", new MeleeCompKnife(Item.ToolMaterial.IRON));
             BalkonsWeaponMod.knifeGold = new ItemMelee("knife.gold", new MeleeCompKnife(Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.knifeDiamond = new ItemMelee("knife.diamond", new MeleeCompKnife(Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.knifeDiamond = new ItemMelee("knife.diamond",
+                    new MeleeCompKnife(Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("warhammer")) {
-            BalkonsWeaponMod.warhammerWood = new ItemMelee("warhammer.wood", new MeleeCompWarhammer(Item.ToolMaterial.WOOD));
-            BalkonsWeaponMod.warhammerStone = new ItemMelee("warhammer.stone", new MeleeCompWarhammer(Item.ToolMaterial.STONE));
-            BalkonsWeaponMod.warhammerSteel = new ItemMelee("warhammer.iron", new MeleeCompWarhammer(Item.ToolMaterial.IRON));
-            BalkonsWeaponMod.warhammerGold = new ItemMelee("warhammer.gold", new MeleeCompWarhammer(Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.warhammerDiamond = new ItemMelee("warhammer.diamond", new MeleeCompWarhammer(Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.warhammerWood = new ItemMelee("warhammer.wood",
+                    new MeleeCompWarhammer(Item.ToolMaterial.WOOD));
+            BalkonsWeaponMod.warhammerStone = new ItemMelee("warhammer.stone",
+                    new MeleeCompWarhammer(Item.ToolMaterial.STONE));
+            BalkonsWeaponMod.warhammerSteel = new ItemMelee("warhammer.iron",
+                    new MeleeCompWarhammer(Item.ToolMaterial.IRON));
+            BalkonsWeaponMod.warhammerGold = new ItemMelee("warhammer.gold",
+                    new MeleeCompWarhammer(Item.ToolMaterial.GOLD));
+            BalkonsWeaponMod.warhammerDiamond = new ItemMelee("warhammer.diamond",
+                    new MeleeCompWarhammer(Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("flail")) {
             BalkonsWeaponMod.flailWood = new ItemFlail("flail.wood", new MeleeCompNone(Item.ToolMaterial.WOOD));
             BalkonsWeaponMod.flailStone = new ItemFlail("flail.stone", new MeleeCompNone(Item.ToolMaterial.STONE));
             BalkonsWeaponMod.flailSteel = new ItemFlail("flail.iron", new MeleeCompNone(Item.ToolMaterial.IRON));
             BalkonsWeaponMod.flailGold = new ItemFlail("flail.gold", new MeleeCompNone(Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.flailDiamond = new ItemFlail("flail.diamond", new MeleeCompNone(Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.flailDiamond = new ItemFlail("flail.diamond",
+                    new MeleeCompNone(Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("katana")) {
-            BalkonsWeaponMod.katanaWood = new ItemMelee("katana.wood", new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.WOOD));
-            BalkonsWeaponMod.katanaStone = new ItemMelee("katana.stone", new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.STONE));
-            BalkonsWeaponMod.katanaSteel = new ItemMelee("katana.iron", new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.IRON));
-            BalkonsWeaponMod.katanaGold = new ItemMelee("katana.gold", new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.katanaDiamond = new ItemMelee("katana.diamond", new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.katanaWood = new ItemMelee("katana.wood",
+                    new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.WOOD));
+            BalkonsWeaponMod.katanaStone = new ItemMelee("katana.stone",
+                    new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.STONE));
+            BalkonsWeaponMod.katanaSteel = new ItemMelee("katana.iron",
+                    new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.IRON));
+            BalkonsWeaponMod.katanaGold = new ItemMelee("katana.gold",
+                    new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.GOLD));
+            BalkonsWeaponMod.katanaDiamond = new ItemMelee("katana.diamond",
+                    new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("boomerang")) {
-            BalkonsWeaponMod.boomerangWood = new ItemMelee("boomerang.wood", new MeleeCompBoomerang(Item.ToolMaterial.WOOD));
-            BalkonsWeaponMod.boomerangStone = new ItemMelee("boomerang.stone", new MeleeCompBoomerang(Item.ToolMaterial.STONE));
-            BalkonsWeaponMod.boomerangSteel = new ItemMelee("boomerang.iron", new MeleeCompBoomerang(Item.ToolMaterial.IRON));
-            BalkonsWeaponMod.boomerangGold = new ItemMelee("boomerang.gold", new MeleeCompBoomerang(Item.ToolMaterial.GOLD));
-            BalkonsWeaponMod.boomerangDiamond = new ItemMelee("boomerang.diamond", new MeleeCompBoomerang(Item.ToolMaterial.DIAMOND));
+            BalkonsWeaponMod.boomerangWood = new ItemMelee("boomerang.wood",
+                    new MeleeCompBoomerang(Item.ToolMaterial.WOOD));
+            BalkonsWeaponMod.boomerangStone = new ItemMelee("boomerang.stone",
+                    new MeleeCompBoomerang(Item.ToolMaterial.STONE));
+            BalkonsWeaponMod.boomerangSteel = new ItemMelee("boomerang.iron",
+                    new MeleeCompBoomerang(Item.ToolMaterial.IRON));
+            BalkonsWeaponMod.boomerangGold = new ItemMelee("boomerang.gold",
+                    new MeleeCompBoomerang(Item.ToolMaterial.GOLD));
+            BalkonsWeaponMod.boomerangDiamond = new ItemMelee("boomerang.diamond",
+                    new MeleeCompBoomerang(Item.ToolMaterial.DIAMOND));
         }
         if (this.modConfig.isEnabled("firerod")) {
             BalkonsWeaponMod.fireRod = new ItemMelee("firerod", new MeleeCompFirerod());
@@ -225,22 +296,29 @@ public class BalkonsWeaponMod
         }
         if (this.modConfig.isEnabled("musket")) {
             if (this.modConfig.isEnabled("knife")) {
-                BalkonsWeaponMod.bayonetWood = new ItemMusket("musketbayonet.wood", new MeleeCompKnife(Item.ToolMaterial.WOOD), BalkonsWeaponMod.knifeWood);
-                BalkonsWeaponMod.bayonetStone = new ItemMusket("musketbayonet.stone", new MeleeCompKnife(Item.ToolMaterial.STONE), BalkonsWeaponMod.knifeStone);
-                BalkonsWeaponMod.bayonetSteel = new ItemMusket("musketbayonet.iron", new MeleeCompKnife(Item.ToolMaterial.IRON), BalkonsWeaponMod.knifeSteel);
-                BalkonsWeaponMod.bayonetGold = new ItemMusket("musketbayonet.gold", new MeleeCompKnife(Item.ToolMaterial.GOLD), BalkonsWeaponMod.knifeGold);
-                BalkonsWeaponMod.bayonetDiamond = new ItemMusket("musketbayonet.diamond", new MeleeCompKnife(Item.ToolMaterial.DIAMOND), BalkonsWeaponMod.knifeDiamond);
+                BalkonsWeaponMod.bayonetWood = new ItemMusket("musketbayonet.wood",
+                        new MeleeCompKnife(Item.ToolMaterial.WOOD), BalkonsWeaponMod.knifeWood);
+                BalkonsWeaponMod.bayonetStone = new ItemMusket("musketbayonet.stone",
+                        new MeleeCompKnife(Item.ToolMaterial.STONE), BalkonsWeaponMod.knifeStone);
+                BalkonsWeaponMod.bayonetSteel = new ItemMusket("musketbayonet.iron",
+                        new MeleeCompKnife(Item.ToolMaterial.IRON), BalkonsWeaponMod.knifeSteel);
+                BalkonsWeaponMod.bayonetGold = new ItemMusket("musketbayonet.gold",
+                        new MeleeCompKnife(Item.ToolMaterial.GOLD), BalkonsWeaponMod.knifeGold);
+                BalkonsWeaponMod.bayonetDiamond = new ItemMusket("musketbayonet.diamond",
+                        new MeleeCompKnife(Item.ToolMaterial.DIAMOND), BalkonsWeaponMod.knifeDiamond);
             }
             BalkonsWeaponMod.musket = new ItemMusket("musket", new MeleeCompNone(null), null);
             BalkonsWeaponMod.musket_iron_part = new WMItem("musket-ironpart");
         }
         if (this.modConfig.isEnabled("blunderbuss")) {
-            BalkonsWeaponMod.blunderbuss = new ItemShooter("blunderbuss", new RangedCompBlunderbuss(), new MeleeCompNone(null));
+            BalkonsWeaponMod.blunderbuss = new ItemShooter("blunderbuss", new RangedCompBlunderbuss(),
+                    new MeleeCompNone(null));
             BalkonsWeaponMod.blunder_iron_part = new WMItem("blunder-ironpart");
             BalkonsWeaponMod.blunderShot = new WMItem("shot");
         }
         if (this.modConfig.isEnabled("flintlock")) {
-            BalkonsWeaponMod.flintlockPistol = new ItemShooter("flintlock", new RangedCompFlintlock(), new MeleeCompNone(null));
+            BalkonsWeaponMod.flintlockPistol = new ItemShooter("flintlock", new RangedCompFlintlock(),
+                    new MeleeCompNone(null));
         }
         if (this.modConfig.isEnabled("dynamite")) {
             BalkonsWeaponMod.dynamite = new ItemDynamite("dynamite");
@@ -264,12 +342,13 @@ public class BalkonsWeaponMod
             BalkonsWeaponMod.mortarShell = new WMItem("shell");
         }
     }
-    
+
     private void registerWeapons() {
         if (this.modConfig.isEnabled("spear")) {
             GameRegistry.addSmelting(BalkonsWeaponMod.spearSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(BalkonsWeaponMod.spearGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear", 1, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear", 1,
+                    this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("halberd")) {
             GameRegistry.addSmelting(BalkonsWeaponMod.halberdSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
@@ -278,13 +357,16 @@ public class BalkonsWeaponMod
         if (this.modConfig.isEnabled("knife")) {
             GameRegistry.addSmelting(BalkonsWeaponMod.knifeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(BalkonsWeaponMod.knifeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife", 2, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife", 2,
+                    this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("javelin")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin", 3, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin"
+                    , 3, this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("musket") || this.modConfig.isEnabled("flintlock")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class, "bullet", 4, this, 16, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class,
+                    "bullet", 4, this, 16, 20, true);
         }
         if (this.modConfig.isEnabled("battleaxe")) {
             GameRegistry.addSmelting(BalkonsWeaponMod.battleaxeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
@@ -295,46 +377,57 @@ public class BalkonsWeaponMod
             GameRegistry.addSmelting(BalkonsWeaponMod.warhammerGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (this.modConfig.isEnabled("crossbow")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt", 5, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt"
+                    , 5, this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("blowgun")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart", 6, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
+                    6, this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("dynamite")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class, "dynamite", 7, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class,
+                    "dynamite", 7, this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("flail")) {
             GameRegistry.addSmelting(BalkonsWeaponMod.flailSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(BalkonsWeaponMod.flailGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail", 8, this, 32, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail", 8,
+                    this, 32, 20, true);
         }
         if (this.modConfig.isEnabled("cannon")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon", 9, this, 64, 128, false);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class, "cannonball", 10, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
+                    9, this, 64, 128, false);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
+                    "cannonball", 10, this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("blunderbuss")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot", 11, this, 16, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
+                    11, this, 16, 20, true);
         }
         if (this.modConfig.isEnabled("dummy")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy", 12, this, 64, 20, false);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy", 12,
+                    this, 64, 20, false);
         }
         if (this.modConfig.isEnabled("boomerang")) {
             GameRegistry.addSmelting(BalkonsWeaponMod.boomerangSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(BalkonsWeaponMod.boomerangGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class, "boomerang", 13, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
+                    "boomerang", 13, this, 64, 20, true);
         }
         if (this.modConfig.isEnabled("katana")) {
             GameRegistry.addSmelting(BalkonsWeaponMod.katanaSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(BalkonsWeaponMod.katanaGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (this.modConfig.isEnabled("mortar")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell", 14, this, 64, 20, true);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell"
+                    , 14, this, 64, 20, true);
         }
     }
-    
+
     private void registerDispenseBehavior() {
         if (BalkonsWeaponMod.musketBullet != null) {
-            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.musketBullet, new DispenseMusketBullet());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.musketBullet,
+                    new DispenseMusketBullet());
         }
         if (BalkonsWeaponMod.javelin != null) {
             BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.javelin, new DispenseJavelin());
@@ -349,7 +442,8 @@ public class BalkonsWeaponMod
             BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.dynamite, new DispenseDynamite());
         }
         if (BalkonsWeaponMod.blunderShot != null) {
-            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.blunderShot, new DispenseBlunderShot());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.blunderShot,
+                    new DispenseBlunderShot());
         }
         if (this.modConfig.isEnabled("cannon")) {
             final DispenseCannonBall behavior = new DispenseCannonBall();
@@ -357,22 +451,22 @@ public class BalkonsWeaponMod
             BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.GUNPOWDER, behavior);
         }
         if (BalkonsWeaponMod.mortarShell != null) {
-            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.mortarShell, new DispenseMortarShell());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(BalkonsWeaponMod.mortarShell,
+                    new DispenseMortarShell());
         }
     }
-    
+
     static {
-        MOD_ITEMS = new ArrayList<Item>();
+        MOD_ITEMS = new ArrayList<>();
     }
-    
+
     @Mod.EventBusSubscriber
-    public static class registrationHandler
-    {
+    public static class registrationHandler {
         @SubscribeEvent
         public static void registerItems(final RegistryEvent.Register<Item> event) {
             event.getRegistry().registerAll(BalkonsWeaponMod.MOD_ITEMS.toArray(new Item[0]));
         }
-        
+
         @SubscribeEvent
         public static void registerModels(final ModelRegistryEvent event) {
             BalkonsWeaponMod.proxy.registerRenderersItem(BalkonsWeaponMod.instance.modConfig);

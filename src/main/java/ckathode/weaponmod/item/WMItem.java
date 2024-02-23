@@ -1,11 +1,10 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.item.*;
-import net.minecraft.creativetab.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 
-public class WMItem extends Item
-{
+public class WMItem extends Item {
     public WMItem(final String id) {
         this.setRegistryName(id);
         this.setTranslationKey(id);

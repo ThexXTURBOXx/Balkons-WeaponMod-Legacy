@@ -1,19 +1,23 @@
 package ckathode.weaponmod.entity.projectile;
 
-import net.minecraft.world.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import ckathode.weaponmod.item.*;
-import net.minecraft.potion.*;
-import net.minecraft.util.*;
-import net.minecraft.init.*;
-import net.minecraft.item.*;
-import ckathode.weaponmod.*;
-import net.minecraft.nbt.*;
-import net.minecraft.network.datasync.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WeaponDamageSource;
+import ckathode.weaponmod.item.DartType;
+import javax.annotation.Nonnull;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
-public class EntityBlowgunDart extends EntityProjectile
-{
+public class EntityBlowgunDart extends EntityProjectile {
     private static final DataParameter<Byte> DART_EFFECT_TYPE;
     private static final float[][] DART_COLORS;
 
@@ -29,10 +33,12 @@ public class EntityBlowgunDart extends EntityProjectile
 
     public EntityBlowgunDart(final World world, final EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.setPickupModeFromEntity((EntityLivingBase)(this.shootingEntity = shooter));
+        this.setPickupModeFromEntity((EntityLivingBase) (this.shootingEntity = shooter));
     }
 
-    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3, final float f4) {
+    @Override
+    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3,
+                      final float f4) {
         final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         final float y = -MathHelper.sin(f * 0.017453292f);
         final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
@@ -44,6 +50,7 @@ public class EntityBlowgunDart extends EntityProjectile
         }
     }
 
+    @Override
     public void entityInit() {
         super.entityInit();
         this.dataManager.register(EntityBlowgunDart.DART_EFFECT_TYPE, (byte) 0);
@@ -66,19 +73,17 @@ public class EntityBlowgunDart extends EntityProjectile
         DamageSource damagesource;
         if (this.shootingEntity == null) {
             damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        }
-        else {
+        } else {
             damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
         }
         if (entity.attackEntityFrom(damagesource, 1.0f + this.extraDamage)) {
             if (entity instanceof EntityLivingBase) {
-                ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(DartType.dartTypes[this.getDartEffectType()].potionEffect));
+                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(DartType.dartTypes[this.getDartEffectType()].potionEffect));
             }
             this.applyEntityHitEffects(entity);
             this.playHitSound();
             this.setDead();
-        }
-        else {
+        } else {
             this.bounceBack();
         }
     }
@@ -103,6 +108,7 @@ public class EntityBlowgunDart extends EntityProjectile
         return new ItemStack(BalkonsWeaponMod.dart, 1, this.getDartEffectType());
     }
 
+    @Nonnull
     @Override
     protected ItemStack getArrowStack() {
         return new ItemStack(BalkonsWeaponMod.dart);
@@ -122,6 +128,6 @@ public class EntityBlowgunDart extends EntityProjectile
 
     static {
         DART_EFFECT_TYPE = EntityDataManager.createKey(EntityBlowgunDart.class, DataSerializers.BYTE);
-        DART_COLORS = new float[][] { { 0.2f, 0.8f, 0.3f }, { 0.9f, 0.7f, 1.0f }, { 0.6f, 1.0f, 0.9f }, { 0.8f, 0.5f, 0.2f } };
+        DART_COLORS = new float[][]{{0.2f, 0.8f, 0.3f}, {0.9f, 0.7f, 1.0f}, {0.6f, 1.0f, 0.9f}, {0.8f, 0.5f, 0.2f}};
     }
 }

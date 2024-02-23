@@ -1,20 +1,32 @@
 package ckathode.weaponmod.entity;
 
-import net.minecraft.world.*;
-import net.minecraft.util.math.*;
-import net.minecraft.entity.*;
-import java.util.*;
-import net.minecraft.init.*;
-import ckathode.weaponmod.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.item.*;
-import net.minecraft.item.*;
-import net.minecraft.nbt.*;
-import net.minecraft.network.datasync.*;
+import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WeaponDamageSource;
+import ckathode.weaponmod.item.IItemWeapon;
+import java.util.List;
+import javax.annotation.Nonnull;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemShield;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
-public class EntityDummy extends Entity
-{
+public class EntityDummy extends Entity {
     private static final DataParameter<Integer> TIME_SINCE_HIT;
     private static final DataParameter<Byte> ROCK_DIRECTION;
     private static final DataParameter<Integer> CURRENT_DAMAGE;
@@ -40,58 +52,57 @@ public class EntityDummy extends Entity
         this.prevPosZ = d2;
     }
 
+    @Override
     protected void entityInit() {
         this.dataManager.register(EntityDummy.TIME_SINCE_HIT, 0);
-        this.dataManager.register(EntityDummy.ROCK_DIRECTION, (byte)1);
+        this.dataManager.register(EntityDummy.ROCK_DIRECTION, (byte) 1);
         this.dataManager.register(EntityDummy.CURRENT_DAMAGE, 0);
     }
 
+    @Override
     public AxisAlignedBB getCollisionBox(final Entity entity) {
         return entity.getEntityBoundingBox();
     }
 
+    @Override
     public AxisAlignedBB getCollisionBoundingBox() {
         return this.getEntityBoundingBox();
     }
 
+    @Override
     public boolean canBePushed() {
         return false;
     }
 
-    public boolean attackEntityFrom(final DamageSource damagesource, final float damage) {
+    @Override
+    public boolean attackEntityFrom(@Nonnull final DamageSource damagesource, final float damage) {
         if (this.world.isRemote || this.isDead || damage <= 0.0f) {
             return false;
         }
         this.setRockDirection(-this.getRockDirection());
         this.setTimeSinceHit(10);
         int i = this.getCurrentDamage();
-        i += (int)(damage * 5.0f);
+        i += (int) (damage * 5.0f);
         if (i > 50) {
             i = 50;
         }
         this.setCurrentDamage(i);
         this.markVelocityChanged();
         if (!(damagesource instanceof EntityDamageSource)) {
-            this.durability -= (int)damage;
-        }
-        else if (damagesource instanceof WeaponDamageSource) {
-            final Entity entity = ((WeaponDamageSource)damagesource).getProjectile();
+            this.durability -= (int) damage;
+        } else if (damagesource instanceof WeaponDamageSource) {
+            final Entity entity = ((WeaponDamageSource) damagesource).getProjectile();
             if (MathHelper.sqrt(entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ) > 0.5) {
-                final Entity entity2 = entity;
-                entity2.motionX *= 0.10000000149011612;
-                final Entity entity3 = entity;
-                entity3.motionY *= 0.10000000149011612;
-                final Entity entity4 = entity;
-                entity4.motionZ *= 0.10000000149011612;
+                entity.motionX *= 0.10000000149011612;
+                entity.motionY *= 0.10000000149011612;
+                entity.motionZ *= 0.10000000149011612;
                 this.playRandomHitSound();
-            }
-            else {
+            } else {
                 entity.motionX = this.rand.nextFloat() - 0.5f;
                 entity.motionY = this.rand.nextFloat() - 0.5f;
                 entity.motionZ = this.rand.nextFloat() - 0.5f;
             }
-        }
-        else {
+        } else {
             this.playRandomHitSound();
         }
         if (this.durability <= 0 && this.world.getGameRules().getBoolean("doEntityDrops")) {
@@ -105,22 +116,24 @@ public class EntityDummy extends Entity
         final int i = this.rand.nextInt(2);
         if (i == 0) {
             this.playSound(SoundEvents.BLOCK_CLOTH_STEP, 0.7f, 1.0f / (this.rand.nextFloat() * 0.2f + 0.4f));
-        }
-        else if (i == 1) {
+        } else {
             this.playSound(SoundEvents.BLOCK_WOOD_STEP, 0.7f, 1.0f / (this.rand.nextFloat() * 0.2f + 0.2f));
         }
     }
 
+    @Override
     public void performHurtAnimation() {
         this.setRockDirection(-this.getRockDirection());
         this.setTimeSinceHit(10);
         this.setCurrentDamage(this.getCurrentDamage() + 10);
     }
 
+    @Override
     public boolean canBeCollidedWith() {
         return !this.isDead;
     }
 
+    @Override
     public void onUpdate() {
         super.onUpdate();
         int i = this.getTimeSinceHit();
@@ -138,19 +151,18 @@ public class EntityDummy extends Entity
             this.motionX = 0.0;
             this.motionY = 0.0;
             this.motionZ = 0.0;
-        }
-        else {
+        } else {
             this.motionX *= 0.99;
             this.motionZ *= 0.99;
             this.motionY -= 0.05;
-            this.fallDistance += (float)(-this.motionY);
+            this.fallDistance += (float) (-this.motionY);
         }
         this.setRotation(this.rotationYaw, this.rotationPitch);
         this.move(MoverType.SELF, 0.0, this.motionY, 0.0);
-        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2, 0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
+        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2,
+                0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
         if (!list.isEmpty()) {
-            for (int j = 0; j < list.size(); ++j) {
-                final Entity entity = list.get(j);
+            for (final Entity entity : list) {
                 if (!entity.isPassenger(this)) {
                     this.applyEntityCollision(entity);
                 }
@@ -158,13 +170,14 @@ public class EntityDummy extends Entity
         }
     }
 
+    @Override
     public void fall(final float f, final float f1) {
         super.fall(f, f1);
         if (!this.onGround) {
             return;
         }
         final int i = MathHelper.floor(f);
-        this.attackEntityFrom(DamageSource.FALL, (float)i);
+        this.attackEntityFrom(DamageSource.FALL, (float) i);
     }
 
     public void dropAsItem(final boolean destroyed, final boolean noCreative) {
@@ -175,40 +188,34 @@ public class EntityDummy extends Entity
             for (int i = 0; i < this.rand.nextInt(8); ++i) {
                 this.dropItem(Items.LEATHER, 1);
             }
-        }
-        else if (noCreative) {
+        } else if (noCreative) {
             this.dropItem(BalkonsWeaponMod.dummy, 1);
         }
         this.setDead();
     }
 
-    public boolean processInitialInteract(final EntityPlayer entityplayer, final EnumHand hand) {
+    @Override
+    public boolean processInitialInteract(final EntityPlayer entityplayer, @Nonnull final EnumHand hand) {
         final ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-        if (itemstack.isEmpty()) {
-            if (entityplayer.capabilities.isCreativeMode) {
-                this.dropAsItem(false, false);
-                return true;
-            }
-            this.dropAsItem(false, true);
-            return true;
-        }
-        else {
+        if (!itemstack.isEmpty()) {
             if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof ItemSword || itemstack.getItem() instanceof ItemBow || itemstack.getItem() instanceof ItemShield) {
                 return false;
             }
-            if (entityplayer.capabilities.isCreativeMode) {
-                this.dropAsItem(false, false);
-                return true;
-            }
-            this.dropAsItem(false, true);
+        }
+        if (entityplayer.capabilities.isCreativeMode) {
+            this.dropAsItem(false, false);
             return true;
         }
+        this.dropAsItem(false, true);
+        return true;
     }
 
-    protected void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
+    @Override
+    protected void writeEntityToNBT(@Nonnull final NBTTagCompound nbttagcompound) {
     }
 
-    protected void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+    @Override
+    protected void readEntityFromNBT(@Nonnull final NBTTagCompound nbttagcompound) {
         this.setPosition(this.posX, this.posY, this.posZ);
         this.setRotation(this.rotationYaw, this.rotationPitch);
     }
@@ -218,7 +225,7 @@ public class EntityDummy extends Entity
     }
 
     public void setRockDirection(final int i) {
-        this.dataManager.set(EntityDummy.ROCK_DIRECTION, (byte)i);
+        this.dataManager.set(EntityDummy.ROCK_DIRECTION, (byte) i);
     }
 
     public void setCurrentDamage(final int i) {

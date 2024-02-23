@@ -1,26 +1,30 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.entity.projectile.*;
-import net.minecraft.client.renderer.entity.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import net.minecraft.client.renderer.vertex.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.util.*;
-import ckathode.weaponmod.*;
+import ckathode.weaponmod.WeaponModResources;
+import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
+import javax.annotation.Nonnull;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
-public class RenderBlowgunDart extends Render<EntityBlowgunDart>
-{
+public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
     public RenderBlowgunDart(final RenderManager renderManager) {
         super(renderManager);
     }
-    
-    public void doRender(final EntityBlowgunDart entityblowgundart, final double d, final double d1, final double d2, final float f, final float f1) {
+
+    @Override
+    public void doRender(@Nonnull final EntityBlowgunDart entityblowgundart, final double d, final double d1,
+                         final double d2, final float f, final float f1) {
         this.bindEntityTexture(entityblowgundart);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
-        GlStateManager.translate((float)d, (float)d1, (float)d2);
+        GlStateManager.translate((float) d, (float) d1, (float) d2);
         GlStateManager.rotate(entityblowgundart.prevRotationYaw + (entityblowgundart.rotationYaw - entityblowgundart.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(entityblowgundart.prevRotationPitch + (entityblowgundart.rotationPitch - entityblowgundart.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         final Tessellator tessellator = Tessellator.getInstance();
@@ -101,8 +105,9 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart>
         GlStateManager.popMatrix();
         super.doRender(entityblowgundart, d, d1, d2, f, f1);
     }
-    
-    protected ResourceLocation getEntityTexture(final EntityBlowgunDart entityblowgundart) {
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull final EntityBlowgunDart entityblowgundart) {
         return WeaponModResources.Textures.DART;
     }
 }
