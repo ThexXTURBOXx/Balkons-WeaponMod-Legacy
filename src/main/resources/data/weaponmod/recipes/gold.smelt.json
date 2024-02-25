@@ -2,31 +2,31 @@
   "type": "minecraft:smelting",
   "ingredient": [
     {
-      "item": "weaponmod:spear.iron"
+      "item": "weaponmod:spear.gold"
     },
     {
-      "item": "weaponmod:halberd.iron"
+      "item": "weaponmod:halberd.gold"
     },
     {
-      "item": "weaponmod:knife.iron"
+      "item": "weaponmod:knife.gold"
     },
     {
-      "item": "weaponmod:battleaxe.iron"
+      "item": "weaponmod:battleaxe.gold"
     },
     {
-      "item": "weaponmod:warhammer.iron"
+      "item": "weaponmod:warhammer.gold"
     },
     {
-      "item": "weaponmod:flail.iron"
+      "item": "weaponmod:flail.gold"
     },
     {
-      "item": "weaponmod:boomerang.iron"
+      "item": "weaponmod:boomerang.gold"
     },
     {
-      "item": "weaponmod:katana.iron"
+      "item": "weaponmod:katana.gold"
     }
   ],
-  "result": "minecraft:iron_nugget",
+  "result": "minecraft:gold_nugget",
   "experience": 0.1,
   "cookingtime": 200
 }
