@@ -2,7 +2,9 @@ package ckathode.weaponmod.entity.projectile;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 
 public class MaterialRegistry {
     private static final float[] NO_MATERIAL_COLOR;
@@ -39,6 +41,13 @@ public class MaterialRegistry {
             }
         }
         return MaterialRegistry.NO_MATERIAL_COLOR;
+    }
+
+    public static int getOrdinal(IItemTier tier) {
+        if (tier instanceof ItemTier) {
+            return ((ItemTier) tier).ordinal();
+        }
+        return -1;
     }
 
     static {

@@ -1,21 +1,24 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityKnife extends EntityMaterialProjectile {
+public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
+    public static final String NAME = "knife";
+
     private int soundTimer;
 
     public EntityKnife(final World world) {
-        super(world);
+        super(BalkonsWeaponMod.entityKnife, world);
     }
 
     public EntityKnife(final World world, final double d, final double d1, final double d2) {
@@ -25,7 +28,8 @@ public class EntityKnife extends EntityMaterialProjectile {
 
     public EntityKnife(final World world, final EntityLivingBase shooter, final ItemStack itemstack) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.setPickupModeFromEntity((EntityLivingBase) (this.shootingEntity = shooter));
+        setShooter(shooter);
+        this.setPickupStatusFromEntity(shooter);
         this.setThrownItemStack(itemstack);
         this.soundTimer = 0;
     }
@@ -45,14 +49,14 @@ public class EntityKnife extends EntityMaterialProjectile {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (this.inGround || this.beenInGround) {
             return;
         }
         this.rotationPitch -= 70.0f;
         if (this.soundTimer >= 3) {
-            if (!this.isInsideOfMaterial(Material.WATER)) {
+            if (!this.areEyesInFluid(FluidTags.WATER)) {
                 this.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 0.6f,
                         1.0f / (this.rand.nextFloat() * 0.2f + 0.6f + this.ticksInAir / 15.0f));
             }
@@ -66,21 +70,17 @@ public class EntityKnife extends EntityMaterialProjectile {
         if (this.world.isRemote) {
             return;
         }
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource,
                 ((IItemWeapon) this.thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 1.0f + this.getMeleeHitDamage(entity))) {
             this.applyEntityHitEffects(entity);
-            if (this.thrownItem.getItemDamage() + 2 > this.thrownItem.getMaxDamage()) {
+            if (this.thrownItem.getDamage() + 2 > this.thrownItem.getMaxDamage()) {
                 this.thrownItem.shrink(1);
-                this.setDead();
+                this.remove();
             } else {
-                if (this.shootingEntity instanceof EntityLivingBase) {
-                    this.thrownItem.damageItem(2, (EntityLivingBase) this.shootingEntity);
+                Entity shooter = getShooter();
+                if (shooter instanceof EntityLivingBase) {
+                    this.thrownItem.damageItem(2, (EntityLivingBase) shooter);
                 } else {
                     this.thrownItem.attemptDamageItem(2, this.rand, null);
                 }
@@ -98,7 +98,7 @@ public class EntityKnife extends EntityMaterialProjectile {
 
     @Override
     public int getMaxLifetime() {
-        return (this.pickupMode == 1 || this.pickupMode == 3) ? 0 : 1200;
+        return (this.pickupStatus == PickupStatus.ALLOWED || this.pickupStatus == PickupStatus.OWNER_ONLY) ? 0 : 1200;
     }
 
     @Override

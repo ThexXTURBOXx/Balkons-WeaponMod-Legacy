@@ -15,9 +15,6 @@ public class WMCommonProxy {
         pipeline.registerPacket(MsgExplosion.class);
     }
 
-    public void registerRenderersItem(final WeaponModConfig config) {
-    }
-
     public void registerRenderersEntity(final WeaponModConfig config) {
     }
 }

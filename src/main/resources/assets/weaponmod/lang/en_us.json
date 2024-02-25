@@ -1,0 +1,99 @@
+{
+    "_comment": "Balkon's WeaponMod language file en_US",
+
+    "item.weaponmod.spear.wood": "Wooden Spear",
+    "item.weaponmod.spear.stone": "Stone Spear",
+    "item.weaponmod.spear.iron": "Iron Spear",
+    "item.weaponmod.spear.diamond": "Diamond Spear",
+    "item.weaponmod.spear.gold": "Golden Spear",
+
+    "item.weaponmod.halberd.wood": "Wooden Halberd",
+    "item.weaponmod.halberd.stone": "Stone Halberd",
+    "item.weaponmod.halberd.iron": "Iron Halberd",
+    "item.weaponmod.halberd.diamond": "Diamond Halberd",
+    "item.weaponmod.halberd.gold": "Golden Halberd",
+
+    "item.weaponmod.battleaxe.wood": "Wooden Battleaxe",
+    "item.weaponmod.battleaxe.stone": "Stone Battleaxe",
+    "item.weaponmod.battleaxe.iron": "Iron Battleaxe",
+    "item.weaponmod.battleaxe.diamond": "Diamond Battleaxe",
+    "item.weaponmod.battleaxe.gold": "Golden Battleaxe",
+
+    "item.weaponmod.warhammer.wood": "Wooden Warhammer",
+    "item.weaponmod.warhammer.stone": "Stone Warhammer",
+    "item.weaponmod.warhammer.iron": "Iron Warhammer",
+    "item.weaponmod.warhammer.diamond": "Diamond Warhammer",
+    "item.weaponmod.warhammer.gold": "Golden Warhammer",
+
+    "item.weaponmod.knife.wood": "Wooden Knife",
+    "item.weaponmod.knife.stone": "Stone Knife",
+    "item.weaponmod.knife.iron": "Iron Knife",
+    "item.weaponmod.knife.diamond": "Diamond Knife",
+    "item.weaponmod.knife.gold": "Golden Knife",
+
+    "item.weaponmod.flail.wood": "Wooden Flail",
+    "item.weaponmod.flail.stone": "Stone Flail",
+    "item.weaponmod.flail.iron": "Iron Flail",
+    "item.weaponmod.flail.diamond": "Diamond Flail",
+    "item.weaponmod.flail.gold": "Golden Flail",
+
+    "item.weaponmod.javelin": "Javelin",
+
+    "item.weaponmod.musket": "Musket",
+    "item.weaponmod.musketbayonet": "Musket with Bayonet",
+    "item.weaponmod.musketbayonet.wood": "Musket with Wooden Bayonet",
+    "item.weaponmod.musketbayonet.stone": "Musket with Stone Bayonet",
+    "item.weaponmod.musketbayonet.iron": "Musket with Iron Bayonet",
+    "item.weaponmod.musketbayonet.diamond": "Musket with Diamond Bayonet",
+    "item.weaponmod.musketbayonet.gold": "Musket with Golden Bayonet",
+    "item.weaponmod.musket-ironpart": "Musket Barrel",
+    "item.weaponmod.bullet": "Musket Round",
+
+    "item.weaponmod.crossbow": "Crossbow",
+    "item.weaponmod.bolt": "Crossbow Bolt",
+
+    "item.weaponmod.blowgun": "Blowgun",
+    "item.weaponmod.dart": "Poisonous Dart",
+
+    "item.weaponmod.dynamite": "Dynamite",
+
+    "item.weaponmod.firerod": "Fire Rod",
+
+    "item.weaponmod.cannon": "Cannon",
+    "item.weaponmod.cannonball": "Cannon Ball",
+
+    "item.weaponmod.blunderbuss": "Blunderbuss",
+    "item.weaponmod.blunder-ironpart": "Blunderbuss Barrel",
+    "item.weaponmod.shot": "Blunderbuss Shot",
+
+    "item.weaponmod.dummy": "Training Dummy",
+
+    "item.weaponmod.gun-stock": "Gun Stock",
+
+    "item.weaponmod.boomerang.wood": "Wooden Boomerang",
+    "item.weaponmod.boomerang.stone": "Stone Boomerang",
+    "item.weaponmod.boomerang.iron": "Iron Boomerang",
+    "item.weaponmod.boomerang.diamond": "Diamond Boomerang",
+    "item.weaponmod.boomerang.gold": "Golden Boomerang",
+
+    "item.weaponmod.katana.wood": "Wooden Katana",
+    "item.weaponmod.katana.stone": "Stone Katana",
+    "item.weaponmod.katana.iron": "Iron Katana",
+    "item.weaponmod.katana.diamond": "Diamond Katana",
+    "item.weaponmod.katana.gold": "Golden Katana",
+
+    "item.weaponmod.flintlock": "Flintlock Pistol",
+
+    "item.weaponmod.mortar": "Hand Mortar",
+    "item.weaponmod.mortar-ironpart": "Mortar Barrel",
+    "item.weaponmod.shell": "Mortar Shell",
+
+    "attribute.name.weaponmod.ignoreArmour": "Ignore Armor",
+    "attribute.name.weaponmod.knockback": "Knockback",
+    "attribute.name.weaponmod.attackSpeed": "Attack Speed",
+    "attribute.name.weaponmod.reloadTime": "Reload Time",
+    "attribute.name.weaponmod.reach": "Reach",
+
+    "death.attack.weapon": "%1$s is no more.",
+    "death.attack.weapon.player": "%1$s died running away from %2$s."
+}

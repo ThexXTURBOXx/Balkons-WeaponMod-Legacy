@@ -15,6 +15,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -23,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class RangedComponent extends AbstractWeaponComponent {
     protected static final int MAX_DELAY = 72000;
@@ -49,9 +51,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void setThisItemProperties() {
-        this.item.setMaxDamage(this.rangedSpecs.durability);
-        this.item.setMaxStackSize(this.rangedSpecs.stackSize);
+    public Properties setProperties(Properties properties) {
+        return properties.defaultMaxDamage(this.rangedSpecs.durability);
     }
 
     @Override
@@ -116,7 +117,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public EnumAction getItemUseAction(final ItemStack itemstack) {
+    public EnumAction getUseAction(final ItemStack itemstack) {
         final int state = ReloadHelper.getReloadState(itemstack);
         if (state == ReloadHelper.STATE_READY) {
             return EnumAction.BOW;
@@ -125,8 +126,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public int getMaxItemUseDuration(final ItemStack itemstack) {
-        return 72000;
+    public int getUseDuration(final ItemStack itemstack) {
+        return MAX_DELAY;
     }
 
     @Override
@@ -153,7 +154,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public void onUsingTick(final ItemStack itemstack, final EntityLivingBase entityliving, final int count) {
         final EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        if (ReloadHelper.getReloadState(itemstack) == ReloadHelper.STATE_NONE && this.getMaxItemUseDuration(itemstack) - count >= this.getReloadDuration(itemstack)) {
+        if (ReloadHelper.getReloadState(itemstack) == ReloadHelper.STATE_NONE && this.getUseDuration(itemstack) - count >= this.getReloadDuration(itemstack)) {
             this.effectReloadDone(itemstack, entityplayer.world, entityplayer);
             setReloadState(itemstack, ReloadHelper.STATE_RELOADED);
         }
@@ -177,8 +178,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void onUpdate(final ItemStack itemstack, final World world, final Entity entity, final int i,
-                         final boolean flag) {
+    public void inventoryTick(final ItemStack itemstack, final World world, final Entity entity, final int i,
+                              final boolean flag) {
     }
 
     public void soundEmpty(final ItemStack itemstack, final World world, final EntityPlayer entityplayer) {
@@ -205,9 +206,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     public abstract void effectShoot(final World p0, final double p1, final double p2, final double p3,
                                      final float p4, final float p5);
 
-    public void applyProjectileEnchantments(final EntityProjectile entity, final ItemStack itemstack) {
+    public void applyProjectileEnchantments(final EntityProjectile<?> entity, final ItemStack itemstack) {
         if (EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0) {
-            entity.setPickupMode(0);
+            entity.setPickupStatus(EntityProjectile.PickupStatus.DISALLOWED);
         }
         final int damage = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, itemstack);
         if (damage > 0) {
@@ -263,12 +264,14 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public boolean hasAmmoAndConsume(final ItemStack itemstack, final World world, final EntityPlayer entityplayer) {
-        return entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0 || this.consumeAmmo(entityplayer);
+        return entityplayer.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
+                itemstack) > 0 || this.consumeAmmo(entityplayer);
     }
 
     public boolean hasAmmo(final ItemStack itemstack, final World world, final EntityPlayer entityplayer) {
         final boolean flag = !this.findAmmo(entityplayer).isEmpty();
-        return entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0 || flag;
+        return entityplayer.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
+                itemstack) > 0 || flag;
     }
 
     public float getFOVMultiplier(final int ticksinuse) {
@@ -290,25 +293,23 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public enum RangedSpecs {
-        BLOWGUN("weaponmod:dart", "blowgun", 250, 1),
-        CROSSBOW("weaponmod:bolt", "crossbow", 250, 1),
-        MUSKET("weaponmod:bullet", "musket", 80, 1),
-        BLUNDERBUSS("weaponmod:shot", "blunderbuss", 80, 1),
-        FLINTLOCK("weaponmod:bullet", "flintlock", 80, 1),
-        MORTAR("weaponmod:shell", "mortar", 40, 1);
+        BLOWGUN("dart", "blowgun", 250),
+        CROSSBOW("bolt", "crossbow", 250),
+        MUSKET("bullet", "musket", 80),
+        BLUNDERBUSS("shot", "blunderbuss", 80),
+        FLINTLOCK("bullet", "flintlock", 8),
+        MORTAR("shell", "mortar", 40);
 
         private int reloadTime;
         private Item ammoItem;
         private String ammoItemTag;
         public final String reloadTimeTag;
         public final int durability;
-        public final int stackSize;
 
-        RangedSpecs(final String ammoitemtag, final String reloadtimetag, final int durability, final int stacksize) {
+        RangedSpecs(final String ammoitemtag, final String reloadtimetag, final int durability) {
             this.ammoItemTag = ammoitemtag;
             this.reloadTimeTag = reloadtimetag;
             this.durability = durability;
-            this.stackSize = stacksize;
             this.ammoItem = null;
             this.reloadTime = -1;
         }
@@ -316,14 +317,15 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public int getReloadTime() {
             if (this.reloadTime < 0 && BalkonsWeaponMod.instance != null) {
                 this.reloadTime = BalkonsWeaponMod.instance.modConfig.getReloadTime(this.reloadTimeTag);
-                BalkonsWeaponMod.modLog.debug("Found reaload time " + this.reloadTime + " for " + this.reloadTimeTag + " @" + this);
+                BalkonsWeaponMod.modLog.debug("Found reload time " + this.reloadTime + " for " + this.reloadTimeTag + " @" + this);
             }
             return this.reloadTime;
         }
 
         public Item getAmmoItem() {
             if (this.ammoItem == null && ammoItemTag != null) {
-                this.ammoItem = Item.REGISTRY.getObject(new ResourceLocation(this.ammoItemTag));
+                this.ammoItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
+                        this.ammoItemTag));
                 BalkonsWeaponMod.modLog.debug("Found item " + this.ammoItem + " for " + this.ammoItemTag + " @" + this);
                 this.ammoItemTag = null;
             }

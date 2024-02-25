@@ -12,9 +12,12 @@ public class WeaponModAttributes extends SharedMonsterAttributes {
 
     static {
         IGNORE_ARMOUR_DAMAGE =
-                new RangedAttribute(null, "weaponmod.ignoreArmour", 0.0, 0.0, 2048.0).setShouldWatch(true);
-        WEAPON_KNOCKBACK = new RangedAttribute(null, "weaponmod.knockback", 0.4, 0.0, 2048.0).setShouldWatch(true);
-        RELOAD_TIME = new RangedAttribute(null, "weaponmod.reloadTime", 0.0, 0.0, 2048.0).setShouldWatch(true);
-        WEAPON_REACH = new RangedAttribute(null, "weaponmod.reach", 0.0, 0.0, 2048.0).setShouldWatch(true);
+                new RangedAttribute(null, BalkonsWeaponMod.MOD_ID + ".ignoreArmour", 0.0, 0.0, 2048.0).setShouldWatch(true);
+        WEAPON_KNOCKBACK =
+                new RangedAttribute(null, BalkonsWeaponMod.MOD_ID + ".knockback", 0.4, 0.0, 2048.0).setShouldWatch(true);
+        RELOAD_TIME =
+                new RangedAttribute(null, BalkonsWeaponMod.MOD_ID + ".reloadTime", 0.0, 0.0, 2048.0).setShouldWatch(true);
+        WEAPON_REACH =
+                new RangedAttribute(null, BalkonsWeaponMod.MOD_ID + ".reach", 0.0, 0.0, 2048.0).setShouldWatch(true);
     }
 }

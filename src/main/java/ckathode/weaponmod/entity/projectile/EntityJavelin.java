@@ -11,20 +11,23 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityJavelin extends EntityProjectile {
+public class EntityJavelin extends EntityProjectile<EntityJavelin> {
+    public static final String NAME = "javelin";
+
     public EntityJavelin(final World world) {
-        super(world);
+        super(BalkonsWeaponMod.entityJavelin, world);
     }
 
     public EntityJavelin(final World world, final double x, final double y, final double z) {
         this(world);
-        this.setPickupMode(1);
+        this.setPickupStatus(PickupStatus.ALLOWED);
         this.setPosition(x, y, z);
     }
 
     public EntityJavelin(final World world, final EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.setPickupModeFromEntity((EntityLivingBase) (this.shootingEntity = shooter));
+        setShooter(shooter);
+        this.setPickupStatusFromEntity(shooter);
     }
 
     @Override
@@ -48,16 +51,11 @@ public class EntityJavelin extends EntityProjectile {
         if (this.getIsCritical()) {
             damage += this.rand.nextInt(damage / 2 + 2);
         }
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, (float) damage)) {
             this.applyEntityHitEffects(entity);
             this.playHitSound();
-            this.setDead();
+            this.remove();
         } else {
             this.bounceBack();
         }
@@ -83,6 +81,7 @@ public class EntityJavelin extends EntityProjectile {
         return 0.03f;
     }
 
+    @Nonnull
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.javelin, 1);

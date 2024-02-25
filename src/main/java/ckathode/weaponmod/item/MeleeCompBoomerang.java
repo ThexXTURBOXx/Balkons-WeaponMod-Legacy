@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -15,8 +15,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class MeleeCompBoomerang extends MeleeComponent {
-    public MeleeCompBoomerang(final Item.ToolMaterial toolmaterial) {
-        super(MeleeSpecs.BOOMERANG, toolmaterial);
+    public MeleeCompBoomerang(final IItemTier itemTier) {
+        super(MeleeSpecs.BOOMERANG, itemTier);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             if (itemstack.isEmpty()) {
                 return;
             }
-            final int j = this.getMaxItemUseDuration(itemstack) - i;
+            final int j = this.getUseDuration(itemstack) - i;
             float f = j / 20.0f;
             f = (f * f + f * 2.0f) / 3.0f;
             if (f < 0.1f) {
@@ -54,7 +54,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
                     SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
                     1.0f / (this.weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
-            if (!entityplayer.capabilities.isCreativeMode) {
+            if (!entityplayer.abilities.isCreativeMode) {
                 ItemStack itemstack2 = itemstack.copy();
                 itemstack2.shrink(1);
                 if (itemstack2.isEmpty()) {
@@ -66,7 +66,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public int getMaxItemUseDuration(final ItemStack itemstack) {
+    public int getUseDuration(final ItemStack itemstack) {
         return 72000;
     }
 
@@ -77,7 +77,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
         if (hand != EnumHand.MAIN_HAND) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
-        if (!entityplayer.capabilities.isCreativeMode && itemstack.isEmpty()) {
+        if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);

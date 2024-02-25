@@ -7,12 +7,12 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiOverlayReloaded extends Gui {
     private final Minecraft mc;
 
@@ -29,10 +29,10 @@ public class GuiOverlayReloaded extends Gui {
         if (p != null) {
             final ItemStack is = p.getHeldItemMainhand();
             if (!is.isEmpty() && is.getItem() instanceof IItemWeapon && ((IItemWeapon) is.getItem()).getRangedComponent() != null) {
-                GlStateManager.pushAttrib();
+                GlStateManager.pushLightingAttrib();
                 final RangedComponent rc = ((IItemWeapon) is.getItem()).getRangedComponent();
                 final boolean rld = RangedComponent.isReloaded(is);
-                GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+                GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
                 GlStateManager.disableLighting();
                 float f;
                 int color;
@@ -53,8 +53,8 @@ public class GuiOverlayReloaded extends Gui {
                 int i;
                 for (i = 0; i < 9 && p.inventory.getStackInSlot(i) != is; ++i) {
                 }
-                final int x0 = e.getResolution().getScaledWidth() / 2 - 88 + i * 20;
-                final int y0 = e.getResolution().getScaledHeight() - 3;
+                final int x0 = Minecraft.getInstance().mainWindow.getScaledWidth() / 2 - 88 + i * 20;
+                final int y0 = Minecraft.getInstance().mainWindow.getScaledHeight() - 3;
                 drawRect(x0, y0, x0 + 16, y0 - (int) (f * 16.0f), color);
                 GlStateManager.popAttrib();
             }

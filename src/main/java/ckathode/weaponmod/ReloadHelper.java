@@ -9,21 +9,21 @@ public abstract class ReloadHelper {
     public static int STATE_READY;
 
     private static void initTagCompound(final ItemStack itemstack) {
-        if (itemstack.getTagCompound() == null) {
-            itemstack.setTagCompound(new NBTTagCompound());
+        if (itemstack.getTag() == null) {
+            itemstack.setTag(new NBTTagCompound());
         }
     }
 
     public static int getReloadState(final ItemStack itemstack) {
-        if (itemstack.hasTagCompound()) {
-            return itemstack.getTagCompound().getByte("rld");
+        if (itemstack.hasTag()) {
+            return itemstack.getTag().getByte("rld");
         }
         return 0;
     }
 
     public static void setReloadState(final ItemStack itemstack, final int state) {
         initTagCompound(itemstack);
-        itemstack.getTagCompound().setByte("rld", (byte) state);
+        itemstack.getTag().putByte("rld", (byte) state);
     }
 
     static {

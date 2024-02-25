@@ -1,0 +1,96 @@
+{
+    "_comment": "Balkon's WeaponMod language file ja_JP",
+
+    "item.weaponmod.spear.wood": "木の槍",
+    "item.weaponmod.spear.stone": "石の槍",
+    "item.weaponmod.spear.iron": "鉄の槍",
+    "item.weaponmod.spear.diamond": "ダイヤの槍",
+    "item.weaponmod.spear.gold": "金の槍",
+
+    "item.weaponmod.halberd.wood": "木の矛槍",
+    "item.weaponmod.halberd.stone": "石の矛槍",
+    "item.weaponmod.halberd.iron": "鉄の矛槍",
+    "item.weaponmod.halberd.diamond": "ダイヤの矛槍",
+    "item.weaponmod.halberd.gold": "金の矛槍",
+
+    "item.weaponmod.battleaxe.wood": "木の戦斧",
+    "item.weaponmod.battleaxe.stone": "石の戦斧",
+    "item.weaponmod.battleaxe.iron": "鉄の戦斧",
+    "item.weaponmod.battleaxe.diamond": "ダイヤの戦斧",
+    "item.weaponmod.battleaxe.gold": "金の戦斧",
+
+    "item.weaponmod.warhammer.wood": "木の戦槌",
+    "item.weaponmod.warhammer.stone": "石の戦槌",
+    "item.weaponmod.warhammer.iron": "鉄の戦槌",
+    "item.weaponmod.warhammer.diamond": "ダイヤの戦槌",
+    "item.weaponmod.warhammer.gold": "金の戦槌",
+
+    "item.weaponmod.knife.wood": "木のナイフ",
+    "item.weaponmod.knife.stone": "石のナイフ",
+    "item.weaponmod.knife.iron": "鉄のナイフ",
+    "item.weaponmod.knife.diamond": "ダイヤのナイフ",
+    "item.weaponmod.knife.gold": "金のナイフ",
+
+    "item.weaponmod.flail.wood": "木のフレイル",
+    "item.weaponmod.flail.stone": "石のフレイル",
+    "item.weaponmod.flail.iron": "鉄のフレイル",
+    "item.weaponmod.flail.diamond": "ダイヤのフレイル",
+    "item.weaponmod.flail.gold": "金のフレイル",
+
+    "item.weaponmod.javelin": "ジャベリン",
+
+    "item.weaponmod.musket": "マスケット銃",
+    "item.weaponmod.musketbayonet": "銃剣付きマスケット",
+    "item.weaponmod.musketbayonet.wood": "木の銃剣付きマスケット",
+    "item.weaponmod.musketbayonet.stone": "石の銃剣付きマスケット",
+    "item.weaponmod.musketbayonet.iron": "鉄の銃剣付きマスケット",
+    "item.weaponmod.musketbayonet.diamond": "ダイヤの銃剣付きマスケット",
+    "item.weaponmod.musketbayonet.gold": "金の銃剣付きマスケット",
+    "item.weaponmod.musket-ironpart": "マスケット銃の銃身",
+    "item.weaponmod.bullet": "マスケット銃の弾",
+
+    "item.weaponmod.crossbow": "クロスボウ",
+    "item.weaponmod.bolt": "太矢",
+
+    "item.weaponmod.blowgun": "吹き矢筒",
+    "item.weaponmod.dart": "毒矢",
+
+    "item.weaponmod.dynamite": "ダイナマイト",
+
+    "item.weaponmod.firerod": "ファイアロッド",
+
+    "item.weaponmod.cannon": "大砲",
+    "item.weaponmod.cannonball": "大砲の弾",
+
+    "item.weaponmod.blunderbuss": "ラッパ銃",
+    "item.weaponmod.blunder-ironpart": "ラッパ銃の銃身",
+    "item.weaponmod.shot": "ラッパ銃の弾",
+
+    "item.weaponmod.dummy": "訓練用カカシ",
+
+    "item.weaponmod.gun-stock": "銃床",
+
+    "item.weaponmod.boomerang.wood": "木のブーメラン",
+    "item.weaponmod.boomerang.stone": "石のブーメラン",
+    "item.weaponmod.boomerang.iron": "鉄のブーメラン",
+    "item.weaponmod.boomerang.diamond": "ダイヤのブーメラン",
+    "item.weaponmod.boomerang.gold": "金のブーメラン",
+
+    "item.weaponmod.katana.wood": "木のカタナ",
+    "item.weaponmod.katana.stone": "石のカタナ",
+    "item.weaponmod.katana.iron": "鉄のカタナ",
+    "item.weaponmod.katana.diamond": "ダイヤのカタナ",
+    "item.weaponmod.katana.gold": "金のカタナ",
+
+    "item.weaponmod.flintlock": "フリントロック式ピストル",
+
+    "item.weaponmod.mortar": "手モルタル",
+    "item.weaponmod.mortar-ironpart": "モルタル銃の銃身",
+    "item.weaponmod.shell": "モルタルシェル",
+
+    "attribute.name.weaponmod.ignoreArmour": "アーマー無効",
+    "attribute.name.weaponmod.knockback": "ノックバック",
+    "attribute.name.weaponmod.attackSpeed": "攻撃速度",
+    "attribute.name.weaponmod.reloadTime": "装填時間",
+    "attribute.name.weaponmod.reach": "射程"
+}

@@ -1,18 +1,18 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.item.ItemTier;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class MeleeCompFirerod extends MeleeComponent {
     public MeleeCompFirerod() {
-        super(MeleeSpecs.FIREROD, Item.ToolMaterial.WOOD);
+        super(MeleeSpecs.FIREROD, ItemTier.WOOD);
     }
 
     @Override
@@ -26,10 +26,10 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
-    public void onUpdate(final ItemStack itemstack, final World world, final Entity entity, final int i,
-                         final boolean flag) {
-        super.onUpdate(itemstack, world, entity, i, flag);
-        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).inventory.getCurrentItem() == itemstack && !entity.isInsideOfMaterial(Material.WATER)) {
+    public void inventoryTick(final ItemStack itemstack, final World world, final Entity entity, final int i,
+                              final boolean flag) {
+        super.inventoryTick(itemstack, world, entity, i, flag);
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).inventory.getCurrentItem() == itemstack && !entity.areEyesInFluid(FluidTags.WATER)) {
             final float f = 1.0f;
             final float f2 = 27.0f;
             final float particleX =
@@ -38,11 +38,11 @@ public class MeleeCompFirerod extends MeleeComponent {
             final float particleZ =
                     MathHelper.cos((entity.rotationYaw + 28.0f) * 0.017453292f) * MathHelper.cos(entity.rotationPitch * 0.017453292f) * 1.0f;
             if (this.weapon.getItemRand().nextInt(5) == 0) {
-                world.spawnParticle(EnumParticleTypes.FLAME, entity.posX + particleX, entity.posY + particleY,
+                world.addParticle(Particles.FLAME, entity.posX + particleX, entity.posY + particleY,
                         entity.posZ + particleZ, 0.0, 0.0, 0.0);
             }
             if (this.weapon.getItemRand().nextInt(5) == 0) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, entity.posX + particleX, entity.posY + particleY,
+                world.addParticle(Particles.SMOKE, entity.posX + particleX, entity.posY + particleY,
                         entity.posZ + particleZ, 0.0, 0.0, 0.0);
             }
         }

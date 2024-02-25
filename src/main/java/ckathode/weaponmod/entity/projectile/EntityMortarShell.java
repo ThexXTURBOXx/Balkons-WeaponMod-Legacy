@@ -4,37 +4,39 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityMortarShell extends EntityProjectile {
+public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
+    public static final String NAME = "shell";
+
     public float explosiveSize;
 
     public EntityMortarShell(final World world) {
-        super(world);
+        super(BalkonsWeaponMod.entityMortarShell, world);
         this.explosiveSize = 2.0f;
     }
 
     public EntityMortarShell(final World world, final double d, final double d1, final double d2) {
         this(world);
-        this.setPickupMode(1);
+        this.setPickupStatus(PickupStatus.ALLOWED);
         this.setPosition(d, d1, d2);
     }
 
     public EntityMortarShell(final World world, final EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.setPickupModeFromEntity((EntityLivingBase) (this.shootingEntity = shooter));
+        setShooter(shooter);
+        this.setPickupStatusFromEntity(shooter);
     }
 
     @Override
@@ -52,14 +54,14 @@ public class EntityMortarShell extends EntityProjectile {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         final double speed =
                 MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
         final double amount = 8.0;
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + this.motionX * i1 / amount,
+                this.world.addParticle(Particles.SMOKE, this.posX + this.motionX * i1 / amount,
                         this.posY + this.motionY * i1 / amount, this.posZ + this.motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
@@ -69,18 +71,18 @@ public class EntityMortarShell extends EntityProjectile {
         if (this.world.isRemote || !this.inGround || this.isInWater()) {
             return;
         }
-        this.setDead();
-        if (this.shootingEntity != null && EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
-                (EntityLivingBase) this.shootingEntity) > 0) {
+        this.remove();
+        Entity shooter = getShooter();
+        if (!(shooter instanceof EntityLivingBase)) return;
+        if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase) shooter) > 0) {
             final float f1 = (float) EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
-                    (EntityLivingBase) this.shootingEntity);
+                    (EntityLivingBase) shooter);
             this.explosiveSize += f1 / 4.0f;
         }
         final boolean flag =
-                this.shootingEntity != null && EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME,
-                        (EntityLivingBase) this.shootingEntity) > 0;
+                EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase) shooter) > 0;
         PhysHelper.createAdvancedExplosion(this.world, this, this.posX, this.posY, this.posZ, this.explosiveSize,
-                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage, true, flag, false);
+                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage.get(), true, flag, false);
     }
 
     @Override
@@ -88,12 +90,7 @@ public class EntityMortarShell extends EntityProjectile {
         this.motionX -= this.motionX / 2.0;
         this.motionZ -= this.motionZ / 2.0;
         this.motionY -= this.motionY / 2.0;
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 5.0f)) {
             this.playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (this.rand.nextFloat() * 0.4f + 0.7f));
         }
@@ -105,9 +102,7 @@ public class EntityMortarShell extends EntityProjectile {
         this.xTile = blockpos.getX();
         this.yTile = blockpos.getY();
         this.zTile = blockpos.getZ();
-        final IBlockState iblockstate = this.world.getBlockState(blockpos);
-        this.inTile = iblockstate.getBlock();
-        this.inData = this.inTile.getMetaFromState(iblockstate);
+        this.inBlockState = this.world.getBlockState(blockpos);
         this.motionX = raytraceResult.hitVec.x - this.posX;
         this.motionY = raytraceResult.hitVec.y - this.posY;
         this.motionZ = raytraceResult.hitVec.z - this.posZ;
@@ -117,8 +112,8 @@ public class EntityMortarShell extends EntityProjectile {
         this.posY -= this.motionY / f1 * 0.05;
         this.posZ -= this.motionZ / f1 * 0.05;
         this.inGround = true;
-        if (this.inTile != null) {
-            this.inTile.onEntityCollision(this.world, blockpos, iblockstate, this);
+        if (this.inBlockState != null) {
+            this.inBlockState.onEntityCollision(this.world, blockpos, this);
         }
         this.createCrater();
     }
@@ -133,6 +128,7 @@ public class EntityMortarShell extends EntityProjectile {
         return 0.04f;
     }
 
+    @Nonnull
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.mortarShell, 1);

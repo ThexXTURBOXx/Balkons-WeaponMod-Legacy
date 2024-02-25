@@ -5,16 +5,18 @@ import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityMusketBullet extends EntityProjectile {
+public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
+    public static final String NAME = "bullet";
+
     public EntityMusketBullet(final World world) {
-        super(world);
-        this.setPickupMode(0);
+        super(BalkonsWeaponMod.entityMusketBullet, world);
+        this.setPickupStatus(PickupStatus.DISALLOWED);
     }
 
     public EntityMusketBullet(final World world, final double d, final double d1, final double d2) {
@@ -24,7 +26,7 @@ public class EntityMusketBullet extends EntityProjectile {
 
     public EntityMusketBullet(final World world, final EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.shootingEntity = shooter;
+        setShooter(shooter);
     }
 
     @Override
@@ -42,11 +44,11 @@ public class EntityMusketBullet extends EntityProjectile {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (this.inGround) {
             if (this.rand.nextInt(4) == 0) {
-                this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0, 0.0,
+                this.world.addParticle(Particles.SMOKE, this.posX, this.posY, this.posZ, 0.0, 0.0,
                         0.0);
             }
             return;
@@ -55,7 +57,7 @@ public class EntityMusketBullet extends EntityProjectile {
         final double amount = 16.0;
         if (speed > 2.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.motionX * i1 / amount,
+                this.world.addParticle(Particles.POOF, this.posX + this.motionX * i1 / amount,
                         this.posY + this.motionY * i1 / amount, this.posZ + this.motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
@@ -64,16 +66,11 @@ public class EntityMusketBullet extends EntityProjectile {
     @Override
     public void onEntityHit(final Entity entity) {
         final float damage = 20.0f + this.extraDamage;
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, damage)) {
             this.applyEntityHitEffects(entity);
             this.playHitSound();
-            this.setDead();
+            this.remove();
         }
     }
 

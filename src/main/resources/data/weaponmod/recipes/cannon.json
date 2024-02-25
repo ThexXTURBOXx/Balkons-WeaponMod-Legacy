@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##X",
+    "  #",
+    "##O"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "O": [
+      {
+        "tag": "minecraft:logs"
+      }
+    ]
+  },
+  "result": {
+    "item": "weaponmod:cannon"
+  }
+}

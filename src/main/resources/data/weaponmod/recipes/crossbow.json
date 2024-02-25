@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "O##",
+    "#X ",
+    "# X"
+  ],
+  "key": {
+    "X": [
+      {
+        "tag": "minecraft:planks"
+      }
+    ],
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "O": {
+      "item": "minecraft:bow"
+    }
+  },
+  "result": {
+    "item": "weaponmod:crossbow"
+  }
+}

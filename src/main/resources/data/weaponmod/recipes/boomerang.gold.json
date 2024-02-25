@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX#",
+    "  X",
+    "  X"
+  ],
+  "key": {
+    "X": [
+      {
+        "tag": "minecraft:planks"
+      }
+    ],
+    "#": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result": {
+    "item": "weaponmod:boomerang.gold"
+  }
+}

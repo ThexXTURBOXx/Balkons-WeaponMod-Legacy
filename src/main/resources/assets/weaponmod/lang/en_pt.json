@@ -1,0 +1,88 @@
+{
+    "_comment": "Balkon's WeaponMod language file en_PT",
+
+    "item.weaponmod.spear.wood": "Timber Stabber",
+    "item.weaponmod.spear.stone": "Stabber o' Rock",
+    "item.weaponmod.spear.iron": "Stabber o' Pebbles",
+    "item.weaponmod.spear.diamond": "Bejeweled Stabber",
+    "item.weaponmod.spear.gold": "Golden Stabber",
+
+    "item.weaponmod.halberd.wood": "Timber Halberd",
+    "item.weaponmod.halberd.stone": "Halberd o' Rock",
+    "item.weaponmod.halberd.iron": "Halberd o' Steel",
+    "item.weaponmod.halberd.diamond": "Bejeweled Halberd",
+    "item.weaponmod.halberd.gold": "Golden Halberd",
+
+    "item.weaponmod.battleaxe.wood": "Grand Hatchet o' Timber",
+    "item.weaponmod.battleaxe.stone": "Grand Hatchet o' Rock",
+    "item.weaponmod.battleaxe.iron": "Grand Iron Hatchet",
+    "item.weaponmod.battleaxe.diamond": "Grand Bejeweled Hatchet",
+    "item.weaponmod.battleaxe.gold": "Grand Golden Hatchet",
+
+    "item.weaponmod.warhammer.wood": "Timber Warrrhammer",
+    "item.weaponmod.warhammer.stone": "Warrrhammer o' Rock",
+    "item.weaponmod.warhammer.iron": "Warrrhammer o' Metal",
+    "item.weaponmod.warhammer.diamond": "Bejeweled Warrrhammer",
+    "item.weaponmod.warhammer.gold": "Golden Warrrhammer",
+
+    "item.weaponmod.knife.wood": "Timber Dagg'r",
+    "item.weaponmod.knife.stone": "Dagg'r o' Rock",
+    "item.weaponmod.knife.iron": "Rusty Dagg'r",
+    "item.weaponmod.knife.diamond": "Bejeweled Dagg'r",
+    "item.weaponmod.knife.gold": "Golden Dagg'r",
+
+    "item.weaponmod.flail.wood": "Plank on a Rope",
+    "item.weaponmod.flail.stone": "Rock on a Rope",
+    "item.weaponmod.flail.iron": "Cannon Ball on a Rope",
+    "item.weaponmod.flail.diamond": "Jewel on a Rope",
+    "item.weaponmod.flail.gold": "Nugget on a Rope",
+
+    "item.weaponmod.javelin": "Javelin'",
+
+    "item.weaponmod.musket": "Musket",
+    "item.weaponmod.musketbayonet": "Musket an' Cutlass",
+    "item.weaponmod.musketbayonet.wood": "Musket an' Cutlass o' Timber",
+    "item.weaponmod.musketbayonet.stone": "Musket an' Cutlass o' Rock",
+    "item.weaponmod.musketbayonet.iron": "Musket an' Rusty Cutlass",
+    "item.weaponmod.musketbayonet.diamond": "Musket an' Bejeweled Cutlass",
+    "item.weaponmod.musketbayonet.gold": "Musket an' Golden Cutlass",
+    "item.weaponmod.musket-ironpart": "Musket Barrrrel",
+    "item.weaponmod.bullet": "Musket Round",
+
+    "item.weaponmod.crossbow": "Pistol o' Lassies",
+    "item.weaponmod.bolt": "Pistol o' Lassies' Bullet",
+
+    "item.weaponmod.blowgun": "Blowgun",
+    "item.weaponmod.dart": "Arrow o' Scurvy",
+
+    "item.weaponmod.dynamite": "Hand Granadoe",
+
+    "item.weaponmod.firerod": "Burnin' Stick",
+
+    "item.weaponmod.cannon": "Monkey",
+    "item.weaponmod.cannonball": "Monkey's Pill",
+
+    "item.weaponmod.blunderbuss": "Ye Olde Gun",
+    "item.weaponmod.blunder-ironpart": "Ye Olde Gun's Barrrrel",
+    "item.weaponmod.shot": "Ye Olde Gun's Shot",
+
+    "item.weaponmod.dummy": "Landlubber's Puppet",
+
+    "item.weaponmod.gun-stock": "Piece o' a Gun",
+
+    "item.weaponmod.boomerang.wood": "Timber Bird",
+    "item.weaponmod.boomerang.stone": "Bird o' Rock",
+    "item.weaponmod.boomerang.iron": "Bird o' Iron",
+    "item.weaponmod.boomerang.diamond": "Bejeweled Bird",
+    "item.weaponmod.boomerang.gold": "Golden Bird",
+
+    "item.weaponmod.katana.wood": "Handsome Cutlass o' Timber",
+    "item.weaponmod.katana.stone": "Handsome Cutlass o' Rock",
+    "item.weaponmod.katana.iron": "Handsome Cutlass o' Metal",
+    "item.weaponmod.katana.diamond": "Handsome Bejeweled Cutlass",
+    "item.weaponmod.katana.gold": "Handsome Golden Cutlass",
+
+    "item.weaponmod.mortar": "Hand Monkey",
+    "item.weaponmod.mortar-ironpart": "Hand Monkey's Barrrrel",
+    "item.weaponmod.shell": "Monkey's Shell"
+}

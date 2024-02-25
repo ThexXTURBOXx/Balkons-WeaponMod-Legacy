@@ -11,32 +11,32 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.glfw.GLFW;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class WMClientEventHandler {
     @SubscribeEvent
-    public void onMouseClick(final MouseEvent e) {
-        final EntityPlayerSP player = Minecraft.getMinecraft().player;
+    public void onMouseClick(final InputEvent.MouseInputEvent e) {
+        final EntityPlayerSP player = Minecraft.getInstance().player;
         if (player == null || !player.world.isRemote) {
             return;
         }
-        if (e.getButton() == 0 && e.isButtonstate()) {
+        if (e.getButton() == 0 && e.getAction() == GLFW.GLFW_PRESS) {
             final ItemStack itemstack = player.getHeldItemMainhand();
             if (!itemstack.isEmpty()) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
                     final float reach = ieri.getExtendedReach(player.world, player, itemstack);
                     final RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
-                    if (raytraceResult != null && raytraceResult.entityHit != null && raytraceResult.entityHit != player && raytraceResult.entityHit.hurtResistantTime == 0) {
-                        FMLClientHandler.instance().getClient().playerController.attackEntity(player,
-                                raytraceResult.entityHit);
+                    if (raytraceResult != null && raytraceResult.entity != null && raytraceResult.entity != player && raytraceResult.entity.hurtResistantTime == 0) {
+                        Minecraft.getInstance().playerController.attackEntity(player,
+                                raytraceResult.entity);
                     }
                 }
             }

@@ -7,11 +7,11 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -25,14 +25,14 @@ public class RenderSpear extends Render<EntitySpear> {
     @Override
     public void doRender(@Nonnull final EntitySpear entityspear, final double d, final double d1, final double d2,
                          final float f, final float f1) {
-        if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
+        if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
             this.bindEntityTexture(entityspear);
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+            GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
-            GlStateManager.translate((float) d, (float) d1, (float) d2);
-            GlStateManager.rotate(entityspear.prevRotationYaw + (entityspear.rotationYaw - entityspear.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(entityspear.prevRotationPitch + (entityspear.rotationPitch - entityspear.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
+            GlStateManager.translated(d, d1, d2);
+            GlStateManager.rotatef(entityspear.prevRotationYaw + (entityspear.rotationYaw - entityspear.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+            GlStateManager.rotatef(entityspear.prevRotationPitch + (entityspear.rotationPitch - entityspear.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             final Tessellator tessellator = Tessellator.getInstance();
             final BufferBuilder vertexbuffer = tessellator.getBuffer();
             final float[] color = entityspear.getMaterialColor();
@@ -53,23 +53,23 @@ public class RenderSpear extends Render<EntitySpear> {
             final float f13 = entityspear.arrowShake - f1;
             if (f13 > 0.0f) {
                 final float f14 = -MathHelper.sin(f13 * 3.0f) * f13;
-                GlStateManager.rotate(f14, 0.0f, 0.0f, 1.0f);
+                GlStateManager.rotatef(f14, 0.0f, 0.0f, 1.0f);
             }
-            GlStateManager.rotate(45.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.scale(0.05625f, 0.05625f, 0.05625f);
-            GlStateManager.translate(-4.0f, 0.0f, 0.0f);
+            GlStateManager.rotatef(45.0f, 1.0f, 0.0f, 0.0f);
+            GlStateManager.scalef(0.05625f, 0.05625f, 0.05625f);
+            GlStateManager.translatef(-4.0f, 0.0f, 0.0f);
             if (this.renderOutlines) {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.enableOutlineMode(this.getTeamColor(entityspear));
             }
-            GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
+            GlStateManager.normal3f(0.05625f, 0.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
             vertexbuffer.pos(-length, -2.0, -2.0).tex(0.0, 0.15625).endVertex();
             vertexbuffer.pos(-length, -2.0, 2.0).tex(0.15625, 0.15625).endVertex();
             vertexbuffer.pos(-length, 2.0, 2.0).tex(0.15625, 0.3125).endVertex();
             vertexbuffer.pos(-length, 2.0, -2.0).tex(0.0, 0.3125).endVertex();
             tessellator.draw();
-            GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
+            GlStateManager.normal3f(-0.05625f, 0.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
             vertexbuffer.pos(-length, 2.0, -2.0).tex(0.0, 0.15625).endVertex();
             vertexbuffer.pos(-length, 2.0, 2.0).tex(0.15625, 0.15625).endVertex();
@@ -77,8 +77,8 @@ public class RenderSpear extends Render<EntitySpear> {
             vertexbuffer.pos(-length, -2.0, -2.0).tex(0.0, 0.3125).endVertex();
             tessellator.draw();
             for (int j = 0; j < 4; ++j) {
-                GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-                GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
+                GlStateManager.rotatef(90.0f, 1.0f, 0.0f, 0.0f);
+                GlStateManager.normal3f(0.0f, 0.0f, 0.05625f);
                 vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                 vertexbuffer.pos(-length, -2.0, 0.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
                 vertexbuffer.pos(length, -2.0, 0.0).tex(1.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -98,25 +98,25 @@ public class RenderSpear extends Render<EntitySpear> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+            final ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             GlStateManager.pushMatrix();
             this.bindEntityTexture(entityspear);
-            GlStateManager.translate((float) d, (float) d1, (float) d2);
+            GlStateManager.translated(d, d1, d2);
             GlStateManager.enableRescaleNormal();
-            GlStateManager.scale(1.7f, 1.7f, 1.7f);
-            GlStateManager.rotate(entityspear.prevRotationYaw + (entityspear.rotationYaw - entityspear.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(entityspear.prevRotationPitch + (entityspear.rotationPitch - entityspear.prevRotationPitch) * f1 - 45.0f, 0.0f, 0.0f, 1.0f);
+            GlStateManager.scalef(1.7f, 1.7f, 1.7f);
+            GlStateManager.rotatef(entityspear.prevRotationYaw + (entityspear.rotationYaw - entityspear.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+            GlStateManager.rotatef(entityspear.prevRotationPitch + (entityspear.rotationPitch - entityspear.prevRotationPitch) * f1 - 45.0f, 0.0f, 0.0f, 1.0f);
             final float f15 = entityspear.arrowShake - f1;
             if (f15 > 0.0f) {
                 final float f16 = -MathHelper.sin(f15 * 3.0f) * f15;
-                GlStateManager.rotate(f16, 0.0f, 0.0f, 1.0f);
+                GlStateManager.rotatef(f16, 0.0f, 0.0f, 1.0f);
             }
-            GlStateManager.translate(-0.35f, -0.35f, 0.0f);
+            GlStateManager.translatef(-0.35f, -0.35f, 0.0f);
             if (this.renderOutlines) {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.enableOutlineMode(this.getTeamColor(entityspear));
             }
-            itemRender.renderItem(this.getStackToRender(entityspear), ItemCameraTransforms.TransformType.NONE);
+            itemRender.renderItem(this.getStackToRender(entityspear), TransformType.NONE);
             if (this.renderOutlines) {
                 GlStateManager.disableOutlineMode();
                 GlStateManager.disableColorMaterial();

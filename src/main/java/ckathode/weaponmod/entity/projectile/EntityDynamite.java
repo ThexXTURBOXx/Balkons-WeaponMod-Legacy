@@ -4,27 +4,28 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityDynamite extends EntityProjectile {
+public class EntityDynamite extends EntityProjectile<EntityDynamite> {
+    public static final String NAME = "dynamite";
+
     private int explodefuse;
     private boolean extinguished;
 
     public EntityDynamite(final World world) {
-        super(world);
-        this.setPickupMode(0);
+        super(BalkonsWeaponMod.entityDynamite, world);
+        this.setPickupStatus(PickupStatus.DISALLOWED);
         this.extinguished = false;
         this.explodefuse = this.rand.nextInt(30) + 20;
     }
@@ -36,7 +37,7 @@ public class EntityDynamite extends EntityProjectile {
 
     public EntityDynamite(final World world, final EntityLivingBase shooter, final int i) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.shootingEntity = shooter;
+        setShooter(shooter);
         this.explodefuse = i;
     }
 
@@ -55,12 +56,12 @@ public class EntityDynamite extends EntityProjectile {
     }
 
     @Override
-    protected void entityInit() {
+    protected void registerData() {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (!this.inGround && !this.beenInGround) {
             this.rotationPitch -= 50.0f;
         } else {
@@ -72,7 +73,7 @@ public class EntityDynamite extends EntityProjectile {
                     1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
             for (int k = 0; k < 8; ++k) {
                 final float f6 = 0.25f;
-                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX - this.motionX * f6,
+                this.world.addParticle(Particles.POOF, this.posX - this.motionX * f6,
                         this.posY - this.motionY * f6, this.posZ - this.motionZ * f6, this.motionX, this.motionY,
                         this.motionZ);
             }
@@ -81,9 +82,9 @@ public class EntityDynamite extends EntityProjectile {
         if (!this.extinguished) {
             if (this.explodefuse <= 0) {
                 this.detonate();
-                this.setDead();
+                this.remove();
             } else {
-                this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, 0.0, 0.0,
+                this.world.addParticle(Particles.SMOKE, this.posX, this.posY, this.posZ, 0.0, 0.0,
                         0.0);
             }
         }
@@ -91,12 +92,7 @@ public class EntityDynamite extends EntityProjectile {
 
     @Override
     public void onEntityHit(final Entity entity) {
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f)) {
             this.applyEntityHitEffects(entity);
             this.playHitSound();
@@ -111,8 +107,7 @@ public class EntityDynamite extends EntityProjectile {
         this.xTile = blockpos.getX();
         this.yTile = blockpos.getY();
         this.zTile = blockpos.getZ();
-        final IBlockState iblockstate = this.world.getBlockState(blockpos);
-        this.inTile = iblockstate.getBlock();
+        this.inBlockState = this.world.getBlockState(blockpos);
         this.motionX = raytraceResult.hitVec.x - this.posX;
         this.motionY = raytraceResult.hitVec.y - this.posY;
         this.motionZ = raytraceResult.hitVec.z - this.posZ;
@@ -131,8 +126,8 @@ public class EntityDynamite extends EntityProjectile {
             this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f,
                     1.2f / (this.rand.nextFloat() * 0.2f + 0.9f));
         }
-        if (this.inTile != null) {
-            this.inTile.onEntityCollision(this.world, blockpos, iblockstate, this);
+        if (this.inBlockState != null) {
+            this.inBlockState.onEntityCollision(this.world, blockpos, this);
         }
     }
 
@@ -141,11 +136,11 @@ public class EntityDynamite extends EntityProjectile {
             return;
         }
         if (this.extinguished && (this.ticksInGround >= 200 || this.ticksInAir >= 200)) {
-            this.setDead();
+            this.remove();
         }
         final float f = 2.0f;
         PhysHelper.createAdvancedExplosion(this.world, this, this.posX, this.posY, this.posZ, f,
-                BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage, true, false, false);
+                BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage.get(), true, false, false);
     }
 
     @Override
@@ -158,6 +153,7 @@ public class EntityDynamite extends EntityProjectile {
         return 0;
     }
 
+    @Nonnull
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.dynamite, 1);
@@ -175,15 +171,15 @@ public class EntityDynamite extends EntityProjectile {
     }
 
     @Override
-    public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-        super.writeEntityToNBT(nbttagcompound);
-        nbttagcompound.setByte("fuse", (byte) this.explodefuse);
-        nbttagcompound.setBoolean("off", this.extinguished);
+    public void writeAdditional(final NBTTagCompound nbttagcompound) {
+        super.writeAdditional(nbttagcompound);
+        nbttagcompound.putByte("fuse", (byte) this.explodefuse);
+        nbttagcompound.putBoolean("off", this.extinguished);
     }
 
     @Override
-    public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
-        super.readEntityFromNBT(nbttagcompound);
+    public void readAdditional(final NBTTagCompound nbttagcompound) {
+        super.readAdditional(nbttagcompound);
         this.explodefuse = nbttagcompound.getByte("fuse");
         this.extinguished = nbttagcompound.getBoolean("off");
     }

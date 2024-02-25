@@ -12,6 +12,7 @@ import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,13 +25,14 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityCannon extends EntityBoat {
+    public static final String NAME = "cannon";
+
     private static final DataParameter<Integer> TIME_SINCE_HIT;
     private static final DataParameter<Byte> ROCK_DIRECTION;
     private static final DataParameter<Integer> CURRENT_DAMAGE;
@@ -58,7 +60,7 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    protected void entityInit() {
+    protected void registerData() {
         this.dataManager.register(EntityCannon.TIME_SINCE_HIT, 0);
         this.dataManager.register(EntityCannon.ROCK_DIRECTION, (byte) 1);
         this.dataManager.register(EntityCannon.CURRENT_DAMAGE, 0);
@@ -69,12 +71,12 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public AxisAlignedBB getCollisionBox(final Entity entity) {
-        return entity.getEntityBoundingBox();
+        return entity.getBoundingBox();
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox() {
-        return this.getEntityBoundingBox();
+        return this.getBoundingBox();
     }
 
     @Override
@@ -89,7 +91,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public boolean attackEntityFrom(@Nonnull final DamageSource damagesource, final float damage) {
-        if (this.world.isRemote || this.isDead) {
+        if (this.world.isRemote || !this.isAlive()) {
             return true;
         }
         if (damagesource instanceof EntityDamageSourceIndirect) {
@@ -99,14 +101,14 @@ public class EntityCannon extends EntityBoat {
         } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
             final EntityPlayer player = (EntityPlayer) damagesource.getTrueSource();
             if (player.inventory.getCurrentItem().isEmpty()) {
-                if (!player.capabilities.isCreativeMode) {
-                    this.dropItem(BalkonsWeaponMod.cannon, 1);
+                if (!player.abilities.isCreativeMode) {
+                    this.entityDropItem(BalkonsWeaponMod.cannon, 1);
                     if (this.isLoaded() || this.isLoading()) {
-                        this.dropItem(BalkonsWeaponMod.cannonBall, 1);
-                        this.dropItem(Items.GUNPOWDER, 1);
+                        this.entityDropItem(BalkonsWeaponMod.cannonBall, 1);
+                        this.entityDropItem(Items.GUNPOWDER, 1);
                     }
                 }
-                this.setDead();
+                this.remove();
                 return true;
             }
         }
@@ -119,19 +121,19 @@ public class EntityCannon extends EntityBoat {
                 this.dropItemWithChance(Items.IRON_INGOT, (int) damage, 1);
             }
             this.dropItemWithChance(Items.FLINT, (int) damage, 1);
-            this.dropItemWithChance(Item.getItemFromBlock(Blocks.LOG), (int) damage, 1);
+            this.dropItemWithChance(Blocks.OAK_LOG.asItem(), (int) damage, 1);
             if (this.isLoaded() || this.isLoading()) {
-                this.dropItem(BalkonsWeaponMod.cannonBall, 1);
-                this.dropItem(Items.GUNPOWDER, 1);
+                this.entityDropItem(BalkonsWeaponMod.cannonBall, 1);
+                this.entityDropItem(Items.GUNPOWDER, 1);
             }
-            this.setDead();
+            this.remove();
         }
         return true;
     }
 
     public void dropItemWithChance(final Item item, final int chance, final int amount) {
         if (this.rand.nextInt(chance) < 10) {
-            this.dropItem(item, amount);
+            this.entityDropItem(item, amount);
         }
     }
 
@@ -144,17 +146,17 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public boolean canBeCollidedWith() {
-        return !this.isDead;
+        return this.isAlive();
     }
 
     @Override
-    public void onUpdate() {
-        this.onEntityUpdate();
+    public void tick() {
+        this.baseTick();
     }
 
     @Override
-    public void onEntityUpdate() {
-        super.onEntityUpdate();
+    public void baseTick() {
+        super.baseTick();
         int i = this.getTimeSinceHit();
         if (i > 0) {
             this.setTimeSinceHit(i - 1);
@@ -183,11 +185,11 @@ public class EntityCannon extends EntityBoat {
         }
         this.setRotation(this.rotationYaw, this.rotationPitch);
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2,
-                0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
+        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(0.2,
+                0.0, 0.2), EntitySelectors.pushableBy(this));
         if (!list.isEmpty()) {
             for (final Entity entity : list) {
-                if (!entity.isPassenger(this) && !entity.isRiding()) {
+                if (!entity.isPassenger(this) && entity.getRidingEntity() == null) {
                     this.applyEntityCollision(entity);
                 }
             }
@@ -235,12 +237,12 @@ public class EntityCannon extends EntityBoat {
 
     public void fireEffects() {
         this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 8.0f, 1.0f / (this.rand.nextFloat() * 0.8f + 0.9f));
-        this.playSound(SoundEvents.ENTITY_LIGHTNING_THUNDER, 8.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.6f));
+        this.playSound(SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, 8.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.6f));
         final float yaw = (float) Math.toRadians(this.rotationYaw);
         final double d = -MathHelper.sin(yaw) * -1.0f;
         final double d2 = MathHelper.cos(yaw) * -1.0f;
         for (int i = 0; i < 20; ++i) {
-            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,
+            this.world.addParticle(Particles.SMOKE,
                     this.posX + d + this.rand.nextDouble() * 0.5 - 0.25, this.posY + this.rand.nextDouble() * 0.5,
                     this.posZ + d2 + this.rand.nextDouble() * 0.5 - 0.25, this.rand.nextDouble() * 0.1 - 0.05,
                     this.rand.nextDouble() * 0.1 - 0.05, this.rand.nextDouble() * 0.1 - 0.05);
@@ -269,21 +271,21 @@ public class EntityCannon extends EntityBoat {
     public void updatePassenger(@Nonnull final Entity passenger) {
         if (this.isPassenger(passenger)) {
             final float f = -0.85f;
-            final float f2 = (float) ((this.isDead ? 0.01 : this.getMountedYOffset()) + passenger.getYOffset());
+            final float f2 = (float) ((this.isAlive() ? this.getMountedYOffset() : 0.01) + passenger.getYOffset());
             final Vec3d vec3d = new Vec3d(f, 0.0, 0.0).rotateYaw(-this.rotationYaw * 0.017453292f - 1.5707964f);
             passenger.setPosition(this.posX + vec3d.x, this.posY + f2, this.posZ + vec3d.z);
         }
     }
 
     @Override
-    protected void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-        nbttagcompound.setFloat("falld", this.fallDistance);
-        nbttagcompound.setBoolean("load", this.isLoaded());
-        nbttagcompound.setShort("ldtime", (short) this.getLoadTimer());
+    protected void writeAdditional(final NBTTagCompound nbttagcompound) {
+        nbttagcompound.putFloat("falld", this.fallDistance);
+        nbttagcompound.putBoolean("load", this.isLoaded());
+        nbttagcompound.putShort("ldtime", (short) this.getLoadTimer());
     }
 
     @Override
-    protected void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
+    protected void readAdditional(final NBTTagCompound nbttagcompound) {
         this.setPosition(this.posX, this.posY, this.posZ);
         this.setRotation(this.rotationYaw, this.rotationPitch);
         this.fallDistance = nbttagcompound.getFloat("falld");
@@ -294,13 +296,13 @@ public class EntityCannon extends EntityBoat {
     @Override
     public boolean processInitialInteract(final EntityPlayer entityplayer, @Nonnull final EnumHand hand) {
         final ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !this.isLoaded() && !this.isLoading() && (entityplayer.capabilities.isCreativeMode || this.consumeAmmo(entityplayer, Items.GUNPOWDER))) {
-            if (entityplayer.capabilities.isCreativeMode || this.consumeAmmo(entityplayer,
+        if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !this.isLoaded() && !this.isLoading() && (entityplayer.abilities.isCreativeMode || this.consumeAmmo(entityplayer, Items.GUNPOWDER))) {
+            if (entityplayer.abilities.isCreativeMode || this.consumeAmmo(entityplayer,
                     BalkonsWeaponMod.cannonBall)) {
                 this.startLoadingCannon();
                 return true;
             }
-            this.dropItem(Items.GUNPOWDER, 1);
+            this.entityDropItem(Items.GUNPOWDER, 1);
             return true;
         } else {
             if (this.isBeingRidden() && this.riddenByPlayer() && this.notThisPlayer(entityplayer)) {

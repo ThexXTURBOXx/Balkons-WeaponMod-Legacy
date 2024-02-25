@@ -25,11 +25,11 @@ public class RenderCannonBall extends Render<EntityCannonBall> {
         GlStateManager.pushMatrix();
         this.bindEntityTexture(entitycannonball);
         GlStateManager.disableLighting();
-        GlStateManager.translate((float) d, (float) d1, (float) d2);
-        GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
-        GlStateManager.scale(-1.0f, -1.0f, 1.0f);
-        GlStateManager.scale(0.7f, 0.7f, 0.7f);
-        GlStateManager.rotate(180.0f, 1.0f, 0.0f, 0.0f);
+        GlStateManager.translated(d, d1, d2);
+        GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
+        GlStateManager.scalef(0.7f, 0.7f, 0.7f);
+        GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
         if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(this.getTeamColor(entitycannonball));

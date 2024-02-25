@@ -22,20 +22,20 @@ public class RenderDummy extends Render<EntityDummy> {
     public void doRender(final EntityDummy entitydummy, final double d, final double d1, final double d2,
                          final float f, final float f1) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float) d, (float) d1 - 0.025f, (float) d2);
-        GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.translated(d, d1 - 0.025f, d2);
+        GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
         final float f2 = entitydummy.getTimeSinceHit() - f1;
         float f3 = entitydummy.getCurrentDamage() - f1;
         if (f3 < 0.0f) {
             f3 = 0.0f;
         }
         if (f2 > 0.0f) {
-            GlStateManager.rotate(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f, 0.0f,
+            GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f, 0.0f,
                     0.0f, 1.0f);
         }
         this.bindEntityTexture(entitydummy);
-        GlStateManager.scale(-1.0f, -1.0f, 1.0f);
-        GlStateManager.rotate(180.0f, 1.0f, 0.0f, 0.0f);
+        GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
+        GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
         if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(this.getTeamColor(entitydummy));

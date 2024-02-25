@@ -1,0 +1,96 @@
+{
+    "_comment": "Balkon's WeaponMod language file nl_NL",
+
+    "item.weaponmod.spear.wood": "Houten speer",
+    "item.weaponmod.spear.stone": "Stenen speer",
+    "item.weaponmod.spear.iron": "IJzeren speer",
+    "item.weaponmod.spear.diamond": "Diamanten speer",
+    "item.weaponmod.spear.gold": "Gouden speer",
+
+    "item.weaponmod.halberd.wood": "Houten hellebaard",
+    "item.weaponmod.halberd.stone": "Stenen hellebaard",
+    "item.weaponmod.halberd.iron": "IJzeren hellebaard",
+    "item.weaponmod.halberd.diamond": "Diamanten hellebaard",
+    "item.weaponmod.halberd.gold": "Gouden hellebaard",
+
+    "item.weaponmod.battleaxe.wood": "Houten gevechtsbijl",
+    "item.weaponmod.battleaxe.stone": "Stenen gevechtsbijl",
+    "item.weaponmod.battleaxe.iron": "IJzeren gevechtsbijl",
+    "item.weaponmod.battleaxe.diamond": "Diamanten gevechtsbijl",
+    "item.weaponmod.battleaxe.gold": "Gouden gevechtsbijl",
+
+    "item.weaponmod.warhammer.wood": "Houten strijdhamer",
+    "item.weaponmod.warhammer.stone": "Stenen strijdhamer",
+    "item.weaponmod.warhammer.iron": "IJzeren strijdhamer",
+    "item.weaponmod.warhammer.diamond": "Diamanten strijdhamer",
+    "item.weaponmod.warhammer.gold": "Gouden strijdhamer",
+
+    "item.weaponmod.knife.wood": "Houten mes",
+    "item.weaponmod.knife.stone": "Stenen mes",
+    "item.weaponmod.knife.iron": "IJzeren mes",
+    "item.weaponmod.knife.diamond": "Diamanten mes",
+    "item.weaponmod.knife.gold": "Gouden mes",
+
+    "item.weaponmod.flail.wood": "Houten strijdvlegel",
+    "item.weaponmod.flail.stone": "Stenen strijdvlegel",
+    "item.weaponmod.flail.iron": "IJzeren strijdvlegel",
+    "item.weaponmod.flail.diamond": "Diamanten strijdvlegel",
+    "item.weaponmod.flail.gold": "Gouden strijdvlegel",
+
+    "item.weaponmod.javelin": "Werpspeer",
+
+    "item.weaponmod.musket": "Musket",
+    "item.weaponmod.musketbayonet": "Musket met bajonet",
+    "item.weaponmod.musketbayonet.wood": "Musket met houten bajonet",
+    "item.weaponmod.musketbayonet.stone": "Musket met stenen bajonet",
+    "item.weaponmod.musketbayonet.iron": "Musket met ijzeren bajonet",
+    "item.weaponmod.musketbayonet.diamond": "Musket met diamanten bajonet",
+    "item.weaponmod.musketbayonet.gold": "Musket met gouden bajonet",
+    "item.weaponmod.musket-ironpart": "Musketloop",
+    "item.weaponmod.bullet": "Musketkogel",
+
+    "item.weaponmod.crossbow": "Kruisboog",
+    "item.weaponmod.bolt": "Kruisboogpijl",
+
+    "item.weaponmod.blowgun": "Blaaspijp",
+    "item.weaponmod.dart": "Giftig dartpijltje",
+
+    "item.weaponmod.dynamite": "Dynamiet",
+
+    "item.weaponmod.firerod": "Vuurstaaf",
+
+    "item.weaponmod.cannon": "Kanon",
+    "item.weaponmod.cannonball": "Kanonskogel",
+
+    "item.weaponmod.blunderbuss": "Donderbus",
+    "item.weaponmod.blunder-ironpart": "Donderbusloop",
+    "item.weaponmod.shot": "Donderbusschot",
+
+    "item.weaponmod.dummy": "Oefenpop",
+
+    "item.weaponmod.gun-stock": "Geweermagazijn",
+
+    "item.weaponmod.boomerang.wood": "Houten boemerang",
+    "item.weaponmod.boomerang.stone": "Stenen boemerang",
+    "item.weaponmod.boomerang.iron": "IJzeren boemerang",
+    "item.weaponmod.boomerang.diamond": "Diamanten boemerang",
+    "item.weaponmod.boomerang.gold": "Gouden boemerang",
+
+    "item.weaponmod.katana.wood": "Houten katana",
+    "item.weaponmod.katana.stone": "Steben katana",
+    "item.weaponmod.katana.iron": "IJzeren katana",
+    "item.weaponmod.katana.diamond": "Diamanten katana",
+    "item.weaponmod.katana.gold": "Gouden katana",
+
+    "item.weaponmod.flintlock": "Vuursteenslot pistool",
+
+    "item.weaponmod.mortar": "Handmortel",
+    "item.weaponmod.mortar-ironpart": "Mortiervat",
+    "item.weaponmod.shell": "Mortel schaal",
+
+    "attribute.name.weaponmod.ignoreArmour": "Negeer pantser",
+    "attribute.name.weaponmod.knockback": "Terugslag",
+    "attribute.name.weaponmod.attackSpeed": "Aanvalssnelheid",
+    "attribute.name.weaponmod.reloadTime": "Herlaadtijd",
+    "attribute.name.weaponmod.reach": "Bereik"
+}

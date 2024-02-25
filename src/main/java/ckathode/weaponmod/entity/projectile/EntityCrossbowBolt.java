@@ -11,20 +11,23 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityCrossbowBolt extends EntityProjectile {
+public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
+    public static final String NAME = "bolt";
+
     public EntityCrossbowBolt(final World world) {
-        super(world);
+        super(BalkonsWeaponMod.entityCrossbowBolt, world);
     }
 
     public EntityCrossbowBolt(final World world, final double d, final double d1, final double d2) {
         this(world);
-        this.setPickupMode(1);
+        this.setPickupStatus(PickupStatus.ALLOWED);
         this.setPosition(d, d1, d2);
     }
 
     public EntityCrossbowBolt(final World world, final EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.setPickupModeFromEntity((EntityLivingBase) (this.shootingEntity = shooter));
+        setShooter(shooter);
+        this.setPickupStatusFromEntity(shooter);
     }
 
     @Override
@@ -45,19 +48,14 @@ public class EntityCrossbowBolt extends EntityProjectile {
     public void onEntityHit(final Entity entity) {
         final float vel = (float) this.getTotalVelocity();
         final float damage = vel * 4.0f + this.extraDamage;
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, damage)) {
             if (entity instanceof EntityLivingBase && this.world.isRemote) {
                 ((EntityLivingBase) entity).setArrowCountInEntity(((EntityLivingBase) entity).getArrowCountInEntity() + 1);
             }
             this.applyEntityHitEffects(entity);
             this.playHitSound();
-            this.setDead();
+            this.remove();
         } else {
             this.bounceBack();
         }
@@ -73,6 +71,7 @@ public class EntityCrossbowBolt extends EntityProjectile {
         return 4;
     }
 
+    @Nonnull
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.bolt, 1);

@@ -10,7 +10,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public abstract class PhysHelper {
     private static double kbMotionX;
@@ -90,8 +90,8 @@ public abstract class PhysHelper {
         if (world instanceof WorldServer && !world.isRemote) {
             final MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
             BalkonsWeaponMod.instance.messagePipeline.sendToAllAround(msg,
-                    new NetworkRegistry.TargetPoint(world.provider.getDimension(), explosion.explosionX,
-                            explosion.explosionY, explosion.explosionZ, 64.0));
+                    new PacketDistributor.TargetPoint(explosion.explosionX, explosion.explosionY,
+                            explosion.explosionZ, 64.0, world.getDimension().getType()));
         }
     }
 

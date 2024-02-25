@@ -13,8 +13,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -23,11 +25,11 @@ import net.minecraft.world.World;
 
 public class MeleeComponent extends AbstractWeaponComponent {
     public final MeleeSpecs meleeSpecs;
-    public final Item.ToolMaterial weaponMaterial;
+    public final IItemTier weaponMaterial;
 
-    public MeleeComponent(final MeleeSpecs meleespecs, final Item.ToolMaterial toolmaterial) {
+    public MeleeComponent(final MeleeSpecs meleespecs, final IItemTier itemTier) {
         this.meleeSpecs = meleespecs;
-        this.weaponMaterial = toolmaterial;
+        this.weaponMaterial = itemTier;
     }
 
     @Override
@@ -35,13 +37,11 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void setThisItemProperties() {
-        if (this.weaponMaterial == null) {
-            this.item.setMaxDamage(this.meleeSpecs.durabilityBase);
-        } else {
-            this.item.setMaxDamage((int) (this.meleeSpecs.durabilityBase + this.weaponMaterial.getMaxUses() * this.meleeSpecs.durabilityMult));
-        }
-        this.item.setMaxStackSize(this.meleeSpecs.stackSize);
+    public Properties setProperties(Properties properties) {
+        return properties.defaultMaxDamage(this.weaponMaterial == null
+                ? this.meleeSpecs.durabilityBase
+                : (int) (this.meleeSpecs.durabilityBase
+                         + this.weaponMaterial.getMaxUses() * this.meleeSpecs.durabilityMult));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public boolean canHarvestBlock(final IBlockState state) {
         final Block block = state.getBlock();
-        return block == Blocks.WEB;
+        return block == Blocks.COBWEB;
     }
 
     @Override
@@ -148,12 +148,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public EnumAction getItemUseAction(final ItemStack itemstack) {
+    public EnumAction getUseAction(final ItemStack itemstack) {
         return EnumAction.NONE;
     }
 
     @Override
-    public int getMaxItemUseDuration(final ItemStack itemstack) {
+    public int getUseDuration(final ItemStack itemstack) {
         return 0;
     }
 
@@ -174,20 +174,20 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void onUpdate(final ItemStack itemstack, final World world, final Entity entity, final int i,
-                         final boolean flag) {
+    public void inventoryTick(final ItemStack itemstack, final World world, final Entity entity, final int i,
+                              final boolean flag) {
     }
 
     public enum MeleeSpecs {
-        SPEAR(0, 1.0f, 2.0f, 1.0f, 1.0f, 0.2f, 1, 2, 1, 2.7f),
-        HALBERD(0, 1.0f, 3.0f, 1.0f, 1.5f, 0.6f, 1, 2, 1, 3.2f),
-        BATTLEAXE(0, 1.0f, 2.0f, 1.0f, 1.5f, 0.5f, 1, 2, 1, 3.0f),
-        WARHAMMER(0, 1.0f, 3.0f, 1.0f, 1.0f, 0.7f, 1, 2, 1, 3.0f),
-        KNIFE(0, 0.5f, 2.0f, 1.0f, 1.5f, 0.2f, 1, 2, 1, 2.0f),
-        KATANA(0, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1, 2, 1, 0.2f),
-        FIREROD(1, 0.0f, 0.0f, 0.0f, 1.0f, 0.4f, 2, 0, 1, 0.0f),
-        BOOMERANG(0, 0.5f, 1.0f, 1.0f, 1.0f, 0.4f, 1, 1, 1, 2.0f),
-        NONE(0, 1.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 1, 0.0f);
+        SPEAR(0, 1.0f, 2.0f, 1.0f, 1.0f, 0.2f, 1, 2, 2.7f),
+        HALBERD(0, 1.0f, 3.0f, 1.0f, 1.5f, 0.6f, 1, 2, 3.2f),
+        BATTLEAXE(0, 1.0f, 2.0f, 1.0f, 1.5f, 0.5f, 1, 2, 3.0f),
+        WARHAMMER(0, 1.0f, 3.0f, 1.0f, 1.0f, 0.7f, 1, 2, 3.0f),
+        KNIFE(0, 0.5f, 2.0f, 1.0f, 1.5f, 0.2f, 1, 2, 2.0f),
+        KATANA(0, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1, 2, 0.2f),
+        FIREROD(1, 0.0f, 0.0f, 0.0f, 1.0f, 0.4f, 2, 0, 0.0f),
+        BOOMERANG(0, 0.5f, 1.0f, 1.0f, 1.0f, 0.4f, 1, 1, 2.0f),
+        NONE(0, 1.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 0.0f);
 
         public final int durabilityBase;
         public final float durabilityMult;
@@ -198,11 +198,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
         public final float attackDelay;
         public final int dmgFromEntity;
         public final int dmgFromBlock;
-        public final int stackSize;
 
         MeleeSpecs(final int durbase, final float durmult, final float dmgbase, final float dmgmult,
                    final float blockdmg, final float knockback, final int dmgfromentity, final int dmgfromblock,
-                   final int stacksize, final float attackdelay) {
+                   final float attackdelay) {
             this.durabilityBase = durbase;
             this.durabilityMult = durmult;
             this.damageBase = dmgbase;
@@ -211,12 +210,11 @@ public class MeleeComponent extends AbstractWeaponComponent {
             this.knockback = knockback;
             this.dmgFromEntity = dmgfromentity;
             this.dmgFromBlock = dmgfromblock;
-            this.stackSize = stacksize;
             this.attackDelay = attackdelay;
         }
 
-        public float getKnockBack(final Item.ToolMaterial material) {
-            return (material == Item.ToolMaterial.GOLD) ? (this.knockback * 1.5f) : this.knockback;
+        public float getKnockBack(final IItemTier material) {
+            return (material == ItemTier.GOLD) ? (this.knockback * 1.5f) : this.knockback;
         }
     }
 }

@@ -2,13 +2,13 @@ package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.entity.EntityCannon;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
+import java.util.function.Supplier;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MsgCannonFire extends WMMessage {
+public class MsgCannonFire implements WMMessage<MsgCannonFire> {
     private int cannonEntityID;
 
     public MsgCannonFire() {
@@ -21,23 +21,23 @@ public class MsgCannonFire extends WMMessage {
     }
 
     @Override
-    public void decodeInto(final ChannelHandlerContext ctx, final ByteBuf buf) {
+    public void decode(final ByteBuf buf) {
         this.cannonEntityID = buf.readInt();
     }
 
     @Override
-    public void encodeInto(final ChannelHandlerContext ctx, final ByteBuf buf) {
+    public void encode(final ByteBuf buf) {
         buf.writeInt(this.cannonEntityID);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public void handleClientSide(final EntityPlayer player) {
+    public void handleClientSide(final MsgCannonFire msg, final Supplier<NetworkEvent.Context> ctx) {
     }
 
     @Override
-    public void handleServerSide(final EntityPlayer player) {
-        final Entity entity = player.world.getEntityByID(this.cannonEntityID);
+    public void handleServerSide(final MsgCannonFire msg, final Supplier<NetworkEvent.Context> ctx) {
+        final Entity entity = ctx.get().getSender().world.getEntityByID(this.cannonEntityID);
         if (entity instanceof EntityCannon) {
             ((EntityCannon) entity).fireCannon();
         }

@@ -17,23 +17,25 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityBlowgunDart extends EntityProjectile {
+public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
+    public static final String NAME = "dart";
     private static final DataParameter<Byte> DART_EFFECT_TYPE;
     private static final float[][] DART_COLORS;
 
     public EntityBlowgunDart(final World world) {
-        super(world);
+        super(BalkonsWeaponMod.entityBlowgunDart, world);
     }
 
     public EntityBlowgunDart(final World world, final double d, final double d1, final double d2) {
         this(world);
-        this.setPickupMode(1);
+        this.setPickupStatus(PickupStatus.ALLOWED);
         this.setPosition(d, d1, d2);
     }
 
     public EntityBlowgunDart(final World world, final EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.setPickupModeFromEntity((EntityLivingBase) (this.shootingEntity = shooter));
+        setShooter(shooter);
+        this.setPickupStatusFromEntity(shooter);
     }
 
     @Override
@@ -51,38 +53,41 @@ public class EntityBlowgunDart extends EntityProjectile {
     }
 
     @Override
-    public void entityInit() {
-        super.entityInit();
+    public void registerData() {
+        super.registerData();
         this.dataManager.register(EntityBlowgunDart.DART_EFFECT_TYPE, (byte) 0);
     }
 
-    public void setDartEffectType(final int i) {
-        this.dataManager.set(EntityBlowgunDart.DART_EFFECT_TYPE, (byte) i);
+    public void setDartEffectType(final DartType type) {
+        setDartEffectType(type.typeID);
     }
 
-    public int getDartEffectType() {
+    public void setDartEffectType(final byte i) {
+        this.dataManager.set(EntityBlowgunDart.DART_EFFECT_TYPE, i);
+    }
+
+    public DartType getDartEffectType() {
+        return DartType.dartTypes[getDartEffectId()];
+    }
+
+    public byte getDartEffectId() {
         return this.dataManager.get(EntityBlowgunDart.DART_EFFECT_TYPE);
     }
 
     public float[] getDartColor() {
-        return EntityBlowgunDart.DART_COLORS[this.getDartEffectType()];
+        return EntityBlowgunDart.DART_COLORS[this.getDartEffectId()];
     }
 
     @Override
     public void onEntityHit(final Entity entity) {
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f + this.extraDamage)) {
             if (entity instanceof EntityLivingBase) {
-                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(DartType.dartTypes[this.getDartEffectType()].potionEffect));
+                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(DartType.dartTypes[this.getDartEffectId()].potionEffect));
             }
             this.applyEntityHitEffects(entity);
             this.playHitSound();
-            this.setDead();
+            this.remove();
         } else {
             this.bounceBack();
         }
@@ -103,27 +108,28 @@ public class EntityBlowgunDart extends EntityProjectile {
         return 4;
     }
 
+    @Nonnull
     @Override
     public ItemStack getPickupItem() {
-        return new ItemStack(BalkonsWeaponMod.dart, 1, this.getDartEffectType());
+        return getArrowStack();
     }
 
     @Nonnull
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.dart);
+        return new ItemStack(BalkonsWeaponMod.darts.get(getDartEffectType()));
     }
 
     @Override
-    public void writeEntityToNBT(final NBTTagCompound nbttagcompound) {
-        super.writeEntityToNBT(nbttagcompound);
-        nbttagcompound.setInteger("darttype", this.getDartEffectType());
+    public void writeAdditional(final NBTTagCompound nbttagcompound) {
+        super.writeAdditional(nbttagcompound);
+        nbttagcompound.putByte("darttype", this.getDartEffectId());
     }
 
     @Override
-    public void readEntityFromNBT(final NBTTagCompound nbttagcompound) {
-        super.readEntityFromNBT(nbttagcompound);
-        this.setDartEffectType(nbttagcompound.getInteger("darttype"));
+    public void readAdditional(final NBTTagCompound nbttagcompound) {
+        super.readAdditional(nbttagcompound);
+        this.setDartEffectType(nbttagcompound.getByte("darttype"));
     }
 
     static {

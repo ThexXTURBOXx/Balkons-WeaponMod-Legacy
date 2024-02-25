@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.DamageSourceAxe;
 import ckathode.weaponmod.WeaponModAttributes;
+import ckathode.weaponmod.entity.projectile.MaterialRegistry;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -9,17 +10,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
-    public static final int[] DEFAULT_IGNORES;
+    public static final int[] DEFAULT_IGNORES = new int[]{1, 1, 1, 1, 1};
     public int ignoreArmourAmount;
 
-    public MeleeCompBattleaxe(final Item.ToolMaterial toolmaterial) {
-        super(MeleeSpecs.BATTLEAXE, toolmaterial);
-        if (toolmaterial.ordinal() < MeleeCompBattleaxe.DEFAULT_IGNORES.length) {
-            this.ignoreArmourAmount = MeleeCompBattleaxe.DEFAULT_IGNORES[toolmaterial.ordinal()];
+    public MeleeCompBattleaxe(final IItemTier itemTier) {
+        super(MeleeSpecs.BATTLEAXE, itemTier);
+        int ordinal = MaterialRegistry.getOrdinal(itemTier);
+        if (ordinal >= 0 && ordinal < MeleeCompBattleaxe.DEFAULT_IGNORES.length) {
+            this.ignoreArmourAmount = MeleeCompBattleaxe.DEFAULT_IGNORES[ordinal];
         }
     }
 
@@ -60,7 +62,4 @@ public class MeleeCompBattleaxe extends MeleeComponent {
                 "Weapon ignore armour modifier", this.ignoreArmourAmount, 0));
     }
 
-    static {
-        DEFAULT_IGNORES = new int[]{1, 1, 1, 1, 1};
-    }
 }

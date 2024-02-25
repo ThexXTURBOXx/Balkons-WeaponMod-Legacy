@@ -1,0 +1,77 @@
+{
+    "_comment": "Balkon's WeaponMod language file it_IT by Frantisek_Markov",
+
+    "item.weaponmod.spear.wood": "Lancia di legno",
+    "item.weaponmod.spear.stone": "Lancia di pietra",
+    "item.weaponmod.spear.iron": "Lancia di ferro",
+    "item.weaponmod.spear.diamond": "Lancia di diamante",
+    "item.weaponmod.spear.gold": "Lancia d'oro",
+
+    "item.weaponmod.halberd.wood": "Alabarda di legno",
+    "item.weaponmod.halberd.stone": "Alabarda di pietra",
+    "item.weaponmod.halberd.iron": "Alabarda di ferro",
+    "item.weaponmod.halberd.diamond": "Alabarda di diamante",
+    "item.weaponmod.halberd.gold": "Alabarda d'oro",
+
+    "item.weaponmod.battleaxe.wood": "Ascia da guerra di legno",
+    "item.weaponmod.battleaxe.stone": "Ascia da guerra di pietra",
+    "item.weaponmod.battleaxe.iron": "Ascia da guerra di ferro",
+    "item.weaponmod.battleaxe.diamond": "Ascia da guerra di diamante",
+    "item.weaponmod.battleaxe.gold": "Ascia da guerra d'oro",
+
+    "item.weaponmod.warhammer.wood": "Martello da guerra di legno",
+    "item.weaponmod.warhammer.stone": "Martello da guerra di pietra",
+    "item.weaponmod.warhammer.iron": "Martello da guerra di ferro",
+    "item.weaponmod.warhammer.diamond": "Martello da guerra di diamante",
+    "item.weaponmod.warhammer.gold": "Martello da guerra d'oro",
+
+    "item.weaponmod.knife.wood": "Pugnale di legno",
+    "item.weaponmod.knife.stone": "Pugnale di pietra",
+    "item.weaponmod.knife.iron": "Pugnale di ferro",
+    "item.weaponmod.knife.diamond": "Pugnale di diamante",
+    "item.weaponmod.knife.gold": "Pugnale d'oro",
+
+    "item.weaponmod.flail.wood": "Mazzafrusto di legno",
+    "item.weaponmod.flail.stone": "Mazzafrusto di pietra",
+    "item.weaponmod.flail.iron": "Mazzafrusto di ferro",
+    "item.weaponmod.flail.diamond": "Mazzafrusto di diamante",
+    "item.weaponmod.flail.gold": "Mazzafrusto d'oro",
+
+    "item.weaponmod.javelin": "Giavellotto",
+
+    "item.weaponmod.musket": "Moschetto",
+    "item.weaponmod.musketbayonet": "Moschetto con baionetta",
+    "item.weaponmod.musket-ironpart": "Canna del moschetto",
+    "item.weaponmod.bullet": "Proiettile del moschetto",
+
+    "item.weaponmod.crossbow": "Balestra",
+    "item.weaponmod.bolt": "Dardo per balestra",
+
+    "item.weaponmod.blowgun": "Cerbottana",
+    "item.weaponmod.dart": "Dardo avvelenato",
+
+    "item.weaponmod.dynamite": "Dinamite",
+
+    "item.weaponmod.firerod": "Bastone del fuoco",
+
+    "item.weaponmod.cannon": "Cannone",
+    "item.weaponmod.cannonball": "Palla di cannone",
+
+    "item.weaponmod.blunderbuss": "Archibugio",
+    "item.weaponmod.blunder-ironpart": "Canna dell'archibugio",
+    "item.weaponmod.shot": "Proiettile dell'archibugio",
+
+    "item.weaponmod.dummy": "Manichino da allenamento",
+
+    "item.weaponmod.gun-stock": "Fusto del fucile",
+
+    "item.weaponmod.boomerang.wood": "Boomerang di legno",
+    "item.weaponmod.boomerang.stone": "Boomerang di pietra",
+    "item.weaponmod.boomerang.iron": "Boomerang di ferro",
+    "item.weaponmod.boomerang.diamond": "Boomerang di diamante",
+    "item.weaponmod.boomerang.gold": "Boomerang d'oro",
+
+    "item.weaponmod.mortar": "Malta a mano",
+    "item.weaponmod.mortar-ironpart": "Canna del mortaio",
+    "item.weaponmod.shell": "Guscio del mortaio"
+}

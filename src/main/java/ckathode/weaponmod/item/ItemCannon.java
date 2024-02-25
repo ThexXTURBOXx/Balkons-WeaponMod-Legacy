@@ -13,14 +13,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceFluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ItemCannon extends WMItem {
     public ItemCannon(final String id) {
-        super(id);
-        this.maxStackSize = 1;
+        super(id, new Properties().maxStackSize(1));
     }
 
     @Override
@@ -50,8 +50,8 @@ public class ItemCannon extends WMItem {
         final float f10 = f4 * f6;
         final double d4 = 5.0;
         final Vec3d vec3d2 = vec3d.add(f8 * d4, f7 * d4, f10 * d4);
-        final RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, true);
-        if (raytraceresult == null || raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK || raytraceresult.sideHit != EnumFacing.UP) {
+        final RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.ALWAYS);
+        if (raytraceresult == null || raytraceresult.type != RayTraceResult.Type.BLOCK || raytraceresult.sideHit != EnumFacing.UP) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         final Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
@@ -59,16 +59,16 @@ public class ItemCannon extends WMItem {
         final boolean flag1 = block == Blocks.SNOW;
         final EntityCannon entitycannon = new EntityCannon(world, blockpos.getX() + 0.5, flag1 ?
                 (blockpos.getY() + 0.38) : (blockpos.getY() + 1.0), blockpos.getZ() + 0.5);
-        if (!world.getCollisionBoxes(entitycannon, entitycannon.getEntityBoundingBox().grow(-0.1)).isEmpty()) {
+        if (world.getCollisionBoxes(entitycannon, entitycannon.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         if (!world.isRemote) {
             world.spawnEntity(entitycannon);
         }
-        if (!entityplayer.capabilities.isCreativeMode || !world.isRemote) {
+        if (!entityplayer.abilities.isCreativeMode || !world.isRemote) {
             itemstack.shrink(1);
         }
-        entityplayer.addStat(StatList.getObjectUseStats(this));
+        entityplayer.addStat(StatList.ITEM_USED.get(this));
         return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }
 }

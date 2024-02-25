@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -16,8 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class MeleeCompNone extends MeleeComponent {
-    public MeleeCompNone(final Item.ToolMaterial toolmaterial) {
-        super(MeleeSpecs.NONE, toolmaterial);
+    public MeleeCompNone(final IItemTier itemTier) {
+        super(MeleeSpecs.NONE, itemTier);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public EnumAction getItemUseAction(final ItemStack itemstack) {
+    public EnumAction getUseAction(final ItemStack itemstack) {
         return EnumAction.NONE;
     }
 

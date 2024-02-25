@@ -3,7 +3,7 @@ package ckathode.weaponmod.item;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -13,18 +13,18 @@ import net.minecraft.world.World;
 
 public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachItem {
     public static boolean getHalberdState(final ItemStack itemstack) {
-        return itemstack.hasTagCompound() && itemstack.getTagCompound().getBoolean("halb");
+        return itemstack.hasTag() && itemstack.getTag().getBoolean("halb");
     }
 
     public static void setHalberdState(final ItemStack itemstack, final boolean flag) {
-        if (itemstack.getTagCompound() == null) {
-            itemstack.setTagCompound(new NBTTagCompound());
+        if (itemstack.getTag() == null) {
+            itemstack.setTag(new NBTTagCompound());
         }
-        itemstack.getTagCompound().setBoolean("halb", flag);
+        itemstack.getTag().putBoolean("halb", flag);
     }
 
-    public MeleeCompHalberd(final Item.ToolMaterial toolmaterial) {
-        super(MeleeSpecs.HALBERD, toolmaterial);
+    public MeleeCompHalberd(final IItemTier itemTier) {
+        super(MeleeSpecs.HALBERD, itemTier);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     @Override
-    public EnumAction getItemUseAction(final ItemStack itemstack) {
+    public EnumAction getUseAction(final ItemStack itemstack) {
         return EnumAction.NONE;
     }
 

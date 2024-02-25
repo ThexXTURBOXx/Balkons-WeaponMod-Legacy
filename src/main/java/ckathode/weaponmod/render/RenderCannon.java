@@ -28,22 +28,22 @@ public class RenderCannon extends Render<EntityCannon> {
         GlStateManager.pushMatrix();
         float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
         rot = Math.min(rot, 20.0f);
-        GlStateManager.translate((float) d, (float) d1 + 2.375f, (float) d2);
-        GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.translated(d, d1 + 2.375f, d2);
+        GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
         final float f2 = entitycannon.getTimeSinceHit() - f1;
         float f3 = entitycannon.getCurrentDamage() - f1;
         if (f3 < 0.0f) {
             f3 = 0.0f;
         }
         if (f2 > 0.0f) {
-            GlStateManager.rotate(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f, 0.0f
+            GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f, 0.0f
                     , 0.0f, 1.0f);
         }
         this.bindEntityTexture(entitycannon);
-        GlStateManager.scale(-1.6f, -1.6f, 1.6f);
+        GlStateManager.scalef(-1.6f, -1.6f, 1.6f);
         if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
             final float f4 = 1.5f;
-            GlStateManager.color(entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4,
+            GlStateManager.color3f(entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4,
                     entitycannon.getBrightness() * f4);
         }
         if (this.renderOutlines) {
@@ -51,9 +51,9 @@ public class RenderCannon extends Render<EntityCannon> {
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0.0f, 1.0f, 0.0f);
-        GlStateManager.rotate(rot, 1.0f, 0.0f, 0.0f);
-        GlStateManager.translate(0.0f, -1.0f, 0.0f);
+        GlStateManager.translatef(0.0f, 1.0f, 0.0f);
+        GlStateManager.rotatef(rot, 1.0f, 0.0f, 0.0f);
+        GlStateManager.translatef(0.0f, -1.0f, 0.0f);
         this.modelBarrel.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GlStateManager.popMatrix();
         final float yaw = -(float) Math.toRadians(f);

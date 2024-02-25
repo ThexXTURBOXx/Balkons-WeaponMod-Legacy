@@ -40,7 +40,13 @@ public abstract class PlayerWeaponData {
     }
 
     private static String getPlayerName(final EntityPlayer player) {
-        return "player:" + player.getName();
+        String playername;
+        if (player.getGameProfile() != null) {
+            playername = player.getGameProfile().getName();
+        } else {
+            playername = "[unknown]";
+        }
+        return "player:" + playername;
     }
 
     private static void unavailableError(final EntityPlayer player, final int id) {
@@ -84,17 +90,17 @@ public abstract class PlayerWeaponData {
     }
 
     public static void setFlailThrown(final EntityPlayer player, final boolean flag) {
-        setBoolean(player, 2, flag);
+        putBoolean(player, FLAIL_THROWN, flag);
     }
 
     public static boolean isFlailThrown(final EntityPlayer player) {
-        return getBoolean(player.getDataManager().get(PlayerWeaponData.BOOLEANS), 2);
+        return getBoolean(player.getDataManager().get(PlayerWeaponData.BOOLEANS), FLAIL_THROWN);
     }
 
-    public static void setBoolean(final EntityPlayer player, final int state, final boolean flag) {
+    public static void putBoolean(final EntityPlayer player, final int state, final boolean flag) {
         try {
             int i = player.getDataManager().get(PlayerWeaponData.BOOLEANS);
-            i = setBoolean(i, state, flag);
+            i = putBoolean(i, state, flag);
             player.getDataManager().set(PlayerWeaponData.BOOLEANS, i);
         } catch (final NullPointerException e) {
             unavailableError(player, PlayerWeaponData.BOOLEANS.getId());
@@ -114,7 +120,7 @@ public abstract class PlayerWeaponData {
         return (i & 1 << pos) != 0x0;
     }
 
-    private static int setBoolean(int i, final int pos, final boolean flag) {
+    private static int putBoolean(int i, final int pos, final boolean flag) {
         final int mask = 1 << pos;
         i &= ~mask;
         if (flag) {

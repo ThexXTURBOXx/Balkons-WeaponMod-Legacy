@@ -5,31 +5,33 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceFluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ItemDummy extends WMItem {
     public ItemDummy(final String id) {
-        super(id);
-        this.maxStackSize = 1;
+        super(id, new Properties().maxStackSize(1));
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer,
-                                                    @Nonnull final EnumHand hand) {
-        final ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public EnumActionResult onItemUse(@Nonnull ItemUseContext context) {
+        World world = context.getWorld();
         if (world.isRemote) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return EnumActionResult.FAIL;
         }
+        final EntityPlayer entityplayer = context.getPlayer();
+        if (entityplayer == null) return EnumActionResult.FAIL;
+        final ItemStack itemstack = context.getItem();
         final float f = 1.0f;
         final float f2 =
                 entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
@@ -47,26 +49,26 @@ public class ItemDummy extends WMItem {
         final float f10 = f4 * f6;
         final double d4 = 5.0;
         final Vec3d vec3d2 = vec3d.add(f8 * d4, f7 * d4, f10 * d4);
-        final RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, true);
-        if (raytraceresult == null || raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+        final RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.ALWAYS);
+        if (raytraceresult == null || raytraceresult.type != RayTraceResult.Type.BLOCK) {
+            return EnumActionResult.FAIL;
         }
         final Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
         final BlockPos blockpos = raytraceresult.getBlockPos();
-        final boolean flag = world.getBlockState(blockpos).getBlock().isReplaceable(world, blockpos);
+        final boolean flag = world.getBlockState(blockpos).isReplaceable(new BlockItemUseContext(context));
         final BlockPos blockpos2 = flag ? blockpos : blockpos.offset(raytraceresult.sideHit);
         final boolean flag2 = block == Blocks.SNOW;
         final EntityDummy entitydummy = new EntityDummy(world, blockpos2.getX() + 0.5, flag2 ?
                 (blockpos2.getY() - 0.12) : blockpos2.getY(), blockpos2.getZ() + 0.5);
         entitydummy.rotationYaw = entityplayer.rotationYaw;
-        if (!world.getCollisionBoxes(entitydummy, entitydummy.getEntityBoundingBox().grow(-0.1)).isEmpty()) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+        if (world.getCollisionBoxes(entitydummy, entitydummy.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
+            return EnumActionResult.FAIL;
         }
         world.spawnEntity(entitydummy);
-        if (!entityplayer.capabilities.isCreativeMode) {
+        if (!entityplayer.abilities.isCreativeMode) {
             itemstack.shrink(1);
         }
-        entityplayer.addStat(StatList.getObjectUseStats(this));
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        entityplayer.addStat(StatList.ITEM_USED.get(this));
+        return EnumActionResult.SUCCESS;
     }
 }

@@ -27,13 +27,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityDummy extends Entity {
+    public static final String NAME = "dummy";
+
     private static final DataParameter<Integer> TIME_SINCE_HIT;
     private static final DataParameter<Byte> ROCK_DIRECTION;
     private static final DataParameter<Integer> CURRENT_DAMAGE;
     private int durability;
 
     public EntityDummy(final World world) {
-        super(world);
+        super(BalkonsWeaponMod.entityDummy, world);
         this.preventEntitySpawning = true;
         this.rotationPitch = -20.0f;
         this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -53,7 +55,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    protected void entityInit() {
+    protected void registerData() {
         this.dataManager.register(EntityDummy.TIME_SINCE_HIT, 0);
         this.dataManager.register(EntityDummy.ROCK_DIRECTION, (byte) 1);
         this.dataManager.register(EntityDummy.CURRENT_DAMAGE, 0);
@@ -61,12 +63,12 @@ public class EntityDummy extends Entity {
 
     @Override
     public AxisAlignedBB getCollisionBox(final Entity entity) {
-        return entity.getEntityBoundingBox();
+        return entity.getBoundingBox();
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox() {
-        return this.getEntityBoundingBox();
+        return this.getBoundingBox();
     }
 
     @Override
@@ -76,7 +78,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean attackEntityFrom(@Nonnull final DamageSource damagesource, final float damage) {
-        if (this.world.isRemote || this.isDead || damage <= 0.0f) {
+        if (this.world.isRemote || !this.isAlive() || damage <= 0.0f) {
             return false;
         }
         this.setRockDirection(-this.getRockDirection());
@@ -115,7 +117,7 @@ public class EntityDummy extends Entity {
     public void playRandomHitSound() {
         final int i = this.rand.nextInt(2);
         if (i == 0) {
-            this.playSound(SoundEvents.BLOCK_CLOTH_STEP, 0.7f, 1.0f / (this.rand.nextFloat() * 0.2f + 0.4f));
+            this.playSound(SoundEvents.BLOCK_WOOL_STEP, 0.7f, 1.0f / (this.rand.nextFloat() * 0.2f + 0.4f));
         } else {
             this.playSound(SoundEvents.BLOCK_WOOD_STEP, 0.7f, 1.0f / (this.rand.nextFloat() * 0.2f + 0.2f));
         }
@@ -130,12 +132,12 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean canBeCollidedWith() {
-        return !this.isDead;
+        return this.isAlive();
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         int i = this.getTimeSinceHit();
         if (i > 0) {
             this.setTimeSinceHit(i - 1);
@@ -159,8 +161,8 @@ public class EntityDummy extends Entity {
         }
         this.setRotation(this.rotationYaw, this.rotationPitch);
         this.move(MoverType.SELF, 0.0, this.motionY, 0.0);
-        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2,
-                0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
+        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(0.2,
+                0.0, 0.2), EntitySelectors.pushableBy(this));
         if (!list.isEmpty()) {
             for (final Entity entity : list) {
                 if (!entity.isPassenger(this)) {
@@ -186,12 +188,12 @@ public class EntityDummy extends Entity {
         }
         if (destroyed) {
             for (int i = 0; i < this.rand.nextInt(8); ++i) {
-                this.dropItem(Items.LEATHER, 1);
+                this.entityDropItem(Items.LEATHER, 1);
             }
         } else if (noCreative) {
-            this.dropItem(BalkonsWeaponMod.dummy, 1);
+            this.entityDropItem(BalkonsWeaponMod.dummy, 1);
         }
-        this.setDead();
+        this.remove();
     }
 
     @Override
@@ -202,7 +204,7 @@ public class EntityDummy extends Entity {
                 return false;
             }
         }
-        if (entityplayer.capabilities.isCreativeMode) {
+        if (entityplayer.abilities.isCreativeMode) {
             this.dropAsItem(false, false);
             return true;
         }
@@ -211,11 +213,11 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    protected void writeEntityToNBT(@Nonnull final NBTTagCompound nbttagcompound) {
+    protected void writeAdditional(@Nonnull final NBTTagCompound nbttagcompound) {
     }
 
     @Override
-    protected void readEntityFromNBT(@Nonnull final NBTTagCompound nbttagcompound) {
+    protected void readAdditional(@Nonnull final NBTTagCompound nbttagcompound) {
         this.setPosition(this.posX, this.posY, this.posZ);
         this.setRotation(this.rotationYaw, this.rotationPitch);
     }

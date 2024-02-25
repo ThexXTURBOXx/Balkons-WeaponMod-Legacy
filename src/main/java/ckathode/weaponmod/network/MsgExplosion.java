@@ -2,17 +2,17 @@ package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.AdvancedExplosion;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayer;
+import java.util.function.Supplier;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MsgExplosion extends WMMessage {
+public class MsgExplosion implements WMMessage<MsgExplosion> {
     private double x;
     private double y;
     private double z;
@@ -35,7 +35,7 @@ public class MsgExplosion extends WMMessage {
     }
 
     @Override
-    public void decodeInto(final ChannelHandlerContext ctx, final ByteBuf buf) {
+    public void decode(final ByteBuf buf) {
         this.x = buf.readDouble();
         this.y = buf.readDouble();
         this.z = buf.readDouble();
@@ -53,7 +53,7 @@ public class MsgExplosion extends WMMessage {
     }
 
     @Override
-    public void encodeInto(final ChannelHandlerContext ctx, final ByteBuf buf) {
+    public void encode(final ByteBuf buf) {
         buf.writeDouble(this.x);
         buf.writeDouble(this.y);
         buf.writeDouble(this.z);
@@ -73,17 +73,17 @@ public class MsgExplosion extends WMMessage {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public void handleClientSide(final EntityPlayer player) {
-        final World world = FMLClientHandler.instance().getWorldClient();
-        final AdvancedExplosion expl = new AdvancedExplosion(world, null, this.x, this.y, this.z, this.size, false,
-                true);
+    public void handleClientSide(final MsgExplosion msg, final Supplier<NetworkEvent.Context> ctx) {
+        final World world = Minecraft.getInstance().world;
+        final AdvancedExplosion expl = new AdvancedExplosion(world, null, this.x, this.y, this.z, this.size,
+                false, true);
         expl.setAffectedBlockPositions(this.blocks);
         expl.doParticleExplosion(this.smallParticles, this.bigParticles);
     }
 
     @Override
-    public void handleServerSide(final EntityPlayer player) {
+    public void handleServerSide(final MsgExplosion msg, final Supplier<NetworkEvent.Context> ctx) {
     }
 }

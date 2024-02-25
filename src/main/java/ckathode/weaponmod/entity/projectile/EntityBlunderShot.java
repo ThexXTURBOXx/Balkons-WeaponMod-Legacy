@@ -12,10 +12,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityBlunderShot extends EntityProjectile {
+public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
+    public static final String NAME = "shot";
+
     public EntityBlunderShot(final World world) {
-        super(world);
-        this.setPickupMode(0);
+        super(BalkonsWeaponMod.entityBlunderShot, world);
+        this.setPickupStatus(PickupStatus.DISALLOWED);
     }
 
     public EntityBlunderShot(final World world, final double x, final double y, final double z) {
@@ -25,7 +27,7 @@ public class EntityBlunderShot extends EntityProjectile {
 
     public EntityBlunderShot(final World world, final EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.shootingEntity = shooter;
+        setShooter(shooter);
     }
 
     @Override
@@ -43,28 +45,23 @@ public class EntityBlunderShot extends EntityProjectile {
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
         if (this.ticksInAir > 4) {
-            this.setDead();
+            this.remove();
         }
     }
 
     @Override
     public void onEntityHit(final Entity entity) {
         final float damage = 4.0f + this.extraDamage;
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         final int prevhurtrestime = entity.hurtResistantTime;
         if (entity.attackEntityFrom(damagesource, damage)) {
             entity.hurtResistantTime = prevhurtrestime;
             this.applyEntityHitEffects(entity);
             this.playHitSound();
-            this.setDead();
+            this.remove();
         }
     }
 

@@ -7,10 +7,10 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 
 public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
@@ -23,12 +23,12 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     @Nonnull
     @Override
     public ItemStack dispenseStack(final IBlockSource blocksource, final ItemStack itemstack) {
-        final EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
+        final EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
         final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), face.getXOffset(), face.getYOffset(),
                 face.getZOffset());
-        itemstack.splitStack(1);
+        itemstack.split(1);
         return itemstack;
     }
 
@@ -42,7 +42,7 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     protected void spawnDispenseParticles(@Nonnull final IBlockSource blocksource, @Nonnull final EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
         final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getXOffset(),
+        blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
     }
 }

@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.entity.Entity;
@@ -10,9 +11,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySpear extends EntityMaterialProjectile {
+public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
+    public static final String NAME = "spear";
+
     public EntitySpear(final World world) {
-        super(world);
+        super(BalkonsWeaponMod.entitySpear, world);
     }
 
     public EntitySpear(final World world, final double d, final double d1, final double d2) {
@@ -22,7 +25,8 @@ public class EntitySpear extends EntityMaterialProjectile {
 
     public EntitySpear(final World world, final EntityLivingBase shooter, final ItemStack itemstack) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        this.setPickupModeFromEntity((EntityLivingBase) (this.shootingEntity = shooter));
+        setShooter(shooter);
+        this.setPickupStatusFromEntity(shooter);
         this.setThrownItemStack(itemstack);
     }
 
@@ -45,22 +49,18 @@ public class EntitySpear extends EntityMaterialProjectile {
         if (this.world.isRemote) {
             return;
         }
-        DamageSource damagesource;
-        if (this.shootingEntity == null) {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, this.shootingEntity);
-        }
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource,
                 ((IItemWeapon) this.thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 1.0f + this.getMeleeHitDamage(entity))) {
             this.applyEntityHitEffects(entity);
             this.playHitSound();
-            if (this.thrownItem.getItemDamage() + 1 > this.thrownItem.getMaxDamage()) {
+            if (this.thrownItem.getDamage() + 1 > this.thrownItem.getMaxDamage()) {
                 this.thrownItem.shrink(1);
-                this.setDead();
+                this.remove();
             } else {
-                if (this.shootingEntity instanceof EntityLivingBase) {
-                    this.thrownItem.damageItem(1, (EntityLivingBase) this.shootingEntity);
+                Entity shooter = this.getShooter();
+                if (shooter instanceof EntityLivingBase) {
+                    this.thrownItem.damageItem(1, (EntityLivingBase) shooter);
                 } else {
                     this.thrownItem.attemptDamageItem(1, this.rand, null);
                 }
@@ -78,7 +78,7 @@ public class EntitySpear extends EntityMaterialProjectile {
 
     @Override
     public int getMaxLifetime() {
-        return (this.pickupMode == 1 || this.pickupMode == 3) ? 0 : 1200;
+        return (this.pickupStatus == PickupStatus.ALLOWED || this.pickupStatus == PickupStatus.OWNER_ONLY) ? 0 : 1200;
     }
 
     @Override

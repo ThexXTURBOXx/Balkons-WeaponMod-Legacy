@@ -1,18 +1,18 @@
 package ckathode.weaponmod.network;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import java.util.function.Supplier;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public abstract class WMMessage {
-    public abstract void encodeInto(final ChannelHandlerContext p0, final ByteBuf p1);
+public interface WMMessage<T extends WMMessage<T>> {
+    void encode(final ByteBuf buf);
 
-    public abstract void decodeInto(final ChannelHandlerContext p0, final ByteBuf p1);
+    void decode(final ByteBuf buf);
 
-    @SideOnly(Side.CLIENT)
-    public abstract void handleClientSide(final EntityPlayer p0);
+    @OnlyIn(Dist.CLIENT)
+    void handleClientSide(final T msg, final Supplier<NetworkEvent.Context> ctx);
 
-    public abstract void handleServerSide(final EntityPlayer p0);
+    void handleServerSide(final T msg, final Supplier<NetworkEvent.Context> ctx);
 }

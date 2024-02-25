@@ -4,10 +4,10 @@ import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -28,7 +28,7 @@ public class RangedCompMortar extends RangedComponent {
     @Override
     public void fire(final ItemStack itemstack, final World world, final EntityLivingBase entityliving, final int i) {
         final EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        final int j = this.getMaxItemUseDuration(itemstack) - i;
+        final int j = this.getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f > 1.0f) {
@@ -43,7 +43,7 @@ public class RangedCompMortar extends RangedComponent {
             world.spawnEntity(entitymortarshell);
         }
         final int damage = 1;
-        if (itemstack.getItemDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadHelper.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
@@ -68,10 +68,9 @@ public class RangedCompMortar extends RangedComponent {
         final float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         final float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         for (int i = 0; i < 3; ++i) {
-            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x + particleX, y + particleY, z + particleZ, 0.0, 0.0
-                    , 0.0);
+            world.addParticle(Particles.SMOKE, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
         }
-        world.spawnParticle(EnumParticleTypes.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+        world.addParticle(Particles.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
     }
 
     @Override
