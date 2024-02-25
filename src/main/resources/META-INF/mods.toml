@@ -1,12 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[25,)"
+issueTrackerURL = "https://github.com/ThexXTURBOXx/balkons-weaponmod/issues"
+logoFile = "bwm_logo.png"
+
 [[mods]]
 modId = "weaponmod"
 version = "${file.jarVersion}"
+updateJSONURL = "https://raw.githubusercontent.com/ThexXTURBOXx/UpdateJSONs/master/weaponmod.json"
 displayName = "Balkon's WeaponMod"
 displayURL = "https://www.minecraftforum.net/topic/211517-bwm"
-logoFile = "bwm_logo.png"
-credits = "Thanks for this example mod goes to Java"
+credits = "BalkondeurAlpha, ThexXTURBOXx"
 authors = "BalkondeurAlpha, ThexXTURBOXx"
 description = '''
 Throw a spear in a zombie's head!

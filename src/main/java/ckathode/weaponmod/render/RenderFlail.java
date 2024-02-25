@@ -35,16 +35,6 @@ public class RenderFlail extends Render<EntityFlail> {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
         float[] color = entityflail.getMaterialColor();
-        int i = 0;
-        float f2 = 0.0f;
-        float f3 = 0.5f;
-        float f4 = 0.0f;
-        float f5 = 0.15625f;
-        float f6 = 0.0f;
-        float f7 = 0.15625f;
-        float f8 = 0.15625f;
-        float f9 = 0.3125f;
-        float f10 = 0.15f;
         GlStateManager.enableRescaleNormal();
         float f11 = -f1;
         if (f11 > 0.0f) {
@@ -101,7 +91,6 @@ public class RenderFlail extends Render<EntityFlail> {
             double d3 = MathHelper.sin(f15);
             double d4 = MathHelper.cos(f15);
             double d5 = k * 0.35;
-            double d6 = 0.8;
             double d7;
             double d8;
             double d9;
@@ -133,7 +122,6 @@ public class RenderFlail extends Render<EntityFlail> {
             GlStateManager.disableTexture2D();
             GlStateManager.disableLighting();
             vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-            int l = 16;
             for (int i2 = 0; i2 <= 16; ++i2) {
                 float f17 = i2 / 16.0f;
                 vertexbuffer.pos(d + d14 * f17, d1 + d15 * (f17 * f17 + f17) * 0.5 + 0.25, d2 + d16 * f17).color(0,

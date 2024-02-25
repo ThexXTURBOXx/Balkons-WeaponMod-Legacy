@@ -29,16 +29,6 @@ public class RenderCrossbowBolt extends Render<EntityCrossbowBolt> {
         GlStateManager.rotatef(entitybolt.prevRotationPitch + (entitybolt.rotationPitch - entitybolt.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
-        int i = 0;
-        float f2 = 0.0f;
-        float f3 = 0.5f;
-        float f4 = 0.0f;
-        float f5 = 0.15625f;
-        float f6 = 0.0f;
-        float f7 = 0.15625f;
-        float f8 = 0.15625f;
-        float f9 = 0.3125f;
-        float f10 = 0.05625f;
         GlStateManager.enableRescaleNormal();
         float f11 = entitybolt.arrowShake - f1;
         if (f11 > 0.0f) {

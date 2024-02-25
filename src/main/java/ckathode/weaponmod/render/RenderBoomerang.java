@@ -35,15 +35,6 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             BufferBuilder vertexbuffer = tessellator.getBuffer();
             int mat = entityboomerang.getWeaponMaterialId();
             float[] color = entityboomerang.getMaterialColor();
-            float ft0 = 0.0f;
-            float ft2 = 0.5f;
-            float ft3 = 1.0f;
-            float fh = 0.08f;
-            float f2 = 0.2f;
-            float f3 = 0.9f;
-            float f4 = 0.8f;
-            float ft4 = 0.5f;
-            float ft5 = 0.65625f;
             GlStateManager.translatef(-0.5f, 0.0f, -0.5f);
             GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
             if (renderOutlines) {

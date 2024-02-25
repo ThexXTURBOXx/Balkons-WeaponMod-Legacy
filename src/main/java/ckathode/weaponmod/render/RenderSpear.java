@@ -36,18 +36,6 @@ public class RenderSpear extends Render<EntitySpear> {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder vertexbuffer = tessellator.getBuffer();
             float[] color = entityspear.getMaterialColor();
-            int i = 0;
-            float f2 = 0.0f;
-            float f3 = 1.0f;
-            float f4 = 0.0f;
-            float f5 = 0.15625f;
-            float f6 = 0.0f;
-            float f7 = 0.15625f;
-            float f8 = 0.15625f;
-            float f9 = 0.3125f;
-            float f10 = 0.3125f;
-            float f11 = 0.46875f;
-            float f12 = 0.05625f;
             double length = 20.0;
             GlStateManager.enableRescaleNormal();
             float f13 = entityspear.arrowShake - f1;

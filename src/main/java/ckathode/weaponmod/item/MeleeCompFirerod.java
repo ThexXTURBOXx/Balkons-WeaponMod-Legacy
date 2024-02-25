@@ -30,8 +30,6 @@ public class MeleeCompFirerod extends MeleeComponent {
                               boolean flag) {
         super.inventoryTick(itemstack, world, entity, i, flag);
         if (entity instanceof EntityPlayer && ((EntityPlayer) entity).inventory.getCurrentItem() == itemstack && !entity.areEyesInFluid(FluidTags.WATER)) {
-            float f = 1.0f;
-            float f2 = 27.0f;
             float particleX =
                     -MathHelper.sin((entity.rotationYaw + 28.0f) * 0.017453292f) * MathHelper.cos(entity.rotationPitch * 0.017453292f) * 1.0f;
             float particleY = -MathHelper.sin(entity.rotationPitch * 0.017453292f) + 1.6f;

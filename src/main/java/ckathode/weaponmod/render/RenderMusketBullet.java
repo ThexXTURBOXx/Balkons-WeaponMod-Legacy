@@ -26,9 +26,6 @@ public class RenderMusketBullet extends Render<EntityMusketBullet> {
         GlStateManager.translated(d, d1, d2);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
-        float f2 = 0.0f;
-        float f3 = 0.3125f;
-        float f4 = 0.05625f;
         GlStateManager.enableRescaleNormal();
         GlStateManager.scalef(0.07f, 0.07f, 0.07f);
         if (renderOutlines) {

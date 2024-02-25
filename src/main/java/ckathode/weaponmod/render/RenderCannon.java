@@ -36,8 +36,8 @@ public class RenderCannon extends Render<EntityCannon> {
             f3 = 0.0f;
         }
         if (f2 > 0.0f) {
-            GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f, 0.0f
-                    , 0.0f, 1.0f);
+            GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f,
+                    0.0f, 0.0f, 1.0f);
         }
         bindEntityTexture(entitycannon);
         GlStateManager.scalef(-1.6f, -1.6f, 1.6f);

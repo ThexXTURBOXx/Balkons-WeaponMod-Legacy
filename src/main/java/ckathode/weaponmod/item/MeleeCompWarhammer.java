@@ -16,7 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class MeleeCompWarhammer extends MeleeComponent {
-    public static int CHARGE_DELAY = 400;
+    public static final int CHARGE_DELAY = 400;
 
     public MeleeCompWarhammer(IItemTier itemTier) {
         super(MeleeSpecs.WARHAMMER, itemTier);
@@ -59,7 +59,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     public boolean isCharged(EntityPlayer entityplayer) {
-        return entityplayer.ticksExisted > PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + 400;
+        return entityplayer.ticksExisted > PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY;
     }
 
     @Override
