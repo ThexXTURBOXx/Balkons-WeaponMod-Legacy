@@ -62,12 +62,13 @@ import net.minecraft.item.ItemTier;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IConditionSerializer;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -168,17 +169,17 @@ public class BalkonsWeaponMod {
     public static EntityType<EntityBoomerang> entityBoomerang;
     public static EntityType<EntityMortarShell> entityMortarShell;
     public final WeaponModConfig modConfig;
-    public final WMMessagePipeline messagePipeline;
     public final IConditionSerializer configConditional;
+    public WMMessagePipeline messagePipeline;
 
     public BalkonsWeaponMod() {
         instance = this;
-        messagePipeline = new WMMessagePipeline();
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(this::setup);
-        bus.addListener(this::setupClient);
-        bus.register(this);
+        DistExecutor.runWhenOn(Dist.CLIENT,
+                () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient));
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().register(this);
         MinecraftForge.EVENT_BUS.register(this);
 
         modConfig = new WeaponModConfig();
@@ -214,13 +215,16 @@ public class BalkonsWeaponMod {
     }
 
     @SubscribeEvent
-    public void on(ModConfig.ModConfigEvent e) {
+    public void onModConfig(ModConfig.ModConfigEvent e) {
         modConfig.postLoadConfig();
     }
 
     public void setup(FMLCommonSetupEvent event) {
-        proxy.registerEventHandlers();
-        proxy.registerPackets(messagePipeline);
+        DeferredWorkQueue.runLater(() -> {
+            messagePipeline = new WMMessagePipeline();
+            proxy.registerEventHandlers();
+            proxy.registerPackets(messagePipeline);
+        });
     }
 
     public void setupClient(FMLClientSetupEvent event) {

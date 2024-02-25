@@ -104,7 +104,7 @@ public class WeaponModConfig {
         int reloadTime;
 
         ReloadTimeSetting(String name, int reloadTime) {
-            super(name + ".reloadtime");
+            super(name);
             this.reloadTime = reloadTime;
         }
     }
@@ -113,7 +113,7 @@ public class WeaponModConfig {
         boolean enabled;
 
         EnableSetting(String name, boolean enabled) {
-            super(name + ".enabled");
+            super(name);
             this.enabled = enabled;
         }
     }
