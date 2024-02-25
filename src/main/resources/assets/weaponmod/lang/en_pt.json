@@ -54,6 +54,9 @@
 
     "item.weaponmod.blowgun": "Blowgun",
     "item.weaponmod.dart": "Arrow o' Scurvy",
+    "item.weaponmod.dart.hunger": "Arrow o' Scurvy",
+    "item.weaponmod.dart.slow": "Arrow o' Scurvy",
+    "item.weaponmod.dart.damage": "Arrow o' Scurvy",
 
     "item.weaponmod.dynamite": "Hand Granadoe",
 

@@ -54,6 +54,9 @@
 
     "item.weaponmod.blowgun": "Духовая трубка",
     "item.weaponmod.dart": "Отравленный дротик",
+    "item.weaponmod.dart.hunger": "Отравленный дротик",
+    "item.weaponmod.dart.slow": "Отравленный дротик",
+    "item.weaponmod.dart.damage": "Отравленный дротик",
 
     "item.weaponmod.dynamite": "Динамитная шашка",
 

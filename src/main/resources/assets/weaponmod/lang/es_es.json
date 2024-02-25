@@ -49,6 +49,9 @@
 
   "item.weaponmod.blowgun": "Cerbatana",
   "item.weaponmod.dart": "Dardo Venenoso",
+  "item.weaponmod.dart.hunger": "Dardo Venenoso",
+  "item.weaponmod.dart.slow": "Dardo Venenoso",
+  "item.weaponmod.dart.damage": "Dardo Venenoso",
 
   "item.weaponmod.dynamite": "Dinamita",
 

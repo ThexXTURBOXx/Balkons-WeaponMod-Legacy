@@ -49,6 +49,9 @@
 
     "item.weaponmod.blowgun": "Sarbacane",
     "item.weaponmod.dart": "Dart toxique",
+    "item.weaponmod.dart.hunger": "Dart toxique",
+    "item.weaponmod.dart.slow": "Dart toxique",
+    "item.weaponmod.dart.damage": "Dart toxique",
 
     "item.weaponmod.dynamite": "Dynamite",
 

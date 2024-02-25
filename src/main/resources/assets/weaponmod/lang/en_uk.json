@@ -54,6 +54,9 @@
 
     "item.weaponmod.blowgun": "Blowgun",
     "item.weaponmod.dart": "Poisonous Dart",
+    "item.weaponmod.dart.hunger": "Poisonous Dart",
+    "item.weaponmod.dart.slow": "Poisonous Dart",
+    "item.weaponmod.dart.damage": "Poisonous Dart",
 
     "item.weaponmod.dynamite": "Dynamite",
 

@@ -54,6 +54,9 @@
 
     "item.weaponmod.blowgun": "吹筒",
     "item.weaponmod.dart": "毒鏢",
+    "item.weaponmod.dart.hunger": "毒鏢",
+    "item.weaponmod.dart.slow": "毒鏢",
+    "item.weaponmod.dart.damage": "毒鏢",
 
     "item.weaponmod.dynamite": "投擲炸藥",
 

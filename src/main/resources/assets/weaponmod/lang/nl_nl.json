@@ -54,6 +54,9 @@
 
     "item.weaponmod.blowgun": "Blaaspijp",
     "item.weaponmod.dart": "Giftig dartpijltje",
+    "item.weaponmod.dart.hunger": "Giftig dartpijltje",
+    "item.weaponmod.dart.slow": "Giftig dartpijltje",
+    "item.weaponmod.dart.damage": "Giftig dartpijltje",
 
     "item.weaponmod.dynamite": "Dynamiet",
 

@@ -54,6 +54,9 @@
 
     "item.weaponmod.blowgun": "Zarabatana",
     "item.weaponmod.dart": "Dardo Envenenado",
+    "item.weaponmod.dart.hunger": "Dardo Envenenado",
+    "item.weaponmod.dart.slow": "Dardo Envenenado",
+    "item.weaponmod.dart.damage": "Dardo Envenenado",
 
     "item.weaponmod.dynamite": "Dinamite",
 

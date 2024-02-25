@@ -49,6 +49,9 @@
 
     "item.weaponmod.blowgun": "Blasrohr",
     "item.weaponmod.dart": "Vergifteter Pfeil",
+    "item.weaponmod.dart.hunger": "Vergifteter Pfeil",
+    "item.weaponmod.dart.slow": "Vergifteter Pfeil",
+    "item.weaponmod.dart.damage": "Vergifteter Pfeil",
 
     "item.weaponmod.dynamite": "Dynamit",
 
