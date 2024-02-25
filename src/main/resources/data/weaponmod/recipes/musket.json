@@ -14,5 +14,11 @@
   },
   "result": {
     "item": "weaponmod:musket"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    }
+  ]
 }

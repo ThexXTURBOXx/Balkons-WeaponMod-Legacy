@@ -26,7 +26,8 @@ public class WeaponModConfig {
     }
 
     public void loadConfig(ModLoadingContext context) {
-        builder.comment("Enable or disable certain weapons")
+        builder.comment("Enable or disable certain weapons (only disables their recipes; they are still obtainable "
+                        + "through Creative mode!)")
                 .push("enable");
         for (final EnableSetting es : enableSettings.values())
             es.configValue = builder.define(es.settingName, es.enabled);

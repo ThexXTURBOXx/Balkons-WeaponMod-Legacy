@@ -14,5 +14,11 @@
   },
   "result": {
     "item": "weaponmod:musket-ironpart"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    }
+  ]
 }

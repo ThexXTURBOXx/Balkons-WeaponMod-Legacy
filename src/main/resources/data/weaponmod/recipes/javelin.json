@@ -16,5 +16,11 @@
   "result": {
     "item": "weaponmod:javelin",
 	"count": 4
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "javelin"
+    }
+  ]
 }

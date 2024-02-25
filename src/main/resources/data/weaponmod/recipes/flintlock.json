@@ -22,5 +22,11 @@
   },
   "result": {
     "item": "weaponmod:flintlock"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "flintlock"
+    }
+  ]
 }

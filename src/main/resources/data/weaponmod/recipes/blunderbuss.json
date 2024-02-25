@@ -14,5 +14,11 @@
   },
   "result": {
     "item": "weaponmod:blunderbuss"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blunderbuss"
+    }
+  ]
 }

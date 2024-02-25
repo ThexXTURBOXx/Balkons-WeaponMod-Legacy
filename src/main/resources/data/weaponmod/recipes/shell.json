@@ -16,5 +16,11 @@
   "result": {
     "item": "weaponmod:shell",
     "count": 2
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "mortar"
+    }
+  ]
 }

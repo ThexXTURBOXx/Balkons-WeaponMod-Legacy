@@ -15,5 +15,11 @@
   },
   "result": {
     "item": "weaponmod:blunder-ironpart"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blunderbuss"
+    }
+  ]
 }

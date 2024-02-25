@@ -17,5 +17,11 @@
   },
   "result": {
     "item": "weaponmod:warhammer.wood"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "warhammer"
+    }
+  ]
 }

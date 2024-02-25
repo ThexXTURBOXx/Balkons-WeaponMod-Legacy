@@ -20,5 +20,11 @@
   },
   "result": {
     "item": "weaponmod:crossbow"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "crossbow"
+    }
+  ]
 }

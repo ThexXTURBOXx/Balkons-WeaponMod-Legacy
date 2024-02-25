@@ -20,5 +20,11 @@
   },
   "result": {
     "item": "weaponmod:flail.wood"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "flail"
+    }
+  ]
 }

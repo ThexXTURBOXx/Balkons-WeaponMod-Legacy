@@ -17,5 +17,11 @@
   },
   "result": {
     "item": "weaponmod:halberd.wood"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "halberd"
+    }
+  ]
 }

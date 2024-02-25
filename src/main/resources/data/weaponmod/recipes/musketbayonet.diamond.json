@@ -4,11 +4,21 @@
     {
       "item": "weaponmod:musket"
     },
-	{
+    {
       "item": "weaponmod:knife.diamond"
     }
   ],
   "result": {
     "item": "weaponmod:musketbayonet.diamond"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
 }

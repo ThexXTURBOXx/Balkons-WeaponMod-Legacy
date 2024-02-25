@@ -15,5 +15,11 @@
   },
   "result": {
     "item": "weaponmod:katana.stone"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "katana"
+    }
+  ]
 }

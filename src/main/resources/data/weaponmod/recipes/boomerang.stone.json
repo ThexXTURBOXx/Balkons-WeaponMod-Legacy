@@ -17,5 +17,11 @@
   },
   "result": {
     "item": "weaponmod:boomerang.stone"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "boomerang"
+    }
+  ]
 }

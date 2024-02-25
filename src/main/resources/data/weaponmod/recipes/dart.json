@@ -19,5 +19,11 @@
   "result": {
     "item": "weaponmod:dart",
 	"count": 4
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
 }

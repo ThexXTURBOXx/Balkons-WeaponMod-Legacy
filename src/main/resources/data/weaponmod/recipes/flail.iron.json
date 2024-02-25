@@ -18,5 +18,11 @@
   },
   "result": {
     "item": "weaponmod:flail.iron"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "flail"
+    }
+  ]
 }

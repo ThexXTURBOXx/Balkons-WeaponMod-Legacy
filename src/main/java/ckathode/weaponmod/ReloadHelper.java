@@ -4,9 +4,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public abstract class ReloadHelper {
-    public static int STATE_NONE = 0;
-    public static int STATE_RELOADED = 1;
-    public static int STATE_READY = 2;
+    public static final int STATE_NONE = 0;
+    public static final int STATE_RELOADED = 1;
+    public static final int STATE_READY = 2;
 
     private static void initTagCompound(ItemStack itemstack) {
         if (itemstack.getTag() == null) {

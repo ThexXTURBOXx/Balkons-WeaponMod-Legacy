@@ -20,5 +20,11 @@
   },
   "result": {
     "item": "weaponmod:cannon"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "cannon"
+    }
+  ]
 }

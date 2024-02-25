@@ -10,5 +10,15 @@
   ],
   "result": {
     "item": "weaponmod:musketbayonet.wood"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
 }
