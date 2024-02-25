@@ -9,8 +9,8 @@ version = "${file.jarVersion}"
 updateJSONURL = "https://raw.githubusercontent.com/ThexXTURBOXx/UpdateJSONs/master/weaponmod.json"
 displayName = "Balkon's WeaponMod"
 displayURL = "https://www.minecraftforum.net/topic/211517-bwm"
-credits = "BalkondeurAlpha, ThexXTURBOXx"
-authors = "BalkondeurAlpha, ThexXTURBOXx"
+credits = "BalkondeurAlpha, HyperSpeeed"
+authors = "BalkondeurAlpha, HyperSpeeed"
 description = '''
 Throw a spear in a zombie's head!
 Cut a skeleton in half with your brand new halberd!
