@@ -1,5 +1,5 @@
 {
-    "_comment": "Balkon's WeaponMod language file de_DE by pick09091995",
+    "_comment": "Balkon's WeaponMod language file de_DE by pick09091995 and HyperSpeeed",
 
     "item.weaponmod.spear.wood": "Holzspeer",
     "item.weaponmod.spear.stone": "Steinspeer",
@@ -41,6 +41,11 @@
 
     "item.weaponmod.musket": "Muskete",
     "item.weaponmod.musketbayonet": "Muskete mit Bajonett",
+    "item.weaponmod.musketbayonet.wood": "Muskete mit Holzbajonett",
+    "item.weaponmod.musketbayonet.stone": "Muskete mit Steinbajonett",
+    "item.weaponmod.musketbayonet.iron": "Muskete mit Eisenbajonett",
+    "item.weaponmod.musketbayonet.diamond": "Muskete mit Diamantbajonett",
+    "item.weaponmod.musketbayonet.gold": "Muskete mit Goldbajonett",
     "item.weaponmod.musket-ironpart": "Musketenlauf",
     "item.weaponmod.bullet": "Musketenkugel",
 
@@ -74,7 +79,24 @@
     "item.weaponmod.boomerang.diamond": "Diamantbumerang",
     "item.weaponmod.boomerang.gold": "Goldener Bumerang",
 
-    "item.weaponmod.mortar": "Handmorser",
-    "item.weaponmod.mortar-ironpart": "Morserfass",
-    "item.weaponmod.shell": "Morsergranate"
+    "item.weaponmod.katana.wood": "Holzkatana",
+    "item.weaponmod.katana.stone": "Steinkatana",
+    "item.weaponmod.katana.iron": "Eisenkatana",
+    "item.weaponmod.katana.diamond": "Diamantkatana",
+    "item.weaponmod.katana.gold": "Goldkatana",
+
+    "item.weaponmod.flintlock": "Steinschlosspistole",
+
+    "item.weaponmod.mortar": "Handmörser",
+    "item.weaponmod.mortar-ironpart": "Mörserrohr",
+    "item.weaponmod.shell": "Mörsergranate",
+
+    "attribute.name.weaponmod.ignoreArmour": "Rüstungspenetration",
+    "attribute.name.weaponmod.knockback": "Rückstoß",
+    "attribute.name.weaponmod.attackSpeed": "Angriffsgeschwindigkeit",
+    "attribute.name.weaponmod.reloadTime": "Nachladedauer",
+    "attribute.name.weaponmod.reach": "Reichweite",
+
+    "death.attack.weapon": "%1$s gibt es nicht mehr.",
+    "death.attack.weapon.player": "%1$s starb auf der Flucht vor %2$s."
 }
