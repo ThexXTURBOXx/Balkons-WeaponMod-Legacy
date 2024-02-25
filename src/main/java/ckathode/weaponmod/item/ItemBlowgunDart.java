@@ -18,16 +18,16 @@ import net.minecraft.world.World;
 public class ItemBlowgunDart extends WMItem {
     private final DartType dartType;
 
-    public ItemBlowgunDart(final String id, @Nonnull final DartType dartType) {
+    public ItemBlowgunDart(String id, @Nonnull DartType dartType) {
         super(id);
         this.dartType = dartType;
     }
 
     @Override
-    public void addInformation(@Nonnull final ItemStack itemstack, @Nullable final World worldIn,
-                               @Nonnull final List<ITextComponent> list, @Nonnull final ITooltipFlag flag) {
-        final PotionEffect potioneffect = dartType.potionEffect;
-        final Potion potion = potioneffect.getPotion();
+    public void addInformation(@Nonnull ItemStack itemstack, @Nullable World worldIn,
+                               @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag flag) {
+        PotionEffect potioneffect = dartType.potionEffect;
+        Potion potion = potioneffect.getPotion();
         ITextComponent s = new TextComponentTranslation(potioneffect.getEffectName());
         if (potioneffect.getAmplifier() > 0) {
             s = s.appendSibling(new TextComponentString(" "))

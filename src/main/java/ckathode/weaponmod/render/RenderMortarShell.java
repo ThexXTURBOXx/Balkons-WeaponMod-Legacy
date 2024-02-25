@@ -12,27 +12,27 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderMortarShell extends Render<EntityMortarShell> {
-    public RenderMortarShell(final RenderManager renderManager) {
+    public RenderMortarShell(RenderManager renderManager) {
         super(renderManager);
-        this.shadowSize = 0.3f;
+        shadowSize = 0.3f;
     }
 
     @Override
-    public void doRender(@Nonnull final EntityMortarShell entitymortarshell, final double d, final double d1,
-                         final double d2, final float f, final float f1) {
-        final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder vertexbuffer = tessellator.getBuffer();
+    public void doRender(@Nonnull EntityMortarShell entitymortarshell, double d, double d1,
+                         double d2, float f, float f1) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
         GlStateManager.pushMatrix();
-        this.bindEntityTexture(entitymortarshell);
+        bindEntityTexture(entitymortarshell);
         GlStateManager.disableLighting();
         GlStateManager.translated(d, d1, d2);
         GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
         GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
         GlStateManager.scalef(0.2f, 0.2f, 0.2f);
         GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
-        if (this.renderOutlines) {
+        if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entitymortarshell));
+            GlStateManager.enableOutlineMode(getTeamColor(entitymortarshell));
         }
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(-0.5, 0.5, -0.5).tex(0.0, 1.0).endVertex();
@@ -60,7 +60,7 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
         vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
         vertexbuffer.pos(0.5, -0.5, 0.5).tex(0.0, 1.0).endVertex();
         tessellator.draw();
-        if (this.renderOutlines) {
+        if (renderOutlines) {
             GlStateManager.disableOutlineMode();
             GlStateManager.disableColorMaterial();
         }
@@ -70,7 +70,7 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull final EntityMortarShell entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityMortarShell entity) {
         return WeaponModResources.Textures.CANNONBALL;
     }
 }

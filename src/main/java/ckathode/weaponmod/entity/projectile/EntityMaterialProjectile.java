@@ -19,23 +19,26 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
-    private static final DataParameter<Byte> WEAPON_MATERIAL;
-    private static final DataParameter<ItemStack> WEAPON_ITEM;
-    private static final float[][] MATERIAL_COLORS;
+    private static final DataParameter<Byte> WEAPON_MATERIAL =
+            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
+    private static final DataParameter<ItemStack> WEAPON_ITEM =
+            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEM_STACK);
+    private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
+            {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
     protected ItemStack thrownItem;
 
-    public EntityMaterialProjectile(final EntityType<T> type, final World world) {
+    public EntityMaterialProjectile(EntityType<T> type, World world) {
         super(type, world);
     }
 
     @Override
     public void registerData() {
         super.registerData();
-        this.dataManager.register(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) 0);
-        this.dataManager.register(EntityMaterialProjectile.WEAPON_ITEM, ItemStack.EMPTY);
+        dataManager.register(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) 0);
+        dataManager.register(EntityMaterialProjectile.WEAPON_ITEM, ItemStack.EMPTY);
     }
 
-    public float getMeleeHitDamage(final Entity entity) {
+    public float getMeleeHitDamage(Entity entity) {
         Entity shooter = getShooter();
         if (shooter instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
             return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) shooter).getHeldItemMainhand(),
@@ -45,15 +48,15 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     @Override
-    public void applyEntityHitEffects(final Entity entity) {
+    public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
         Entity shooter = getShooter();
         if (shooter instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
             int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) shooter);
             if (i != 0) {
                 ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
-                        -MathHelper.sin(this.rotationYaw * 0.017453292f),
-                        -MathHelper.cos(this.rotationYaw * 0.017453292f));
+                        -MathHelper.sin(rotationYaw * 0.017453292f),
+                        -MathHelper.cos(rotationYaw * 0.017453292f));
             }
             i = EnchantmentHelper.getFireAspectModifier((EntityLivingBase) shooter);
             if (i > 0 && !entity.isBurning()) {
@@ -62,43 +65,43 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
         }
     }
 
-    public void setThrownItemStack(@Nonnull final ItemStack itemstack) {
-        this.thrownItem = itemstack;
-        if (this.thrownItem.getItem() instanceof ItemFlail || !BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
-            this.updateWeaponMaterial();
-        } else if (this.thrownItem != null && !(this.thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
-            this.dataManager.set(EntityMaterialProjectile.WEAPON_ITEM, itemstack);
+    public void setThrownItemStack(@Nonnull ItemStack itemstack) {
+        thrownItem = itemstack;
+        if (thrownItem.getItem() instanceof ItemFlail || !BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
+            updateWeaponMaterial();
+        } else if (thrownItem != null && !(thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
+            dataManager.set(EntityMaterialProjectile.WEAPON_ITEM, itemstack);
         }
     }
 
     @Nonnull
     @Override
     public ItemStack getPickupItem() {
-        return this.thrownItem;
+        return thrownItem;
     }
 
     public int getWeaponMaterialId() {
-        return this.dataManager.get(EntityMaterialProjectile.WEAPON_MATERIAL);
+        return dataManager.get(EntityMaterialProjectile.WEAPON_MATERIAL);
     }
 
     public ItemStack getWeapon() {
-        return this.dataManager.get(EntityMaterialProjectile.WEAPON_ITEM);
+        return dataManager.get(EntityMaterialProjectile.WEAPON_ITEM);
     }
 
-    protected final void updateWeaponMaterial() {
-        if (this.thrownItem != null && this.thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) this.thrownItem.getItem()).getMeleeComponent() != null) {
-            int material = MaterialRegistry.getMaterialID(this.thrownItem);
+    protected void updateWeaponMaterial() {
+        if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
+            int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
                 material =
-                        MaterialRegistry.getOrdinal(((IItemWeapon) this.thrownItem.getItem()).getMeleeComponent().weaponMaterial);
+                        MaterialRegistry.getOrdinal(((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial);
             }
-            this.dataManager.set(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) (material & 0xFF));
+            dataManager.set(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) (material & 0xFF));
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public final float[] getMaterialColor() {
-        final int id = this.getWeaponMaterialId();
+    public float[] getMaterialColor() {
+        int id = getWeaponMaterialId();
         if (id < 5) {
             return EntityMaterialProjectile.MATERIAL_COLORS[id];
         }
@@ -106,23 +109,17 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     @Override
-    public void writeAdditional(final NBTTagCompound nbttagcompound) {
+    public void writeAdditional(NBTTagCompound nbttagcompound) {
         super.writeAdditional(nbttagcompound);
-        if (this.thrownItem != null) {
-            nbttagcompound.put("thrI", this.thrownItem.write(new NBTTagCompound()));
+        if (thrownItem != null) {
+            nbttagcompound.put("thrI", thrownItem.write(new NBTTagCompound()));
         }
     }
 
     @Override
-    public void readAdditional(final NBTTagCompound nbttagcompound) {
+    public void readAdditional(NBTTagCompound nbttagcompound) {
         super.readAdditional(nbttagcompound);
-        this.setThrownItemStack(ItemStack.read(nbttagcompound.getCompound("thrI")));
+        setThrownItemStack(ItemStack.read(nbttagcompound.getCompound("thrI")));
     }
 
-    static {
-        WEAPON_MATERIAL = EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
-        WEAPON_ITEM = EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEM_STACK);
-        MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f,
-                0.7f}, {1.0f, 0.9f, 0.0f}};
-    }
 }

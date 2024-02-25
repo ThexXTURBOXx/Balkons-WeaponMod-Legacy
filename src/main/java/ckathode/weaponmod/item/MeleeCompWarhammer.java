@@ -16,70 +16,70 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class MeleeCompWarhammer extends MeleeComponent {
-    public static final int CHARGE_DELAY = 400;
+    public static int CHARGE_DELAY = 400;
 
-    public MeleeCompWarhammer(final IItemTier itemTier) {
+    public MeleeCompWarhammer(IItemTier itemTier) {
         super(MeleeSpecs.WARHAMMER, itemTier);
     }
 
     @Override
-    public float getBlockDamage(final ItemStack itemstack, final IBlockState block) {
-        final float f = super.getBlockDamage(itemstack, block);
-        final float f2 = this.weaponMaterial.getAttackDamage() + 2.0f;
+    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
+        float f = super.getBlockDamage(itemstack, block);
+        float f2 = weaponMaterial.getAttackDamage() + 2.0f;
         return f * f2;
     }
 
     @Override
-    public void onPlayerStoppedUsing(final ItemStack itemstack, final World world,
-                                     final EntityLivingBase entityliving, final int i) {
-        final EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        final int j = this.getUseDuration(itemstack) - i;
+    public void onPlayerStoppedUsing(ItemStack itemstack, World world,
+                                     EntityLivingBase entityliving, int i) {
+        EntityPlayer entityplayer = (EntityPlayer) entityliving;
+        int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 4.0f;
         if (f > 1.0f) {
-            this.superSmash(itemstack, world, entityplayer);
+            superSmash(itemstack, world, entityplayer);
         }
     }
 
-    protected void superSmash(final ItemStack itemstack, final World world, final EntityPlayer entityplayer) {
+    protected void superSmash(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         entityplayer.swingArm(EnumHand.MAIN_HAND);
-        final float f = this.getEntityDamage() / 2.0f;
-        final WarhammerExplosion expl = new WarhammerExplosion(world, entityplayer, entityplayer.posX,
+        float f = getEntityDamage() / 2.0f;
+        WarhammerExplosion expl = new WarhammerExplosion(world, entityplayer, entityplayer.posX,
                 entityplayer.posY, entityplayer.posZ, f, false, true);
         expl.doEntityExplosion(DamageSource.causePlayerDamage(entityplayer));
         expl.doParticleExplosion(true, false);
         PhysHelper.sendExplosion(world, expl, true, false);
         itemstack.damageItem(16, entityplayer);
         entityplayer.addExhaustion(6.0f);
-        this.setSmashed(entityplayer);
+        setSmashed(entityplayer);
     }
 
-    public void setSmashed(final EntityPlayer entityplayer) {
+    public void setSmashed(EntityPlayer entityplayer) {
         PlayerWeaponData.setLastWarhammerSmashTicks(entityplayer, entityplayer.ticksExisted);
     }
 
-    public boolean isCharged(final EntityPlayer entityplayer) {
+    public boolean isCharged(EntityPlayer entityplayer) {
         return entityplayer.ticksExisted > PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + 400;
     }
 
     @Override
-    public EnumAction getUseAction(final ItemStack itemstack) {
+    public EnumAction getUseAction(ItemStack itemstack) {
         return EnumAction.BOW;
     }
 
     @Override
-    public int getUseDuration(final ItemStack itemstack) {
+    public int getUseDuration(ItemStack itemstack) {
         return 72000;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer,
-                                                    final EnumHand hand) {
-        final ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
+                                                    EnumHand hand) {
+        ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (itemstack.isEmpty()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
-        if (this.isCharged(entityplayer)) {
+        if (isCharged(entityplayer)) {
             entityplayer.setActiveHand(hand);
             return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
         }

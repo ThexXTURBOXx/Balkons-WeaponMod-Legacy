@@ -14,7 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class ItemJavelin extends WMItem {
-    public ItemJavelin(final String id) {
+    public ItemJavelin(String id) {
         super(id, new Properties().maxStackSize(16));
     }
 
@@ -24,13 +24,13 @@ public class ItemJavelin extends WMItem {
     }
 
     @Override
-    public void onPlayerStoppedUsing(final ItemStack itemstack, @Nonnull final World world,
-                                     @Nonnull final EntityLivingBase entityLiving, final int i) {
-        final EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+    public void onPlayerStoppedUsing(ItemStack itemstack, @Nonnull World world,
+                                     @Nonnull EntityLivingBase entityLiving, int i) {
+        EntityPlayer entityplayer = (EntityPlayer) entityLiving;
         if (itemstack.isEmpty()) {
             return;
         }
-        final int j = this.getUseDuration(itemstack) - i;
+        int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f < 0.1f) {
@@ -41,7 +41,7 @@ public class ItemJavelin extends WMItem {
         }
         boolean crit = !entityplayer.onGround && !entityplayer.isInWater();
         if (!world.isRemote) {
-            final EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
+            EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
             entityjavelin.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
                     f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
             entityjavelin.setIsCritical(crit);
@@ -58,21 +58,21 @@ public class ItemJavelin extends WMItem {
     }
 
     @Override
-    public int getUseDuration(@Nonnull final ItemStack itemstack) {
+    public int getUseDuration(@Nonnull ItemStack itemstack) {
         return 72000;
     }
 
     @Nonnull
     @Override
-    public EnumAction getUseAction(@Nonnull final ItemStack itemstack) {
+    public EnumAction getUseAction(@Nonnull ItemStack itemstack) {
         return EnumAction.BOW;
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull final World world, final EntityPlayer entityplayer,
-                                                    @Nonnull final EnumHand hand) {
-        final ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
+                                                    @Nonnull EnumHand hand) {
+        ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }

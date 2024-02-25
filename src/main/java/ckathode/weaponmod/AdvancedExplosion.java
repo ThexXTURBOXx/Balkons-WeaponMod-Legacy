@@ -28,54 +28,54 @@ public class AdvancedExplosion extends Explosion {
     public Entity exploder;
     public float explosionSize;
     protected boolean blocksCalculated;
-    protected static final Random rand;
+    protected static final Random rand = new Random();
 
-    public AdvancedExplosion(final World world, final Entity entity, final double d, final double d1, final double d2
-            , final float f, final boolean flame, final boolean smoke) {
-        super(world, entity, d, d1, d2, f, flame, smoke);
-        this.worldObj = world;
-        this.exploder = entity;
-        this.explosionX = d;
-        this.explosionY = d1;
-        this.explosionZ = d2;
-        this.explosionSize = f;
+    public AdvancedExplosion(World world, Entity entity, double x, double y, double z,
+                             float size, boolean flame, boolean smoke) {
+        super(world, entity, x, y, z, size, flame, smoke);
+        worldObj = world;
+        exploder = entity;
+        explosionX = x;
+        explosionY = y;
+        explosionZ = z;
+        explosionSize = size;
     }
 
-    public void setAffectedBlockPositions(final List<BlockPos> list) {
-        this.getAffectedBlockPositions().addAll(list);
-        this.blocksCalculated = true;
+    public void setAffectedBlockPositions(List<BlockPos> list) {
+        getAffectedBlockPositions().addAll(list);
+        blocksCalculated = true;
     }
 
     public void doEntityExplosion() {
-        this.doEntityExplosion(DamageSource.causeExplosionDamage(this));
+        doEntityExplosion(DamageSource.causeExplosionDamage(this));
     }
 
-    public void doEntityExplosion(final DamageSource damagesource) {
-        final float size = this.explosionSize * 2.0f;
-        final int k1 = MathHelper.floor(this.explosionX - size - 1.0);
-        final int l1 = MathHelper.floor(this.explosionX + size + 1.0);
-        final int i2 = MathHelper.floor(this.explosionY - size - 1.0);
-        final int i3 = MathHelper.floor(this.explosionY + size + 1.0);
-        final int j2 = MathHelper.floor(this.explosionZ - size - 1.0);
-        final int j3 = MathHelper.floor(this.explosionZ + size + 1.0);
-        final List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this.exploder,
+    public void doEntityExplosion(DamageSource damagesource) {
+        float size = explosionSize * 2.0f;
+        int k1 = MathHelper.floor(explosionX - size - 1.0);
+        int l1 = MathHelper.floor(explosionX + size + 1.0);
+        int i2 = MathHelper.floor(explosionY - size - 1.0);
+        int i3 = MathHelper.floor(explosionY + size + 1.0);
+        int j2 = MathHelper.floor(explosionZ - size - 1.0);
+        int j3 = MathHelper.floor(explosionZ + size + 1.0);
+        List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder,
                 new AxisAlignedBB(k1, i2, j2, l1, i3, j3));
-        final Vec3d vec31 = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
-        for (final Entity entity : list) {
+        Vec3d vec31 = new Vec3d(explosionX, explosionY, explosionZ);
+        for (Entity entity : list) {
             if (!entity.isImmuneToExplosions()) {
-                final double dr = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / size;
+                double dr = entity.getDistance(explosionX, explosionY, explosionZ) / size;
                 if (dr <= 1.0) {
-                    double dx = entity.posX - this.explosionX;
-                    double dy = entity.posY - this.explosionY;
-                    double dz = entity.posZ - this.explosionZ;
-                    final double d = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+                    double dx = entity.posX - explosionX;
+                    double dy = entity.posY - explosionY;
+                    double dz = entity.posZ - explosionZ;
+                    double d = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
                     if (d != 0.0) {
                         dx /= d;
                         dy /= d;
                         dz /= d;
-                        final double dens = this.worldObj.getBlockDensity(vec31, entity.getBoundingBox());
-                        final double var36 = (1.0 - dr) * dens;
-                        final int damage = (int) ((var36 * var36 + var36) / 2.0 * 8.0 * size + 1.0);
+                        double dens = worldObj.getBlockDensity(vec31, entity.getBoundingBox());
+                        double var36 = (1.0 - dr) * dens;
+                        int damage = (int) ((var36 * var36 + var36) / 2.0 * 8.0 * size + 1.0);
                         entity.attackEntityFrom(damagesource, (float) damage);
                         entity.motionX += dx * var36;
                         entity.motionY += dy * var36;
@@ -87,74 +87,72 @@ public class AdvancedExplosion extends Explosion {
     }
 
     public void doBlockExplosion() {
-        if (!this.blocksCalculated) {
-            this.calculateBlockExplosion();
+        if (!blocksCalculated) {
+            calculateBlockExplosion();
         }
-        for (final BlockPos blockpos : this.getAffectedBlockPositions()) {
-            final IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
-            final Block block = iblockstate.getBlock();
+        for (BlockPos blockpos : getAffectedBlockPositions()) {
+            IBlockState iblockstate = worldObj.getBlockState(blockpos);
             if (iblockstate.getMaterial() != Material.AIR) {
+                Block block = iblockstate.getBlock();
                 if (block.canDropFromExplosion(this)) {
-                    iblockstate.dropBlockAsItemWithChance(this.worldObj, blockpos, 1.0f / this.explosionSize, 0);
+                    iblockstate.dropBlockAsItemWithChance(worldObj, blockpos, 1.0f / explosionSize, 0);
                 }
-                this.worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
-                block.onBlockExploded(iblockstate, this.worldObj, blockpos, this);
+                worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
+                iblockstate.onBlockExploded(worldObj, blockpos, this);
             }
         }
     }
 
     public void doFlaming() {
-        if (!this.blocksCalculated) {
-            this.calculateBlockExplosion();
+        if (!blocksCalculated) {
+            calculateBlockExplosion();
         }
-        for (final BlockPos blockpos : this.getAffectedBlockPositions()) {
-            if (this.worldObj.getBlockState(blockpos).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos.down()).isFullCube() && AdvancedExplosion.rand.nextInt(3) == 0) {
-                this.worldObj.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
+        for (BlockPos blockpos : getAffectedBlockPositions()) {
+            if (worldObj.getBlockState(blockpos).getMaterial() == Material.AIR && worldObj.getBlockState(blockpos.down()).isFullCube() && AdvancedExplosion.rand.nextInt(3) == 0) {
+                worldObj.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
             }
         }
     }
 
-    public void doParticleExplosion(final boolean smallparticles, final boolean bigparticles) {
-        this.worldObj.playSound(null, this.explosionX, this.explosionY, this.explosionZ,
+    public void doParticleExplosion(boolean smallparticles, boolean bigparticles) {
+        worldObj.playSound(null, explosionX, explosionY, explosionZ,
                 SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0f,
-                (1.0f + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2f) * 0.7f);
+                (1.0f + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2f) * 0.7f);
         if (bigparticles) {
-            this.worldObj.addParticle(Particles.EXPLOSION, this.explosionX, this.explosionY,
-                    this.explosionZ, 0.0, 0.0, 0.0);
+            worldObj.addParticle(Particles.EXPLOSION, explosionX, explosionY,
+                    explosionZ, 0.0, 0.0, 0.0);
         }
         if (!smallparticles) {
             return;
         }
-        if (!this.blocksCalculated) {
-            this.calculateBlockExplosion();
+        if (!blocksCalculated) {
+            calculateBlockExplosion();
         }
-        for (final BlockPos blockpos : this.getAffectedBlockPositions()) {
-            final IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
-            final Block block = iblockstate.getBlock();
-            final double px = blockpos.getX() + this.worldObj.rand.nextFloat();
-            final double py = blockpos.getY() + this.worldObj.rand.nextFloat();
-            final double pz = blockpos.getZ() + this.worldObj.rand.nextFloat();
-            double dx = px - this.explosionX;
-            double dy = py - this.explosionY;
-            double dz = pz - this.explosionZ;
-            final double distance = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+        for (BlockPos blockpos : getAffectedBlockPositions()) {
+            double px = blockpos.getX() + worldObj.rand.nextFloat();
+            double py = blockpos.getY() + worldObj.rand.nextFloat();
+            double pz = blockpos.getZ() + worldObj.rand.nextFloat();
+            double dx = px - explosionX;
+            double dy = py - explosionY;
+            double dz = pz - explosionZ;
+            double distance = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
             dx /= distance;
             dy /= distance;
             dz /= distance;
-            double d7 = 0.5 / (distance / this.explosionSize + 0.1);
-            d7 *= this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3f;
+            double d7 = 0.5 / (distance / explosionSize + 0.1);
+            d7 *= worldObj.rand.nextFloat() * worldObj.rand.nextFloat() + 0.3f;
             dx *= d7;
             dy *= d7;
             dz *= d7;
-            this.worldObj.addParticle(Particles.POOF, (px + this.explosionX) / 2.0,
-                    (py + this.explosionY) / 2.0, (pz + this.explosionZ) / 2.0, dx, dy, dz);
-            this.worldObj.addParticle(Particles.SMOKE, px, py, pz, dx, dy, dz);
+            worldObj.addParticle(Particles.POOF, (px + explosionX) / 2.0,
+                    (py + explosionY) / 2.0, (pz + explosionZ) / 2.0, dx, dy, dz);
+            worldObj.addParticle(Particles.SMOKE, px, py, pz, dx, dy, dz);
         }
     }
 
     protected void calculateBlockExplosion() {
-        final byte maxsize = 16;
-        final Set<BlockPos> set = Sets.newHashSet();
+        byte maxsize = 16;
+        Set<BlockPos> set = Sets.newHashSet();
         for (int j = 0; j < maxsize; ++j) {
             for (int k = 0; k < maxsize; ++k) {
                 for (int l = 0; l < maxsize; ++l) {
@@ -162,21 +160,20 @@ public class AdvancedExplosion extends Explosion {
                         double rx = j / 15.0f * 2.0f - 1.0f;
                         double ry = k / 15.0f * 2.0f - 1.0f;
                         double rz = l / 15.0f * 2.0f - 1.0f;
-                        final double rd = Math.sqrt(rx * rx + ry * ry + rz * rz);
+                        double rd = Math.sqrt(rx * rx + ry * ry + rz * rz);
                         rx /= rd;
                         ry /= rd;
                         rz /= rd;
-                        float strength = this.explosionSize * (0.7f + this.worldObj.rand.nextFloat() * 0.6f);
-                        double dx = this.explosionX;
-                        double dy = this.explosionY;
-                        double dz = this.explosionZ;
-                        final float f = 0.3f;
+                        float strength = explosionSize * (0.7f + worldObj.rand.nextFloat() * 0.6f);
+                        double dx = explosionX;
+                        double dy = explosionY;
+                        double dz = explosionZ;
+                        float f = 0.3f;
                         while (strength > 0.0f) {
-                            final BlockPos blockpos = new BlockPos(dx, dy, dz);
-                            final IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
+                            BlockPos blockpos = new BlockPos(dx, dy, dz);
+                            IBlockState iblockstate = worldObj.getBlockState(blockpos);
                             if (iblockstate.getMaterial() != Material.AIR) {
-                                strength -= (iblockstate.getBlock().getExplosionResistance(iblockstate, this.worldObj,
-                                        blockpos, null, this) + 0.3f) * f;
+                                strength -= (iblockstate.getExplosionResistance(worldObj, blockpos, null, this) + 0.3f) * f;
                             }
                             if (strength > 0.0f) {
                                 set.add(blockpos);
@@ -190,11 +187,8 @@ public class AdvancedExplosion extends Explosion {
                 }
             }
         }
-        this.getAffectedBlockPositions().addAll(set);
-        this.blocksCalculated = true;
+        getAffectedBlockPositions().addAll(set);
+        blocksCalculated = true;
     }
 
-    static {
-        rand = new Random();
-    }
 }

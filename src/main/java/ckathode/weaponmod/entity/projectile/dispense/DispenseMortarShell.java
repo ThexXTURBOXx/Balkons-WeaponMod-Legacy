@@ -16,21 +16,21 @@ import net.minecraft.world.World;
 public class DispenseMortarShell extends DispenseWeaponProjectile {
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull final World world, final IPosition pos,
-                                              @Nonnull final ItemStack stack) {
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
+                                              @Nonnull ItemStack stack) {
         return new EntityMortarShell(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
+    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
-                SoundCategory.NEUTRAL, 3.0f, 1.0f / (this.rand.nextFloat() * 0.2f + 0.2f));
+                SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.2f + 0.2f));
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull final IBlockSource blocksource, @Nonnull final EnumFacing face) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
-        final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
     }

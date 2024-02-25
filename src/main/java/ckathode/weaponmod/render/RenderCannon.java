@@ -14,23 +14,23 @@ public class RenderCannon extends Render<EntityCannon> {
     protected final ModelCannonBarrel modelBarrel;
     protected final ModelCannonStandard modelStandard;
 
-    public RenderCannon(final RenderManager renderManager) {
+    public RenderCannon(RenderManager renderManager) {
         super(renderManager);
-        this.modelCannon = new ModelCannon();
-        this.modelBarrel = new ModelCannonBarrel();
-        this.modelStandard = new ModelCannonStandard();
-        this.shadowSize = 1.0f;
+        modelCannon = new ModelCannon();
+        modelBarrel = new ModelCannonBarrel();
+        modelStandard = new ModelCannonStandard();
+        shadowSize = 1.0f;
     }
 
     @Override
-    public void doRender(final EntityCannon entitycannon, final double d, final double d1, final double d2,
-                         final float f, final float f1) {
+    public void doRender(EntityCannon entitycannon, double d, double d1, double d2,
+                         float f, float f1) {
         GlStateManager.pushMatrix();
         float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
         rot = Math.min(rot, 20.0f);
         GlStateManager.translated(d, d1 + 2.375f, d2);
         GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
-        final float f2 = entitycannon.getTimeSinceHit() - f1;
+        float f2 = entitycannon.getTimeSinceHit() - f1;
         float f3 = entitycannon.getCurrentDamage() - f1;
         if (f3 < 0.0f) {
             f3 = 0.0f;
@@ -39,14 +39,14 @@ public class RenderCannon extends Render<EntityCannon> {
             GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f, 0.0f
                     , 0.0f, 1.0f);
         }
-        this.bindEntityTexture(entitycannon);
+        bindEntityTexture(entitycannon);
         GlStateManager.scalef(-1.6f, -1.6f, 1.6f);
         if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
-            final float f4 = 1.5f;
+            float f4 = 1.5f;
             GlStateManager.color3f(entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4,
                     entitycannon.getBrightness() * f4);
         }
-        if (this.renderOutlines) {
+        if (renderOutlines) {
             GlStateManager.disableOutlineMode();
             GlStateManager.disableColorMaterial();
         }
@@ -54,23 +54,23 @@ public class RenderCannon extends Render<EntityCannon> {
         GlStateManager.translatef(0.0f, 1.0f, 0.0f);
         GlStateManager.rotatef(rot, 1.0f, 0.0f, 0.0f);
         GlStateManager.translatef(0.0f, -1.0f, 0.0f);
-        this.modelBarrel.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        modelBarrel.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GlStateManager.popMatrix();
-        final float yaw = -(float) Math.toRadians(f);
-        this.modelStandard.base_1.rotateAngleY = yaw;
-        this.modelStandard.base_2.rotateAngleY = yaw;
-        this.modelStandard.base_stand.rotateAngleY = yaw;
-        this.modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
-        if (this.renderOutlines) {
+        float yaw = -(float) Math.toRadians(f);
+        modelStandard.base_1.rotateAngleY = yaw;
+        modelStandard.base_2.rotateAngleY = yaw;
+        modelStandard.base_stand.rotateAngleY = yaw;
+        modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entitycannon));
+            GlStateManager.enableOutlineMode(getTeamColor(entitycannon));
         }
         GlStateManager.popMatrix();
         super.doRender(entitycannon, d, d1, d2, f, f1);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull final EntityCannon entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityCannon entity) {
         return WeaponModResources.Textures.CANNON;
     }
 }

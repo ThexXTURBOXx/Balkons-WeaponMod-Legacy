@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 
 public class DispenseBlowgunDart extends DispenseWeaponProjectile {
     @Override
-    protected IProjectile getProjectileEntityWorld(final World world, final IPosition pos, final ItemStack itemstack) {
-        final EntityBlowgunDart dart = (EntityBlowgunDart) this.getProjectileEntity(world, pos, itemstack);
+    protected IProjectile getProjectileEntityWorld(World world, IPosition pos, ItemStack itemstack) {
+        EntityBlowgunDart dart = (EntityBlowgunDart) getProjectileEntity(world, pos, itemstack);
         Item item = itemstack.getItem();
         if (item instanceof ItemBlowgunDart)
             dart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
@@ -24,8 +24,8 @@ public class DispenseBlowgunDart extends DispenseWeaponProjectile {
 
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull final World world, final IPosition pos,
-                                              @Nonnull final ItemStack itemstack) {
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
+                                              @Nonnull ItemStack itemstack) {
         return new EntityBlowgunDart(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
@@ -40,7 +40,7 @@ public class DispenseBlowgunDart extends DispenseWeaponProjectile {
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
+    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_ARROW_SHOOT,
                 SoundCategory.NEUTRAL, 1.0f, 1.2f);
     }

@@ -7,8 +7,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public interface ICustomProjectileMaterials {
     int[] getAllMaterialIDs();
 
-    int getMaterialID(final ItemStack p0);
+    int getMaterialID(ItemStack p0);
 
     @OnlyIn(Dist.CLIENT)
-    float[] getColorFromMaterialID(final int p0);
+    float[] getColorFromMaterialID(int p0);
 }

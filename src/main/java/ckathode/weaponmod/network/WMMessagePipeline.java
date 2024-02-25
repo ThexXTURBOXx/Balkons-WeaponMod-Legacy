@@ -37,29 +37,29 @@ public class WMMessagePipeline {
         HANDLER.registerMessage(registerIndex++, messageType, this::encode, this::decode, this::handle);
     }
 
-    protected <T extends WMMessage<T>> void encode(final T msg, final PacketBuffer buf) {
-        if (!this.idToPacket.contains(msg.getClass())) {
+    protected <T extends WMMessage<T>> void encode(T msg, PacketBuffer buf) {
+        if (!idToPacket.contains(msg.getClass())) {
             throw new NullPointerException("No Packet Registered for: " + msg.getClass().getCanonicalName());
         }
-        final int discriminator = this.idToPacket.indexOf(msg.getClass());
+        int discriminator = idToPacket.indexOf(msg.getClass());
         buf.writeInt(discriminator);
         msg.encode(buf);
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends WMMessage<T>> T decode(final PacketBuffer buf) {
-        final ByteBuf payload = buf.duplicate();
+    protected <T extends WMMessage<T>> T decode(PacketBuffer buf) {
+        ByteBuf payload = buf.duplicate();
         if (payload.readableBytes() < 1) {
             BalkonsWeaponMod.modLog.log(Level.ERROR, "The FMLIndexedCodec has received an empty buffer, likely a "
                                                      + "result of a LAN server issue.");
         }
-        final int discriminator = payload.readInt();
-        final Class<T> clazz = (Class<T>) this.idToPacket.get(discriminator);
+        int discriminator = payload.readInt();
+        Class<T> clazz = (Class<T>) idToPacket.get(discriminator);
         if (clazz == null) {
             throw new NullPointerException("No packet registered for discriminator: " + discriminator);
         }
         try {
-            final T pkt = clazz.newInstance();
+            T pkt = clazz.newInstance();
             pkt.decode(payload.slice());
             return pkt;
         } catch (Throwable t) {
@@ -83,26 +83,26 @@ public class WMMessagePipeline {
         ctx.get().setPacketHandled(true);
     }
 
-    public <T extends WMMessage<T>> void sendToAll(final WMMessage<T> message) {
+    public <T extends WMMessage<T>> void sendToAll(WMMessage<T> message) {
         HANDLER.send(PacketDistributor.ALL.noArg(), message);
     }
 
-    public <T extends WMMessage<T>> void sendTo(final WMMessage<T> message, final EntityPlayerMP player) {
+    public <T extends WMMessage<T>> void sendTo(WMMessage<T> message, EntityPlayerMP player) {
         if (!(player instanceof FakePlayer)) {
             HANDLER.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
-    public <T extends WMMessage<T>> void sendToAllAround(final WMMessage<T> message,
-                                                         final PacketDistributor.TargetPoint point) {
+    public <T extends WMMessage<T>> void sendToAllAround(WMMessage<T> message,
+                                                         PacketDistributor.TargetPoint point) {
         HANDLER.send(PacketDistributor.NEAR.with(() -> point), message);
     }
 
-    public <T extends WMMessage<T>> void sendToDimension(final WMMessage<T> message, final DimensionType dimension) {
+    public <T extends WMMessage<T>> void sendToDimension(WMMessage<T> message, DimensionType dimension) {
         HANDLER.send(PacketDistributor.DIMENSION.with(() -> dimension), message);
     }
 
-    public <T extends WMMessage<T>> void sendToServer(final WMMessage<T> message) {
+    public <T extends WMMessage<T>> void sendToServer(WMMessage<T> message) {
         HANDLER.sendToServer(message);
     }
 

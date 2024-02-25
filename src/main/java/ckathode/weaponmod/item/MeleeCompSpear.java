@@ -17,19 +17,19 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem {
-    public MeleeCompSpear(final IItemTier itemTier) {
+    public MeleeCompSpear(IItemTier itemTier) {
         super(MeleeSpecs.SPEAR, itemTier);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer,
-                                                    final EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
+                                                    EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (!BalkonsWeaponMod.instance.modConfig.canThrowSpear.get()) {
             return super.onItemRightClick(world, entityplayer, hand);
         }
         if (!world.isRemote) {
-            final EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack);
+            EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack);
             entityspear.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.8f, 3.0f);
             entityspear.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
             if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
@@ -38,7 +38,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             world.spawnEntity(entityspear);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
-                , SoundCategory.PLAYERS, 1.0f, 1.0f / (this.weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+                , SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.abilities.isCreativeMode) {
             itemstack = itemstack.copy();
             itemstack.setCount(0);
@@ -47,13 +47,13 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     }
 
     @Override
-    public EnumAction getUseAction(final ItemStack itemstack) {
+    public EnumAction getUseAction(ItemStack itemstack) {
         return BalkonsWeaponMod.instance.modConfig.canThrowSpear.get()
                 ? EnumAction.NONE : super.getUseAction(itemstack);
     }
 
     @Override
-    public float getExtendedReach(final World world, final EntityLivingBase living, final ItemStack itemstack) {
+    public float getExtendedReach(World world, EntityLivingBase living, ItemStack itemstack) {
         return 4.0f;
     }
 }

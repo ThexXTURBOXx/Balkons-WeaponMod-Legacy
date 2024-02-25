@@ -80,8 +80,9 @@ public class BalkonsWeaponMod {
     public static final String MOD_ID = "weaponmod";
     public static final List<Item> MOD_ITEMS = new ArrayList<>();
     public static BalkonsWeaponMod instance;
-    public static Logger modLog = LogManager.getLogger(MOD_ID);
-    public static WMCommonProxy proxy = DistExecutor.runForDist(() -> WMClientProxy::new, () -> WMCommonProxy::new);
+    public static final Logger modLog = LogManager.getLogger(MOD_ID);
+    public static final WMCommonProxy proxy = DistExecutor.runForDist(() -> WMClientProxy::new,
+            () -> WMCommonProxy::new);
     public static Item javelin;
     public static Item spearWood;
     public static Item spearStone;
@@ -120,7 +121,7 @@ public class BalkonsWeaponMod {
     public static Item crossbow;
     public static Item bolt;
     public static Item blowgun;
-    public static Map<DartType, Item> darts = new HashMap<>();
+    public static final Map<DartType, Item> darts = new HashMap<>();
     public static Item dynamite;
     public static Item flailWood;
     public static Item flailStone;
@@ -162,56 +163,56 @@ public class BalkonsWeaponMod {
     public static EntityType<EntityDummy> entityDummy;
     public static EntityType<EntityBoomerang> entityBoomerang;
     public static EntityType<EntityMortarShell> entityMortarShell;
-    public WeaponModConfig modConfig;
-    public WMMessagePipeline messagePipeline;
+    public final WeaponModConfig modConfig;
+    public final WMMessagePipeline messagePipeline;
 
     public BalkonsWeaponMod() {
         instance = this;
-        this.messagePipeline = new WMMessagePipeline();
+        messagePipeline = new WMMessagePipeline();
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::setup);
         bus.register(this);
         MinecraftForge.EVENT_BUS.register(this);
 
-        this.modConfig = new WeaponModConfig();
-        this.modConfig.addEnableSetting("spear");
-        this.modConfig.addEnableSetting("halberd");
-        this.modConfig.addEnableSetting("battleaxe");
-        this.modConfig.addEnableSetting("knife");
-        this.modConfig.addEnableSetting("warhammer");
-        this.modConfig.addEnableSetting("flail");
-        this.modConfig.addEnableSetting("katana");
-        this.modConfig.addEnableSetting("boomerang");
-        this.modConfig.addEnableSetting("firerod");
-        this.modConfig.addEnableSetting("javelin");
-        this.modConfig.addEnableSetting("crossbow");
-        this.modConfig.addEnableSetting("blowgun");
-        this.modConfig.addEnableSetting("musket");
-        this.modConfig.addEnableSetting("blunderbuss");
-        this.modConfig.addEnableSetting("flintlock");
-        this.modConfig.addEnableSetting("dynamite");
-        this.modConfig.addEnableSetting("cannon");
-        this.modConfig.addEnableSetting("dummy");
-        this.modConfig.addEnableSetting("mortar");
-        this.modConfig.addReloadTimeSetting("musket", 30);
-        this.modConfig.addReloadTimeSetting("crossbow", 15);
-        this.modConfig.addReloadTimeSetting("blowgun", 10);
-        this.modConfig.addReloadTimeSetting("blunderbuss", 20);
-        this.modConfig.addReloadTimeSetting("flintlock", 15);
-        this.modConfig.addReloadTimeSetting("mortar", 50);
-        this.modConfig.loadConfig(ModLoadingContext.get());
+        modConfig = new WeaponModConfig();
+        modConfig.addEnableSetting("spear");
+        modConfig.addEnableSetting("halberd");
+        modConfig.addEnableSetting("battleaxe");
+        modConfig.addEnableSetting("knife");
+        modConfig.addEnableSetting("warhammer");
+        modConfig.addEnableSetting("flail");
+        modConfig.addEnableSetting("katana");
+        modConfig.addEnableSetting("boomerang");
+        modConfig.addEnableSetting("firerod");
+        modConfig.addEnableSetting("javelin");
+        modConfig.addEnableSetting("crossbow");
+        modConfig.addEnableSetting("blowgun");
+        modConfig.addEnableSetting("musket");
+        modConfig.addEnableSetting("blunderbuss");
+        modConfig.addEnableSetting("flintlock");
+        modConfig.addEnableSetting("dynamite");
+        modConfig.addEnableSetting("cannon");
+        modConfig.addEnableSetting("dummy");
+        modConfig.addEnableSetting("mortar");
+        modConfig.addReloadTimeSetting("musket", 30);
+        modConfig.addReloadTimeSetting("crossbow", 15);
+        modConfig.addReloadTimeSetting("blowgun", 10);
+        modConfig.addReloadTimeSetting("blunderbuss", 20);
+        modConfig.addReloadTimeSetting("flintlock", 15);
+        modConfig.addReloadTimeSetting("mortar", 50);
+        modConfig.loadConfig(ModLoadingContext.get());
     }
 
     @SubscribeEvent
     public void on(ModConfig.ModConfigEvent e) {
-        this.modConfig.postLoadConfig();
+        modConfig.postLoadConfig();
     }
 
-    public void setup(final FMLCommonSetupEvent event) {
+    public void setup(FMLCommonSetupEvent event) {
         proxy.registerEventHandlers();
-        proxy.registerRenderersEntity(this.modConfig);
-        proxy.registerPackets(this.messagePipeline);
+        proxy.registerRenderersEntity(modConfig);
+        proxy.registerPackets(messagePipeline);
     }
 
     @SuppressWarnings("unchecked")
@@ -223,9 +224,9 @@ public class BalkonsWeaponMod {
     }
 
     @SubscribeEvent
-    public void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
+    public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         IForgeRegistry<EntityType<?>> registry = event.getRegistry();
-        if (this.modConfig.isEnabled("spear")) {
+        if (modConfig.isEnabled("spear")) {
 //            GameRegistry.addSmelting(spearSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(spearGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear", 1,
@@ -233,11 +234,11 @@ public class BalkonsWeaponMod {
             registry.register(entitySpear =
                     createEntityType(EntitySpear.class, EntitySpear.NAME, EntitySpear::new));
         }
-        if (this.modConfig.isEnabled("halberd")) {
+        if (modConfig.isEnabled("halberd")) {
 //            GameRegistry.addSmelting(halberdSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(halberdGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
-        if (this.modConfig.isEnabled("knife")) {
+        if (modConfig.isEnabled("knife")) {
 //            GameRegistry.addSmelting(knifeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(knifeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife", 2,
@@ -245,45 +246,45 @@ public class BalkonsWeaponMod {
             registry.register(entityKnife =
                     createEntityType(EntityKnife.class, EntityKnife.NAME, EntityKnife::new));
         }
-        if (this.modConfig.isEnabled("javelin")) {
+        if (modConfig.isEnabled("javelin")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin"
 //                    , 3, this, 64, 20, true);
             registry.register(entityJavelin =
                     createEntityType(EntityJavelin.class, EntityJavelin.NAME, EntityJavelin::new));
         }
-        if (this.modConfig.isEnabled("musket") || this.modConfig.isEnabled("flintlock")) {
+        if (modConfig.isEnabled("musket") || modConfig.isEnabled("flintlock")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class,
 //                    "bullet", 4, this, 16, 20, true);
             registry.register(entityMusketBullet =
                     createEntityType(EntityMusketBullet.class, EntityMusketBullet.NAME, EntityMusketBullet::new));
         }
-        if (this.modConfig.isEnabled("battleaxe")) {
+        if (modConfig.isEnabled("battleaxe")) {
 //            GameRegistry.addSmelting(battleaxeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(battleaxeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
-        if (this.modConfig.isEnabled("warhammer")) {
+        if (modConfig.isEnabled("warhammer")) {
 //            GameRegistry.addSmelting(warhammerSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(warhammerGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
-        if (this.modConfig.isEnabled("crossbow")) {
+        if (modConfig.isEnabled("crossbow")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt"
 //                    , 5, this, 64, 20, true);
             registry.register(entityCrossbowBolt =
                     createEntityType(EntityCrossbowBolt.class, EntityCrossbowBolt.NAME, EntityCrossbowBolt::new));
         }
-        if (this.modConfig.isEnabled("blowgun")) {
+        if (modConfig.isEnabled("blowgun")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
 //                    6, this, 64, 20, true);
             registry.register(entityBlowgunDart =
                     createEntityType(EntityBlowgunDart.class, EntityBlowgunDart.NAME, EntityBlowgunDart::new));
         }
-        if (this.modConfig.isEnabled("dynamite")) {
+        if (modConfig.isEnabled("dynamite")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class,
 //                    "dynamite", 7, this, 64, 20, true);
             registry.register(entityDynamite =
                     createEntityType(EntityDynamite.class, EntityDynamite.NAME, EntityDynamite::new));
         }
-        if (this.modConfig.isEnabled("flail")) {
+        if (modConfig.isEnabled("flail")) {
 //            GameRegistry.addSmelting(flailSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(flailGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail", 8,
@@ -291,7 +292,7 @@ public class BalkonsWeaponMod {
             registry.register(entityFlail =
                     createEntityType(EntityFlail.class, EntityFlail.NAME, EntityFlail::new));
         }
-        if (this.modConfig.isEnabled("cannon")) {
+        if (modConfig.isEnabled("cannon")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
 //                    9, this, 64, 128, false);
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
@@ -301,19 +302,19 @@ public class BalkonsWeaponMod {
             registry.register(entityCannonBall =
                     createEntityType(EntityCannonBall.class, EntityCannonBall.NAME, EntityCannonBall::new));
         }
-        if (this.modConfig.isEnabled("blunderbuss")) {
+        if (modConfig.isEnabled("blunderbuss")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
 //                    11, this, 16, 20, true);
             registry.register(entityBlunderShot =
                     createEntityType(EntityBlunderShot.class, EntityBlunderShot.NAME, EntityBlunderShot::new));
         }
-        if (this.modConfig.isEnabled("dummy")) {
+        if (modConfig.isEnabled("dummy")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy", 12,
 //                    this, 64, 20, false);
             registry.register(entityDummy =
                     createEntityType(EntityDummy.class, EntityDummy.NAME, EntityDummy::new));
         }
-        if (this.modConfig.isEnabled("boomerang")) {
+        if (modConfig.isEnabled("boomerang")) {
 //            GameRegistry.addSmelting(boomerangSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(boomerangGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
@@ -321,11 +322,11 @@ public class BalkonsWeaponMod {
             registry.register(entityBoomerang =
                     createEntityType(EntityBoomerang.class, EntityBoomerang.NAME, EntityBoomerang::new));
         }
-        if (this.modConfig.isEnabled("katana")) {
+        if (modConfig.isEnabled("katana")) {
 //            GameRegistry.addSmelting(katanaSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
 //            GameRegistry.addSmelting(katanaGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
-        if (this.modConfig.isEnabled("mortar")) {
+        if (modConfig.isEnabled("mortar")) {
 //            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell"
 //                    , 14, this, 64, 20, true);
             registry.register(entityMortarShell =
@@ -334,16 +335,16 @@ public class BalkonsWeaponMod {
     }
 
     @SubscribeEvent
-    public void registerItems(final RegistryEvent.Register<Item> event) {
+    public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        if (this.modConfig.isEnabled("spear")) {
+        if (modConfig.isEnabled("spear")) {
             registry.register(spearWood = new ItemMelee("spear.wood", new MeleeCompSpear(ItemTier.WOOD)));
             registry.register(spearStone = new ItemMelee("spear.stone", new MeleeCompSpear(ItemTier.STONE)));
             registry.register(spearSteel = new ItemMelee("spear.iron", new MeleeCompSpear(ItemTier.IRON)));
             registry.register(spearGold = new ItemMelee("spear.gold", new MeleeCompSpear(ItemTier.GOLD)));
             registry.register(spearDiamond = new ItemMelee("spear.diamond", new MeleeCompSpear(ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("halberd")) {
+        if (modConfig.isEnabled("halberd")) {
             registry.register(halberdWood = new ItemMelee("halberd.wood", new MeleeCompHalberd(ItemTier.WOOD)));
             registry.register(halberdStone = new ItemMelee("halberd.stone", new MeleeCompHalberd(ItemTier.STONE)));
             registry.register(halberdSteel = new ItemMelee("halberd.iron", new MeleeCompHalberd(ItemTier.IRON)));
@@ -351,7 +352,7 @@ public class BalkonsWeaponMod {
             registry.register(halberdDiamond = new ItemMelee("halberd.diamond",
                     new MeleeCompHalberd(ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("battleaxe")) {
+        if (modConfig.isEnabled("battleaxe")) {
             registry.register(battleaxeWood = new ItemMelee("battleaxe.wood", new MeleeCompBattleaxe(ItemTier.WOOD)));
             registry.register(battleaxeStone = new ItemMelee("battleaxe.stone",
                     new MeleeCompBattleaxe(ItemTier.STONE)));
@@ -360,14 +361,14 @@ public class BalkonsWeaponMod {
             registry.register(battleaxeDiamond = new ItemMelee("battleaxe.diamond",
                     new MeleeCompBattleaxe(ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("knife")) {
+        if (modConfig.isEnabled("knife")) {
             registry.register(knifeWood = new ItemMelee("knife.wood", new MeleeCompKnife(ItemTier.WOOD)));
             registry.register(knifeStone = new ItemMelee("knife.stone", new MeleeCompKnife(ItemTier.STONE)));
             registry.register(knifeSteel = new ItemMelee("knife.iron", new MeleeCompKnife(ItemTier.IRON)));
             registry.register(knifeGold = new ItemMelee("knife.gold", new MeleeCompKnife(ItemTier.GOLD)));
             registry.register(knifeDiamond = new ItemMelee("knife.diamond", new MeleeCompKnife(ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("warhammer")) {
+        if (modConfig.isEnabled("warhammer")) {
             registry.register(warhammerWood = new ItemMelee("warhammer.wood", new MeleeCompWarhammer(ItemTier.WOOD)));
             registry.register(warhammerStone = new ItemMelee("warhammer.stone",
                     new MeleeCompWarhammer(ItemTier.STONE)));
@@ -376,14 +377,14 @@ public class BalkonsWeaponMod {
             registry.register(warhammerDiamond = new ItemMelee("warhammer.diamond",
                     new MeleeCompWarhammer(ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("flail")) {
+        if (modConfig.isEnabled("flail")) {
             registry.register(flailWood = new ItemFlail("flail.wood", new MeleeCompNone(ItemTier.WOOD)));
             registry.register(flailStone = new ItemFlail("flail.stone", new MeleeCompNone(ItemTier.STONE)));
             registry.register(flailSteel = new ItemFlail("flail.iron", new MeleeCompNone(ItemTier.IRON)));
             registry.register(flailGold = new ItemFlail("flail.gold", new MeleeCompNone(ItemTier.GOLD)));
             registry.register(flailDiamond = new ItemFlail("flail.diamond", new MeleeCompNone(ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("katana")) {
+        if (modConfig.isEnabled("katana")) {
             registry.register(katanaWood = new ItemMelee("katana.wood",
                     new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA,
                             ItemTier.WOOD)));
@@ -400,7 +401,7 @@ public class BalkonsWeaponMod {
                     new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA,
                             ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("boomerang")) {
+        if (modConfig.isEnabled("boomerang")) {
             registry.register(boomerangWood = new ItemMelee("boomerang.wood", new MeleeCompBoomerang(ItemTier.WOOD)));
             registry.register(boomerangStone = new ItemMelee("boomerang.stone",
                     new MeleeCompBoomerang(ItemTier.STONE)));
@@ -409,18 +410,18 @@ public class BalkonsWeaponMod {
             registry.register(boomerangDiamond = new ItemMelee("boomerang.diamond",
                     new MeleeCompBoomerang(ItemTier.DIAMOND)));
         }
-        if (this.modConfig.isEnabled("firerod")) {
+        if (modConfig.isEnabled("firerod")) {
             registry.register(fireRod = new ItemMelee("firerod", new MeleeCompFirerod()));
         }
-        if (this.modConfig.isEnabled("javelin")) {
+        if (modConfig.isEnabled("javelin")) {
             registry.register(javelin = new ItemJavelin("javelin"));
         }
-        if (this.modConfig.isEnabled("crossbow")) {
+        if (modConfig.isEnabled("crossbow")) {
             registry.register(crossbow = new ItemShooter("crossbow", new RangedCompCrossbow(),
                     new MeleeCompNone(null)));
             registry.register(bolt = new WMItem("bolt"));
         }
-        if (this.modConfig.isEnabled("blowgun")) {
+        if (modConfig.isEnabled("blowgun")) {
             registry.register(blowgun = new ItemShooter("blowgun", new RangedCompBlowgun(), new MeleeCompNone(null)));
             for (DartType type : DartType.dartTypes) {
                 if (type == null) continue;
@@ -429,8 +430,8 @@ public class BalkonsWeaponMod {
                 registry.register(dart);
             }
         }
-        if (this.modConfig.isEnabled("musket")) {
-            if (this.modConfig.isEnabled("knife")) {
+        if (modConfig.isEnabled("musket")) {
+            if (modConfig.isEnabled("knife")) {
                 registry.register(bayonetWood = new ItemMusket("musketbayonet.wood",
                         new MeleeCompKnife(ItemTier.WOOD), knifeWood));
                 registry.register(bayonetStone = new ItemMusket("musketbayonet.stone",
@@ -446,39 +447,39 @@ public class BalkonsWeaponMod {
             registry.register(musket = new ItemMusket("musket", new MeleeCompNone(null), null));
             registry.register(musket_iron_part = new WMItem("musket-ironpart"));
         }
-        if (this.modConfig.isEnabled("blunderbuss")) {
+        if (modConfig.isEnabled("blunderbuss")) {
             registry.register(blunderbuss = new ItemShooter("blunderbuss", new RangedCompBlunderbuss(),
                     new MeleeCompNone(null)));
             registry.register(blunder_iron_part = new WMItem("blunder-ironpart"));
             registry.register(blunderShot = new WMItem("shot"));
         }
-        if (this.modConfig.isEnabled("flintlock")) {
+        if (modConfig.isEnabled("flintlock")) {
             registry.register(flintlockPistol = new ItemShooter("flintlock", new RangedCompFlintlock(),
                     new MeleeCompNone(null)));
         }
-        if (this.modConfig.isEnabled("dynamite")) {
+        if (modConfig.isEnabled("dynamite")) {
             registry.register(dynamite = new ItemDynamite("dynamite"));
         }
-        if (this.modConfig.isEnabled("cannon")) {
+        if (modConfig.isEnabled("cannon")) {
             registry.register(cannon = new ItemCannon("cannon"));
             registry.register(cannonBall = new WMItem("cannonball"));
         }
-        if (this.modConfig.isEnabled("dummy")) {
+        if (modConfig.isEnabled("dummy")) {
             registry.register(dummy = new ItemDummy("dummy"));
         }
-        if (this.modConfig.isEnabled("musket") || this.modConfig.isEnabled("blunderbuss")) {
+        if (modConfig.isEnabled("musket") || modConfig.isEnabled("blunderbuss")) {
             registry.register(gunStock = new WMItem("gun-stock"));
         }
-        if (this.modConfig.isEnabled("musket") || this.modConfig.isEnabled("flintlock")) {
+        if (modConfig.isEnabled("musket") || modConfig.isEnabled("flintlock")) {
             registry.register(musketBullet = new WMItem("bullet"));
         }
-        if (this.modConfig.isEnabled("mortar")) {
+        if (modConfig.isEnabled("mortar")) {
             registry.register(mortar = new ItemShooter("mortar", new RangedCompMortar(), new MeleeCompNone(null)));
             registry.register(mortar_iron_part = new WMItem("mortar-ironpart"));
             registry.register(mortarShell = new WMItem("shell"));
         }
 
-        this.registerDispenseBehavior();
+        registerDispenseBehavior();
     }
 
     private void registerDispenseBehavior() {
@@ -500,8 +501,8 @@ public class BalkonsWeaponMod {
         if (blunderShot != null) {
             BlockDispenser.registerDispenseBehavior(blunderShot, new DispenseBlunderShot());
         }
-        if (this.modConfig.isEnabled("cannon")) {
-            final DispenseCannonBall behavior = new DispenseCannonBall();
+        if (modConfig.isEnabled("cannon")) {
+            DispenseCannonBall behavior = new DispenseCannonBall();
             BlockDispenser.registerDispenseBehavior(cannonBall, behavior);
             BlockDispenser.registerDispenseBehavior(Items.GUNPOWDER, behavior);
         }
@@ -513,7 +514,7 @@ public class BalkonsWeaponMod {
     @Mod.EventBusSubscriber
     public static class registrationHandler {
         @SubscribeEvent
-        public static void registerItems(final RegistryEvent.Register<Item> event) {
+        public static void registerItems(RegistryEvent.Register<Item> event) {
             event.getRegistry().registerAll(MOD_ITEMS.toArray(new Item[0]));
         }
     }

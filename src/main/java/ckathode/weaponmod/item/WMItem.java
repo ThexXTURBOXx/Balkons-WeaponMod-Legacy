@@ -6,14 +6,13 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.ResourceLocation;
 
 public class WMItem extends Item {
-    public WMItem(final String id) {
+    public WMItem(String id) {
         this(id, new Properties());
     }
 
-    public WMItem(final String id, final Properties properties) {
+    public WMItem(String id, Properties properties) {
         super(properties.group(ItemGroup.COMBAT));
-        this.setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
-        // TODO: NEEDED? this.setTranslationKey(id);
+        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
         BalkonsWeaponMod.MOD_ITEMS.add(this);
     }
 }

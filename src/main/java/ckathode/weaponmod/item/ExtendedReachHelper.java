@@ -13,34 +13,34 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class ExtendedReachHelper {
-    private static Minecraft mc;
+    private static final Minecraft mc = Minecraft.getInstance();
 
-    public static RayTraceResult getMouseOver(final float frame, final float dist) {
+    public static RayTraceResult getMouseOver(float frame, float dist) {
         RayTraceResult raytraceResult = null;
-        if (ExtendedReachHelper.mc.getRenderViewEntity() != null && ExtendedReachHelper.mc.world != null) {
+        if (mc.getRenderViewEntity() != null && mc.world != null) {
             double var2 = dist;
-            raytraceResult = ExtendedReachHelper.mc.getRenderViewEntity().rayTrace(var2, frame,
+            raytraceResult = mc.getRenderViewEntity().rayTrace(var2, frame,
                     RayTraceFluidMode.NEVER);
             double calcdist = var2;
-            final Vec3d pos = ExtendedReachHelper.mc.getRenderViewEntity().getEyePosition(frame);
+            Vec3d pos = mc.getRenderViewEntity().getEyePosition(frame);
             var2 = calcdist;
             if (raytraceResult != null) {
                 calcdist = raytraceResult.hitVec.distanceTo(pos);
             }
-            final Vec3d lookvec = ExtendedReachHelper.mc.getRenderViewEntity().getLook(frame);
-            final Vec3d var3 = pos.add(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2);
+            Vec3d lookvec = mc.getRenderViewEntity().getLook(frame);
+            Vec3d var3 = pos.add(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2);
             Entity pointedEntity = null;
-            final float var4 = 1.0f;
-            final List<Entity> list =
-                    ExtendedReachHelper.mc.world.getEntitiesInAABBexcluding(ExtendedReachHelper.mc.getRenderViewEntity(),
-                            ExtendedReachHelper.mc.getRenderViewEntity().getBoundingBox()
+            float var4 = 1.0f;
+            List<Entity> list =
+                    mc.world.getEntitiesInAABBexcluding(mc.getRenderViewEntity(),
+                            mc.getRenderViewEntity().getBoundingBox()
                                     .expand(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2)
                                     .grow(var4, var4, var4),
                             EntitySelectors.NOT_SPECTATING.and(entity -> entity != null && entity.canBeCollidedWith()));
             double d = calcdist;
-            for (final Entity entity : list) {
-                final AxisAlignedBB aabb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());
-                final RayTraceResult raytraceResult2 = aabb.calculateIntercept(pos, var3);
+            for (Entity entity : list) {
+                AxisAlignedBB aabb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());
+                RayTraceResult raytraceResult2 = aabb.calculateIntercept(pos, var3);
                 if (aabb.contains(pos)) {
                     if (d < 0.0) {
                         continue;
@@ -51,7 +51,7 @@ public abstract class ExtendedReachHelper {
                     if (raytraceResult2 == null) {
                         continue;
                     }
-                    final double d2 = pos.distanceTo(raytraceResult2.hitVec);
+                    double d2 = pos.distanceTo(raytraceResult2.hitVec);
                     if (d2 >= d && d != 0.0) {
                         continue;
                     }
@@ -66,7 +66,4 @@ public abstract class ExtendedReachHelper {
         return raytraceResult;
     }
 
-    static {
-        ExtendedReachHelper.mc = Minecraft.getInstance();
-    }
 }

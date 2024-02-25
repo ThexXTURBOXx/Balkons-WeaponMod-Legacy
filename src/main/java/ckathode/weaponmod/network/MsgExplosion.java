@@ -21,52 +21,52 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
     private boolean smallParticles;
     private boolean bigParticles;
 
-    public MsgExplosion(final AdvancedExplosion explosion, final boolean smallparts, final boolean bigparts) {
-        this.x = explosion.explosionX;
-        this.y = explosion.explosionY;
-        this.z = explosion.explosionZ;
-        this.size = explosion.explosionSize;
-        this.blocks = explosion.getAffectedBlockPositions();
-        this.smallParticles = smallparts;
-        this.bigParticles = bigparts;
+    public MsgExplosion(AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
+        x = explosion.explosionX;
+        y = explosion.explosionY;
+        z = explosion.explosionZ;
+        size = explosion.explosionSize;
+        blocks = explosion.getAffectedBlockPositions();
+        smallParticles = smallparts;
+        bigParticles = bigparts;
     }
 
     public MsgExplosion() {
     }
 
     @Override
-    public void decode(final ByteBuf buf) {
-        this.x = buf.readDouble();
-        this.y = buf.readDouble();
-        this.z = buf.readDouble();
-        this.size = buf.readFloat();
-        this.smallParticles = buf.readBoolean();
-        this.bigParticles = buf.readBoolean();
-        final int size = buf.readInt();
-        this.blocks = new ArrayList<>(size);
+    public void decode(ByteBuf buf) {
+        x = buf.readDouble();
+        y = buf.readDouble();
+        z = buf.readDouble();
+        size = buf.readFloat();
+        smallParticles = buf.readBoolean();
+        bigParticles = buf.readBoolean();
+        int size = buf.readInt();
+        blocks = new ArrayList<>(size);
         for (int i = 0; i < size; ++i) {
-            final int ix = buf.readByte() + (int) this.x;
-            final int iy = buf.readByte() + (int) this.y;
-            final int iz = buf.readByte() + (int) this.z;
-            this.blocks.add(new BlockPos(ix, iy, iz));
+            int ix = buf.readByte() + (int) x;
+            int iy = buf.readByte() + (int) y;
+            int iz = buf.readByte() + (int) z;
+            blocks.add(new BlockPos(ix, iy, iz));
         }
     }
 
     @Override
-    public void encode(final ByteBuf buf) {
-        buf.writeDouble(this.x);
-        buf.writeDouble(this.y);
-        buf.writeDouble(this.z);
-        buf.writeFloat(this.size);
-        buf.writeBoolean(this.smallParticles);
-        buf.writeBoolean(this.bigParticles);
-        final int n = this.blocks.size();
+    public void encode(ByteBuf buf) {
+        buf.writeDouble(x);
+        buf.writeDouble(y);
+        buf.writeDouble(z);
+        buf.writeFloat(size);
+        buf.writeBoolean(smallParticles);
+        buf.writeBoolean(bigParticles);
+        int n = blocks.size();
         buf.writeInt(n);
         for (int i = 0; i < n; ++i) {
-            final BlockPos pos = this.blocks.get(i);
-            final int dx = pos.getX() - (int) this.x;
-            final int dy = pos.getY() - (int) this.y;
-            final int dz = pos.getZ() - (int) this.z;
+            BlockPos pos = blocks.get(i);
+            int dx = pos.getX() - (int) x;
+            int dy = pos.getY() - (int) y;
+            int dz = pos.getZ() - (int) z;
             buf.writeByte(dx);
             buf.writeByte(dy);
             buf.writeByte(dz);
@@ -75,15 +75,15 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void handleClientSide(final MsgExplosion msg, final Supplier<NetworkEvent.Context> ctx) {
-        final World world = Minecraft.getInstance().world;
-        final AdvancedExplosion expl = new AdvancedExplosion(world, null, this.x, this.y, this.z, this.size,
+    public void handleClientSide(MsgExplosion msg, Supplier<NetworkEvent.Context> ctx) {
+        World world = Minecraft.getInstance().world;
+        AdvancedExplosion expl = new AdvancedExplosion(world, null, x, y, z, size,
                 false, true);
-        expl.setAffectedBlockPositions(this.blocks);
-        expl.doParticleExplosion(this.smallParticles, this.bigParticles);
+        expl.setAffectedBlockPositions(blocks);
+        expl.doParticleExplosion(smallParticles, bigParticles);
     }
 
     @Override
-    public void handleServerSide(final MsgExplosion msg, final Supplier<NetworkEvent.Context> ctx) {
+    public void handleServerSide(MsgExplosion msg, Supplier<NetworkEvent.Context> ctx) {
     }
 }

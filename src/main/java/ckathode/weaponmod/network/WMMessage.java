@@ -7,12 +7,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public interface WMMessage<T extends WMMessage<T>> {
-    void encode(final ByteBuf buf);
+    void encode(ByteBuf buf);
 
-    void decode(final ByteBuf buf);
+    void decode(ByteBuf buf);
 
     @OnlyIn(Dist.CLIENT)
-    void handleClientSide(final T msg, final Supplier<NetworkEvent.Context> ctx);
+    void handleClientSide(T msg, Supplier<NetworkEvent.Context> ctx);
 
-    void handleServerSide(final T msg, final Supplier<NetworkEvent.Context> ctx);
+    void handleServerSide(T msg, Supplier<NetworkEvent.Context> ctx);
 }

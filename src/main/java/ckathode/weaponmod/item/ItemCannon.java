@@ -19,7 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ItemCannon extends WMItem {
-    public ItemCannon(final String id) {
+    public ItemCannon(String id) {
         super(id, new Properties().maxStackSize(1));
     }
 
@@ -30,34 +30,34 @@ public class ItemCannon extends WMItem {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer,
-                                                    @Nonnull final EnumHand hand) {
-        final ItemStack itemstack = entityplayer.getHeldItem(hand);
-        final float f = 1.0f;
-        final float f2 =
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
+                                                    @Nonnull EnumHand hand) {
+        ItemStack itemstack = entityplayer.getHeldItem(hand);
+        float f = 1.0f;
+        float f2 =
                 entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
-        final float f3 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
-        final double d = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX);
-        final double d2 =
+        float f3 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw) * f;
+        double d = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX);
+        double d2 =
                 entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) + entityplayer.getEyeHeight();
-        final double d3 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ);
-        final Vec3d vec3d = new Vec3d(d, d2, d3);
-        final float f4 = MathHelper.cos(-f3 * 0.01745329f - 3.141593f);
-        final float f5 = MathHelper.sin(-f3 * 0.01745329f - 3.141593f);
-        final float f6 = -MathHelper.cos(-f2 * 0.01745329f);
-        final float f7 = MathHelper.sin(-f2 * 0.01745329f);
-        final float f8 = f5 * f6;
-        final float f10 = f4 * f6;
-        final double d4 = 5.0;
-        final Vec3d vec3d2 = vec3d.add(f8 * d4, f7 * d4, f10 * d4);
-        final RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.ALWAYS);
+        double d3 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ);
+        Vec3d vec3d = new Vec3d(d, d2, d3);
+        float f4 = MathHelper.cos(-f3 * 0.01745329f - 3.141593f);
+        float f5 = MathHelper.sin(-f3 * 0.01745329f - 3.141593f);
+        float f6 = -MathHelper.cos(-f2 * 0.01745329f);
+        float f7 = MathHelper.sin(-f2 * 0.01745329f);
+        float f8 = f5 * f6;
+        float f10 = f4 * f6;
+        double d4 = 5.0;
+        Vec3d vec3d2 = vec3d.add(f8 * d4, f7 * d4, f10 * d4);
+        RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.ALWAYS);
         if (raytraceresult == null || raytraceresult.type != RayTraceResult.Type.BLOCK || raytraceresult.sideHit != EnumFacing.UP) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
-        final Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
-        final BlockPos blockpos = raytraceresult.getBlockPos();
-        final boolean flag1 = block == Blocks.SNOW;
-        final EntityCannon entitycannon = new EntityCannon(world, blockpos.getX() + 0.5, flag1 ?
+        Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
+        BlockPos blockpos = raytraceresult.getBlockPos();
+        boolean flag1 = block == Blocks.SNOW;
+        EntityCannon entitycannon = new EntityCannon(world, blockpos.getX() + 0.5, flag1 ?
                 (blockpos.getY() + 0.38) : (blockpos.getY() + 1.0), blockpos.getZ() + 0.5);
         if (world.getCollisionBoxes(entitycannon, entitycannon.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);

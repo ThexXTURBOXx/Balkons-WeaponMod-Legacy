@@ -30,31 +30,30 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
-    public ItemMelee(final String id, final MeleeComponent meleecomponent) {
+    public ItemMelee(String id, MeleeComponent meleecomponent) {
         this(id, meleecomponent, new Properties());
     }
 
-    public ItemMelee(final String id, final MeleeComponent meleecomponent, final Properties properties) {
+    public ItemMelee(String id, MeleeComponent meleecomponent, Properties properties) {
         super((meleecomponent.weaponMaterial == null) ? ItemTier.WOOD : meleecomponent.weaponMaterial, 3,
                 -2.4F, meleecomponent.setProperties(properties).group(ItemGroup.COMBAT));
-        this.setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
-        // TODO: Needed? this.setTranslationKey(id);
-        (this.meleeComponent = meleecomponent).setItem(this);
-        this.addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"),
+        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        (meleeComponent = meleecomponent).setItem(this);
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"),
                 new IItemPropertyGetter() {
                     @Override
                     @OnlyIn(Dist.CLIENT)
-                    public float call(@Nonnull final ItemStack stack, @Nullable final World world,
-                                      @Nullable final EntityLivingBase entity) {
+                    public float call(@Nonnull ItemStack stack, @Nullable World world,
+                                      @Nullable EntityLivingBase entity) {
                         return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ?
                                 1.0f : 0.0f;
                     }
                 });
-        this.addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), new IItemPropertyGetter() {
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), new IItemPropertyGetter() {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull final ItemStack stack, @Nullable final World world,
-                              @Nullable final EntityLivingBase entity) {
+            public float call(@Nonnull ItemStack stack, @Nullable World world,
+                              @Nullable EntityLivingBase entity) {
                 return MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
             }
         });
@@ -63,114 +62,114 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
 
     @Override
     public float getAttackDamage() {
-        return this.meleeComponent.getEntityDamageMaterialPart();
+        return meleeComponent.getEntityDamageMaterialPart();
     }
 
     @Override
-    public float getDestroySpeed(@Nonnull final ItemStack itemstack, @Nonnull final IBlockState block) {
-        return this.meleeComponent.getBlockDamage(itemstack, block);
+    public float getDestroySpeed(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
+        return meleeComponent.getBlockDamage(itemstack, block);
     }
 
     @Override
-    public boolean canHarvestBlock(@Nonnull final IBlockState block) {
-        return this.meleeComponent.canHarvestBlock(block);
+    public boolean canHarvestBlock(@Nonnull IBlockState block) {
+        return meleeComponent.canHarvestBlock(block);
     }
 
     @Override
-    public boolean hitEntity(@Nonnull final ItemStack itemstack, @Nonnull final EntityLivingBase entityliving,
-                             @Nonnull final EntityLivingBase attacker) {
-        return this.meleeComponent.hitEntity(itemstack, entityliving, attacker);
+    public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityliving,
+                             @Nonnull EntityLivingBase attacker) {
+        return meleeComponent.hitEntity(itemstack, entityliving, attacker);
     }
 
     @Override
-    public boolean onBlockDestroyed(@Nonnull final ItemStack itemstack, @Nonnull final World world,
-                                    @Nonnull final IBlockState block, @Nonnull final BlockPos pos,
-                                    @Nonnull final EntityLivingBase entityliving) {
-        return this.meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
+    public boolean onBlockDestroyed(@Nonnull ItemStack itemstack, @Nonnull World world,
+                                    @Nonnull IBlockState block, @Nonnull BlockPos pos,
+                                    @Nonnull EntityLivingBase entityliving) {
+        return meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
     }
 
     @Override
     public int getItemEnchantability() {
-        return this.meleeComponent.getItemEnchantability();
+        return meleeComponent.getItemEnchantability();
     }
 
     @Nonnull
     @Override
-    public EnumAction getUseAction(@Nonnull final ItemStack itemstack) {
-        return this.meleeComponent.getUseAction(itemstack);
+    public EnumAction getUseAction(@Nonnull ItemStack itemstack) {
+        return meleeComponent.getUseAction(itemstack);
     }
 
     @Override
-    public int getUseDuration(@Nonnull final ItemStack itemstack) {
-        return this.meleeComponent.getUseDuration(itemstack);
+    public int getUseDuration(@Nonnull ItemStack itemstack) {
+        return meleeComponent.getUseDuration(itemstack);
     }
 
     @Override
-    public boolean onLeftClickEntity(@Nonnull final ItemStack itemstack, @Nonnull final EntityPlayer player,
-                                     @Nonnull final Entity entity) {
-        return this.meleeComponent.onLeftClickEntity(itemstack, player, entity);
-    }
-
-    @Nonnull
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull final World world,
-                                                    @Nonnull final EntityPlayer entityplayer,
-                                                    @Nonnull final EnumHand hand) {
-        return this.meleeComponent.onItemRightClick(world, entityplayer, hand);
-    }
-
-    @Override
-    public void onUsingTick(@Nonnull final ItemStack itemstack, @Nonnull final EntityLivingBase entityplayer,
-                            final int count) {
-        this.meleeComponent.onUsingTick(itemstack, entityplayer, count);
-    }
-
-    @Override
-    public void onPlayerStoppedUsing(@Nonnull final ItemStack itemstack, @Nonnull final World world,
-                                     @Nonnull final EntityLivingBase entityplayer, final int i) {
-        this.meleeComponent.onPlayerStoppedUsing(itemstack, world, entityplayer, i);
-    }
-
-    @Override
-    public void inventoryTick(@Nonnull final ItemStack itemstack, @Nonnull final World world,
-                              @Nonnull final Entity entity, final int i, final boolean flag) {
-        this.meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
+    public boolean onLeftClickEntity(@Nonnull ItemStack itemstack, @Nonnull EntityPlayer player,
+                                     @Nonnull Entity entity) {
+        return meleeComponent.onLeftClickEntity(itemstack, player, entity);
     }
 
     @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull final EntityEquipmentSlot equipmentSlot
-            , @Nonnull final ItemStack itemstack) {
-        final Multimap<String, AttributeModifier> multimap = HashMultimap.create();
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world,
+                                                    @Nonnull EntityPlayer entityplayer,
+                                                    @Nonnull EnumHand hand) {
+        return meleeComponent.onItemRightClick(world, entityplayer, hand);
+    }
+
+    @Override
+    public void onUsingTick(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityplayer,
+                            int count) {
+        meleeComponent.onUsingTick(itemstack, entityplayer, count);
+    }
+
+    @Override
+    public void onPlayerStoppedUsing(@Nonnull ItemStack itemstack, @Nonnull World world,
+                                     @Nonnull EntityLivingBase entityplayer, int i) {
+        meleeComponent.onPlayerStoppedUsing(itemstack, world, entityplayer, i);
+    }
+
+    @Override
+    public void inventoryTick(@Nonnull ItemStack itemstack, @Nonnull World world,
+                              @Nonnull Entity entity, int i, boolean flag) {
+        meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
+    }
+
+    @Nonnull
+    @Override
+    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot
+            , @Nonnull ItemStack itemstack) {
+        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-            this.meleeComponent.addItemAttributeModifiers(multimap);
+            meleeComponent.addItemAttributeModifiers(multimap);
         }
         return multimap;
     }
 
     @Override
-    public final UUID getUUIDDamage() {
+    public UUID getUUIDDamage() {
         return ItemMelee.ATTACK_DAMAGE_MODIFIER;
     }
 
     @Override
-    public final UUID getUUIDSpeed() {
+    public UUID getUUIDSpeed() {
         return ItemMelee.ATTACK_SPEED_MODIFIER;
     }
 
     @Override
-    public final UUID getUUID() {
+    public UUID getUUID() {
         return ItemMelee.WEAPON_MODIFIER;
     }
 
     @Override
-    public final Random getItemRand() {
+    public Random getItemRand() {
         return random;
     }
 
     @Override
     public MeleeComponent getMeleeComponent() {
-        return this.meleeComponent;
+        return meleeComponent;
     }
 
     @Override

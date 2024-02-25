@@ -10,11 +10,11 @@ public class WMCommonProxy {
         MinecraftForge.EVENT_BUS.register(new WMCommonEventHandler());
     }
 
-    public void registerPackets(final WMMessagePipeline pipeline) {
+    public void registerPackets(WMMessagePipeline pipeline) {
         pipeline.registerPacket(MsgCannonFire.class);
         pipeline.registerPacket(MsgExplosion.class);
     }
 
-    public void registerRenderersEntity(final WeaponModConfig config) {
+    public void registerRenderersEntity(WeaponModConfig config) {
     }
 }

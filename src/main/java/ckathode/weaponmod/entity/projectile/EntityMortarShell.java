@@ -22,100 +22,100 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
 
     public float explosiveSize;
 
-    public EntityMortarShell(final World world) {
+    public EntityMortarShell(World world) {
         super(BalkonsWeaponMod.entityMortarShell, world);
-        this.explosiveSize = 2.0f;
+        explosiveSize = 2.0f;
     }
 
-    public EntityMortarShell(final World world, final double d, final double d1, final double d2) {
+    public EntityMortarShell(World world, double d, double d1, double d2) {
         this(world);
-        this.setPickupStatus(PickupStatus.ALLOWED);
-        this.setPosition(d, d1, d2);
+        setPickupStatus(PickupStatus.ALLOWED);
+        setPosition(d, d1, d2);
     }
 
-    public EntityMortarShell(final World world, final EntityLivingBase shooter) {
+    public EntityMortarShell(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
-        this.setPickupStatusFromEntity(shooter);
+        setPickupStatusFromEntity(shooter);
     }
 
     @Override
-    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3,
-                      final float f4) {
-        final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        final float y = -MathHelper.sin(f * 0.017453292f);
-        final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        this.shoot(x, y, z, f3, f4);
-        this.motionX += entity.motionX;
-        this.motionZ += entity.motionZ;
+    public void shoot(Entity entity, float f, float f1, float f2, float f3,
+                      float f4) {
+        float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        float y = -MathHelper.sin(f * 0.017453292f);
+        float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        shoot(x, y, z, f3, f4);
+        motionX += entity.motionX;
+        motionZ += entity.motionZ;
         if (!entity.onGround) {
-            this.motionY += entity.motionY;
+            motionY += entity.motionY;
         }
     }
 
     @Override
     public void tick() {
         super.tick();
-        final double speed =
-                MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-        final double amount = 8.0;
+        double speed =
+                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        double amount = 8.0;
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                this.world.addParticle(Particles.SMOKE, this.posX + this.motionX * i1 / amount,
-                        this.posY + this.motionY * i1 / amount, this.posZ + this.motionZ * i1 / amount, 0.0, 0.0, 0.0);
+                world.addParticle(Particles.SMOKE, posX + motionX * i1 / amount,
+                        posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
     }
 
     public void createCrater() {
-        if (this.world.isRemote || !this.inGround || this.isInWater()) {
+        if (world.isRemote || !inGround || isInWater()) {
             return;
         }
-        this.remove();
+        remove();
         Entity shooter = getShooter();
         if (!(shooter instanceof EntityLivingBase)) return;
         if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase) shooter) > 0) {
-            final float f1 = (float) EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
+            float f1 = (float) EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
                     (EntityLivingBase) shooter);
-            this.explosiveSize += f1 / 4.0f;
+            explosiveSize += f1 / 4.0f;
         }
-        final boolean flag =
+        boolean flag =
                 EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase) shooter) > 0;
-        PhysHelper.createAdvancedExplosion(this.world, this, this.posX, this.posY, this.posZ, this.explosiveSize,
+        PhysHelper.createAdvancedExplosion(world, this, posX, posY, posZ, explosiveSize,
                 BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage.get(), true, flag, false);
     }
 
     @Override
-    public void onEntityHit(final Entity entity) {
-        this.motionX -= this.motionX / 2.0;
-        this.motionZ -= this.motionZ / 2.0;
-        this.motionY -= this.motionY / 2.0;
+    public void onEntityHit(Entity entity) {
+        motionX -= motionX / 2.0;
+        motionZ -= motionZ / 2.0;
+        motionY -= motionY / 2.0;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 5.0f)) {
-            this.playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (this.rand.nextFloat() * 0.4f + 0.7f));
+            playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
         }
     }
 
     @Override
-    public void onGroundHit(final RayTraceResult raytraceResult) {
-        final BlockPos blockpos = raytraceResult.getBlockPos();
-        this.xTile = blockpos.getX();
-        this.yTile = blockpos.getY();
-        this.zTile = blockpos.getZ();
-        this.inBlockState = this.world.getBlockState(blockpos);
-        this.motionX = raytraceResult.hitVec.x - this.posX;
-        this.motionY = raytraceResult.hitVec.y - this.posY;
-        this.motionZ = raytraceResult.hitVec.z - this.posZ;
-        final float f1 =
-                MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-        this.posX -= this.motionX / f1 * 0.05;
-        this.posY -= this.motionY / f1 * 0.05;
-        this.posZ -= this.motionZ / f1 * 0.05;
-        this.inGround = true;
-        if (this.inBlockState != null) {
-            this.inBlockState.onEntityCollision(this.world, blockpos, this);
+    public void onGroundHit(RayTraceResult raytraceResult) {
+        BlockPos blockpos = raytraceResult.getBlockPos();
+        xTile = blockpos.getX();
+        yTile = blockpos.getY();
+        zTile = blockpos.getZ();
+        inBlockState = world.getBlockState(blockpos);
+        motionX = raytraceResult.hitVec.x - posX;
+        motionY = raytraceResult.hitVec.y - posY;
+        motionZ = raytraceResult.hitVec.z - posZ;
+        float f1 =
+                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        posX -= motionX / f1 * 0.05;
+        posY -= motionY / f1 * 0.05;
+        posZ -= motionZ / f1 * 0.05;
+        inGround = true;
+        if (inBlockState != null) {
+            inBlockState.onEntityCollision(world, blockpos, this);
         }
-        this.createCrater();
+        createCrater();
     }
 
     @Override

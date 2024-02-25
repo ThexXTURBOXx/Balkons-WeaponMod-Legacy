@@ -15,19 +15,19 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class MeleeCompBoomerang extends MeleeComponent {
-    public MeleeCompBoomerang(final IItemTier itemTier) {
+    public MeleeCompBoomerang(IItemTier itemTier) {
         super(MeleeSpecs.BOOMERANG, itemTier);
     }
 
     @Override
-    public void onPlayerStoppedUsing(final ItemStack itemstack, final World world,
-                                     final EntityLivingBase entityliving, final int i) {
+    public void onPlayerStoppedUsing(ItemStack itemstack, World world,
+                                     EntityLivingBase entityliving, int i) {
         if (entityliving instanceof EntityPlayer) {
-            final EntityPlayer entityplayer = (EntityPlayer) entityliving;
+            EntityPlayer entityplayer = (EntityPlayer) entityliving;
             if (itemstack.isEmpty()) {
                 return;
             }
-            final int j = this.getUseDuration(itemstack) - i;
+            int j = getUseDuration(itemstack) - i;
             float f = j / 20.0f;
             f = (f * f + f * 2.0f) / 3.0f;
             if (f < 0.1f) {
@@ -40,7 +40,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             }
             f *= 1.5f;
             if (!world.isRemote) {
-                final EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack);
+                EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack);
                 entityboomerang.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f,
                         5.0f);
                 entityboomerang.setIsCritical(crit);
@@ -53,7 +53,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             }
             world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
                     SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
-                    1.0f / (this.weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
+                    1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
             if (!entityplayer.abilities.isCreativeMode) {
                 ItemStack itemstack2 = itemstack.copy();
                 itemstack2.shrink(1);
@@ -66,14 +66,14 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public int getUseDuration(final ItemStack itemstack) {
+    public int getUseDuration(ItemStack itemstack) {
         return 72000;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer,
-                                                    final EnumHand hand) {
-        final ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
+                                                    EnumHand hand) {
+        ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (hand != EnumHand.MAIN_HAND) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }

@@ -16,22 +16,22 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class GuiOverlayReloaded extends Gui {
     private final Minecraft mc;
 
-    public GuiOverlayReloaded(final Minecraft minecraft) {
-        this.mc = minecraft;
+    public GuiOverlayReloaded(Minecraft minecraft) {
+        mc = minecraft;
     }
 
     @SubscribeEvent
-    public void renderGUIOverlay(final RenderGameOverlayEvent e) {
+    public void renderGUIOverlay(RenderGameOverlayEvent e) {
         if (e instanceof RenderGameOverlayEvent.Post || e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR) {
             return;
         }
-        final EntityPlayer p = this.mc.player;
+        EntityPlayer p = mc.player;
         if (p != null) {
-            final ItemStack is = p.getHeldItemMainhand();
+            ItemStack is = p.getHeldItemMainhand();
             if (!is.isEmpty() && is.getItem() instanceof IItemWeapon && ((IItemWeapon) is.getItem()).getRangedComponent() != null) {
                 GlStateManager.pushLightingAttrib();
-                final RangedComponent rc = ((IItemWeapon) is.getItem()).getRangedComponent();
-                final boolean rld = RangedComponent.isReloaded(is);
+                RangedComponent rc = ((IItemWeapon) is.getItem()).getRangedComponent();
+                boolean rld = RangedComponent.isReloaded(is);
                 GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
                 GlStateManager.disableLighting();
                 float f;
@@ -53,8 +53,8 @@ public class GuiOverlayReloaded extends Gui {
                 int i;
                 for (i = 0; i < 9 && p.inventory.getStackInSlot(i) != is; ++i) {
                 }
-                final int x0 = Minecraft.getInstance().mainWindow.getScaledWidth() / 2 - 88 + i * 20;
-                final int y0 = Minecraft.getInstance().mainWindow.getScaledHeight() - 3;
+                int x0 = Minecraft.getInstance().mainWindow.getScaledWidth() / 2 - 88 + i * 20;
+                int y0 = Minecraft.getInstance().mainWindow.getScaledHeight() - 3;
                 drawRect(x0, y0, x0 + 16, y0 - (int) (f * 16.0f), color);
                 GlStateManager.popAttrib();
             }

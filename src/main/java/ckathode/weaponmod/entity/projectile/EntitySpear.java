@@ -14,71 +14,71 @@ import net.minecraft.world.World;
 public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
     public static final String NAME = "spear";
 
-    public EntitySpear(final World world) {
+    public EntitySpear(World world) {
         super(BalkonsWeaponMod.entitySpear, world);
     }
 
-    public EntitySpear(final World world, final double d, final double d1, final double d2) {
+    public EntitySpear(World world, double d, double d1, double d2) {
         this(world);
-        this.setPosition(d, d1, d2);
+        setPosition(d, d1, d2);
     }
 
-    public EntitySpear(final World world, final EntityLivingBase shooter, final ItemStack itemstack) {
+    public EntitySpear(World world, EntityLivingBase shooter, ItemStack itemstack) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
-        this.setPickupStatusFromEntity(shooter);
-        this.setThrownItemStack(itemstack);
+        setPickupStatusFromEntity(shooter);
+        setThrownItemStack(itemstack);
     }
 
     @Override
-    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3,
-                      final float f4) {
-        final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        final float y = -MathHelper.sin(f * 0.017453292f);
-        final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        this.shoot(x, y, z, f3, f4);
-        this.motionX += entity.motionX;
-        this.motionZ += entity.motionZ;
+    public void shoot(Entity entity, float f, float f1, float f2, float f3,
+                      float f4) {
+        float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        float y = -MathHelper.sin(f * 0.017453292f);
+        float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        shoot(x, y, z, f3, f4);
+        motionX += entity.motionX;
+        motionZ += entity.motionZ;
         if (!entity.onGround) {
-            this.motionY += entity.motionY;
+            motionY += entity.motionY;
         }
     }
 
     @Override
-    public void onEntityHit(final Entity entity) {
-        if (this.world.isRemote) {
+    public void onEntityHit(Entity entity) {
+        if (world.isRemote) {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource,
-                ((IItemWeapon) this.thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 1.0f + this.getMeleeHitDamage(entity))) {
-            this.applyEntityHitEffects(entity);
-            this.playHitSound();
-            if (this.thrownItem.getDamage() + 1 > this.thrownItem.getMaxDamage()) {
-                this.thrownItem.shrink(1);
-                this.remove();
+                ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
+            applyEntityHitEffects(entity);
+            playHitSound();
+            if (thrownItem.getDamage() + 1 > thrownItem.getMaxDamage()) {
+                thrownItem.shrink(1);
+                remove();
             } else {
-                Entity shooter = this.getShooter();
+                Entity shooter = getShooter();
                 if (shooter instanceof EntityLivingBase) {
-                    this.thrownItem.damageItem(1, (EntityLivingBase) shooter);
+                    thrownItem.damageItem(1, (EntityLivingBase) shooter);
                 } else {
-                    this.thrownItem.attemptDamageItem(1, this.rand, null);
+                    thrownItem.attemptDamageItem(1, rand, null);
                 }
-                this.setVelocity(0.0, 0.0, 0.0);
+                setVelocity(0.0, 0.0, 0.0);
             }
         } else {
-            this.bounceBack();
+            bounceBack();
         }
     }
 
     @Override
     public void playHitSound() {
-        this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.9f));
+        playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.9f));
     }
 
     @Override
     public int getMaxLifetime() {
-        return (this.pickupStatus == PickupStatus.ALLOWED || this.pickupStatus == PickupStatus.OWNER_ONLY) ? 0 : 1200;
+        return (pickupStatus == PickupStatus.ALLOWED || pickupStatus == PickupStatus.OWNER_ONLY) ? 0 : 1200;
     }
 
     @Override

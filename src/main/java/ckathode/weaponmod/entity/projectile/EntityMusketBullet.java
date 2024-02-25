@@ -14,63 +14,63 @@ import net.minecraft.world.World;
 public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     public static final String NAME = "bullet";
 
-    public EntityMusketBullet(final World world) {
+    public EntityMusketBullet(World world) {
         super(BalkonsWeaponMod.entityMusketBullet, world);
-        this.setPickupStatus(PickupStatus.DISALLOWED);
+        setPickupStatus(PickupStatus.DISALLOWED);
     }
 
-    public EntityMusketBullet(final World world, final double d, final double d1, final double d2) {
+    public EntityMusketBullet(World world, double d, double d1, double d2) {
         this(world);
-        this.setPosition(d, d1, d2);
+        setPosition(d, d1, d2);
     }
 
-    public EntityMusketBullet(final World world, final EntityLivingBase shooter) {
+    public EntityMusketBullet(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
     }
 
     @Override
-    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3,
-                      final float f4) {
-        final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        final float y = -MathHelper.sin(f * 0.017453292f);
-        final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        this.shoot(x, y, z, f3, f4);
-        this.motionX += entity.motionX;
-        this.motionZ += entity.motionZ;
+    public void shoot(Entity entity, float f, float f1, float f2, float f3,
+                      float f4) {
+        float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        float y = -MathHelper.sin(f * 0.017453292f);
+        float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        shoot(x, y, z, f3, f4);
+        motionX += entity.motionX;
+        motionZ += entity.motionZ;
         if (!entity.onGround) {
-            this.motionY += entity.motionY;
+            motionY += entity.motionY;
         }
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.inGround) {
-            if (this.rand.nextInt(4) == 0) {
-                this.world.addParticle(Particles.SMOKE, this.posX, this.posY, this.posZ, 0.0, 0.0,
+        if (inGround) {
+            if (rand.nextInt(4) == 0) {
+                world.addParticle(Particles.SMOKE, posX, posY, posZ, 0.0, 0.0,
                         0.0);
             }
             return;
         }
-        final double speed = this.getTotalVelocity();
-        final double amount = 16.0;
+        double speed = getTotalVelocity();
+        double amount = 16.0;
         if (speed > 2.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                this.world.addParticle(Particles.POOF, this.posX + this.motionX * i1 / amount,
-                        this.posY + this.motionY * i1 / amount, this.posZ + this.motionZ * i1 / amount, 0.0, 0.0, 0.0);
+                world.addParticle(Particles.POOF, posX + motionX * i1 / amount,
+                        posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
     }
 
     @Override
-    public void onEntityHit(final Entity entity) {
-        final float damage = 20.0f + this.extraDamage;
+    public void onEntityHit(Entity entity) {
+        float damage = 20.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, damage)) {
-            this.applyEntityHitEffects(entity);
-            this.playHitSound();
-            this.remove();
+            applyEntityHitEffects(entity);
+            playHitSound();
+            remove();
         }
     }
 
@@ -91,7 +91,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
 
     @Override
     public float getGravity() {
-        return (this.getTotalVelocity() < 3.0) ? 0.07f : 0.0f;
+        return (getTotalVelocity() < 3.0) ? 0.07f : 0.0f;
     }
 
     @Override

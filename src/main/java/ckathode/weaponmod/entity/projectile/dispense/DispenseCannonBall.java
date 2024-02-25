@@ -23,18 +23,18 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
     private boolean normalDispense;
 
     public DispenseCannonBall() {
-        this.rand = new Random();
-        this.normalDispense = false;
+        rand = new Random();
+        normalDispense = false;
     }
 
     @Nonnull
     @Override
-    public ItemStack dispenseStack(final IBlockSource blocksource, @Nonnull final ItemStack itemstack) {
+    public ItemStack dispenseStack(IBlockSource blocksource, @Nonnull ItemStack itemstack) {
         boolean canfire = false;
-        this.normalDispense = false;
-        final TileEntity tileentity = blocksource.getWorld().getTileEntity(blocksource.getBlockPos());
+        normalDispense = false;
+        TileEntity tileentity = blocksource.getWorld().getTileEntity(blocksource.getBlockPos());
         if (tileentity instanceof TileEntityDispenser) {
-            final TileEntityDispenser dispenser = (TileEntityDispenser) tileentity;
+            TileEntityDispenser dispenser = (TileEntityDispenser) tileentity;
             Item itemtocheck = null;
             if (itemstack.getItem() == Items.GUNPOWDER) {
                 itemtocheck = BalkonsWeaponMod.cannonBall;
@@ -42,7 +42,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
                 itemtocheck = Items.GUNPOWDER;
             }
             for (int i = 0; i < dispenser.getSizeInventory(); ++i) {
-                final ItemStack itemstack2 = dispenser.getStackInSlot(i);
+                ItemStack itemstack2 = dispenser.getStackInSlot(i);
                 if (!itemstack2.isEmpty() && itemstack2.getItem() == itemtocheck) {
                     dispenser.decrStackSize(i, 1);
                     canfire = true;
@@ -51,15 +51,15 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
             }
         }
         if (!canfire) {
-            this.normalDispense = true;
+            normalDispense = true;
             return super.dispenseStack(blocksource, itemstack);
         }
-        final EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
-        final double xvel = face.getXOffset() * 1.5;
-        final double yvel = face.getYOffset() * 1.5;
-        final double zvel = face.getZOffset() * 1.5;
-        final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        final EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getWorld(), pos.getX() + xvel,
+        EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
+        double xvel = face.getXOffset() * 1.5;
+        double yvel = face.getYOffset() * 1.5;
+        double zvel = face.getZOffset() * 1.5;
+        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getWorld(), pos.getX() + xvel,
                 pos.getY() + yvel, pos.getZ() + zvel);
         entitycannonball.shoot(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
         blocksource.getWorld().spawnEntity(entitycannonball);
@@ -68,22 +68,22 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
-        if (this.normalDispense) {
+    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
+        if (normalDispense) {
             super.playDispenseSound(blocksource);
             return;
         }
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
-                SoundCategory.NEUTRAL, 8.0f, 1.0f / (this.rand.nextFloat() * 0.8f + 0.9f));
+                SoundCategory.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.8f + 0.9f));
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
-                SoundCategory.NEUTRAL, 8.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.6f));
+                SoundCategory.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull final IBlockSource blocksource, @Nonnull final EnumFacing face) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
-        if (!this.normalDispense) {
-            final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        if (!normalDispense) {
+            IPosition pos = BlockDispenser.getDispensePosition(blocksource);
             blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
                     pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
         }

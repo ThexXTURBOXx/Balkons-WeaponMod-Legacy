@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class MeleeCompNone extends MeleeComponent {
-    public MeleeCompNone(final IItemTier itemTier) {
+    public MeleeCompNone(IItemTier itemTier) {
         super(MeleeSpecs.NONE, itemTier);
     }
 
@@ -31,30 +31,30 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public float getBlockDamage(final ItemStack itemstack, final IBlockState block) {
+    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
         return 1.0f;
     }
 
     @Override
-    public boolean canHarvestBlock(final IBlockState block) {
+    public boolean canHarvestBlock(IBlockState block) {
         return false;
     }
 
     @Override
-    public boolean onBlockDestroyed(final ItemStack itemstack, final World world, final IBlockState block,
-                                    final BlockPos pos, final EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, IBlockState block,
+                                    BlockPos pos, EntityLivingBase entityliving) {
         return true;
     }
 
     @Override
-    public boolean hitEntity(final ItemStack itemstack, final EntityLivingBase entityliving,
-                             final EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack itemstack, EntityLivingBase entityliving,
+                             EntityLivingBase attacker) {
         return true;
     }
 
     @Override
-    public float getKnockBack(final ItemStack itemstack, final EntityLivingBase entityliving,
-                              final EntityLivingBase attacker) {
+    public float getKnockBack(ItemStack itemstack, EntityLivingBase entityliving,
+                              EntityLivingBase attacker) {
         return 0.0f;
     }
 
@@ -64,23 +64,23 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public void addItemAttributeModifiers(final Multimap<String, AttributeModifier> multimap) {
+    public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
     }
 
     @Override
-    public boolean onLeftClickEntity(final ItemStack itemstack, final EntityPlayer player, final Entity entity) {
+    public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity) {
         return false;
     }
 
     @Override
-    public EnumAction getUseAction(final ItemStack itemstack) {
+    public EnumAction getUseAction(ItemStack itemstack) {
         return EnumAction.NONE;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(final World world, final EntityPlayer entityplayer,
-                                                    final EnumHand hand) {
-        final ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
+                                                    EnumHand hand) {
+        ItemStack itemstack = entityplayer.getHeldItem(hand);
         return new ActionResult<>(EnumActionResult.PASS, itemstack);
     }
 }

@@ -53,37 +53,37 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     public float extraDamage;
     public int knockBack;
 
-    public EntityProjectile(final EntityType<T> type, final World world) {
+    public EntityProjectile(EntityType<T> type, World world) {
         super(type, world);
-        this.xTile = -1;
-        this.yTile = -1;
-        this.zTile = -1;
-        this.inBlockState = null;
-        this.inGround = false;
-        this.arrowShake = 0;
-        this.ticksInAir = 0;
-        this.pickupStatus = PickupStatus.DISALLOWED;
-        this.extraDamage = 0.0f;
-        this.knockBack = 0;
-        this.setSize(0.5f, 0.5f);
+        xTile = -1;
+        yTile = -1;
+        zTile = -1;
+        inBlockState = null;
+        inGround = false;
+        arrowShake = 0;
+        ticksInAir = 0;
+        pickupStatus = PickupStatus.DISALLOWED;
+        extraDamage = 0.0f;
+        knockBack = 0;
+        setSize(0.5f, 0.5f);
     }
 
     @Override
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(EntityProjectile.WEAPON_CRITICAL, (byte) 0);
+        dataManager.register(EntityProjectile.WEAPON_CRITICAL, (byte) 0);
     }
 
-    protected void setPickupStatusFromEntity(final EntityLivingBase entityliving) {
+    protected void setPickupStatusFromEntity(EntityLivingBase entityliving) {
         if (entityliving instanceof EntityPlayer) {
             if (((EntityPlayer) entityliving).abilities.isCreativeMode) {
-                this.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+                setPickupStatus(PickupStatus.CREATIVE_ONLY);
             } else {
-                this.setPickupStatus(BalkonsWeaponMod.instance.modConfig.allCanPickup.get()
+                setPickupStatus(BalkonsWeaponMod.instance.modConfig.allCanPickup.get()
                         ? PickupStatus.ALLOWED : PickupStatus.OWNER_ONLY);
             }
         } else {
-            this.setPickupStatus(PickupStatus.DISALLOWED);
+            setPickupStatus(PickupStatus.DISALLOWED);
         }
     }
 
@@ -93,174 +93,174 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     @Override
-    public void shoot(double x, double y, double z, final float speed, final float deviation) {
-        final float f = MathHelper.sqrt(x * x + y * y + z * z);
+    public void shoot(double x, double y, double z, float speed, float deviation) {
+        float f = MathHelper.sqrt(x * x + y * y + z * z);
         x /= f;
         y /= f;
         z /= f;
-        x += this.rand.nextGaussian() * 0.007499999832361937 * deviation;
-        y += this.rand.nextGaussian() * 0.007499999832361937 * deviation;
-        z += this.rand.nextGaussian() * 0.007499999832361937 * deviation;
+        x += rand.nextGaussian() * 0.007499999832361937 * deviation;
+        y += rand.nextGaussian() * 0.007499999832361937 * deviation;
+        z += rand.nextGaussian() * 0.007499999832361937 * deviation;
         x *= speed;
         y *= speed;
         z *= speed;
-        this.motionX = x;
-        this.motionY = y;
-        this.motionZ = z;
-        final float f2 = MathHelper.sqrt(x * x + z * z);
-        final float n = (float) (MathHelper.atan2(x, z) * 180.0 / 3.141592653589793);
-        this.rotationYaw = n;
-        this.prevRotationYaw = n;
-        final float n2 = (float) (MathHelper.atan2(y, f2) * 180.0 / 3.141592653589793);
-        this.rotationPitch = n2;
-        this.prevRotationPitch = n2;
-        this.ticksInGround = 0;
+        motionX = x;
+        motionY = y;
+        motionZ = z;
+        float f2 = MathHelper.sqrt(x * x + z * z);
+        float n = (float) (MathHelper.atan2(x, z) * 180.0 / 3.141592653589793);
+        rotationYaw = n;
+        prevRotationYaw = n;
+        float n2 = (float) (MathHelper.atan2(y, f2) * 180.0 / 3.141592653589793);
+        rotationPitch = n2;
+        prevRotationPitch = n2;
+        ticksInGround = 0;
     }
 
     @Override
-    public void setVelocity(final double d, final double d1, final double d2) {
-        this.motionX = d;
-        this.motionY = d1;
-        this.motionZ = d2;
-        if (this.aimRotation() && this.prevRotationPitch == 0.0f && this.prevRotationYaw == 0.0f) {
-            final float f = MathHelper.sqrt(d * d + d2 * d2);
-            final float n = (float) (MathHelper.atan2(d, d2) * 180.0 / 3.141592653589793);
-            this.rotationYaw = n;
-            this.prevRotationYaw = n;
-            final float n2 = (float) (MathHelper.atan2(d1, f) * 180.0 / 3.141592653589793);
-            this.rotationPitch = n2;
-            this.prevRotationPitch = n2;
-            this.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-            this.ticksInGround = 0;
+    public void setVelocity(double d, double d1, double d2) {
+        motionX = d;
+        motionY = d1;
+        motionZ = d2;
+        if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
+            float f = MathHelper.sqrt(d * d + d2 * d2);
+            float n = (float) (MathHelper.atan2(d, d2) * 180.0 / 3.141592653589793);
+            rotationYaw = n;
+            prevRotationYaw = n;
+            float n2 = (float) (MathHelper.atan2(d1, f) * 180.0 / 3.141592653589793);
+            rotationPitch = n2;
+            prevRotationPitch = n2;
+            setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
+            ticksInGround = 0;
         }
     }
 
     @Override
     public void tick() {
-        this.baseTick();
+        baseTick();
     }
 
     @Override
     public void baseTick() {
         super.baseTick();
-        if (this.aimRotation() && this.prevRotationPitch == 0.0f && this.prevRotationYaw == 0.0f) {
-            final float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            final float n = (float) (MathHelper.atan2(this.motionX, this.motionZ) * 180.0 / 3.141592653589793);
-            this.rotationYaw = n;
-            this.prevRotationYaw = n;
-            final float n2 = (float) (MathHelper.atan2(this.motionY, f) * 180.0 / 3.141592653589793);
-            this.rotationPitch = n2;
-            this.prevRotationPitch = n2;
+        if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
+            float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+            float n = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
+            rotationYaw = n;
+            prevRotationYaw = n;
+            float n2 = (float) (MathHelper.atan2(motionY, f) * 180.0 / 3.141592653589793);
+            rotationPitch = n2;
+            prevRotationPitch = n2;
         }
-        final BlockPos blockpos = new BlockPos(this.xTile, this.yTile, this.zTile);
-        final IBlockState iblockstate = this.world.getBlockState(blockpos);
+        BlockPos blockpos = new BlockPos(xTile, yTile, zTile);
+        IBlockState iblockstate = world.getBlockState(blockpos);
         if (iblockstate.getMaterial() != Material.AIR) {
-            final VoxelShape voxelShape = iblockstate.getCollisionShape(this.world, blockpos);
+            VoxelShape voxelShape = iblockstate.getCollisionShape(world, blockpos);
             if (!voxelShape.isEmpty() && voxelShape.getBoundingBox().offset(blockpos).contains(
-                    new Vec3d(this.posX, this.posY, this.posZ))) {
-                this.inGround = true;
+                    new Vec3d(posX, posY, posZ))) {
+                inGround = true;
             }
         }
-        if (this.arrowShake > 0) {
-            --this.arrowShake;
+        if (arrowShake > 0) {
+            --arrowShake;
         }
-        if (this.inGround) {
-            if (!iblockstate.equals(this.inBlockState) &&
-                !this.world.isCollisionBoxesEmpty(null, this.getBoundingBox().grow(0.05))) {
-                this.inGround = false;
-                this.motionX *= this.rand.nextFloat() * 0.2f;
-                this.motionY *= this.rand.nextFloat() * 0.2f;
-                this.motionZ *= this.rand.nextFloat() * 0.2f;
-                this.ticksInGround = 0;
-                this.ticksInAir = 0;
+        if (inGround) {
+            if (!iblockstate.equals(inBlockState) &&
+                !world.isCollisionBoxesEmpty(null, getBoundingBox().grow(0.05))) {
+                inGround = false;
+                motionX *= rand.nextFloat() * 0.2f;
+                motionY *= rand.nextFloat() * 0.2f;
+                motionZ *= rand.nextFloat() * 0.2f;
+                ticksInGround = 0;
+                ticksInAir = 0;
             } else {
-                ++this.ticksInGround;
-                final int t = this.getMaxLifetime();
-                if (t != 0 && this.ticksInGround >= t) {
-                    this.remove();
+                ++ticksInGround;
+                int t = getMaxLifetime();
+                if (t != 0 && ticksInGround >= t) {
+                    remove();
                 }
             }
-            ++this.timeInGround;
+            ++timeInGround;
             return;
         }
-        this.timeInGround = 0;
-        ++this.ticksInAir;
-        Vec3d vec3d = new Vec3d(this.posX, this.posY, this.posZ);
-        Vec3d vec3d2 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-        RayTraceResult raytraceresult = this.world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.NEVER, true, false);
-        vec3d = new Vec3d(this.posX, this.posY, this.posZ);
-        vec3d2 = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+        timeInGround = 0;
+        ++ticksInAir;
+        Vec3d vec3d = new Vec3d(posX, posY, posZ);
+        Vec3d vec3d2 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
+        RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.NEVER, true, false);
+        vec3d = new Vec3d(posX, posY, posZ);
+        vec3d2 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
         if (raytraceresult != null) {
             vec3d2 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
         }
-        final Entity entity = this.findEntity(vec3d, vec3d2);
+        Entity entity = findEntity(vec3d, vec3d2);
         if (entity != null) {
             raytraceresult = new RayTraceResult(entity);
         }
         if (raytraceresult != null) {
             if (raytraceresult.entity != null) {
-                this.onEntityHit(raytraceresult.entity);
+                onEntityHit(raytraceresult.entity);
             } else {
-                this.onGroundHit(raytraceresult);
+                onGroundHit(raytraceresult);
             }
         }
-        if (this.getIsCritical()) {
+        if (getIsCritical()) {
             for (int i1 = 0; i1 < 2; ++i1) {
-                this.world.addParticle(Particles.CRIT, this.posX + this.motionX * i1 / 4.0,
-                        this.posY + this.motionY * i1 / 4.0, this.posZ + this.motionZ * i1 / 4.0, -this.motionX,
-                        -this.motionY + 0.2, -this.motionZ);
+                world.addParticle(Particles.CRIT, posX + motionX * i1 / 4.0,
+                        posY + motionY * i1 / 4.0, posZ + motionZ * i1 / 4.0, -motionX,
+                        -motionY + 0.2, -motionZ);
             }
         }
-        this.posX += this.motionX;
-        this.posY += this.motionY;
-        this.posZ += this.motionZ;
-        if (this.aimRotation()) {
-            final float f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-            final float n3 = (float) (MathHelper.atan2(this.motionX, this.motionZ) * 180.0 / 3.141592653589793);
-            this.rotationYaw = n3;
-            this.prevRotationYaw = n3;
-            final float n4 = (float) (MathHelper.atan2(this.motionY, f2) * 180.0 / 3.141592653589793);
-            this.rotationPitch = n4;
-            this.prevRotationPitch = n4;
+        posX += motionX;
+        posY += motionY;
+        posZ += motionZ;
+        if (aimRotation()) {
+            float f2 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+            float n3 = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
+            rotationYaw = n3;
+            prevRotationYaw = n3;
+            float n4 = (float) (MathHelper.atan2(motionY, f2) * 180.0 / 3.141592653589793);
+            rotationPitch = n4;
+            prevRotationPitch = n4;
         }
-        float res = this.getAirResistance();
-        final float grav = this.getGravity();
-        if (this.isInWater()) {
-            this.beenInGround = true;
+        float res = getAirResistance();
+        float grav = getGravity();
+        if (isInWater()) {
+            beenInGround = true;
             for (int i2 = 0; i2 < 4; ++i2) {
-                final float f3 = 0.25f;
-                this.world.addParticle(Particles.BUBBLE, this.posX - this.motionX * 0.25,
-                        this.posY - this.motionY * 0.25, this.posZ - this.motionZ * 0.25, this.motionX, this.motionY,
-                        this.motionZ);
+                float f3 = 0.25f;
+                world.addParticle(Particles.BUBBLE, posX - motionX * 0.25,
+                        posY - motionY * 0.25, posZ - motionZ * 0.25, motionX, motionY,
+                        motionZ);
             }
             res *= 0.6f;
         }
-        this.motionX *= res;
-        this.motionY *= res;
-        this.motionZ *= res;
-        if (!this.hasNoGravity()) {
-            this.motionY -= grav;
+        motionX *= res;
+        motionY *= res;
+        motionZ *= res;
+        if (!hasNoGravity()) {
+            motionY -= grav;
         }
-        this.setPosition(this.posX, this.posY, this.posZ);
-        this.doBlockCollisions();
+        setPosition(posX, posY, posZ);
+        doBlockCollisions();
     }
 
-    public void onEntityHit(final Entity entity) {
-        this.bounceBack();
-        this.applyEntityHitEffects(entity);
+    public void onEntityHit(Entity entity) {
+        bounceBack();
+        applyEntityHitEffects(entity);
     }
 
-    public void applyEntityHitEffects(final Entity entity) {
-        if (this.isBurning() && !(entity instanceof EntityEnderman)) {
+    public void applyEntityHitEffects(Entity entity) {
+        if (isBurning() && !(entity instanceof EntityEnderman)) {
             entity.setFire(5);
         }
         if (entity instanceof EntityLivingBase) {
-            final EntityLivingBase entityliving = (EntityLivingBase) entity;
-            if (this.knockBack > 0) {
-                final float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            EntityLivingBase entityliving = (EntityLivingBase) entity;
+            if (knockBack > 0) {
+                float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
                 if (f > 0.0f) {
-                    entity.addVelocity(this.motionX * this.knockBack * 0.6 / f, 0.1,
-                            this.motionZ * this.knockBack * 0.6 / f);
+                    entity.addVelocity(motionX * knockBack * 0.6 / f, 0.1,
+                            motionZ * knockBack * 0.6 / f);
                 }
             }
             Entity shooter = getShooter();
@@ -268,58 +268,58 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
                 EnchantmentHelper.applyThornEnchantments(entityliving, shooter);
                 EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shooter, entityliving);
             }
-            if (shooter instanceof EntityPlayerMP && !this.shootingEntity.equals(entity.getUniqueID()) && entity instanceof EntityPlayer) {
+            if (shooter instanceof EntityPlayerMP && !shootingEntity.equals(entity.getUniqueID()) && entity instanceof EntityPlayer) {
                 ((EntityPlayerMP) shooter).connection.sendPacket(new SPacketChangeGameState(6, 0.0f));
             }
         }
     }
 
-    public void onGroundHit(final RayTraceResult raytraceResult) {
-        final BlockPos blockpos = raytraceResult.getBlockPos();
-        this.xTile = blockpos.getX();
-        this.yTile = blockpos.getY();
-        this.zTile = blockpos.getZ();
-        this.inBlockState = this.world.getBlockState(blockpos);
-        this.motionX = raytraceResult.hitVec.x - this.posX;
-        this.motionY = raytraceResult.hitVec.y - this.posY;
-        this.motionZ = raytraceResult.hitVec.z - this.posZ;
-        final float f1 =
-                MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-        this.posX -= this.motionX / f1 * 0.05;
-        this.posY -= this.motionY / f1 * 0.05;
-        this.posZ -= this.motionZ / f1 * 0.05;
-        this.inGround = true;
-        this.beenInGround = true;
-        this.setIsCritical(false);
-        this.arrowShake = this.getMaxArrowShake();
-        this.playHitSound();
-        if (this.inBlockState != null) {
-            this.inBlockState.onEntityCollision(this.world, blockpos, this);
+    public void onGroundHit(RayTraceResult raytraceResult) {
+        BlockPos blockpos = raytraceResult.getBlockPos();
+        xTile = blockpos.getX();
+        yTile = blockpos.getY();
+        zTile = blockpos.getZ();
+        inBlockState = world.getBlockState(blockpos);
+        motionX = raytraceResult.hitVec.x - posX;
+        motionY = raytraceResult.hitVec.y - posY;
+        motionZ = raytraceResult.hitVec.z - posZ;
+        float f1 =
+                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        posX -= motionX / f1 * 0.05;
+        posY -= motionY / f1 * 0.05;
+        posZ -= motionZ / f1 * 0.05;
+        inGround = true;
+        beenInGround = true;
+        setIsCritical(false);
+        arrowShake = getMaxArrowShake();
+        playHitSound();
+        if (inBlockState != null) {
+            inBlockState.onEntityCollision(world, blockpos, this);
         }
     }
 
     protected void bounceBack() {
-        this.motionX *= -0.1;
-        this.motionY *= -0.1;
-        this.motionZ *= -0.1;
-        this.rotationYaw += 180.0f;
-        this.prevRotationYaw += 180.0f;
-        this.ticksInAir = 0;
+        motionX *= -0.1;
+        motionY *= -0.1;
+        motionZ *= -0.1;
+        rotationYaw += 180.0f;
+        prevRotationYaw += 180.0f;
+        ticksInAir = 0;
     }
 
     @Nullable
-    protected Entity findEntity(final Vec3d vec3d, final Vec3d vec3d1) {
+    protected Entity findEntity(Vec3d vec3d, Vec3d vec3d1) {
         Entity entity = null;
-        final List<Entity> list = this.world.getEntitiesInAABBexcluding(this,
-                this.getBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0),
+        List<Entity> list = world.getEntitiesInAABBexcluding(this,
+                getBoundingBox().expand(motionX, motionY, motionZ).grow(1.0),
                 EntityProjectile.WEAPON_TARGETS);
         double d = 0.0;
-        for (final Entity entity2 : list) {
-            if (!entity2.getUniqueID().equals(this.shootingEntity) || this.ticksInAir >= 5) {
-                final AxisAlignedBB axisalignedbb = entity2.getBoundingBox().grow(0.3);
-                final RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d1);
+        for (Entity entity2 : list) {
+            if (!entity2.getUniqueID().equals(shootingEntity) || ticksInAir >= 5) {
+                AxisAlignedBB axisalignedbb = entity2.getBoundingBox().grow(0.3);
+                RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d1);
                 if (raytraceresult != null) {
-                    final double d2 = vec3d.squareDistanceTo(raytraceresult.hitVec);
+                    double d2 = vec3d.squareDistanceTo(raytraceresult.hitVec);
                     if (d2 < d || d == 0.0) {
                         entity = entity2;
                         d = d2;
@@ -330,8 +330,8 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         return entity;
     }
 
-    public final double getTotalVelocity() {
-        return MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+    public double getTotalVelocity() {
+        return MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
     }
 
     public boolean aimRotation() {
@@ -372,62 +372,62 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     @Override
-    public void setIsCritical(final boolean flag) {
-        if (this.canBeCritical()) {
-            this.dataManager.set(EntityProjectile.WEAPON_CRITICAL, (byte) (flag ? 1 : 0));
+    public void setIsCritical(boolean flag) {
+        if (canBeCritical()) {
+            dataManager.set(EntityProjectile.WEAPON_CRITICAL, (byte) (flag ? 1 : 0));
         }
     }
 
     @Override
     public boolean getIsCritical() {
-        return this.canBeCritical() && this.dataManager.get(EntityProjectile.WEAPON_CRITICAL) != 0;
+        return canBeCritical() && dataManager.get(EntityProjectile.WEAPON_CRITICAL) != 0;
     }
 
-    public void setExtraDamage(final float f) {
-        this.extraDamage = f;
+    public void setExtraDamage(float f) {
+        extraDamage = f;
     }
 
     @Override
-    public void setKnockbackStrength(final int i) {
-        this.knockBack = i;
+    public void setKnockbackStrength(int i) {
+        knockBack = i;
     }
 
-    public void setPickupStatus(final PickupStatus i) {
-        this.pickupStatus = i;
+    public void setPickupStatus(PickupStatus i) {
+        pickupStatus = i;
     }
 
     public PickupStatus getPickupStatus() {
-        return this.pickupStatus;
+        return pickupStatus;
     }
 
-    public boolean canPickup(final EntityPlayer entityplayer) {
-        if (this.pickupStatus == PickupStatus.ALLOWED) {
+    public boolean canPickup(EntityPlayer entityplayer) {
+        if (pickupStatus == PickupStatus.ALLOWED) {
             return true;
         }
-        if (this.pickupStatus == PickupStatus.CREATIVE_ONLY) {
+        if (pickupStatus == PickupStatus.CREATIVE_ONLY) {
             return entityplayer.abilities.isCreativeMode;
         }
-        return this.pickupStatus == PickupStatus.OWNER_ONLY && entityplayer.getUniqueID().equals(this.shootingEntity);
+        return pickupStatus == PickupStatus.OWNER_ONLY && entityplayer.getUniqueID().equals(shootingEntity);
     }
 
     @Override
-    public void onCollideWithPlayer(@Nonnull final EntityPlayer entityplayer) {
-        if (this.inGround && this.arrowShake <= 0 && this.canPickup(entityplayer) && !this.world.isRemote) {
-            final ItemStack item = this.getPickupItem();
+    public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
+        if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote) {
+            ItemStack item = getPickupItem();
             if (item == null) {
                 return;
             }
-            if ((this.pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.abilities.isCreativeMode) ||
+            if ((pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.abilities.isCreativeMode) ||
                 entityplayer.inventory.addItemStackToInventory(item)) {
-                this.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
-                        ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
-                this.onItemPickup(entityplayer);
-                this.remove();
+                playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
+                        ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                onItemPickup(entityplayer);
+                remove();
             }
         }
     }
 
-    protected void onItemPickup(final EntityPlayer entityplayer) {
+    protected void onItemPickup(EntityPlayer entityplayer) {
         entityplayer.onItemPickup(this, 1);
     }
 
@@ -442,31 +442,31 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     @Override
-    public void writeAdditional(final NBTTagCompound nbttagcompound) {
-        nbttagcompound.putInt("xTile", this.xTile);
-        nbttagcompound.putInt("yTile", this.yTile);
-        nbttagcompound.putInt("zTile", this.zTile);
-        if (this.inBlockState != null) {
-            nbttagcompound.put("inBlockState", NBTUtil.writeBlockState(this.inBlockState));
+    public void writeAdditional(NBTTagCompound nbttagcompound) {
+        nbttagcompound.putInt("xTile", xTile);
+        nbttagcompound.putInt("yTile", yTile);
+        nbttagcompound.putInt("zTile", zTile);
+        if (inBlockState != null) {
+            nbttagcompound.put("inBlockState", NBTUtil.writeBlockState(inBlockState));
         }
-        nbttagcompound.putByte("shake", (byte) this.arrowShake);
-        nbttagcompound.putBoolean("inGround", this.inGround);
-        nbttagcompound.putBoolean("beenInGround", this.beenInGround);
-        nbttagcompound.putByte("pickup", (byte) this.pickupStatus.ordinal());
+        nbttagcompound.putByte("shake", (byte) arrowShake);
+        nbttagcompound.putBoolean("inGround", inGround);
+        nbttagcompound.putBoolean("beenInGround", beenInGround);
+        nbttagcompound.putByte("pickup", (byte) pickupStatus.ordinal());
     }
 
     @Override
-    public void readAdditional(final NBTTagCompound nbttagcompound) {
-        this.xTile = nbttagcompound.getInt("xTile");
-        this.yTile = nbttagcompound.getInt("yTile");
-        this.zTile = nbttagcompound.getInt("zTile");
+    public void readAdditional(NBTTagCompound nbttagcompound) {
+        xTile = nbttagcompound.getInt("xTile");
+        yTile = nbttagcompound.getInt("yTile");
+        zTile = nbttagcompound.getInt("zTile");
         if (nbttagcompound.contains("inBlockState", 10)) {
-            this.inBlockState = NBTUtil.readBlockState(nbttagcompound.getCompound("inBlockState"));
+            inBlockState = NBTUtil.readBlockState(nbttagcompound.getCompound("inBlockState"));
         }
-        this.arrowShake = (nbttagcompound.getByte("shake") & 0xFF);
-        this.inGround = nbttagcompound.getBoolean("inGround");
-        this.beenInGround = nbttagcompound.getBoolean("beenInGrond");
-        this.pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
+        arrowShake = (nbttagcompound.getByte("shake") & 0xFF);
+        inGround = nbttagcompound.getBoolean("inGround");
+        beenInGround = nbttagcompound.getBoolean("beenInGrond");
+        pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
     }
 
     public enum PickupStatus {

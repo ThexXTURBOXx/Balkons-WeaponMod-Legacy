@@ -38,7 +38,7 @@ public class WMClientProxy extends WMCommonProxy {
     @Override
     public void registerEventHandlers() {
         super.registerEventHandlers();
-        final WMClientEventHandler eventhandler = new WMClientEventHandler();
+        WMClientEventHandler eventhandler = new WMClientEventHandler();
         MinecraftForge.EVENT_BUS.register(eventhandler);
         if (BalkonsWeaponMod.instance.modConfig.guiOverlayReloaded.get()) {
             MinecraftForge.EVENT_BUS.register(new GuiOverlayReloaded(Minecraft.getInstance()));
@@ -46,12 +46,12 @@ public class WMClientProxy extends WMCommonProxy {
     }
 
     @Override
-    public void registerPackets(final WMMessagePipeline pipeline) {
+    public void registerPackets(WMMessagePipeline pipeline) {
         super.registerPackets(pipeline);
     }
 
     @Override
-    public void registerRenderersEntity(final WeaponModConfig config) {
+    public void registerRenderersEntity(WeaponModConfig config) {
         if (config.isEnabled("knife")) {
             RenderingRegistry.registerEntityRenderingHandler(EntityKnife.class, RenderKnife::new);
         }

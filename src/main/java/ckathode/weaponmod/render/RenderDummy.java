@@ -12,19 +12,19 @@ import net.minecraft.util.math.MathHelper;
 public class RenderDummy extends Render<EntityDummy> {
     private final ModelDummy modelDummy;
 
-    public RenderDummy(final RenderManager renderManager) {
+    public RenderDummy(RenderManager renderManager) {
         super(renderManager);
-        this.modelDummy = new ModelDummy();
-        this.shadowSize = 1.0f;
+        modelDummy = new ModelDummy();
+        shadowSize = 1.0f;
     }
 
     @Override
-    public void doRender(final EntityDummy entitydummy, final double d, final double d1, final double d2,
-                         final float f, final float f1) {
+    public void doRender(EntityDummy entitydummy, double d, double d1, double d2,
+                         float f, float f1) {
         GlStateManager.pushMatrix();
         GlStateManager.translated(d, d1 - 0.025f, d2);
         GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
-        final float f2 = entitydummy.getTimeSinceHit() - f1;
+        float f2 = entitydummy.getTimeSinceHit() - f1;
         float f3 = entitydummy.getCurrentDamage() - f1;
         if (f3 < 0.0f) {
             f3 = 0.0f;
@@ -33,15 +33,15 @@ public class RenderDummy extends Render<EntityDummy> {
             GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f, 0.0f,
                     0.0f, 1.0f);
         }
-        this.bindEntityTexture(entitydummy);
+        bindEntityTexture(entitydummy);
         GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
         GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
-        if (this.renderOutlines) {
+        if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entitydummy));
+            GlStateManager.enableOutlineMode(getTeamColor(entitydummy));
         }
-        this.modelDummy.render(entitydummy, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
-        if (this.renderOutlines) {
+        modelDummy.render(entitydummy, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        if (renderOutlines) {
             GlStateManager.disableOutlineMode();
             GlStateManager.disableColorMaterial();
         }
@@ -50,7 +50,7 @@ public class RenderDummy extends Render<EntityDummy> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull final EntityDummy entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityDummy entity) {
         return WeaponModResources.Textures.DUMMY;
     }
 }

@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 public class DispenseMusketBullet extends DispenseWeaponProjectile {
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull final World world, final IPosition pos,
-                                              @Nonnull final ItemStack stack) {
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
+                                              @Nonnull ItemStack stack) {
         return new EntityMusketBullet(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
@@ -37,17 +37,17 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
+    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
-                SoundCategory.NEUTRAL, 3.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.7f));
+                SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.7f));
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
-                SoundCategory.NEUTRAL, 3.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.4f));
+                SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.4f));
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull final IBlockSource blocksource, @Nonnull final EnumFacing face) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
-        final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.2, 0.0);
     }

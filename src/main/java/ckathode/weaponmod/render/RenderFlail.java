@@ -18,46 +18,46 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class RenderFlail extends Render<EntityFlail> {
-    public RenderFlail(final RenderManager renderManager) {
+    public RenderFlail(RenderManager renderManager) {
         super(renderManager);
     }
 
     @Override
-    public void doRender(@Nonnull final EntityFlail entityflail, final double d, final double d1, final double d2,
-                         final float f, final float f1) {
-        this.bindEntityTexture(entityflail);
+    public void doRender(@Nonnull EntityFlail entityflail, double d, double d1, double d2,
+                         float f, float f1) {
+        bindEntityTexture(entityflail);
         GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         GlStateManager.translated(d, d1, d2);
         GlStateManager.rotatef(entityflail.prevRotationYaw + (entityflail.rotationYaw - entityflail.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotatef(entityflail.prevRotationPitch + (entityflail.rotationPitch - entityflail.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
-        final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder vertexbuffer = tessellator.getBuffer();
-        final float[] color = entityflail.getMaterialColor();
-        final int i = 0;
-        final float f2 = 0.0f;
-        final float f3 = 0.5f;
-        final float f4 = 0.0f;
-        final float f5 = 0.15625f;
-        final float f6 = 0.0f;
-        final float f7 = 0.15625f;
-        final float f8 = 0.15625f;
-        final float f9 = 0.3125f;
-        final float f10 = 0.15f;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        float[] color = entityflail.getMaterialColor();
+        int i = 0;
+        float f2 = 0.0f;
+        float f3 = 0.5f;
+        float f4 = 0.0f;
+        float f5 = 0.15625f;
+        float f6 = 0.0f;
+        float f7 = 0.15625f;
+        float f8 = 0.15625f;
+        float f9 = 0.3125f;
+        float f10 = 0.15f;
         GlStateManager.enableRescaleNormal();
-        final float f11 = -f1;
+        float f11 = -f1;
         if (f11 > 0.0f) {
-            final float f12 = -MathHelper.sin(f11 * 3.0f) * f11;
+            float f12 = -MathHelper.sin(f11 * 3.0f) * f11;
             GlStateManager.rotatef(f12, 0.0f, 0.0f, 1.0f);
         }
         GlStateManager.color3f(color[0], color[1], color[2]);
         GlStateManager.rotatef(45.0f, 1.0f, 0.0f, 0.0f);
         GlStateManager.scalef(0.15f, 0.15f, 0.15f);
         GlStateManager.translatef(-4.0f, 0.0f, 0.0f);
-        if (this.renderOutlines) {
+        if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entityflail));
+            GlStateManager.enableOutlineMode(getTeamColor(entityflail));
         }
         GlStateManager.normal3f(0.15f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -83,7 +83,7 @@ public class RenderFlail extends Render<EntityFlail> {
             vertexbuffer.pos(-8.0, 2.0, 0.0).tex(0.0, 0.15625).endVertex();
             tessellator.draw();
         }
-        if (this.renderOutlines) {
+        if (renderOutlines) {
             GlStateManager.disableOutlineMode();
             GlStateManager.disableColorMaterial();
         }
@@ -91,23 +91,23 @@ public class RenderFlail extends Render<EntityFlail> {
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
         Entity shooter = entityflail.getShooter();
-        if (shooter instanceof EntityLivingBase && !this.renderOutlines) {
-            final int k = (((EntityLivingBase) shooter).getPrimaryHand() == EnumHandSide.RIGHT) ?
+        if (shooter instanceof EntityLivingBase && !renderOutlines) {
+            int k = (((EntityLivingBase) shooter).getPrimaryHand() == EnumHandSide.RIGHT) ?
                     1 : -1;
-            final float f13 = ((EntityLivingBase) shooter).getSwingProgress(f1);
-            final float f14 = MathHelper.sin(MathHelper.sqrt(f13) * 3.1415927f);
-            final float f15 =
+            float f13 = ((EntityLivingBase) shooter).getSwingProgress(f1);
+            float f14 = MathHelper.sin(MathHelper.sqrt(f13) * 3.1415927f);
+            float f15 =
                     (((EntityLivingBase) shooter).prevRenderYawOffset + (((EntityLivingBase) shooter).renderYawOffset - ((EntityLivingBase) shooter).prevRenderYawOffset) * f1) * 0.017453292f;
-            final double d3 = MathHelper.sin(f15);
-            final double d4 = MathHelper.cos(f15);
-            final double d5 = k * 0.35;
-            final double d6 = 0.8;
+            double d3 = MathHelper.sin(f15);
+            double d4 = MathHelper.cos(f15);
+            double d5 = k * 0.35;
+            double d6 = 0.8;
             double d7;
             double d8;
             double d9;
             double d10;
-            if (this.renderManager.options != null && this.renderManager.options.thirdPersonView <= 0 && shooter == Minecraft.getInstance().player) {
-                double f16 = this.renderManager.options.fovSetting;
+            if (renderManager.options != null && renderManager.options.thirdPersonView <= 0 && shooter == Minecraft.getInstance().player) {
+                double f16 = renderManager.options.fovSetting;
                 f16 /= 100.0f;
                 Vec3d vec3d = new Vec3d(k * -0.36 * f16, -0.045 * f16, 0.4);
                 vec3d = vec3d.rotatePitch(-(shooter.prevRotationPitch + (shooter.rotationPitch - shooter.prevRotationPitch) * f1) * 0.017453292f);
@@ -124,18 +124,18 @@ public class RenderFlail extends Render<EntityFlail> {
                 d9 = shooter.prevPosZ + (shooter.posZ - shooter.prevPosZ) * f1 - d3 * d5 + d4 * 0.8;
                 d10 = (shooter.isSneaking() ? -0.1875 : 0.0);
             }
-            final double d11 = entityflail.prevPosX + (entityflail.posX - entityflail.prevPosX) * f1;
-            final double d12 = entityflail.prevPosY + (entityflail.posY - entityflail.prevPosY) * f1 + 0.25;
-            final double d13 = entityflail.prevPosZ + (entityflail.posZ - entityflail.prevPosZ) * f1;
-            final double d14 = (float) (d7 - d11);
-            final double d15 = (float) (d8 - d12) + d10;
-            final double d16 = (float) (d9 - d13);
+            double d11 = entityflail.prevPosX + (entityflail.posX - entityflail.prevPosX) * f1;
+            double d12 = entityflail.prevPosY + (entityflail.posY - entityflail.prevPosY) * f1 + 0.25;
+            double d13 = entityflail.prevPosZ + (entityflail.posZ - entityflail.prevPosZ) * f1;
+            double d14 = (float) (d7 - d11);
+            double d15 = (float) (d8 - d12) + d10;
+            double d16 = (float) (d9 - d13);
             GlStateManager.disableTexture2D();
             GlStateManager.disableLighting();
             vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-            final int l = 16;
+            int l = 16;
             for (int i2 = 0; i2 <= 16; ++i2) {
-                final float f17 = i2 / 16.0f;
+                float f17 = i2 / 16.0f;
                 vertexbuffer.pos(d + d14 * f17, d1 + d15 * (f17 * f17 + f17) * 0.5 + 0.25, d2 + d16 * f17).color(0,
                         0, 0, 255).endVertex();
             }
@@ -147,7 +147,7 @@ public class RenderFlail extends Render<EntityFlail> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull final EntityFlail entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityFlail entity) {
         return WeaponModResources.Textures.FLAIL;
     }
 }

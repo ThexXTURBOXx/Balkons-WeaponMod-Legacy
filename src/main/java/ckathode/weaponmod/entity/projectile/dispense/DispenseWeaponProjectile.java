@@ -16,25 +16,25 @@ public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispens
     protected final Random rand;
 
     public DispenseWeaponProjectile() {
-        this.rand = new Random();
+        rand = new Random();
     }
 
     @Nonnull
     @Override
-    public ItemStack dispenseStack(final IBlockSource blocksource, @Nonnull final ItemStack itemstack) {
-        final World world = blocksource.getWorld();
-        final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        final EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
-        final IProjectile projectile = this.getProjectileEntity(world, pos, itemstack);
-        projectile.shoot(face.getXOffset(), face.getYOffset() + this.getYVel(), face.getZOffset(), this.getVelocity()
-                , this.getDeviation());
+    public ItemStack dispenseStack(IBlockSource blocksource, @Nonnull ItemStack itemstack) {
+        World world = blocksource.getWorld();
+        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
+        IProjectile projectile = getProjectileEntity(world, pos, itemstack);
+        projectile.shoot(face.getXOffset(), face.getYOffset() + getYVel(), face.getZOffset(), getVelocity()
+                , getDeviation());
         world.spawnEntity((Entity) projectile);
         itemstack.split(1);
         return itemstack;
     }
 
-    protected IProjectile getProjectileEntityWorld(final World world, final IPosition pos, final ItemStack itemstack) {
-        return this.getProjectileEntity(world, pos, itemstack);
+    protected IProjectile getProjectileEntityWorld(World world, IPosition pos, ItemStack itemstack) {
+        return getProjectileEntity(world, pos, itemstack);
     }
 
     public double getYVel() {
@@ -42,20 +42,20 @@ public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispens
     }
 
     public float getVelocity() {
-        return this.getProjectileVelocity();
+        return getProjectileVelocity();
     }
 
     public float getDeviation() {
-        return this.getProjectileInaccuracy();
+        return getProjectileInaccuracy();
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
+    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
         super.playDispenseSound(blocksource);
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull final IBlockSource blocksource, @Nonnull final EnumFacing facing) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing facing) {
         super.spawnDispenseParticles(blocksource, facing);
     }
 }

@@ -17,14 +17,14 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     private final Random rand;
 
     public DispenseBlunderShot() {
-        this.rand = new Random();
+        rand = new Random();
     }
 
     @Nonnull
     @Override
-    public ItemStack dispenseStack(final IBlockSource blocksource, final ItemStack itemstack) {
-        final EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
-        final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+    public ItemStack dispenseStack(IBlockSource blocksource, ItemStack itemstack) {
+        EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
+        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), face.getXOffset(), face.getYOffset(),
                 face.getZOffset());
@@ -33,15 +33,15 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     }
 
     @Override
-    protected void playDispenseSound(final IBlockSource blocksource) {
+    protected void playDispenseSound(IBlockSource blocksource) {
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
-                SoundCategory.NEUTRAL, 3.0f, 1.0f / (this.rand.nextFloat() * 0.4f + 0.6f));
+                SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull final IBlockSource blocksource, @Nonnull final EnumFacing face) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
-        final IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
     }

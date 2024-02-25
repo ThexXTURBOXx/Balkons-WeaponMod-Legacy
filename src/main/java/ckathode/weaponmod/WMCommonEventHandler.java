@@ -7,7 +7,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class WMCommonEventHandler {
     @SubscribeEvent
-    public void onEntityConstructed(final EntityEvent.EntityConstructing event) {
+    public void onEntityConstructed(EntityEvent.EntityConstructing event) {
         Entity entity = event.getEntity();
         if (entity instanceof EntityPlayer) {
             PlayerWeaponData.initPlayerWeaponData((EntityPlayer) entity);

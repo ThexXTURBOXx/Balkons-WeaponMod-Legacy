@@ -27,36 +27,35 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemShooter extends ItemBow implements IItemWeapon {
-    protected static final int MAX_DELAY = 72000;
+    protected static int MAX_DELAY = 72000;
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
 
-    public ItemShooter(final String id, final RangedComponent rangedcomponent, final MeleeComponent meleecomponent) {
+    public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
         this(id, rangedcomponent, meleecomponent, new Properties());
     }
 
-    public ItemShooter(final String id, final RangedComponent rangedcomponent, final MeleeComponent meleecomponent,
-                       final Properties properties) {
+    public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent,
+                       Properties properties) {
         super(rangedcomponent.setProperties(properties).group(ItemGroup.COMBAT));
-        this.setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
-        // TODO: Needed? this.setTranslationKey(id);
-        this.rangedComponent = rangedcomponent;
-        this.meleeComponent = meleecomponent;
+        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        rangedComponent = rangedcomponent;
+        meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
-        this.addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reload"), new IItemPropertyGetter() {
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reload"), new IItemPropertyGetter() {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull final ItemStack stack, @Nullable final World world,
-                              @Nullable final EntityLivingBase entity) {
+            public float call(@Nonnull ItemStack stack, @Nullable World world,
+                              @Nullable EntityLivingBase entity) {
                 return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f;
             }
         });
-        this.addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reloaded"), new IItemPropertyGetter() {
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reloaded"), new IItemPropertyGetter() {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull final ItemStack stack, @Nullable final World world,
-                              @Nullable final EntityLivingBase entity) {
+            public float call(@Nonnull ItemStack stack, @Nullable World world,
+                              @Nullable EntityLivingBase entity) {
                 return RangedComponent.isReloaded(stack) ? 1.0f : 0.0f;
             }
         });
@@ -64,117 +63,117 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     }
 
     @Override
-    public float getDestroySpeed(@Nonnull final ItemStack itemstack, @Nonnull final IBlockState block) {
-        return this.meleeComponent.getBlockDamage(itemstack, block);
+    public float getDestroySpeed(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
+        return meleeComponent.getBlockDamage(itemstack, block);
     }
 
     @Override
-    public boolean canHarvestBlock(@Nonnull final IBlockState block) {
-        return this.meleeComponent.canHarvestBlock(block);
+    public boolean canHarvestBlock(@Nonnull IBlockState block) {
+        return meleeComponent.canHarvestBlock(block);
     }
 
     @Override
-    public boolean hitEntity(@Nonnull final ItemStack itemstack, @Nonnull final EntityLivingBase entityliving,
-                             @Nonnull final EntityLivingBase attacker) {
-        return this.meleeComponent.hitEntity(itemstack, entityliving, attacker);
+    public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityliving,
+                             @Nonnull EntityLivingBase attacker) {
+        return meleeComponent.hitEntity(itemstack, entityliving, attacker);
     }
 
     @Override
-    public boolean onBlockDestroyed(@Nonnull final ItemStack itemstack, @Nonnull final World world,
-                                    @Nonnull final IBlockState block, @Nonnull final BlockPos pos,
-                                    @Nonnull final EntityLivingBase entityliving) {
-        return this.meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
+    public boolean onBlockDestroyed(@Nonnull ItemStack itemstack, @Nonnull World world,
+                                    @Nonnull IBlockState block, @Nonnull BlockPos pos,
+                                    @Nonnull EntityLivingBase entityliving) {
+        return meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
     }
 
     @Override
     public int getItemEnchantability() {
-        return this.meleeComponent.getItemEnchantability();
+        return meleeComponent.getItemEnchantability();
     }
 
     @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull final EntityEquipmentSlot equipmentSlot
-            , @Nonnull final ItemStack itemstack) {
-        final Multimap<String, AttributeModifier> multimap = HashMultimap.create();
+    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot
+            , @Nonnull ItemStack itemstack) {
+        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-            this.meleeComponent.addItemAttributeModifiers(multimap);
-            this.rangedComponent.addItemAttributeModifiers(multimap);
+            meleeComponent.addItemAttributeModifiers(multimap);
+            rangedComponent.addItemAttributeModifiers(multimap);
         }
         return multimap;
     }
 
     @Override
-    public boolean onLeftClickEntity(@Nonnull final ItemStack itemstack, @Nonnull final EntityPlayer player,
-                                     @Nonnull final Entity entity) {
-        return this.meleeComponent.onLeftClickEntity(itemstack, player, entity) && this.rangedComponent.onLeftClickEntity(itemstack, player, entity);
+    public boolean onLeftClickEntity(@Nonnull ItemStack itemstack, @Nonnull EntityPlayer player,
+                                     @Nonnull Entity entity) {
+        return meleeComponent.onLeftClickEntity(itemstack, player, entity) && rangedComponent.onLeftClickEntity(itemstack, player, entity);
     }
 
     @Nonnull
     @Override
-    public EnumAction getUseAction(@Nonnull final ItemStack itemstack) {
-        return this.rangedComponent.getUseAction(itemstack);
+    public EnumAction getUseAction(@Nonnull ItemStack itemstack) {
+        return rangedComponent.getUseAction(itemstack);
     }
 
     @Override
-    public int getUseDuration(@Nonnull final ItemStack itemstack) {
-        return this.rangedComponent.getUseDuration(itemstack);
+    public int getUseDuration(@Nonnull ItemStack itemstack) {
+        return rangedComponent.getUseDuration(itemstack);
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull final World world,
-                                                    @Nonnull final EntityPlayer entityplayer,
-                                                    @Nonnull final EnumHand hand) {
-        return this.rangedComponent.onItemRightClick(world, entityplayer, hand);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world,
+                                                    @Nonnull EntityPlayer entityplayer,
+                                                    @Nonnull EnumHand hand) {
+        return rangedComponent.onItemRightClick(world, entityplayer, hand);
     }
 
     @Override
-    public void onUsingTick(@Nonnull final ItemStack itemstack, @Nonnull final EntityLivingBase entityplayer,
-                            final int count) {
-        this.rangedComponent.onUsingTick(itemstack, entityplayer, count);
+    public void onUsingTick(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityplayer,
+                            int count) {
+        rangedComponent.onUsingTick(itemstack, entityplayer, count);
     }
 
     @Override
-    public void onPlayerStoppedUsing(@Nonnull final ItemStack itemstack, @Nonnull final World world,
-                                     @Nonnull final EntityLivingBase entityplayer, final int i) {
-        this.rangedComponent.onPlayerStoppedUsing(itemstack, world, entityplayer, i);
+    public void onPlayerStoppedUsing(@Nonnull ItemStack itemstack, @Nonnull World world,
+                                     @Nonnull EntityLivingBase entityplayer, int i) {
+        rangedComponent.onPlayerStoppedUsing(itemstack, world, entityplayer, i);
     }
 
     @Override
-    public void inventoryTick(@Nonnull final ItemStack itemstack, @Nonnull final World world,
-                              @Nonnull final Entity entity, final int i, final boolean flag) {
-        this.meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
-        this.rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
+    public void inventoryTick(@Nonnull ItemStack itemstack, @Nonnull World world,
+                              @Nonnull Entity entity, int i, boolean flag) {
+        meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
+        rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
     }
 
     @Override
-    public final UUID getUUIDDamage() {
+    public UUID getUUIDDamage() {
         return ItemShooter.ATTACK_DAMAGE_MODIFIER;
     }
 
     @Override
-    public final UUID getUUIDSpeed() {
+    public UUID getUUIDSpeed() {
         return ItemShooter.ATTACK_SPEED_MODIFIER;
     }
 
     @Override
-    public final UUID getUUID() {
+    public UUID getUUID() {
         return ItemShooter.WEAPON_MODIFIER;
     }
 
     @Override
-    public final Random getItemRand() {
+    public Random getItemRand() {
         return random;
     }
 
     @Override
     public MeleeComponent getMeleeComponent() {
-        return this.meleeComponent;
+        return meleeComponent;
     }
 
     @Override
     public RangedComponent getRangedComponent() {
-        return this.rangedComponent;
+        return rangedComponent;
     }
 
 }

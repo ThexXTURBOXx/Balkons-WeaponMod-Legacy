@@ -19,51 +19,54 @@ import net.minecraft.world.World;
 
 public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     public static final String NAME = "dart";
-    private static final DataParameter<Byte> DART_EFFECT_TYPE;
-    private static final float[][] DART_COLORS;
 
-    public EntityBlowgunDart(final World world) {
+    private static final DataParameter<Byte> DART_EFFECT_TYPE = EntityDataManager.createKey(EntityBlowgunDart.class,
+            DataSerializers.BYTE);
+    private static final float[][] DART_COLORS = new float[][]{{0.2f, 0.8f, 0.3f}, {0.9f, 0.7f, 1.0f},
+            {0.6f, 1.0f, 0.9f}, {0.8f, 0.5f, 0.2f}};
+
+    public EntityBlowgunDart(World world) {
         super(BalkonsWeaponMod.entityBlowgunDart, world);
     }
 
-    public EntityBlowgunDart(final World world, final double d, final double d1, final double d2) {
+    public EntityBlowgunDart(World world, double d, double d1, double d2) {
         this(world);
-        this.setPickupStatus(PickupStatus.ALLOWED);
-        this.setPosition(d, d1, d2);
+        setPickupStatus(PickupStatus.ALLOWED);
+        setPosition(d, d1, d2);
     }
 
-    public EntityBlowgunDart(final World world, final EntityLivingBase shooter) {
+    public EntityBlowgunDart(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
-        this.setPickupStatusFromEntity(shooter);
+        setPickupStatusFromEntity(shooter);
     }
 
     @Override
-    public void shoot(final Entity entity, final float f, final float f1, final float f2, final float f3,
-                      final float f4) {
-        final float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        final float y = -MathHelper.sin(f * 0.017453292f);
-        final float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        this.shoot(x, y, z, f3, f4);
-        this.motionX += entity.motionX;
-        this.motionZ += entity.motionZ;
+    public void shoot(Entity entity, float f, float f1, float f2, float f3,
+                      float f4) {
+        float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        float y = -MathHelper.sin(f * 0.017453292f);
+        float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
+        shoot(x, y, z, f3, f4);
+        motionX += entity.motionX;
+        motionZ += entity.motionZ;
         if (!entity.onGround) {
-            this.motionY += entity.motionY;
+            motionY += entity.motionY;
         }
     }
 
     @Override
     public void registerData() {
         super.registerData();
-        this.dataManager.register(EntityBlowgunDart.DART_EFFECT_TYPE, (byte) 0);
+        dataManager.register(EntityBlowgunDart.DART_EFFECT_TYPE, (byte) 0);
     }
 
-    public void setDartEffectType(final DartType type) {
+    public void setDartEffectType(DartType type) {
         setDartEffectType(type.typeID);
     }
 
-    public void setDartEffectType(final byte i) {
-        this.dataManager.set(EntityBlowgunDart.DART_EFFECT_TYPE, i);
+    public void setDartEffectType(byte i) {
+        dataManager.set(EntityBlowgunDart.DART_EFFECT_TYPE, i);
     }
 
     public DartType getDartEffectType() {
@@ -71,25 +74,25 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     public byte getDartEffectId() {
-        return this.dataManager.get(EntityBlowgunDart.DART_EFFECT_TYPE);
+        return dataManager.get(EntityBlowgunDart.DART_EFFECT_TYPE);
     }
 
     public float[] getDartColor() {
-        return EntityBlowgunDart.DART_COLORS[this.getDartEffectId()];
+        return EntityBlowgunDart.DART_COLORS[getDartEffectId()];
     }
 
     @Override
-    public void onEntityHit(final Entity entity) {
+    public void onEntityHit(Entity entity) {
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
-        if (entity.attackEntityFrom(damagesource, 1.0f + this.extraDamage)) {
+        if (entity.attackEntityFrom(damagesource, 1.0f + extraDamage)) {
             if (entity instanceof EntityLivingBase) {
-                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(DartType.dartTypes[this.getDartEffectId()].potionEffect));
+                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(DartType.dartTypes[getDartEffectId()].potionEffect));
             }
-            this.applyEntityHitEffects(entity);
-            this.playHitSound();
-            this.remove();
+            applyEntityHitEffects(entity);
+            playHitSound();
+            remove();
         } else {
-            this.bounceBack();
+            bounceBack();
         }
     }
 
@@ -100,7 +103,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
 
     @Override
     public void playHitSound() {
-        this.playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.2f / (this.rand.nextFloat() * 0.2f + 0.2f));
+        playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.2f / (rand.nextFloat() * 0.2f + 0.2f));
     }
 
     @Override
@@ -121,19 +124,15 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     @Override
-    public void writeAdditional(final NBTTagCompound nbttagcompound) {
+    public void writeAdditional(NBTTagCompound nbttagcompound) {
         super.writeAdditional(nbttagcompound);
-        nbttagcompound.putByte("darttype", this.getDartEffectId());
+        nbttagcompound.putByte("darttype", getDartEffectId());
     }
 
     @Override
-    public void readAdditional(final NBTTagCompound nbttagcompound) {
+    public void readAdditional(NBTTagCompound nbttagcompound) {
         super.readAdditional(nbttagcompound);
-        this.setDartEffectType(nbttagcompound.getByte("darttype"));
+        setDartEffectType(nbttagcompound.getByte("darttype"));
     }
 
-    static {
-        DART_EFFECT_TYPE = EntityDataManager.createKey(EntityBlowgunDart.class, DataSerializers.BYTE);
-        DART_COLORS = new float[][]{{0.2f, 0.8f, 0.3f}, {0.9f, 0.7f, 1.0f}, {0.6f, 1.0f, 0.9f}, {0.8f, 0.5f, 0.2f}};
-    }
 }

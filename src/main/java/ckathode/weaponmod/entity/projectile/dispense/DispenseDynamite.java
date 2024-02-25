@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 public class DispenseDynamite extends DispenseWeaponProjectile {
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull final World world, final IPosition pos,
-                                              @Nonnull final ItemStack stack) {
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
+                                              @Nonnull ItemStack stack) {
         return new EntityDynamite(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
+    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_TNT_PRIMED,
                 SoundCategory.NEUTRAL, 1.0f, 1.2f);
     }

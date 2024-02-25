@@ -17,38 +17,38 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderBoomerang extends Render<EntityBoomerang> {
-    public RenderBoomerang(final RenderManager renderManager) {
+    public RenderBoomerang(RenderManager renderManager) {
         super(renderManager);
     }
 
     @Override
-    public void doRender(@Nonnull final EntityBoomerang entityboomerang, final double d, final double d1,
-                         final double d2, final float f, final float f1) {
+    public void doRender(@Nonnull EntityBoomerang entityboomerang, double d, double d1,
+                         double d2, float f, float f1) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
-            this.bindEntityTexture(entityboomerang);
+            bindEntityTexture(entityboomerang);
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
             GlStateManager.translated(d, d1, d2);
             GlStateManager.rotatef(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotatef(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
-            final Tessellator tessellator = Tessellator.getInstance();
-            final BufferBuilder vertexbuffer = tessellator.getBuffer();
-            final int mat = entityboomerang.getWeaponMaterialId();
-            final float[] color = entityboomerang.getMaterialColor();
-            final float ft0 = 0.0f;
-            final float ft2 = 0.5f;
-            final float ft3 = 1.0f;
-            final float fh = 0.08f;
-            final float f2 = 0.2f;
-            final float f3 = 0.9f;
-            final float f4 = 0.8f;
-            final float ft4 = 0.5f;
-            final float ft5 = 0.65625f;
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder vertexbuffer = tessellator.getBuffer();
+            int mat = entityboomerang.getWeaponMaterialId();
+            float[] color = entityboomerang.getMaterialColor();
+            float ft0 = 0.0f;
+            float ft2 = 0.5f;
+            float ft3 = 1.0f;
+            float fh = 0.08f;
+            float f2 = 0.2f;
+            float f3 = 0.9f;
+            float f4 = 0.8f;
+            float ft4 = 0.5f;
+            float ft5 = 0.65625f;
             GlStateManager.translatef(-0.5f, 0.0f, -0.5f);
             GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-            if (this.renderOutlines) {
+            if (renderOutlines) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(this.getTeamColor(entityboomerang));
+                GlStateManager.enableOutlineMode(getTeamColor(entityboomerang));
             }
             GlStateManager.normal3f(0.0f, 1.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -76,7 +76,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
                 vertexbuffer.pos(0.0, 0.0, 0.0).tex(0.5, 0.0).color(color[0], color[1], color[2], 1.0f).endVertex();
             }
             tessellator.draw();
-            final float sqrt2 = (float) Math.sqrt(2.0);
+            float sqrt2 = (float) Math.sqrt(2.0);
             GlStateManager.disableCull();
             GlStateManager.normal3f(-sqrt2, 0.0f, sqrt2);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -101,7 +101,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
                 vertexbuffer.pos(0.2, -0.08, 0.2).tex(0.5, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
             }
             tessellator.draw();
-            if (this.renderOutlines) {
+            if (renderOutlines) {
                 GlStateManager.disableOutlineMode();
                 GlStateManager.disableColorMaterial();
             }
@@ -109,21 +109,21 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            final ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
+            ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             GlStateManager.pushMatrix();
-            this.bindEntityTexture(entityboomerang);
+            bindEntityTexture(entityboomerang);
             GlStateManager.translated(d, d1, d2);
             GlStateManager.enableRescaleNormal();
             GlStateManager.scalef(0.85f, 0.85f, 0.85f);
             GlStateManager.rotatef(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotatef(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotatef(90.0f, 1.0f, 0.0f, 0.0f);
-            if (this.renderOutlines) {
+            if (renderOutlines) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(this.getTeamColor(entityboomerang));
+                GlStateManager.enableOutlineMode(getTeamColor(entityboomerang));
             }
-            itemRender.renderItem(this.getStackToRender(entityboomerang), TransformType.NONE);
-            if (this.renderOutlines) {
+            itemRender.renderItem(getStackToRender(entityboomerang), TransformType.NONE);
+            if (renderOutlines) {
                 GlStateManager.disableOutlineMode();
                 GlStateManager.disableColorMaterial();
             }
@@ -133,12 +133,12 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
         super.doRender(entityboomerang, d, d1, d2, f, f1);
     }
 
-    public ItemStack getStackToRender(final EntityBoomerang entity) {
+    public ItemStack getStackToRender(EntityBoomerang entity) {
         return entity.getWeapon();
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull final EntityBoomerang entity) {
+    protected ResourceLocation getEntityTexture(@Nonnull EntityBoomerang entity) {
         return WeaponModResources.Textures.BOOMERANG;
     }
 }

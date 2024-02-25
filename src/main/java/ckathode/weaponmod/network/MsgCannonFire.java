@@ -12,32 +12,32 @@ public class MsgCannonFire implements WMMessage<MsgCannonFire> {
     private int cannonEntityID;
 
     public MsgCannonFire() {
-        this.cannonEntityID = 0;
+        cannonEntityID = 0;
     }
 
-    public MsgCannonFire(final EntityCannon entity) {
-        this.cannonEntityID = 0;
-        this.cannonEntityID = entity.getEntityId();
-    }
-
-    @Override
-    public void decode(final ByteBuf buf) {
-        this.cannonEntityID = buf.readInt();
+    public MsgCannonFire(EntityCannon entity) {
+        cannonEntityID = 0;
+        cannonEntityID = entity.getEntityId();
     }
 
     @Override
-    public void encode(final ByteBuf buf) {
-        buf.writeInt(this.cannonEntityID);
+    public void decode(ByteBuf buf) {
+        cannonEntityID = buf.readInt();
+    }
+
+    @Override
+    public void encode(ByteBuf buf) {
+        buf.writeInt(cannonEntityID);
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void handleClientSide(final MsgCannonFire msg, final Supplier<NetworkEvent.Context> ctx) {
+    public void handleClientSide(MsgCannonFire msg, Supplier<NetworkEvent.Context> ctx) {
     }
 
     @Override
-    public void handleServerSide(final MsgCannonFire msg, final Supplier<NetworkEvent.Context> ctx) {
-        final Entity entity = ctx.get().getSender().world.getEntityByID(this.cannonEntityID);
+    public void handleServerSide(MsgCannonFire msg, Supplier<NetworkEvent.Context> ctx) {
+        Entity entity = ctx.get().getSender().world.getEntityByID(cannonEntityID);
         if (entity instanceof EntityCannon) {
             ((EntityCannon) entity).fireCannon();
         }

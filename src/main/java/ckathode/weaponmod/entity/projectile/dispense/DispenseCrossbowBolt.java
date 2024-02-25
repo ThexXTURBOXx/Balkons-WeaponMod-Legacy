@@ -13,8 +13,8 @@ import net.minecraft.world.World;
 public class DispenseCrossbowBolt extends DispenseWeaponProjectile {
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull final World world, final IPosition pos,
-                                              @Nonnull final ItemStack stack) {
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
+                                              @Nonnull ItemStack stack) {
         return new EntityCrossbowBolt(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
@@ -29,7 +29,7 @@ public class DispenseCrossbowBolt extends DispenseWeaponProjectile {
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull final IBlockSource blocksource) {
+    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_ARROW_SHOOT,
                 SoundCategory.NEUTRAL, 1.0f, 1.2f);
     }

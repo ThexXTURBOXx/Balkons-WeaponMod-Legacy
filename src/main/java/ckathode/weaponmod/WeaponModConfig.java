@@ -20,44 +20,44 @@ public class WeaponModConfig {
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
 
     public WeaponModConfig() {
-        this.builder = new ForgeConfigSpec.Builder();
-        this.enableSettings = new LinkedHashMap<>();
-        this.reloadTimeSettings = new LinkedHashMap<>();
+        builder = new ForgeConfigSpec.Builder();
+        enableSettings = new LinkedHashMap<>();
+        reloadTimeSettings = new LinkedHashMap<>();
     }
 
     public void loadConfig(ModLoadingContext context) {
         builder.comment("Enable or disable certain weapons")
                 .push("enable");
-        for (final EnableSetting es : this.enableSettings.values())
+        for (final EnableSetting es : enableSettings.values())
             es.configValue = builder.define(es.settingName, es.enabled);
         builder.pop();
 
         builder.comment("The reload durations of the reloadable weapons")
                 .push("reloadtime");
-        for (final ReloadTimeSetting rs : this.reloadTimeSettings.values())
+        for (final ReloadTimeSetting rs : reloadTimeSettings.values())
             rs.configValue = builder.define(rs.settingName, rs.reloadTime);
         builder.pop();
 
         builder.comment("Miscellaneous mod settings")
                 .push("settings");
-        this.cannonDoesBlockDamage = builder
+        cannonDoesBlockDamage = builder
                 .define("cannon-block-damage", true);
-        this.dynamiteDoesBlockDamage = builder
+        dynamiteDoesBlockDamage = builder
                 .define("dynamite-block-damage", true);
-        this.mortarDoesBlockDamage = builder
+        mortarDoesBlockDamage = builder
                 .define("mortar-block-damage", true);
-        this.canThrowKnife = builder
+        canThrowKnife = builder
                 .define("can-throw-knife", true);
-        this.canThrowSpear = builder
+        canThrowSpear = builder
                 .define("can-throw-spear", true);
-        this.allCanPickup = builder
+        allCanPickup = builder
                 .comment("Change this to 'false' to allow only the thrower/shooter of the projectile to " +
                          "pick the item up. If set to 'true' everyone can pick the item up.")
                 .define("pickup-all", true);
-        this.guiOverlayReloaded = builder
+        guiOverlayReloaded = builder
                 .comment("Show reload progress in hotbar.")
                 .define("reload-progress", true);
-        this.itemModelForEntity = builder
+        itemModelForEntity = builder
                 .comment("Item model for entity (knife, spear, etc).")
                 .define("render-entity-model", true);
         builder.pop();
@@ -66,27 +66,27 @@ public class WeaponModConfig {
     }
 
     public void postLoadConfig() {
-        for (final EnableSetting es : this.enableSettings.values())
+        for (EnableSetting es : enableSettings.values())
             es.enabled = es.configValue.get();
-        for (final ReloadTimeSetting rs : this.reloadTimeSettings.values())
+        for (ReloadTimeSetting rs : reloadTimeSettings.values())
             rs.reloadTime = rs.configValue.get();
     }
 
-    public void addEnableSetting(final String weapon) {
-        this.enableSettings.put(weapon, new EnableSetting(weapon, true));
+    public void addEnableSetting(String weapon) {
+        enableSettings.put(weapon, new EnableSetting(weapon, true));
     }
 
-    public void addReloadTimeSetting(final String weapon, final int defaulttime) {
-        this.reloadTimeSettings.put(weapon, new ReloadTimeSetting(weapon, defaulttime));
+    public void addReloadTimeSetting(String weapon, int defaulttime) {
+        reloadTimeSettings.put(weapon, new ReloadTimeSetting(weapon, defaulttime));
     }
 
-    public boolean isEnabled(final String weapon) {
-        final EnableSetting es = this.enableSettings.get(weapon);
+    public boolean isEnabled(String weapon) {
+        EnableSetting es = enableSettings.get(weapon);
         return es == null || es.enabled;
     }
 
-    public int getReloadTime(final String weapon) {
-        final ReloadTimeSetting rs = this.reloadTimeSettings.get(weapon);
+    public int getReloadTime(String weapon) {
+        ReloadTimeSetting rs = reloadTimeSettings.get(weapon);
         return (rs == null) ? 0 : rs.reloadTime;
     }
 
@@ -94,15 +94,15 @@ public class WeaponModConfig {
         ForgeConfigSpec.ConfigValue<T> configValue;
         final String settingName;
 
-        Setting(final String name) {
-            this.settingName = name;
+        Setting(String name) {
+            settingName = name;
         }
     }
 
     private static class ReloadTimeSetting extends Setting<Integer> {
         int reloadTime;
 
-        ReloadTimeSetting(final String name, final int reloadTime) {
+        ReloadTimeSetting(String name, int reloadTime) {
             super(name + ".reloadtime");
             this.reloadTime = reloadTime;
         }
@@ -111,7 +111,7 @@ public class WeaponModConfig {
     private static class EnableSetting extends Setting<Boolean> {
         boolean enabled;
 
-        EnableSetting(final String name, final boolean enabled) {
+        EnableSetting(String name, boolean enabled) {
             super(name + ".enabled");
             this.enabled = enabled;
         }
