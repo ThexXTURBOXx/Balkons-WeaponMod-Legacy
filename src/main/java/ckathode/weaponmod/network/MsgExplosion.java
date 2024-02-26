@@ -21,6 +21,10 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
     private boolean smallParticles;
     private boolean bigParticles;
 
+    public MsgExplosion() {
+        // Needed for WMMessagePipeline instantiation
+    }
+
     public MsgExplosion(AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
         x = explosion.explosionX;
         y = explosion.explosionY;

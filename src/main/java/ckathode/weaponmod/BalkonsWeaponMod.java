@@ -223,12 +223,20 @@ public class BalkonsWeaponMod {
         proxy.registerRenderersEntity();
     }
 
-    @SuppressWarnings("unchecked")
     private <T extends Entity> EntityType<T> createEntityType(Class<T> entityClass, String name,
                                                               Function<? super World, ? extends T> factory) {
-        // Helper method because Forge is too stupid to handle generics properly...
-        return (EntityType<T>) EntityType.Builder.create(entityClass, factory)
-                .build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
+        return createEntityType(entityClass, name, -1, -1, false, factory);
+    }
+
+    @SuppressWarnings("unchecked")
+    // Helper method because Forge is too stupid to handle generics properly...
+    private <T extends Entity> EntityType<T> createEntityType(Class<T> entityClass, String name,
+                                                              int range, int updateFrequency, boolean velocityUpdates,
+                                                              Function<? super World, ? extends T> factory) {
+        EntityType.Builder<T> builder = EntityType.Builder.create(entityClass, factory);
+        if (range >= 0 && updateFrequency >= 0)
+            builder.tracker(range, updateFrequency, velocityUpdates);
+        return (EntityType<T>) builder.build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
     }
 
     @SubscribeEvent
@@ -267,7 +275,7 @@ public class BalkonsWeaponMod {
                 createEntityType(EntityBlunderShot.class, EntityBlunderShot.NAME, EntityBlunderShot::new));
 
         registry.register(entityDummy =
-                createEntityType(EntityDummy.class, EntityDummy.NAME, EntityDummy::new));
+                createEntityType(EntityDummy.class, EntityDummy.NAME, 64, 20, false, EntityDummy::new));
 
         registry.register(entityBoomerang =
                 createEntityType(EntityBoomerang.class, EntityBoomerang.NAME, EntityBoomerang::new));

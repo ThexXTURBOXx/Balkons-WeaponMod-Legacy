@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
@@ -63,6 +64,12 @@ public class EntityCannon extends EntityBoat {
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
+    }
+
+    @Nonnull
+    @Override
+    public EntityType<?> getType() {
+        return BalkonsWeaponMod.entityCannon;
     }
 
     @Override

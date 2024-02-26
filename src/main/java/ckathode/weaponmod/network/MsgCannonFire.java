@@ -11,6 +11,10 @@ import net.minecraftforge.fml.network.NetworkEvent;
 public class MsgCannonFire implements WMMessage<MsgCannonFire> {
     private int cannonEntityID;
 
+    public MsgCannonFire() {
+        // Needed for WMMessagePipeline instantiation
+    }
+
     public MsgCannonFire(EntityCannon entity) {
         cannonEntityID = 0;
         cannonEntityID = entity.getEntityId();

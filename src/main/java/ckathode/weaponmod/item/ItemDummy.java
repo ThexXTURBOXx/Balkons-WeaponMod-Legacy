@@ -26,9 +26,6 @@ public class ItemDummy extends WMItem {
     @Override
     public EnumActionResult onItemUse(@Nonnull ItemUseContext context) {
         World world = context.getWorld();
-        if (world.isRemote) {
-            return EnumActionResult.FAIL;
-        }
         EntityPlayer entityplayer = context.getPlayer();
         if (entityplayer == null) return EnumActionResult.FAIL;
         ItemStack itemstack = context.getItem();
@@ -58,13 +55,15 @@ public class ItemDummy extends WMItem {
         boolean flag = world.getBlockState(blockpos).isReplaceable(new BlockItemUseContext(context));
         BlockPos blockpos2 = flag ? blockpos : blockpos.offset(raytraceresult.sideHit);
         boolean flag2 = block == Blocks.SNOW;
-        EntityDummy entitydummy = new EntityDummy(world, blockpos2.getX() + 0.5, flag2 ?
-                (blockpos2.getY() - 0.12) : blockpos2.getY(), blockpos2.getZ() + 0.5);
+        EntityDummy entitydummy = new EntityDummy(world, blockpos2.getX() + 0.5,
+                blockpos2.getY() - (flag2 ? 0.12 : 0), blockpos2.getZ() + 0.5);
         entitydummy.rotationYaw = entityplayer.rotationYaw;
         if (world.getCollisionBoxes(entitydummy, entitydummy.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
             return EnumActionResult.FAIL;
         }
-        world.spawnEntity(entitydummy);
+        if (!world.isRemote) {
+            world.spawnEntity(entitydummy);
+        }
         if (!entityplayer.abilities.isCreativeMode) {
             itemstack.shrink(1);
         }

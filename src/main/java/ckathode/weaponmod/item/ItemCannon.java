@@ -6,11 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceFluidMode;
@@ -30,9 +29,11 @@ public class ItemCannon extends WMItem {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    @Nonnull EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public EnumActionResult onItemUse(@Nonnull ItemUseContext context) {
+        World world = context.getWorld();
+        EntityPlayer entityplayer = context.getPlayer();
+        if (entityplayer == null) return EnumActionResult.FAIL;
+        ItemStack itemstack = context.getItem();
         float f = 1.0f;
         float f2 =
                 entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
@@ -52,23 +53,23 @@ public class ItemCannon extends WMItem {
         Vec3d vec3d2 = vec3d.add(f8 * d4, f7 * d4, f10 * d4);
         RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.ALWAYS);
         if (raytraceresult == null || raytraceresult.type != RayTraceResult.Type.BLOCK || raytraceresult.sideHit != EnumFacing.UP) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return EnumActionResult.FAIL;
         }
         Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
         BlockPos blockpos = raytraceresult.getBlockPos();
         boolean flag1 = block == Blocks.SNOW;
-        EntityCannon entitycannon = new EntityCannon(world, blockpos.getX() + 0.5, flag1 ?
-                (blockpos.getY() + 0.38) : (blockpos.getY() + 1.0), blockpos.getZ() + 0.5);
+        EntityCannon entitycannon = new EntityCannon(world, blockpos.getX() + 0.5,
+                blockpos.getY() + (flag1 ? 0.38 : 1.0), blockpos.getZ() + 0.5);
         if (world.getCollisionBoxes(entitycannon, entitycannon.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return EnumActionResult.FAIL;
         }
         if (!world.isRemote) {
             world.spawnEntity(entitycannon);
         }
-        if (!entityplayer.abilities.isCreativeMode || !world.isRemote) {
+        if (!entityplayer.abilities.isCreativeMode) {
             itemstack.shrink(1);
         }
         entityplayer.addStat(StatList.ITEM_USED.get(this));
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return EnumActionResult.SUCCESS;
     }
 }
