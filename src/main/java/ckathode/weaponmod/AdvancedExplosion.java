@@ -21,14 +21,14 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class AdvancedExplosion extends Explosion {
-    public World worldObj;
-    public double explosionX;
-    public double explosionY;
-    public double explosionZ;
-    public Entity exploder;
-    public float explosionSize;
-    protected boolean blocksCalculated;
     protected static final Random rand = new Random();
+    public final World worldObj;
+    public final double explosionX;
+    public final double explosionY;
+    public final double explosionZ;
+    public final Entity exploder;
+    public final float explosionSize;
+    protected boolean blocksCalculated;
 
     public AdvancedExplosion(World world, Entity entity, double x, double y, double z,
                              float size, boolean flame, boolean smoke) {
@@ -108,7 +108,7 @@ public class AdvancedExplosion extends Explosion {
             calculateBlockExplosion();
         }
         for (BlockPos blockpos : getAffectedBlockPositions()) {
-            if (worldObj.getBlockState(blockpos).getMaterial() == Material.AIR && worldObj.getBlockState(blockpos.down()).isFullCube() && AdvancedExplosion.rand.nextInt(3) == 0) {
+            if (worldObj.getBlockState(blockpos).getMaterial() == Material.AIR && worldObj.getBlockState(blockpos.down()).isFullCube() && rand.nextInt(3) == 0) {
                 worldObj.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
             }
         }

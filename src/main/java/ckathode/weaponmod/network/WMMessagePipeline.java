@@ -21,12 +21,12 @@ import org.apache.logging.log4j.Level;
 @ChannelHandler.Sharable
 public class WMMessagePipeline {
 
-    private static final String PROTOCOL_VERSION = Integer.toString(1);
-    private static final SimpleChannel HANDLER = NetworkRegistry.ChannelBuilder
+    private final String protocolVersion = Integer.toString(1);
+    private final SimpleChannel handler = NetworkRegistry.ChannelBuilder
             .named(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "main"))
-            .clientAcceptedVersions(PROTOCOL_VERSION::equals)
-            .serverAcceptedVersions(PROTOCOL_VERSION::equals)
-            .networkProtocolVersion(() -> PROTOCOL_VERSION)
+            .clientAcceptedVersions(protocolVersion::equals)
+            .serverAcceptedVersions(protocolVersion::equals)
+            .networkProtocolVersion(() -> protocolVersion)
             .simpleChannel();
     private final LinkedList<Class<? extends WMMessage<?>>> idToPacket = new LinkedList<>();
 
@@ -34,7 +34,7 @@ public class WMMessagePipeline {
 
     public <T extends WMMessage<T>> void registerPacket(Class<T> messageType) {
         idToPacket.add(messageType);
-        HANDLER.registerMessage(registerIndex++, messageType, this::encode, this::decode, this::handle);
+        handler.registerMessage(registerIndex++, messageType, this::encode, this::decode, this::handle);
     }
 
     protected <T extends WMMessage<T>> void encode(T msg, PacketBuffer buf) {
@@ -84,26 +84,26 @@ public class WMMessagePipeline {
     }
 
     public <T extends WMMessage<T>> void sendToAll(WMMessage<T> message) {
-        HANDLER.send(PacketDistributor.ALL.noArg(), message);
+        handler.send(PacketDistributor.ALL.noArg(), message);
     }
 
     public <T extends WMMessage<T>> void sendTo(WMMessage<T> message, EntityPlayerMP player) {
         if (!(player instanceof FakePlayer)) {
-            HANDLER.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+            handler.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
     public <T extends WMMessage<T>> void sendToAllAround(WMMessage<T> message,
                                                          PacketDistributor.TargetPoint point) {
-        HANDLER.send(PacketDistributor.NEAR.with(() -> point), message);
+        handler.send(PacketDistributor.NEAR.with(() -> point), message);
     }
 
     public <T extends WMMessage<T>> void sendToDimension(WMMessage<T> message, DimensionType dimension) {
-        HANDLER.send(PacketDistributor.DIMENSION.with(() -> dimension), message);
+        handler.send(PacketDistributor.DIMENSION.with(() -> dimension), message);
     }
 
     public <T extends WMMessage<T>> void sendToServer(WMMessage<T> message) {
-        HANDLER.sendToServer(message);
+        handler.sendToServer(message);
     }
 
 }

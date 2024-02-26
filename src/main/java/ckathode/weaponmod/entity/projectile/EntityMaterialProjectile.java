@@ -34,8 +34,8 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @Override
     public void registerData() {
         super.registerData();
-        dataManager.register(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) 0);
-        dataManager.register(EntityMaterialProjectile.WEAPON_ITEM, ItemStack.EMPTY);
+        dataManager.register(WEAPON_MATERIAL, (byte) 0);
+        dataManager.register(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
     public float getMeleeHitDamage(Entity entity) {
@@ -70,7 +70,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
         if (thrownItem.getItem() instanceof ItemFlail || !BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
             updateWeaponMaterial();
         } else if (thrownItem != null && !(thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
-            dataManager.set(EntityMaterialProjectile.WEAPON_ITEM, itemstack);
+            dataManager.set(WEAPON_ITEM, itemstack);
         }
     }
 
@@ -81,11 +81,11 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     public int getWeaponMaterialId() {
-        return dataManager.get(EntityMaterialProjectile.WEAPON_MATERIAL);
+        return dataManager.get(WEAPON_MATERIAL);
     }
 
     public ItemStack getWeapon() {
-        return dataManager.get(EntityMaterialProjectile.WEAPON_ITEM);
+        return dataManager.get(WEAPON_ITEM);
     }
 
     protected void updateWeaponMaterial() {
@@ -95,7 +95,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
                 material =
                         MaterialRegistry.getOrdinal(((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial);
             }
-            dataManager.set(EntityMaterialProjectile.WEAPON_MATERIAL, (byte) (material & 0xFF));
+            dataManager.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
         }
     }
 
@@ -103,7 +103,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
         if (id < 5) {
-            return EntityMaterialProjectile.MATERIAL_COLORS[id];
+            return MATERIAL_COLORS[id];
         }
         return MaterialRegistry.getColorFromMaterialID(id);
     }

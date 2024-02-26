@@ -59,19 +59,19 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             motionY += entity.motionY;
         }
         floatStrength = Math.min(1.5f, f3);
-        dataManager.set(EntityBoomerang.BOOMERANG, Float.floatToRawIntBits(floatStrength));
+        dataManager.set(BOOMERANG, Float.floatToRawIntBits(floatStrength));
     }
 
     @Override
     public void registerData() {
         super.registerData();
-        dataManager.register(EntityBoomerang.BOOMERANG, Float.floatToRawIntBits(0.0f));
+        dataManager.register(BOOMERANG, Float.floatToRawIntBits(0.0f));
     }
 
     @Override
     public void tick() {
         super.tick();
-        floatStrength = Float.intBitsToFloat(dataManager.get(EntityBoomerang.BOOMERANG));
+        floatStrength = Float.intBitsToFloat(dataManager.get(BOOMERANG));
         if (inGround) {
             return;
         }
@@ -105,7 +105,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                 soundTimer %= 3.0f;
             }
         }
-        dataManager.set(EntityBoomerang.BOOMERANG, Float.floatToRawIntBits(floatStrength));
+        dataManager.set(BOOMERANG, Float.floatToRawIntBits(floatStrength));
     }
 
     @Override

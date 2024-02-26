@@ -59,7 +59,6 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
                 return RangedComponent.isReloaded(stack) ? 1.0f : 0.0f;
             }
         });
-        BalkonsWeaponMod.MOD_ITEMS.add(this);
     }
 
     @Override

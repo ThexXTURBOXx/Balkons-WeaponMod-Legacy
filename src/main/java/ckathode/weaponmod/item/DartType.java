@@ -14,7 +14,7 @@ public class DartType {
     public final PotionEffect potionEffect;
 
     public DartType(byte id, String typename, PotionEffect potioneffect) {
-        DartType.dartTypes[id] = this;
+        dartTypes[id] = this;
         typeID = id;
         typeName = typename;
         potionEffect = potioneffect;

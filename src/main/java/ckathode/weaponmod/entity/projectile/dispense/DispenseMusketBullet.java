@@ -1,6 +1,7 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
+import java.util.Random;
 import javax.annotation.Nonnull;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.IBlockSource;
@@ -14,6 +15,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class DispenseMusketBullet extends DispenseWeaponProjectile {
+    private final Random rand = new Random();
+
     @Nonnull
     @Override
     protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
@@ -27,12 +30,12 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
     }
 
     @Override
-    public float getDeviation() {
+    protected float getProjectileInaccuracy() {
         return 3.0f;
     }
 
     @Override
-    public float getVelocity() {
+    public float getProjectileVelocity() {
         return 5.0f;
     }
 

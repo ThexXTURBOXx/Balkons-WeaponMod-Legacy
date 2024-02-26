@@ -19,12 +19,12 @@ public class DispenseCrossbowBolt extends DispenseWeaponProjectile {
     }
 
     @Override
-    public float getVelocity() {
+    public float getProjectileVelocity() {
         return 3.0f;
     }
 
     @Override
-    public float getDeviation() {
+    protected float getProjectileInaccuracy() {
         return 2.0f;
     }
 

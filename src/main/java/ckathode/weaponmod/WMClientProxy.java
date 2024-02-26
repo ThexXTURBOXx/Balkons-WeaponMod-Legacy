@@ -51,49 +51,21 @@ public class WMClientProxy extends WMCommonProxy {
     }
 
     @Override
-    public void registerRenderersEntity(WeaponModConfig config) {
-        if (config.isEnabled("knife")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityKnife.class, RenderKnife::new);
-        }
-        if (config.isEnabled("spear")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntitySpear.class, RenderSpear::new);
-        }
-        if (config.isEnabled("javelin")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityJavelin.class, RenderJavelin::new);
-        }
-        if (config.isEnabled("musket")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, RenderMusketBullet::new);
-        }
-        if (config.isEnabled("crossbow")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityCrossbowBolt.class, RenderCrossbowBolt::new);
-        }
-        if (config.isEnabled("blowgun")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityBlowgunDart.class, RenderBlowgunDart::new);
-        }
-        if (config.isEnabled("dynamite")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, RenderDynamite::new);
-        }
-        if (config.isEnabled("flail")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityFlail.class, RenderFlail::new);
-        }
-        if (config.isEnabled("cannon")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityCannon.class, RenderCannon::new);
-            RenderingRegistry.registerEntityRenderingHandler(EntityCannonBall.class, RenderCannonBall::new);
-        }
-        if (config.isEnabled("blunderbuss")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityBlunderShot.class, RenderBlunderShot::new);
-        }
-        if (config.isEnabled("dummy")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
-        }
-        if (config.isEnabled("boomerang")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityBoomerang.class, RenderBoomerang::new);
-        }
-        if (config.isEnabled("flintlock")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, RenderMusketBullet::new);
-        }
-        if (config.isEnabled("mortar")) {
-            RenderingRegistry.registerEntityRenderingHandler(EntityMortarShell.class, RenderMortarShell::new);
-        }
+    public void registerRenderersEntity() {
+        RenderingRegistry.registerEntityRenderingHandler(EntityKnife.class, RenderKnife::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySpear.class, RenderSpear::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityJavelin.class, RenderJavelin::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, RenderMusketBullet::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityCrossbowBolt.class, RenderCrossbowBolt::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityBlowgunDart.class, RenderBlowgunDart::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, RenderDynamite::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityFlail.class, RenderFlail::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityCannon.class, RenderCannon::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityCannonBall.class, RenderCannonBall::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityBlunderShot.class, RenderBlunderShot::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityBoomerang.class, RenderBoomerang::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, RenderMusketBullet::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMortarShell.class, RenderMortarShell::new);
     }
 }

@@ -48,9 +48,7 @@ import ckathode.weaponmod.item.RangedCompFlintlock;
 import ckathode.weaponmod.item.RangedCompMortar;
 import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.network.WMMessagePipeline;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import net.minecraft.block.BlockDispenser;
@@ -83,7 +81,6 @@ import org.apache.logging.log4j.Logger;
 @Mod(BalkonsWeaponMod.MOD_ID)
 public class BalkonsWeaponMod {
     public static final String MOD_ID = "weaponmod";
-    public static final List<Item> MOD_ITEMS = new ArrayList<>();
     public static BalkonsWeaponMod instance;
     public static final Logger modLog = LogManager.getLogger(MOD_ID);
     public static final WMCommonProxy proxy = DistExecutor.runForDist(() -> WMClientProxy::new,
@@ -210,13 +207,8 @@ public class BalkonsWeaponMod {
         modConfig.addReloadTimeSetting("mortar", 50);
         modConfig.loadConfig(ModLoadingContext.get());
 
-        configConditional = CraftingHelper.register(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional"),
+        configConditional = CraftingHelper.register(new ResourceLocation(MOD_ID, "config_conditional"),
                 json -> () -> modConfig.isEnabled(JsonUtils.getString(json, "weapon")));
-    }
-
-    @SubscribeEvent
-    public void onModConfig(ModConfig.ModConfigEvent e) {
-        modConfig.postLoadConfig();
     }
 
     public void setup(FMLCommonSetupEvent event) {
@@ -228,7 +220,7 @@ public class BalkonsWeaponMod {
     }
 
     public void setupClient(FMLClientSetupEvent event) {
-        proxy.registerRenderersEntity(modConfig);
+        proxy.registerRenderersEntity();
     }
 
     @SuppressWarnings("unchecked")
@@ -242,60 +234,46 @@ public class BalkonsWeaponMod {
     @SubscribeEvent
     public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         IForgeRegistry<EntityType<?>> registry = event.getRegistry();
-        if (modConfig.isEnabled("spear")) {
-            registry.register(entitySpear =
-                    createEntityType(EntitySpear.class, EntitySpear.NAME, EntitySpear::new));
-        }
-        if (modConfig.isEnabled("knife")) {
-            registry.register(entityKnife =
-                    createEntityType(EntityKnife.class, EntityKnife.NAME, EntityKnife::new));
-        }
-        if (modConfig.isEnabled("javelin")) {
-            registry.register(entityJavelin =
-                    createEntityType(EntityJavelin.class, EntityJavelin.NAME, EntityJavelin::new));
-        }
-        if (modConfig.isEnabled("musket") || modConfig.isEnabled("flintlock")) {
-            registry.register(entityMusketBullet =
-                    createEntityType(EntityMusketBullet.class, EntityMusketBullet.NAME, EntityMusketBullet::new));
-        }
-        if (modConfig.isEnabled("crossbow")) {
-            registry.register(entityCrossbowBolt =
-                    createEntityType(EntityCrossbowBolt.class, EntityCrossbowBolt.NAME, EntityCrossbowBolt::new));
-        }
-        if (modConfig.isEnabled("blowgun")) {
-            registry.register(entityBlowgunDart =
-                    createEntityType(EntityBlowgunDart.class, EntityBlowgunDart.NAME, EntityBlowgunDart::new));
-        }
-        if (modConfig.isEnabled("dynamite")) {
-            registry.register(entityDynamite =
-                    createEntityType(EntityDynamite.class, EntityDynamite.NAME, EntityDynamite::new));
-        }
-        if (modConfig.isEnabled("flail")) {
-            registry.register(entityFlail =
-                    createEntityType(EntityFlail.class, EntityFlail.NAME, EntityFlail::new));
-        }
-        if (modConfig.isEnabled("cannon")) {
-            registry.register(entityCannon =
-                    createEntityType(EntityCannon.class, EntityCannon.NAME, EntityCannon::new));
-            registry.register(entityCannonBall =
-                    createEntityType(EntityCannonBall.class, EntityCannonBall.NAME, EntityCannonBall::new));
-        }
-        if (modConfig.isEnabled("blunderbuss")) {
-            registry.register(entityBlunderShot =
-                    createEntityType(EntityBlunderShot.class, EntityBlunderShot.NAME, EntityBlunderShot::new));
-        }
-        if (modConfig.isEnabled("dummy")) {
-            registry.register(entityDummy =
-                    createEntityType(EntityDummy.class, EntityDummy.NAME, EntityDummy::new));
-        }
-        if (modConfig.isEnabled("boomerang")) {
-            registry.register(entityBoomerang =
-                    createEntityType(EntityBoomerang.class, EntityBoomerang.NAME, EntityBoomerang::new));
-        }
-        if (modConfig.isEnabled("mortar")) {
-            registry.register(entityMortarShell =
-                    createEntityType(EntityMortarShell.class, EntityMortarShell.NAME, EntityMortarShell::new));
-        }
+        registry.register(entitySpear =
+                createEntityType(EntitySpear.class, EntitySpear.NAME, EntitySpear::new));
+
+        registry.register(entityKnife =
+                createEntityType(EntityKnife.class, EntityKnife.NAME, EntityKnife::new));
+
+        registry.register(entityJavelin =
+                createEntityType(EntityJavelin.class, EntityJavelin.NAME, EntityJavelin::new));
+
+        registry.register(entityMusketBullet =
+                createEntityType(EntityMusketBullet.class, EntityMusketBullet.NAME, EntityMusketBullet::new));
+
+        registry.register(entityCrossbowBolt =
+                createEntityType(EntityCrossbowBolt.class, EntityCrossbowBolt.NAME, EntityCrossbowBolt::new));
+
+        registry.register(entityBlowgunDart =
+                createEntityType(EntityBlowgunDart.class, EntityBlowgunDart.NAME, EntityBlowgunDart::new));
+
+        registry.register(entityDynamite =
+                createEntityType(EntityDynamite.class, EntityDynamite.NAME, EntityDynamite::new));
+
+        registry.register(entityFlail =
+                createEntityType(EntityFlail.class, EntityFlail.NAME, EntityFlail::new));
+
+        registry.register(entityCannon =
+                createEntityType(EntityCannon.class, EntityCannon.NAME, EntityCannon::new));
+        registry.register(entityCannonBall =
+                createEntityType(EntityCannonBall.class, EntityCannonBall.NAME, EntityCannonBall::new));
+
+        registry.register(entityBlunderShot =
+                createEntityType(EntityBlunderShot.class, EntityBlunderShot.NAME, EntityBlunderShot::new));
+
+        registry.register(entityDummy =
+                createEntityType(EntityDummy.class, EntityDummy.NAME, EntityDummy::new));
+
+        registry.register(entityBoomerang =
+                createEntityType(EntityBoomerang.class, EntityBoomerang.NAME, EntityBoomerang::new));
+
+        registry.register(entityMortarShell =
+                createEntityType(EntityMortarShell.class, EntityMortarShell.NAME, EntityMortarShell::new));
     }
 
     @SubscribeEvent
@@ -412,6 +390,11 @@ public class BalkonsWeaponMod {
         registerDispenseBehavior();
     }
 
+    @SubscribeEvent
+    public void onModConfig(ModConfig.ModConfigEvent e) {
+        modConfig.postLoadConfig();
+    }
+
     private void registerDispenseBehavior() {
         if (musketBullet != null) {
             BlockDispenser.registerDispenseBehavior(musketBullet, new DispenseMusketBullet());
@@ -431,7 +414,7 @@ public class BalkonsWeaponMod {
         if (blunderShot != null) {
             BlockDispenser.registerDispenseBehavior(blunderShot, new DispenseBlunderShot());
         }
-        if (modConfig.isEnabled("cannon")) {
+        if (cannonBall != null) {
             DispenseCannonBall behavior = new DispenseCannonBall();
             BlockDispenser.registerDispenseBehavior(cannonBall, behavior);
             BlockDispenser.registerDispenseBehavior(Items.GUNPOWDER, behavior);
@@ -441,11 +424,4 @@ public class BalkonsWeaponMod {
         }
     }
 
-    @Mod.EventBusSubscriber
-    public static class registrationHandler {
-        @SubscribeEvent
-        public static void registerItems(RegistryEvent.Register<Item> event) {
-            event.getRegistry().registerAll(MOD_ITEMS.toArray(new Item[0]));
-        }
-    }
 }

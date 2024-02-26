@@ -19,12 +19,12 @@ public class DispenseJavelin extends DispenseWeaponProjectile {
     }
 
     @Override
-    public float getDeviation() {
+    protected float getProjectileInaccuracy() {
         return 4.0f;
     }
 
     @Override
-    public float getVelocity() {
+    public float getProjectileVelocity() {
         return 1.1f;
     }
 

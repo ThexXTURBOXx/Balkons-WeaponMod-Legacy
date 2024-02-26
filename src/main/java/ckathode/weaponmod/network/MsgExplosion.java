@@ -31,9 +31,6 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
         bigParticles = bigparts;
     }
 
-    public MsgExplosion() {
-    }
-
     @Override
     public void decode(ByteBuf buf) {
         x = buf.readDouble();
@@ -60,10 +57,8 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
         buf.writeFloat(size);
         buf.writeBoolean(smallParticles);
         buf.writeBoolean(bigParticles);
-        int n = blocks.size();
-        buf.writeInt(n);
-        for (int i = 0; i < n; ++i) {
-            BlockPos pos = blocks.get(i);
+        buf.writeInt(blocks.size());
+        for (BlockPos pos : blocks) {
             int dx = pos.getX() - (int) x;
             int dy = pos.getY() - (int) y;
             int dz = pos.getZ() - (int) z;

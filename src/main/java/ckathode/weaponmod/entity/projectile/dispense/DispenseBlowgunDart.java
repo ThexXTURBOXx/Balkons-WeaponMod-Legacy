@@ -13,29 +13,25 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class DispenseBlowgunDart extends DispenseWeaponProjectile {
+
+    @Nonnull
     @Override
-    protected IProjectile getProjectileEntityWorld(World world, IPosition pos, ItemStack itemstack) {
-        EntityBlowgunDart dart = (EntityBlowgunDart) getProjectileEntity(world, pos, itemstack);
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
+                                              @Nonnull ItemStack itemstack) {
+        EntityBlowgunDart dart = new EntityBlowgunDart(world, pos.getX(), pos.getY(), pos.getZ());
         Item item = itemstack.getItem();
         if (item instanceof ItemBlowgunDart)
             dart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
         return dart;
     }
 
-    @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
-                                              @Nonnull ItemStack itemstack) {
-        return new EntityBlowgunDart(world, pos.getX(), pos.getY(), pos.getZ());
-    }
-
-    @Override
-    public float getVelocity() {
+    public float getProjectileVelocity() {
         return 3.0f;
     }
 
     @Override
-    public float getDeviation() {
+    protected float getProjectileInaccuracy() {
         return 2.0f;
     }
 

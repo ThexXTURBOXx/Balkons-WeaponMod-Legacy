@@ -14,11 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 
 public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
-    private final Random rand;
-
-    public DispenseBlunderShot() {
-        rand = new Random();
-    }
+    private final Random rand = new Random();
 
     @Nonnull
     @Override

@@ -19,13 +19,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 
 public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
-    private final Random rand;
-    private boolean normalDispense;
-
-    public DispenseCannonBall() {
-        rand = new Random();
-        normalDispense = false;
-    }
+    private final Random rand = new Random();
+    private boolean normalDispense = false;
 
     @Nonnull
     @Override

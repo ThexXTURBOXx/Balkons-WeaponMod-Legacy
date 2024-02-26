@@ -57,7 +57,6 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
                 return MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
             }
         });
-        BalkonsWeaponMod.MOD_ITEMS.add(this);
     }
 
     @Override

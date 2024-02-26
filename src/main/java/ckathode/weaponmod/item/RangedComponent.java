@@ -5,6 +5,10 @@ import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -108,7 +112,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
         multimap.put(WeaponModAttributes.RELOAD_TIME.getName(), new AttributeModifier(weapon.getUUID(), "Weapon "
                                                                                                         +
-                                                                                                        "reloadtime modifier", rangedSpecs.getReloadTime(), 0));
+                                                                                                        "reloadtime "
+                                                                                                        + "modifier",
+                rangedSpecs.getReloadTime(), 0));
     }
 
     @Override
@@ -227,8 +233,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return rangedSpecs.getReloadTime();
     }
 
-    public Item getAmmoItem() {
-        return rangedSpecs.getAmmoItem();
+    public List<Item> getAmmoItems() {
+        return rangedSpecs.getAmmoItems();
     }
 
     protected ItemStack findAmmo(EntityPlayer entityplayer) {
@@ -248,7 +254,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     protected boolean isAmmo(ItemStack stack) {
-        return stack.getItem() == getAmmoItem();
+        return getAmmoItems().contains(stack.getItem());
     }
 
     protected boolean consumeAmmo(EntityPlayer entityplayer) {
@@ -293,24 +299,25 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public enum RangedSpecs {
-        BLOWGUN("dart", "blowgun", 250),
-        CROSSBOW("bolt", "crossbow", 250),
-        MUSKET("bullet", "musket", 80),
-        BLUNDERBUSS("shot", "blunderbuss", 80),
-        FLINTLOCK("bullet", "flintlock", 8),
-        MORTAR("shell", "mortar", 40);
+        BLOWGUN("blowgun", 250, Arrays.stream(DartType.dartTypes)
+                .filter(Objects::nonNull).map(t -> t.typeName).toArray(String[]::new)),
+        CROSSBOW("crossbow", 250, "bolt"),
+        MUSKET("musket", 80, "bullet"),
+        BLUNDERBUSS("blunderbuss", 80, "shot"),
+        FLINTLOCK("flintlock", 8, "bullet"),
+        MORTAR("mortar", 40, "shell");
 
         private int reloadTime;
-        private Item ammoItem;
-        private String ammoItemTag;
+        private List<Item> ammoItems;
+        private final String[] ammoItemTags;
         public final String reloadTimeTag;
         public final int durability;
 
-        RangedSpecs(String ammoitemtag, String reloadtimetag, int durability) {
-            ammoItemTag = ammoitemtag;
+        RangedSpecs(String reloadtimetag, int durability, String... ammoitemtags) {
+            ammoItemTags = ammoitemtags;
             reloadTimeTag = reloadtimetag;
             this.durability = durability;
-            ammoItem = null;
+            ammoItems = null;
             reloadTime = -1;
         }
 
@@ -322,14 +329,15 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             return reloadTime;
         }
 
-        public Item getAmmoItem() {
-            if (ammoItem == null && ammoItemTag != null) {
-                ammoItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                        ammoItemTag));
-                BalkonsWeaponMod.modLog.debug("Found item " + ammoItem + " for " + ammoItemTag + " @" + this);
-                ammoItemTag = null;
+        public List<Item> getAmmoItems() {
+            if (ammoItems == null) {
+                ammoItems = Arrays.stream(ammoItemTags)
+                        .map(t -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
+                        .collect(Collectors.toList());
+                BalkonsWeaponMod.modLog.debug("Found items " + ammoItems + " for " + Arrays.toString(ammoItemTags) +
+                                              " @" + this);
             }
-            return ammoItem;
+            return ammoItems;
         }
     }
 }

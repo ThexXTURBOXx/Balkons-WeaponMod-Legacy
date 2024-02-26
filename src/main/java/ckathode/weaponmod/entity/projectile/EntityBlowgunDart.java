@@ -58,7 +58,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     @Override
     public void registerData() {
         super.registerData();
-        dataManager.register(EntityBlowgunDart.DART_EFFECT_TYPE, (byte) 0);
+        dataManager.register(DART_EFFECT_TYPE, (byte) 0);
     }
 
     public void setDartEffectType(DartType type) {
@@ -66,7 +66,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     public void setDartEffectType(byte i) {
-        dataManager.set(EntityBlowgunDart.DART_EFFECT_TYPE, i);
+        dataManager.set(DART_EFFECT_TYPE, i);
     }
 
     public DartType getDartEffectType() {
@@ -74,11 +74,11 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     public byte getDartEffectId() {
-        return dataManager.get(EntityBlowgunDart.DART_EFFECT_TYPE);
+        return dataManager.get(DART_EFFECT_TYPE);
     }
 
     public float[] getDartColor() {
-        return EntityBlowgunDart.DART_COLORS[getDartEffectId()];
+        return DART_COLORS[getDartEffectId()];
     }
 
     @Override

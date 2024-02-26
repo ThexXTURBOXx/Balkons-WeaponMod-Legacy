@@ -1,6 +1,7 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
+import java.util.Random;
 import javax.annotation.Nonnull;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.IBlockSource;
@@ -14,6 +15,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class DispenseMortarShell extends DispenseWeaponProjectile {
+    private final Random rand = new Random();
+
     @Nonnull
     @Override
     protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,

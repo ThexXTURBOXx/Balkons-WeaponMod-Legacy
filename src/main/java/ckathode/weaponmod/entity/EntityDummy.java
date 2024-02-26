@@ -59,9 +59,9 @@ public class EntityDummy extends Entity {
 
     @Override
     protected void registerData() {
-        dataManager.register(EntityDummy.TIME_SINCE_HIT, 0);
-        dataManager.register(EntityDummy.ROCK_DIRECTION, (byte) 1);
-        dataManager.register(EntityDummy.CURRENT_DAMAGE, 0);
+        dataManager.register(TIME_SINCE_HIT, 0);
+        dataManager.register(ROCK_DIRECTION, (byte) 1);
+        dataManager.register(CURRENT_DAMAGE, 0);
     }
 
     @Override
@@ -226,27 +226,27 @@ public class EntityDummy extends Entity {
     }
 
     public void setTimeSinceHit(int i) {
-        dataManager.set(EntityDummy.TIME_SINCE_HIT, i);
+        dataManager.set(TIME_SINCE_HIT, i);
     }
 
     public void setRockDirection(int i) {
-        dataManager.set(EntityDummy.ROCK_DIRECTION, (byte) i);
+        dataManager.set(ROCK_DIRECTION, (byte) i);
     }
 
     public void setCurrentDamage(int i) {
-        dataManager.set(EntityDummy.CURRENT_DAMAGE, i);
+        dataManager.set(CURRENT_DAMAGE, i);
     }
 
     public int getTimeSinceHit() {
-        return dataManager.get(EntityDummy.TIME_SINCE_HIT);
+        return dataManager.get(TIME_SINCE_HIT);
     }
 
     public int getRockDirection() {
-        return dataManager.get(EntityDummy.ROCK_DIRECTION);
+        return dataManager.get(ROCK_DIRECTION);
     }
 
     public int getCurrentDamage() {
-        return dataManager.get(EntityDummy.CURRENT_DAMAGE);
+        return dataManager.get(CURRENT_DAMAGE);
     }
 
 }

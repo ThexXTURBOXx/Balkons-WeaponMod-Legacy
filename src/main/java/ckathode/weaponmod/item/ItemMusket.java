@@ -4,6 +4,7 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,16 +18,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemMusket extends ItemShooter {
+    @Nullable
     protected final Item bayonetItem;
-    private int bayonetDurability;
+    private final int bayonetDurability;
 
-    public ItemMusket(String id, MeleeComponent meleecomponent, Item bayonetitem) {
+    public ItemMusket(String id, MeleeComponent meleecomponent, @Nullable Item bayonetitem) {
         super(id, new RangedCompMusket(), meleecomponent);
         bayonetItem = bayonetitem;
-        if (meleecomponent.meleeSpecs != MeleeComponent.MeleeSpecs.NONE && meleecomponent.weaponMaterial != null) {
-            bayonetDurability =
-                    meleecomponent.meleeSpecs.durabilityBase + (int) (meleecomponent.weaponMaterial.getMaxUses() * meleecomponent.meleeSpecs.durabilityMult);
-        }
+        bayonetDurability =
+                meleecomponent.meleeSpecs != MeleeComponent.MeleeSpecs.NONE && meleecomponent.weaponMaterial != null
+                        ? meleecomponent.meleeSpecs.durabilityBase +
+                          (int) (meleecomponent.weaponMaterial.getMaxUses() * meleecomponent.meleeSpecs.durabilityMult)
+                        : 0;
     }
 
     public boolean hasBayonet() {

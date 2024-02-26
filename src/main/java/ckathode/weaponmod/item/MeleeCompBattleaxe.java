@@ -14,15 +14,14 @@ import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
-    public static final int[] DEFAULT_IGNORES = new int[]{1, 1, 1, 1, 1};
-    public int ignoreArmourAmount;
+    public static final float[] DEFAULT_IGNORES = new float[]{1, 1, 1, 1, 1};
+    public final float ignoreArmourAmount;
 
     public MeleeCompBattleaxe(IItemTier itemTier) {
         super(MeleeSpecs.BATTLEAXE, itemTier);
         int ordinal = MaterialRegistry.getOrdinal(itemTier);
-        if (ordinal >= 0 && ordinal < MeleeCompBattleaxe.DEFAULT_IGNORES.length) {
-            ignoreArmourAmount = MeleeCompBattleaxe.DEFAULT_IGNORES[ordinal];
-        }
+        ignoreArmourAmount = ordinal >= 0 && ordinal < DEFAULT_IGNORES.length
+                ? DEFAULT_IGNORES[ordinal] : 0;
     }
 
     @Override
@@ -34,7 +33,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
             double mz = entity.motionZ;
             int prevhurtres = living.hurtResistantTime;
             int prevhurt = living.hurtTime;
-            living.attackEntityFrom(new DamageSourceAxe(), (float) ignoreArmourAmount);
+            living.attackEntityFrom(new DamageSourceAxe(), ignoreArmourAmount);
             entity.motionX = mx;
             entity.motionY = my;
             entity.motionZ = mz;

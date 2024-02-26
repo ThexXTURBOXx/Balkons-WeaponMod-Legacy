@@ -71,7 +71,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     @Override
     protected void registerData() {
         super.registerData();
-        dataManager.register(EntityProjectile.WEAPON_CRITICAL, (byte) 0);
+        dataManager.register(WEAPON_CRITICAL, (byte) 0);
     }
 
     protected void setPickupStatusFromEntity(EntityLivingBase entityliving) {
@@ -229,8 +229,8 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
             beenInGround = true;
             for (int i2 = 0; i2 < 4; ++i2) {
                 float f3 = 0.25f;
-                world.addParticle(Particles.BUBBLE, posX - motionX * 0.25,
-                        posY - motionY * 0.25, posZ - motionZ * 0.25, motionX, motionY,
+                world.addParticle(Particles.BUBBLE, posX - motionX * f3,
+                        posY - motionY * f3, posZ - motionZ * f3, motionX, motionY,
                         motionZ);
             }
             res *= 0.6f;
@@ -312,7 +312,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         Entity entity = null;
         List<Entity> list = world.getEntitiesInAABBexcluding(this,
                 getBoundingBox().expand(motionX, motionY, motionZ).grow(1.0),
-                EntityProjectile.WEAPON_TARGETS);
+                WEAPON_TARGETS);
         double d = 0.0;
         for (Entity entity2 : list) {
             if (!entity2.getUniqueID().equals(shootingEntity) || ticksInAir >= 5) {
@@ -374,13 +374,13 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     @Override
     public void setIsCritical(boolean flag) {
         if (canBeCritical()) {
-            dataManager.set(EntityProjectile.WEAPON_CRITICAL, (byte) (flag ? 1 : 0));
+            dataManager.set(WEAPON_CRITICAL, (byte) (flag ? 1 : 0));
         }
     }
 
     @Override
     public boolean getIsCritical() {
-        return canBeCritical() && dataManager.get(EntityProjectile.WEAPON_CRITICAL) != 0;
+        return canBeCritical() && dataManager.get(WEAPON_CRITICAL) != 0;
     }
 
     public void setExtraDamage(float f) {

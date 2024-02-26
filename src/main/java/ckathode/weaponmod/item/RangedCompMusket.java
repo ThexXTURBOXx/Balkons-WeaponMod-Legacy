@@ -55,7 +55,7 @@ public class RangedCompMusket extends RangedComponent {
         int deltadamage = 1;
         boolean flag = itemstack.getDamage() + deltadamage > itemstack.getMaxDamage();
         itemstack.damageItem(deltadamage, entityplayer);
-        if (flag) {
+        if (flag && musket != null) {
             int bayonetdamage = (itemstack.getTag() == null) ? 0 : itemstack.getTag().getShort(
                     "bayonetDamage");
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1);

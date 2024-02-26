@@ -67,12 +67,12 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     protected void registerData() {
-        dataManager.register(EntityCannon.TIME_SINCE_HIT, 0);
-        dataManager.register(EntityCannon.ROCK_DIRECTION, (byte) 1);
-        dataManager.register(EntityCannon.CURRENT_DAMAGE, 0);
-        dataManager.register(EntityCannon.LOADED, (byte) 0);
-        dataManager.register(EntityCannon.LOAD_TIMER, 0);
-        dataManager.register(EntityCannon.SUPER_POWERED, (byte) 0);
+        dataManager.register(TIME_SINCE_HIT, 0);
+        dataManager.register(ROCK_DIRECTION, (byte) 1);
+        dataManager.register(CURRENT_DAMAGE, 0);
+        dataManager.register(LOADED, (byte) 0);
+        dataManager.register(LOAD_TIMER, 0);
+        dataManager.register(SUPER_POWERED, (byte) 0);
     }
 
     @Override
@@ -363,15 +363,15 @@ public class EntityCannon extends EntityBoat {
     }
 
     public void setLoaded(boolean flag) {
-        dataManager.set(EntityCannon.LOADED, (byte) (flag ? 1 : 0));
+        dataManager.set(LOADED, (byte) (flag ? 1 : 0));
     }
 
     public void setLoadTimer(int time) {
-        dataManager.set(EntityCannon.LOAD_TIMER, time);
+        dataManager.set(LOAD_TIMER, time);
     }
 
     public void setSuperPowered(boolean flag) {
-        dataManager.set(EntityCannon.SUPER_POWERED, (byte) (flag ? 1 : 0));
+        dataManager.set(SUPER_POWERED, (byte) (flag ? 1 : 0));
     }
 
     public boolean isLoading() {
@@ -379,41 +379,41 @@ public class EntityCannon extends EntityBoat {
     }
 
     public boolean isLoaded() {
-        return dataManager.get(EntityCannon.LOADED) != 0;
+        return dataManager.get(LOADED) != 0;
     }
 
     public int getLoadTimer() {
-        return dataManager.get(EntityCannon.LOAD_TIMER);
+        return dataManager.get(LOAD_TIMER);
     }
 
     public boolean isSuperPowered() {
-        return dataManager.get(EntityCannon.SUPER_POWERED) != 0;
+        return dataManager.get(SUPER_POWERED) != 0;
     }
 
     @Override
     public void setTimeSinceHit(int i) {
-        dataManager.set(EntityCannon.TIME_SINCE_HIT, i);
+        dataManager.set(TIME_SINCE_HIT, i);
     }
 
     public void setRockDirection(int i) {
-        dataManager.set(EntityCannon.ROCK_DIRECTION, (byte) i);
+        dataManager.set(ROCK_DIRECTION, (byte) i);
     }
 
     public void setCurrentDamage(int i) {
-        dataManager.set(EntityCannon.CURRENT_DAMAGE, i);
+        dataManager.set(CURRENT_DAMAGE, i);
     }
 
     @Override
     public int getTimeSinceHit() {
-        return dataManager.get(EntityCannon.TIME_SINCE_HIT);
+        return dataManager.get(TIME_SINCE_HIT);
     }
 
     public int getRockDirection() {
-        return dataManager.get(EntityCannon.ROCK_DIRECTION);
+        return dataManager.get(ROCK_DIRECTION);
     }
 
     public int getCurrentDamage() {
-        return dataManager.get(EntityCannon.CURRENT_DAMAGE);
+        return dataManager.get(CURRENT_DAMAGE);
     }
 
 }

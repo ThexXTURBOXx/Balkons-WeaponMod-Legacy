@@ -85,8 +85,7 @@ public abstract class PhysHelper {
         return explosion;
     }
 
-    public static void sendExplosion(World world, AdvancedExplosion explosion, boolean smallparts,
-                                     boolean bigparts) {
+    public static void sendExplosion(World world, AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
         if (world instanceof WorldServer && !world.isRemote) {
             MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
             BalkonsWeaponMod.instance.messagePipeline.sendToAllAround(msg,
@@ -95,11 +94,10 @@ public abstract class PhysHelper {
         }
     }
 
-    public static void knockBack(EntityLivingBase entityliving, EntityLivingBase attacker,
-                                 float knockback) {
-        entityliving.motionX = PhysHelper.kbMotionX;
-        entityliving.motionY = PhysHelper.kbMotionY;
-        entityliving.motionZ = PhysHelper.kbMotionZ;
+    public static void knockBack(EntityLivingBase entityliving, EntityLivingBase attacker, float knockback) {
+        entityliving.motionX = kbMotionX;
+        entityliving.motionY = kbMotionY;
+        entityliving.motionZ = kbMotionZ;
         double dx;
         double dz;
         for (dx = attacker.posX - entityliving.posX, dz = attacker.posZ - entityliving.posZ; dx * dx + dz * dz < 1.0E-4; dx = (Math.random() - Math.random()) * 0.01, dz = (Math.random() - Math.random()) * 0.01) {
@@ -113,26 +111,26 @@ public abstract class PhysHelper {
         if (entityliving.motionY > 0.4) {
             entityliving.motionY = 0.4;
         }
-        if (PhysHelper.knockBackModifier > 0) {
-            dx = -Math.sin(Math.toRadians(attacker.rotationYaw)) * PhysHelper.knockBackModifier * 0.5;
-            dz = Math.cos(Math.toRadians(attacker.rotationYaw)) * PhysHelper.knockBackModifier * 0.5;
+        if (knockBackModifier > 0) {
+            dx = -Math.sin(Math.toRadians(attacker.rotationYaw)) * knockBackModifier * 0.5;
+            dz = Math.cos(Math.toRadians(attacker.rotationYaw)) * knockBackModifier * 0.5;
             entityliving.addVelocity(dx, 0.1, dz);
         }
         if (entityliving instanceof EntityPlayerMP) {
             ((EntityPlayerMP) entityliving).connection.sendPacket(new SPacketEntityVelocity(entityliving));
         }
-        PhysHelper.knockBackModifier = 0;
-        PhysHelper.kbMotionX = (PhysHelper.kbMotionY = (PhysHelper.kbMotionZ = 0.0));
+        knockBackModifier = 0;
+        kbMotionX = (kbMotionY = (kbMotionZ = 0.0));
     }
 
     public static void prepareKnockbackOnEntity(EntityLivingBase attacker, EntityLivingBase entity) {
-        PhysHelper.knockBackModifier = EnchantmentHelper.getKnockbackModifier(attacker);
+        knockBackModifier = EnchantmentHelper.getKnockbackModifier(attacker);
         if (attacker.isSprinting()) {
-            ++PhysHelper.knockBackModifier;
+            ++knockBackModifier;
         }
-        PhysHelper.kbMotionX = entity.motionX;
-        PhysHelper.kbMotionY = entity.motionY;
-        PhysHelper.kbMotionZ = entity.motionZ;
+        kbMotionX = entity.motionX;
+        kbMotionY = entity.motionY;
+        kbMotionZ = entity.motionZ;
     }
 
 }

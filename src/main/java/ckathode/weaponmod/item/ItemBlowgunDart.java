@@ -16,6 +16,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemBlowgunDart extends WMItem {
+    @Nonnull
     private final DartType dartType;
 
     public ItemBlowgunDart(String id, @Nonnull DartType dartType) {
@@ -46,6 +47,7 @@ public class ItemBlowgunDart extends WMItem {
         list.add(s);
     }
 
+    @Nonnull
     public DartType getDartType() {
         return dartType;
     }

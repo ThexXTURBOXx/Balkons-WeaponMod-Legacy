@@ -78,8 +78,8 @@ public class RangedCompBlowgun extends RangedComponent {
 
     @Override
     public void soundEmpty(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
-                , SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.5f));
+        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
+                SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.5f));
     }
 
     @Override

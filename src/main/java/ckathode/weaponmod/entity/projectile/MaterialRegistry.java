@@ -8,38 +8,31 @@ import net.minecraft.item.ItemTier;
 
 public class MaterialRegistry {
     private static final float[] NO_MATERIAL_COLOR = new float[]{1.0f, 1.0f, 1.0f};
-    private static Map<Integer, ICustomProjectileMaterials> customMaterials;
+    private static final Map<Integer, ICustomProjectileMaterials> CUSTOM_MATERIALS = new HashMap<>(5);
 
     public static void registerCustomProjectileMaterial(ICustomProjectileMaterials customprojectilematerial) {
-        if (MaterialRegistry.customMaterials == null) {
-            MaterialRegistry.customMaterials = new HashMap<>(4);
-        }
         int[] allMaterialIDs = customprojectilematerial.getAllMaterialIDs();
         for (int i : allMaterialIDs) {
-            MaterialRegistry.customMaterials.put(i, customprojectilematerial);
+            CUSTOM_MATERIALS.put(i, customprojectilematerial);
         }
     }
 
     public static int getMaterialID(ItemStack itemstack) {
-        if (MaterialRegistry.customMaterials != null) {
-            for (ICustomProjectileMaterials mat : MaterialRegistry.customMaterials.values()) {
-                int i = mat.getMaterialID(itemstack);
-                if (i > 4) {
-                    return i;
-                }
+        for (ICustomProjectileMaterials mat : CUSTOM_MATERIALS.values()) {
+            int i = mat.getMaterialID(itemstack);
+            if (i >= 5) {
+                return i;
             }
         }
         return -1;
     }
 
     public static float[] getColorFromMaterialID(int id) {
-        if (MaterialRegistry.customMaterials != null) {
-            ICustomProjectileMaterials mat = MaterialRegistry.customMaterials.get(id);
-            if (mat != null) {
-                return mat.getColorFromMaterialID(id);
-            }
+        ICustomProjectileMaterials mat = CUSTOM_MATERIALS.get(id);
+        if (mat != null) {
+            return mat.getColorFromMaterialID(id);
         }
-        return MaterialRegistry.NO_MATERIAL_COLOR;
+        return NO_MATERIAL_COLOR;
     }
 
     public static int getOrdinal(IItemTier tier) {
