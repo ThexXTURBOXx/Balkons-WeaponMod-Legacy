@@ -98,5 +98,20 @@
     "attribute.name.weaponmod.reach": "Reichweite",
 
     "death.attack.weapon": "%1$s gibt es nicht mehr.",
-    "death.attack.weapon.player": "%1$s starb auf der Flucht vor %2$s."
+    "death.attack.weapon.player": "%1$s starb auf der Flucht vor %2$s.",
+
+    "entity.weaponmod.spear": "Speer",
+    "entity.weaponmod.knife": "Messer",
+    "entity.weaponmod.javelin": "Wurfspeer",
+    "entity.weaponmod.bullet": "Geschoss",
+    "entity.weaponmod.bolt": "Armbrustbolzen",
+    "entity.weaponmod.dart": "Vergifteter Pfeil",
+    "entity.weaponmod.dynamite": "Dynamit",
+    "entity.weaponmod.flail": "Flegel",
+    "entity.weaponmod.cannon": "Kanone",
+    "entity.weaponmod.cannonball": "Kanonenkugel",
+    "entity.weaponmod.shot": "Donnerbüchsenschrot",
+    "entity.weaponmod.dummy": "Puppe",
+    "entity.weaponmod.boomerang": "Bumerang",
+    "entity.weaponmod.shell": "Mörsergranate"
 }

@@ -98,5 +98,20 @@
     "attribute.name.weaponmod.reach": "Reach",
 
     "death.attack.weapon": "%1$s is no more.",
-    "death.attack.weapon.player": "%1$s died running away from %2$s."
+    "death.attack.weapon.player": "%1$s died running away from %2$s.",
+
+    "entity.weaponmod.spear": "Spear",
+    "entity.weaponmod.knife": "Knife",
+    "entity.weaponmod.javelin": "Javelin",
+    "entity.weaponmod.bullet": "Bullet",
+    "entity.weaponmod.bolt": "Crossbow Bolt",
+    "entity.weaponmod.dart": "Dart",
+    "entity.weaponmod.dynamite": "Dynamite",
+    "entity.weaponmod.flail": "Flail",
+    "entity.weaponmod.cannon": "Cannon",
+    "entity.weaponmod.cannonball": "Cannon Ball",
+    "entity.weaponmod.shot": "Blunderbuss Shot",
+    "entity.weaponmod.dummy": "Dummy",
+    "entity.weaponmod.boomerang": "Boomerang",
+    "entity.weaponmod.shell": "Mortar Shell"
 }
