@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     public static final String NAME = "boomerang";
 
-    private static final DataParameter<Integer> BOOMERANG = EntityDataManager.createKey(EntityBoomerang.class,
-            DataSerializers.VARINT);
+    private static final DataParameter<Float> BOOMERANG = EntityDataManager.createKey(EntityBoomerang.class,
+            DataSerializers.FLOAT);
     public static final double RETURN_STRENGTH = 0.05;
     public static final float MIN_FLOAT_STRENGTH = 0.4f;
     private float soundTimer;
@@ -59,19 +59,19 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             motionY += entity.motionY;
         }
         floatStrength = Math.min(1.5f, f3);
-        dataManager.set(BOOMERANG, Float.floatToRawIntBits(floatStrength));
+        dataManager.set(BOOMERANG, floatStrength);
     }
 
     @Override
     public void registerData() {
         super.registerData();
-        dataManager.register(BOOMERANG, Float.floatToRawIntBits(0.0f));
+        dataManager.register(BOOMERANG, 0.0f);
     }
 
     @Override
     public void tick() {
         super.tick();
-        floatStrength = Float.intBitsToFloat(dataManager.get(BOOMERANG));
+        floatStrength = dataManager.get(BOOMERANG);
         if (inGround) {
             return;
         }
@@ -105,7 +105,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                 soundTimer %= 3.0f;
             }
         }
-        dataManager.set(BOOMERANG, Float.floatToRawIntBits(floatStrength));
+        dataManager.set(BOOMERANG, floatStrength);
     }
 
     @Override
