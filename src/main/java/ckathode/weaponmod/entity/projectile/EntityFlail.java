@@ -49,8 +49,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void shoot(Entity entity, float f, float f1, float f2, float f3, float f4) {
         motionX += entity.motionX;
         motionZ += entity.motionZ;
         if (!entity.onGround) {
@@ -78,7 +77,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
                     pickUpByOwner();
                 }
             }
-        } else {
+        } else if (!world.isRemote) {
             remove();
         }
         if (inGround) {

@@ -21,6 +21,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -34,8 +35,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-public abstract class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow implements IProjectile {
+public abstract class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
+        implements IProjectile, IEntityAdditionalSpawnData {
     private static final Predicate<Entity> WEAPON_TARGETS = EntitySelectors.NOT_SPECTATING.and(
             EntitySelectors.IS_ALIVE).and(Entity::canBeCollidedWith);
     private static final DataParameter<Byte> WEAPON_CRITICAL = EntityDataManager.createKey(EntityProjectile.class,
@@ -52,6 +55,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     public boolean beenInGround;
     public float extraDamage;
     public int knockBack;
+    private Entity shooter;
 
     public EntityProjectile(EntityType<T> type, World world) {
         super(type, world);
@@ -72,6 +76,31 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     protected void registerData() {
         super.registerData();
         dataManager.register(WEAPON_CRITICAL, (byte) 0);
+    }
+
+    @Override
+    public void writeSpawnData(PacketBuffer buffer) {
+        Entity shooter = getShooter();
+        buffer.writeInt(shooter != null ? shooter.getEntityId() : -1);
+    }
+
+    @Override
+    public void readSpawnData(PacketBuffer additionalData) {
+        int shooterId = additionalData.readInt();
+        if (shooterId >= 0) setShooter(world.getEntityByID(shooterId));
+    }
+
+    @Override
+    public void setShooter(@Nullable Entity shooter) {
+        this.shooter = shooter;
+        super.setShooter(shooter);
+    }
+
+    @Nullable
+    @Override
+    public Entity getShooter() {
+        if (shooter != null) return shooter;
+        return super.getShooter();
     }
 
     protected void setPickupStatusFromEntity(EntityLivingBase entityliving) {

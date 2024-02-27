@@ -10,8 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -80,8 +80,9 @@ public class RenderFlail extends Render<EntityFlail> {
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
-        Entity shooter = entityflail.getShooter();
-        if (shooter instanceof EntityLivingBase && !renderOutlines) {
+        EntityPlayer shooter = entityflail.shootingEntity != null
+                ? entityflail.getEntityWorld().getPlayerEntityByUUID(entityflail.shootingEntity) : null;
+        if (shooter != null && !renderOutlines) {
             int k = (((EntityLivingBase) shooter).getPrimaryHand() == EnumHandSide.RIGHT) ?
                     1 : -1;
             float f13 = ((EntityLivingBase) shooter).getSwingProgress(f1);

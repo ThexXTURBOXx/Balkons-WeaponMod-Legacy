@@ -236,7 +236,9 @@ public class BalkonsWeaponMod {
         EntityType.Builder<T> builder = EntityType.Builder.create(entityClass, factory);
         if (range >= 0 && updateFrequency >= 0)
             builder.tracker(range, updateFrequency, velocityUpdates);
-        return (EntityType<T>) builder.build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
+        return (EntityType<T>) builder
+                .customSpawning(null, false) // Workaround for weird issues with getShooter()
+                .build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
     }
 
     @SubscribeEvent
