@@ -14,7 +14,6 @@ import ckathode.weaponmod.entity.projectile.EntityKnife;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
-import ckathode.weaponmod.network.WMMessagePipeline;
 import ckathode.weaponmod.render.GuiOverlayReloaded;
 import ckathode.weaponmod.render.RenderBlowgunDart;
 import ckathode.weaponmod.render.RenderBlunderShot;
@@ -43,11 +42,6 @@ public class WMClientProxy extends WMCommonProxy {
         if (BalkonsWeaponMod.instance.modConfig.guiOverlayReloaded.get()) {
             MinecraftForge.EVENT_BUS.register(new GuiOverlayReloaded(Minecraft.getInstance()));
         }
-    }
-
-    @Override
-    public void registerPackets(WMMessagePipeline pipeline) {
-        super.registerPackets(pipeline);
     }
 
     @Override

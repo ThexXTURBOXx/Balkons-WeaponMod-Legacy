@@ -39,16 +39,16 @@ public class GuiOverlayReloaded extends Gui {
                 if (rld) {
                     f = 1.0f;
                     if (p.getActiveItemStack() == is && RangedComponent.isReadyToFire(is)) {
-                        color = 1623588864;
+                        color = 0x60c60000;
                     } else {
-                        color = 1614056960;
+                        color = 0x60348e00;
                     }
                 } else if (p.getActiveItemStack() == is) {
                     f = Math.min(p.getItemInUseMaxCount() / (float) rc.getReloadDuration(is), 1.0f);
-                    color = 1625991168;
+                    color = 0x60eaa800;
                 } else {
                     f = 0.0f;
-                    color = 0;
+                    color = 0x00000000;
                 }
                 int i;
                 for (i = 0; i < 9 && p.inventory.getStackInSlot(i) != is; ++i) {
