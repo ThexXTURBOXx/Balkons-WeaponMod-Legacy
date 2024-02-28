@@ -309,9 +309,9 @@ public class EntityCannon extends EntityBoat {
     @Override
     public boolean processInitialInteract(EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading() && (entityplayer.abilities.isCreativeMode || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
-            if (entityplayer.abilities.isCreativeMode || consumeAmmo(entityplayer,
-                    BalkonsWeaponMod.cannonBall)) {
+        if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading()
+            && (entityplayer.abilities.isCreativeMode || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
+            if (entityplayer.abilities.isCreativeMode || consumeAmmo(entityplayer, BalkonsWeaponMod.cannonBall)) {
                 startLoadingCannon();
                 return true;
             }
