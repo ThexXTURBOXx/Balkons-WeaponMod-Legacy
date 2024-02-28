@@ -23,7 +23,7 @@ public class ModelCannonBarrel extends ModelBase {
         swiwel_front.setTextureSize(32, 32);
         swiwel_front.mirror = true;
         setRotation(swiwel_front, 0.0f, 0.0f, 0.0f);
-        (swivel_back = new ModelRenderer(this, 12, 0)).addBox(-2.0f, -0.5f, -2.0f, 4, 8, 4);
+        (swivel_back = new ModelRenderer(this, 12, 0)).addBox(-2.0f, -0.501f, -2.0f, 4, 8, 4);
         swivel_back.setRotationPoint(0.0f, 16.0f, 0.0f);
         swivel_back.setTextureSize(32, 32);
         swivel_back.mirror = true;
