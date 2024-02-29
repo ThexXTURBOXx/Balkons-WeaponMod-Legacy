@@ -24,7 +24,7 @@ public class WMClientEventHandler {
     @SubscribeEvent
     public void onMouseClick(InputEvent.MouseInputEvent e) {
         EntityPlayerSP player = Minecraft.getInstance().player;
-        if (player == null || !player.world.isRemote) {
+        if (player == null || !player.world.isRemote || Minecraft.getInstance().currentScreen != null) {
             return;
         }
         if (e.getButton() == 0 && e.getAction() == GLFW.GLFW_PRESS) {
