@@ -85,10 +85,10 @@ public class RenderFlail extends Render<EntityFlail> {
         if (shooter != null && !renderOutlines) {
             int k = (((EntityLivingBase) shooter).getPrimaryHand() == EnumHandSide.RIGHT) ?
                     1 : -1;
-            float f13 = ((EntityLivingBase) shooter).getSwingProgress(f1);
+            float f13 = shooter.getSwingProgress(f1);
             float f14 = MathHelper.sin(MathHelper.sqrt(f13) * 3.1415927f);
             float f15 =
-                    (((EntityLivingBase) shooter).prevRenderYawOffset + (((EntityLivingBase) shooter).renderYawOffset - ((EntityLivingBase) shooter).prevRenderYawOffset) * f1) * 0.017453292f;
+                    (shooter.prevRenderYawOffset + (shooter.renderYawOffset - shooter.prevRenderYawOffset) * f1) * 0.017453292f;
             double d3 = MathHelper.sin(f15);
             double d4 = MathHelper.cos(f15);
             double d5 = k * 0.35;

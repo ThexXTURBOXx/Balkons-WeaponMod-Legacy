@@ -109,7 +109,7 @@ public class BalkonsWeaponMod {
     public static Item musketBullet;
     public static Item musket;
     public static Item gunStock;
-    public static Item musket_iron_part;
+    public static Item musketIronPart;
     public static Item battleaxeWood;
     public static Item battleaxeStone;
     public static Item battleaxeSteel;
@@ -135,7 +135,7 @@ public class BalkonsWeaponMod {
     public static Item cannonBall;
     public static Item blunderShot;
     public static Item blunderbuss;
-    public static Item blunder_iron_part;
+    public static Item blunderIronPart;
     public static Item dummy;
     public static Item boomerangWood;
     public static Item boomerangStone;
@@ -150,7 +150,7 @@ public class BalkonsWeaponMod {
     public static Item flintlockPistol;
     public static Item mortarShell;
     public static Item mortar;
-    public static Item mortar_iron_part;
+    public static Item mortarIronPart;
     public static EntityType<EntitySpear> entitySpear;
     public static EntityType<EntityKnife> entityKnife;
     public static EntityType<EntityJavelin> entityJavelin;
@@ -372,11 +372,11 @@ public class BalkonsWeaponMod {
         registry.register(bayonetDiamond = new ItemMusket("musketbayonet.diamond",
                 new MeleeCompKnife(ItemTier.DIAMOND), knifeDiamond));
         registry.register(musket = new ItemMusket("musket", new MeleeCompNone(null), null));
-        registry.register(musket_iron_part = new WMItem("musket-ironpart"));
+        registry.register(musketIronPart = new WMItem("musket-ironpart"));
 
         registry.register(blunderbuss = new ItemShooter("blunderbuss", new RangedCompBlunderbuss(),
                 new MeleeCompNone(null)));
-        registry.register(blunder_iron_part = new WMItem("blunder-ironpart"));
+        registry.register(blunderIronPart = new WMItem("blunder-ironpart"));
         registry.register(blunderShot = new WMItem("shot"));
 
         registry.register(flintlockPistol = new ItemShooter("flintlock", new RangedCompFlintlock(),
@@ -394,7 +394,7 @@ public class BalkonsWeaponMod {
         registry.register(musketBullet = new WMItem("bullet"));
 
         registry.register(mortar = new ItemShooter("mortar", new RangedCompMortar(), new MeleeCompNone(null)));
-        registry.register(mortar_iron_part = new WMItem("mortar-ironpart"));
+        registry.register(mortarIronPart = new WMItem("mortar-ironpart"));
         registry.register(mortarShell = new WMItem("shell"));
 
         registerDispenseBehavior();

@@ -70,8 +70,8 @@ public final class PhysHelper {
 
     public static AdvancedExplosion createAdvancedExplosion(World world, Entity entity, double d,
                                                             double d1, double d2, float size,
-                                                            boolean destroyBlocks, boolean spawnParticles
-            , boolean flame, boolean smoke) {
+                                                            boolean destroyBlocks, boolean spawnParticles,
+                                                            boolean flame, boolean smoke) {
         AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, smoke);
         explosion.doEntityExplosion();
         if (destroyBlocks) {
@@ -98,9 +98,11 @@ public final class PhysHelper {
         entityliving.motionX = kbMotionX;
         entityliving.motionY = kbMotionY;
         entityliving.motionZ = kbMotionZ;
-        double dx;
+        double dx = attacker.posX - entityliving.posX;
         double dz;
-        for (dx = attacker.posX - entityliving.posX, dz = attacker.posZ - entityliving.posZ; dx * dx + dz * dz < 1.0E-4; dx = (Math.random() - Math.random()) * 0.01, dz = (Math.random() - Math.random()) * 0.01) {
+        for (dz = attacker.posZ - entityliving.posZ; dx * dx + dz * dz < 1E-4D;
+             dz = (Math.random() - Math.random()) * 0.01D) {
+            dx = (Math.random() - Math.random()) * 0.01D;
         }
         entityliving.attackedAtYaw =
                 (float) (Math.atan2(dz, dx) * 180.0 / 3.141592653589793) - entityliving.rotationYaw;

@@ -10,9 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class RenderCannon extends Render<EntityCannon> {
-    protected final ModelCannon modelCannon;
-    protected final ModelCannonBarrel modelBarrel;
-    protected final ModelCannonStandard modelStandard;
+    private final ModelCannon modelCannon;
+    private final ModelCannonBarrel modelBarrel;
+    private final ModelCannonStandard modelStandard;
 
     public RenderCannon(RenderManager renderManager) {
         super(renderManager);
@@ -57,9 +57,9 @@ public class RenderCannon extends Render<EntityCannon> {
         modelBarrel.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GlStateManager.popMatrix();
         float yaw = -(float) Math.toRadians(f);
-        modelStandard.base_1.rotateAngleY = yaw;
-        modelStandard.base_2.rotateAngleY = yaw;
-        modelStandard.base_stand.rotateAngleY = yaw;
+        modelStandard.base1.rotateAngleY = yaw;
+        modelStandard.base2.rotateAngleY = yaw;
+        modelStandard.baseStand.rotateAngleY = yaw;
         modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();

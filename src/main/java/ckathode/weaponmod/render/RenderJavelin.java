@@ -23,8 +23,7 @@ public class RenderJavelin extends Render<EntityJavelin> {
     }
 
     @Override
-    public void doRender(@Nonnull EntityJavelin entityjavelin, double d, double d1, double d2
-            , float f, float f1) {
+    public void doRender(@Nonnull EntityJavelin entityjavelin, double d, double d1, double d2, float f, float f1) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
             bindEntityTexture(entityjavelin);
             GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
