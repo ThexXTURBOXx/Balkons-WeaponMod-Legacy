@@ -1,14 +1,14 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "weaponmod:items/boomerang.diamond"
-    },
-    "overrides": [
-        {
-            "predicate": {
-                "weaponmod:ready-to-throw": 1
-            },
-            "model": "weaponmod:item/boomerang.diamond_ready"
-        }
-    ]
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "weaponmod:items/boomerang.diamond"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "weaponmod:ready-to-throw": 1
+      },
+      "model": "weaponmod:item/boomerang.diamond_ready"
+    }
+  ]
 }

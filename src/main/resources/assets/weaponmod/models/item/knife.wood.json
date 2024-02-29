@@ -1,6 +1,6 @@
 {
-    "parent": "weaponmod:item/handheld_short",
-    "textures": {
-        "layer0": "weaponmod:items/knife.wood"
-    }
+  "parent": "weaponmod:item/handheld_short",
+  "textures": {
+    "layer0": "weaponmod:items/knife.wood"
+  }
 }

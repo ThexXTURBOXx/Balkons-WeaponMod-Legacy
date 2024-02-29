@@ -1,6 +1,6 @@
 {
-    "parent": "weaponmod:item/handheld_rod",
-	"textures": {
-        "layer0": "weaponmod:items/dynamite"
-    }
+  "parent": "weaponmod:item/handheld_rod",
+  "textures": {
+    "layer0": "weaponmod:items/dynamite"
+  }
 }

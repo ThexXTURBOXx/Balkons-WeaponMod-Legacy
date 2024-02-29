@@ -1,6 +1,6 @@
 {
-    "parent": "weaponmod:item/handheld_block",
-    "textures": {
-        "layer0": "weaponmod:items/boomerang.wood"
-    }
+  "parent": "weaponmod:item/handheld_block",
+  "textures": {
+    "layer0": "weaponmod:items/boomerang.wood"
+  }
 }

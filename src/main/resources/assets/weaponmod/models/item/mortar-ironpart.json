@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-	"textures": {
-        "layer0": "weaponmod:items/mortar-ironpart"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "weaponmod:items/mortar-ironpart"
+  }
 }

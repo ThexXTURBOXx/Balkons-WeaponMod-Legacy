@@ -1,6 +1,6 @@
 {
-    "parent": "weaponmod:item/flail.diamond",
-    "textures": {
-        "layer0": "weaponmod:items/flail-thrown"
-    }
+  "parent": "weaponmod:item/flail.diamond",
+  "textures": {
+    "layer0": "weaponmod:items/flail-thrown"
+  }
 }

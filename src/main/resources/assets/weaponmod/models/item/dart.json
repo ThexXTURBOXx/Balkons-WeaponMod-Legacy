@@ -1,6 +1,6 @@
 {
-    "parent": "item/generated",
-	"textures": {
-        "layer0": "weaponmod:items/dart"
-    }
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "weaponmod:items/dart"
+  }
 }
