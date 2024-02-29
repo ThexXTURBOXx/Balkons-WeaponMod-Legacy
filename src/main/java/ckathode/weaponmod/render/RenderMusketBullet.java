@@ -68,6 +68,6 @@ public class RenderMusketBullet extends Render<EntityMusketBullet> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityMusketBullet entity) {
-        return WeaponModResources.Textures.BULLET;
+        return WeaponModResources.Entity.BULLET;
     }
 }

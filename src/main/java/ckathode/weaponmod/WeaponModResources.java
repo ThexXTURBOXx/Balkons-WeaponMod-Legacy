@@ -5,8 +5,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class WeaponModResources {
-    public abstract static class Textures {
+public final class WeaponModResources {
+    public static final class Entity {
         public static final ResourceLocation DART = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/entity/blowgun_dart.png");
         public static final ResourceLocation BOOMERANG = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/entity/boomerang.png");
         public static final ResourceLocation CANNON = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/entity/cannon.png");
@@ -19,5 +19,8 @@ public abstract class WeaponModResources {
         public static final ResourceLocation KNIFE = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/entity/knife.png");
         public static final ResourceLocation BULLET = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/entity/musket_bullet.png");
         public static final ResourceLocation SPEAR = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/entity/spear.png");
+    }
+    public static final class Gui {
+        public static final ResourceLocation OVERLAY = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/gui/overlay.png");
     }
 }

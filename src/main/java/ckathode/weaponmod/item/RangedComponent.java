@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper;
+import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
@@ -35,14 +36,14 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     public final RangedSpecs rangedSpecs;
 
     public static boolean isReloaded(ItemStack itemstack) {
-        return ReloadHelper.getReloadState(itemstack) >= ReloadHelper.STATE_RELOADED;
+        return ReloadHelper.getReloadState(itemstack).isReloaded();
     }
 
     public static boolean isReadyToFire(ItemStack itemstack) {
-        return ReloadHelper.getReloadState(itemstack) == ReloadHelper.STATE_READY;
+        return ReloadHelper.getReloadState(itemstack) == ReloadState.STATE_READY;
     }
 
-    public static void setReloadState(ItemStack itemstack, int state) {
+    public static void setReloadState(ItemStack itemstack, ReloadState state) {
         ReloadHelper.setReloadState(itemstack, state);
     }
 
@@ -124,8 +125,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     @Override
     public EnumAction getUseAction(ItemStack itemstack) {
-        int state = ReloadHelper.getReloadState(itemstack);
-        if (state == ReloadHelper.STATE_READY) {
+        ReloadState state = ReloadHelper.getReloadState(itemstack);
+        if (state == ReloadState.STATE_READY) {
             return EnumAction.BOW;
         }
         return EnumAction.NONE;
@@ -145,7 +146,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         }
         if (!hasAmmo(itemstack, world, entityplayer)) {
             soundEmpty(itemstack, world, entityplayer);
-            setReloadState(itemstack, ReloadHelper.STATE_NONE);
+            setReloadState(itemstack, ReloadState.STATE_NONE);
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         if (isReadyToFire(itemstack)) {
@@ -160,9 +161,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public void onUsingTick(ItemStack itemstack, EntityLivingBase entityliving, int count) {
         EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        if (ReloadHelper.getReloadState(itemstack) == ReloadHelper.STATE_NONE && getUseDuration(itemstack) - count >= getReloadDuration(itemstack)) {
+        if (ReloadHelper.getReloadState(itemstack) == ReloadState.STATE_NONE && getUseDuration(itemstack) - count >= getReloadDuration(itemstack)) {
             effectReloadDone(itemstack, entityplayer.world, entityplayer);
-            setReloadState(itemstack, ReloadHelper.STATE_RELOADED);
+            setReloadState(itemstack, ReloadState.STATE_RELOADED);
         }
     }
 
@@ -177,9 +178,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             if (hasAmmoAndConsume(itemstack, world, entityplayer)) {
                 fire(itemstack, world, entityplayer, i);
             }
-            setReloadState(itemstack, ReloadHelper.STATE_NONE);
+            setReloadState(itemstack, ReloadState.STATE_NONE);
         } else {
-            setReloadState(itemstack, ReloadHelper.STATE_READY);
+            setReloadState(itemstack, ReloadState.STATE_READY);
         }
     }
 

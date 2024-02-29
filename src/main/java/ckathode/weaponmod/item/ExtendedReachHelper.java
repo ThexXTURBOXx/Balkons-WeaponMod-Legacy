@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class ExtendedReachHelper {
+public final class ExtendedReachHelper {
     private static final Minecraft mc = Minecraft.getInstance();
 
     public static RayTraceResult getMouseOver(float frame, float dist) {

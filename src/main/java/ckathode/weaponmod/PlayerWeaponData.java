@@ -5,33 +5,31 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 
-public abstract class PlayerWeaponData {
-    private static final DataParameter<Integer> BOOLEANS = EntityDataManager.createKey(EntityPlayer.class,
-            DataSerializers.VARINT);
+public final class PlayerWeaponData {
     private static final DataParameter<Integer> WARHAMMER_LAST_SMASH_TICKS =
             EntityDataManager.createKey(EntityPlayer.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> FLAIL_THROWN = EntityDataManager.createKey(EntityPlayer.class,
+            DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> FLAIL_ENTITY_ID = EntityDataManager.createKey(EntityPlayer.class,
             DataSerializers.VARINT);
-    public static final int WARHAMMER_CHARGED = 1;
-    public static final int FLAIL_THROWN = 2;
 
     public static void initPlayerWeaponData(EntityPlayer player) {
         String playername = getPlayerName(player);
         BalkonsWeaponMod.modLog.trace("Initializing DataManager values for " + playername);
         EntityDataManager dataManager = player.getDataManager();
         try {
-            dataManager.get(BOOLEANS);
-            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + BOOLEANS.getId());
-        } catch (NullPointerException ignored) {
-        } finally {
-            dataManager.register(BOOLEANS, 0);
-        }
-        try {
             dataManager.get(WARHAMMER_LAST_SMASH_TICKS);
             BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + WARHAMMER_LAST_SMASH_TICKS.getId());
         } catch (NullPointerException ignored) {
         } finally {
             dataManager.register(WARHAMMER_LAST_SMASH_TICKS, player.ticksExisted);
+        }
+        try {
+            dataManager.get(FLAIL_THROWN);
+            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + FLAIL_THROWN.getId());
+        } catch (NullPointerException ignored) {
+        } finally {
+            dataManager.register(FLAIL_THROWN, false);
         }
         try {
             dataManager.get(FLAIL_ENTITY_ID);
@@ -60,23 +58,6 @@ public abstract class PlayerWeaponData {
         initPlayerWeaponData(player);
     }
 
-    public static void setFlailEntityId(EntityPlayer player, int id) {
-        try {
-            player.getDataManager().set(FLAIL_ENTITY_ID, id);
-        } catch (NullPointerException e) {
-            unavailableError(player, FLAIL_ENTITY_ID.getId());
-        }
-    }
-
-    public static int getFlailEntityId(EntityPlayer player) {
-        try {
-            return player.getDataManager().get(FLAIL_ENTITY_ID);
-        } catch (NullPointerException e) {
-            unavailableError(player, FLAIL_ENTITY_ID.getId());
-            return 0;
-        }
-    }
-
     public static int getLastWarhammerSmashTicks(EntityPlayer player) {
         try {
             return player.getDataManager().get(WARHAMMER_LAST_SMASH_TICKS);
@@ -94,44 +75,38 @@ public abstract class PlayerWeaponData {
         }
     }
 
-    public static void setFlailThrown(EntityPlayer player, boolean flag) {
-        putBoolean(player, FLAIL_THROWN, flag);
-    }
-
     public static boolean isFlailThrown(EntityPlayer player) {
-        return getBoolean(player.getDataManager().get(BOOLEANS), FLAIL_THROWN);
-    }
-
-    public static void putBoolean(EntityPlayer player, int state, boolean flag) {
         try {
-            int i = player.getDataManager().get(BOOLEANS);
-            i = putBoolean(i, state, flag);
-            player.getDataManager().set(BOOLEANS, i);
+            return player.getDataManager().get(FLAIL_THROWN);
         } catch (NullPointerException e) {
-            unavailableError(player, BOOLEANS.getId());
-        }
-    }
-
-    public static boolean getBoolean(EntityPlayer player, int state) {
-        try {
-            return getBoolean(player.getDataManager().get(BOOLEANS), state);
-        } catch (NullPointerException e) {
-            unavailableError(player, BOOLEANS.getId());
+            unavailableError(player, FLAIL_THROWN.getId());
             return false;
         }
     }
 
-    private static boolean getBoolean(int i, int pos) {
-        return (i & 1 << pos) != 0x0;
+    public static void setFlailThrown(EntityPlayer player, boolean flag) {
+        try {
+            player.getDataManager().set(FLAIL_THROWN, flag);
+        } catch (NullPointerException e) {
+            unavailableError(player, FLAIL_THROWN.getId());
+        }
     }
 
-    private static int putBoolean(int i, int pos, boolean flag) {
-        int mask = 1 << pos;
-        i &= ~mask;
-        if (flag) {
-            i |= mask;
+    public static int getFlailEntityId(EntityPlayer player) {
+        try {
+            return player.getDataManager().get(FLAIL_ENTITY_ID);
+        } catch (NullPointerException e) {
+            unavailableError(player, FLAIL_ENTITY_ID.getId());
+            return 0;
         }
-        return i;
+    }
+
+    public static void setFlailEntityId(EntityPlayer player, int id) {
+        try {
+            player.getDataManager().set(FLAIL_ENTITY_ID, id);
+        } catch (NullPointerException e) {
+            unavailableError(player, FLAIL_ENTITY_ID.getId());
+        }
     }
 
 }

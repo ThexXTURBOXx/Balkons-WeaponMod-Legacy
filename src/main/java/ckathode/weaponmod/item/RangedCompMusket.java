@@ -1,6 +1,6 @@
 package ckathode.weaponmod.item;
 
-import ckathode.weaponmod.ReloadHelper;
+import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,7 +62,7 @@ public class RangedCompMusket extends RangedComponent {
             newStack.setDamage(bayonetdamage);
             entityplayer.inventory.addItemStackToInventory(newStack);
         } else {
-            RangedComponent.setReloadState(itemstack, ReloadHelper.STATE_NONE);
+            RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         postShootingEffects(itemstack, entityplayer, world);
     }

@@ -1,6 +1,6 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.RangedComponent;
 import net.minecraft.client.MainWindow;
@@ -11,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -19,7 +18,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiOverlayReloaded extends Gui {
-    private final ResourceLocation overlay = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/gui/overlay.png");
     private final Minecraft mc;
 
     public GuiOverlayReloaded(Minecraft minecraft) {
@@ -68,7 +66,7 @@ public class GuiOverlayReloaded extends Gui {
         int height = (int) (f * 24);
 
         zLevel = -90; // at the same level as the hotbar itself
-        mc.getRenderManager().textureManager.bindTexture(overlay);
+        mc.getRenderManager().textureManager.bindTexture(WeaponModResources.Gui.OVERLAY);
         drawTexturedModalRect(x0, y0 - height, tx, offset + 24 - height, width, height);
     }
 }

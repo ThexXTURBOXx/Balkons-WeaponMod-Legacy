@@ -137,6 +137,6 @@ public class RenderFlail extends Render<EntityFlail> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityFlail entity) {
-        return WeaponModResources.Textures.FLAIL;
+        return WeaponModResources.Entity.FLAIL;
     }
 }

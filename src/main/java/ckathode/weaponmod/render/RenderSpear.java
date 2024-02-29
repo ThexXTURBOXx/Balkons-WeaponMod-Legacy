@@ -121,6 +121,6 @@ public class RenderSpear extends Render<EntitySpear> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntitySpear entity) {
-        return WeaponModResources.Textures.SPEAR;
+        return WeaponModResources.Entity.SPEAR;
     }
 }

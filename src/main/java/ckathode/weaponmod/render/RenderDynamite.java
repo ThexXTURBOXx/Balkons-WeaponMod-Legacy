@@ -79,6 +79,6 @@ public class RenderDynamite extends Render<EntityDynamite> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityDynamite entity) {
-        return WeaponModResources.Textures.DYNAMITE;
+        return WeaponModResources.Entity.DYNAMITE;
     }
 }

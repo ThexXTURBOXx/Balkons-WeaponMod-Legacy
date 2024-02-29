@@ -98,6 +98,6 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityBlowgunDart entityblowgundart) {
-        return WeaponModResources.Textures.DART;
+        return WeaponModResources.Entity.DART;
     }
 }

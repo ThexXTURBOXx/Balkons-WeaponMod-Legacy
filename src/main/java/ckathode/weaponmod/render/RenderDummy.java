@@ -51,6 +51,6 @@ public class RenderDummy extends Render<EntityDummy> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityDummy entity) {
-        return WeaponModResources.Textures.DUMMY;
+        return WeaponModResources.Entity.DUMMY;
     }
 }

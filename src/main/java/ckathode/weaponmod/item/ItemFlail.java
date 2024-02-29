@@ -32,7 +32,7 @@ public class ItemFlail extends ItemMelee {
             public float call(@Nonnull ItemStack stack, @Nullable World worldIn,
                               @Nullable EntityLivingBase entityIn) {
                 return (entityIn == null) ? 0.0f :
-                        ((entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && PlayerWeaponData.isFlailThrown((EntityPlayer) entityIn)) ? 1.0f : 0.0f);
+                        ((entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && isThrown((EntityPlayer) entityIn)) ? 1.0f : 0.0f);
             }
         });
     }
@@ -49,7 +49,7 @@ public class ItemFlail extends ItemMelee {
             return;
         }
         EntityPlayer player = (EntityPlayer) entity;
-        if (!PlayerWeaponData.isFlailThrown(player)) {
+        if (!isThrown(player)) {
             return;
         }
         ItemStack itemstack2 = player.getHeldItemMainhand();
@@ -108,6 +108,10 @@ public class ItemFlail extends ItemMelee {
         PlayerWeaponData.setFlailThrown(entityplayer, flag);
     }
 
+    public boolean isThrown(EntityPlayer entityplayer) {
+        return PlayerWeaponData.isFlailThrown(entityplayer);
+    }
+
     private void removePreviousFlail(World world, EntityPlayer entityplayer) {
         int id = PlayerWeaponData.getFlailEntityId(entityplayer);
         if (id != 0) {
@@ -116,10 +120,6 @@ public class ItemFlail extends ItemMelee {
                 entity.remove();
             }
         }
-    }
-
-    public boolean getThrown(EntityPlayer entityplayer) {
-        return PlayerWeaponData.isFlailThrown(entityplayer);
     }
 
     public float getFlailDamage() {

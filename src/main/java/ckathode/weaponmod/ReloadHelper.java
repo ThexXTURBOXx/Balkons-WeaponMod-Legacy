@@ -1,12 +1,10 @@
 package ckathode.weaponmod;
 
+import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class ReloadHelper {
-    public static final int STATE_NONE = 0;
-    public static final int STATE_RELOADED = 1;
-    public static final int STATE_READY = 2;
+public final class ReloadHelper {
 
     private static void initTagCompound(ItemStack itemstack) {
         if (itemstack.getTag() == null) {
@@ -14,16 +12,30 @@ public abstract class ReloadHelper {
         }
     }
 
-    public static int getReloadState(ItemStack itemstack) {
-        if (itemstack.hasTag()) {
-            return itemstack.getTag().getByte("rld");
+    @Nonnull
+    public static ReloadState getReloadState(ItemStack itemstack) {
+        try {
+            if (itemstack.hasTag()) {
+                return ReloadState.values()[itemstack.getTag().getByte("rld")];
+            }
+        } catch (Throwable ignored) {
         }
-        return 0;
+        return ReloadState.STATE_NONE;
     }
 
-    public static void setReloadState(ItemStack itemstack, int state) {
+    public static void setReloadState(ItemStack itemstack, ReloadState state) {
         initTagCompound(itemstack);
-        itemstack.getTag().putByte("rld", (byte) state);
+        itemstack.getTag().putByte("rld", (byte) state.ordinal());
+    }
+
+    public enum ReloadState {
+        STATE_NONE,
+        STATE_RELOADED,
+        STATE_READY;
+
+        public boolean isReloaded() {
+            return this == STATE_RELOADED || this == STATE_READY;
+        }
     }
 
 }

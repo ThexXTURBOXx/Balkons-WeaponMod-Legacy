@@ -78,6 +78,6 @@ public class RenderCrossbowBolt extends Render<EntityCrossbowBolt> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityCrossbowBolt entity) {
-        return WeaponModResources.Textures.BOLT;
+        return WeaponModResources.Entity.BOLT;
     }
 }

@@ -130,6 +130,6 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityBoomerang entity) {
-        return WeaponModResources.Textures.BOOMERANG;
+        return WeaponModResources.Entity.BOOMERANG;
     }
 }

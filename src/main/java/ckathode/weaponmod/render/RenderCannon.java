@@ -71,6 +71,6 @@ public class RenderCannon extends Render<EntityCannon> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityCannon entity) {
-        return WeaponModResources.Textures.CANNON;
+        return WeaponModResources.Entity.CANNON;
     }
 }

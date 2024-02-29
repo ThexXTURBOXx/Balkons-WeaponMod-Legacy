@@ -1,7 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
-import ckathode.weaponmod.ReloadHelper;
+import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -64,11 +64,11 @@ public class RangedCompBlowgun extends RangedComponent {
         }
         int damage = 1;
         if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
-            RangedComponent.setReloadState(itemstack, ReloadHelper.STATE_NONE);
+            RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
         postShootingEffects(itemstack, entityplayer, world);
-        RangedComponent.setReloadState(itemstack, ReloadHelper.STATE_NONE);
+        RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
     }
 
     @Override

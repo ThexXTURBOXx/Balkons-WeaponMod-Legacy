@@ -120,6 +120,6 @@ public class RenderKnife extends Render<EntityKnife> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityKnife entity) {
-        return WeaponModResources.Textures.KNIFE;
+        return WeaponModResources.Entity.KNIFE;
     }
 }

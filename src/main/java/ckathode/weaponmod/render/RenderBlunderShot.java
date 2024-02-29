@@ -80,6 +80,6 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityBlunderShot entity) {
-        return WeaponModResources.Textures.BULLET;
+        return WeaponModResources.Entity.BULLET;
     }
 }

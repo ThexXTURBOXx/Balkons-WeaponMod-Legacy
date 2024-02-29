@@ -71,6 +71,6 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityMortarShell entity) {
-        return WeaponModResources.Textures.CANNONBALL;
+        return WeaponModResources.Entity.CANNONBALL;
     }
 }

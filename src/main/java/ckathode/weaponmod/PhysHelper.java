@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-public abstract class PhysHelper {
+public final class PhysHelper {
     private static double kbMotionX = 0.0;
     private static double kbMotionY = 0.0;
     private static double kbMotionZ = 0.0;

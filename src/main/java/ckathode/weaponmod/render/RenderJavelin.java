@@ -117,6 +117,6 @@ public class RenderJavelin extends Render<EntityJavelin> {
 
     @Override
     protected ResourceLocation getEntityTexture(@Nonnull EntityJavelin entity) {
-        return WeaponModResources.Textures.JAVELIN;
+        return WeaponModResources.Entity.JAVELIN;
     }
 }

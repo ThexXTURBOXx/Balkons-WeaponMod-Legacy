@@ -1,6 +1,6 @@
 package ckathode.weaponmod.item;
 
-import ckathode.weaponmod.ReloadHelper;
+import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,7 +44,7 @@ public class RangedCompMortar extends RangedComponent {
         }
         int damage = 1;
         if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
-            RangedComponent.setReloadState(itemstack, ReloadHelper.STATE_NONE);
+            RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
         postShootingEffects(itemstack, entityplayer, world);
