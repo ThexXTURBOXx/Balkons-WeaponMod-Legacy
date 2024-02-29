@@ -1,16 +1,17 @@
 package ckathode.weaponmod.render;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.RangedComponent;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -18,6 +19,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiOverlayReloaded extends Gui {
+    private final ResourceLocation overlay = new ResourceLocation(BalkonsWeaponMod.MOD_ID, "textures/gui/overlay.png");
     private final Minecraft mc;
 
     public GuiOverlayReloaded(Minecraft minecraft) {
@@ -25,13 +27,16 @@ public class GuiOverlayReloaded extends Gui {
     }
 
     @SubscribeEvent
-    public void renderGUIOverlay(RenderGameOverlayEvent e) {
-        if (e instanceof RenderGameOverlayEvent.Post || e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR)
+    public void renderGUIOverlay(RenderGameOverlayEvent.Pre e) {
+        if (e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR)
             return;
 
         EntityPlayer p = mc.player;
         if (p == null) return;
+        int currentItem = p.inventory.currentItem;
         ItemStack is = p.getActiveItemStack();
+        ItemStack current = p.inventory.getStackInSlot(currentItem);
+        ItemStack offHandItem = p.getHeldItemOffhand();
         if (is.isEmpty()) return;
         Item item = is.getItem();
         if (!(item instanceof IItemWeapon)) return;
@@ -40,28 +45,30 @@ public class GuiOverlayReloaded extends Gui {
 
         EnumHandSide offHandSide = p.getPrimaryHand().opposite();
         EnumHand hand = p.getActiveHand();
-
-        GlStateManager.pushLightingAttrib();
-        GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GlStateManager.disableLighting();
+        if (hand == EnumHand.MAIN_HAND && is != current ||
+            hand == EnumHand.OFF_HAND && is != offHandItem) return;
 
         float f;
-        int color;
+        int offset;
         if (RangedComponent.isReloaded(is)) {
             f = 1.0f;
-            color = RangedComponent.isReadyToFire(is) ? 0x60c60000 : 0x60348e00;
+            offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
         } else {
             f = Math.min(p.getItemInUseMaxCount() / (float) rc.getReloadDuration(is), 1.0f);
-            color = 0x60eaa800;
+            offset = 0;
         }
 
         MainWindow window = Minecraft.getInstance().mainWindow;
         int x0 = window.getScaledWidth() / 2 + (hand == EnumHand.OFF_HAND ?
-                (offHandSide == EnumHandSide.LEFT ? -117 : 101)
-                : -88 + p.inventory.currentItem * 20);
-        int y0 = window.getScaledHeight() - 3;
+                (offHandSide == EnumHandSide.LEFT ? -120 : 91)
+                : -91 - 1 + currentItem * 20);
+        int y0 = window.getScaledHeight() + 1;
+        int tx = hand == EnumHand.OFF_HAND ? (offHandSide == EnumHandSide.LEFT ? 24 : 53) : 0;
+        int width = hand == EnumHand.OFF_HAND ? 29 : 24;
+        int height = (int) (f * 24);
 
-        drawRect(x0, y0, x0 + 16, y0 - (int) (f * 16.0f), color);
-        GlStateManager.popAttrib();
+        zLevel = -90; // at the same level as the hotbar itself
+        mc.getRenderManager().textureManager.bindTexture(overlay);
+        drawTexturedModalRect(x0, y0 - height, tx, offset + 24 - height, width, height);
     }
 }
