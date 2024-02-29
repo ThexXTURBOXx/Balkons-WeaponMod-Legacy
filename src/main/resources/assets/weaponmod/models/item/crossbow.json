@@ -18,13 +18,13 @@
     "overrides": [
         {
             "predicate": {
-                "reloaded": 1
+                "weaponmod:reloaded": 1
             },
             "model": "weaponmod:item/crossbow-loaded"
         },
         {
             "predicate": {
-                "reload": 1
+                "weaponmod:reload": 1
             },
             "model": "weaponmod:item/crossbow_reload"
         }

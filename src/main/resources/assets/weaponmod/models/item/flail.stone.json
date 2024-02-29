@@ -6,7 +6,7 @@
     "overrides": [
         {
             "predicate": {
-                "thrown": 1
+                "weaponmod:thrown": 1
             },
             "model": "weaponmod:item/flail.stone-thrown"
         }

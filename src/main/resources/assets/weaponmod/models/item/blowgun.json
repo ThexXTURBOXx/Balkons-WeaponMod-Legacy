@@ -18,7 +18,7 @@
     "overrides": [
         {
             "predicate": {
-                "reload": 1
+                "weaponmod:reload": 1
             },
             "model": "weaponmod:item/blowgun_reload"
         }

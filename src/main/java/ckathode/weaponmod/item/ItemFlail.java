@@ -31,8 +31,8 @@ public class ItemFlail extends ItemMelee {
             @OnlyIn(Dist.CLIENT)
             public float call(@Nonnull ItemStack stack, @Nullable World worldIn,
                               @Nullable EntityLivingBase entityIn) {
-                return (entityIn == null) ? 0.0f :
-                        ((entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && isThrown((EntityPlayer) entityIn)) ? 1.0f : 0.0f);
+                return entityIn instanceof EntityPlayer && entityIn.getHeldItemMainhand() == stack
+                       && isThrown((EntityPlayer) entityIn) ? 1.0f : 0.0f;
             }
         });
     }
@@ -53,9 +53,9 @@ public class ItemFlail extends ItemMelee {
             return;
         }
         ItemStack itemstack2 = player.getHeldItemMainhand();
-        if (itemstack2.isEmpty() || itemstack2.getItem() != this) {
+        if (itemstack2.isEmpty() || !((itemstack2.getItem()) instanceof ItemFlail)) {
             setThrown(player, false);
-        } else {
+        } else if (itemstack2.getItem() == this) {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
                 Entity entity2 = world.getEntityByID(id);
