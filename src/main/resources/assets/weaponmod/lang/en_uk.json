@@ -97,8 +97,13 @@
   "attribute.name.weaponmod.reloadTime": "Reload Time",
   "attribute.name.weaponmod.reach": "Reach",
 
-  "death.attack.weapon": "%1$s is no more.",
-  "death.attack.weapon.player": "%1$s died running away from %2$s.",
+  "death.attack.weapon": "%1$s is no more",
+  "death.attack.weapon.item": "%1$s died running away from %2$s with %3$s",
+  "death.attack.weapon.player": "%1$s died running away from %2$s",
+
+  "death.attack.battleaxe": "%1$s has been axed out of existence",
+  "death.attack.battleaxe.item": "%1$s has been axed out of existence by %2$s with %3$s",
+  "death.attack.battleaxe.player": "%1$s has been axed out of existence by %2$s",
 
   "entity.weaponmod.spear": "Spear",
   "entity.weaponmod.knife": "Knife",
