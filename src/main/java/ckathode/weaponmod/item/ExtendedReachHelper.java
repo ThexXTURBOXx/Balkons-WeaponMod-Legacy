@@ -16,54 +16,62 @@ public final class ExtendedReachHelper {
     private static final Minecraft mc = Minecraft.getInstance();
 
     public static RayTraceResult getMouseOver(float frame, float dist) {
-        RayTraceResult raytraceResult = null;
-        if (mc.getRenderViewEntity() != null && mc.world != null) {
-            double var2 = dist;
-            raytraceResult = mc.getRenderViewEntity().rayTrace(var2, frame,
-                    RayTraceFluidMode.NEVER);
-            double calcdist = var2;
-            Vec3d pos = mc.getRenderViewEntity().getEyePosition(frame);
-            var2 = calcdist;
-            if (raytraceResult != null) {
-                calcdist = raytraceResult.hitVec.distanceTo(pos);
+        RayTraceResult result = null;
+        Entity entity = mc.getRenderViewEntity();
+        if (entity != null && mc.world != null) {
+            double distNew = dist;
+            result = entity.rayTrace(distNew, frame, RayTraceFluidMode.NEVER);
+            double calcDist = distNew;
+            Vec3d pos = entity.getEyePosition(frame);
+            distNew = calcDist;
+
+            if (result != null) {
+                calcDist = result.hitVec.distanceTo(pos);
             }
-            Vec3d lookvec = mc.getRenderViewEntity().getLook(frame);
-            Vec3d var3 = pos.add(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2);
+
+            Vec3d lookVec = entity.getLook(1.0F);
+            Vec3d traced = pos.add(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew);
             Entity pointedEntity = null;
-            float var4 = 1.0f;
-            List<Entity> list =
-                    mc.world.getEntitiesInAABBexcluding(mc.getRenderViewEntity(),
-                            mc.getRenderViewEntity().getBoundingBox()
-                                    .expand(lookvec.x * var2, lookvec.y * var2, lookvec.z * var2)
-                                    .grow(var4, var4, var4),
-                            EntitySelectors.NOT_SPECTATING.and(entity -> entity != null && entity.canBeCollidedWith()));
-            double d = calcdist;
-            for (Entity entity : list) {
-                AxisAlignedBB aabb = entity.getBoundingBox().grow(entity.getCollisionBorderSize());
-                RayTraceResult raytraceResult2 = aabb.calculateIntercept(pos, var3);
+            float f = 1.0F;
+            List<Entity> list = mc.world.getEntitiesInAABBexcluding(entity,
+                    entity.getBoundingBox()
+                            .expand(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew)
+                            .grow(f, f, f),
+                    EntitySelectors.NOT_SPECTATING.and(Entity::canBeCollidedWith));
+            double d = calcDist;
+
+            Vec3d hitVec = null;
+            for (Entity entity1 : list) {
+                AxisAlignedBB aabb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
+                RayTraceResult intercept = aabb.calculateIntercept(pos, traced);
                 if (aabb.contains(pos)) {
-                    if (d < 0.0) {
-                        continue;
+                    if (d >= 0.0D) {
+                        pointedEntity = entity1;
+                        hitVec = intercept == null ? pos : intercept.hitVec;
+                        d = 0.0D;
                     }
-                    pointedEntity = entity;
-                    d = 0.0;
-                } else {
-                    if (raytraceResult2 == null) {
-                        continue;
+                } else if (intercept != null) {
+                    double d1 = pos.distanceTo(intercept.hitVec);
+                    if (d1 < d || d == 0.0D) {
+                        if (entity1.getLowestRidingEntity() == entity.getLowestRidingEntity() && !entity1.canRiderInteract()) {
+                            if (d == 0.0D) {
+                                pointedEntity = entity1;
+                                hitVec = intercept.hitVec;
+                            }
+                        } else {
+                            pointedEntity = entity1;
+                            hitVec = intercept.hitVec;
+                            d = d1;
+                        }
                     }
-                    double d2 = pos.distanceTo(raytraceResult2.hitVec);
-                    if (d2 >= d && d != 0.0) {
-                        continue;
-                    }
-                    pointedEntity = entity;
-                    d = d2;
                 }
             }
-            if (pointedEntity != null && (d < calcdist || raytraceResult == null)) {
-                raytraceResult = new RayTraceResult(pointedEntity);
+
+            if (pointedEntity != null && (d < calcDist || result == null)) {
+                result = new RayTraceResult(pointedEntity, hitVec);
             }
         }
-        return raytraceResult;
+        return result;
     }
 
 }
