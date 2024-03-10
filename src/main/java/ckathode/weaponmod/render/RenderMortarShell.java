@@ -25,11 +25,11 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
         GlStateManager.pushMatrix();
         bindEntityTexture(entitymortarshell);
         GlStateManager.disableLighting();
-        GlStateManager.translated(d, d1, d2);
-        GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
-        GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
-        GlStateManager.scalef(0.2f, 0.2f, 0.2f);
-        GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
+        GlStateManager.translate(d, d1, d2);
+        GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.scale(-1.0f, -1.0f, 1.0f);
+        GlStateManager.scale(0.2f, 0.2f, 0.2f);
+        GlStateManager.rotate(180.0f, 1.0f, 0.0f, 0.0f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(getTeamColor(entitymortarshell));

@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 
 public class DartType {
@@ -12,6 +13,14 @@ public class DartType {
     public final byte typeID;
     public final String typeName;
     public final PotionEffect potionEffect;
+
+    public static DartType getDartTypeFromStack(final ItemStack itemstack) {
+        final int damage = itemstack.getItemDamage();
+        if (damage >= 0 && damage < DartType.dartTypes.length) {
+            return DartType.dartTypes[damage];
+        }
+        return null;
+    }
 
     public DartType(byte id, String typename, PotionEffect potioneffect) {
         dartTypes[id] = this;

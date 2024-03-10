@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -15,45 +16,40 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTier;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
-        this(id, meleecomponent, new Properties());
-    }
-
-    public ItemMelee(String id, MeleeComponent meleecomponent, Properties properties) {
-        super((meleecomponent.weaponMaterial == null) ? ItemTier.WOOD : meleecomponent.weaponMaterial, 3,
-                -2.4F, meleecomponent.setProperties(properties).group(ItemGroup.COMBAT));
+        super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setTranslationKey(id);
         (meleeComponent = meleecomponent).setItem(this);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"),
-                new IItemPropertyGetter() {
-                    @Override
-                    @OnlyIn(Dist.CLIENT)
-                    public float call(@Nonnull ItemStack stack, @Nullable World world,
-                                      @Nullable EntityLivingBase entity) {
-                        return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ?
-                                1.0f : 0.0f;
-                    }
-                });
+        meleecomponent.setThisItemProperties();
+        setCreativeTab(CreativeTabs.COMBAT);
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"), new IItemPropertyGetter() {
+            @Override
+            @SideOnly(Side.CLIENT)
+            public float apply(@Nonnull ItemStack stack, @Nullable World world,
+                               @Nullable EntityLivingBase entity) {
+                return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ? 1.0f : 0.0f;
+            }
+        });
         addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), new IItemPropertyGetter() {
             @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World world,
-                              @Nullable EntityLivingBase entity) {
+            @SideOnly(Side.CLIENT)
+            public float apply(@Nonnull ItemStack stack, @Nullable World world,
+                               @Nullable EntityLivingBase entity) {
                 return MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
             }
         });
@@ -94,13 +90,13 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
 
     @Nonnull
     @Override
-    public EnumAction getUseAction(@Nonnull ItemStack itemstack) {
-        return meleeComponent.getUseAction(itemstack);
+    public EnumAction getItemUseAction(@Nonnull ItemStack itemstack) {
+        return meleeComponent.getItemUseAction(itemstack);
     }
 
     @Override
-    public int getUseDuration(@Nonnull ItemStack itemstack) {
-        return meleeComponent.getUseDuration(itemstack);
+    public int getMaxItemUseDuration(@Nonnull ItemStack itemstack) {
+        return meleeComponent.getMaxItemUseDuration(itemstack);
     }
 
     @Override
@@ -130,9 +126,9 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack itemstack, @Nonnull World world,
-                              @Nonnull Entity entity, int i, boolean flag) {
-        meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
+    public void onUpdate(@Nonnull ItemStack itemstack, @Nonnull World world,
+                         @Nonnull Entity entity, int i, boolean flag) {
+        meleeComponent.onUpdate(itemstack, world, entity, i, flag);
     }
 
     @Nonnull
@@ -163,7 +159,7 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
 
     @Override
     public Random getItemRand() {
-        return random;
+        return itemRand;
     }
 
     @Override

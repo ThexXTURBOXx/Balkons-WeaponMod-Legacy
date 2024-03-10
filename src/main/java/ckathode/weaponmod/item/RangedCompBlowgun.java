@@ -7,11 +7,11 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -32,7 +32,7 @@ public class RangedCompBlowgun extends RangedComponent {
     @Override
     public void fire(ItemStack itemstack, World world, EntityLivingBase entityliving, int i) {
         EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        int j = getUseDuration(itemstack) - i;
+        int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f < 0.1f) {
@@ -42,10 +42,10 @@ public class RangedCompBlowgun extends RangedComponent {
             f = 1.0f;
         }
         ItemStack dartstack = findAmmo(entityplayer);
-        if (dartstack.isEmpty() && entityplayer.abilities.isCreativeMode) {
-            dartstack = new ItemStack(BalkonsWeaponMod.darts.get(DartType.damage), 1);
+        if (dartstack.isEmpty() && entityplayer.capabilities.isCreativeMode) {
+            dartstack = new ItemStack(BalkonsWeaponMod.dart, 1);
         }
-        if (!entityplayer.abilities.isCreativeMode
+        if (!entityplayer.capabilities.isCreativeMode
             && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) == 0) {
             dartstack.shrink(1);
             if (dartstack.isEmpty()) {
@@ -58,12 +58,12 @@ public class RangedCompBlowgun extends RangedComponent {
                     f * 1.5f, 1.0f);
             Item item = dartstack.getItem();
             if (item instanceof ItemBlowgunDart)
-                entityblowgundart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
+                entityblowgundart.setDartEffectType((byte) dartstack.getMetadata());
             applyProjectileEnchantments(entityblowgundart, itemstack);
             world.spawnEntity(entityblowgundart);
         }
         int damage = 1;
-        if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getItemDamage() + damage <= itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
@@ -97,7 +97,8 @@ public class RangedCompBlowgun extends RangedComponent {
         float particleX = -MathHelper.sin((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
-        world.addParticle(Particles.POOF, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+        world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, x + particleX, y + particleY, z + particleZ, 0.0, 0.0,
+                0.0);
     }
 
     @Override

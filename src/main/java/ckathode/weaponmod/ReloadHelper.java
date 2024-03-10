@@ -7,16 +7,16 @@ import net.minecraft.nbt.NBTTagCompound;
 public final class ReloadHelper {
 
     private static void initTagCompound(ItemStack itemstack) {
-        if (itemstack.getTag() == null) {
-            itemstack.setTag(new NBTTagCompound());
+        if (itemstack.getTagCompound() == null) {
+            itemstack.setTagCompound(new NBTTagCompound());
         }
     }
 
     @Nonnull
     public static ReloadState getReloadState(ItemStack itemstack) {
         try {
-            if (itemstack.hasTag()) {
-                return ReloadState.values()[itemstack.getTag().getByte("rld")];
+            if (itemstack.hasTagCompound()) {
+                return ReloadState.values()[itemstack.getTagCompound().getByte("rld")];
             }
         } catch (Throwable ignored) {
         }
@@ -25,7 +25,7 @@ public final class ReloadHelper {
 
     public static void setReloadState(ItemStack itemstack, ReloadState state) {
         initTagCompound(itemstack);
-        itemstack.getTag().putByte("rld", (byte) state.ordinal());
+        itemstack.getTagCompound().setByte("rld", (byte) state.ordinal());
     }
 
     public enum ReloadState {

@@ -7,7 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 public class MeleeCompWarhammer extends MeleeComponent {
     public static final int CHARGE_DELAY = 400;
 
-    public MeleeCompWarhammer(IItemTier itemTier) {
-        super(MeleeSpecs.WARHAMMER, itemTier);
+    public MeleeCompWarhammer(Item.ToolMaterial toolmaterial) {
+        super(MeleeSpecs.WARHAMMER, toolmaterial);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     public void onPlayerStoppedUsing(ItemStack itemstack, World world,
                                      EntityLivingBase entityliving, int i) {
         EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        int j = getUseDuration(itemstack) - i;
+        int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 4.0f;
         if (f > 1.0f) {
@@ -63,12 +63,12 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
+    public EnumAction getItemUseAction(ItemStack itemstack) {
         return EnumAction.BOW;
     }
 
     @Override
-    public int getUseDuration(ItemStack itemstack) {
+    public int getMaxItemUseDuration(ItemStack itemstack) {
         return 72000;
     }
 

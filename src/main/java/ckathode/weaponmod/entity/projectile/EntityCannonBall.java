@@ -7,20 +7,20 @@ import ckathode.weaponmod.entity.EntityCannon;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
+public class EntityCannonBall extends EntityProjectile {
     public static final String NAME = "cannonball";
 
     public EntityCannonBall(World world) {
-        super(BalkonsWeaponMod.entityCannonBall, world);
+        super(world);
     }
 
     public EntityCannonBall(World world, double d, double d1, double d2) {
@@ -33,7 +33,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         this(world, entitycannon.posX, entitycannon.posY + 1.0, entitycannon.posZ);
         Entity entityPassenger = entitycannon.getPassengers().isEmpty() ? null :
                 entitycannon.getPassengers().get(0);
-        setShooter(entitycannon);
+        setThrower(entitycannon);
         if (entityPassenger instanceof EntityLivingBase) {
             setPickupStatusFromEntity((EntityLivingBase) entityPassenger);
         } else {
@@ -50,14 +50,14 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
         double speed =
                 MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
         double amount = 8.0;
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                world.addParticle(Particles.SMOKE, posX + motionX * i1 / amount,
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + motionX * i1 / amount,
                         posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
@@ -67,10 +67,10 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         if (world.isRemote || !inGround || isInWater()) {
             return;
         }
-        remove();
+        setDead();
         float f = getIsCritical() ? 5.0f : 2.5f;
         PhysHelper.createAdvancedExplosion(world, this, posX, posY, posZ, f,
-                BalkonsWeaponMod.instance.modConfig.cannonDoesBlockDamage.get(), true, false, false);
+                BalkonsWeaponMod.instance.modConfig.cannonDoesBlockDamage, true, false, false);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         posZ -= motionZ / f1 * 0.05;
         inGround = true;
         if (inBlockState != null) {
-            inBlockState.onEntityCollision(world, blockpos, this);
+            inBlockState.getBlock().onEntityCollision(world, blockpos, inBlockState, this);
         }
         createCrater();
     }

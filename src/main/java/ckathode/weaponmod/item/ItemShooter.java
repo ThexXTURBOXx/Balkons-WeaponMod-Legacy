@@ -16,15 +16,14 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemShooter extends ItemBow implements IItemWeapon {
     protected static final int MAX_DELAY = 72000;
@@ -32,30 +31,26 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
-        this(id, rangedcomponent, meleecomponent, new Properties());
-    }
-
-    public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent,
-                       Properties properties) {
-        super(rangedcomponent.setProperties(properties).group(ItemGroup.COMBAT));
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setTranslationKey(id);
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
+        rangedcomponent.setThisItemProperties();
         addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reload"), new IItemPropertyGetter() {
             @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World world,
-                              @Nullable EntityLivingBase entity) {
+            @SideOnly(Side.CLIENT)
+            public float apply(@Nonnull ItemStack stack, @Nullable World world,
+                               @Nullable EntityLivingBase entity) {
                 return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f;
             }
         });
         addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reloaded"), new IItemPropertyGetter() {
             @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World world,
-                              @Nullable EntityLivingBase entity) {
+            @SideOnly(Side.CLIENT)
+            public float apply(@Nonnull ItemStack stack, @Nullable World world,
+                               @Nullable EntityLivingBase entity) {
                 return RangedComponent.isReloaded(stack) ? 1.0f : 0.0f;
             }
         });
@@ -109,13 +104,13 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
 
     @Nonnull
     @Override
-    public EnumAction getUseAction(@Nonnull ItemStack itemstack) {
-        return rangedComponent.getUseAction(itemstack);
+    public EnumAction getItemUseAction(@Nonnull ItemStack itemstack) {
+        return rangedComponent.getItemUseAction(itemstack);
     }
 
     @Override
-    public int getUseDuration(@Nonnull ItemStack itemstack) {
-        return rangedComponent.getUseDuration(itemstack);
+    public int getMaxItemUseDuration(@Nonnull ItemStack itemstack) {
+        return rangedComponent.getMaxItemUseDuration(itemstack);
     }
 
     @Nonnull
@@ -139,10 +134,10 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     }
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack itemstack, @Nonnull World world,
-                              @Nonnull Entity entity, int i, boolean flag) {
-        meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
-        rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
+    public void onUpdate(@Nonnull ItemStack itemstack, @Nonnull World world,
+                         @Nonnull Entity entity, int i, boolean flag) {
+        meleeComponent.onUpdate(itemstack, world, entity, i, flag);
+        rangedComponent.onUpdate(itemstack, world, entity, i, flag);
     }
 
     @Override
@@ -162,7 +157,7 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
 
     @Override
     public Random getItemRand() {
-        return random;
+        return itemRand;
     }
 
     @Override
@@ -175,4 +170,9 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         return rangedComponent;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isFull3D() {
+        return true;
+    }
 }

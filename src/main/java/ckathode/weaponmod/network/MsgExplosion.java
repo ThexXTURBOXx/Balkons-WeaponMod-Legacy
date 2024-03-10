@@ -2,17 +2,17 @@ package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.AdvancedExplosion;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class MsgExplosion implements WMMessage<MsgExplosion> {
+public class MsgExplosion extends WMMessage {
     private double x;
     private double y;
     private double z;
@@ -36,7 +36,7 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
     }
 
     @Override
-    public void decode(ByteBuf buf) {
+    public void decodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
         x = buf.readDouble();
         y = buf.readDouble();
         z = buf.readDouble();
@@ -54,7 +54,7 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
     }
 
     @Override
-    public void encode(ByteBuf buf) {
+    public void encodeInto(ChannelHandlerContext ctx, ByteBuf buf) {
         buf.writeDouble(x);
         buf.writeDouble(y);
         buf.writeDouble(z);
@@ -72,10 +72,10 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @SideOnly(Side.CLIENT)
     @Override
-    public void handleClientSide(MsgExplosion msg, Supplier<NetworkEvent.Context> ctx) {
-        World world = Minecraft.getInstance().world;
+    public void handleClientSide(EntityPlayer player) {
+        World world = Minecraft.getMinecraft().world;
         AdvancedExplosion expl = new AdvancedExplosion(world, null, x, y, z, size,
                 false, true);
         expl.setAffectedBlockPositions(blocks);
@@ -83,6 +83,6 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
     }
 
     @Override
-    public void handleServerSide(MsgExplosion msg, Supplier<NetworkEvent.Context> ctx) {
+    public void handleServerSide(EntityPlayer player) {
     }
 }

@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.DamageSourceAxe;
 import ckathode.weaponmod.WeaponModAttributes;
-import ckathode.weaponmod.entity.projectile.MaterialRegistry;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -10,18 +9,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
     public static final float[] DEFAULT_IGNORES = new float[]{1, 1, 1, 1, 1};
     public final float ignoreArmourAmount;
 
-    public MeleeCompBattleaxe(IItemTier itemTier) {
-        super(MeleeSpecs.BATTLEAXE, itemTier);
-        int ordinal = MaterialRegistry.getOrdinal(itemTier);
-        ignoreArmourAmount = ordinal >= 0 && ordinal < DEFAULT_IGNORES.length
-                ? DEFAULT_IGNORES[ordinal] : 0;
+    public MeleeCompBattleaxe(Item.ToolMaterial toolmaterial) {
+        super(MeleeSpecs.BATTLEAXE, toolmaterial);
+        int ordinal = toolmaterial.ordinal();
+        ignoreArmourAmount = ordinal < DEFAULT_IGNORES.length ? DEFAULT_IGNORES[ordinal] : 0;
     }
 
     @Override

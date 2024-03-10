@@ -21,12 +21,12 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
     public void doRender(@Nonnull EntityBlowgunDart entityblowgundart, double d, double d1,
                          double d2, float f, float f1) {
         bindEntityTexture(entityblowgundart);
-        GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
-        GlStateManager.translated(d, d1, d2);
-        GlStateManager.rotatef(entityblowgundart.prevRotationYaw + (entityblowgundart.rotationYaw - entityblowgundart.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
-        GlStateManager.rotatef(entityblowgundart.prevRotationPitch + (entityblowgundart.rotationPitch - entityblowgundart.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
+        GlStateManager.translate(d, d1, d2);
+        GlStateManager.rotate(entityblowgundart.prevRotationYaw + (entityblowgundart.rotationYaw - entityblowgundart.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.rotate(entityblowgundart.prevRotationPitch + (entityblowgundart.rotationPitch - entityblowgundart.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
         byte type = entityblowgundart.getDartEffectId();
@@ -35,16 +35,16 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
         float f11 = entityblowgundart.arrowShake - f1;
         if (f11 > 0.0f) {
             float f12 = -MathHelper.sin(f11 * 3.0f) * f11;
-            GlStateManager.rotatef(f12, 0.0f, 0.0f, 1.0f);
+            GlStateManager.rotate(f12, 0.0f, 0.0f, 1.0f);
         }
-        GlStateManager.rotatef(45.0f, 1.0f, 0.0f, 0.0f);
-        GlStateManager.scalef(0.05625f, 0.05625f, 0.05625f);
-        GlStateManager.translatef(-1.0f, 0.0f, 0.0f);
+        GlStateManager.rotate(45.0f, 1.0f, 0.0f, 0.0f);
+        GlStateManager.scale(0.05625f, 0.05625f, 0.05625f);
+        GlStateManager.translate(-1.0f, 0.0f, 0.0f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(getTeamColor(entityblowgundart));
         }
-        GlStateManager.normal3f(0.05625f, 0.0f, 0.0f);
+        GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         vertexbuffer.pos(-5.0, -2.0, -2.0).tex(0.0, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
         vertexbuffer.pos(-5.0, -2.0, 2.0).tex(0.15625, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -57,7 +57,7 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
             vertexbuffer.pos(-5.0, 2.0, -2.0).tex(0.0, 0.625).color(color[0], color[1], color[2], 1.0f).endVertex();
         }
         tessellator.draw();
-        GlStateManager.normal3f(-0.05625f, 0.0f, 0.0f);
+        GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         vertexbuffer.pos(-5.0, 2.0, -2.0).tex(0.0, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
         vertexbuffer.pos(-5.0, 2.0, 2.0).tex(0.15625, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -71,8 +71,8 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
         }
         tessellator.draw();
         for (int j = 0; j < 4; ++j) {
-            GlStateManager.rotatef(90.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.normal3f(0.0f, 0.0f, 0.05625f);
+            GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+            GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
             vertexbuffer.pos(-6.0, -2.0, 0.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
             vertexbuffer.pos(6.0, -2.0, 0.0).tex(0.5, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();

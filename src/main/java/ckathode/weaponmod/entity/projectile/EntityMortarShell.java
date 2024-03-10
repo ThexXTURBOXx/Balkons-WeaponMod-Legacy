@@ -8,22 +8,22 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
+public class EntityMortarShell extends EntityProjectile {
     public static final String NAME = "shell";
 
     public float explosiveSize;
 
     public EntityMortarShell(World world) {
-        super(BalkonsWeaponMod.entityMortarShell, world);
+        super(world);
         explosiveSize = 2.0f;
     }
 
@@ -35,7 +35,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
 
     public EntityMortarShell(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         setPickupStatusFromEntity(shooter);
     }
 
@@ -54,14 +54,14 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
         double speed =
                 MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
         double amount = 8.0;
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                world.addParticle(Particles.SMOKE, posX + motionX * i1 / amount,
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + motionX * i1 / amount,
                         posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
@@ -71,8 +71,8 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         if (world.isRemote || !inGround || isInWater()) {
             return;
         }
-        remove();
-        Entity shooter = getShooter();
+        setDead();
+        Entity shooter = getThrower();
         if (!(shooter instanceof EntityLivingBase)) return;
         if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase) shooter) > 0) {
             float f1 = (float) EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
@@ -82,7 +82,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         boolean flag =
                 EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase) shooter) > 0;
         PhysHelper.createAdvancedExplosion(world, this, posX, posY, posZ, explosiveSize,
-                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage.get(), true, flag, false);
+                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage, true, flag, false);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         posZ -= motionZ / f1 * 0.05;
         inGround = true;
         if (inBlockState != null) {
-            inBlockState.onEntityCollision(world, blockpos, this);
+            inBlockState.getBlock().onEntityCollision(world, blockpos, inBlockState, this);
         }
         createCrater();
     }

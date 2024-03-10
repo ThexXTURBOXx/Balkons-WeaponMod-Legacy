@@ -12,11 +12,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
+public class EntityBlunderShot extends EntityProjectile {
     public static final String NAME = "shot";
 
     public EntityBlunderShot(World world) {
-        super(BalkonsWeaponMod.entityBlunderShot, world);
+        super(world);
         setPickupStatus(PickupStatus.DISALLOWED);
     }
 
@@ -27,7 +27,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
     public EntityBlunderShot(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
     }
 
     @Override
@@ -45,10 +45,10 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
         if (ticksInAir > 4) {
-            remove();
+            setDead();
         }
     }
 
@@ -61,7 +61,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
             entity.hurtResistantTime = prevhurtrestime;
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            setDead();
         }
     }
 

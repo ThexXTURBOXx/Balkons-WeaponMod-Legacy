@@ -22,7 +22,6 @@ import ckathode.weaponmod.entity.projectile.dispense.DispenseDynamite;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseJavelin;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseMortarShell;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseMusketBullet;
-import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import ckathode.weaponmod.item.ItemCannon;
 import ckathode.weaponmod.item.ItemDummy;
@@ -48,43 +47,41 @@ import ckathode.weaponmod.item.RangedCompFlintlock;
 import ckathode.weaponmod.item.RangedCompMortar;
 import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.network.WMMessagePipeline;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemTier;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IConditionSerializer;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(BalkonsWeaponMod.MOD_ID)
+@Mod.EventBusSubscriber
+@Mod(modid = BalkonsWeaponMod.MOD_ID, name = BalkonsWeaponMod.MOD_NAME, version = BalkonsWeaponMod.MOD_VERSION,
+        updateJSON = BalkonsWeaponMod.UPDATE_JSON, acceptedMinecraftVersions = "[1.12.2]")
 public class BalkonsWeaponMod {
     public static final String MOD_ID = "weaponmod";
+    public static final String MOD_NAME = "Balkon's WeaponMod";
+    public static final String MOD_VERSION = "1.20.0";
+    public static final String UPDATE_JSON = "https://raw.githubusercontent.com/"
+                                             + "ThexXTURBOXx/UpdateJSONs/master/weaponmod.json";
+    @Mod.Instance("weaponmod")
     public static BalkonsWeaponMod instance;
-    public static final Logger modLog = LogManager.getLogger(MOD_ID);
-    public static final WMCommonProxy proxy = DistExecutor.runForDist(() -> WMClientProxy::new,
-            () -> WMCommonProxy::new);
+    public static Logger modLog;
+    @SidedProxy(clientSide = "ckathode.weaponmod.WMClientProxy", serverSide = "ckathode.weaponmod.WMCommonProxy")
+    public static WMCommonProxy proxy;
     public static Item javelin;
     public static Item spearWood;
     public static Item spearStone;
@@ -123,7 +120,7 @@ public class BalkonsWeaponMod {
     public static Item crossbow;
     public static Item bolt;
     public static Item blowgun;
-    public static final Map<DartType, Item> darts = new HashMap<>();
+    public static Item dart;
     public static Item dynamite;
     public static Item flailWood;
     public static Item flailStone;
@@ -151,35 +148,20 @@ public class BalkonsWeaponMod {
     public static Item mortarShell;
     public static Item mortar;
     public static Item mortarIronPart;
-    public static EntityType<EntitySpear> entitySpear;
-    public static EntityType<EntityKnife> entityKnife;
-    public static EntityType<EntityJavelin> entityJavelin;
-    public static EntityType<EntityMusketBullet> entityMusketBullet;
-    public static EntityType<EntityCrossbowBolt> entityCrossbowBolt;
-    public static EntityType<EntityBlowgunDart> entityBlowgunDart;
-    public static EntityType<EntityDynamite> entityDynamite;
-    public static EntityType<EntityFlail> entityFlail;
-    public static EntityType<EntityCannon> entityCannon;
-    public static EntityType<EntityCannonBall> entityCannonBall;
-    public static EntityType<EntityBlunderShot> entityBlunderShot;
-    public static EntityType<EntityDummy> entityDummy;
-    public static EntityType<EntityBoomerang> entityBoomerang;
-    public static EntityType<EntityMortarShell> entityMortarShell;
-    public final WeaponModConfig modConfig;
-    public final IConditionSerializer configConditional;
+    public WeaponModConfig modConfig;
     public WMMessagePipeline messagePipeline;
 
     public BalkonsWeaponMod() {
         instance = this;
-
-        DistExecutor.runWhenOn(Dist.CLIENT,
-                () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient));
-
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().register(this);
+        messagePipeline = new WMMessagePipeline();
         MinecraftForge.EVENT_BUS.register(this);
+    }
 
-        modConfig = new WeaponModConfig();
+    @Mod.EventHandler
+    public void preInitMod(final FMLPreInitializationEvent event) {
+        modLog = event.getModLog();
+
+        modConfig = new WeaponModConfig(new Configuration(event.getSuggestedConfigurationFile()));
         modConfig.addEnableSetting("spear");
         modConfig.addEnableSetting("halberd");
         modConfig.addEnableSetting("battleaxe");
@@ -205,145 +187,172 @@ public class BalkonsWeaponMod {
         modConfig.addReloadTimeSetting("blunderbuss", 20);
         modConfig.addReloadTimeSetting("flintlock", 15);
         modConfig.addReloadTimeSetting("mortar", 50);
-        modConfig.loadConfig(ModLoadingContext.get());
-
-        configConditional = CraftingHelper.register(new ResourceLocation(MOD_ID, "config_conditional"),
-                json -> () -> modConfig.isEnabled(JsonUtils.getString(json, "weapon")));
+        modConfig.loadConfig();
+        proxy.registerRenderersEntity(modConfig);
     }
 
-    public void setup(FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(() -> {
-            messagePipeline = new WMMessagePipeline();
-            proxy.registerEventHandlers();
-            proxy.registerPackets(messagePipeline);
-        });
+    @Mod.EventHandler
+    public void initMod(final FMLInitializationEvent event) {
+        messagePipeline.initalize();
+        proxy.registerPackets(messagePipeline);
+        proxy.registerEventHandlers();
+        registerWeapons();
+        registerDispenseBehavior();
     }
 
-    public void setupClient(FMLClientSetupEvent event) {
-        proxy.registerRenderersEntity();
-    }
-
-    private <T extends Entity> EntityType<T> createEntityType(Class<T> entityClass, String name,
-                                                              Function<? super World, ? extends T> factory) {
-        return createEntityType(entityClass, name, -1, -1, false, factory);
-    }
-
-    @SuppressWarnings("unchecked")
-    // Helper method because Forge is too stupid to handle generics properly...
-    private <T extends Entity> EntityType<T> createEntityType(Class<T> entityClass, String name,
-                                                              int range, int updateFrequency, boolean velocityUpdates,
-                                                              Function<? super World, ? extends T> factory) {
-        EntityType.Builder<T> builder = EntityType.Builder.create(entityClass, factory);
-        if (range >= 0 && updateFrequency >= 0)
-            builder.tracker(range, updateFrequency, velocityUpdates);
-        return (EntityType<T>) builder
-                .customSpawning(null, false) // Workaround for weird issues with getShooter()
-                .build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
+    @Mod.EventHandler
+    public void postInitMod(FMLPostInitializationEvent event) {
+        messagePipeline.postInitialize();
     }
 
     @SubscribeEvent
-    public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
-        IForgeRegistry<EntityType<?>> registry = event.getRegistry();
-        registry.register(entitySpear =
-                createEntityType(EntitySpear.class, EntitySpear.NAME, EntitySpear::new));
+    public static void registerModels(ModelRegistryEvent event) {
+        proxy.registerRenderersItem(instance.modConfig);
+    }
 
-        registry.register(entityKnife =
-                createEntityType(EntityKnife.class, EntityKnife.NAME, EntityKnife::new));
-
-        registry.register(entityJavelin =
-                createEntityType(EntityJavelin.class, EntityJavelin.NAME, EntityJavelin::new));
-
-        registry.register(entityMusketBullet =
-                createEntityType(EntityMusketBullet.class, EntityMusketBullet.NAME, EntityMusketBullet::new));
-
-        registry.register(entityCrossbowBolt =
-                createEntityType(EntityCrossbowBolt.class, EntityCrossbowBolt.NAME, EntityCrossbowBolt::new));
-
-        registry.register(entityBlowgunDart =
-                createEntityType(EntityBlowgunDart.class, EntityBlowgunDart.NAME, EntityBlowgunDart::new));
-
-        registry.register(entityDynamite =
-                createEntityType(EntityDynamite.class, EntityDynamite.NAME, EntityDynamite::new));
-
-        registry.register(entityFlail =
-                createEntityType(EntityFlail.class, EntityFlail.NAME, EntityFlail::new));
-
-        registry.register(entityCannon =
-                createEntityType(EntityCannon.class, EntityCannon.NAME, EntityCannon::new));
-        registry.register(entityCannonBall =
-                createEntityType(EntityCannonBall.class, EntityCannonBall.NAME, EntityCannonBall::new));
-
-        registry.register(entityBlunderShot =
-                createEntityType(EntityBlunderShot.class, EntityBlunderShot.NAME, EntityBlunderShot::new));
-
-        registry.register(entityDummy =
-                createEntityType(EntityDummy.class, EntityDummy.NAME, 64, 20, false, EntityDummy::new));
-
-        registry.register(entityBoomerang =
-                createEntityType(EntityBoomerang.class, EntityBoomerang.NAME, EntityBoomerang::new));
-
-        registry.register(entityMortarShell =
-                createEntityType(EntityMortarShell.class, EntityMortarShell.NAME, EntityMortarShell::new));
+    private void registerWeapons() {
+        if (modConfig.isEnabled("spear")) {
+            GameRegistry.addSmelting(spearSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(spearGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear", 1,
+                    this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("halberd")) {
+            GameRegistry.addSmelting(halberdSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(halberdGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+        }
+        if (modConfig.isEnabled("knife")) {
+            GameRegistry.addSmelting(knifeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(knifeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife", 2,
+                    this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("javelin")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin"
+                    , 3, this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("musket") || modConfig.isEnabled("flintlock")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class,
+                    "bullet", 4, this, 16, 20, true);
+        }
+        if (modConfig.isEnabled("battleaxe")) {
+            GameRegistry.addSmelting(battleaxeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(battleaxeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+        }
+        if (modConfig.isEnabled("warhammer")) {
+            GameRegistry.addSmelting(warhammerSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(warhammerGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+        }
+        if (modConfig.isEnabled("crossbow")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt"
+                    , 5, this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("blowgun")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
+                    6, this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("dynamite")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class,
+                    "dynamite", 7, this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("flail")) {
+            GameRegistry.addSmelting(flailSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(flailGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail", 8,
+                    this, 32, 20, true);
+        }
+        if (modConfig.isEnabled("cannon")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
+                    9, this, 64, 128, false);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
+                    "cannonball", 10, this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("blunderbuss")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
+                    11, this, 16, 20, true);
+        }
+        if (modConfig.isEnabled("dummy")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy", 12,
+                    this, 64, 20, false);
+        }
+        if (modConfig.isEnabled("boomerang")) {
+            GameRegistry.addSmelting(boomerangSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(boomerangGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
+                    "boomerang", 13, this, 64, 20, true);
+        }
+        if (modConfig.isEnabled("katana")) {
+            GameRegistry.addSmelting(katanaSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addSmelting(katanaGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+        }
+        if (modConfig.isEnabled("mortar")) {
+            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell"
+                    , 14, this, 64, 20, true);
+        }
     }
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(spearWood = new ItemMelee("spear.wood", new MeleeCompSpear(ItemTier.WOOD)));
-        registry.register(spearStone = new ItemMelee("spear.stone", new MeleeCompSpear(ItemTier.STONE)));
-        registry.register(spearSteel = new ItemMelee("spear.iron", new MeleeCompSpear(ItemTier.IRON)));
-        registry.register(spearGold = new ItemMelee("spear.gold", new MeleeCompSpear(ItemTier.GOLD)));
-        registry.register(spearDiamond = new ItemMelee("spear.diamond", new MeleeCompSpear(ItemTier.DIAMOND)));
+        registry.register(spearWood = new ItemMelee("spear.wood", new MeleeCompSpear(ToolMaterial.WOOD)));
+        registry.register(spearStone = new ItemMelee("spear.stone", new MeleeCompSpear(ToolMaterial.STONE)));
+        registry.register(spearSteel = new ItemMelee("spear.iron", new MeleeCompSpear(ToolMaterial.IRON)));
+        registry.register(spearGold = new ItemMelee("spear.gold", new MeleeCompSpear(ToolMaterial.GOLD)));
+        registry.register(spearDiamond = new ItemMelee("spear.diamond", new MeleeCompSpear(ToolMaterial.DIAMOND)));
 
-        registry.register(halberdWood = new ItemMelee("halberd.wood", new MeleeCompHalberd(ItemTier.WOOD)));
-        registry.register(halberdStone = new ItemMelee("halberd.stone", new MeleeCompHalberd(ItemTier.STONE)));
-        registry.register(halberdSteel = new ItemMelee("halberd.iron", new MeleeCompHalberd(ItemTier.IRON)));
-        registry.register(halberdGold = new ItemMelee("halberd.gold", new MeleeCompHalberd(ItemTier.GOLD)));
-        registry.register(halberdDiamond = new ItemMelee("halberd.diamond", new MeleeCompHalberd(ItemTier.DIAMOND)));
+        registry.register(halberdWood = new ItemMelee("halberd.wood", new MeleeCompHalberd(ToolMaterial.WOOD)));
+        registry.register(halberdStone = new ItemMelee("halberd.stone", new MeleeCompHalberd(ToolMaterial.STONE)));
+        registry.register(halberdSteel = new ItemMelee("halberd.iron", new MeleeCompHalberd(ToolMaterial.IRON)));
+        registry.register(halberdGold = new ItemMelee("halberd.gold", new MeleeCompHalberd(ToolMaterial.GOLD)));
+        registry.register(halberdDiamond = new ItemMelee("halberd.diamond",
+                new MeleeCompHalberd(ToolMaterial.DIAMOND)));
 
-        registry.register(battleaxeWood = new ItemMelee("battleaxe.wood", new MeleeCompBattleaxe(ItemTier.WOOD)));
-        registry.register(battleaxeStone = new ItemMelee("battleaxe.stone", new MeleeCompBattleaxe(ItemTier.STONE)));
-        registry.register(battleaxeSteel = new ItemMelee("battleaxe.iron", new MeleeCompBattleaxe(ItemTier.IRON)));
-        registry.register(battleaxeGold = new ItemMelee("battleaxe.gold", new MeleeCompBattleaxe(ItemTier.GOLD)));
+        registry.register(battleaxeWood = new ItemMelee("battleaxe.wood", new MeleeCompBattleaxe(ToolMaterial.WOOD)));
+        registry.register(battleaxeStone = new ItemMelee("battleaxe.stone",
+                new MeleeCompBattleaxe(ToolMaterial.STONE)));
+        registry.register(battleaxeSteel = new ItemMelee("battleaxe.iron", new MeleeCompBattleaxe(ToolMaterial.IRON)));
+        registry.register(battleaxeGold = new ItemMelee("battleaxe.gold", new MeleeCompBattleaxe(ToolMaterial.GOLD)));
         registry.register(battleaxeDiamond = new ItemMelee("battleaxe.diamond",
-                new MeleeCompBattleaxe(ItemTier.DIAMOND)));
+                new MeleeCompBattleaxe(ToolMaterial.DIAMOND)));
 
-        registry.register(knifeWood = new ItemMelee("knife.wood", new MeleeCompKnife(ItemTier.WOOD)));
-        registry.register(knifeStone = new ItemMelee("knife.stone", new MeleeCompKnife(ItemTier.STONE)));
-        registry.register(knifeSteel = new ItemMelee("knife.iron", new MeleeCompKnife(ItemTier.IRON)));
-        registry.register(knifeGold = new ItemMelee("knife.gold", new MeleeCompKnife(ItemTier.GOLD)));
-        registry.register(knifeDiamond = new ItemMelee("knife.diamond", new MeleeCompKnife(ItemTier.DIAMOND)));
+        registry.register(knifeWood = new ItemMelee("knife.wood", new MeleeCompKnife(ToolMaterial.WOOD)));
+        registry.register(knifeStone = new ItemMelee("knife.stone", new MeleeCompKnife(ToolMaterial.STONE)));
+        registry.register(knifeSteel = new ItemMelee("knife.iron", new MeleeCompKnife(ToolMaterial.IRON)));
+        registry.register(knifeGold = new ItemMelee("knife.gold", new MeleeCompKnife(ToolMaterial.GOLD)));
+        registry.register(knifeDiamond = new ItemMelee("knife.diamond", new MeleeCompKnife(ToolMaterial.DIAMOND)));
 
-        registry.register(warhammerWood = new ItemMelee("warhammer.wood", new MeleeCompWarhammer(ItemTier.WOOD)));
-        registry.register(warhammerStone = new ItemMelee("warhammer.stone", new MeleeCompWarhammer(ItemTier.STONE)));
-        registry.register(warhammerSteel = new ItemMelee("warhammer.iron", new MeleeCompWarhammer(ItemTier.IRON)));
-        registry.register(warhammerGold = new ItemMelee("warhammer.gold", new MeleeCompWarhammer(ItemTier.GOLD)));
+        registry.register(warhammerWood = new ItemMelee("warhammer.wood", new MeleeCompWarhammer(ToolMaterial.WOOD)));
+        registry.register(warhammerStone = new ItemMelee("warhammer.stone",
+                new MeleeCompWarhammer(ToolMaterial.STONE)));
+        registry.register(warhammerSteel = new ItemMelee("warhammer.iron", new MeleeCompWarhammer(ToolMaterial.IRON)));
+        registry.register(warhammerGold = new ItemMelee("warhammer.gold", new MeleeCompWarhammer(ToolMaterial.GOLD)));
         registry.register(warhammerDiamond = new ItemMelee("warhammer.diamond",
-                new MeleeCompWarhammer(ItemTier.DIAMOND)));
+                new MeleeCompWarhammer(ToolMaterial.DIAMOND)));
 
-        registry.register(flailWood = new ItemFlail("flail.wood", new MeleeCompNone(ItemTier.WOOD)));
-        registry.register(flailStone = new ItemFlail("flail.stone", new MeleeCompNone(ItemTier.STONE)));
-        registry.register(flailSteel = new ItemFlail("flail.iron", new MeleeCompNone(ItemTier.IRON)));
-        registry.register(flailGold = new ItemFlail("flail.gold", new MeleeCompNone(ItemTier.GOLD)));
-        registry.register(flailDiamond = new ItemFlail("flail.diamond", new MeleeCompNone(ItemTier.DIAMOND)));
+        registry.register(flailWood = new ItemFlail("flail.wood", new MeleeCompNone(ToolMaterial.WOOD)));
+        registry.register(flailStone = new ItemFlail("flail.stone", new MeleeCompNone(ToolMaterial.STONE)));
+        registry.register(flailSteel = new ItemFlail("flail.iron", new MeleeCompNone(ToolMaterial.IRON)));
+        registry.register(flailGold = new ItemFlail("flail.gold", new MeleeCompNone(ToolMaterial.GOLD)));
+        registry.register(flailDiamond = new ItemFlail("flail.diamond", new MeleeCompNone(ToolMaterial.DIAMOND)));
 
         registry.register(katanaWood = new ItemMelee("katana.wood",
-                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ItemTier.WOOD)));
+                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.WOOD)));
         registry.register(katanaStone = new ItemMelee("katana.stone",
-                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ItemTier.STONE)));
+                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.STONE)));
         registry.register(katanaSteel = new ItemMelee("katana.iron",
-                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ItemTier.IRON)));
+                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.IRON)));
         registry.register(katanaGold = new ItemMelee("katana.gold",
-                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ItemTier.GOLD)));
+                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.GOLD)));
         registry.register(katanaDiamond = new ItemMelee("katana.diamond",
-                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ItemTier.DIAMOND)));
+                new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.DIAMOND)));
 
-        registry.register(boomerangWood = new ItemMelee("boomerang.wood", new MeleeCompBoomerang(ItemTier.WOOD)));
-        registry.register(boomerangStone = new ItemMelee("boomerang.stone", new MeleeCompBoomerang(ItemTier.STONE)));
-        registry.register(boomerangSteel = new ItemMelee("boomerang.iron", new MeleeCompBoomerang(ItemTier.IRON)));
-        registry.register(boomerangGold = new ItemMelee("boomerang.gold", new MeleeCompBoomerang(ItemTier.GOLD)));
+        registry.register(boomerangWood = new ItemMelee("boomerang.wood", new MeleeCompBoomerang(ToolMaterial.WOOD)));
+        registry.register(boomerangStone = new ItemMelee("boomerang.stone",
+                new MeleeCompBoomerang(ToolMaterial.STONE)));
+        registry.register(boomerangSteel = new ItemMelee("boomerang.iron", new MeleeCompBoomerang(ToolMaterial.IRON)));
+        registry.register(boomerangGold = new ItemMelee("boomerang.gold", new MeleeCompBoomerang(ToolMaterial.GOLD)));
         registry.register(boomerangDiamond = new ItemMelee("boomerang.diamond",
-                new MeleeCompBoomerang(ItemTier.DIAMOND)));
+                new MeleeCompBoomerang(ToolMaterial.DIAMOND)));
 
         registry.register(fireRod = new ItemMelee("firerod", new MeleeCompFirerod()));
 
@@ -354,23 +363,18 @@ public class BalkonsWeaponMod {
         registry.register(bolt = new WMItem("bolt"));
 
         registry.register(blowgun = new ItemShooter("blowgun", new RangedCompBlowgun(), new MeleeCompNone(null)));
-        for (DartType type : DartType.dartTypes) {
-            if (type == null) continue;
-            Item dart = new ItemBlowgunDart(type.typeName, type);
-            darts.put(type, dart);
-            registry.register(dart);
-        }
+        registry.register(dart = new ItemBlowgunDart("dart"));
 
         registry.register(bayonetWood = new ItemMusket("musketbayonet.wood",
-                new MeleeCompKnife(ItemTier.WOOD), knifeWood));
+                new MeleeCompKnife(ToolMaterial.WOOD), knifeWood));
         registry.register(bayonetStone = new ItemMusket("musketbayonet.stone",
-                new MeleeCompKnife(ItemTier.STONE), knifeStone));
+                new MeleeCompKnife(ToolMaterial.STONE), knifeStone));
         registry.register(bayonetSteel = new ItemMusket("musketbayonet.iron",
-                new MeleeCompKnife(ItemTier.IRON), knifeSteel));
+                new MeleeCompKnife(ToolMaterial.IRON), knifeSteel));
         registry.register(bayonetGold = new ItemMusket("musketbayonet.gold",
-                new MeleeCompKnife(ItemTier.GOLD), knifeGold));
+                new MeleeCompKnife(ToolMaterial.GOLD), knifeGold));
         registry.register(bayonetDiamond = new ItemMusket("musketbayonet.diamond",
-                new MeleeCompKnife(ItemTier.DIAMOND), knifeDiamond));
+                new MeleeCompKnife(ToolMaterial.DIAMOND), knifeDiamond));
         registry.register(musket = new ItemMusket("musket", new MeleeCompNone(null), null));
         registry.register(musketIronPart = new WMItem("musket-ironpart"));
 
@@ -400,37 +404,32 @@ public class BalkonsWeaponMod {
         registerDispenseBehavior();
     }
 
-    @SubscribeEvent
-    public void onModConfig(ModConfig.ModConfigEvent e) {
-        modConfig.postLoadConfig();
-    }
-
     private void registerDispenseBehavior() {
         if (musketBullet != null) {
-            BlockDispenser.registerDispenseBehavior(musketBullet, new DispenseMusketBullet());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(musketBullet, new DispenseMusketBullet());
         }
         if (javelin != null) {
-            BlockDispenser.registerDispenseBehavior(javelin, new DispenseJavelin());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(javelin, new DispenseJavelin());
         }
         if (bolt != null) {
-            BlockDispenser.registerDispenseBehavior(bolt, new DispenseCrossbowBolt());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(bolt, new DispenseCrossbowBolt());
         }
-        for (Item dart : darts.values()) {
-            BlockDispenser.registerDispenseBehavior(dart, new DispenseBlowgunDart());
+        if (dart != null) {
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(dart, new DispenseBlowgunDart());
         }
         if (dynamite != null) {
-            BlockDispenser.registerDispenseBehavior(dynamite, new DispenseDynamite());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(dynamite, new DispenseDynamite());
         }
         if (blunderShot != null) {
-            BlockDispenser.registerDispenseBehavior(blunderShot, new DispenseBlunderShot());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(blunderShot, new DispenseBlunderShot());
         }
         if (cannonBall != null) {
             DispenseCannonBall behavior = new DispenseCannonBall();
-            BlockDispenser.registerDispenseBehavior(cannonBall, behavior);
-            BlockDispenser.registerDispenseBehavior(Items.GUNPOWDER, behavior);
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(cannonBall, behavior);
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Items.GUNPOWDER, behavior);
         }
         if (mortarShell != null) {
-            BlockDispenser.registerDispenseBehavior(mortarShell, new DispenseMortarShell());
+            BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(mortarShell, new DispenseMortarShell());
         }
     }
 

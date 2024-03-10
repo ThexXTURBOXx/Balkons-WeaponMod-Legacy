@@ -1,6 +1,5 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import javax.annotation.Nonnull;
@@ -19,7 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
+public class EntityBoomerang extends EntityMaterialProjectile {
     public static final String NAME = "boomerang";
 
     private static final DataParameter<Float> BOOMERANG = EntityDataManager.createKey(EntityBoomerang.class,
@@ -30,7 +29,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     public float floatStrength;
 
     public EntityBoomerang(World world) {
-        super(BalkonsWeaponMod.entityBoomerang, world);
+        super(world);
     }
 
     public EntityBoomerang(World world, double x, double y, double z) {
@@ -40,7 +39,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     public EntityBoomerang(World world, EntityLivingBase shooter, ItemStack itemstack) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
         soundTimer = 0.0f;
@@ -63,14 +62,14 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     }
 
     @Override
-    public void registerData() {
-        super.registerData();
+    public void entityInit() {
+        super.entityInit();
         dataManager.register(BOOMERANG, 0.0f);
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
         floatStrength = dataManager.get(BOOMERANG);
         if (inGround) {
             return;
@@ -87,7 +86,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             rotationYaw += 20.0f * floatStrength;
         }
         Entity shooter;
-        if (!beenInGround && (shooter = getShooter()) != null && floatStrength > 0.0f) {
+        if (!beenInGround && (shooter = getThrower()) != null && floatStrength > 0.0f) {
             double dx = posX - shooter.posX;
             double dy = posY - shooter.posY - shooter.getEyeHeight();
             double dz = posZ - shooter.posZ;
@@ -113,7 +112,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         if (world.isRemote || floatStrength < MIN_FLOAT_STRENGTH) {
             return;
         }
-        Entity shooter = getShooter();
+        Entity shooter = getThrower();
         if (entity == shooter) {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
@@ -121,11 +120,11 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                 if (item.isEmpty()) {
                     return;
                 }
-                if (player.abilities.isCreativeMode || player.inventory.addItemStackToInventory(item)) {
+                if (player.capabilities.isCreativeMode || player.inventory.addItemStackToInventory(item)) {
                     playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
                             ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                     onItemPickup(player);
-                    remove();
+                    setDead();
                 }
             }
             return;
@@ -140,9 +139,9 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         if (entity.attackEntityFrom(damagesource, damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
-            if (thrownItem.getDamage() + 1 > thrownItem.getMaxDamage()) {
+            if (thrownItem.getItemDamage() + 1 > thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
-                remove();
+                setDead();
             } else {
                 if (shooter instanceof EntityLivingBase) {
                     thrownItem.damageItem(1, (EntityLivingBase) shooter);
@@ -179,7 +178,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         beenInGround = true;
         floatStrength = 0.0f;
         if (inBlockState != null) {
-            inBlockState.onEntityCollision(world, blockpos, this);
+            inBlockState.getBlock().onEntityCollision(world, blockpos, inBlockState, this);
         }
     }
 
@@ -221,16 +220,16 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
         if (!beenInGround && ticksInAir > 5 && floatStrength >= MIN_FLOAT_STRENGTH &&
-            entityplayer.getUniqueID().equals(shootingEntity)) {
+            entityplayer == shootingEntity) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) {
                 return;
             }
-            if (entityplayer.abilities.isCreativeMode || entityplayer.inventory.addItemStackToInventory(item)) {
+            if (entityplayer.capabilities.isCreativeMode || entityplayer.inventory.addItemStackToInventory(item)) {
                 playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
                         ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                 onItemPickup(entityplayer);
-                remove();
+                setDead();
                 return;
             }
         }

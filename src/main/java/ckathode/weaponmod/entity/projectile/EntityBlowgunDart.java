@@ -17,7 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
+public class EntityBlowgunDart extends EntityProjectile {
     public static final String NAME = "dart";
 
     private static final DataParameter<Byte> DART_EFFECT_TYPE = EntityDataManager.createKey(EntityBlowgunDart.class,
@@ -26,7 +26,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
             {0.6f, 1.0f, 0.9f}, {0.8f, 0.5f, 0.2f}};
 
     public EntityBlowgunDart(World world) {
-        super(BalkonsWeaponMod.entityBlowgunDart, world);
+        super(world);
     }
 
     public EntityBlowgunDart(World world, double d, double d1, double d2) {
@@ -37,7 +37,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
 
     public EntityBlowgunDart(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         setPickupStatusFromEntity(shooter);
     }
 
@@ -56,8 +56,8 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     @Override
-    public void registerData() {
-        super.registerData();
+    public void entityInit() {
+        super.entityInit();
         dataManager.register(DART_EFFECT_TYPE, (byte) 0);
     }
 
@@ -90,7 +90,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
             }
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            setDead();
         } else {
             bounceBack();
         }
@@ -120,18 +120,18 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     @Nonnull
     @Override
     protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.darts.get(getDartEffectType()));
+        return new ItemStack(BalkonsWeaponMod.dart, 1, getDartEffectId());
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
-        super.writeAdditional(nbttagcompound);
-        nbttagcompound.putByte("darttype", getDartEffectId());
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setByte("darttype", getDartEffectId());
     }
 
     @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
-        super.readAdditional(nbttagcompound);
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+        super.readEntityFromNBT(nbttagcompound);
         setDartEffectType(nbttagcompound.getByte("darttype"));
     }
 

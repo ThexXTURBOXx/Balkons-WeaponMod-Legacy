@@ -9,13 +9,13 @@ import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.init.Items;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 
 public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
@@ -49,7 +49,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
             normalDispense = true;
             return super.dispenseStack(blocksource, itemstack);
         }
-        EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
+        EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
         double xvel = face.getXOffset() * 1.5;
         double yvel = face.getYOffset() * 1.5;
         double zvel = face.getZOffset() * 1.5;
@@ -58,7 +58,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
                 pos.getY() + yvel, pos.getZ() + zvel);
         entitycannonball.shoot(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
         blocksource.getWorld().spawnEntity(entitycannonball);
-        itemstack.split(1);
+        itemstack.splitStack(1);
         return itemstack;
     }
 
@@ -70,7 +70,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
         }
         blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
                 SoundCategory.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.8f + 0.9f));
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
+        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_THUNDER,
                 SoundCategory.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
     }
 
@@ -79,7 +79,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
         super.spawnDispenseParticles(blocksource, face);
         if (!normalDispense) {
             IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-            blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
+            blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getXOffset(),
                     pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
         }
     }

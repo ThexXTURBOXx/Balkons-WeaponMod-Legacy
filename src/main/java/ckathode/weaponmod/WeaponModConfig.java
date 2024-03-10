@@ -2,118 +2,94 @@ package ckathode.weaponmod;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.common.config.Configuration;
 
 public class WeaponModConfig {
-    private final ForgeConfigSpec.Builder builder;
-    public ForgeConfigSpec.BooleanValue cannonDoesBlockDamage;
-    public ForgeConfigSpec.BooleanValue dynamiteDoesBlockDamage;
-    public ForgeConfigSpec.BooleanValue mortarDoesBlockDamage;
-    public ForgeConfigSpec.BooleanValue canThrowKnife;
-    public ForgeConfigSpec.BooleanValue canThrowSpear;
-    public ForgeConfigSpec.BooleanValue allCanPickup;
-    public ForgeConfigSpec.BooleanValue guiOverlayReloaded;
-    public ForgeConfigSpec.BooleanValue itemModelForEntity;
+    private final Configuration config;
+    public boolean cannonDoesBlockDamage;
+    public boolean dynamiteDoesBlockDamage;
+    public boolean mortarDoesBlockDamage;
+    public boolean canThrowKnife;
+    public boolean canThrowSpear;
+    public boolean allCanPickup;
+    public boolean guiOverlayReloaded;
+    public boolean itemModelForEntity;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
 
-    public WeaponModConfig() {
-        builder = new ForgeConfigSpec.Builder();
+    public WeaponModConfig(final Configuration configuration) {
+        config = configuration;
         enableSettings = new LinkedHashMap<>();
         reloadTimeSettings = new LinkedHashMap<>();
     }
 
-    public void loadConfig(ModLoadingContext context) {
-        builder.comment("Enable or disable certain weapons (only disables their recipes; they are still obtainable "
-                        + "through Creative mode!)")
-                .push("enable");
-        for (final EnableSetting es : enableSettings.values())
-            es.configValue = builder.define(es.settingName, es.enabled);
-        builder.pop();
-
-        builder.comment("The reload durations of the reloadable weapons")
-                .push("reloadtime");
-        for (final ReloadTimeSetting rs : reloadTimeSettings.values())
-            rs.configValue = builder.define(rs.settingName, rs.reloadTime);
-        builder.pop();
-
-        builder.comment("Miscellaneous mod settings")
-                .push("settings");
-        cannonDoesBlockDamage = builder
-                .define("cannon-block-damage", true);
-        dynamiteDoesBlockDamage = builder
-                .define("dynamite-block-damage", true);
-        mortarDoesBlockDamage = builder
-                .define("mortar-block-damage", true);
-        canThrowKnife = builder
-                .define("can-throw-knife", true);
-        canThrowSpear = builder
-                .define("can-throw-spear", true);
-        allCanPickup = builder
-                .comment("Change this to 'false' to allow only the thrower/shooter of the projectile to " +
-                         "pick the item up. If set to 'true' everyone can pick the item up.")
-                .define("pickup-all", true);
-        guiOverlayReloaded = builder
-                .comment("Show reload progress in hotbar.")
-                .define("reload-progress", true);
-        itemModelForEntity = builder
-                .comment("Item model for entity (knife, spear, etc).")
-                .define("render-entity-model", true);
-        builder.pop();
-
-        context.registerConfig(ModConfig.Type.COMMON, builder.build());
-    }
-
-    public void postLoadConfig() {
-        for (EnableSetting es : enableSettings.values())
-            es.enabled = es.configValue.get();
-        for (ReloadTimeSetting rs : reloadTimeSettings.values())
-            rs.reloadTime = rs.configValue.get();
-    }
-
-    public void addEnableSetting(String weapon) {
+    public void addEnableSetting(final String weapon) {
         enableSettings.put(weapon, new EnableSetting(weapon, true));
     }
 
-    public void addReloadTimeSetting(String weapon, int defaulttime) {
+    public void addReloadTimeSetting(final String weapon, final int defaulttime) {
         reloadTimeSettings.put(weapon, new ReloadTimeSetting(weapon, defaulttime));
     }
 
-    public boolean isEnabled(String weapon) {
-        EnableSetting es = enableSettings.get(weapon);
+    public boolean isEnabled(final String weapon) {
+        final EnableSetting es = enableSettings.get(weapon);
         return es == null || es.enabled;
     }
 
-    public int getReloadTime(String weapon) {
-        ReloadTimeSetting rs = reloadTimeSettings.get(weapon);
+    public int getReloadTime(final String weapon) {
+        final ReloadTimeSetting rs = reloadTimeSettings.get(weapon);
         return (rs == null) ? 0 : rs.reloadTime;
     }
 
-    private abstract static class Setting<T> {
-        ForgeConfigSpec.ConfigValue<T> configValue;
+    public void loadConfig() {
+        config.load();
+        config.addCustomCategoryComment("enable", "Enable or disable certain weapons");
+        config.addCustomCategoryComment("reloadtime", "The reload durations of the reloadable weapons");
+        config.addCustomCategoryComment("settings", "Miscellaneous mod settings");
+        cannonDoesBlockDamage = config.get("settings", "cannon-block-damage", true).getBoolean(true);
+        dynamiteDoesBlockDamage = config.get("settings", "dynamite-block-damage", true).getBoolean(true);
+        mortarDoesBlockDamage = config.get("settings", "mortar-block-damage", true).getBoolean(true);
+        canThrowKnife = config.get("settings", "can-throw-knife", true).getBoolean(true);
+        canThrowSpear = config.get("settings", "can-throw-spear", true).getBoolean(true);
+        allCanPickup = config.get("settings", "pickup-all", true, "Change this to 'false' to allow only the"
+                                                                  + " thrower/shooter of the projectile to "
+                                                                  + "pick the item up. If set to 'true' "
+                                                                  + "everyone can pick the item up.").getBoolean(true);
+        guiOverlayReloaded = config.get("settings", "reload-progress", true, "Show reload progress in "
+                                                                             + "hotbar.").getBoolean(true);
+        itemModelForEntity = config.get("settings", "render-entity-model", true, "Item model for entity "
+                                                                                 + "(knife, spear, etc).").getBoolean(true);
+        for (final EnableSetting es : enableSettings.values()) {
+            es.enabled = config.get("enable", es.settingName, es.enabled).getBoolean(es.enabled);
+        }
+        for (final ReloadTimeSetting rs : reloadTimeSettings.values()) {
+            rs.reloadTime = config.get("reloadtime", rs.settingName, rs.reloadTime).getInt(rs.reloadTime);
+        }
+        config.save();
+    }
+
+    private abstract static class Setting {
         final String settingName;
 
-        Setting(String name) {
+        Setting(final String name) {
             settingName = name;
         }
     }
 
-    private static class ReloadTimeSetting extends Setting<Integer> {
+    private static class ReloadTimeSetting extends Setting {
         int reloadTime;
 
-        ReloadTimeSetting(String name, int reloadTime) {
-            super(name);
-            this.reloadTime = reloadTime;
+        ReloadTimeSetting(final String name, final int time) {
+            super(name + ".reloadtime");
+            reloadTime = time;
         }
     }
 
-    private static class EnableSetting extends Setting<Boolean> {
+    private static class EnableSetting extends Setting {
         boolean enabled;
 
-        EnableSetting(String name, boolean enabled) {
-            super(name);
+        EnableSetting(final String name, boolean enabled) {
+            super(name + ".enabled");
             this.enabled = enabled;
         }
     }

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "X",
+    "O"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minecraft:gunpowder"
+    },
+    "O": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "weaponmod:bullet",
+    "count": 8
+  }
+}

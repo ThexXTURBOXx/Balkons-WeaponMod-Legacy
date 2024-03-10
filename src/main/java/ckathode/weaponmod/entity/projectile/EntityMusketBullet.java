@@ -5,17 +5,17 @@ import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
+public class EntityMusketBullet extends EntityProjectile {
     public static final String NAME = "bullet";
 
     public EntityMusketBullet(World world) {
-        super(BalkonsWeaponMod.entityMusketBullet, world);
+        super(world);
         setPickupStatus(PickupStatus.DISALLOWED);
     }
 
@@ -26,7 +26,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
 
     public EntityMusketBullet(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
     }
 
     @Override
@@ -44,11 +44,11 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
         if (inGround) {
             if (rand.nextInt(4) == 0) {
-                world.addParticle(Particles.SMOKE, posX, posY, posZ, 0.0, 0.0,
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY, posZ, 0.0, 0.0,
                         0.0);
             }
             return;
@@ -57,7 +57,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         double amount = 16.0;
         if (speed > 2.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                world.addParticle(Particles.POOF, posX + motionX * i1 / amount,
+                world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX + motionX * i1 / amount,
                         posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
@@ -70,7 +70,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         if (entity.attackEntityFrom(damagesource, damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            setDead();
         }
     }
 

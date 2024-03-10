@@ -5,30 +5,31 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceFluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ItemDummy extends WMItem {
     public ItemDummy(String id) {
-        super(id, new Properties().maxStackSize(1));
+        super(id);
+        maxStackSize = 1;
     }
 
     @Nonnull
     @Override
-    public EnumActionResult onItemUse(@Nonnull ItemUseContext context) {
-        World world = context.getWorld();
-        EntityPlayer entityplayer = context.getPlayer();
-        if (entityplayer == null) return EnumActionResult.FAIL;
-        ItemStack itemstack = context.getItem();
+    public EnumActionResult onItemUse(@Nonnull EntityPlayer entityplayer, @Nonnull World world,
+                                      @Nonnull BlockPos p_180614_3_, @Nonnull EnumHand hand,
+                                      @Nonnull EnumFacing p_180614_5_, float p_180614_6_, float p_180614_7_,
+                                      float p_180614_8_) {
+        ItemStack itemstack = entityplayer.getHeldItem(hand);
+        if (world.isRemote) return EnumActionResult.FAIL;
         float f = 1.0f;
         float f2 =
                 entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
@@ -46,28 +47,26 @@ public class ItemDummy extends WMItem {
         float f10 = f4 * f6;
         double d4 = 5.0;
         Vec3d vec3d2 = vec3d.add(f8 * d4, f7 * d4, f10 * d4);
-        RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.ALWAYS);
-        if (raytraceresult == null || raytraceresult.type != RayTraceResult.Type.BLOCK) {
+        RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, true);
+        if (raytraceresult == null || raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
             return EnumActionResult.FAIL;
         }
         Block block = world.getBlockState(raytraceresult.getBlockPos()).getBlock();
         BlockPos blockpos = raytraceresult.getBlockPos();
-        boolean flag = world.getBlockState(blockpos).isReplaceable(new BlockItemUseContext(context));
+        boolean flag = world.getBlockState(blockpos).getBlock().isReplaceable(world, blockpos);
         BlockPos blockpos2 = flag ? blockpos : blockpos.offset(raytraceresult.sideHit);
         boolean flag2 = block == Blocks.SNOW;
         EntityDummy entitydummy = new EntityDummy(world, blockpos2.getX() + 0.5,
                 blockpos2.getY() - (flag2 ? 0.12 : 0), blockpos2.getZ() + 0.5);
         entitydummy.rotationYaw = entityplayer.rotationYaw;
-        if (world.getCollisionBoxes(entitydummy, entitydummy.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
+        if (!world.getCollisionBoxes(entitydummy, entitydummy.getEntityBoundingBox().grow(-0.1)).isEmpty()) {
             return EnumActionResult.FAIL;
         }
-        if (!world.isRemote) {
-            world.spawnEntity(entitydummy);
-        }
-        if (!entityplayer.abilities.isCreativeMode) {
+        world.spawnEntity(entitydummy);
+        if (!entityplayer.capabilities.isCreativeMode) {
             itemstack.shrink(1);
         }
-        entityplayer.addStat(StatList.ITEM_USED.get(this));
+        entityplayer.addStat(StatList.getObjectUseStats(this));
         return EnumActionResult.SUCCESS;
     }
 }

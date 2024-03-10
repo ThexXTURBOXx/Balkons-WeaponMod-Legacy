@@ -11,11 +11,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
+public class EntityCrossbowBolt extends EntityProjectile {
     public static final String NAME = "bolt";
 
     public EntityCrossbowBolt(World world) {
-        super(BalkonsWeaponMod.entityCrossbowBolt, world);
+        super(world);
     }
 
     public EntityCrossbowBolt(World world, double d, double d1, double d2) {
@@ -26,7 +26,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
 
     public EntityCrossbowBolt(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         setPickupStatusFromEntity(shooter);
     }
 
@@ -55,7 +55,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
             }
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            setDead();
         } else {
             bounceBack();
         }

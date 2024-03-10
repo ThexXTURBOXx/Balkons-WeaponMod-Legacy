@@ -1,6 +1,5 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.entity.Entity;
@@ -12,11 +11,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
+public class EntitySpear extends EntityMaterialProjectile {
     public static final String NAME = "spear";
 
     public EntitySpear(World world) {
-        super(BalkonsWeaponMod.entitySpear, world);
+        super(world);
     }
 
     public EntitySpear(World world, double d, double d1, double d2) {
@@ -26,7 +25,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
     public EntitySpear(World world, EntityLivingBase shooter, ItemStack itemstack) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
     }
@@ -56,13 +55,12 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
             playHitSound();
-            if (thrownItem.getDamage() + 1 > thrownItem.getMaxDamage()) {
+            if (thrownItem.getItemDamage() + 1 > thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
-                remove();
+                setDead();
             } else {
-                Entity shooter = getShooter();
-                if (shooter instanceof EntityLivingBase) {
-                    thrownItem.damageItem(1, (EntityLivingBase) shooter);
+                if (shootingEntity instanceof EntityLivingBase) {
+                    thrownItem.damageItem(1, (EntityLivingBase) shootingEntity);
                 } else {
                     thrownItem.attemptDamageItem(1, rand, null);
                 }

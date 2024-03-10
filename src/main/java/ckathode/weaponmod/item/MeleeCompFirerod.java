@@ -1,19 +1,19 @@
 package ckathode.weaponmod.item;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Particles;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class MeleeCompFirerod extends MeleeComponent {
     public MeleeCompFirerod() {
-        super(MeleeSpecs.FIREROD, ItemTier.WOOD);
+        super(MeleeSpecs.FIREROD, Item.ToolMaterial.WOOD);
     }
 
     @Override
@@ -26,11 +26,11 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
-    public void inventoryTick(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
-        super.inventoryTick(itemstack, world, entity, i, flag);
+    public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
+        super.onUpdate(itemstack, world, entity, i, flag);
         if (!(entity instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) entity;
-        if (player.areEyesInFluid(FluidTags.WATER)) return;
+        if (player.isInsideOfMaterial(Material.WATER)) return;
         boolean mainHand = player.getHeldItemMainhand() == itemstack;
         boolean offHand = player.getHeldItemOffhand() == itemstack;
         if (!mainHand && !offHand) return;
@@ -43,11 +43,11 @@ public class MeleeCompFirerod extends MeleeComponent {
         float particleZ =
                 MathHelper.cos(((player.rotationYaw + f1) / 180F) * 3.141593F) * MathHelper.cos((player.rotationPitch / 180F) * 3.141593F) * f;
         if (weapon.getItemRand().nextInt(5) == 0) {
-            world.addParticle(Particles.FLAME, player.posX + particleX, player.posY + particleY,
+            world.spawnParticle(EnumParticleTypes.FLAME, player.posX + particleX, player.posY + particleY,
                     player.posZ + particleZ, 0.0D, 0.0D, 0.0D);
         }
         if (weapon.getItemRand().nextInt(5) == 0) {
-            world.addParticle(Particles.SMOKE, player.posX + particleX, player.posY + particleY,
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, player.posX + particleX, player.posY + particleY,
                     player.posZ + particleZ, 0.0D, 0.0D, 0.0D);
         }
     }

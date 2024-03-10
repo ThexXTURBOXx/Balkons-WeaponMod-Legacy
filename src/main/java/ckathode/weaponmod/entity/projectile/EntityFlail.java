@@ -1,6 +1,5 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.ItemFlail;
@@ -15,7 +14,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
+public class EntityFlail extends EntityMaterialProjectile {
     public static final String NAME = "flail";
 
     public boolean isSwinging;
@@ -26,7 +25,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     private double distanceZ;
 
     public EntityFlail(World world) {
-        super(BalkonsWeaponMod.entityFlail, world);
+        super(world);
         ignoreFrustumCheck = true;
         flailDamage = 1.0f;
         distanceTotal = 0.0;
@@ -42,7 +41,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     public EntityFlail(World worldIn, EntityLivingBase shooter, ItemStack itemstack) {
         this(worldIn, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.3, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
         distanceTotal = 0.0;
@@ -59,9 +58,9 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        Entity shooter = getShooter();
+    public void onUpdate() {
+        super.onUpdate();
+        Entity shooter = getThrower();
         if (shooter != null) {
             distanceX = shooter.posX - posX;
             distanceY = shooter.posY - posY;
@@ -73,12 +72,12 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
             }
             if (shooter instanceof EntityPlayer) {
                 ItemStack itemstack = ((EntityPlayer) shooter).getHeldItemMainhand();
-                if (itemstack.isEmpty() || (thrownItem != null && itemstack.getItem() != thrownItem.getItem()) || !shooter.isAlive()) {
+                if (itemstack.isEmpty() || (thrownItem != null && itemstack.getItem() != thrownItem.getItem()) || !shooter.isEntityAlive()) {
                     pickUpByOwner();
                 }
             }
         } else if (!world.isRemote) {
-            remove();
+            setDead();
         }
         if (inGround) {
             inGround = false;
@@ -91,12 +90,12 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         if (looseFromGround) {
             inGround = false;
         }
-        Entity shooter = getShooter();
+        Entity shooter = getThrower();
         if (shooter == null) {
             return;
         }
         double targetPosX = shooter.posX;
-        double targetPosY = shooter.getBoundingBox().minY + 0.4000000059604645;
+        double targetPosY = shooter.getEntityBoundingBox().minY + 0.4000000059604645;
         double targetPosZ = shooter.posZ;
         float f = 27.0f;
         float f2 = 2.0f;
@@ -126,8 +125,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     public void pickUpByOwner() {
-        remove();
-        Entity shooter = getShooter();
+        setDead();
+        Entity shooter = getThrower();
         if (shooter instanceof EntityPlayer && thrownItem != null) {
             PlayerWeaponData.setFlailThrown((EntityPlayer) shooter, false);
         }
@@ -148,7 +147,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (entity.getUniqueID().equals(shootingEntity)) {
+        if (entity == shootingEntity) {
             return;
         }
         Entity shooter = getDamagingEntity();
@@ -194,14 +193,14 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
-        super.writeAdditional(nbttagcompound);
-        nbttagcompound.putFloat("fDmg", flailDamage);
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setFloat("fDmg", flailDamage);
     }
 
     @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
-        super.readAdditional(nbttagcompound);
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+        super.readEntityFromNBT(nbttagcompound);
         flailDamage = nbttagcompound.getFloat("fDmg");
     }
 

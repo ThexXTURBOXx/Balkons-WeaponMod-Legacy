@@ -8,7 +8,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
@@ -32,7 +31,7 @@ public abstract class AbstractWeaponComponent {
 
     protected abstract void onSetItem();
 
-    public abstract Properties setProperties(Properties properties);
+    public abstract void setThisItemProperties();
 
     public abstract float getEntityDamageMaterialPart();
 
@@ -55,9 +54,9 @@ public abstract class AbstractWeaponComponent {
 
     public abstract void addItemAttributeModifiers(Multimap<String, AttributeModifier> p0);
 
-    public abstract EnumAction getUseAction(ItemStack p0);
+    public abstract EnumAction getItemUseAction(ItemStack p0);
 
-    public abstract int getUseDuration(ItemStack p0);
+    public abstract int getMaxItemUseDuration(ItemStack p0);
 
     public abstract boolean onLeftClickEntity(ItemStack p0, EntityPlayer p1, Entity p2);
 
@@ -68,6 +67,6 @@ public abstract class AbstractWeaponComponent {
     public abstract void onPlayerStoppedUsing(ItemStack p0, World p1, EntityLivingBase p2,
                                               int p3);
 
-    public abstract void inventoryTick(ItemStack p0, World p1, Entity p2, int p3,
-                                       boolean p4);
+    public abstract void onUpdate(ItemStack p0, World p1, Entity p2, int p3,
+                                  boolean p4);
 }

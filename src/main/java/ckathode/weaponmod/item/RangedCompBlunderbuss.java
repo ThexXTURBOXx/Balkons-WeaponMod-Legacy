@@ -4,10 +4,10 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -32,7 +32,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
             EntityBlunderShot.fireSpreadShot(world, entityplayer, this, itemstack);
         }
         int damage = 1;
-        if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getItemDamage() + damage <= itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
@@ -57,9 +57,10 @@ public class RangedCompBlunderbuss extends RangedComponent {
         float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         for (int i = 0; i < 3; ++i) {
-            world.addParticle(Particles.SMOKE, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x + particleX, y + particleY, z + particleZ, 0.0, 0.0,
+                    0.0);
         }
-        world.addParticle(Particles.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+        world.spawnParticle(EnumParticleTypes.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
     }
 
     @Override

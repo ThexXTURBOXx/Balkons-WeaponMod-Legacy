@@ -11,32 +11,31 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.glfw.GLFW;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@OnlyIn(Dist.CLIENT)
+@SideOnly(Side.CLIENT)
 public class WMClientEventHandler {
     @SubscribeEvent
-    public void onMouseClick(InputEvent.MouseInputEvent e) {
-        EntityPlayerSP player = Minecraft.getInstance().player;
-        if (player == null || !player.world.isRemote || Minecraft.getInstance().currentScreen != null) {
+    public void onMouseClick(final MouseEvent e) {
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        if (player == null || !player.world.isRemote || Minecraft.getMinecraft().currentScreen != null) {
             return;
         }
-        if (e.getButton() == 0 && e.getAction() == GLFW.GLFW_PRESS) {
+        if (e.getButton() == 0 && e.isButtonstate()) {
             ItemStack itemstack = player.getHeldItemMainhand();
             if (!itemstack.isEmpty()) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
                     float reach = ieri.getExtendedReach(player.world, player, itemstack);
                     RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
-                    if (raytraceResult != null && raytraceResult.entity != null && raytraceResult.entity != player && raytraceResult.entity.hurtResistantTime == 0) {
-                        Minecraft.getInstance().playerController.attackEntity(player,
-                                raytraceResult.entity);
+                    if (raytraceResult != null && raytraceResult.entityHit != null && raytraceResult.entityHit != player && raytraceResult.entityHit.hurtResistantTime == 0) {
+                        Minecraft.getMinecraft().playerController.attackEntity(player,
+                                raytraceResult.entityHit);
                     }
                 }
             }
@@ -55,23 +54,23 @@ public class WMClientEventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerTick(TickEvent.PlayerTickEvent e) {
+    public void onPlayerTick(final TickEvent.PlayerTickEvent e) {
         if (!e.player.world.isRemote) {
             return;
         }
         if (e.phase == TickEvent.Phase.START && e.player instanceof EntityPlayerSP) {
-            EntityPlayerSP entity = (EntityPlayerSP) e.player;
+            final EntityPlayerSP entity = (EntityPlayerSP) e.player;
             if (entity.movementInput.jump && entity.getRidingEntity() instanceof EntityCannon && ((EntityCannon) entity.getRidingEntity()).isLoaded()) {
-                MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getRidingEntity());
+                final MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getRidingEntity());
                 BalkonsWeaponMod.instance.messagePipeline.sendToServer(msg);
             }
         }
     }
 
     @SubscribeEvent
-    public void onFOVUpdateEvent(FOVUpdateEvent e) {
+    public void onFOVUpdateEvent(final FOVUpdateEvent e) {
         if (e.getEntity().isHandActive() && e.getEntity().getActiveItemStack().getItem() instanceof IItemWeapon) {
-            RangedComponent rc =
+            final RangedComponent rc =
                     ((IItemWeapon) e.getEntity().getActiveItemStack().getItem()).getRangedComponent();
             if (rc != null && RangedComponent.isReadyToFire(e.getEntity().getActiveItemStack())) {
                 e.setNewfov(e.getFov() * rc.getFOVMultiplier(e.getEntity().getItemInUseMaxCount()));

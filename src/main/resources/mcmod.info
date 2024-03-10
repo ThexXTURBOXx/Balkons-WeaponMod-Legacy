@@ -1,0 +1,20 @@
+[
+{
+  "modid": "weaponmod",
+  "name": "Balkon's WeaponMod",
+  "description": "Throw a spear in a zombie's head!
+Cut a skeleton in half with your brand new halberd!
+Shoot some slimes in pieces with an old musket!
+And more!",
+  "version": "1.20.0",
+  "mcversion": "1.12.2",
+  "logoFile": "bwm_logo.png",
+  "url": "https://www.minecraftforum.net/topic/211517-bwm",
+  "updateUrl": "",
+  "authorList": ["BalkondeurAlpha", "HyperSpeeed"],
+  "credits": "BalkondeurAlpha, HyperSpeeed",
+  "parent": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -38,7 +38,7 @@ public class EntityDummy extends Entity {
     private int durability;
 
     public EntityDummy(World world) {
-        super(BalkonsWeaponMod.entityDummy, world);
+        super(world);
         preventEntitySpawning = true;
         rotationPitch = -20.0f;
         setRotation(rotationYaw, rotationPitch);
@@ -58,7 +58,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    protected void registerData() {
+    protected void entityInit() {
         dataManager.register(TIME_SINCE_HIT, 0);
         dataManager.register(ROCK_DIRECTION, (byte) 1);
         dataManager.register(CURRENT_DAMAGE, 0);
@@ -66,12 +66,12 @@ public class EntityDummy extends Entity {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity.getBoundingBox();
+        return entity.getEntityBoundingBox();
     }
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox() {
-        return getBoundingBox();
+        return getEntityBoundingBox();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
-        if (world.isRemote || !isAlive() || damage <= 0.0f) {
+        if (world.isRemote || isDead || damage <= 0.0f) {
             return false;
         }
         setRockDirection(-getRockDirection());
@@ -120,7 +120,7 @@ public class EntityDummy extends Entity {
     public void playRandomHitSound() {
         int i = rand.nextInt(2);
         if (i == 0) {
-            playSound(SoundEvents.BLOCK_WOOL_STEP, 0.7f, 1.0f / (rand.nextFloat() * 0.2f + 0.4f));
+            playSound(SoundEvents.BLOCK_CLOTH_STEP, 0.7f, 1.0f / (rand.nextFloat() * 0.2f + 0.4f));
         } else {
             playSound(SoundEvents.BLOCK_WOOD_STEP, 0.7f, 1.0f / (rand.nextFloat() * 0.2f + 0.2f));
         }
@@ -135,12 +135,12 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean canBeCollidedWith() {
-        return isAlive();
+        return !isDead;
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
         int i = getTimeSinceHit();
         if (i > 0) {
             setTimeSinceHit(i - 1);
@@ -164,8 +164,8 @@ public class EntityDummy extends Entity {
         }
         setRotation(rotationYaw, rotationPitch);
         move(MoverType.SELF, 0.0, motionY, 0.0);
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(0.2,
-                0.0, 0.2), EntitySelectors.pushableBy(this));
+        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(0.2,
+                0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
                 if (!entity.isPassenger(this)) {
@@ -191,12 +191,12 @@ public class EntityDummy extends Entity {
         }
         if (destroyed) {
             for (int i = 0; i < rand.nextInt(8); ++i) {
-                entityDropItem(Items.LEATHER, 1);
+                dropItem(Items.LEATHER, 1);
             }
         } else if (noCreative) {
-            entityDropItem(BalkonsWeaponMod.dummy, 1);
+            dropItem(BalkonsWeaponMod.dummy, 1);
         }
-        remove();
+        setDead();
     }
 
     @Override
@@ -207,7 +207,7 @@ public class EntityDummy extends Entity {
                 return false;
             }
         }
-        if (entityplayer.abilities.isCreativeMode) {
+        if (entityplayer.capabilities.isCreativeMode) {
             dropAsItem(false, false);
             return true;
         }
@@ -216,11 +216,11 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    protected void writeAdditional(@Nonnull NBTTagCompound nbttagcompound) {
+    protected void writeEntityToNBT(@Nonnull NBTTagCompound nbttagcompound) {
     }
 
     @Override
-    protected void readAdditional(@Nonnull NBTTagCompound nbttagcompound) {
+    protected void readEntityFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
         setPosition(posX, posY, posZ);
         setRotation(rotationYaw, rotationPitch);
     }

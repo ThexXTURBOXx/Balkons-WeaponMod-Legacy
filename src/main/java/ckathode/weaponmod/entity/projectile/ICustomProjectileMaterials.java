@@ -1,14 +1,14 @@
 package ckathode.weaponmod.entity.projectile;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ICustomProjectileMaterials {
     int[] getAllMaterialIDs();
 
     int getMaterialID(ItemStack stack);
 
-    @OnlyIn(Dist.CLIENT)
+    @SideOnly(Side.CLIENT)
     float[] getColorFromMaterialID(int materialId);
 }

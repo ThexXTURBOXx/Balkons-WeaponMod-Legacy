@@ -17,8 +17,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFlail extends ItemMelee {
     private final float flailDamage;
@@ -28,9 +28,9 @@ public class ItemFlail extends ItemMelee {
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamage();
         addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), new IItemPropertyGetter() {
             @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World worldIn,
-                              @Nullable EntityLivingBase entityIn) {
+            @SideOnly(Side.CLIENT)
+            public float apply(@Nonnull ItemStack stack, @Nullable World worldIn,
+                               @Nullable EntityLivingBase entityIn) {
                 return entityIn instanceof EntityPlayer && entityIn.getHeldItemMainhand() == stack
                        && isThrown((EntityPlayer) entityIn) ? 1.0f : 0.0f;
             }
@@ -43,8 +43,14 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack itemstack, @Nonnull World world,
-                              @Nonnull Entity entity, int i, boolean flag) {
+    @SideOnly(Side.CLIENT)
+    public boolean isFull3D() {
+        return true;
+    }
+
+    @Override
+    public void onUpdate(@Nonnull ItemStack itemstack, @Nonnull World world,
+                         @Nonnull Entity entity, int i, boolean flag) {
         if (!(entity instanceof EntityPlayer)) {
             return;
         }
@@ -60,7 +66,7 @@ public class ItemFlail extends ItemMelee {
             if (id != 0) {
                 Entity entity2 = world.getEntityByID(id);
                 if (entity2 instanceof EntityFlail) {
-                    ((EntityFlail) entity2).setShooter(player);
+                    ((EntityFlail) entity2).setThrower(player);
                     ((EntityFlail) entity2).setThrownItemStack(itemstack);
                 }
             }
@@ -94,7 +100,7 @@ public class ItemFlail extends ItemMelee {
 
     public void throwFlail(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.PLAYERS, 0.5f, 0.4f / (ItemFlail.random.nextFloat() * 0.4f + 0.8f));
+                SoundCategory.PLAYERS, 0.5f, 0.4f / (ItemFlail.itemRand.nextFloat() * 0.4f + 0.8f));
         if (!world.isRemote) {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
             entityflail.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
@@ -117,7 +123,7 @@ public class ItemFlail extends ItemMelee {
         if (id != 0) {
             Entity entity = world.getEntityByID(id);
             if (entity instanceof EntityFlail) {
-                entity.remove();
+                entity.setDead();
             }
         }
     }

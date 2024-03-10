@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -16,15 +16,15 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class MeleeCompKnife extends MeleeComponent {
-    public MeleeCompKnife(IItemTier itemTier) {
-        super(MeleeSpecs.KNIFE, itemTier);
+    public MeleeCompKnife(Item.ToolMaterial toolmaterial) {
+        super(MeleeSpecs.KNIFE, toolmaterial);
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
                                                     EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!BalkonsWeaponMod.instance.modConfig.canThrowKnife.get()) {
+        if (!BalkonsWeaponMod.instance.modConfig.canThrowKnife) {
             return super.onItemRightClick(world, entityplayer, hand);
         }
         if (!world.isRemote) {
@@ -38,7 +38,7 @@ public class MeleeCompKnife extends MeleeComponent {
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.abilities.isCreativeMode) {
+        if (!entityplayer.capabilities.isCreativeMode) {
             itemstack = itemstack.copy();
             itemstack.setCount(0);
         }
@@ -46,8 +46,7 @@ public class MeleeCompKnife extends MeleeComponent {
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
-        return BalkonsWeaponMod.instance.modConfig.canThrowKnife.get()
-                ? EnumAction.NONE : super.getUseAction(itemstack);
+    public EnumAction getItemUseAction(ItemStack itemstack) {
+        return BalkonsWeaponMod.instance.modConfig.canThrowKnife ? EnumAction.NONE : super.getItemUseAction(itemstack);
     }
 }

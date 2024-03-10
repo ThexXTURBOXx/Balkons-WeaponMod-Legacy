@@ -1,28 +1,28 @@
 package ckathode.weaponmod.item;
 
+import com.google.common.base.Predicates;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceFluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@OnlyIn(Dist.CLIENT)
+@SideOnly(Side.CLIENT)
 public final class ExtendedReachHelper {
-    private static final Minecraft mc = Minecraft.getInstance();
+    private static final Minecraft mc = Minecraft.getMinecraft();
 
     public static RayTraceResult getMouseOver(float frame, float dist) {
         RayTraceResult result = null;
         Entity entity = mc.getRenderViewEntity();
         if (entity != null && mc.world != null) {
             double distNew = dist;
-            result = entity.rayTrace(distNew, frame, RayTraceFluidMode.NEVER);
+            result = entity.rayTrace(distNew, frame);
             double calcDist = distNew;
-            Vec3d pos = entity.getEyePosition(frame);
+            Vec3d pos = entity.getPositionEyes(frame);
             distNew = calcDist;
 
             if (result != null) {
@@ -34,15 +34,15 @@ public final class ExtendedReachHelper {
             Entity pointedEntity = null;
             float f = 1.0F;
             List<Entity> list = mc.world.getEntitiesInAABBexcluding(entity,
-                    entity.getBoundingBox()
+                    entity.getEntityBoundingBox()
                             .expand(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew)
                             .grow(f, f, f),
-                    EntitySelectors.NOT_SPECTATING.and(Entity::canBeCollidedWith));
+                    Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
             double d = calcDist;
 
             Vec3d hitVec = null;
             for (Entity entity1 : list) {
-                AxisAlignedBB aabb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
+                AxisAlignedBB aabb = entity1.getEntityBoundingBox().grow(entity1.getCollisionBorderSize());
                 RayTraceResult intercept = aabb.calculateIntercept(pos, traced);
                 if (aabb.contains(pos)) {
                     if (d >= 0.0D) {

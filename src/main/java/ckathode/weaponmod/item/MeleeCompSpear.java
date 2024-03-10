@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemTier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -17,15 +17,15 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem {
-    public MeleeCompSpear(IItemTier itemTier) {
-        super(MeleeSpecs.SPEAR, itemTier);
+    public MeleeCompSpear(Item.ToolMaterial toolmaterial) {
+        super(MeleeSpecs.SPEAR, toolmaterial);
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
                                                     EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!BalkonsWeaponMod.instance.modConfig.canThrowSpear.get()) {
+        if (!BalkonsWeaponMod.instance.modConfig.canThrowSpear) {
             return super.onItemRightClick(world, entityplayer, hand);
         }
         if (!world.isRemote) {
@@ -39,7 +39,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.abilities.isCreativeMode) {
+        if (!entityplayer.capabilities.isCreativeMode) {
             itemstack = itemstack.copy();
             itemstack.setCount(0);
         }
@@ -47,9 +47,8 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
-        return BalkonsWeaponMod.instance.modConfig.canThrowSpear.get()
-                ? EnumAction.NONE : super.getUseAction(itemstack);
+    public EnumAction getItemUseAction(ItemStack itemstack) {
+        return BalkonsWeaponMod.instance.modConfig.canThrowSpear ? EnumAction.NONE : super.getItemUseAction(itemstack);
     }
 
     @Override

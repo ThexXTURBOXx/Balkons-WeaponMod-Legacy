@@ -11,11 +11,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityJavelin extends EntityProjectile<EntityJavelin> {
+public class EntityJavelin extends EntityProjectile {
     public static final String NAME = "javelin";
 
     public EntityJavelin(World world) {
-        super(BalkonsWeaponMod.entityJavelin, world);
+        super(world);
     }
 
     public EntityJavelin(World world, double x, double y, double z) {
@@ -26,7 +26,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
 
     public EntityJavelin(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         setPickupStatusFromEntity(shooter);
     }
 
@@ -55,7 +55,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
         if (entity.attackEntityFrom(damagesource, (float) damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            setDead();
         } else {
             bounceBack();
         }

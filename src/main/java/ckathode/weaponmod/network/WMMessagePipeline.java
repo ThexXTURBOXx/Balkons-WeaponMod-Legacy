@@ -2,108 +2,150 @@ package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageCodec;
+import java.util.EnumMap;
 import java.util.LinkedList;
-import java.util.function.Supplier;
+import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 
 @ChannelHandler.Sharable
-public class WMMessagePipeline {
+public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMMessage> {
+    private EnumMap<Side, FMLEmbeddedChannel> channels;
+    private final LinkedList<Class<? extends WMMessage>> packets;
+    private boolean isPostInitialized;
 
-    private final String protocolVersion = Integer.toString(1);
-    private final SimpleChannel handler = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "main"))
-            .clientAcceptedVersions(protocolVersion::equals)
-            .serverAcceptedVersions(protocolVersion::equals)
-            .networkProtocolVersion(() -> protocolVersion)
-            .simpleChannel();
-    private final LinkedList<Class<? extends WMMessage<?>>> idToPacket = new LinkedList<>();
-
-    private int registerIndex = 0;
-
-    public <T extends WMMessage<T>> void registerPacket(Class<T> messageType) {
-        idToPacket.add(messageType);
-        handler.registerMessage(registerIndex++, messageType, this::encode, this::decode, this::handle);
+    public WMMessagePipeline() {
+        packets = new LinkedList<>();
+        isPostInitialized = false;
     }
 
-    protected <T extends WMMessage<T>> void encode(T msg, PacketBuffer buf) {
-        if (!idToPacket.contains(msg.getClass())) {
+    public boolean registerPacket(final Class<? extends WMMessage> class0) {
+        if (packets.size() > 256) {
+            BalkonsWeaponMod.modLog.error("More than 256 packets registered");
+            return false;
+        }
+        if (packets.contains(class0)) {
+            BalkonsWeaponMod.modLog.warn("Packet already registered");
+            return false;
+        }
+        if (isPostInitialized) {
+            BalkonsWeaponMod.modLog.error("Already post-initialized");
+            return false;
+        }
+        packets.add(class0);
+        return true;
+    }
+
+    @Override
+    protected void encode(final ChannelHandlerContext ctx, final WMMessage msg, final List<Object> out) {
+        final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+        if (!packets.contains(msg.getClass())) {
             throw new NullPointerException("No Packet Registered for: " + msg.getClass().getCanonicalName());
         }
-        int discriminator = idToPacket.indexOf(msg.getClass());
-        buf.writeInt(discriminator);
-        msg.encode(buf);
+        final byte discriminator = (byte) packets.indexOf(msg.getClass());
+        buffer.writeByte(discriminator);
+        msg.encodeInto(ctx, buffer);
+        final FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer,
+                ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
+        out.add(proxyPacket);
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T extends WMMessage<T>> T decode(PacketBuffer buf) {
-        ByteBuf payload = buf.duplicate();
+    @Override
+    protected void decode(final ChannelHandlerContext ctx, final FMLProxyPacket msg, final List<Object> out) throws Exception {
+        final ByteBuf payload = msg.payload().duplicate();
         if (payload.readableBytes() < 1) {
-            BalkonsWeaponMod.modLog.log(Level.ERROR, "The FMLIndexedCodec has received an empty buffer, likely a "
-                                                     + "result of a LAN server issue.");
+            FMLLog.log.log(Level.ERROR, "The FMLIndexedCodec has received an empty buffer on channel %s, likely a "
+                                        + "result of a LAN server issue. Pipeline parts : %s",
+                    new Object[]{ctx.channel().attr(NetworkRegistry.FML_CHANNEL), ctx.pipeline().toString()});
         }
-        int discriminator = payload.readInt();
-        Class<T> clazz = (Class<T>) idToPacket.get(discriminator);
+        final byte discriminator = payload.readByte();
+        final Class<? extends WMMessage> clazz = packets.get(discriminator);
         if (clazz == null) {
             throw new NullPointerException("No packet registered for discriminator: " + discriminator);
         }
-        try {
-            T pkt = clazz.newInstance();
-            pkt.decode(payload.slice());
-            return pkt;
-        } catch (Throwable t) {
-            NullPointerException e = new NullPointerException("Could not instantiate packet: " + discriminator);
-            e.addSuppressed(t);
-            throw e;
-        }
-    }
-
-    protected <T extends WMMessage<T>> void handle(T msg, Supplier<NetworkEvent.Context> ctx) {
-        switch (EffectiveSide.get()) {
+        final WMMessage pkt = clazz.newInstance();
+        pkt.decodeInto(ctx, payload.slice());
+        switch (FMLCommonHandler.instance().getEffectiveSide()) {
         case CLIENT: {
-            msg.handleClientSide(msg, ctx);
+            final EntityPlayer player = getClientPlayer();
+            pkt.handleClientSide(player);
             break;
         }
         case SERVER: {
-            msg.handleServerSide(msg, ctx);
+            final INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+            final EntityPlayer player = ((NetHandlerPlayServer) netHandler).player;
+            pkt.handleServerSide(player);
             break;
         }
         }
-        ctx.get().setPacketHandled(true);
+        out.add(pkt);
     }
 
-    public <T extends WMMessage<T>> void sendToAll(WMMessage<T> message) {
-        handler.send(PacketDistributor.ALL.noArg(), message);
+    public void initalize() {
+        channels = NetworkRegistry.INSTANCE.newChannel("WeaponMod", this);
     }
 
-    public <T extends WMMessage<T>> void sendTo(WMMessage<T> message, EntityPlayerMP player) {
-        if (!(player instanceof FakePlayer)) {
-            handler.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+    public void postInitialize() {
+        if (isPostInitialized) {
+            return;
         }
+        isPostInitialized = true;
+        packets.sort((clazz1, clazz2) -> {
+            int com = String.CASE_INSENSITIVE_ORDER.compare(clazz1.getCanonicalName(), clazz2.getCanonicalName());
+            if (com == 0) {
+                com = clazz1.getCanonicalName().compareTo(clazz2.getCanonicalName());
+            }
+            return com;
+        });
     }
 
-    public <T extends WMMessage<T>> void sendToAllAround(WMMessage<T> message,
-                                                         PacketDistributor.TargetPoint point) {
-        handler.send(PacketDistributor.NEAR.with(() -> point), message);
+    @SideOnly(Side.CLIENT)
+    private EntityPlayer getClientPlayer() {
+        return Minecraft.getMinecraft().player;
     }
 
-    public <T extends WMMessage<T>> void sendToDimension(WMMessage<T> message, DimensionType dimension) {
-        handler.send(PacketDistributor.DIMENSION.with(() -> dimension), message);
+    public void sendToAll(final WMMessage message) {
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+        channels.get(Side.SERVER).writeAndFlush(message);
     }
 
-    public <T extends WMMessage<T>> void sendToServer(WMMessage<T> message) {
-        handler.sendToServer(message);
+    public void sendTo(final WMMessage message, final EntityPlayerMP player) {
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+        channels.get(Side.SERVER).writeAndFlush(message);
     }
 
+    public void sendToAllAround(final WMMessage message, final NetworkRegistry.TargetPoint point) {
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
+        channels.get(Side.SERVER).writeAndFlush(message);
+    }
+
+    public void sendToDimension(final WMMessage message, final int dimensionId) {
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
+        channels.get(Side.SERVER).writeAndFlush(message);
+    }
+
+    public void sendToServer(final WMMessage message) {
+        channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+        channels.get(Side.CLIENT).writeAndFlush(message);
+    }
 }

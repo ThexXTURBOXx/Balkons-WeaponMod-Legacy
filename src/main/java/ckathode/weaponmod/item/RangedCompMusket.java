@@ -4,10 +4,10 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,7 +38,7 @@ public class RangedCompMusket extends RangedComponent {
     @Override
     public void fire(ItemStack itemstack, World world, EntityLivingBase entityliving, int i) {
         EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        int j = getUseDuration(itemstack) - i;
+        int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f > 1.0f) {
@@ -53,14 +53,12 @@ public class RangedCompMusket extends RangedComponent {
             world.spawnEntity(entitymusketbullet);
         }
         int deltadamage = 1;
-        boolean flag = itemstack.getDamage() + deltadamage > itemstack.getMaxDamage();
+        boolean flag = itemstack.getItemDamage() + deltadamage > itemstack.getMaxDamage();
         itemstack.damageItem(deltadamage, entityplayer);
         if (flag && musket != null) {
-            int bayonetdamage = (itemstack.getTag() == null) ? 0 : itemstack.getTag().getShort(
+            int bayonetdamage = (itemstack.getTagCompound() == null) ? 0 : itemstack.getTagCompound().getShort(
                     "bayonetDamage");
-            ItemStack newStack = new ItemStack(musket.bayonetItem, 1);
-            newStack.setDamage(bayonetdamage);
-            entityplayer.inventory.addItemStackToInventory(newStack);
+            entityplayer.inventory.addItemStackToInventory(new ItemStack(musket.bayonetItem, 1, bayonetdamage));
         } else {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
@@ -81,15 +79,16 @@ public class RangedCompMusket extends RangedComponent {
                             float pitch) {
         world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 3.0f,
                 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.7f));
-        world.playSound(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.PLAYERS, 3.0f,
+        world.playSound(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.PLAYERS, 3.0f,
                 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
         float particleX = -MathHelper.sin((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         for (int i = 0; i < 3; ++i) {
-            world.addParticle(Particles.SMOKE, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x + particleX, y + particleY, z + particleZ, 0.0, 0.0,
+                    0.0);
         }
-        world.addParticle(Particles.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+        world.spawnParticle(EnumParticleTypes.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
     }
 
     @Override

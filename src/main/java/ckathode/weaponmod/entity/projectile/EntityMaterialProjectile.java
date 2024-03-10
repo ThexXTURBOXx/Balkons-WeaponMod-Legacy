@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -15,10 +14,10 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
+public abstract class EntityMaterialProjectile extends EntityProjectile {
     private static final DataParameter<Byte> WEAPON_MATERIAL =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
     private static final DataParameter<ItemStack> WEAPON_ITEM =
@@ -27,21 +26,20 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
     protected ItemStack thrownItem;
 
-    public EntityMaterialProjectile(EntityType<T> type, World world) {
-        super(type, world);
+    public EntityMaterialProjectile(World world) {
+        super(world);
     }
 
     @Override
-    public void registerData() {
-        super.registerData();
+    public void entityInit() {
+        super.entityInit();
         dataManager.register(WEAPON_MATERIAL, (byte) 0);
         dataManager.register(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
     public float getMeleeHitDamage(Entity entity) {
-        Entity shooter = getShooter();
-        if (shooter instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) shooter).getHeldItemMainhand(),
+        if (shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
+            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) shootingEntity).getHeldItemMainhand(),
                     ((EntityLivingBase) entity).getCreatureAttribute());
         }
         return 0.0f;
@@ -50,15 +48,14 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @Override
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
-        Entity shooter = getShooter();
-        if (shooter instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) shooter);
+        if (shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
+            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) shootingEntity);
             if (i != 0) {
                 ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
                         -MathHelper.sin(rotationYaw * 0.017453292f),
                         -MathHelper.cos(rotationYaw * 0.017453292f));
             }
-            i = EnchantmentHelper.getFireAspectModifier((EntityLivingBase) shooter);
+            i = EnchantmentHelper.getFireAspectModifier((EntityLivingBase) shootingEntity);
             if (i > 0 && !entity.isBurning()) {
                 entity.setFire(1);
             }
@@ -67,9 +64,9 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
 
     public void setThrownItemStack(@Nonnull ItemStack itemstack) {
         thrownItem = itemstack;
-        if (thrownItem.getItem() instanceof ItemFlail || !BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
+        if (thrownItem.getItem() instanceof ItemFlail || !BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             updateWeaponMaterial();
-        } else if (thrownItem != null && !(thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
+        } else if (thrownItem != null && !(thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             dataManager.set(WEAPON_ITEM, itemstack);
         }
     }
@@ -92,14 +89,13 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
         if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
-                material =
-                        MaterialRegistry.getOrdinal(((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial);
+                material = ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial.ordinal();
             }
             dataManager.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @SideOnly(Side.CLIENT)
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
         if (id < 5) {
@@ -109,17 +105,17 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
-        super.writeAdditional(nbttagcompound);
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
         if (thrownItem != null) {
-            nbttagcompound.put("thrI", thrownItem.write(new NBTTagCompound()));
+            nbttagcompound.setTag("thrI", thrownItem.writeToNBT(new NBTTagCompound()));
         }
     }
 
     @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
-        super.readAdditional(nbttagcompound);
-        setThrownItemStack(ItemStack.read(nbttagcompound.getCompound("thrI")));
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+        super.readEntityFromNBT(nbttagcompound);
+        setThrownItemStack(new ItemStack(nbttagcompound.getCompoundTag("thrI")));
     }
 
 }

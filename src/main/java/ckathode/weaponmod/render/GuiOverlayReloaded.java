@@ -3,20 +3,20 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.RangedComponent;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@OnlyIn(Dist.CLIENT)
+@SideOnly(Side.CLIENT)
 public class GuiOverlayReloaded extends Gui {
     private final Minecraft mc;
 
@@ -56,17 +56,17 @@ public class GuiOverlayReloaded extends Gui {
             offset = 0;
         }
 
-        MainWindow window = Minecraft.getInstance().mainWindow;
-        int x0 = window.getScaledWidth() / 2 + (hand == EnumHand.OFF_HAND ?
+        ScaledResolution res = e.getResolution();
+        int x0 = res.getScaledWidth() / 2 + (hand == EnumHand.OFF_HAND ?
                 (offHandSide == EnumHandSide.LEFT ? -120 : 91)
                 : -91 - 1 + currentItem * 20);
-        int y0 = window.getScaledHeight() + 1;
+        int y0 = res.getScaledHeight() + 1;
         int tx = hand == EnumHand.OFF_HAND ? (offHandSide == EnumHandSide.LEFT ? 24 : 53) : 0;
         int width = hand == EnumHand.OFF_HAND ? 29 : 24;
         int height = (int) (f * 24);
 
         zLevel = -90; // at the same level as the hotbar itself
-        mc.getRenderManager().textureManager.bindTexture(WeaponModResources.Gui.OVERLAY);
+        mc.getRenderManager().renderEngine.bindTexture(WeaponModResources.Gui.OVERLAY);
         drawTexturedModalRect(x0, y0 - height, tx, offset + 24 - height, width, height);
     }
 }

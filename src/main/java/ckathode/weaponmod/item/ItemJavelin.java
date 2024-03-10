@@ -12,10 +12,13 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemJavelin extends WMItem {
     public ItemJavelin(String id) {
-        super(id, new Properties().maxStackSize(16));
+        super(id);
+        maxStackSize = 16;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class ItemJavelin extends WMItem {
         if (itemstack.isEmpty()) {
             return;
         }
-        int j = getUseDuration(itemstack) - i;
+        int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f < 0.1f) {
@@ -48,8 +51,8 @@ public class ItemJavelin extends WMItem {
             world.spawnEntity(entityjavelin);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
-                , SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.abilities.isCreativeMode) {
+                , SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));
+        if (!entityplayer.capabilities.isCreativeMode) {
             itemstack.shrink(1);
             if (itemstack.isEmpty()) {
                 entityplayer.inventory.deleteStack(itemstack);
@@ -58,13 +61,13 @@ public class ItemJavelin extends WMItem {
     }
 
     @Override
-    public int getUseDuration(@Nonnull ItemStack itemstack) {
+    public int getMaxItemUseDuration(@Nonnull ItemStack itemstack) {
         return 72000;
     }
 
     @Nonnull
     @Override
-    public EnumAction getUseAction(@Nonnull ItemStack itemstack) {
+    public EnumAction getItemUseAction(@Nonnull ItemStack itemstack) {
         return EnumAction.BOW;
     }
 
@@ -73,11 +76,16 @@ public class ItemJavelin extends WMItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
                                                     @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
+        if (!entityplayer.capabilities.isCreativeMode && itemstack.isEmpty()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);
         return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isFull3D() {
+        return true;
+    }
 }

@@ -10,10 +10,13 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDynamite extends WMItem {
     public ItemDynamite(String id) {
-        super(id, new Properties().maxStackSize(64));
+        super(id);
+        maxStackSize = 64;
     }
 
     @Override
@@ -26,18 +29,23 @@ public class ItemDynamite extends WMItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
                                                     @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!entityplayer.abilities.isCreativeMode) {
+        if (!entityplayer.capabilities.isCreativeMode) {
             itemstack.shrink(1);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED,
-                SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
+                SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));
         if (!world.isRemote) {
             EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
-                    40 + random.nextInt(10));
+                    40 + itemRand.nextInt(10));
             entitydynamite.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.7f, 4.0f);
             world.spawnEntity(entitydynamite);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isFull3D() {
+        return true;
+    }
 }

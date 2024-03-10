@@ -7,10 +7,10 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
@@ -34,7 +34,7 @@ public class DispenseMortarShell extends DispenseWeaponProjectile {
     protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
         IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
+        blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
     }
 }

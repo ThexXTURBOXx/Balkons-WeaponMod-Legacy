@@ -13,10 +13,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item.Properties;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTier;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -25,11 +23,11 @@ import net.minecraft.world.World;
 
 public class MeleeComponent extends AbstractWeaponComponent {
     public final MeleeSpecs meleeSpecs;
-    public final IItemTier weaponMaterial;
+    public final Item.ToolMaterial weaponMaterial;
 
-    public MeleeComponent(MeleeSpecs meleespecs, IItemTier itemTier) {
+    public MeleeComponent(MeleeSpecs meleespecs, Item.ToolMaterial toolmaterial) {
         meleeSpecs = meleespecs;
-        weaponMaterial = itemTier;
+        weaponMaterial = toolmaterial;
     }
 
     @Override
@@ -37,8 +35,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public Properties setProperties(Properties properties) {
-        return properties.defaultMaxDamage(weaponMaterial == null
+    public void setThisItemProperties() {
+        item.setMaxDamage(weaponMaterial == null
                 ? meleeSpecs.durabilityBase
                 : (int) (meleeSpecs.durabilityBase
                          + weaponMaterial.getMaxUses() * meleeSpecs.durabilityMult));
@@ -69,7 +67,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public boolean canHarvestBlock(IBlockState state) {
         Block block = state.getBlock();
-        return block == Blocks.COBWEB;
+        return block == Blocks.WEB;
     }
 
     @Override
@@ -148,12 +146,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
+    public EnumAction getItemUseAction(ItemStack itemstack) {
         return EnumAction.NONE;
     }
 
     @Override
-    public int getUseDuration(ItemStack itemstack) {
+    public int getMaxItemUseDuration(ItemStack itemstack) {
         return 0;
     }
 
@@ -174,8 +172,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void inventoryTick(ItemStack itemstack, World world, Entity entity, int i,
-                              boolean flag) {
+    public void onUpdate(ItemStack itemstack, World world, Entity entity, int i,
+                         boolean flag) {
     }
 
     public enum MeleeSpecs {
@@ -213,8 +211,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
             attackDelay = attackdelay;
         }
 
-        public float getKnockBack(IItemTier material) {
-            return (material == ItemTier.GOLD) ? (knockback * 1.5f) : knockback;
+        public float getKnockBack(final Item.ToolMaterial material) {
+            return (material == Item.ToolMaterial.GOLD) ? (knockback * 1.5f) : knockback;
         }
     }
 }

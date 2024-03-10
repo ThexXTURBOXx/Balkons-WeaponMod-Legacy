@@ -20,26 +20,26 @@ public class RenderMusketBullet extends Render<EntityMusketBullet> {
     public void doRender(@Nonnull EntityMusketBullet entitymusketbullet, double d, double d1,
                          double d2, float f, float f1) {
         bindEntityTexture(entitymusketbullet);
-        GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
-        GlStateManager.translated(d, d1, d2);
+        GlStateManager.translate(d, d1, d2);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
         GlStateManager.enableRescaleNormal();
-        GlStateManager.scalef(0.07f, 0.07f, 0.07f);
+        GlStateManager.scale(0.07f, 0.07f, 0.07f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(getTeamColor(entitymusketbullet));
         }
-        GlStateManager.normal3f(0.05625f, 0.0f, 0.0f);
+        GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.0).endVertex();
         vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.0).endVertex();
         vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.3125).endVertex();
         vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.3125).endVertex();
         tessellator.draw();
-        GlStateManager.normal3f(-0.05625f, 0.0f, 0.0f);
+        GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.0).endVertex();
         vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.0).endVertex();
@@ -47,8 +47,8 @@ public class RenderMusketBullet extends Render<EntityMusketBullet> {
         vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.3125).endVertex();
         tessellator.draw();
         for (int j = 0; j < 4; ++j) {
-            GlStateManager.rotatef(90.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.normal3f(0.0f, 0.0f, 0.05625f);
+            GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+            GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
             vertexbuffer.pos(-1.0, -1.0, 0.0).tex(0.0, 0.0).endVertex();
             vertexbuffer.pos(1.0, -1.0, 0.0).tex(0.3125, 0.0).endVertex();

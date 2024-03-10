@@ -6,25 +6,25 @@ import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityDynamite extends EntityProjectile<EntityDynamite> {
+public class EntityDynamite extends EntityProjectile {
     public static final String NAME = "dynamite";
 
     private int explodefuse;
     private boolean extinguished;
 
     public EntityDynamite(World world) {
-        super(BalkonsWeaponMod.entityDynamite, world);
+        super(world);
         setPickupStatus(PickupStatus.DISALLOWED);
         extinguished = false;
         explodefuse = rand.nextInt(30) + 20;
@@ -37,7 +37,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
 
     public EntityDynamite(World world, EntityLivingBase shooter, int i) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        setThrower(shooter);
         explodefuse = i;
     }
 
@@ -56,12 +56,12 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    protected void registerData() {
+    protected void entityInit() {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onUpdate() {
+        super.onUpdate();
         if (!inGround && !beenInGround) {
             rotationPitch -= 50.0f;
         } else {
@@ -73,7 +73,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                     1.2f / (rand.nextFloat() * 0.2f + 0.9f));
             for (int k = 0; k < 8; ++k) {
                 float f6 = 0.25f;
-                world.addParticle(Particles.POOF, posX - motionX * f6,
+                world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX - motionX * f6,
                         posY - motionY * f6, posZ - motionZ * f6, motionX, motionY,
                         motionZ);
             }
@@ -82,9 +82,9 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         if (!extinguished) {
             if (explodefuse <= 0) {
                 detonate();
-                remove();
+                setDead();
             } else {
-                world.addParticle(Particles.SMOKE, posX, posY, posZ, 0.0, 0.0,
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY, posZ, 0.0, 0.0,
                         0.0);
             }
         }
@@ -127,7 +127,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                     1.2f / (rand.nextFloat() * 0.2f + 0.9f));
         }
         if (inBlockState != null) {
-            inBlockState.onEntityCollision(world, blockpos, this);
+            inBlockState.getBlock().onEntityCollision(world, blockpos, inBlockState, this);
         }
     }
 
@@ -136,11 +136,11 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
             return;
         }
         if (extinguished && (ticksInGround >= 200 || ticksInAir >= 200)) {
-            remove();
+            setDead();
         }
         float f = 2.0f;
         PhysHelper.createAdvancedExplosion(world, this, posX, posY, posZ, f,
-                BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage.get(), true, false, false);
+                BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage, true, false, false);
     }
 
     @Override
@@ -171,15 +171,15 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
-        super.writeAdditional(nbttagcompound);
-        nbttagcompound.putByte("fuse", (byte) explodefuse);
-        nbttagcompound.putBoolean("off", extinguished);
+    public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
+        nbttagcompound.setByte("fuse", (byte) explodefuse);
+        nbttagcompound.setBoolean("off", extinguished);
     }
 
     @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
-        super.readAdditional(nbttagcompound);
+    public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+        super.readEntityFromNBT(nbttagcompound);
         explodefuse = nbttagcompound.getByte("fuse");
         extinguished = nbttagcompound.getBoolean("off");
     }

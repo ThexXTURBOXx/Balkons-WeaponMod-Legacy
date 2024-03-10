@@ -30,7 +30,7 @@ public class RangedCompCrossbow extends RangedComponent {
     @Override
     public void fire(ItemStack itemstack, World world, EntityLivingBase entityliving, int i) {
         EntityPlayer entityplayer = (EntityPlayer) entityliving;
-        int j = getUseDuration(itemstack) - i;
+        int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f > 1.0f) {
@@ -44,7 +44,7 @@ public class RangedCompCrossbow extends RangedComponent {
             world.spawnEntity(entitybolt);
         }
         int damage = 1;
-        if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getItemDamage() + damage <= itemstack.getMaxDamage()) {
             resetReload(world, itemstack);
         }
         itemstack.damageItem(damage, entityplayer);

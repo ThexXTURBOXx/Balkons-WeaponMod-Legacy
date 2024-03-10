@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    " #X",
+    "# #"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "weaponmod:blunder-ironpart"
+  }
+}
