@@ -4,15 +4,15 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderBlunderShot extends Render<EntityBlunderShot> {
-    public RenderBlunderShot(RenderManager renderManager) {
+public class RenderBlunderShot extends EntityRenderer<EntityBlunderShot> {
+    public RenderBlunderShot(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
@@ -30,7 +30,7 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         GlStateManager.scalef(0.04f, 0.04f, 0.04f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entityblundershot));
+            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityblundershot));
         }
         GlStateManager.normal3f(0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -57,14 +57,14 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
             tessellator.draw();
         }
         if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
+            GlStateManager.tearDownSolidRenderingTextureCombine();
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
-        GlStateManager.disableTexture2D();
+        GlStateManager.disableTexture();
         GlStateManager.disableCull();
         GlStateManager.color4f(1.0f, 1.0f, 0.8f, 1.0f);
         GlStateManager.lineWidth(1.0f);
@@ -72,7 +72,7 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         vertexbuffer.pos(entityblundershot.posX, entityblundershot.posY, entityblundershot.posZ);
         vertexbuffer.pos(entityblundershot.prevPosX, entityblundershot.prevPosY, entityblundershot.prevPosZ);
         tessellator.draw();
-        GlStateManager.enableTexture2D();
+        GlStateManager.enableTexture();
         GlStateManager.enableCull();
         GlStateManager.popMatrix();
         super.doRender(entityblundershot, d, d1, d2, f, f1);

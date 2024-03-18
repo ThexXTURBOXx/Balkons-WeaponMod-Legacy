@@ -3,15 +3,15 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
@@ -21,8 +21,8 @@ public class MeleeCompKnife extends MeleeComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
+                                                    Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (!BalkonsWeaponMod.instance.modConfig.canThrowKnife.get()) {
             return super.onItemRightClick(world, entityplayer, hand);
@@ -34,7 +34,7 @@ public class MeleeCompKnife extends MeleeComponent {
             if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                 entityknife.setFire(100);
             }
-            world.spawnEntity(entityknife);
+            world.addEntity(entityknife);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
@@ -42,12 +42,12 @@ public class MeleeCompKnife extends MeleeComponent {
             itemstack = itemstack.copy();
             itemstack.setCount(0);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
+    public UseAction getUseAction(ItemStack itemstack) {
         return BalkonsWeaponMod.instance.modConfig.canThrowKnife.get()
-                ? EnumAction.NONE : super.getUseAction(itemstack);
+                ? UseAction.NONE : super.getUseAction(itemstack);
     }
 }

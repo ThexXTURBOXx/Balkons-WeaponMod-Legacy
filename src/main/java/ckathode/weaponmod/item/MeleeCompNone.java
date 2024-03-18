@@ -1,17 +1,17 @@
 package ckathode.weaponmod.item;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -31,30 +31,30 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
+    public float getBlockDamage(ItemStack itemstack, BlockState block) {
         return 1.0f;
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState block) {
+    public boolean canHarvestBlock(BlockState block) {
         return false;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, IBlockState block,
-                                    BlockPos pos, EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, BlockState block,
+                                    BlockPos pos, LivingEntity entityliving) {
         return true;
     }
 
     @Override
-    public boolean hitEntity(ItemStack itemstack, EntityLivingBase entityliving,
-                             EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack itemstack, LivingEntity entityliving,
+                             LivingEntity attacker) {
         return true;
     }
 
     @Override
-    public float getKnockBack(ItemStack itemstack, EntityLivingBase entityliving,
-                              EntityLivingBase attacker) {
+    public float getKnockBack(ItemStack itemstack, LivingEntity entityliving,
+                              LivingEntity attacker) {
         return 0.0f;
     }
 
@@ -68,19 +68,19 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity) {
+    public boolean onLeftClickEntity(ItemStack itemstack, PlayerEntity player, Entity entity) {
         return false;
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
-        return EnumAction.NONE;
+    public UseAction getUseAction(ItemStack itemstack) {
+        return UseAction.NONE;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
+                                                    Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        return new ActionResult<>(EnumActionResult.PASS, itemstack);
+        return new ActionResult<>(ActionResultType.PASS, itemstack);
     }
 }

@@ -3,17 +3,17 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityCannon;
 import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderCannon extends Render<EntityCannon> {
+public class RenderCannon extends EntityRenderer<EntityCannon> {
     private final ModelCannonBarrel modelBarrel;
     private final ModelCannonStandard modelStandard;
 
-    public RenderCannon(RenderManager renderManager) {
+    public RenderCannon(EntityRendererManager renderManager) {
         super(renderManager);
         modelBarrel = new ModelCannonBarrel();
         modelStandard = new ModelCannonStandard();
@@ -45,7 +45,7 @@ public class RenderCannon extends Render<EntityCannon> {
                     entitycannon.getBrightness() * f4);
         }
         if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
+            GlStateManager.tearDownSolidRenderingTextureCombine();
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.pushMatrix();
@@ -61,7 +61,7 @@ public class RenderCannon extends Render<EntityCannon> {
         modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitycannon));
+            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entitycannon));
         }
         GlStateManager.popMatrix();
         super.doRender(entitycannon, d, d1, d2, f, f1);

@@ -4,27 +4,29 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityJavelin extends EntityProjectile<EntityJavelin> {
     public static final String NAME = "javelin";
 
-    public EntityJavelin(World world) {
-        super(BalkonsWeaponMod.entityJavelin, world);
+    public EntityJavelin(EntityType<EntityJavelin> entityType, World world) {
+        super(entityType, world);
     }
 
     public EntityJavelin(World world, double x, double y, double z) {
-        this(world);
+        this(BalkonsWeaponMod.entityJavelin, world);
         setPickupStatus(PickupStatus.ALLOWED);
         setPosition(x, y, z);
     }
 
-    public EntityJavelin(World world, EntityLivingBase shooter) {
+    public EntityJavelin(World world, LivingEntity shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
         setPickupStatusFromEntity(shooter);
@@ -37,11 +39,8 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3 * 1.1f, f4);
-        motionX += entity.motionX;
-        motionZ += entity.motionZ;
-        if (!entity.onGround) {
-            motionY += entity.motionY;
-        }
+        Vec3d entityMotion = entity.getMotion();
+        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
     }
 
     @Override

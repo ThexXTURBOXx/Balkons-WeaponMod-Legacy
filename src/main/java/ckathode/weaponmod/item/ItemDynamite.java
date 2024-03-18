@@ -2,12 +2,12 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import javax.annotation.Nonnull;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
@@ -23,8 +23,8 @@ public class ItemDynamite extends WMItem {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
-                                                    @Nonnull EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, PlayerEntity entityplayer,
+                                                    @Nonnull Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (!entityplayer.abilities.isCreativeMode) {
             itemstack.shrink(1);
@@ -35,9 +35,9 @@ public class ItemDynamite extends WMItem {
             EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
                     40 + random.nextInt(10));
             entitydynamite.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.7f, 4.0f);
-            world.spawnEntity(entitydynamite);
+            world.addEntity(entitydynamite);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 
 }

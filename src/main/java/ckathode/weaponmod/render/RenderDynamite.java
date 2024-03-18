@@ -4,17 +4,17 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderDynamite extends Render<EntityDynamite> {
+public class RenderDynamite extends EntityRenderer<EntityDynamite> {
 
-    public RenderDynamite(RenderManager renderManager) {
+    public RenderDynamite(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
@@ -41,7 +41,7 @@ public class RenderDynamite extends Render<EntityDynamite> {
         GlStateManager.translatef(-4.0f, 0.0f, 0.0f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitydynamite));
+            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entitydynamite));
         }
         GlStateManager.normal3f(0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -68,7 +68,7 @@ public class RenderDynamite extends Render<EntityDynamite> {
             tessellator.draw();
         }
         if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
+            GlStateManager.tearDownSolidRenderingTextureCombine();
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.disableRescaleNormal();

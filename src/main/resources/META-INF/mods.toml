@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[25,)"
+loaderVersion = "[28,)"
 issueTrackerURL = "https://github.com/ThexXTURBOXx/balkons-weaponmod/issues"
 logoFile = "bwm_logo.png"
 
@@ -21,6 +21,5 @@ And more!
 [[dependencies.weaponmod]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.13.2]"
-ordering = "NONE"
+versionRange = "[1.14.4]"
 side = "BOTH"

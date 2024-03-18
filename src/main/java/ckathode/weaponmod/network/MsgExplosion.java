@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -77,7 +78,7 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
     public void handleClientSide(MsgExplosion msg, Supplier<NetworkEvent.Context> ctx) {
         World world = Minecraft.getInstance().world;
         AdvancedExplosion expl = new AdvancedExplosion(world, null, x, y, z, size,
-                false, true);
+                false, Explosion.Mode.DESTROY);
         expl.setAffectedBlockPositions(blocks);
         expl.doParticleExplosion(smallParticles, bigParticles);
     }

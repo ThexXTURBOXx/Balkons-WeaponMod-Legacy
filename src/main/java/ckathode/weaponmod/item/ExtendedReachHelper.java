@@ -1,11 +1,10 @@
 package ckathode.weaponmod.item;
 
-import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EntitySelectors;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.RayTraceFluidMode;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
@@ -20,55 +19,31 @@ public final class ExtendedReachHelper {
         Entity entity = mc.getRenderViewEntity();
         if (entity != null && mc.world != null) {
             double distNew = dist;
-            result = entity.rayTrace(distNew, frame, RayTraceFluidMode.NEVER);
+            result = entity.pick(distNew, frame, false);
             double calcDist = distNew;
             Vec3d pos = entity.getEyePosition(frame);
             distNew = calcDist;
 
+            calcDist *= calcDist;
             if (result != null) {
-                calcDist = result.hitVec.distanceTo(pos);
+                calcDist = result.getHitVec().squareDistanceTo(pos);
             }
 
             Vec3d lookVec = entity.getLook(1.0F);
             Vec3d traced = pos.add(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew);
             Entity pointedEntity = null;
             float f = 1.0F;
-            List<Entity> list = mc.world.getEntitiesInAABBexcluding(entity,
-                    entity.getBoundingBox()
-                            .expand(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew)
-                            .grow(f, f, f),
-                    EntitySelectors.NOT_SPECTATING.and(Entity::canBeCollidedWith));
-            double d = calcDist;
-
-            Vec3d hitVec = null;
-            for (Entity entity1 : list) {
-                AxisAlignedBB aabb = entity1.getBoundingBox().grow(entity1.getCollisionBorderSize());
-                RayTraceResult intercept = aabb.calculateIntercept(pos, traced);
-                if (aabb.contains(pos)) {
-                    if (d >= 0.0D) {
-                        pointedEntity = entity1;
-                        hitVec = intercept == null ? pos : intercept.hitVec;
-                        d = 0.0D;
-                    }
-                } else if (intercept != null) {
-                    double d1 = pos.distanceTo(intercept.hitVec);
-                    if (d1 < d || d == 0.0D) {
-                        if (entity1.getLowestRidingEntity() == entity.getLowestRidingEntity() && !entity1.canRiderInteract()) {
-                            if (d == 0.0D) {
-                                pointedEntity = entity1;
-                                hitVec = intercept.hitVec;
-                            }
-                        } else {
-                            pointedEntity = entity1;
-                            hitVec = intercept.hitVec;
-                            d = d1;
-                        }
-                    }
+            final AxisAlignedBB axisalignedbb = entity.getBoundingBox().expand(lookVec.scale(distNew))
+                    .grow(1.0, 1.0, 1.0);
+            final EntityRayTraceResult entityraytraceresult = ProjectileHelper.rayTraceEntities(entity, pos, traced,
+                    axisalignedbb, e -> !e.isSpectator() && e.canBeCollidedWith(), calcDist);
+            if (entityraytraceresult != null) {
+                final Entity entity2 = entityraytraceresult.getEntity();
+                final Vec3d hitVec = entityraytraceresult.getHitVec();
+                final double d1 = pos.squareDistanceTo(hitVec);
+                if (d1 < calcDist || result == null) {
+                    result = entityraytraceresult;
                 }
-            }
-
-            if (pointedEntity != null && (d < calcDist || result == null)) {
-                result = new RayTraceResult(pointedEntity, hitVec);
             }
         }
         return result;

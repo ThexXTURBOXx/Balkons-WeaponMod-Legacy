@@ -6,10 +6,10 @@ import ckathode.weaponmod.item.ItemFlail;
 import javax.annotation.Nonnull;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -22,7 +22,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     private static final DataParameter<Byte> WEAPON_MATERIAL =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
     private static final DataParameter<ItemStack> WEAPON_ITEM =
-            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEM_STACK);
+            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEMSTACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
     protected ItemStack thrownItem;
@@ -40,9 +40,9 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
 
     public float getMeleeHitDamage(Entity entity) {
         Entity shooter = getShooter();
-        if (shooter instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) shooter).getHeldItemMainhand(),
-                    ((EntityLivingBase) entity).getCreatureAttribute());
+        if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
+            return EnchantmentHelper.getModifierForCreature(((LivingEntity) shooter).getHeldItemMainhand(),
+                    ((LivingEntity) entity).getCreatureAttribute());
         }
         return 0.0f;
     }
@@ -51,14 +51,14 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
         Entity shooter = getShooter();
-        if (shooter instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) shooter);
+        if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
+            int i = EnchantmentHelper.getKnockbackModifier((LivingEntity) shooter);
             if (i != 0) {
-                ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
+                ((LivingEntity) entity).knockBack(this, i * 0.4f,
                         -MathHelper.sin(rotationYaw * 0.017453292f),
                         -MathHelper.cos(rotationYaw * 0.017453292f));
             }
-            i = EnchantmentHelper.getFireAspectModifier((EntityLivingBase) shooter);
+            i = EnchantmentHelper.getFireAspectModifier((LivingEntity) shooter);
             if (i > 0 && !entity.isBurning()) {
                 entity.setFire(1);
             }
@@ -109,15 +109,15 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
+    public void writeAdditional(CompoundNBT nbttagcompound) {
         super.writeAdditional(nbttagcompound);
         if (thrownItem != null) {
-            nbttagcompound.put("thrI", thrownItem.write(new NBTTagCompound()));
+            nbttagcompound.put("thrI", thrownItem.write(new CompoundNBT()));
         }
     }
 
     @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
+    public void readAdditional(CompoundNBT nbttagcompound) {
         super.readAdditional(nbttagcompound);
         setThrownItemStack(ItemStack.read(nbttagcompound.getCompound("thrI")));
     }

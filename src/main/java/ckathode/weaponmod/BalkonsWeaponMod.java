@@ -13,6 +13,7 @@ import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
+import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseBlowgunDart;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseBlunderShot;
@@ -50,23 +51,22 @@ import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.network.WMMessagePipeline;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
-import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTier;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IConditionSerializer;
+import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -166,7 +166,7 @@ public class BalkonsWeaponMod {
     public static EntityType<EntityBoomerang> entityBoomerang;
     public static EntityType<EntityMortarShell> entityMortarShell;
     public final WeaponModConfig modConfig;
-    public final IConditionSerializer configConditional;
+    public final IConditionSerializer<?> configConditional;
     public WMMessagePipeline messagePipeline;
 
     public BalkonsWeaponMod() {
@@ -207,37 +207,37 @@ public class BalkonsWeaponMod {
         modConfig.addReloadTimeSetting("mortar", 50);
         modConfig.loadConfig(ModLoadingContext.get());
 
-        configConditional = CraftingHelper.register(new ResourceLocation(MOD_ID, "config_conditional"),
-                json -> () -> modConfig.isEnabled(JsonUtils.getString(json, "weapon")));
+        configConditional = CraftingHelper.register(new WMConfigCondition.Serializer(modConfig));
     }
 
     public void setup(FMLCommonSetupEvent event) {
-        DeferredWorkQueue.runLater(() -> {
-            messagePipeline = new WMMessagePipeline();
-            proxy.registerEventHandlers();
-            proxy.registerPackets(messagePipeline);
-        });
+        messagePipeline = new WMMessagePipeline();
+        proxy.registerEventHandlers();
+        proxy.registerPackets(messagePipeline);
     }
 
     public void setupClient(FMLClientSetupEvent event) {
         proxy.registerRenderersEntity();
     }
 
-    private <T extends Entity> EntityType<T> createEntityType(Class<T> entityClass, String name,
-                                                              Function<? super World, ? extends T> factory) {
-        return createEntityType(entityClass, name, -1, -1, false, factory);
+    private <T extends Entity> EntityType<T> createEntityType(String name, EntitySize size,
+                                                              EntityType.IFactory<T> factory) {
+        return createEntityType(name, size, -1, -1, true, factory);
     }
 
     @SuppressWarnings("unchecked")
     // Helper method because Forge is too stupid to handle generics properly...
-    private <T extends Entity> EntityType<T> createEntityType(Class<T> entityClass, String name,
-                                                              int range, int updateFrequency, boolean velocityUpdates,
-                                                              Function<? super World, ? extends T> factory) {
-        EntityType.Builder<T> builder = EntityType.Builder.create(entityClass, factory);
-        if (range >= 0 && updateFrequency >= 0)
-            builder.tracker(range, updateFrequency, velocityUpdates);
+    private <T extends Entity> EntityType<T> createEntityType(String name, EntitySize size, int range,
+                                                              int updateFrequency, boolean velocityUpdates,
+                                                              EntityType.IFactory<T> factory) {
+        EntityType.Builder<T> builder = EntityType.Builder.create(factory, EntityClassification.MISC);
+        if (range >= 0)
+            builder.setTrackingRange(range);
+        if (updateFrequency >= 0)
+            builder.setUpdateInterval(updateFrequency);
         return (EntityType<T>) builder
-                .customSpawning(null, false) // Workaround for weird issues with getShooter()
+                .size(size.width, size.height)
+                .setShouldReceiveVelocityUpdates(velocityUpdates)
                 .build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
     }
 
@@ -245,45 +245,52 @@ public class BalkonsWeaponMod {
     public void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         IForgeRegistry<EntityType<?>> registry = event.getRegistry();
         registry.register(entitySpear =
-                createEntityType(EntitySpear.class, EntitySpear.NAME, EntitySpear::new));
+                createEntityType(EntitySpear.NAME, new EntitySize(0.5f, 0.5f, false), EntitySpear::new));
 
         registry.register(entityKnife =
-                createEntityType(EntityKnife.class, EntityKnife.NAME, EntityKnife::new));
+                createEntityType(EntityKnife.NAME, new EntitySize(0.5f, 0.5f, false), EntityKnife::new));
 
         registry.register(entityJavelin =
-                createEntityType(EntityJavelin.class, EntityJavelin.NAME, EntityJavelin::new));
+                createEntityType(EntityJavelin.NAME, new EntitySize(0.5f, 0.5f, false), EntityJavelin::new));
 
         registry.register(entityMusketBullet =
-                createEntityType(EntityMusketBullet.class, EntityMusketBullet.NAME, EntityMusketBullet::new));
+                createEntityType(EntityMusketBullet.NAME, new EntitySize(0.5f, 0.5f, false), EntityMusketBullet::new));
 
         registry.register(entityCrossbowBolt =
-                createEntityType(EntityCrossbowBolt.class, EntityCrossbowBolt.NAME, EntityCrossbowBolt::new));
+                createEntityType(EntityCrossbowBolt.NAME, new EntitySize(0.5f, 0.5f, false), EntityCrossbowBolt::new));
 
         registry.register(entityBlowgunDart =
-                createEntityType(EntityBlowgunDart.class, EntityBlowgunDart.NAME, EntityBlowgunDart::new));
+                createEntityType(EntityBlowgunDart.NAME, new EntitySize(0.5f, 0.5f, false), EntityBlowgunDart::new));
 
         registry.register(entityDynamite =
-                createEntityType(EntityDynamite.class, EntityDynamite.NAME, EntityDynamite::new));
+                createEntityType(EntityDynamite.NAME, new EntitySize(0.5f, 0.5f, false), EntityDynamite::new));
 
         registry.register(entityFlail =
-                createEntityType(EntityFlail.class, EntityFlail.NAME, EntityFlail::new));
+                createEntityType(EntityFlail.NAME, new EntitySize(0.5f, 0.5f, false), EntityFlail::new));
 
         registry.register(entityCannon =
-                createEntityType(EntityCannon.class, EntityCannon.NAME, EntityCannon::new));
+                createEntityType(EntityCannon.NAME, new EntitySize(1.5f, 1.0f, false), EntityCannon::new));
         registry.register(entityCannonBall =
-                createEntityType(EntityCannonBall.class, EntityCannonBall.NAME, EntityCannonBall::new));
+                createEntityType(EntityCannonBall.NAME, new EntitySize(0.5f, 0.5f, false), EntityCannonBall::new));
 
         registry.register(entityBlunderShot =
-                createEntityType(EntityBlunderShot.class, EntityBlunderShot.NAME, EntityBlunderShot::new));
+                createEntityType(EntityBlunderShot.NAME, new EntitySize(0.5f, 0.5f, false), EntityBlunderShot::new));
 
         registry.register(entityDummy =
-                createEntityType(EntityDummy.class, EntityDummy.NAME, 64, 20, false, EntityDummy::new));
+                createEntityType(EntityDummy.NAME, new EntitySize(0.5f, 1.9f, false), 4, 20, true, EntityDummy::new));
 
         registry.register(entityBoomerang =
-                createEntityType(EntityBoomerang.class, EntityBoomerang.NAME, EntityBoomerang::new));
+                createEntityType(EntityBoomerang.NAME, new EntitySize(0.5f, 0.5f, false), EntityBoomerang::new));
 
         registry.register(entityMortarShell =
-                createEntityType(EntityMortarShell.class, EntityMortarShell.NAME, EntityMortarShell::new));
+                createEntityType(EntityMortarShell.NAME, new EntitySize(0.5f, 0.5f, false), EntityMortarShell::new));
+    }
+
+    @SubscribeEvent
+    public void setEyeHeight(EntityEvent.EyeHeight e) {
+        if (e.getEntity() instanceof EntityProjectile) {
+            e.setNewHeight(0);
+        }
     }
 
     @SubscribeEvent
@@ -407,30 +414,30 @@ public class BalkonsWeaponMod {
 
     private void registerDispenseBehavior() {
         if (musketBullet != null) {
-            BlockDispenser.registerDispenseBehavior(musketBullet, new DispenseMusketBullet());
+            DispenserBlock.registerDispenseBehavior(musketBullet, new DispenseMusketBullet());
         }
         if (javelin != null) {
-            BlockDispenser.registerDispenseBehavior(javelin, new DispenseJavelin());
+            DispenserBlock.registerDispenseBehavior(javelin, new DispenseJavelin());
         }
         if (bolt != null) {
-            BlockDispenser.registerDispenseBehavior(bolt, new DispenseCrossbowBolt());
+            DispenserBlock.registerDispenseBehavior(bolt, new DispenseCrossbowBolt());
         }
         for (Item dart : darts.values()) {
-            BlockDispenser.registerDispenseBehavior(dart, new DispenseBlowgunDart());
+            DispenserBlock.registerDispenseBehavior(dart, new DispenseBlowgunDart());
         }
         if (dynamite != null) {
-            BlockDispenser.registerDispenseBehavior(dynamite, new DispenseDynamite());
+            DispenserBlock.registerDispenseBehavior(dynamite, new DispenseDynamite());
         }
         if (blunderShot != null) {
-            BlockDispenser.registerDispenseBehavior(blunderShot, new DispenseBlunderShot());
+            DispenserBlock.registerDispenseBehavior(blunderShot, new DispenseBlunderShot());
         }
         if (cannonBall != null) {
             DispenseCannonBall behavior = new DispenseCannonBall();
-            BlockDispenser.registerDispenseBehavior(cannonBall, behavior);
-            BlockDispenser.registerDispenseBehavior(Items.GUNPOWDER, behavior);
+            DispenserBlock.registerDispenseBehavior(cannonBall, behavior);
+            DispenserBlock.registerDispenseBehavior(Items.GUNPOWDER, behavior);
         }
         if (mortarShell != null) {
-            BlockDispenser.registerDispenseBehavior(mortarShell, new DispenseMortarShell());
+            DispenserBlock.registerDispenseBehavior(mortarShell, new DispenseMortarShell());
         }
     }
 

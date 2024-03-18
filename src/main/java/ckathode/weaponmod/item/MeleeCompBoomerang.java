@@ -2,15 +2,15 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
@@ -21,9 +21,9 @@ public class MeleeCompBoomerang extends MeleeComponent {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world,
-                                     EntityLivingBase entityliving, int i) {
-        if (entityliving instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer) entityliving;
+                                     LivingEntity entityliving, int i) {
+        if (entityliving instanceof PlayerEntity) {
+            PlayerEntity entityplayer = (PlayerEntity) entityliving;
             if (itemstack.isEmpty()) {
                 return;
             }
@@ -49,7 +49,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                 if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                     entityboomerang.setFire(100);
                 }
-                world.spawnEntity(entityboomerang);
+                world.addEntity(entityboomerang);
             }
             world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
                     SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
@@ -71,16 +71,16 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
+                                                    Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (hand != EnumHand.MAIN_HAND) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+        if (hand != Hand.MAIN_HAND) {
+            return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
         if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 }

@@ -8,22 +8,24 @@ import ckathode.weaponmod.item.RangedComponent;
 import ckathode.weaponmod.network.MsgCannonFire;
 import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.glfw.GLFW;
 
 @OnlyIn(Dist.CLIENT)
 public class WMClientEventHandler {
     @SubscribeEvent
     public void onMouseClick(InputEvent.MouseInputEvent e) {
-        EntityPlayerSP player = Minecraft.getInstance().player;
+        ClientPlayerEntity player = Minecraft.getInstance().player;
         if (player == null || !player.world.isRemote || Minecraft.getInstance().currentScreen != null) {
             return;
         }
@@ -34,9 +36,11 @@ public class WMClientEventHandler {
                 if (ieri != null) {
                     float reach = ieri.getExtendedReach(player.world, player, itemstack);
                     RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
-                    if (raytraceResult != null && raytraceResult.entity != null && raytraceResult.entity != player && raytraceResult.entity.hurtResistantTime == 0) {
-                        Minecraft.getInstance().playerController.attackEntity(player,
-                                raytraceResult.entity);
+                    if (!(raytraceResult instanceof EntityRayTraceResult)) return;
+                    EntityRayTraceResult ertr = (EntityRayTraceResult) raytraceResult;
+                    Entity entity = ertr.getEntity();
+                    if (entity != null && entity != player && entity.hurtResistantTime == 0) {
+                        Minecraft.getInstance().playerController.attackEntity(player, entity);
                     }
                 }
             }
@@ -59,8 +63,8 @@ public class WMClientEventHandler {
         if (!e.player.world.isRemote) {
             return;
         }
-        if (e.phase == TickEvent.Phase.START && e.player instanceof EntityPlayerSP) {
-            EntityPlayerSP entity = (EntityPlayerSP) e.player;
+        if (e.phase == TickEvent.Phase.START && e.player instanceof ClientPlayerEntity) {
+            ClientPlayerEntity entity = (ClientPlayerEntity) e.player;
             if (entity.movementInput.jump && entity.getRidingEntity() instanceof EntityCannon && ((EntityCannon) entity.getRidingEntity()).isLoaded()) {
                 MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getRidingEntity());
                 BalkonsWeaponMod.instance.messagePipeline.sendToServer(msg);

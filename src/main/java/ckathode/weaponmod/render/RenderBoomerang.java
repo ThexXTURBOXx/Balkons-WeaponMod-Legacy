@@ -3,21 +3,21 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
+import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderBoomerang extends Render<EntityBoomerang> {
-    public RenderBoomerang(RenderManager renderManager) {
+public class RenderBoomerang extends EntityRenderer<EntityBoomerang> {
+    public RenderBoomerang(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
@@ -39,7 +39,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
             if (renderOutlines) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityboomerang));
+                GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityboomerang));
             }
             GlStateManager.normal3f(0.0f, 1.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -93,7 +93,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             }
             tessellator.draw();
             if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
+                GlStateManager.tearDownSolidRenderingTextureCombine();
                 GlStateManager.disableColorMaterial();
             }
             GlStateManager.enableCull();
@@ -111,11 +111,11 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             GlStateManager.rotatef(90.0f, 1.0f, 0.0f, 0.0f);
             if (renderOutlines) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityboomerang));
+                GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityboomerang));
             }
             itemRender.renderItem(getStackToRender(entityboomerang), TransformType.NONE);
             if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
+                GlStateManager.tearDownSolidRenderingTextureCombine();
                 GlStateManager.disableColorMaterial();
             }
             GlStateManager.disableRescaleNormal();

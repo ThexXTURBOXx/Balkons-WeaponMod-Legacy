@@ -2,23 +2,23 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
+import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHandSide;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class RenderFlail extends Render<EntityFlail> {
-    public RenderFlail(RenderManager renderManager) {
+public class RenderFlail extends EntityRenderer<EntityFlail> {
+    public RenderFlail(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
@@ -47,7 +47,7 @@ public class RenderFlail extends Render<EntityFlail> {
         GlStateManager.translatef(-4.0f, 0.0f, 0.0f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entityflail));
+            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityflail));
         }
         GlStateManager.normal3f(0.15f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -74,16 +74,16 @@ public class RenderFlail extends Render<EntityFlail> {
             tessellator.draw();
         }
         if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
+            GlStateManager.tearDownSolidRenderingTextureCombine();
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
-        EntityPlayer shooter = entityflail.shootingEntity != null
-                ? entityflail.getEntityWorld().getPlayerEntityByUUID(entityflail.shootingEntity) : null;
+        PlayerEntity shooter = entityflail.shootingEntity != null
+                ? entityflail.getEntityWorld().getPlayerByUuid(entityflail.shootingEntity) : null;
         if (shooter != null && !renderOutlines) {
-            int k = (((EntityLivingBase) shooter).getPrimaryHand() == EnumHandSide.RIGHT) ?
+            int k = (((LivingEntity) shooter).getPrimaryHand() == HandSide.RIGHT) ?
                     1 : -1;
             float f13 = shooter.getSwingProgress(f1);
             float f14 = MathHelper.sin(MathHelper.sqrt(f13) * 3.1415927f);
@@ -97,7 +97,7 @@ public class RenderFlail extends Render<EntityFlail> {
             double d9;
             double d10;
             if (renderManager.options != null && renderManager.options.thirdPersonView <= 0 && shooter == Minecraft.getInstance().player) {
-                double f16 = renderManager.options.fovSetting;
+                double f16 = renderManager.options.fov;
                 f16 /= 100.0f;
                 Vec3d vec3d = new Vec3d(k * -0.36 * f16, -0.045 * f16, 0.4);
                 vec3d = vec3d.rotatePitch(-(shooter.prevRotationPitch + (shooter.rotationPitch - shooter.prevRotationPitch) * f1) * 0.017453292f);
@@ -120,7 +120,7 @@ public class RenderFlail extends Render<EntityFlail> {
             double d14 = (float) (d7 - d11);
             double d15 = (float) (d8 - d12) + d10;
             double d16 = (float) (d9 - d13);
-            GlStateManager.disableTexture2D();
+            GlStateManager.disableTexture();
             GlStateManager.disableLighting();
             vertexbuffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
             for (int i2 = 0; i2 <= 16; ++i2) {
@@ -130,7 +130,7 @@ public class RenderFlail extends Render<EntityFlail> {
             }
             tessellator.draw();
             GlStateManager.enableLighting();
-            GlStateManager.enableTexture2D();
+            GlStateManager.enableTexture();
             super.doRender(entityflail, d, d1, d2, f, f1);
         }
     }

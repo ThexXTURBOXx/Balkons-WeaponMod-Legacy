@@ -4,21 +4,21 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import java.util.Random;
 import javax.annotation.Nonnull;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
-import net.minecraft.init.Items;
-import net.minecraft.init.Particles;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.DispenserTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityDispenser;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 
-public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
+public class DispenseCannonBall extends DefaultDispenseItemBehavior {
     private final Random rand = new Random();
     private boolean normalDispense = false;
 
@@ -28,8 +28,8 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
         boolean canfire = false;
         normalDispense = false;
         TileEntity tileentity = blocksource.getWorld().getTileEntity(blocksource.getBlockPos());
-        if (tileentity instanceof TileEntityDispenser) {
-            TileEntityDispenser dispenser = (TileEntityDispenser) tileentity;
+        if (tileentity instanceof DispenserTileEntity) {
+            DispenserTileEntity dispenser = (DispenserTileEntity) tileentity;
             Item itemtocheck = null;
             if (itemstack.getItem() == Items.GUNPOWDER) {
                 itemtocheck = BalkonsWeaponMod.cannonBall;
@@ -49,15 +49,15 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
             normalDispense = true;
             return super.dispenseStack(blocksource, itemstack);
         }
-        EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
+        Direction face = blocksource.getBlockState().get(DispenserBlock.FACING);
         double xvel = face.getXOffset() * 1.5;
         double yvel = face.getYOffset() * 1.5;
         double zvel = face.getZOffset() * 1.5;
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        IPosition pos = DispenserBlock.getDispensePosition(blocksource);
         EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getWorld(), pos.getX() + xvel,
                 pos.getY() + yvel, pos.getZ() + zvel);
         entitycannonball.shoot(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
-        blocksource.getWorld().spawnEntity(entitycannonball);
+        blocksource.getWorld().addEntity(entitycannonball);
         itemstack.split(1);
         return itemstack;
     }
@@ -75,11 +75,11 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
         super.spawnDispenseParticles(blocksource, face);
         if (!normalDispense) {
-            IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-            blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
+            IPosition pos = DispenserBlock.getDispensePosition(blocksource);
+            blocksource.getWorld().addParticle(ParticleTypes.FLAME, pos.getX() + face.getXOffset(),
                     pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
         }
     }

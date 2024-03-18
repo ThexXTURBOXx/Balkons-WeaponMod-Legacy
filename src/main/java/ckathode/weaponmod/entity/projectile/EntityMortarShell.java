@@ -5,16 +5,19 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Particles;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
@@ -22,18 +25,18 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
 
     public float explosiveSize;
 
-    public EntityMortarShell(World world) {
-        super(BalkonsWeaponMod.entityMortarShell, world);
+    public EntityMortarShell(EntityType<EntityMortarShell> entityType, World world) {
+        super(entityType, world);
         explosiveSize = 2.0f;
     }
 
     public EntityMortarShell(World world, double d, double d1, double d2) {
-        this(world);
+        this(BalkonsWeaponMod.entityMortarShell, world);
         setPickupStatus(PickupStatus.ALLOWED);
         setPosition(d, d1, d2);
     }
 
-    public EntityMortarShell(World world, EntityLivingBase shooter) {
+    public EntityMortarShell(World world, LivingEntity shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
         setPickupStatusFromEntity(shooter);
@@ -46,23 +49,19 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        motionX += entity.motionX;
-        motionZ += entity.motionZ;
-        if (!entity.onGround) {
-            motionY += entity.motionY;
-        }
+        Vec3d entityMotion = entity.getMotion();
+        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
     }
 
     @Override
     public void tick() {
         super.tick();
-        double speed =
-                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        double speed = getMotion().length();
         double amount = 8.0;
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                world.addParticle(Particles.SMOKE, posX + motionX * i1 / amount,
-                        posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
+                Vec3d pos = getPositionVector().add(getMotion().scale(i1 / amount));
+                world.addParticle(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
             }
         }
     }
@@ -73,23 +72,21 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         }
         remove();
         Entity shooter = getShooter();
-        if (!(shooter instanceof EntityLivingBase)) return;
-        if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase) shooter) > 0) {
+        if (!(shooter instanceof LivingEntity)) return;
+        if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (LivingEntity) shooter) > 0) {
             float f1 = (float) EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
-                    (EntityLivingBase) shooter);
+                    (LivingEntity) shooter);
             explosiveSize += f1 / 4.0f;
         }
         boolean flag =
-                EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase) shooter) > 0;
+                EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (LivingEntity) shooter) > 0;
         PhysHelper.createAdvancedExplosion(world, this, posX, posY, posZ, explosiveSize,
-                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage.get(), true, flag, false);
+                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage.get(), true, flag, Explosion.Mode.DESTROY);
     }
 
     @Override
     public void onEntityHit(Entity entity) {
-        motionX -= motionX / 2.0;
-        motionZ -= motionZ / 2.0;
-        motionY -= motionY / 2.0;
+        setMotion(getMotion().scale(0.5));
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 5.0f)) {
             playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
@@ -97,20 +94,18 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
+    public void onGroundHit(BlockRayTraceResult raytraceResult) {
+        BlockPos blockpos = raytraceResult.getPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = world.getBlockState(blockpos);
-        motionX = raytraceResult.hitVec.x - posX;
-        motionY = raytraceResult.hitVec.y - posY;
-        motionZ = raytraceResult.hitVec.z - posZ;
-        float f1 =
-                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
-        posX -= motionX / f1 * 0.05;
-        posY -= motionY / f1 * 0.05;
-        posZ -= motionZ / f1 * 0.05;
+        setMotion(raytraceResult.getHitVec().subtract(getPositionVec()));
+        double f1 = getMotion().length();
+        Vec3d pos = getPositionVec().subtract(getMotion().scale(0.05 / f1));
+        posX = pos.x;
+        posY = pos.y;
+        posZ = pos.z;
         inGround = true;
         if (inBlockState != null) {
             inBlockState.onEntityCollision(world, blockpos, this);

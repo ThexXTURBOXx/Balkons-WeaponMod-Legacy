@@ -4,22 +4,22 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponModAttributes;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -58,32 +58,33 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
+    public float getBlockDamage(ItemStack itemstack, BlockState block) {
         if (canHarvestBlock(block)) {
             return meleeSpecs.blockDamage * 10.0f;
         }
         Material material = block.getMaterial();
-        return (material != Material.PLANTS && material != Material.VINE && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD) ? 1.0f : meleeSpecs.blockDamage;
+        return (material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD) ? 1.0f : meleeSpecs.blockDamage;
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState state) {
+    public boolean canHarvestBlock(BlockState state) {
         Block block = state.getBlock();
         return block == Blocks.COBWEB;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, IBlockState block,
-                                    BlockPos pos, EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, BlockState block,
+                                    BlockPos pos, LivingEntity entityliving) {
         if (block.getBlockHardness(world, pos) != 0.0f) {
-            itemstack.damageItem(meleeSpecs.dmgFromBlock, entityliving);
+            itemstack.damageItem(meleeSpecs.dmgFromBlock, entityliving,
+                    s -> s.sendBreakAnimation(Hand.MAIN_HAND));
         }
         return true;
     }
 
     @Override
-    public boolean hitEntity(ItemStack itemstack, EntityLivingBase entityliving,
-                             EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack itemstack, LivingEntity entityliving,
+                             LivingEntity attacker) {
         if (entityliving.hurtResistantTime == entityliving.maxHurtResistantTime) {
             float kb = getKnockBack(itemstack, entityliving, attacker);
             PhysHelper.knockBack(entityliving, attacker, kb);
@@ -94,19 +95,19 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 entityliving.hurtResistantTime -= (int) (f / getAttackDelay(itemstack, entityliving, attacker));
             }
         }
-        itemstack.damageItem(meleeSpecs.dmgFromEntity, attacker);
+        itemstack.damageItem(meleeSpecs.dmgFromEntity, attacker, s -> s.sendBreakAnimation(Hand.MAIN_HAND));
         return true;
     }
 
     @Override
-    public float getAttackDelay(ItemStack itemstack, EntityLivingBase entityliving,
-                                EntityLivingBase attacker) {
+    public float getAttackDelay(ItemStack itemstack, LivingEntity entityliving,
+                                LivingEntity attacker) {
         return meleeSpecs.attackDelay;
     }
 
     @Override
-    public float getKnockBack(ItemStack itemstack, EntityLivingBase entityliving,
-                              EntityLivingBase attacker) {
+    public float getKnockBack(ItemStack itemstack, LivingEntity entityliving,
+                              LivingEntity attacker) {
         return meleeSpecs.getKnockBack(weaponMaterial);
     }
 
@@ -120,36 +121,39 @@ public class MeleeComponent extends AbstractWeaponComponent {
         float dmg = getEntityDamage();
         if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-                    new AttributeModifier(weapon.getUUIDDamage(), "Weapon attack damage modifier", dmg, 0));
+                    new AttributeModifier(weapon.getUUIDDamage(), "Weapon attack damage modifier", dmg,
+                            AttributeModifier.Operation.ADDITION));
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
                     new AttributeModifier(weapon.getUUIDSpeed(), "Weapon attack speed modifier",
-                            -meleeSpecs.attackDelay, 0));
+                            -meleeSpecs.attackDelay, AttributeModifier.Operation.ADDITION));
         }
         if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
             multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getName(), new AttributeModifier(weapon.getUUID(),
-                    "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f, 0));
+                    "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
+                    AttributeModifier.Operation.ADDITION));
         }
         if (this instanceof IExtendedReachItem) {
             try {
                 multimap.put(WeaponModAttributes.WEAPON_REACH.getName(), new AttributeModifier(weapon.getUUID(),
                         "Weapon reach modifier",
-                        ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f, 0));
+                        ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
+                        AttributeModifier.Operation.ADDITION));
             } catch (NullPointerException ignored) {
             }
         }
     }
 
     @Override
-    public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity) {
-        if (entity instanceof EntityLivingBase) {
-            PhysHelper.prepareKnockbackOnEntity(player, (EntityLivingBase) entity);
+    public boolean onLeftClickEntity(ItemStack itemstack, PlayerEntity player, Entity entity) {
+        if (entity instanceof LivingEntity) {
+            PhysHelper.prepareKnockbackOnEntity(player, (LivingEntity) entity);
         }
         return false;
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
-        return EnumAction.NONE;
+    public UseAction getUseAction(ItemStack itemstack) {
+        return UseAction.NONE;
     }
 
     @Override
@@ -158,19 +162,19 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
+                                                    Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        return new ActionResult<>(EnumActionResult.PASS, itemstack);
+        return new ActionResult<>(ActionResultType.PASS, itemstack);
     }
 
     @Override
-    public void onUsingTick(ItemStack itemstack, EntityLivingBase entityliving, int count) {
+    public void onUsingTick(ItemStack itemstack, LivingEntity entityliving, int count) {
     }
 
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world,
-                                     EntityLivingBase entityliving, int i) {
+                                     LivingEntity entityliving, int i) {
     }
 
     @Override

@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import java.util.LinkedList;
 import java.util.function.Supplier;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
@@ -87,7 +87,7 @@ public class WMMessagePipeline {
         handler.send(PacketDistributor.ALL.noArg(), message);
     }
 
-    public <T extends WMMessage<T>> void sendTo(WMMessage<T> message, EntityPlayerMP player) {
+    public <T extends WMMessage<T>> void sendTo(WMMessage<T> message, ServerPlayerEntity player) {
         if (!(player instanceof FakePlayer)) {
             handler.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
         }

@@ -3,14 +3,14 @@ package ckathode.weaponmod.entity.projectile.dispense;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import java.util.Random;
 import javax.annotation.Nonnull;
-import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.init.Particles;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
@@ -48,10 +48,10 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
         super.spawnDispenseParticles(blocksource, face);
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
+        IPosition pos = DispenserBlock.getDispensePosition(blocksource);
+        blocksource.getWorld().addParticle(ParticleTypes.FLAME, pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.2, 0.0);
     }
 }

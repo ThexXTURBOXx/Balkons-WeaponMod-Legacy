@@ -3,9 +3,9 @@ package ckathode.weaponmod;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.IndirectEntityDamageSource;
 
-public class WeaponDamageSource extends EntityDamageSourceIndirect {
+public class WeaponDamageSource extends IndirectEntityDamageSource {
     private final EntityProjectile<?> projectileEntity;
     private final Entity shooterEntity;
 

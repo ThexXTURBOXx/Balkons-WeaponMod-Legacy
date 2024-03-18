@@ -3,24 +3,24 @@ package ckathode.weaponmod.entity.projectile.dispense;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import java.util.Random;
 import javax.annotation.Nonnull;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.block.DispenserBlock;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
-import net.minecraft.init.Particles;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 
-public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
+public class DispenseBlunderShot extends DefaultDispenseItemBehavior {
     private final Random rand = new Random();
 
     @Nonnull
     @Override
     public ItemStack dispenseStack(IBlockSource blocksource, ItemStack itemstack) {
-        EnumFacing face = blocksource.getBlockState().get(BlockDispenser.FACING);
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        Direction face = blocksource.getBlockState().get(DispenserBlock.FACING);
+        IPosition pos = DispenserBlock.getDispensePosition(blocksource);
         EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), face.getXOffset(), face.getYOffset(),
                 face.getZOffset());
@@ -35,10 +35,10 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
+    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
         super.spawnDispenseParticles(blocksource, face);
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        blocksource.getWorld().addParticle(Particles.FLAME, pos.getX() + face.getXOffset(),
+        IPosition pos = DispenserBlock.getDispensePosition(blocksource);
+        blocksource.getWorld().addParticle(ParticleTypes.FLAME, pos.getX() + face.getXOffset(),
                 pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
     }
 }

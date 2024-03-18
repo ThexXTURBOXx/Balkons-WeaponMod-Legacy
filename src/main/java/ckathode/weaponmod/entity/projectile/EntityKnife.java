@@ -4,13 +4,15 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
@@ -18,16 +20,16 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     private int soundTimer;
 
-    public EntityKnife(World world) {
-        super(BalkonsWeaponMod.entityKnife, world);
+    public EntityKnife(EntityType<EntityKnife> entityType, World world) {
+        super(entityType, world);
     }
 
     public EntityKnife(World world, double d, double d1, double d2) {
-        this(world);
+        this(BalkonsWeaponMod.entityKnife, world);
         setPosition(d, d1, d2);
     }
 
-    public EntityKnife(World world, EntityLivingBase shooter, ItemStack itemstack) {
+    public EntityKnife(World world, LivingEntity shooter, ItemStack itemstack) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
         setPickupStatusFromEntity(shooter);
@@ -42,11 +44,8 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        motionX += entity.motionX;
-        motionZ += entity.motionZ;
-        if (!entity.onGround) {
-            motionY += entity.motionY;
-        }
+        Vec3d entityMotion = entity.getMotion();
+        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
     }
 
     @Override
@@ -81,8 +80,9 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
                 remove();
             } else {
                 Entity shooter = getShooter();
-                if (shooter instanceof EntityLivingBase) {
-                    thrownItem.damageItem(2, (EntityLivingBase) shooter);
+                if (shooter instanceof LivingEntity) {
+                    thrownItem.damageItem(2, (LivingEntity) shooter, s -> {
+                    });
                 } else {
                     thrownItem.attemptDamageItem(2, rand, null);
                 }

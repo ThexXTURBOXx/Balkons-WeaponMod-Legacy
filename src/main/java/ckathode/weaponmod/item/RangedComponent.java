@@ -10,23 +10,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -71,36 +71,36 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
+    public float getBlockDamage(ItemStack itemstack, BlockState block) {
         return 0.0f;
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState block) {
+    public boolean canHarvestBlock(BlockState block) {
         return false;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, IBlockState block,
-                                    BlockPos pos, EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, BlockState block,
+                                    BlockPos pos, LivingEntity entityliving) {
         return false;
     }
 
     @Override
-    public boolean hitEntity(ItemStack itemstack, EntityLivingBase entityliving,
-                             EntityLivingBase attacker) {
+    public boolean hitEntity(ItemStack itemstack, LivingEntity entityliving,
+                             LivingEntity attacker) {
         return false;
     }
 
     @Override
-    public float getAttackDelay(ItemStack itemstack, EntityLivingBase entityliving,
-                                EntityLivingBase attacker) {
+    public float getAttackDelay(ItemStack itemstack, LivingEntity entityliving,
+                                LivingEntity attacker) {
         return 0.0f;
     }
 
     @Override
-    public float getKnockBack(ItemStack itemstack, EntityLivingBase entityliving,
-                              EntityLivingBase attacker) {
+    public float getKnockBack(ItemStack itemstack, LivingEntity entityliving,
+                              LivingEntity attacker) {
         return 0.0f;
     }
 
@@ -115,21 +115,21 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                                                                                                         +
                                                                                                         "reloadtime "
                                                                                                         + "modifier",
-                rangedSpecs.getReloadTime(), 0));
+                rangedSpecs.getReloadTime(), AttributeModifier.Operation.ADDITION));
     }
 
     @Override
-    public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity) {
+    public boolean onLeftClickEntity(ItemStack itemstack, PlayerEntity player, Entity entity) {
         return false;
     }
 
     @Override
-    public EnumAction getUseAction(ItemStack itemstack) {
+    public UseAction getUseAction(ItemStack itemstack) {
         ReloadState state = ReloadHelper.getReloadState(itemstack);
         if (state == ReloadState.STATE_READY) {
-            return EnumAction.BOW;
+            return UseAction.BOW;
         }
-        return EnumAction.NONE;
+        return UseAction.NONE;
     }
 
     @Override
@@ -138,29 +138,29 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
+                                                    Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (itemstack.isEmpty() || entityplayer.isHandActive()) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
         if (!hasAmmo(itemstack, world, entityplayer)) {
             soundEmpty(itemstack, world, entityplayer);
             setReloadState(itemstack, ReloadState.STATE_NONE);
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
         if (isReadyToFire(itemstack)) {
             soundCharge(itemstack, world, entityplayer);
             entityplayer.setActiveHand(hand);
-            return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+            return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
         }
         entityplayer.setActiveHand(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 
     @Override
-    public void onUsingTick(ItemStack itemstack, EntityLivingBase entityliving, int count) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
+    public void onUsingTick(ItemStack itemstack, LivingEntity entityliving, int count) {
+        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         if (ReloadHelper.getReloadState(itemstack) == ReloadState.STATE_NONE && getUseDuration(itemstack) - count >= getReloadDuration(itemstack)) {
             effectReloadDone(itemstack, entityplayer.world, entityplayer);
             setReloadState(itemstack, ReloadState.STATE_RELOADED);
@@ -169,8 +169,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world,
-                                     EntityLivingBase entityliving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
+                                     LivingEntity entityliving, int i) {
+        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         if (!isReloaded(itemstack)) {
             return;
         }
@@ -189,26 +189,26 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                               boolean flag) {
     }
 
-    public void soundEmpty(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    public void soundEmpty(ItemStack itemstack, World world, PlayerEntity entityplayer) {
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
                 SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.PLAYERS, 1.0f, 1.25f);
     }
 
-    public void soundCharge(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    public void soundCharge(ItemStack itemstack, World world, PlayerEntity entityplayer) {
     }
 
-    public void postShootingEffects(ItemStack itemstack, EntityPlayer entityplayer,
+    public void postShootingEffects(ItemStack itemstack, PlayerEntity entityplayer,
                                     World world) {
         effectPlayer(itemstack, entityplayer, world);
         effectShoot(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, entityplayer.rotationYaw,
                 entityplayer.rotationPitch);
     }
 
-    public abstract void effectReloadDone(ItemStack p0, World p1, EntityPlayer p2);
+    public abstract void effectReloadDone(ItemStack p0, World p1, PlayerEntity p2);
 
-    public abstract void fire(ItemStack p0, World p1, EntityLivingBase p2, int p3);
+    public abstract void fire(ItemStack p0, World p1, LivingEntity p2, int p3);
 
-    public abstract void effectPlayer(ItemStack p0, EntityPlayer p1, World p2);
+    public abstract void effectPlayer(ItemStack p0, PlayerEntity p1, World p2);
 
     public abstract void effectShoot(World p0, double p1, double p2, double p3,
                                      float p4, float p5);
@@ -238,12 +238,12 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return rangedSpecs.getAmmoItems();
     }
 
-    protected ItemStack findAmmo(EntityPlayer entityplayer) {
-        if (isAmmo(entityplayer.getHeldItem(EnumHand.OFF_HAND))) {
-            return entityplayer.getHeldItem(EnumHand.OFF_HAND);
+    protected ItemStack findAmmo(PlayerEntity entityplayer) {
+        if (isAmmo(entityplayer.getHeldItem(Hand.OFF_HAND))) {
+            return entityplayer.getHeldItem(Hand.OFF_HAND);
         }
-        if (isAmmo(entityplayer.getHeldItem(EnumHand.MAIN_HAND))) {
-            return entityplayer.getHeldItem(EnumHand.MAIN_HAND);
+        if (isAmmo(entityplayer.getHeldItem(Hand.MAIN_HAND))) {
+            return entityplayer.getHeldItem(Hand.MAIN_HAND);
         }
         for (int i = 0; i < entityplayer.inventory.getSizeInventory(); ++i) {
             ItemStack itemstack = entityplayer.inventory.getStackInSlot(i);
@@ -258,7 +258,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return getAmmoItems().contains(stack.getItem());
     }
 
-    protected boolean consumeAmmo(EntityPlayer entityplayer) {
+    protected boolean consumeAmmo(PlayerEntity entityplayer) {
         ItemStack itemAmmo = findAmmo(entityplayer);
         if (itemAmmo.isEmpty()) {
             return false;
@@ -270,12 +270,12 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return true;
     }
 
-    public boolean hasAmmoAndConsume(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    public boolean hasAmmoAndConsume(ItemStack itemstack, World world, PlayerEntity entityplayer) {
         return entityplayer.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || consumeAmmo(entityplayer);
     }
 
-    public boolean hasAmmo(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+    public boolean hasAmmo(ItemStack itemstack, World world, PlayerEntity entityplayer) {
         boolean flag = !findAmmo(entityplayer).isEmpty();
         return entityplayer.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || flag;

@@ -6,25 +6,30 @@ import ckathode.weaponmod.item.IItemWeapon;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemShield;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.item.ShieldItem;
+import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityDummy extends Entity {
     public static final String NAME = "dummy";
@@ -37,21 +42,18 @@ public class EntityDummy extends Entity {
             DataSerializers.VARINT);
     private int durability;
 
-    public EntityDummy(World world) {
-        super(BalkonsWeaponMod.entityDummy, world);
+    public EntityDummy(EntityType<EntityDummy> entityType, World world) {
+        super(entityType, world);
         preventEntitySpawning = true;
         rotationPitch = -20.0f;
         setRotation(rotationYaw, rotationPitch);
-        setSize(0.5f, 1.9f);
         durability = 50;
     }
 
     public EntityDummy(World world, double d, double d1, double d2) {
-        this(world);
+        this(BalkonsWeaponMod.entityDummy, world);
         setPosition(d, d1, d2);
-        motionX = 0.0;
-        motionY = 0.0;
-        motionZ = 0.0;
+        setMotion(Vec3d.ZERO);
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
@@ -62,6 +64,12 @@ public class EntityDummy extends Entity {
         dataManager.register(TIME_SINCE_HIT, 0);
         dataManager.register(ROCK_DIRECTION, (byte) 1);
         dataManager.register(CURRENT_DAMAGE, 0);
+    }
+
+    @Nonnull
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -97,20 +105,16 @@ public class EntityDummy extends Entity {
             durability -= (int) damage;
         } else if (damagesource instanceof WeaponDamageSource) {
             Entity entity = ((WeaponDamageSource) damagesource).getProjectile();
-            if (MathHelper.sqrt(entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ) > 0.5) {
-                entity.motionX *= 0.10000000149011612;
-                entity.motionY *= 0.10000000149011612;
-                entity.motionZ *= 0.10000000149011612;
+            if (entity.getMotion().length() > 0.5) {
+                entity.setMotion(entity.getMotion().scale(0.10000000149011612));
                 playRandomHitSound();
             } else {
-                entity.motionX = rand.nextFloat() - 0.5f;
-                entity.motionY = rand.nextFloat() - 0.5f;
-                entity.motionZ = rand.nextFloat() - 0.5f;
+                entity.setMotion(rand.nextFloat() - 0.5f, rand.nextFloat() - 0.5f, rand.nextFloat() - 0.5f);
             }
         } else {
             playRandomHitSound();
         }
-        if (durability <= 0 && world.getGameRules().getBoolean("doEntityDrops")) {
+        if (durability <= 0 && world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             dropAsItem(true, true);
         }
         markVelocityChanged();
@@ -153,19 +157,19 @@ public class EntityDummy extends Entity {
         prevPosY = posY;
         prevPosZ = posZ;
         if (onGround) {
-            motionX = 0.0;
-            motionY = 0.0;
-            motionZ = 0.0;
+            setMotion(Vec3d.ZERO);
         } else {
-            motionX *= 0.99;
-            motionZ *= 0.99;
-            motionY -= 0.05;
+            Vec3d motion = getMotion();
+            double motionX = motion.x * 0.99;
+            double motionZ = motion.z * 0.99;
+            double motionY = motion.y - 0.05;
             fallDistance += (float) (-motionY);
+            setMotion(motionX, motionY, motionZ);
         }
         setRotation(rotationYaw, rotationPitch);
-        move(MoverType.SELF, 0.0, motionY, 0.0);
+        move(MoverType.SELF, new Vec3d(0.0, getMotion().y, 0.0));
         List<Entity> list = world.getEntitiesInAABBexcluding(this, getBoundingBox().grow(0.2,
-                0.0, 0.2), EntitySelectors.pushableBy(this));
+                0.0, 0.2), EntityPredicates.pushableBy(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
                 if (!entity.isPassenger(this)) {
@@ -200,10 +204,10 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer entityplayer, @Nonnull EnumHand hand) {
+    public boolean processInitialInteract(PlayerEntity entityplayer, @Nonnull Hand hand) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
         if (!itemstack.isEmpty()) {
-            if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof ItemSword || itemstack.getItem() instanceof ItemBow || itemstack.getItem() instanceof ItemShield) {
+            if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof SwordItem || itemstack.getItem() instanceof BowItem || itemstack.getItem() instanceof ShieldItem) {
                 return false;
             }
         }
@@ -216,11 +220,11 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    protected void writeAdditional(@Nonnull NBTTagCompound nbttagcompound) {
+    protected void writeAdditional(@Nonnull CompoundNBT nbttagcompound) {
     }
 
     @Override
-    protected void readAdditional(@Nonnull NBTTagCompound nbttagcompound) {
+    protected void readAdditional(@Nonnull CompoundNBT nbttagcompound) {
         setPosition(posX, posY, posZ);
         setRotation(rotationYaw, rotationPitch);
     }

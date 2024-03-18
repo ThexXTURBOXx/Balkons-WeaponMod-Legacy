@@ -6,19 +6,19 @@ import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderJavelin extends Render<EntityJavelin> {
-    public RenderJavelin(RenderManager renderManager) {
+public class RenderJavelin extends EntityRenderer<EntityJavelin> {
+    public RenderJavelin(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
@@ -46,7 +46,7 @@ public class RenderJavelin extends Render<EntityJavelin> {
             GlStateManager.translatef(-4.0f, 0.0f, 0.0f);
             if (renderOutlines) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityjavelin));
+                GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityjavelin));
             }
             GlStateManager.normal3f(0.05625f, 0.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -73,7 +73,7 @@ public class RenderJavelin extends Render<EntityJavelin> {
                 tessellator.draw();
             }
             if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
+                GlStateManager.tearDownSolidRenderingTextureCombine();
                 GlStateManager.disableColorMaterial();
             }
             GlStateManager.disableRescaleNormal();
@@ -97,11 +97,11 @@ public class RenderJavelin extends Render<EntityJavelin> {
             GlStateManager.rotatef(180.0f, 0.0f, 1.0f, 0.0f);
             if (renderOutlines) {
                 GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityjavelin));
+                GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityjavelin));
             }
             itemRender.renderItem(getStackToRender(entityjavelin), TransformType.NONE);
             if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
+                GlStateManager.tearDownSolidRenderingTextureCombine();
                 GlStateManager.disableColorMaterial();
             }
             GlStateManager.disableRescaleNormal();

@@ -1,19 +1,19 @@
 package ckathode.weaponmod;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 
 public final class PlayerWeaponData {
     private static final DataParameter<Integer> WARHAMMER_LAST_SMASH_TICKS =
-            EntityDataManager.createKey(EntityPlayer.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> FLAIL_THROWN = EntityDataManager.createKey(EntityPlayer.class,
+            EntityDataManager.createKey(PlayerEntity.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> FLAIL_THROWN = EntityDataManager.createKey(PlayerEntity.class,
             DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> FLAIL_ENTITY_ID = EntityDataManager.createKey(EntityPlayer.class,
+    private static final DataParameter<Integer> FLAIL_ENTITY_ID = EntityDataManager.createKey(PlayerEntity.class,
             DataSerializers.VARINT);
 
-    public static void initPlayerWeaponData(EntityPlayer player) {
+    public static void initPlayerWeaponData(PlayerEntity player) {
         String playername = getPlayerName(player);
         BalkonsWeaponMod.modLog.trace("Initializing DataManager values for " + playername);
         EntityDataManager dataManager = player.getDataManager();
@@ -40,7 +40,7 @@ public final class PlayerWeaponData {
         }
     }
 
-    private static String getPlayerName(EntityPlayer player) {
+    private static String getPlayerName(PlayerEntity player) {
         // Needed since EntityConstructing event is fired too early in the
         // Entity constructor such that the GameProfile is not yet set
         String playername;
@@ -52,13 +52,13 @@ public final class PlayerWeaponData {
         return "player:" + playername;
     }
 
-    private static void unavailableError(EntityPlayer player, int id) {
+    private static void unavailableError(PlayerEntity player, int id) {
         BalkonsWeaponMod.modLog.error("DataManager ID " + id + " for " + getPlayerName(player) + " unavailable, " +
                                       "trying to reinitialize");
         initPlayerWeaponData(player);
     }
 
-    public static int getLastWarhammerSmashTicks(EntityPlayer player) {
+    public static int getLastWarhammerSmashTicks(PlayerEntity player) {
         try {
             return player.getDataManager().get(WARHAMMER_LAST_SMASH_TICKS);
         } catch (NullPointerException e) {
@@ -67,7 +67,7 @@ public final class PlayerWeaponData {
         }
     }
 
-    public static void setLastWarhammerSmashTicks(EntityPlayer player, int age) {
+    public static void setLastWarhammerSmashTicks(PlayerEntity player, int age) {
         try {
             player.getDataManager().set(WARHAMMER_LAST_SMASH_TICKS, age);
         } catch (NullPointerException e) {
@@ -75,7 +75,7 @@ public final class PlayerWeaponData {
         }
     }
 
-    public static boolean isFlailThrown(EntityPlayer player) {
+    public static boolean isFlailThrown(PlayerEntity player) {
         try {
             return player.getDataManager().get(FLAIL_THROWN);
         } catch (NullPointerException e) {
@@ -84,7 +84,7 @@ public final class PlayerWeaponData {
         }
     }
 
-    public static void setFlailThrown(EntityPlayer player, boolean flag) {
+    public static void setFlailThrown(PlayerEntity player, boolean flag) {
         try {
             player.getDataManager().set(FLAIL_THROWN, flag);
         } catch (NullPointerException e) {
@@ -92,7 +92,7 @@ public final class PlayerWeaponData {
         }
     }
 
-    public static int getFlailEntityId(EntityPlayer player) {
+    public static int getFlailEntityId(PlayerEntity player) {
         try {
             return player.getDataManager().get(FLAIL_ENTITY_ID);
         } catch (NullPointerException e) {
@@ -101,7 +101,7 @@ public final class PlayerWeaponData {
         }
     }
 
-    public static void setFlailEntityId(EntityPlayer player, int id) {
+    public static void setFlailEntityId(PlayerEntity player, int id) {
         try {
             player.getDataManager().set(FLAIL_ENTITY_ID, id);
         } catch (NullPointerException e) {

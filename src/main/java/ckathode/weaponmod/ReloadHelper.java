@@ -2,13 +2,13 @@ package ckathode.weaponmod;
 
 import javax.annotation.Nonnull;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public final class ReloadHelper {
 
     private static void initTagCompound(ItemStack itemstack) {
         if (itemstack.getTag() == null) {
-            itemstack.setTag(new NBTTagCompound());
+            itemstack.setTag(new CompoundNBT());
         }
     }
 

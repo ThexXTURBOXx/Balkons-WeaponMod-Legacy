@@ -1,53 +1,56 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
-import java.util.List;
 import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Particles;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.EndermanEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.network.play.server.SPacketChangeGameState;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.network.play.server.SChangeGameStatePacket;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceFluidMode;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
 
-public abstract class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
+public abstract class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrowEntity
         implements IProjectile, IEntityAdditionalSpawnData {
-    private static final Predicate<Entity> WEAPON_TARGETS = EntitySelectors.NOT_SPECTATING.and(
-            EntitySelectors.IS_ALIVE).and(Entity::canBeCollidedWith);
+    private static final Predicate<Entity> WEAPON_TARGETS = EntityPredicates.NOT_SPECTATING.and(
+            EntityPredicates.IS_ALIVE).and(Entity::canBeCollidedWith);
     private static final DataParameter<Byte> WEAPON_CRITICAL = EntityDataManager.createKey(EntityProjectile.class,
             DataSerializers.BYTE);
     protected int xTile;
     protected int yTile;
     protected int zTile;
     @Nullable
-    protected IBlockState inBlockState;
+    protected BlockState inBlockState;
     protected boolean inGround;
     public PickupStatus pickupStatus;
     protected int ticksInGround;
@@ -69,13 +72,18 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         pickupStatus = PickupStatus.DISALLOWED;
         extraDamage = 0.0f;
         knockBack = 0;
-        setSize(0.5f, 0.5f);
     }
 
     @Override
     protected void registerData() {
         super.registerData();
         dataManager.register(WEAPON_CRITICAL, (byte) 0);
+    }
+
+    @Nonnull
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -103,9 +111,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         return super.getShooter();
     }
 
-    protected void setPickupStatusFromEntity(EntityLivingBase entityliving) {
-        if (entityliving instanceof EntityPlayer) {
-            if (((EntityPlayer) entityliving).abilities.isCreativeMode) {
+    protected void setPickupStatusFromEntity(LivingEntity entityliving) {
+        if (entityliving instanceof PlayerEntity) {
+            if (((PlayerEntity) entityliving).abilities.isCreativeMode) {
                 setPickupStatus(PickupStatus.CREATIVE_ONLY);
             } else {
                 setPickupStatus(BalkonsWeaponMod.instance.modConfig.allCanPickup.get()
@@ -123,24 +131,17 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
 
     @Override
     public void shoot(double x, double y, double z, float speed, float deviation) {
-        float f = MathHelper.sqrt(x * x + y * y + z * z);
-        x /= f;
-        y /= f;
-        z /= f;
-        x += rand.nextGaussian() * 0.007499999832361937 * deviation;
-        y += rand.nextGaussian() * 0.007499999832361937 * deviation;
-        z += rand.nextGaussian() * 0.007499999832361937 * deviation;
-        x *= speed;
-        y *= speed;
-        z *= speed;
-        motionX = x;
-        motionY = y;
-        motionZ = z;
-        float f2 = MathHelper.sqrt(x * x + z * z);
-        float n = (float) (MathHelper.atan2(x, z) * 180.0 / 3.141592653589793);
+        Vec3d v = new Vec3d(x, y, z).normalize()
+                .add(rand.nextGaussian() * 0.0075 * deviation,
+                        rand.nextGaussian() * 0.0075 * deviation,
+                        rand.nextGaussian() * 0.0075 * deviation)
+                .scale(speed);
+        setMotion(v);
+        float f2 = MathHelper.sqrt(horizontalMag(v));
+        float n = (float) (MathHelper.atan2(v.x, v.z) * 180.0 / Math.PI);
         rotationYaw = n;
         prevRotationYaw = n;
-        float n2 = (float) (MathHelper.atan2(y, f2) * 180.0 / 3.141592653589793);
+        float n2 = (float) (MathHelper.atan2(v.y, f2) * 180.0 / Math.PI);
         rotationPitch = n2;
         prevRotationPitch = n2;
         ticksInGround = 0;
@@ -148,15 +149,14 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
 
     @Override
     public void setVelocity(double d, double d1, double d2) {
-        motionX = d;
-        motionY = d1;
-        motionZ = d2;
+        Vec3d v = new Vec3d(d, d1, d2);
+        setMotion(v);
         if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
-            float f = MathHelper.sqrt(d * d + d2 * d2);
-            float n = (float) (MathHelper.atan2(d, d2) * 180.0 / 3.141592653589793);
+            float f = MathHelper.sqrt(horizontalMag(v));
+            float n = (float) (MathHelper.atan2(d, d2) * 180.0 / Math.PI);
             rotationYaw = n;
             prevRotationYaw = n;
-            float n2 = (float) (MathHelper.atan2(d1, f) * 180.0 / 3.141592653589793);
+            float n2 = (float) (MathHelper.atan2(d1, f) * 180.0 / Math.PI);
             rotationPitch = n2;
             prevRotationPitch = n2;
             setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
@@ -172,17 +172,16 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     @Override
     public void baseTick() {
         super.baseTick();
+        Vec3d motion = getMotion();
         if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
-            float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-            float n = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
-            rotationYaw = n;
-            prevRotationYaw = n;
-            float n2 = (float) (MathHelper.atan2(motionY, f) * 180.0 / 3.141592653589793);
-            rotationPitch = n2;
-            prevRotationPitch = n2;
+            float f = MathHelper.sqrt(Entity.horizontalMag(motion));
+            rotationYaw = (float) (MathHelper.atan2(motion.x, motion.z) * 180.0 / Math.PI);
+            rotationPitch = (float) (MathHelper.atan2(motion.y, f) * 180.0 / Math.PI);
+            prevRotationYaw = rotationYaw;
+            prevRotationPitch = rotationPitch;
         }
         BlockPos blockpos = new BlockPos(xTile, yTile, zTile);
-        IBlockState iblockstate = world.getBlockState(blockpos);
+        BlockState iblockstate = world.getBlockState(blockpos);
         if (iblockstate.getMaterial() != Material.AIR) {
             VoxelShape voxelShape = iblockstate.getCollisionShape(world, blockpos);
             if (!voxelShape.isEmpty() && voxelShape.getBoundingBox().offset(blockpos).contains(
@@ -195,11 +194,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         }
         if (inGround) {
             if (!iblockstate.equals(inBlockState) &&
-                !world.isCollisionBoxesEmpty(null, getBoundingBox().grow(0.05))) {
+                !world.areCollisionShapesEmpty(this.getBoundingBox().grow(0.05))) {
                 inGround = false;
-                motionX *= rand.nextFloat() * 0.2f;
-                motionY *= rand.nextFloat() * 0.2f;
-                motionZ *= rand.nextFloat() * 0.2f;
+                setMotion(motion.mul(rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f));
                 ticksInGround = 0;
                 ticksInAir = 0;
             } else {
@@ -214,62 +211,80 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         }
         timeInGround = 0;
         ++ticksInAir;
-        Vec3d vec3d = new Vec3d(posX, posY, posZ);
-        Vec3d vec3d2 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
-        RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, RayTraceFluidMode.NEVER, true, false);
-        vec3d = new Vec3d(posX, posY, posZ);
-        vec3d2 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
-        if (raytraceresult != null) {
-            vec3d2 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+        Vec3d vec3d = getPositionVector();
+        Vec3d vec3d2 = vec3d.add(getMotion());
+        RayTraceResult raytraceresult = world.rayTraceBlocks(new RayTraceContext(vec3d, vec3d2,
+                RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, this));
+        if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
+            vec3d2 = raytraceresult.getHitVec();
         }
-        Entity entity = findEntity(vec3d, vec3d2);
-        if (entity != null) {
-            raytraceresult = new RayTraceResult(entity);
-        }
-        if (raytraceresult != null) {
-            if (raytraceresult.entity != null) {
-                onEntityHit(raytraceresult.entity);
-            } else {
-                onGroundHit(raytraceresult);
+
+        while (isAlive()) {
+            EntityRayTraceResult entityraytraceresult = rayTraceEntities(vec3d, vec3d2);
+            if (entityraytraceresult != null) {
+                raytraceresult = entityraytraceresult;
             }
+            if (raytraceresult instanceof EntityRayTraceResult) {
+                final Entity entity = ((EntityRayTraceResult) raytraceresult).getEntity();
+                final Entity entity2 = getShooter();
+                if (entity instanceof PlayerEntity && entity2 instanceof PlayerEntity && !((PlayerEntity) entity2).canAttackPlayer((PlayerEntity) entity)) {
+                    raytraceresult = null;
+                    entityraytraceresult = null;
+                }
+            }
+            if (raytraceresult != null && raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+                if (raytraceresult instanceof EntityRayTraceResult) {
+                    onEntityHit(((EntityRayTraceResult) raytraceresult).getEntity());
+                } else {
+                    onGroundHit((BlockRayTraceResult) raytraceresult);
+                }
+                isAirBorne = true;
+            }
+            if (entityraytraceresult == null) {
+                break;
+            }
+            if (getPierceLevel() <= 0) {
+                break;
+            }
+            raytraceresult = null;
         }
+
         if (getIsCritical()) {
+            Vec3d motion2 = getMotion();
             for (int i1 = 0; i1 < 2; ++i1) {
-                world.addParticle(Particles.CRIT, posX + motionX * i1 / 4.0,
-                        posY + motionY * i1 / 4.0, posZ + motionZ * i1 / 4.0, -motionX,
-                        -motionY + 0.2, -motionZ);
+                Vec3d pos = getPositionVector().add(motion2.scale(i1 / 4.0));
+                world.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, -motion2.x,
+                        -motion2.y + 0.2, -motion2.z);
             }
         }
-        posX += motionX;
-        posY += motionY;
-        posZ += motionZ;
+        Vec3d newPos = getPositionVec().add(getMotion());
+        posX = newPos.x;
+        posY = newPos.y;
+        posZ = newPos.z;
         if (aimRotation()) {
-            float f2 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-            float n3 = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
+            Vec3d motion2 = getMotion();
+            double f2 = MathHelper.sqrt(horizontalMag(motion2));
+            float n3 = (float) (MathHelper.atan2(motion2.x, motion2.z) * 180.0 / Math.PI);
             rotationYaw = n3;
             prevRotationYaw = n3;
-            float n4 = (float) (MathHelper.atan2(motionY, f2) * 180.0 / 3.141592653589793);
+            float n4 = (float) (MathHelper.atan2(motion2.y, f2) * 180.0 / Math.PI);
             rotationPitch = n4;
             prevRotationPitch = n4;
         }
         float res = getAirResistance();
         float grav = getGravity();
         if (isInWater()) {
+            Vec3d motion2 = getMotion();
             beenInGround = true;
             for (int i2 = 0; i2 < 4; ++i2) {
                 float f3 = 0.25f;
-                world.addParticle(Particles.BUBBLE, posX - motionX * f3,
-                        posY - motionY * f3, posZ - motionZ * f3, motionX, motionY,
-                        motionZ);
+                Vec3d pos = getPositionVector().subtract(motion2.scale(f3));
+                world.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, motion2.x,
+                        motion2.y + 0.2, motion2.z);
             }
             res *= 0.6f;
         }
-        motionX *= res;
-        motionY *= res;
-        motionZ *= res;
-        if (!hasNoGravity()) {
-            motionY -= grav;
-        }
+        setMotion(getMotion().scale(res).subtract(0, hasNoGravity() ? 0 : grav, 0));
         setPosition(posX, posY, posZ);
         doBlockCollisions();
     }
@@ -280,43 +295,41 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     public void applyEntityHitEffects(Entity entity) {
-        if (isBurning() && !(entity instanceof EntityEnderman)) {
+        if (isBurning() && !(entity instanceof EndermanEntity)) {
             entity.setFire(5);
         }
-        if (entity instanceof EntityLivingBase) {
-            EntityLivingBase entityliving = (EntityLivingBase) entity;
+        if (entity instanceof LivingEntity) {
+            LivingEntity entityliving = (LivingEntity) entity;
             if (knockBack > 0) {
-                float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-                if (f > 0.0f) {
-                    entity.addVelocity(motionX * knockBack * 0.6 / f, 0.1,
-                            motionZ * knockBack * 0.6 / f);
+                double f = horizontalMag(getMotion());
+                if (f > 0.0) {
+                    Vec3d v = getMotion().scale(knockBack * 0.6 / f);
+                    entity.addVelocity(v.x, 0.1, v.z);
                 }
             }
             Entity shooter = getShooter();
-            if (shooter instanceof EntityLivingBase) {
+            if (shooter instanceof LivingEntity) {
                 EnchantmentHelper.applyThornEnchantments(entityliving, shooter);
-                EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shooter, entityliving);
+                EnchantmentHelper.applyArthropodEnchantments((LivingEntity) shooter, entityliving);
             }
-            if (shooter instanceof EntityPlayerMP && !shootingEntity.equals(entity.getUniqueID()) && entity instanceof EntityPlayer) {
-                ((EntityPlayerMP) shooter).connection.sendPacket(new SPacketChangeGameState(6, 0.0f));
+            if (shooter instanceof ServerPlayerEntity && !shootingEntity.equals(entity.getUniqueID()) && entity instanceof PlayerEntity) {
+                ((ServerPlayerEntity) shooter).connection.sendPacket(new SChangeGameStatePacket(6, 0.0f));
             }
         }
     }
 
-    public void onGroundHit(RayTraceResult raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
+    public void onGroundHit(BlockRayTraceResult raytraceResult) {
+        BlockPos blockpos = raytraceResult.getPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = world.getBlockState(blockpos);
-        motionX = raytraceResult.hitVec.x - posX;
-        motionY = raytraceResult.hitVec.y - posY;
-        motionZ = raytraceResult.hitVec.z - posZ;
-        float f1 =
-                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
-        posX -= motionX / f1 * 0.05;
-        posY -= motionY / f1 * 0.05;
-        posZ -= motionZ / f1 * 0.05;
+        setMotion(raytraceResult.getHitVec().subtract(getPositionVec()));
+        double f1 = getMotion().length();
+        Vec3d pos = getPositionVector().subtract(getMotion().scale(0.05 / f1));
+        posX = pos.x;
+        posY = pos.y;
+        posZ = pos.z;
         inGround = true;
         beenInGround = true;
         setIsCritical(false);
@@ -328,39 +341,14 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     protected void bounceBack() {
-        motionX *= -0.1;
-        motionY *= -0.1;
-        motionZ *= -0.1;
+        setMotion(getMotion().scale(-0.1));
         rotationYaw += 180.0f;
         prevRotationYaw += 180.0f;
         ticksInAir = 0;
     }
 
-    @Nullable
-    protected Entity findEntity(Vec3d vec3d, Vec3d vec3d1) {
-        Entity entity = null;
-        List<Entity> list = world.getEntitiesInAABBexcluding(this,
-                getBoundingBox().expand(motionX, motionY, motionZ).grow(1.0),
-                WEAPON_TARGETS);
-        double d = 0.0;
-        for (Entity entity2 : list) {
-            if (!entity2.getUniqueID().equals(shootingEntity) || ticksInAir >= 5) {
-                AxisAlignedBB axisalignedbb = entity2.getBoundingBox().grow(0.3);
-                RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d1);
-                if (raytraceresult != null) {
-                    double d2 = vec3d.squareDistanceTo(raytraceresult.hitVec);
-                    if (d2 < d || d == 0.0) {
-                        entity = entity2;
-                        d = d2;
-                    }
-                }
-            }
-        }
-        return entity;
-    }
-
     public double getTotalVelocity() {
-        return MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        return getMotion().length();
     }
 
     public boolean aimRotation() {
@@ -429,7 +417,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         return pickupStatus;
     }
 
-    public boolean canPickup(EntityPlayer entityplayer) {
+    public boolean canPickup(PlayerEntity entityplayer) {
         if (pickupStatus == PickupStatus.ALLOWED) {
             return true;
         }
@@ -440,7 +428,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     @Override
-    public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
+    public void onCollideWithPlayer(@Nonnull PlayerEntity entityplayer) {
         if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote) {
             ItemStack item = getPickupItem();
             if (item == null) {
@@ -456,7 +444,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         }
     }
 
-    protected void onItemPickup(EntityPlayer entityplayer) {
+    protected void onItemPickup(PlayerEntity entityplayer) {
         entityplayer.onItemPickup(this, 1);
     }
 
@@ -466,12 +454,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     @Override
-    public float getEyeHeight() {
-        return 0.0f;
-    }
-
-    @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
+    public void writeAdditional(CompoundNBT nbttagcompound) {
         nbttagcompound.putInt("xTile", xTile);
         nbttagcompound.putInt("yTile", yTile);
         nbttagcompound.putInt("zTile", zTile);
@@ -485,7 +468,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
+    public void readAdditional(CompoundNBT nbttagcompound) {
         xTile = nbttagcompound.getInt("xTile");
         yTile = nbttagcompound.getInt("yTile");
         zTile = nbttagcompound.getInt("zTile");

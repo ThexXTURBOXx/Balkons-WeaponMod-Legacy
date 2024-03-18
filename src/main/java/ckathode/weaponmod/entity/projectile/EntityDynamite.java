@@ -5,16 +5,19 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Particles;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class EntityDynamite extends EntityProjectile<EntityDynamite> {
@@ -23,19 +26,19 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     private int explodefuse;
     private boolean extinguished;
 
-    public EntityDynamite(World world) {
-        super(BalkonsWeaponMod.entityDynamite, world);
+    public EntityDynamite(EntityType<EntityDynamite> entityType, World world) {
+        super(entityType, world);
         setPickupStatus(PickupStatus.DISALLOWED);
         extinguished = false;
         explodefuse = rand.nextInt(30) + 20;
     }
 
     public EntityDynamite(World world, double d, double d1, double d2) {
-        this(world);
+        this(BalkonsWeaponMod.entityDynamite, world);
         setPosition(d, d1, d2);
     }
 
-    public EntityDynamite(World world, EntityLivingBase shooter, int i) {
+    public EntityDynamite(World world, LivingEntity shooter, int i) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
         explodefuse = i;
@@ -48,11 +51,8 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        motionX += entity.motionX;
-        motionZ += entity.motionZ;
-        if (!entity.onGround) {
-            motionY += entity.motionY;
-        }
+        Vec3d entityMotion = entity.getMotion();
+        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
     }
 
     @Override
@@ -73,9 +73,9 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                     1.2f / (rand.nextFloat() * 0.2f + 0.9f));
             for (int k = 0; k < 8; ++k) {
                 float f6 = 0.25f;
-                world.addParticle(Particles.POOF, posX - motionX * f6,
-                        posY - motionY * f6, posZ - motionZ * f6, motionX, motionY,
-                        motionZ);
+                Vec3d motion = getMotion();
+                Vec3d pos = getPositionVector().subtract(motion.scale(f6));
+                world.addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, motion.x, motion.y, motion.z);
             }
         }
         --explodefuse;
@@ -84,7 +84,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                 detonate();
                 remove();
             } else {
-                world.addParticle(Particles.SMOKE, posX, posY, posZ, 0.0, 0.0,
+                world.addParticle(ParticleTypes.SMOKE, posX, posY, posZ, 0.0, 0.0,
                         0.0);
             }
         }
@@ -102,23 +102,18 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
+    public void onGroundHit(BlockRayTraceResult raytraceResult) {
+        BlockPos blockpos = raytraceResult.getPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = world.getBlockState(blockpos);
-        motionX = raytraceResult.hitVec.x - posX;
-        motionY = raytraceResult.hitVec.y - posY;
-        motionZ = raytraceResult.hitVec.z - posZ;
-        float f1 =
-                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
-        posX -= motionX / f1 * 0.05;
-        posY -= motionY / f1 * 0.05;
-        posZ -= motionZ / f1 * 0.05;
-        motionX *= -0.2;
-        motionZ *= -0.2;
-        if (raytraceResult.sideHit == EnumFacing.UP) {
+        Vec3d motion = raytraceResult.getHitVec().subtract(getPositionVec());
+        setMotion(motion);
+        Vec3d newPos = getPositionVec().subtract(motion.normalize().scale(0.05));
+        setPosition(newPos.x, newPos.y, newPos.z);
+        setMotion(-0.2 * motion.x, motion.y, -0.2 * motion.z);
+        if (raytraceResult.getFace() == Direction.UP) {
             inGround = true;
             beenInGround = true;
         } else {
@@ -140,7 +135,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         }
         float f = 2.0f;
         PhysHelper.createAdvancedExplosion(world, this, posX, posY, posZ, f,
-                BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage.get(), true, false, false);
+                BalkonsWeaponMod.instance.modConfig.dynamiteDoesBlockDamage.get(), true, false, Explosion.Mode.DESTROY);
     }
 
     @Override
@@ -171,14 +166,14 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
+    public void writeAdditional(CompoundNBT nbttagcompound) {
         super.writeAdditional(nbttagcompound);
         nbttagcompound.putByte("fuse", (byte) explodefuse);
         nbttagcompound.putBoolean("off", extinguished);
     }
 
     @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
+    public void readAdditional(CompoundNBT nbttagcompound) {
         super.readAdditional(nbttagcompound);
         explodefuse = nbttagcompound.getByte("fuse");
         extinguished = nbttagcompound.getBoolean("off");

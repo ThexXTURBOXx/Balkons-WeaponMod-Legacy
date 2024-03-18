@@ -3,25 +3,25 @@ package ckathode.weaponmod;
 import ckathode.weaponmod.network.MsgExplosion;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 public final class PhysHelper {
-    private static double kbMotionX = 0.0;
-    private static double kbMotionY = 0.0;
-    private static double kbMotionZ = 0.0;
+    private static Vec3d kbMotion = Vec3d.ZERO;
     private static int knockBackModifier = 0;
 
     public static AdvancedExplosion createStandardExplosion(World world, Entity entity, double d,
                                                             double d1, double d2, float size,
-                                                            boolean flame, boolean smoke) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, smoke);
+                                                            boolean flame, Explosion.Mode mode) {
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
         explosion.doEntityExplosion();
         explosion.doBlockExplosion();
         explosion.doParticleExplosion(true, true);
@@ -34,8 +34,8 @@ public final class PhysHelper {
                                                             boolean destroyBlocks,
                                                             boolean spawnSmallParticles,
                                                             boolean spawnBigParticles, boolean flame,
-                                                            boolean smoke) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, smoke);
+                                                            Explosion.Mode mode) {
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
         explosion.doEntityExplosion();
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -54,8 +54,8 @@ public final class PhysHelper {
                                                             boolean destroyBlocks,
                                                             boolean spawnSmallParticles,
                                                             boolean spawnBigParticles, boolean flame,
-                                                            boolean smoke) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, smoke);
+                                                            Explosion.Mode mode) {
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
         explosion.doEntityExplosion(damagesource);
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -71,8 +71,8 @@ public final class PhysHelper {
     public static AdvancedExplosion createAdvancedExplosion(World world, Entity entity, double d,
                                                             double d1, double d2, float size,
                                                             boolean destroyBlocks, boolean spawnParticles,
-                                                            boolean flame, boolean smoke) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, smoke);
+                                                            boolean flame, Explosion.Mode mode) {
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
         explosion.doEntityExplosion();
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -86,7 +86,7 @@ public final class PhysHelper {
     }
 
     public static void sendExplosion(World world, AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
-        if (world instanceof WorldServer && !world.isRemote) {
+        if (world instanceof ServerWorld && !world.isRemote) {
             MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
             BalkonsWeaponMod.instance.messagePipeline.sendToAllAround(msg,
                     new PacketDistributor.TargetPoint(explosion.explosionX, explosion.explosionY,
@@ -94,10 +94,8 @@ public final class PhysHelper {
         }
     }
 
-    public static void knockBack(EntityLivingBase entityliving, EntityLivingBase attacker, float knockback) {
-        entityliving.motionX = kbMotionX;
-        entityliving.motionY = kbMotionY;
-        entityliving.motionZ = kbMotionZ;
+    public static void knockBack(LivingEntity entityliving, LivingEntity attacker, float knockback) {
+        entityliving.setMotion(kbMotion);
         double dx = attacker.posX - entityliving.posX;
         double dz;
         for (dz = attacker.posZ - entityliving.posZ; dx * dx + dz * dz < 1E-4D;
@@ -107,32 +105,29 @@ public final class PhysHelper {
         entityliving.attackedAtYaw =
                 (float) (Math.atan2(dz, dx) * 180.0 / 3.141592653589793) - entityliving.rotationYaw;
         float f = MathHelper.sqrt(dx * dx + dz * dz);
-        entityliving.motionX -= dx / f * knockback;
-        entityliving.motionY += knockback;
-        entityliving.motionZ -= dz / f * knockback;
-        if (entityliving.motionY > 0.4) {
-            entityliving.motionY = 0.4;
+        Vec3d motion = entityliving.getMotion().add(new Vec3d(-dx / f * knockback, knockback, -dz / f * knockback));
+        if (motion.y > 0.4) {
+            motion = new Vec3d(motion.x, 0.4, motion.z);
         }
+        entityliving.setMotion(motion);
         if (knockBackModifier > 0) {
             dx = -Math.sin(Math.toRadians(attacker.rotationYaw)) * knockBackModifier * 0.5;
             dz = Math.cos(Math.toRadians(attacker.rotationYaw)) * knockBackModifier * 0.5;
             entityliving.addVelocity(dx, 0.1, dz);
         }
-        if (entityliving instanceof EntityPlayerMP) {
-            ((EntityPlayerMP) entityliving).connection.sendPacket(new SPacketEntityVelocity(entityliving));
+        if (entityliving instanceof ServerPlayerEntity) {
+            ((ServerPlayerEntity) entityliving).connection.sendPacket(new SEntityVelocityPacket(entityliving));
         }
         knockBackModifier = 0;
-        kbMotionX = (kbMotionY = (kbMotionZ = 0.0));
+        kbMotion = Vec3d.ZERO;
     }
 
-    public static void prepareKnockbackOnEntity(EntityLivingBase attacker, EntityLivingBase entity) {
+    public static void prepareKnockbackOnEntity(LivingEntity attacker, LivingEntity entity) {
         knockBackModifier = EnchantmentHelper.getKnockbackModifier(attacker);
         if (attacker.isSprinting()) {
             ++knockBackModifier;
         }
-        kbMotionX = entity.motionX;
-        kbMotionY = entity.motionY;
-        kbMotionZ = entity.motionZ;
+        kbMotion = entity.getMotion();
     }
 
 }

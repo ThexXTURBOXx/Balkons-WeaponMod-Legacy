@@ -3,16 +3,16 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityDummy;
 import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderDummy extends Render<EntityDummy> {
+public class RenderDummy extends EntityRenderer<EntityDummy> {
     private final ModelDummy modelDummy;
 
-    public RenderDummy(RenderManager renderManager) {
+    public RenderDummy(EntityRendererManager renderManager) {
         super(renderManager);
         modelDummy = new ModelDummy();
         shadowSize = 1.0f;
@@ -38,11 +38,11 @@ public class RenderDummy extends Render<EntityDummy> {
         GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitydummy));
+            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entitydummy));
         }
         modelDummy.render(entitydummy, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
+            GlStateManager.tearDownSolidRenderingTextureCombine();
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.popMatrix();

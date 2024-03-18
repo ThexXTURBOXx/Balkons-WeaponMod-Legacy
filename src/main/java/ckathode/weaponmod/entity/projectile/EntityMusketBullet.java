@@ -4,27 +4,29 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Particles;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     public static final String NAME = "bullet";
 
-    public EntityMusketBullet(World world) {
-        super(BalkonsWeaponMod.entityMusketBullet, world);
+    public EntityMusketBullet(EntityType<EntityMusketBullet> entityType, World world) {
+        super(entityType, world);
         setPickupStatus(PickupStatus.DISALLOWED);
     }
 
     public EntityMusketBullet(World world, double d, double d1, double d2) {
-        this(world);
+        this(BalkonsWeaponMod.entityMusketBullet, world);
         setPosition(d, d1, d2);
     }
 
-    public EntityMusketBullet(World world, EntityLivingBase shooter) {
+    public EntityMusketBullet(World world, LivingEntity shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
     }
@@ -36,11 +38,8 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        motionX += entity.motionX;
-        motionZ += entity.motionZ;
-        if (!entity.onGround) {
-            motionY += entity.motionY;
-        }
+        Vec3d entityMotion = entity.getMotion();
+        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
     }
 
     @Override
@@ -48,7 +47,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         super.tick();
         if (inGround) {
             if (rand.nextInt(4) == 0) {
-                world.addParticle(Particles.SMOKE, posX, posY, posZ, 0.0, 0.0,
+                world.addParticle(ParticleTypes.SMOKE, posX, posY, posZ, 0.0, 0.0,
                         0.0);
             }
             return;
@@ -57,8 +56,8 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         double amount = 16.0;
         if (speed > 2.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                world.addParticle(Particles.POOF, posX + motionX * i1 / amount,
-                        posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
+                Vec3d pos = getPositionVector().add(getMotion().scale(i1 / amount));
+                world.addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
             }
         }
     }

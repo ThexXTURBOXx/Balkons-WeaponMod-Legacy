@@ -2,14 +2,14 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import javax.annotation.Nonnull;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.UseAction;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
@@ -25,8 +25,8 @@ public class ItemJavelin extends WMItem {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, @Nonnull World world,
-                                     @Nonnull EntityLivingBase entityLiving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+                                     @Nonnull LivingEntity entityLiving, int i) {
+        PlayerEntity entityplayer = (PlayerEntity) entityLiving;
         if (itemstack.isEmpty()) {
             return;
         }
@@ -45,7 +45,7 @@ public class ItemJavelin extends WMItem {
             entityjavelin.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
                     f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
             entityjavelin.setIsCritical(crit);
-            world.spawnEntity(entityjavelin);
+            world.addEntity(entityjavelin);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
@@ -64,20 +64,20 @@ public class ItemJavelin extends WMItem {
 
     @Nonnull
     @Override
-    public EnumAction getUseAction(@Nonnull ItemStack itemstack) {
-        return EnumAction.BOW;
+    public UseAction getUseAction(@Nonnull ItemStack itemstack) {
+        return UseAction.BOW;
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
-                                                    @Nonnull EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, PlayerEntity entityplayer,
+                                                    @Nonnull Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 
 }

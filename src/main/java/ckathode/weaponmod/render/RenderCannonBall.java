@@ -4,15 +4,15 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderCannonBall extends Render<EntityCannonBall> {
-    public RenderCannonBall(RenderManager renderManager) {
+public class RenderCannonBall extends EntityRenderer<EntityCannonBall> {
+    public RenderCannonBall(EntityRendererManager renderManager) {
         super(renderManager);
         shadowSize = 0.5f;
     }
@@ -32,7 +32,7 @@ public class RenderCannonBall extends Render<EntityCannonBall> {
         GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
         if (renderOutlines) {
             GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitycannonball));
+            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entitycannonball));
         }
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(-0.5, 0.5, -0.5).tex(0.0, 1.0).endVertex();
@@ -61,7 +61,7 @@ public class RenderCannonBall extends Render<EntityCannonBall> {
         vertexbuffer.pos(0.5, -0.5, 0.5).tex(0.0, 1.0).endVertex();
         tessellator.draw();
         if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
+            GlStateManager.tearDownSolidRenderingTextureCombine();
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.enableLighting();

@@ -5,27 +5,29 @@ import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.RangedComponent;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     public static final String NAME = "shot";
 
-    public EntityBlunderShot(World world) {
-        super(BalkonsWeaponMod.entityBlunderShot, world);
+    public EntityBlunderShot(EntityType<EntityBlunderShot> entityType, World world) {
+        super(entityType, world);
         setPickupStatus(PickupStatus.DISALLOWED);
     }
 
     public EntityBlunderShot(World world, double x, double y, double z) {
-        this(world);
+        this(BalkonsWeaponMod.entityBlunderShot, world);
         setPosition(x, y, z);
     }
 
-    public EntityBlunderShot(World world, EntityLivingBase shooter) {
+    public EntityBlunderShot(World world, LivingEntity shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
     }
@@ -37,11 +39,8 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        motionX += entity.motionX;
-        motionZ += entity.motionZ;
-        if (!entity.onGround) {
-            motionY += entity.motionY;
-        }
+        Vec3d entityMotion = entity.getMotion();
+        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
     }
 
     @Override
@@ -91,22 +90,22 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         return new ItemStack(BalkonsWeaponMod.blunderShot);
     }
 
-    public static void fireSpreadShot(World world, EntityLivingBase entityliving,
+    public static void fireSpreadShot(World world, LivingEntity entityliving,
                                       RangedComponent item, ItemStack itemstack) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
+        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         for (int i = 0; i < 10; ++i) {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
             entity.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }
-            world.spawnEntity(entity);
+            world.addEntity(entity);
         }
     }
 
     public static void fireSpreadShot(World world, double x, double y, double z) {
         for (int i = 0; i < 10; ++i) {
-            world.spawnEntity(new EntityBlunderShot(world, x, y, z));
+            world.addEntity(new EntityBlunderShot(world, x, y, z));
         }
     }
 
@@ -115,7 +114,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         for (int i2 = 0; i2 < 10; ++i2) {
             EntityBlunderShot entityblundershot = new EntityBlunderShot(world, d, d1, d2);
             entityblundershot.shoot(i, j, k, 5.0f, 15.0f);
-            world.spawnEntity(entityblundershot);
+            world.addEntity(entityblundershot);
         }
     }
 }
