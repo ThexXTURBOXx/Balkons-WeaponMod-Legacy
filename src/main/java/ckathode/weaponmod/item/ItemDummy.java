@@ -59,7 +59,7 @@ public class ItemDummy extends WMItem {
                 EntityDummy entitydummy = new EntityDummy(world, raytraceresult.getHitVec().x + 0.5,
                         raytraceresult.getHitVec().y + (flag1 ? 0.38 : 1.0), raytraceresult.getHitVec().z + 0.5);
                 entitydummy.rotationYaw = entityplayer.rotationYaw;
-                if (!world.isCollisionBoxesEmpty(entitydummy, entitydummy.getBoundingBox().grow(-0.1))) {
+                if (!world.hasNoCollisions(entitydummy, entitydummy.getBoundingBox().grow(-0.1))) {
                     return new ActionResult<>(ActionResultType.FAIL, itemstack);
                 } else {
                     if (!world.isRemote) {

@@ -217,11 +217,12 @@ public class EntityCannon extends BoatEntity {
     }
 
     @Override
-    public void fall(float f, float f1) {
-        super.fall(f, f1);
+    public boolean onLivingFall(float f, float f1) {
+        super.onLivingFall(f, f1);
         int i = MathHelper.floor(f);
         i *= 2;
         attackEntityFrom(DamageSource.FALL, (float) i);
+        return false;
     }
 
     public void handleReloadTime() {

@@ -180,13 +180,14 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public void fall(float f, float f1) {
-        super.fall(f, f1);
+    public boolean onLivingFall(float f, float f1) {
+        super.onLivingFall(f, f1);
         if (!onGround) {
-            return;
+            return false;
         }
         int i = MathHelper.floor(f);
         attackEntityFrom(DamageSource.FALL, (float) i);
+        return false;
     }
 
     public void dropAsItem(boolean destroyed, boolean noCreative) {

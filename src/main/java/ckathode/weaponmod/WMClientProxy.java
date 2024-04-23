@@ -1,19 +1,5 @@
 package ckathode.weaponmod;
 
-import ckathode.weaponmod.entity.EntityCannon;
-import ckathode.weaponmod.entity.EntityDummy;
-import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
-import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
-import ckathode.weaponmod.entity.projectile.EntityBoomerang;
-import ckathode.weaponmod.entity.projectile.EntityCannonBall;
-import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
-import ckathode.weaponmod.entity.projectile.EntityDynamite;
-import ckathode.weaponmod.entity.projectile.EntityFlail;
-import ckathode.weaponmod.entity.projectile.EntityJavelin;
-import ckathode.weaponmod.entity.projectile.EntityKnife;
-import ckathode.weaponmod.entity.projectile.EntityMortarShell;
-import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
-import ckathode.weaponmod.entity.projectile.EntitySpear;
 import ckathode.weaponmod.render.GuiOverlayReloaded;
 import ckathode.weaponmod.render.RenderBlowgunDart;
 import ckathode.weaponmod.render.RenderBlunderShot;
@@ -46,20 +32,19 @@ public class WMClientProxy extends WMCommonProxy {
 
     @Override
     public void registerRenderersEntity() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityKnife.class, RenderKnife::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySpear.class, RenderSpear::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityJavelin.class, RenderJavelin::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, RenderMusketBullet::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityCrossbowBolt.class, RenderCrossbowBolt::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBlowgunDart.class, RenderBlowgunDart::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityDynamite.class, RenderDynamite::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityFlail.class, RenderFlail::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityCannon.class, RenderCannon::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityCannonBall.class, RenderCannonBall::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBlunderShot.class, RenderBlunderShot::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, RenderDummy::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBoomerang.class, RenderBoomerang::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, RenderMusketBullet::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMortarShell.class, RenderMortarShell::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityKnife, RenderKnife::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entitySpear, RenderSpear::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityJavelin, RenderJavelin::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityMusketBullet, RenderMusketBullet::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityCrossbowBolt, RenderCrossbowBolt::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityBlowgunDart, RenderBlowgunDart::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityDynamite, RenderDynamite::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityFlail, RenderFlail::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityCannon, RenderCannon::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityCannonBall, RenderCannonBall::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityBlunderShot, RenderBlunderShot::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityDummy, RenderDummy::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityBoomerang, RenderBoomerang::new);
+        RenderingRegistry.registerEntityRenderingHandler(BalkonsWeaponMod.entityMortarShell, RenderMortarShell::new);
     }
 }

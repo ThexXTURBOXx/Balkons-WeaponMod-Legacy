@@ -192,14 +192,19 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         if (arrowShake > 0) {
             --arrowShake;
         }
+
+        if (isWet()) {
+            extinguish();
+        }
+
         if (inGround) {
             if (!iblockstate.equals(inBlockState) &&
-                !world.areCollisionShapesEmpty(this.getBoundingBox().grow(0.05))) {
+                world.hasNoCollisions(getBoundingBox().grow(0.06))) {
                 inGround = false;
                 setMotion(motion.mul(rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f));
                 ticksInGround = 0;
                 ticksInAir = 0;
-            } else {
+            } else if (!world.isRemote) {
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {

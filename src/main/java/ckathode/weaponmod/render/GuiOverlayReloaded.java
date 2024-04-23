@@ -56,7 +56,7 @@ public class GuiOverlayReloaded extends AbstractGui {
             offset = 0;
         }
 
-        MainWindow window = Minecraft.getInstance().mainWindow;
+        MainWindow window = Minecraft.getInstance().getMainWindow();
         int x0 = window.getScaledWidth() / 2 + (hand == Hand.OFF_HAND ?
                 (offHandSide == HandSide.LEFT ? -120 : 91)
                 : -91 - 1 + currentItem * 20);
@@ -65,7 +65,7 @@ public class GuiOverlayReloaded extends AbstractGui {
         int width = hand == Hand.OFF_HAND ? 29 : 24;
         int height = (int) (f * 24);
 
-        blitOffset = -90; // at the same level as the hotbar itself
+        setBlitOffset(-90); // at the same level as the hotbar itself
         mc.getRenderManager().textureManager.bindTexture(WeaponModResources.Gui.OVERLAY);
         blit(x0, y0 - height, tx, offset + 24 - height, width, height);
     }

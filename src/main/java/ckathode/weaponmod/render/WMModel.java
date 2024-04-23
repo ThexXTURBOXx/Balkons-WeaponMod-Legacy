@@ -1,20 +1,40 @@
 package ckathode.weaponmod.render;
 
-import javax.annotation.Nonnull;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.entity.model.RendererModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class WMModel<T extends Entity> extends EntityModel<T> {
 
+    private final List<ModelRenderer> renderers = new ArrayList<>();
+
     @Override
-    public void render(@Nonnull T entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        for (RendererModel model : boxList) {
-            model.render(f5);
+    @ParametersAreNonnullByDefault
+    public void render(MatrixStack ms, IVertexBuilder buf, int lm, int ov, float r, float g, float b, float a) {
+        for (ModelRenderer model : renderers) {
+            model.render(ms, buf, lm, ov, r, g, b, a);
         }
     }
 
-    public void setRotation(RendererModel model, float x, float y, float z) {
+    @Override
+    @ParametersAreNonnullByDefault
+    public void accept(ModelRenderer renderer) {
+        super.accept(renderer);
+        renderers.add(renderer);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void setRotationAngles(T t, float v, float v1, float v2, float v3, float v4) {
+    }
+
+    @ParametersAreNonnullByDefault
+    public void setRotation(ModelRenderer model, float x, float y, float z) {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;

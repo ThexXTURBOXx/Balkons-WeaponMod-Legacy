@@ -1,6 +1,9 @@
 package ckathode.weaponmod;
 
 import com.google.common.collect.Sets;
+import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -93,23 +96,37 @@ public class AdvancedExplosion extends Explosion {
         if (!blocksCalculated) {
             calculateBlockExplosion();
         }
-        for (BlockPos blockpos : getAffectedBlockPositions()) {
-            BlockState iblockstate = worldObj.getBlockState(blockpos);
-            if (!iblockstate.isAir(worldObj, blockpos)) {
-                if (iblockstate.canDropFromExplosion(worldObj, blockpos, this)) {
-                    TileEntity tileentity = iblockstate.hasTileEntity() ? worldObj.getTileEntity(blockpos) : null;
+
+        ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
+        List<BlockPos> positions = getAffectedBlockPositions();
+        Collections.shuffle(positions, worldObj.rand);
+        for (BlockPos blockpos : positions) {
+            BlockState blockstate = worldObj.getBlockState(blockpos);
+            Block block = blockstate.getBlock();
+            if (!blockstate.isAir(worldObj, blockpos)) {
+                BlockPos blockpos1 = blockpos.toImmutable();
+                worldObj.getProfiler().startSection("explosion_blocks");
+                if (blockstate.canDropFromExplosion(worldObj, blockpos, this) && worldObj instanceof ServerWorld) {
+                    TileEntity tileentity = blockstate.hasTileEntity() ? worldObj.getTileEntity(blockpos) : null;
                     LootContext.Builder lcBuilder =
                             new LootContext.Builder((ServerWorld) worldObj)
                                     .withRandom(worldObj.rand)
                                     .withParameter(LootParameters.POSITION, blockpos)
                                     .withParameter(LootParameters.TOOL, ItemStack.EMPTY)
                                     .withNullableParameter(LootParameters.BLOCK_ENTITY, tileentity)
+                                    .withNullableParameter(LootParameters.THIS_ENTITY, this.exploder)
                                     .withParameter(LootParameters.EXPLOSION_RADIUS, explosionSize);
-                    Block.spawnDrops(iblockstate, lcBuilder);
+                    blockstate.getDrops(lcBuilder).forEach((s) -> {
+                        func_229976_a_(objectarraylist, s, blockpos1);
+                    });
                 }
-                worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
-                iblockstate.onBlockExploded(worldObj, blockpos, this);
+
+                blockstate.onBlockExploded(worldObj, blockpos, this);
             }
+        }
+
+        for (Pair<ItemStack, BlockPos> pair : objectarraylist) {
+            Block.spawnAsEntity(worldObj, pair.getSecond(), pair.getFirst());
         }
     }
 

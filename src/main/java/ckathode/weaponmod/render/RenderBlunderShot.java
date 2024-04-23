@@ -2,84 +2,75 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
-import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.BufferBuilder;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderBlunderShot extends EntityRenderer<EntityBlunderShot> {
+public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
+
     public RenderBlunderShot(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
     @Override
-    public void doRender(@Nonnull EntityBlunderShot entityblundershot, double d, double d1,
-                         double d2, float f, float f1) {
-        bindEntityTexture(entityblundershot);
-        GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
-        GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
-        GlStateManager.translated(d, d1, d2);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.scalef(0.04f, 0.04f, 0.04f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityblundershot));
-        }
-        GlStateManager.normal3f(0.05625f, 0.0f, 0.0f);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.0).endVertex();
-        vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.3125).endVertex();
-        vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.3125).endVertex();
-        tessellator.draw();
-        GlStateManager.normal3f(-0.05625f, 0.0f, 0.0f);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.0).endVertex();
-        vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.3125).endVertex();
-        vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.3125).endVertex();
-        tessellator.draw();
+    @ParametersAreNonnullByDefault
+    public void render(EntityBlunderShot entityblundershot, float f, float f1,
+                       MatrixStack ms, IRenderTypeBuffer bufs, int lm) {
+        ms.push();
+        IVertexBuilder builder = bufs.getBuffer(RenderType.getEntityCutout(getEntityTexture(entityblundershot)));
+        ms.scale(0.04f, 0.04f, 0.04f);
+        MatrixStack.Entry last = ms.getLast();
+        drawVertex(last, builder, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, 0.0f, -1.0f, 1.0f, 0.3125f, 0.0f, 0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, 0.0f, 1.0f, 1.0f, 0.3125f, 0.3125f, 0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, 0.0f, 1.0f, -1.0f, 0.0f, 0.3125f, 0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, -0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, 0.0f, 1.0f, 1.0f, 0.3125f, 0.0f, -0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, 0.0f, -1.0f, 1.0f, 0.3125f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, 0.0f, -1.0f, -1.0f, 0.0f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
         for (int j = 0; j < 4; ++j) {
-            GlStateManager.rotatef(90.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.normal3f(0.0f, 0.0f, 0.05625f);
-            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-            vertexbuffer.pos(-1.0, -1.0, 0.0).tex(0.0, 0.0).endVertex();
-            vertexbuffer.pos(1.0, -1.0, 0.0).tex(0.3125, 0.0).endVertex();
-            vertexbuffer.pos(1.0, 1.0, 0.0).tex(0.3125, 0.3125).endVertex();
-            vertexbuffer.pos(-1.0, 1.0, 0.0).tex(0.0, 0.3125).endVertex();
-            tessellator.draw();
+            ms.rotate(Vector3f.XP.rotationDegrees(90.0f));
+            last = ms.getLast();
+            drawVertex(last, builder, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+            drawVertex(last, builder, 1.0f, -1.0f, 0.0f, 0.3125f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+            drawVertex(last, builder, 1.0f, 1.0f, 0.0f, 0.3125f, 0.3125f, 0.0f, 0.0f, 0.05625f, lm);
+            drawVertex(last, builder, -1.0f, 1.0f, 0.0f, 0.0f, 0.3125f, 0.0f, 0.0f, 0.05625f, lm);
         }
-        if (renderOutlines) {
-            GlStateManager.tearDownSolidRenderingTextureCombine();
-            GlStateManager.disableColorMaterial();
-        }
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        ms.pop();
+        ms.push();
         GlStateManager.disableTexture();
         GlStateManager.disableCull();
-        GlStateManager.color4f(1.0f, 1.0f, 0.8f, 1.0f);
         GlStateManager.lineWidth(1.0f);
-        vertexbuffer.begin(1, DefaultVertexFormats.POSITION_COLOR);
-        vertexbuffer.pos(entityblundershot.posX, entityblundershot.posY, entityblundershot.posZ);
-        vertexbuffer.pos(entityblundershot.prevPosX, entityblundershot.prevPosY, entityblundershot.prevPosZ);
-        tessellator.draw();
+        Matrix4f mat = ms.getLast().getMatrix();
+        builder = bufs.getBuffer(RenderType.getLines());
+        builder.pos(mat, (float) entityblundershot.posX, (float) entityblundershot.posY,
+                        (float) entityblundershot.posZ)
+                .color(1.0f, 1.0f, 0.8f, 1.0f)
+                .normal(0.0f, 0.0f, 0.05625f)
+                .endVertex();
+        builder.pos(mat, (float) entityblundershot.prevPosX, (float) entityblundershot.prevPosY,
+                        (float) entityblundershot.prevPosZ)
+                .color(1.0f, 1.0f, 0.8f, 1.0f)
+                .normal(0.0f, 0.0f, 0.05625f)
+                .endVertex();
         GlStateManager.enableTexture();
         GlStateManager.enableCull();
-        GlStateManager.popMatrix();
-        super.doRender(entityblundershot, d, d1, d2, f, f1);
+        ms.pop();
+        super.render(entityblundershot, f, f1, ms, bufs, lm);
     }
 
+    @Nonnull
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull EntityBlunderShot entity) {
+    public ResourceLocation getEntityTexture(@Nonnull EntityBlunderShot entity) {
         return WeaponModResources.Entity.BULLET;
     }
+
 }

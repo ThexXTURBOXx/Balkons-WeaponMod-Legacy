@@ -2,75 +2,67 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.BufferBuilder;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
+import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderCannonBall extends EntityRenderer<EntityCannonBall> {
+public class RenderCannonBall extends WMRenderer<EntityCannonBall> {
+
     public RenderCannonBall(EntityRendererManager renderManager) {
         super(renderManager);
         shadowSize = 0.5f;
     }
 
     @Override
-    public void doRender(@Nonnull EntityCannonBall entitycannonball, double d, double d1,
-                         double d2, float f, float f1) {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
-        GlStateManager.pushMatrix();
-        bindEntityTexture(entitycannonball);
-        GlStateManager.disableLighting();
-        GlStateManager.translated(d, d1, d2);
-        GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
-        GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
-        GlStateManager.scalef(0.7f, 0.7f, 0.7f);
-        GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entitycannonball));
-        }
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(-0.5, 0.5, -0.5).tex(0.0, 1.0).endVertex();
-        vertexbuffer.pos(0.5, 0.5, -0.5).tex(1.0, 1.0).endVertex();
-        vertexbuffer.pos(0.5, -0.5, -0.5).tex(1.0, 0.0).endVertex();
-        vertexbuffer.pos(-0.5, -0.5, -0.5).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(-0.5, -0.5, 0.5).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(0.5, -0.5, 0.5).tex(1.0, 0.0).endVertex();
-        vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
-        vertexbuffer.pos(-0.5, 0.5, 0.5).tex(0.0, 1.0).endVertex();
-        vertexbuffer.pos(-0.5, -0.5, -0.5).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(0.5, -0.5, -0.5).tex(1.0, 0.0).endVertex();
-        vertexbuffer.pos(0.5, -0.5, 0.5).tex(1.0, 1.0).endVertex();
-        vertexbuffer.pos(-0.5, -0.5, 0.5).tex(0.0, 1.0).endVertex();
-        vertexbuffer.pos(-0.5, 0.5, 0.5).tex(0.0, 1.0).endVertex();
-        vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
-        vertexbuffer.pos(0.5, 0.5, -0.5).tex(1.0, 0.0).endVertex();
-        vertexbuffer.pos(-0.5, 0.5, -0.5).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(-0.5, -0.5, 0.5).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(-0.5, 0.5, 0.5).tex(1.0, 0.0).endVertex();
-        vertexbuffer.pos(-0.5, 0.5, -0.5).tex(1.0, 1.0).endVertex();
-        vertexbuffer.pos(-0.5, -0.5, -0.5).tex(0.0, 1.0).endVertex();
-        vertexbuffer.pos(0.5, -0.5, -0.5).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(0.5, 0.5, -0.5).tex(1.0, 0.0).endVertex();
-        vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
-        vertexbuffer.pos(0.5, -0.5, 0.5).tex(0.0, 1.0).endVertex();
-        tessellator.draw();
-        if (renderOutlines) {
-            GlStateManager.tearDownSolidRenderingTextureCombine();
-            GlStateManager.disableColorMaterial();
-        }
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
-        super.doRender(entitycannonball, d, d1, d2, f, f1);
+    @ParametersAreNonnullByDefault
+    public void render(EntityCannonBall entitycannonball, float f, float f1,
+                       MatrixStack ms, IRenderTypeBuffer bufs, int lm) {
+        ms.push();
+        IVertexBuilder builder = bufs.getBuffer(RenderType.getEntityCutout(getEntityTexture(entitycannonball)));
+        ms.rotate(Vector3f.YP.rotationDegrees(180.0f - f));
+        ms.scale(-1.0f, -1.0f, 1.0f);
+        ms.scale(0.7f, 0.7f, 0.7f);
+        ms.rotate(Vector3f.XP.rotationDegrees(180.0f));
+        MatrixStack.Entry last = ms.getLast();
+        drawVertex(last, builder, -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, -0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        drawVertex(last, builder, 0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
+        ms.pop();
+        super.render(entitycannonball, f, f1, ms, bufs, lm);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull EntityCannonBall entity) {
+    @Nonnull
+    @ParametersAreNonnullByDefault
+    public ResourceLocation getEntityTexture(@Nonnull EntityCannonBall entity) {
         return WeaponModResources.Entity.CANNONBALL;
     }
+
 }
