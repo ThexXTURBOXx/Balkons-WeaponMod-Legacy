@@ -41,7 +41,7 @@ public class WMConfigCondition implements ICondition {
 
         @Override
         public WMConfigCondition read(JsonObject json) {
-            return new WMConfigCondition(config, JSONUtils.getString(json, "weapon"));
+            return new WMConfigCondition(config, JSONUtils.getAsString(json, "weapon"));
         }
 
         @Override

@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
@@ -23,50 +23,51 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
     public EntitySpear(World world, double d, double d1, double d2) {
         this(BalkonsWeaponMod.entitySpear, world);
-        setPosition(d, d1, d2);
+        setPos(d, d1, d2);
     }
 
     public EntitySpear(World world, LivingEntity shooter, ItemStack itemstack) {
-        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        this(world, shooter.getX(), shooter.getY() + shooter.getEyeHeight() - 0.1, shooter.getZ());
+        setOwner(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void shootFromRotation(Entity entity, float f, float f1, float f2, float f3,
+                                  float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        Vec3d entityMotion = entity.getMotion();
-        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
+        Vector3d entityMotion = entity.getDeltaMovement();
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+                entityMotion.z));
     }
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         Item item = thrownItem.getItem();
-        if (item instanceof IItemWeapon && entity.attackEntityFrom(damagesource,
+        if (item instanceof IItemWeapon && entity.hurt(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
             playHitSound();
-            if (thrownItem.getDamage() + 1 > thrownItem.getMaxDamage()) {
+            if (thrownItem.getDamageValue() + 1 > thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
                 remove();
             } else {
-                Entity shooter = getShooter();
+                Entity shooter = getOwner();
                 if (shooter instanceof LivingEntity) {
-                    thrownItem.damageItem(1, (LivingEntity) shooter, s -> {
+                    thrownItem.hurtAndBreak(1, (LivingEntity) shooter, s -> {
                     });
                 } else {
-                    thrownItem.attemptDamageItem(1, rand, null);
+                    thrownItem.hurt(1, random, null);
                 }
-                setVelocity(0.0, 0.0, 0.0);
+                lerpMotion(0.0, 0.0, 0.0);
             }
         } else {
             bounceBack();
@@ -75,7 +76,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
     @Override
     public void playHitSound() {
-        playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.9f));
+        playSound(SoundEvents.ARROW_HIT, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.9f));
     }
 
     @Override

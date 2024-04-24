@@ -6,12 +6,12 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
-import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class DispenseMusketBullet extends DispenseWeaponProjectile {
@@ -19,9 +19,9 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
 
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
-                                              @Nonnull ItemStack stack) {
-        return new EntityMusketBullet(world, pos.getX(), pos.getY(), pos.getZ());
+    protected ProjectileEntity getProjectile(@Nonnull World world, IPosition pos,
+                                             @Nonnull ItemStack stack) {
+        return new EntityMusketBullet(world, pos.x(), pos.y(), pos.z());
     }
 
     @Override
@@ -30,28 +30,28 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
     }
 
     @Override
-    protected float getProjectileInaccuracy() {
+    protected float getUncertainty() {
         return 3.0f;
     }
 
     @Override
-    public float getProjectileVelocity() {
+    public float getPower() {
         return 5.0f;
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
+    protected void playSound(@Nonnull IBlockSource blocksource) {
+        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.GENERIC_EXPLODE,
                 SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.7f));
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
+        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.LIGHTNING_BOLT_THUNDER,
                 SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.4f));
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
-        super.spawnDispenseParticles(blocksource, face);
+    protected void playAnimation(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
+        super.playAnimation(blocksource, face);
         IPosition pos = DispenserBlock.getDispensePosition(blocksource);
-        blocksource.getWorld().addParticle(ParticleTypes.FLAME, pos.getX() + face.getXOffset(),
-                pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.2, 0.0);
+        blocksource.getLevel().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
+                pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.2, 0.0);
     }
 }

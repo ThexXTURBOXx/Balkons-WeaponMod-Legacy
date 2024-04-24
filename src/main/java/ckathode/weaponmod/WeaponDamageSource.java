@@ -20,7 +20,7 @@ public class WeaponDamageSource extends IndirectEntityDamageSource {
     }
 
     @Override
-    public Entity getTrueSource() {
+    public Entity getEntity() {
         return shooterEntity;
     }
 

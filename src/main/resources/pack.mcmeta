@@ -1,6 +1,6 @@
 {
-  "pack": {
-    "description": "Balkon's WeaponMod resources",
-    "pack_format": 5
-  }
+    "pack": {
+        "description": "${mod_id} resources",
+        "pack_format": 6
+    }
 }

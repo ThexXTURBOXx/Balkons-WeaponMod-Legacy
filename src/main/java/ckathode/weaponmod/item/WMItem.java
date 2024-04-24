@@ -11,7 +11,7 @@ public class WMItem extends Item {
     }
 
     public WMItem(String id, Properties properties) {
-        super(properties.group(ItemGroup.COMBAT));
+        super(properties.tab(ItemGroup.TAB_COMBAT));
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
     }
 }

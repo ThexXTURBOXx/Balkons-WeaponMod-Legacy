@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
@@ -23,24 +23,25 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
     public EntityCrossbowBolt(World world, double d, double d1, double d2) {
         this(BalkonsWeaponMod.entityCrossbowBolt, world);
         setPickupStatus(PickupStatus.ALLOWED);
-        setPosition(d, d1, d2);
+        setPos(d, d1, d2);
     }
 
     public EntityCrossbowBolt(World world, LivingEntity shooter) {
-        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+        setOwner(shooter);
         setPickupStatusFromEntity(shooter);
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void shootFromRotation(Entity entity, float f, float f1, float f2, float f3,
+                                  float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        Vec3d entityMotion = entity.getMotion();
-        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
+        Vector3d entityMotion = entity.getDeltaMovement();
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+                entityMotion.z));
     }
 
     @Override
@@ -48,9 +49,9 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
         float vel = (float) getTotalVelocity();
         float damage = vel * 4.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
-        if (entity.attackEntityFrom(damagesource, damage)) {
-            if (entity instanceof LivingEntity && world.isRemote) {
-                ((LivingEntity) entity).setArrowCountInEntity(((LivingEntity) entity).getArrowCountInEntity() + 1);
+        if (entity.hurt(damagesource, damage)) {
+            if (entity instanceof LivingEntity && level.isClientSide) {
+                ((LivingEntity) entity).setArrowCount(((LivingEntity) entity).getArrowCount() + 1);
             }
             applyEntityHitEffects(entity);
             playHitSound();
@@ -62,7 +63,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
 
     @Override
     public void playHitSound() {
-        playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.2f / (rand.nextFloat() * 0.2f + 0.4f));
+        playSound(SoundEvents.ARROW_HIT, 1.0f, 1.2f / (random.nextFloat() * 0.2f + 0.4f));
     }
 
     @Override
@@ -72,13 +73,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
 
     @Nonnull
     @Override
-    public ItemStack getPickupItem() {
-        return new ItemStack(BalkonsWeaponMod.bolt, 1);
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
+    protected ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.bolt);
     }
 }

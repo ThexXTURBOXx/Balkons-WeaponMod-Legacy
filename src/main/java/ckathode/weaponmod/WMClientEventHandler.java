@@ -26,21 +26,21 @@ public class WMClientEventHandler {
     @SubscribeEvent
     public void onMouseClick(InputEvent.MouseInputEvent e) {
         ClientPlayerEntity player = Minecraft.getInstance().player;
-        if (player == null || !player.world.isRemote || Minecraft.getInstance().currentScreen != null) {
+        if (player == null || !player.level.isClientSide || Minecraft.getInstance().screen != null) {
             return;
         }
         if (e.getButton() == 0 && e.getAction() == GLFW.GLFW_PRESS) {
-            ItemStack itemstack = player.getHeldItemMainhand();
+            ItemStack itemstack = player.getMainHandItem();
             if (!itemstack.isEmpty()) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
-                    float reach = ieri.getExtendedReach(player.world, player, itemstack);
+                    float reach = ieri.getExtendedReach(player.level, player, itemstack);
                     RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
                     if (!(raytraceResult instanceof EntityRayTraceResult)) return;
                     EntityRayTraceResult ertr = (EntityRayTraceResult) raytraceResult;
                     Entity entity = ertr.getEntity();
-                    if (entity != null && entity != player && entity.hurtResistantTime == 0) {
-                        Minecraft.getInstance().playerController.attackEntity(player, entity);
+                    if (entity != null && entity != player && entity.invulnerableTime == 0) {
+                        Minecraft.getInstance().gameMode.attack(player, entity);
                     }
                 }
             }
@@ -60,13 +60,13 @@ public class WMClientEventHandler {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent e) {
-        if (!e.player.world.isRemote) {
+        if (!e.player.level.isClientSide) {
             return;
         }
         if (e.phase == TickEvent.Phase.START && e.player instanceof ClientPlayerEntity) {
             ClientPlayerEntity entity = (ClientPlayerEntity) e.player;
-            if (entity.movementInput.jump && entity.getRidingEntity() instanceof EntityCannon && ((EntityCannon) entity.getRidingEntity()).isLoaded()) {
-                MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getRidingEntity());
+            if (entity.input.jumping && entity.getVehicle() instanceof EntityCannon && ((EntityCannon) entity.getVehicle()).isLoaded()) {
+                MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getVehicle());
                 BalkonsWeaponMod.instance.messagePipeline.sendToServer(msg);
             }
         }
@@ -74,11 +74,11 @@ public class WMClientEventHandler {
 
     @SubscribeEvent
     public void onFOVUpdateEvent(FOVUpdateEvent e) {
-        if (e.getEntity().isHandActive() && e.getEntity().getActiveItemStack().getItem() instanceof IItemWeapon) {
+        if (e.getEntity().isUsingItem() && e.getEntity().getUseItem().getItem() instanceof IItemWeapon) {
             RangedComponent rc =
-                    ((IItemWeapon) e.getEntity().getActiveItemStack().getItem()).getRangedComponent();
-            if (rc != null && RangedComponent.isReadyToFire(e.getEntity().getActiveItemStack())) {
-                e.setNewfov(e.getFov() * rc.getFOVMultiplier(e.getEntity().getItemInUseMaxCount()));
+                    ((IItemWeapon) e.getEntity().getUseItem().getItem()).getRangedComponent();
+            if (rc != null && RangedComponent.isReadyToFire(e.getEntity().getUseItem())) {
+                e.setNewfov(e.getFov() * rc.getFOVMultiplier(e.getEntity().getTicksUsingItem()));
             }
         }
     }

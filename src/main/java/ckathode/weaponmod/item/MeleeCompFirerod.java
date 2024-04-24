@@ -3,10 +3,9 @@ package ckathode.weaponmod.item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -17,10 +16,10 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
-    public boolean hitEntity(ItemStack itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
-        boolean flag = super.hitEntity(itemstack, entityliving, entityliving1);
+    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
+        boolean flag = super.hurtEnemy(itemstack, entityliving, entityliving1);
         if (flag) {
-            entityliving.setFire(12 + weapon.getItemRand().nextInt(3));
+            entityliving.setSecondsOnFire(12 + weapon.getItemRand().nextInt(3));
         }
         return flag;
     }
@@ -30,25 +29,25 @@ public class MeleeCompFirerod extends MeleeComponent {
         super.inventoryTick(itemstack, world, entity, i, flag);
         if (!(entity instanceof PlayerEntity)) return;
         PlayerEntity player = (PlayerEntity) entity;
-        if (player.areEyesInFluid(FluidTags.WATER)) return;
-        boolean mainHand = player.getHeldItemMainhand() == itemstack;
-        boolean offHand = player.getHeldItemOffhand() == itemstack;
+        if (player.isInWater()) return;
+        boolean mainHand = player.getMainHandItem() == itemstack;
+        boolean offHand = player.getOffhandItem() == itemstack;
         if (!mainHand && !offHand) return;
 
         float f = 1.0f;
-        float f1 = offHand ^ (player.getPrimaryHand() == HandSide.LEFT) ? -28.0f : 28.0f;
+        float f1 = offHand ^ (player.getMainArm() == HandSide.LEFT) ? -28.0f : 28.0f;
         float particleX =
-                -MathHelper.sin(((player.rotationYaw + f1) / 180F) * 3.141593F) * MathHelper.cos((player.rotationPitch / 180F) * 3.141593F) * f;
-        float particleY = -MathHelper.sin((player.rotationPitch / 180F) * 3.141593F) + player.getEyeHeight();
+                -MathHelper.sin(((player.yRot + f1) / 180F) * 3.141593F) * MathHelper.cos((player.xRot / 180F) * 3.141593F) * f;
+        float particleY = -MathHelper.sin((player.xRot / 180F) * 3.141593F) + player.getEyeHeight();
         float particleZ =
-                MathHelper.cos(((player.rotationYaw + f1) / 180F) * 3.141593F) * MathHelper.cos((player.rotationPitch / 180F) * 3.141593F) * f;
+                MathHelper.cos(((player.yRot + f1) / 180F) * 3.141593F) * MathHelper.cos((player.xRot / 180F) * 3.141593F) * f;
         if (weapon.getItemRand().nextInt(5) == 0) {
-            world.addParticle(ParticleTypes.FLAME, player.posX + particleX, player.posY + particleY,
-                    player.posZ + particleZ, 0.0D, 0.0D, 0.0D);
+            world.addParticle(ParticleTypes.FLAME, player.getX() + particleX, player.getY() + particleY,
+                    player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
         }
         if (weapon.getItemRand().nextInt(5) == 0) {
-            world.addParticle(ParticleTypes.SMOKE, player.posX + particleX, player.posY + particleY,
-                    player.posZ + particleZ, 0.0D, 0.0D, 0.0D);
+            world.addParticle(ParticleTypes.SMOKE, player.getX() + particleX, player.getY() + particleY,
+                    player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
         }
     }
 }

@@ -31,7 +31,7 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
         y = explosion.explosionY;
         z = explosion.explosionZ;
         size = explosion.explosionSize;
-        blocks = explosion.getAffectedBlockPositions();
+        blocks = explosion.getToBlow();
         smallParticles = smallparts;
         bigParticles = bigparts;
     }
@@ -76,7 +76,7 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void handleClientSide(MsgExplosion msg, Supplier<NetworkEvent.Context> ctx) {
-        World world = Minecraft.getInstance().world;
+        World world = Minecraft.getInstance().level;
         AdvancedExplosion expl = new AdvancedExplosion(world, null, x, y, z, size,
                 false, Explosion.Mode.DESTROY);
         expl.setAffectedBlockPositions(blocks);

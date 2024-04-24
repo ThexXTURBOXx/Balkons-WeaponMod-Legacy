@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class WarhammerExplosion extends AdvancedExplosion {
@@ -23,23 +23,23 @@ public class WarhammerExplosion extends AdvancedExplosion {
         int i3 = MathHelper.floor(explosionY + size + 1.0);
         int j2 = MathHelper.floor(explosionZ - size - 1.0);
         int j3 = MathHelper.floor(explosionZ + size + 1.0);
-        List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder,
+        List<Entity> list = worldObj.getEntities(exploder,
                 new AxisAlignedBB(k1, i2, j2, l1, i3, j3));
         for (Entity entity : list) {
-            double dr = MathHelper.sqrt(entity.getDistanceSq(explosionX, explosionY, explosionZ)) / size;
+            double dr = MathHelper.sqrt(entity.distanceToSqr(explosionX, explosionY, explosionZ)) / size;
             if (dr <= 1.0) {
-                double dx = entity.posX - explosionX;
-                double dy = entity.posY + entity.getEyeHeight() - explosionY;
-                double dz = entity.posZ - explosionZ;
+                double dx = entity.getX() - explosionX;
+                double dy = entity.getEyeY() - explosionY;
+                double dz = entity.getZ() - explosionZ;
                 double d = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
                 dx /= d;
                 dy /= d;
                 dz /= d;
                 double var36 = 1.0 - dr;
                 int damage = (int) ((var36 * var36 + var36) / 2.0 * 8.0 * size + 1.0);
-                entity.attackEntityFrom(damagesource, (float) damage);
-                entity.setMotion(entity.getMotion().add(
-                        new Vec3d(dx * var36, dy * var36, dz * var36)));
+                entity.hurt(damagesource, (float) damage);
+                entity.setDeltaMovement(entity.getDeltaMovement().add(
+                        new Vector3d(dx * var36, dy * var36, dz * var36)));
             }
         }
     }

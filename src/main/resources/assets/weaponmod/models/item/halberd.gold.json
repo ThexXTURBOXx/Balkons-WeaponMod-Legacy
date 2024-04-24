@@ -42,7 +42,7 @@
   "overrides": [
     {
       "predicate": {
-        "weaponmod:state": 1
+        "weaponmod:halberd-state": 1
       },
       "model": "weaponmod:item/halberd.gold_state"
     }

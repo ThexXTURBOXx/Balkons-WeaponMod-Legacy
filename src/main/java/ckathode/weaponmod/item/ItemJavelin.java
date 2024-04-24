@@ -4,28 +4,28 @@ import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class ItemJavelin extends WMItem {
     public ItemJavelin(String id) {
-        super(id, new Properties().maxStackSize(16));
+        super(id, new Properties().stacksTo(16));
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 0;
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack itemstack, @Nonnull World world,
-                                     @Nonnull LivingEntity entityLiving, int i) {
+    public void releaseUsing(ItemStack itemstack, @Nonnull World world,
+                             @Nonnull LivingEntity entityLiving, int i) {
         PlayerEntity entityplayer = (PlayerEntity) entityLiving;
         if (itemstack.isEmpty()) {
             return;
@@ -39,20 +39,20 @@ public class ItemJavelin extends WMItem {
         if (f > 1.0f) {
             f = 1.0f;
         }
-        boolean crit = !entityplayer.onGround && !entityplayer.isInWater();
-        if (!world.isRemote) {
+        boolean crit = !entityplayer.isOnGround() && !entityplayer.isInWater();
+        if (!world.isClientSide) {
             EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
-            entityjavelin.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
+            entityjavelin.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f,
                     f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
-            entityjavelin.setIsCritical(crit);
-            world.addEntity(entityjavelin);
+            entityjavelin.setCritArrow(crit);
+            world.addFreshEntity(entityjavelin);
         }
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
+        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.abilities.isCreativeMode) {
+        if (!entityplayer.abilities.instabuild) {
             itemstack.shrink(1);
             if (itemstack.isEmpty()) {
-                entityplayer.inventory.deleteStack(itemstack);
+                entityplayer.inventory.removeItem(itemstack);
             }
         }
     }
@@ -64,19 +64,19 @@ public class ItemJavelin extends WMItem {
 
     @Nonnull
     @Override
-    public UseAction getUseAction(@Nonnull ItemStack itemstack) {
+    public UseAction getUseAnimation(@Nonnull ItemStack itemstack) {
         return UseAction.BOW;
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, PlayerEntity entityplayer,
-                                                    @Nonnull Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
+    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity entityplayer,
+                                       @Nonnull Hand hand) {
+        ItemStack itemstack = entityplayer.getItemInHand(hand);
+        if (!entityplayer.abilities.instabuild && itemstack.isEmpty()) {
             return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
-        entityplayer.setActiveHand(hand);
+        entityplayer.startUsingItem(hand);
         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 

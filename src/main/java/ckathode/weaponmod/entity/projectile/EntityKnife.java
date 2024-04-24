@@ -8,11 +8,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
@@ -26,26 +25,27 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     public EntityKnife(World world, double d, double d1, double d2) {
         this(BalkonsWeaponMod.entityKnife, world);
-        setPosition(d, d1, d2);
+        setPos(d, d1, d2);
     }
 
     public EntityKnife(World world, LivingEntity shooter, ItemStack itemstack) {
-        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+        setOwner(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
         soundTimer = 0;
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void shootFromRotation(Entity entity, float f, float f1, float f2, float f3,
+                                  float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        Vec3d entityMotion = entity.getMotion();
-        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
+        Vector3d entityMotion = entity.getDeltaMovement();
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+                entityMotion.z));
     }
 
     @Override
@@ -54,11 +54,11 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         if (inGround || beenInGround) {
             return;
         }
-        rotationPitch -= 70.0f;
+        xRot -= 70.0f;
         if (soundTimer >= 3) {
-            if (!areEyesInFluid(FluidTags.WATER)) {
-                playSound(SoundEvents.ENTITY_ARROW_SHOOT, 0.6f,
-                        1.0f / (rand.nextFloat() * 0.2f + 0.6f + ticksInAir / 15.0f));
+            if (!isInWater()) {
+                playSound(SoundEvents.ARROW_SHOOT, 0.6f,
+                        1.0f / (random.nextFloat() * 0.2f + 0.6f + ticksInAir / 15.0f));
             }
             soundTimer = 0;
         }
@@ -67,26 +67,26 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         Item item = thrownItem.getItem();
-        if (item instanceof IItemWeapon && entity.attackEntityFrom(damagesource,
+        if (item instanceof IItemWeapon && entity.hurt(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
-            if (thrownItem.getDamage() + 2 > thrownItem.getMaxDamage()) {
+            if (thrownItem.getDamageValue() + 2 > thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
                 remove();
             } else {
-                Entity shooter = getShooter();
+                Entity shooter = getOwner();
                 if (shooter instanceof LivingEntity) {
-                    thrownItem.damageItem(2, (LivingEntity) shooter, s -> {
+                    thrownItem.hurtAndBreak(2, (LivingEntity) shooter, s -> {
                     });
                 } else {
-                    thrownItem.attemptDamageItem(2, rand, null);
+                    thrownItem.hurt(2, random, null);
                 }
-                setVelocity(0.0, 0.0, 0.0);
+                lerpMotion(0.0, 0.0, 0.0);
             }
         } else {
             bounceBack();

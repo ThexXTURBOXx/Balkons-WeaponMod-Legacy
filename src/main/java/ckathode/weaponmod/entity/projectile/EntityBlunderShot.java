@@ -11,7 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
@@ -24,23 +24,24 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
     public EntityBlunderShot(World world, double x, double y, double z) {
         this(BalkonsWeaponMod.entityBlunderShot, world);
-        setPosition(x, y, z);
+        setPos(x, y, z);
     }
 
     public EntityBlunderShot(World world, LivingEntity shooter) {
-        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
-        setShooter(shooter);
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+        setOwner(shooter);
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void shootFromRotation(Entity entity, float f, float f1, float f2, float f3,
+                                  float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
-        Vec3d entityMotion = entity.getMotion();
-        setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));
+        Vector3d entityMotion = entity.getDeltaMovement();
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+                entityMotion.z));
     }
 
     @Override
@@ -55,9 +56,9 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     public void onEntityHit(Entity entity) {
         float damage = 4.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
-        int prevhurtrestime = entity.hurtResistantTime;
-        if (entity.attackEntityFrom(damagesource, damage)) {
-            entity.hurtResistantTime = prevhurtrestime;
+        int prevhurtrestime = entity.invulnerableTime;
+        if (entity.hurt(damagesource, damage)) {
+            entity.invulnerableTime = prevhurtrestime;
             applyEntityHitEffects(entity);
             playHitSound();
             remove();
@@ -86,7 +87,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
     @Nonnull
     @Override
-    protected ItemStack getArrowStack() {
+    protected ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.blunderShot);
     }
 
@@ -95,17 +96,17 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         PlayerEntity entityplayer = (PlayerEntity) entityliving;
         for (int i = 0; i < 10; ++i) {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
-            entity.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 15.0f);
+            entity.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }
-            world.addEntity(entity);
+            world.addFreshEntity(entity);
         }
     }
 
     public static void fireSpreadShot(World world, double x, double y, double z) {
         for (int i = 0; i < 10; ++i) {
-            world.addEntity(new EntityBlunderShot(world, x, y, z));
+            world.addFreshEntity(new EntityBlunderShot(world, x, y, z));
         }
     }
 
@@ -114,7 +115,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         for (int i2 = 0; i2 < 10; ++i2) {
             EntityBlunderShot entityblundershot = new EntityBlunderShot(world, d, d1, d2);
             entityblundershot.shoot(i, j, k, 5.0f, 15.0f);
-            world.addEntity(entityblundershot);
+            world.addFreshEntity(entityblundershot);
         }
     }
 }

@@ -19,38 +19,38 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 public class ItemCannon extends WMItem {
-    private static final Predicate<Entity> PREDICATE = EntityPredicates.NOT_SPECTATING.and(Entity::canBeCollidedWith);
+    private static final Predicate<Entity> PREDICATE = EntityPredicates.NO_SPECTATORS.and(Entity::isPickable);
 
     public ItemCannon(String id) {
-        super(id, new Properties().maxStackSize(1));
+        super(id, new Properties().stacksTo(1));
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 10;
     }
 
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer, Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        RayTraceResult raytraceresult = rayTrace(world, entityplayer, RayTraceContext.FluidMode.ANY);
+    public ActionResult<ItemStack> use(World world, PlayerEntity entityplayer, Hand hand) {
+        ItemStack itemstack = entityplayer.getItemInHand(hand);
+        RayTraceResult raytraceresult = getPlayerPOVHitResult(world, entityplayer, RayTraceContext.FluidMode.ANY);
         if (raytraceresult.getType() == RayTraceResult.Type.MISS) {
             return new ActionResult<>(ActionResultType.PASS, itemstack);
         } else {
-            Vec3d lookVec = entityplayer.getLook(1.0F);
+            Vector3d lookVec = entityplayer.getViewVector(1.0F);
             double f = 5.0;
-            List<Entity> entities = world.getEntitiesInAABBexcluding(entityplayer,
-                    entityplayer.getBoundingBox().expand(lookVec.scale(f)).grow(1.0), PREDICATE);
+            List<Entity> entities = world.getEntities(entityplayer,
+                    entityplayer.getBoundingBox().expandTowards(lookVec.scale(f)).inflate(1.0), PREDICATE);
             if (!entities.isEmpty()) {
-                Vec3d eyePos = entityplayer.getEyePosition(1.0F);
+                Vector3d eyePos = entityplayer.getEyePosition(1.0F);
                 for (Entity e : entities) {
-                    AxisAlignedBB aabb = e.getBoundingBox().grow(e.getCollisionBorderSize());
+                    AxisAlignedBB aabb = e.getBoundingBox().inflate(e.getPickRadius());
                     if (aabb.contains(eyePos)) {
                         return new ActionResult<>(ActionResultType.PASS, itemstack);
                     }
@@ -59,23 +59,23 @@ public class ItemCannon extends WMItem {
 
             if (raytraceresult instanceof BlockRayTraceResult) {
                 BlockRayTraceResult brtr = (BlockRayTraceResult) raytraceresult;
-                Block block = world.getBlockState(brtr.getPos()).getBlock();
+                Block block = world.getBlockState(brtr.getBlockPos()).getBlock();
                 boolean flag1 = block == Blocks.SNOW;
-                EntityCannon entitycannon = new EntityCannon(world, raytraceresult.getHitVec().x + 0.5,
-                        raytraceresult.getHitVec().y + (flag1 ? 0.38 : 1.0), raytraceresult.getHitVec().z + 0.5);
-                entitycannon.rotationYaw = entityplayer.rotationYaw;
-                if (!world.hasNoCollisions(entitycannon, entitycannon.getBoundingBox().grow(-0.1))) {
+                EntityCannon entitycannon = new EntityCannon(world, raytraceresult.getLocation().x + 0.5,
+                        raytraceresult.getLocation().y + (flag1 ? 0.38 : 1.0), raytraceresult.getLocation().z + 0.5);
+                entitycannon.yRot = entityplayer.yRot;
+                if (!world.noCollision(entitycannon, entitycannon.getBoundingBox().inflate(-0.1))) {
                     return new ActionResult<>(ActionResultType.FAIL, itemstack);
                 } else {
-                    if (!world.isRemote) {
-                        world.addEntity(entitycannon);
+                    if (!world.isClientSide) {
+                        world.addFreshEntity(entitycannon);
                     }
 
-                    if (!entityplayer.abilities.isCreativeMode) {
+                    if (!entityplayer.abilities.instabuild) {
                         itemstack.shrink(1);
                     }
 
-                    entityplayer.addStat(Stats.ITEM_USED.get(this));
+                    entityplayer.awardStat(Stats.ITEM_USED.get(this));
                     return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
                 }
             } else {

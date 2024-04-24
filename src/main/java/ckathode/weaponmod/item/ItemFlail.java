@@ -1,44 +1,29 @@
 package ckathode.weaponmod.item;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemFlail extends ItemMelee {
     private final float flailDamage;
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
         super(id, meleecomponent);
-        flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamage();
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), new IItemPropertyGetter() {
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World worldIn,
-                              @Nullable LivingEntity entityIn) {
-                return entityIn instanceof PlayerEntity && entityIn.getHeldItemMainhand() == stack
-                       && isThrown((PlayerEntity) entityIn) ? 1.0f : 0.0f;
-            }
-        });
+        flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamageBonus();
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 0;
     }
 
@@ -52,15 +37,15 @@ public class ItemFlail extends ItemMelee {
         if (!isThrown(player)) {
             return;
         }
-        ItemStack itemstack2 = player.getHeldItemMainhand();
+        ItemStack itemstack2 = player.getMainHandItem();
         if (itemstack2.isEmpty() || !((itemstack2.getItem()) instanceof ItemFlail)) {
             setThrown(player, false);
         } else if (itemstack2.getItem() == this) {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
-                Entity entity2 = world.getEntityByID(id);
+                Entity entity2 = world.getEntity(id);
                 if (entity2 instanceof EntityFlail) {
-                    ((EntityFlail) entity2).setShooter(player);
+                    ((EntityFlail) entity2).setOwner(player);
                     ((EntityFlail) entity2).setThrownItemStack(itemstack);
                 }
             }
@@ -69,37 +54,37 @@ public class ItemFlail extends ItemMelee {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world,
-                                                    @Nonnull PlayerEntity entityplayer,
-                                                    @Nonnull Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> use(@Nonnull World world,
+                                       @Nonnull PlayerEntity entityplayer,
+                                       @Nonnull Hand hand) {
+        ItemStack itemstack = entityplayer.getItemInHand(hand);
         if (hand != Hand.MAIN_HAND) {
             return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
         removePreviousFlail(world, entityplayer);
         if (!itemstack.isEmpty()) {
-            entityplayer.swingArm(hand);
-            itemstack.damageItem(1, entityplayer, s -> s.sendBreakAnimation(Hand.MAIN_HAND));
+            entityplayer.swing(hand);
+            itemstack.hurtAndBreak(1, entityplayer, s -> s.broadcastBreakEvent(Hand.MAIN_HAND));
             throwFlail(itemstack, world, entityplayer);
         }
         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 
     @Override
-    public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull LivingEntity entityliving,
+    public boolean hurtEnemy(@Nonnull ItemStack itemstack, @Nonnull LivingEntity entityliving,
                              @Nonnull LivingEntity attacker) {
-        onItemRightClick(attacker.world, (PlayerEntity) attacker, Hand.MAIN_HAND);
+        use(attacker.level, (PlayerEntity) attacker, Hand.MAIN_HAND);
         return true;
     }
 
     public void throwFlail(ItemStack itemstack, World world, PlayerEntity entityplayer) {
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
+        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
                 SoundCategory.PLAYERS, 0.5f, 0.4f / (ItemFlail.random.nextFloat() * 0.4f + 0.8f));
-        if (!world.isRemote) {
+        if (!world.isClientSide) {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
-            entityflail.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
-            PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getEntityId());
-            world.addEntity(entityflail);
+            entityflail.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.75f, 3.0f);
+            PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getId());
+            world.addFreshEntity(entityflail);
         }
         setThrown(entityplayer, true);
     }
@@ -115,7 +100,7 @@ public class ItemFlail extends ItemMelee {
     private void removePreviousFlail(World world, PlayerEntity entityplayer) {
         int id = PlayerWeaponData.getFlailEntityId(entityplayer);
         if (id != 0) {
-            Entity entity = world.getEntityByID(id);
+            Entity entity = world.getEntity(id);
             if (entity instanceof EntityFlail) {
                 entity.remove();
             }

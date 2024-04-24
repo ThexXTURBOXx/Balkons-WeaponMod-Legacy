@@ -4,11 +4,12 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -21,7 +22,7 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public float getEntityDamageMaterialPart() {
+    public float getDamage() {
         return 0.0f;
     }
 
@@ -31,23 +32,23 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, BlockState block) {
+    public float getDestroySpeed(ItemStack itemstack, BlockState block) {
         return 1.0f;
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState block) {
+    public boolean canHarvestBlock(ItemStack stack, BlockState block) {
         return false;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, BlockState block,
-                                    BlockPos pos, LivingEntity entityliving) {
+    public boolean mineBlock(ItemStack itemstack, World world, BlockState block,
+                             BlockPos pos, LivingEntity entityliving) {
         return true;
     }
 
     @Override
-    public boolean hitEntity(ItemStack itemstack, LivingEntity entityliving,
+    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving,
                              LivingEntity attacker) {
         return true;
     }
@@ -59,12 +60,12 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public int getItemEnchantability() {
+    public int getEnchantmentValue() {
         return 1;
     }
 
     @Override
-    public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
+    public void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> multimap) {
     }
 
     @Override
@@ -73,14 +74,14 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack itemstack) {
+    public UseAction getUseAnimation(ItemStack itemstack) {
         return UseAction.NONE;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
-                                                    Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> use(World world, PlayerEntity entityplayer,
+                                       Hand hand) {
+        ItemStack itemstack = entityplayer.getItemInHand(hand);
         return new ActionResult<>(ActionResultType.PASS, itemstack);
     }
 }

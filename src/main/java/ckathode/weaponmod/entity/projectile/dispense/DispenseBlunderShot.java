@@ -7,38 +7,38 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 
 public class DispenseBlunderShot extends DefaultDispenseItemBehavior {
     private final Random rand = new Random();
 
     @Nonnull
     @Override
-    public ItemStack dispenseStack(IBlockSource blocksource, ItemStack itemstack) {
-        Direction face = blocksource.getBlockState().get(DispenserBlock.FACING);
+    public ItemStack execute(IBlockSource blocksource, ItemStack itemstack) {
+        Direction face = blocksource.getBlockState().getValue(DispenserBlock.FACING);
         IPosition pos = DispenserBlock.getDispensePosition(blocksource);
-        EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getXOffset(),
-                pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), face.getXOffset(), face.getYOffset(),
-                face.getZOffset());
+        EntityBlunderShot.fireFromDispenser(blocksource.getLevel(), pos.x() + face.getStepX(),
+                pos.y() + face.getStepY(), pos.z() + face.getStepZ(), face.getStepX(), face.getStepY(),
+                face.getStepZ());
         itemstack.split(1);
         return itemstack;
     }
 
     @Override
-    protected void playDispenseSound(IBlockSource blocksource) {
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
+    protected void playSound(IBlockSource blocksource) {
+        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.GENERIC_EXPLODE,
                 SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
-        super.spawnDispenseParticles(blocksource, face);
+    protected void playAnimation(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
+        super.playAnimation(blocksource, face);
         IPosition pos = DispenserBlock.getDispensePosition(blocksource);
-        blocksource.getWorld().addParticle(ParticleTypes.FLAME, pos.getX() + face.getXOffset(),
-                pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
+        blocksource.getLevel().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
+                pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
     }
 }

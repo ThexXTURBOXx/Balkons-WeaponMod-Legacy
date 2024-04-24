@@ -17,7 +17,7 @@ public class MsgCannonFire implements WMMessage<MsgCannonFire> {
 
     public MsgCannonFire(EntityCannon entity) {
         cannonEntityID = 0;
-        cannonEntityID = entity.getEntityId();
+        cannonEntityID = entity.getId();
     }
 
     @Override
@@ -37,7 +37,7 @@ public class MsgCannonFire implements WMMessage<MsgCannonFire> {
 
     @Override
     public void handleServerSide(MsgCannonFire msg, Supplier<NetworkEvent.Context> ctx) {
-        Entity entity = ctx.get().getSender().world.getEntityByID(cannonEntityID);
+        Entity entity = ctx.get().getSender().level.getEntity(cannonEntityID);
         if (entity instanceof EntityCannon) {
             ((EntityCannon) entity).fireCannon();
         }

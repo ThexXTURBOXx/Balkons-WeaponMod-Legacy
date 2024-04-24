@@ -5,13 +5,13 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class MeleeCompBoomerang extends MeleeComponent {
@@ -20,8 +20,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack itemstack, World world,
-                                     LivingEntity entityliving, int i) {
+    public void releaseUsing(ItemStack itemstack, World world, LivingEntity entityliving, int i) {
         if (entityliving instanceof PlayerEntity) {
             PlayerEntity entityplayer = (PlayerEntity) entityliving;
             if (itemstack.isEmpty()) {
@@ -39,28 +38,28 @@ public class MeleeCompBoomerang extends MeleeComponent {
                 crit = true;
             }
             f *= 1.5f;
-            if (!world.isRemote) {
+            if (!world.isClientSide) {
                 EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack);
-                entityboomerang.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f,
+                entityboomerang.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, f,
                         5.0f);
-                entityboomerang.setIsCritical(crit);
-                entityboomerang.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK,
+                entityboomerang.setCritArrow(crit);
+                entityboomerang.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK,
                         itemstack));
-                if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                    entityboomerang.setFire(100);
+                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+                    entityboomerang.setSecondsOnFire(100);
                 }
-                world.addEntity(entityboomerang);
+                world.addFreshEntity(entityboomerang);
             }
-            world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
-                    SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
+            world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
+                    SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
                     1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
-            if (!entityplayer.abilities.isCreativeMode) {
+            if (!entityplayer.abilities.instabuild) {
                 ItemStack itemstack2 = itemstack.copy();
                 itemstack2.shrink(1);
                 if (itemstack2.isEmpty()) {
                     itemstack2 = ItemStack.EMPTY;
                 }
-                entityplayer.inventory.mainInventory.set(entityplayer.inventory.currentItem, itemstack2);
+                entityplayer.inventory.items.set(entityplayer.inventory.selected, itemstack2);
             }
         }
     }
@@ -71,16 +70,16 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
-                                                    Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> use(World world, PlayerEntity entityplayer,
+                                       Hand hand) {
+        ItemStack itemstack = entityplayer.getItemInHand(hand);
         if (hand != Hand.MAIN_HAND) {
             return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
-        if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
+        if (!entityplayer.abilities.instabuild && itemstack.isEmpty()) {
             return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
-        entityplayer.setActiveHand(hand);
+        entityplayer.startUsingItem(hand);
         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
 }

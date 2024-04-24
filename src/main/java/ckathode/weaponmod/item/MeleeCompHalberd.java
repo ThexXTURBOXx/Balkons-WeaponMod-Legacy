@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -42,14 +41,9 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     @Override
-    public UseAction getUseAction(ItemStack itemstack) {
-        return UseAction.NONE;
-    }
-
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
-                                                    Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> use(World world, PlayerEntity entityplayer,
+                                       Hand hand) {
+        ItemStack itemstack = entityplayer.getItemInHand(hand);
         setHalberdState(itemstack, !getHalberdState(itemstack));
         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }

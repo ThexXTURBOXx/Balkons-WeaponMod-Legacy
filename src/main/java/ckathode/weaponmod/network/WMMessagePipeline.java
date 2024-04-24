@@ -7,8 +7,9 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -89,7 +90,7 @@ public class WMMessagePipeline {
 
     public <T extends WMMessage<T>> void sendTo(WMMessage<T> message, ServerPlayerEntity player) {
         if (!(player instanceof FakePlayer)) {
-            handler.sendTo(message, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+            handler.sendTo(message, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
@@ -98,7 +99,7 @@ public class WMMessagePipeline {
         handler.send(PacketDistributor.NEAR.with(() -> point), message);
     }
 
-    public <T extends WMMessage<T>> void sendToDimension(WMMessage<T> message, DimensionType dimension) {
+    public <T extends WMMessage<T>> void sendToDimension(WMMessage<T> message, RegistryKey<World> dimension) {
         handler.send(PacketDistributor.DIMENSION.with(() -> dimension), message);
     }
 

@@ -24,10 +24,10 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
 
     @Nonnull
     @Override
-    public ItemStack dispenseStack(IBlockSource blocksource, @Nonnull ItemStack itemstack) {
+    public ItemStack execute(IBlockSource blocksource, @Nonnull ItemStack itemstack) {
         boolean canfire = false;
         normalDispense = false;
-        TileEntity tileentity = blocksource.getWorld().getTileEntity(blocksource.getBlockPos());
+        TileEntity tileentity = blocksource.getLevel().getBlockEntity(blocksource.getPos());
         if (tileentity instanceof DispenserTileEntity) {
             DispenserTileEntity dispenser = (DispenserTileEntity) tileentity;
             Item itemtocheck = null;
@@ -36,10 +36,10 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
             } else if (itemstack.getItem() == BalkonsWeaponMod.cannonBall) {
                 itemtocheck = Items.GUNPOWDER;
             }
-            for (int i = 0; i < dispenser.getSizeInventory(); ++i) {
-                ItemStack itemstack2 = dispenser.getStackInSlot(i);
+            for (int i = 0; i < dispenser.getContainerSize(); ++i) {
+                ItemStack itemstack2 = dispenser.getItem(i);
                 if (!itemstack2.isEmpty() && itemstack2.getItem() == itemtocheck) {
-                    dispenser.decrStackSize(i, 1);
+                    dispenser.removeItem(i, 1);
                     canfire = true;
                     break;
                 }
@@ -47,40 +47,40 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
         }
         if (!canfire) {
             normalDispense = true;
-            return super.dispenseStack(blocksource, itemstack);
+            return super.execute(blocksource, itemstack);
         }
-        Direction face = blocksource.getBlockState().get(DispenserBlock.FACING);
-        double xvel = face.getXOffset() * 1.5;
-        double yvel = face.getYOffset() * 1.5;
-        double zvel = face.getZOffset() * 1.5;
+        Direction face = blocksource.getBlockState().getValue(DispenserBlock.FACING);
+        double xvel = face.getStepX() * 1.5;
+        double yvel = face.getStepY() * 1.5;
+        double zvel = face.getStepZ() * 1.5;
         IPosition pos = DispenserBlock.getDispensePosition(blocksource);
-        EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getWorld(), pos.getX() + xvel,
-                pos.getY() + yvel, pos.getZ() + zvel);
+        EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getLevel(), pos.x() + xvel,
+                pos.y() + yvel, pos.z() + zvel);
         entitycannonball.shoot(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
-        blocksource.getWorld().addEntity(entitycannonball);
+        blocksource.getLevel().addFreshEntity(entitycannonball);
         itemstack.split(1);
         return itemstack;
     }
 
     @Override
-    protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
+    protected void playSound(@Nonnull IBlockSource blocksource) {
         if (normalDispense) {
-            super.playDispenseSound(blocksource);
+            super.playSound(blocksource);
             return;
         }
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
+        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.GENERIC_EXPLODE,
                 SoundCategory.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.8f + 0.9f));
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,
+        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.LIGHTNING_BOLT_THUNDER,
                 SoundCategory.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
     }
 
     @Override
-    protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
-        super.spawnDispenseParticles(blocksource, face);
+    protected void playAnimation(@Nonnull IBlockSource blocksource, @Nonnull Direction face) {
+        super.playAnimation(blocksource, face);
         if (!normalDispense) {
             IPosition pos = DispenserBlock.getDispensePosition(blocksource);
-            blocksource.getWorld().addParticle(ParticleTypes.FLAME, pos.getX() + face.getXOffset(),
-                    pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
+            blocksource.getLevel().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
+                    pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
         }
     }
 }

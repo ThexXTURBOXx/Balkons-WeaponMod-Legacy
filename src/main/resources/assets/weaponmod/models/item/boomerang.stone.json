@@ -6,7 +6,7 @@
   "overrides": [
     {
       "predicate": {
-        "weaponmod:ready-to-throw": 1
+        "weaponmod:boomerang-ready": 1
       },
       "model": "weaponmod:item/boomerang.stone_ready"
     }

@@ -83,7 +83,7 @@ public class BalkonsWeaponMod {
     public static final String MOD_ID = "weaponmod";
     public static BalkonsWeaponMod instance;
     public static final Logger modLog = LogManager.getLogger(MOD_ID);
-    public static final WMCommonProxy proxy = DistExecutor.runForDist(() -> WMClientProxy::new,
+    public static final WMCommonProxy proxy = DistExecutor.safeRunForDist(() -> WMClientProxy::new,
             () -> WMCommonProxy::new);
     public static Item javelin;
     public static Item spearWood;
@@ -172,11 +172,12 @@ public class BalkonsWeaponMod {
     public BalkonsWeaponMod() {
         instance = this;
 
-        DistExecutor.runWhenOn(Dist.CLIENT,
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                 () -> () -> FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient));
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
+        MinecraftForge.EVENT_BUS.register(new ForgeBusEvents());
         MinecraftForge.EVENT_BUS.register(this);
 
         modConfig = new WeaponModConfig();
@@ -218,6 +219,7 @@ public class BalkonsWeaponMod {
 
     public void setupClient(FMLClientSetupEvent event) {
         proxy.registerRenderersEntity();
+        proxy.registerItemModelProperties();
     }
 
     private <T extends Entity> EntityType<T> createEntityType(String name, EntitySize size,
@@ -230,13 +232,13 @@ public class BalkonsWeaponMod {
     private <T extends Entity> EntityType<T> createEntityType(String name, EntitySize size, int range,
                                                               int updateFrequency, boolean velocityUpdates,
                                                               EntityType.IFactory<T> factory) {
-        EntityType.Builder<T> builder = EntityType.Builder.create(factory, EntityClassification.MISC);
+        EntityType.Builder<T> builder = EntityType.Builder.of(factory, EntityClassification.MISC);
         if (range >= 0)
             builder.setTrackingRange(range);
         if (updateFrequency >= 0)
             builder.setUpdateInterval(updateFrequency);
         return (EntityType<T>) builder
-                .size(size.width, size.height)
+                .sized(size.width, size.height)
                 .setShouldReceiveVelocityUpdates(velocityUpdates)
                 .build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
     }
@@ -284,13 +286,6 @@ public class BalkonsWeaponMod {
 
         registry.register(entityMortarShell =
                 createEntityType(EntityMortarShell.NAME, new EntitySize(0.5f, 0.5f, false), EntityMortarShell::new));
-    }
-
-    @SubscribeEvent
-    public void setEyeHeight(EntityEvent.EyeHeight e) {
-        if (e.getEntity() instanceof EntityProjectile) {
-            e.setNewHeight(0);
-        }
     }
 
     @SubscribeEvent
@@ -414,30 +409,39 @@ public class BalkonsWeaponMod {
 
     private void registerDispenseBehavior() {
         if (musketBullet != null) {
-            DispenserBlock.registerDispenseBehavior(musketBullet, new DispenseMusketBullet());
+            DispenserBlock.registerBehavior(musketBullet, new DispenseMusketBullet());
         }
         if (javelin != null) {
-            DispenserBlock.registerDispenseBehavior(javelin, new DispenseJavelin());
+            DispenserBlock.registerBehavior(javelin, new DispenseJavelin());
         }
         if (bolt != null) {
-            DispenserBlock.registerDispenseBehavior(bolt, new DispenseCrossbowBolt());
+            DispenserBlock.registerBehavior(bolt, new DispenseCrossbowBolt());
         }
         for (Item dart : darts.values()) {
-            DispenserBlock.registerDispenseBehavior(dart, new DispenseBlowgunDart());
+            DispenserBlock.registerBehavior(dart, new DispenseBlowgunDart());
         }
         if (dynamite != null) {
-            DispenserBlock.registerDispenseBehavior(dynamite, new DispenseDynamite());
+            DispenserBlock.registerBehavior(dynamite, new DispenseDynamite());
         }
         if (blunderShot != null) {
-            DispenserBlock.registerDispenseBehavior(blunderShot, new DispenseBlunderShot());
+            DispenserBlock.registerBehavior(blunderShot, new DispenseBlunderShot());
         }
         if (cannonBall != null) {
             DispenseCannonBall behavior = new DispenseCannonBall();
-            DispenserBlock.registerDispenseBehavior(cannonBall, behavior);
-            DispenserBlock.registerDispenseBehavior(Items.GUNPOWDER, behavior);
+            DispenserBlock.registerBehavior(cannonBall, behavior);
+            DispenserBlock.registerBehavior(Items.GUNPOWDER, behavior);
         }
         if (mortarShell != null) {
-            DispenserBlock.registerDispenseBehavior(mortarShell, new DispenseMortarShell());
+            DispenserBlock.registerBehavior(mortarShell, new DispenseMortarShell());
+        }
+    }
+
+    public class ForgeBusEvents {
+        @SubscribeEvent
+        public void setEyeHeight(EntityEvent.Size e) {
+            if (e.getEntity() instanceof EntityProjectile) {
+                e.setNewEyeHeight(0);
+            }
         }
     }
 

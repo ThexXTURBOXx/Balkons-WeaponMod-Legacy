@@ -8,11 +8,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
     public static final float[] DEFAULT_IGNORES = new float[]{1, 1, 1, 1, 1};
@@ -29,32 +30,32 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     public boolean onLeftClickEntity(ItemStack itemstack, PlayerEntity player, Entity entity) {
         if (entity instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) entity;
-            Vec3d motion = entity.getMotion();
-            int prevhurtres = living.hurtResistantTime;
+            Vector3d motion = entity.getDeltaMovement();
+            int prevhurtres = living.invulnerableTime;
             int prevhurt = living.hurtTime;
-            living.attackEntityFrom(new DamageSourceAxe(), ignoreArmourAmount);
-            entity.setMotion(motion);
-            living.hurtResistantTime = prevhurtres;
+            living.hurt(new DamageSourceAxe(), ignoreArmourAmount);
+            entity.setDeltaMovement(motion);
+            living.invulnerableTime = prevhurtres;
             living.hurtTime = prevhurt;
         }
         return super.onLeftClickEntity(itemstack, player, entity);
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, BlockState block) {
-        return (block.getMaterial() == Material.WOOD) ? (weaponMaterial.getEfficiency() * 0.75f) :
-                super.getBlockDamage(itemstack, block);
+    public float getDestroySpeed(ItemStack itemstack, BlockState block) {
+        return (block.getMaterial() == Material.WOOD) ? (weaponMaterial.getSpeed() * 0.75f) :
+                super.getDestroySpeed(itemstack, block);
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState block) {
+    public boolean canHarvestBlock(ItemStack stack, BlockState block) {
         return block.getMaterial() == Material.WOOD;
     }
 
     @Override
-    public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
+    public void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> multimap) {
         super.addItemAttributeModifiers(multimap);
-        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getName(), new AttributeModifier(weapon.getUUID(),
+        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(weapon.getUUID(),
                 "Weapon ignore armour modifier", ignoreArmourAmount, AttributeModifier.Operation.ADDITION));
     }
 

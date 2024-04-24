@@ -12,12 +12,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 
 public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
 
@@ -30,14 +30,14 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
     public void render(EntityBoomerang entityboomerang, float f, float f1,
                        MatrixStack ms, IRenderTypeBuffer bufs, int lm) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
-            IVertexBuilder builder = bufs.getBuffer(RenderType.getEntityCutout(getEntityTexture(entityboomerang)));
-            ms.push();
-            ms.rotate(Vector3f.ZP.rotationDegrees(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1));
-            ms.rotate(Vector3f.YP.rotationDegrees(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f));
+            IVertexBuilder builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityboomerang)));
+            ms.pushPose();
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityboomerang.xRotO + (entityboomerang.xRot - entityboomerang.xRotO) * f1));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityboomerang.yRotO + (entityboomerang.yRot - entityboomerang.yRotO) * f1 - 90.0f));
             int material = entityboomerang.getWeaponMaterialId();
             float[] color = entityboomerang.getMaterialColor();
             ms.translate(-0.5f, 0.0f, -0.5f);
-            MatrixStack.Entry last = ms.getLast();
+            MatrixStack.Entry last = ms.last();
             drawVertex(last, builder, 0.0f, 0.0f, 1.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, lm);
             drawVertex(last, builder, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, lm);
             drawVertex(last, builder, 1.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, lm);
@@ -66,7 +66,7 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
                 drawVertex(last, builder, 0.0f, 0.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.5f, 0.0f, 0.0f,
                         -1.0f, 0.0f, lm);
             }
-            GlStateManager.disableCull();
+            GlStateManager._disableCull();
             drawVertex(last, builder, 0.2f, -0.08f, 0.8f, 0.5f, 0.5f, -SQRT2, 0.0f, SQRT2, lm);
             drawVertex(last, builder, 0.2f, 0.08f, 0.8f, 0.5f, 0.65625f, -SQRT2, 0.0f, SQRT2, lm);
             drawVertex(last, builder, 0.9f, 0.08f, 0.8f, 0.0f, 0.65625f, -SQRT2, 0.0f, SQRT2, lm);
@@ -95,18 +95,19 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
                 drawVertex(last, builder, 0.2f, -0.08f, 0.2f, color[0], color[1], color[2], 1.0f, 0.5f, 0.5f, -SQRT2,
                         0.0f, SQRT2, lm);
             }
-            GlStateManager.enableCull();
-            ms.pop();
+            GlStateManager._enableCull();
+            ms.popPose();
         } else {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
-            ms.push();
+            ms.pushPose();
             ms.scale(0.85f, 0.85f, 0.85f);
-            ms.rotate(Vector3f.ZP.rotationDegrees(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1));
-            ms.rotate(Vector3f.YP.rotationDegrees(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f));
-            ms.rotate(Vector3f.XP.rotationDegrees(90.0f));
-            itemRender.renderItem(getStackToRender(entityboomerang), TransformType.NONE, lm, OverlayTexture.NO_OVERLAY,
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityboomerang.xRotO + (entityboomerang.xRot - entityboomerang.xRotO) * f1));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityboomerang.yRotO + (entityboomerang.yRot - entityboomerang.yRotO) * f1 - 90.0f));
+            ms.mulPose(Vector3f.XP.rotationDegrees(90.0f));
+            itemRender.renderStatic(getStackToRender(entityboomerang), TransformType.NONE, lm,
+                    OverlayTexture.NO_OVERLAY,
                     ms, bufs);
-            ms.pop();
+            ms.popPose();
         }
         super.render(entityboomerang, f, f1, ms, bufs, lm);
     }
@@ -118,7 +119,7 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
     @Override
     @Nonnull
     @ParametersAreNonnullByDefault
-    public ResourceLocation getEntityTexture(@Nonnull EntityBoomerang entity) {
+    public ResourceLocation getTextureLocation(@Nonnull EntityBoomerang entity) {
         return WeaponModResources.Entity.BOOMERANG;
     }
 
