@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "itemtransformhelper.fabric.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "GuiMixin",
+    "MinecraftMixin",
+    "ModelManagerMixin"
+  ],
+  "mixins": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
