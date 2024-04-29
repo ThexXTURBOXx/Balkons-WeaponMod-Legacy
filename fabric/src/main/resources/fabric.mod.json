@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "${mod_id}",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "${mod_name}",
   "description": "${mod_description}",
   "authors": [
@@ -13,7 +13,7 @@
     "issues": "${mod_issues_url}"
   },
   "license": "${mod_license}",
-  "icon": "bwm_logo.png",
+  "icon": "bwm_logo_sq.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -23,9 +23,11 @@
   "mixins": [
     "weaponmod.mixins.json"
   ],
+  "accessWidener": "weaponmod.accesswidener",
   "depends": {
     "fabric": "*",
     "minecraft": ">=1.16.5",
-    "architectury": ">=1.32.68"
+    "architectury": ">=${architectury_version}",
+    "cloth-config2": ">=${cloth_config_version}"
   }
 }

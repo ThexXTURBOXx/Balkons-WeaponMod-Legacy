@@ -1,13 +1,13 @@
 package ckathode.weaponmod.fabric;
 
-import ckathode.weaponmod.fabriclike.BalkonsWeaponModFabricLike;
+import ckathode.weaponmod.BalkonsWeaponMod;
 import net.fabricmc.api.ModInitializer;
 
 public class BalkonsWeaponModFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        BalkonsWeaponModFabricLike.init();
+        BalkonsWeaponMod.init();
     }
 
 }

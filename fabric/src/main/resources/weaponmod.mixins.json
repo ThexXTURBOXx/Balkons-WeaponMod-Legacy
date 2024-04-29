@@ -1,14 +1,15 @@
 {
   "required": true,
-  "package": "itemtransformhelper.fabric.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "package": "ckathode.weaponmod.fabric.mixin",
+  "compatibilityLevel": "JAVA_8",
   "minVersion": "0.8",
   "client": [
-    "GuiMixin",
-    "MinecraftMixin",
-    "ModelManagerMixin"
+    "AbstractClientPlayerMixin",
+    "GuiMixin"
   ],
-  "mixins": [],
+  "mixins": [
+    "EntityMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

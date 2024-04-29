@@ -4,38 +4,44 @@
     "item.weaponmod.spear.wood": "Lança de Madeira",
     "item.weaponmod.spear.stone": "Lança de Pedra",
     "item.weaponmod.spear.iron": "Lança de Ferro",
-    "item.weaponmod.spear.diamond": "Lança de Diamante",
     "item.weaponmod.spear.gold": "Lança de Ouro",
+    "item.weaponmod.spear.diamond": "Lança de Diamante",
+    "item.weaponmod.spear.netherite": "Lança de Netherita",
 
     "item.weaponmod.halberd.wood": "Alabarda de Madeira",
     "item.weaponmod.halberd.stone": "Alabarda de Pedra",
     "item.weaponmod.halberd.iron": "Alabarda de Ferro",
-    "item.weaponmod.halberd.diamond": "Alabarda de Diamante",
     "item.weaponmod.halberd.gold": "Alabarda de Ouro",
+    "item.weaponmod.halberd.diamond": "Alabarda de Diamante",
+    "item.weaponmod.halberd.netherite": "Alabarda de Netherita",
 
     "item.weaponmod.battleaxe.wood": "Machado de Batalha de Madeira",
     "item.weaponmod.battleaxe.stone": "Machado de Batalha de Pedra",
     "item.weaponmod.battleaxe.iron": "Machado de Batalha de Ferro",
-    "item.weaponmod.battleaxe.diamond": "Machado de Batalha de Diamante",
     "item.weaponmod.battleaxe.gold": "Machado de Batalha de Ouro",
+    "item.weaponmod.battleaxe.diamond": "Machado de Batalha de Diamante",
+    "item.weaponmod.battleaxe.netherite": "Machado de Batalha de Netherita",
 
     "item.weaponmod.warhammer.wood": "Martelo de Guerra de Madeira",
     "item.weaponmod.warhammer.stone": "Martelo de Guerra de Pedra",
     "item.weaponmod.warhammer.iron": "Martelo de Guerra de Ferro",
-    "item.weaponmod.warhammer.diamond": "Martelo de Guerra de Diamante",
     "item.weaponmod.warhammer.gold": "Martelo de Guerra de Ouro",
+    "item.weaponmod.warhammer.diamond": "Martelo de Guerra de Diamante",
+    "item.weaponmod.warhammer.netherite": "Martelo de Guerra de Netherita",
 
     "item.weaponmod.knife.wood": "Punhal de Madeira",
     "item.weaponmod.knife.stone": "Punhal de Pedra",
     "item.weaponmod.knife.iron": "Punhal de Ferro",
-    "item.weaponmod.knife.diamond": "Punhal de Diamante",
     "item.weaponmod.knife.gold": "Punhal de Ouro",
+    "item.weaponmod.knife.diamond": "Punhal de Diamante",
+    "item.weaponmod.knife.netherite": "Punhal de Netherita",
 
     "item.weaponmod.flail.wood": "Mangual de Madeira",
     "item.weaponmod.flail.stone": "Mangual de Pedra",
     "item.weaponmod.flail.iron": "Mangual de Ferro",
-    "item.weaponmod.flail.diamond": "Mangual de Diamante",
     "item.weaponmod.flail.gold": "Mangual de Ouro",
+    "item.weaponmod.flail.diamond": "Mangual de Diamante",
+    "item.weaponmod.flail.netherite": "Mangual de Netherita",
 
     "item.weaponmod.javelin": "Azagaia",
 
@@ -44,8 +50,9 @@
     "item.weaponmod.musketbayonet.wood": "Mosquete com Baioneta de Madeira",
     "item.weaponmod.musketbayonet.stone": "Mosquete com Baioneta de Pedra",
     "item.weaponmod.musketbayonet.iron": "Mosquete com Baioneta de Ferro",
-    "item.weaponmod.musketbayonet.diamond": "Mosquete com Baioneta de Diamante",
     "item.weaponmod.musketbayonet.gold": "Mosquete com Baioneta de Ouro",
+    "item.weaponmod.musketbayonet.diamond": "Mosquete com Baioneta de Diamante",
+    "item.weaponmod.musketbayonet.netherite": "Mosquete com Baioneta de Netherita",
     "item.weaponmod.musket-ironpart": "Culatra do Mosquete",
     "item.weaponmod.bullet": "Munição para Mosquete",
 
@@ -76,14 +83,16 @@
     "item.weaponmod.boomerang.wood": "Bumerangue de Madeira",
     "item.weaponmod.boomerang.stone": "Bumerangue de Pedra",
     "item.weaponmod.boomerang.iron": "Bumerangue de Ferro",
-    "item.weaponmod.boomerang.diamond": "Bumerangue de Diamante",
     "item.weaponmod.boomerang.gold": "Bumerangue de Ouro",
+    "item.weaponmod.boomerang.diamond": "Bumerangue de Diamante",
+    "item.weaponmod.boomerang.netherite": "Bumerangue de Netherita",
 
     "item.weaponmod.katana.wood": "Katana de Madeira",
     "item.weaponmod.katana.stone": "Katana de Pedra",
     "item.weaponmod.katana.iron": "Katana de Ferro",
-    "item.weaponmod.katana.diamond": "Katana de Diamante",
     "item.weaponmod.katana.gold": "Katana de Ouro",
+    "item.weaponmod.katana.diamond": "Katana de Diamante",
+    "item.weaponmod.katana.netherite": "Katana de Netherita",
 
     "item.weaponmod.flintlock": "Garrucha",
 
@@ -91,9 +100,9 @@
     "item.weaponmod.mortar-ironpart": "Culatra do Argamassa",
     "item.weaponmod.shell": "Casca de Morteiro",
 
-    "attribute.name.weaponmod.ignoreArmour": "Ignora Armadura",
-    "attribute.name.weaponmod.knockback": "Tranco",
-    "attribute.name.weaponmod.attackSpeed": "Velocidade de Ataque",
-    "attribute.name.weaponmod.reloadTime": "Tempo de Recarga",
-    "attribute.name.weaponmod.reach": "Alcance"
+    "attribute.weaponmod.ignoreArmour": "Ignora Armadura",
+    "attribute.weaponmod.knockback": "Tranco",
+    "attribute.weaponmod.attackSpeed": "Velocidade de Ataque",
+    "attribute.weaponmod.reloadTime": "Tempo de Recarga",
+    "attribute.weaponmod.reach": "Alcance"
 }

@@ -13,6 +13,7 @@ dependencies {
     // Remove the next line if you don't want to depend on the API
     modApi "me.shedaniel:architectury:${rootProject.architectury_version}"
     //modApi "dev.architectury:architectury:${rootProject.architectury_version}"
+    modApi "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
 }
 
 publishing {

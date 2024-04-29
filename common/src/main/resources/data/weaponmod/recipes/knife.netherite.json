@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "weaponmod:knife.diamond"
+  },
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "item": "weaponmod:knife.netherite"
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
+}

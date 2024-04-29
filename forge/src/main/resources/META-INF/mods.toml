@@ -28,3 +28,17 @@ mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "architectury"
+mandatory = true
+versionRange = "[${architectury_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "cloth-config"
+mandatory = true
+versionRange = "[${cloth_config_version},)"
+ordering = "NONE"
+side = "BOTH"

@@ -1,0 +1,42 @@
+{
+  "parent": "weaponmod:item/handheld_short",
+  "textures": {
+    "layer0": "weaponmod:items/spear.netherite"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        90,
+        35
+      ],
+      "translation": [
+        0,
+        3.0,
+        1
+      ],
+      "scale": [
+        1.7,
+        1.7,
+        1.7
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        -90,
+        -35
+      ],
+      "translation": [
+        0,
+        3.0,
+        1
+      ],
+      "scale": [
+        1.7,
+        1.7,
+        1.7
+      ]
+    }
+  }
+}

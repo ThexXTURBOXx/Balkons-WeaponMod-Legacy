@@ -1,0 +1,6 @@
+{
+  "parent": "weaponmod:item/flail.netherite",
+  "textures": {
+    "layer0": "weaponmod:items/flail.netherite-thrown"
+  }
+}
