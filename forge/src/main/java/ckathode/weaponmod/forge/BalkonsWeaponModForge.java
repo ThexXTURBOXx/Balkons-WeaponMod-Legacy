@@ -1,9 +1,9 @@
 package ckathode.weaponmod.forge;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
-import me.shedaniel.architectury.platform.forge.EventBuses;
-import me.shedaniel.architectury.utils.Env;
-import me.shedaniel.architectury.utils.EnvExecutor;
+import dev.architectury.platform.forge.EventBuses;
+import dev.architectury.utils.Env;
+import dev.architectury.utils.EnvExecutor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;

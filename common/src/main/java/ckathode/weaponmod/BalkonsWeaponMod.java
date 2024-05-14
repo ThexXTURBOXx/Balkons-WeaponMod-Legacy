@@ -16,6 +16,9 @@ import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import ckathode.weaponmod.item.WMItemProperties;
 import ckathode.weaponmod.network.WMMessagePipeline;
+import ckathode.weaponmod.render.ModelCannonBarrel;
+import ckathode.weaponmod.render.ModelCannonStandard;
+import ckathode.weaponmod.render.ModelDummy;
 import ckathode.weaponmod.render.RenderBlowgunDart;
 import ckathode.weaponmod.render.RenderBlunderShot;
 import ckathode.weaponmod.render.RenderBoomerang;
@@ -30,9 +33,10 @@ import ckathode.weaponmod.render.RenderKnife;
 import ckathode.weaponmod.render.RenderMortarShell;
 import ckathode.weaponmod.render.RenderMusketBullet;
 import ckathode.weaponmod.render.RenderSpear;
-import me.shedaniel.architectury.registry.entity.EntityRenderers;
-import me.shedaniel.architectury.utils.Env;
-import me.shedaniel.architectury.utils.EnvExecutor;
+import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
+import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
+import dev.architectury.utils.Env;
+import dev.architectury.utils.EnvExecutor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.apache.logging.log4j.LogManager;
@@ -56,20 +60,27 @@ public class BalkonsWeaponMod {
     public static class Client {
 
         public static void registerRenderers() {
-            EntityRenderers.register(EntityJavelin.TYPE, RenderJavelin::new);
-            EntityRenderers.register(EntitySpear.TYPE, RenderSpear::new);
-            EntityRenderers.register(EntityKnife.TYPE, RenderKnife::new);
-            EntityRenderers.register(EntityMusketBullet.TYPE, RenderMusketBullet::new);
-            EntityRenderers.register(EntityBlowgunDart.TYPE, RenderBlowgunDart::new);
-            EntityRenderers.register(EntityDynamite.TYPE, RenderDynamite::new);
-            EntityRenderers.register(EntityFlail.TYPE, RenderFlail::new);
-            EntityRenderers.register(EntityCannon.TYPE, RenderCannon::new);
-            EntityRenderers.register(EntityCannonBall.TYPE, RenderCannonBall::new);
-            EntityRenderers.register(EntityDummy.TYPE, RenderDummy::new);
-            EntityRenderers.register(EntityBoomerang.TYPE, RenderBoomerang::new);
-            EntityRenderers.register(EntityCrossbowBolt.TYPE, RenderCrossbowBolt::new);
-            EntityRenderers.register(EntityBlunderShot.TYPE, RenderBlunderShot::new);
-            EntityRenderers.register(EntityMortarShell.TYPE, RenderMortarShell::new);
+            EntityModelLayerRegistry.register(
+                    ModelCannonBarrel.CANNON_BARREL_LAYER, ModelCannonBarrel::createLayer);
+            EntityModelLayerRegistry.register(
+                    ModelCannonStandard.CANNON_STANDARD_LAYER, ModelCannonStandard::createLayer);
+            EntityModelLayerRegistry.register(
+                    ModelDummy.MAIN_LAYER, ModelDummy::createLayer);
+
+            EntityRendererRegistry.register(() -> EntityJavelin.TYPE, RenderJavelin::new);
+            EntityRendererRegistry.register(() -> EntitySpear.TYPE, RenderSpear::new);
+            EntityRendererRegistry.register(() -> EntityKnife.TYPE, RenderKnife::new);
+            EntityRendererRegistry.register(() -> EntityMusketBullet.TYPE, RenderMusketBullet::new);
+            EntityRendererRegistry.register(() -> EntityBlowgunDart.TYPE, RenderBlowgunDart::new);
+            EntityRendererRegistry.register(() -> EntityDynamite.TYPE, RenderDynamite::new);
+            EntityRendererRegistry.register(() -> EntityFlail.TYPE, RenderFlail::new);
+            EntityRendererRegistry.register(() -> EntityCannon.TYPE, RenderCannon::new);
+            EntityRendererRegistry.register(() -> EntityCannonBall.TYPE, RenderCannonBall::new);
+            EntityRendererRegistry.register(() -> EntityDummy.TYPE, RenderDummy::new);
+            EntityRendererRegistry.register(() -> EntityBoomerang.TYPE, RenderBoomerang::new);
+            EntityRendererRegistry.register(() -> EntityCrossbowBolt.TYPE, RenderCrossbowBolt::new);
+            EntityRendererRegistry.register(() -> EntityBlunderShot.TYPE, RenderBlunderShot::new);
+            EntityRendererRegistry.register(() -> EntityMortarShell.TYPE, RenderMortarShell::new);
         }
 
         @Environment(EnvType.CLIENT)

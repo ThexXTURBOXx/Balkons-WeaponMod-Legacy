@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.Random;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -68,6 +67,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
         return meleeComponent.getEnchantmentValue();
     }
 
+    @NotNull
     @Override
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
         Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
@@ -134,11 +134,6 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     @Override
     public UUID getUUID() {
         return ItemShooter.WEAPON_MODIFIER;
-    }
-
-    @Override
-    public Random getItemRand() {
-        return random;
     }
 
     @Override

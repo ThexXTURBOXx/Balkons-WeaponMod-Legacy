@@ -7,14 +7,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderMusketBullet extends WMRenderer<EntityMusketBullet> {
 
-    public RenderMusketBullet(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderMusketBullet(Context context) {
+        super(context);
     }
 
     @Override

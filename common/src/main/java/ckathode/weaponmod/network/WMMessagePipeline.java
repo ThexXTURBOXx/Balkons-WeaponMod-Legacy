@@ -5,8 +5,8 @@ import ckathode.weaponmod.WMUtil.EffectiveSide;
 import io.netty.buffer.ByteBuf;
 import java.util.LinkedList;
 import java.util.function.Supplier;
-import me.shedaniel.architectury.networking.NetworkChannel;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkChannel;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -50,7 +50,7 @@ public final class WMMessagePipeline {
             throw new NullPointerException("No packet registered for discriminator: " + discriminator);
         }
         try {
-            T pkt = clazz.newInstance();
+            T pkt = clazz.getDeclaredConstructor().newInstance();
             pkt.decode(payload.slice());
             return pkt;
         } catch (Throwable t) {

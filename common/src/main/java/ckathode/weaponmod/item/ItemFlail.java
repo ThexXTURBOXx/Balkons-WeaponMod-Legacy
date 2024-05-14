@@ -50,10 +50,9 @@ public class ItemFlail extends ItemMelee {
     @Override
     public void inventoryTick(@NotNull ItemStack itemstack, @NotNull Level world,
                               @NotNull Entity entity, int i, boolean flag) {
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player player)) {
             return;
         }
-        Player player = (Player) entity;
         if (!isThrown(player)) {
             return;
         }
@@ -104,10 +103,11 @@ public class ItemFlail extends ItemMelee {
 
     public void throwFlail(ItemStack itemstack, Level world, Player entityplayer) {
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
-                SoundSource.PLAYERS, 0.5f, 0.4f / (ItemFlail.random.nextFloat() * 0.4f + 0.8f));
+                SoundSource.PLAYERS, 0.5f, 0.4f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClientSide) {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
-            entityflail.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.75f, 3.0f);
+            entityflail.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, 0.75f, 3.0f);
             PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getId());
             world.addFreshEntity(entityflail);
             setThrown(entityplayer, true);
@@ -127,7 +127,7 @@ public class ItemFlail extends ItemMelee {
         if (id != 0) {
             Entity entity = world.getEntity(id);
             if (entity instanceof EntityFlail) {
-                entity.remove();
+                entity.remove(Entity.RemovalReason.DISCARDED);
             }
         }
     }

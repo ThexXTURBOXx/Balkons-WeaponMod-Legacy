@@ -47,17 +47,17 @@ public class ItemJavelin extends WMItem {
         boolean crit = !entityplayer.isOnGround() && !entityplayer.isInWater();
         if (!world.isClientSide) {
             EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
-            entityjavelin.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f,
-                    f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
+            entityjavelin.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
             entityjavelin.setCritArrow(crit);
             world.addFreshEntity(entityjavelin);
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
-                SoundSource.PLAYERS, 1.0f, 1.0f / (Item.random.nextFloat() * 0.4f + 0.8f));
+                SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
             itemstack.shrink(1);
             if (itemstack.isEmpty()) {
-                entityplayer.inventory.removeItem(itemstack);
+                entityplayer.getInventory().removeItem(itemstack);
             }
         }
     }

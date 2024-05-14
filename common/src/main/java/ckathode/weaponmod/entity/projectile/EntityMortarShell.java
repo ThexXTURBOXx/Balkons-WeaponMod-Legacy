@@ -4,7 +4,7 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.WeaponModConfig;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
@@ -49,6 +49,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         setPickupStatusFromEntity(shooter);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -83,7 +84,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         if (level.isClientSide || !inGround || isInWater()) {
             return;
         }
-        remove();
+        remove(RemovalReason.DISCARDED);
         Entity shooter = getOwner();
         if (!(shooter instanceof LivingEntity)) return;
         if (EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER_ARROWS, (LivingEntity) shooter) > 0) {

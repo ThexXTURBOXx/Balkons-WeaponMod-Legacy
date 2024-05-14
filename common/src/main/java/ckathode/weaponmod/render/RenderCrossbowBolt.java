@@ -7,15 +7,15 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt> {
 
-    public RenderCrossbowBolt(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderCrossbowBolt(Context context) {
+        super(context);
     }
 
     @Override
@@ -23,8 +23,8 @@ public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt> {
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitybolt)));
         ms.pushPose();
-        ms.mulPose(Vector3f.YP.rotationDegrees(entitybolt.yRotO + (entitybolt.yRot - entitybolt.yRotO) * f1 - 90.0f));
-        ms.mulPose(Vector3f.ZP.rotationDegrees(entitybolt.xRotO + (entitybolt.xRot - entitybolt.xRotO) * f1));
+        ms.mulPose(Vector3f.YP.rotationDegrees(entitybolt.yRotO + (entitybolt.getYRot() - entitybolt.yRotO) * f1 - 90.0f));
+        ms.mulPose(Vector3f.ZP.rotationDegrees(entitybolt.xRotO + (entitybolt.getXRot() - entitybolt.xRotO) * f1));
         float f11 = entitybolt.shakeTime - f1;
         if (f11 > 0.0f) {
             float f12 = -Mth.sin(f11 * 3.0f) * f11;

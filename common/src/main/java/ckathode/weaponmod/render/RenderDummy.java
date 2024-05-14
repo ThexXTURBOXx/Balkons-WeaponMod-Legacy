@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -17,9 +17,9 @@ public class RenderDummy extends WMRenderer<EntityDummy> {
 
     private final ModelDummy modelDummy;
 
-    public RenderDummy(EntityRenderDispatcher renderManager) {
-        super(renderManager);
-        modelDummy = new ModelDummy();
+    public RenderDummy(Context context) {
+        super(context);
+        modelDummy = new ModelDummy(context.bakeLayer(ModelDummy.MAIN_LAYER));
         shadowRadius = 1.0f;
     }
 

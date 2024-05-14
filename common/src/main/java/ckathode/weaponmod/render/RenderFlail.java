@@ -4,12 +4,11 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -20,20 +19,19 @@ import org.jetbrains.annotations.NotNull;
 
 public class RenderFlail extends WMRenderer<EntityFlail> {
 
-    public RenderFlail(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderFlail(Context context) {
+        super(context);
     }
 
     @Override
     public void render(@NotNull EntityFlail entityflail, float p, float partialTicks,
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         Entity shooterEntity = entityflail.getOwner();
-        if (shooterEntity instanceof Player) {
-            Player shooter = (Player) shooterEntity;
+        if (shooterEntity instanceof Player shooter) {
             ms.pushPose();
             ms.pushPose();
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityflail.yRotO + (entityflail.yRot - entityflail.yRotO) * partialTicks - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityflail.xRotO + (entityflail.xRot - entityflail.xRotO) * partialTicks));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityflail.yRotO + (entityflail.getYRot() - entityflail.yRotO) * partialTicks - 90.0f));
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityflail.xRotO + (entityflail.getXRot() - entityflail.xRotO) * partialTicks));
             float[] color = entityflail.getMaterialColor();
             float f11 = -partialTicks;
             if (f11 > 0.0f) {
@@ -90,12 +88,10 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
             float f3;
             double d9;
             if ((entityRenderDispatcher.options == null || entityRenderDispatcher.options.getCameraType().isFirstPerson()) && shooter == Minecraft.getInstance().player) {
-                d9 = entityRenderDispatcher.options.fov;
-                d9 /= 100.0;
-                Vec3 vec3d = new Vec3((double) i * -0.36 * d9, -0.045 * d9, 0.4);
-                vec3d = vec3d.xRot(-Mth.lerp(partialTicks, shooter.xRotO,
-                        shooter.xRot) * 0.017453292F);
-                vec3d = vec3d.yRot(-Mth.lerp(partialTicks, shooter.yRotO, shooter.yRot) * 0.017453292F);
+                d9 = 960.0 / entityRenderDispatcher.options.fov;
+                Vec3 vec3d = this.entityRenderDispatcher.camera.getNearPlane()
+                        .getPointOnPlane((float) i * 0.525f, -0.1f);
+                vec3d = vec3d.scale(d9);
                 vec3d = vec3d.yRot(f1 * 0.5F);
                 vec3d = vec3d.xRot(-f1 * 0.7F);
                 d4 = Mth.lerp(partialTicks, shooter.xo, shooter.getX()) + vec3d.x;
@@ -115,12 +111,12 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
             float f4 = (float) (d4 - d9);
             float f5 = (float) (d5 - d10) + f3;
             float f6 = (float) (d6 - d8);
-            builder = bufs.getBuffer(RenderType.lines());
-            Matrix4f mat = ms.last().pose();
+            builder = bufs.getBuffer(RenderType.lineStrip());
+            last = ms.last();
 
-            for (int k = 0; k < 16; ++k) {
-                stringVertex(f4, f5, f6, builder, mat, fraction(k, 16));
-                stringVertex(f4, f5, f6, builder, mat, fraction(k + 1, 16));
+            int v = 16;
+            for (int k = 0; k <= v; ++k) {
+                stringVertex(f4, f5, f6, builder, last, fraction(k, v), fraction(k + 1, v));
             }
 
             ms.popPose();
@@ -132,9 +128,16 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
         return (float) part / (float) total;
     }
 
-    private static void stringVertex(float f4, float f5, float f6, VertexConsumer builder, Matrix4f mat, float frac) {
-        builder.vertex(mat, f4 * frac, f5 * (frac * frac + frac) * 0.5F + 0.25F,
-                f6 * frac).color(0, 0, 0, 255).endVertex();
+    private static void stringVertex(float f, float g, float h, VertexConsumer builder, PoseStack.Pose pose, float i,
+                                     float j) {
+        float k = f * i;
+        float l = g * (i * i + i) * 0.5f + 0.25f;
+        float m = h * i;
+        float n = f * j - k;
+        float o = g * (j * j + j) * 0.5f + 0.25f - l;
+        float p = h * j - m;
+        float q = Mth.sqrt(n * n + o * o + p * p);
+        builder.vertex(pose.pose(), k, l, m).color(0, 0, 0, 255).normal(pose.normal(), n /= q, o /= q, p /= q).endVertex();
     }
 
     @Override

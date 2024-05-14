@@ -7,14 +7,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderMortarShell extends WMRenderer<EntityMortarShell> {
 
-    public RenderMortarShell(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderMortarShell(Context context) {
+        super(context);
         shadowRadius = 0.3f;
     }
 

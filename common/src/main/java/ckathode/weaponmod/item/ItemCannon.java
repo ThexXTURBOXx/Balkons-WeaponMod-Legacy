@@ -64,7 +64,7 @@ public class ItemCannon extends WMItem {
             boolean flag1 = block == Blocks.SNOW;
             EntityCannon entitycannon = new EntityCannon(world, raytraceresult.getLocation().x + 0.5,
                     raytraceresult.getLocation().y + (flag1 ? 0.38 : 1.0), raytraceresult.getLocation().z + 0.5);
-            entitycannon.yRot = entityplayer.yRot;
+            entitycannon.setYRot(entityplayer.getYRot());
             if (!world.noCollision(entitycannon, entitycannon.getBoundingBox().inflate(-0.1))) {
                 return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
             } else {

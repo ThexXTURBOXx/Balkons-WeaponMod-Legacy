@@ -2,7 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -38,6 +38,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
         setPickupStatusFromEntity(shooter);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -66,7 +67,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
         if (entity.hurt(damagesource, (float) damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            remove(RemovalReason.DISCARDED);
         } else {
             bounceBack();
         }

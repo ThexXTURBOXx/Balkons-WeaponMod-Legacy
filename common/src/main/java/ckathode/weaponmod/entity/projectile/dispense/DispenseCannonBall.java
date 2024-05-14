@@ -29,8 +29,7 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
         boolean canfire = false;
         normalDispense = false;
         BlockEntity tileentity = blocksource.getLevel().getBlockEntity(blocksource.getPos());
-        if (tileentity instanceof DispenserBlockEntity) {
-            DispenserBlockEntity dispenser = (DispenserBlockEntity) tileentity;
+        if (tileentity instanceof DispenserBlockEntity dispenser) {
             Item itemtocheck = null;
             if (itemstack.getItem() == Items.GUNPOWDER) {
                 itemtocheck = WMRegistries.ITEM_CANNON_BALL.get();

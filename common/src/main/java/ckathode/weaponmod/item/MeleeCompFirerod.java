@@ -23,7 +23,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
         boolean flag = super.hurtEnemy(itemstack, entityliving, entityliving1);
         if (flag) {
-            entityliving.setSecondsOnFire(12 + weapon.getItemRand().nextInt(3));
+            entityliving.setSecondsOnFire(12 + entityliving.getRandom().nextInt(3));
         }
         return flag;
     }
@@ -31,8 +31,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     @Override
     public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int i, boolean flag) {
         super.inventoryTick(itemstack, world, entity, i, flag);
-        if (!(entity instanceof Player)) return;
-        Player player = (Player) entity;
+        if (!(entity instanceof Player player)) return;
         if (player.isInWater()) return;
         boolean mainHand = player.getMainHandItem() == itemstack;
         boolean offHand = player.getOffhandItem() == itemstack;
@@ -41,15 +40,15 @@ public class MeleeCompFirerod extends MeleeComponent {
         float f = 1.0f;
         float f1 = offHand ^ (player.getMainArm() == HumanoidArm.LEFT) ? -28.0f : 28.0f;
         float particleX =
-                -Mth.sin(((player.yRot + f1) / 180F) * 3.141593F) * Mth.cos((player.xRot / 180F) * 3.141593F) * f;
-        float particleY = -Mth.sin((player.xRot / 180F) * 3.141593F) + player.getEyeHeight();
+                -Mth.sin(((player.getYRot() + f1) / 180F) * 3.141593F) * Mth.cos((player.getXRot() / 180F) * 3.141593F) * f;
+        float particleY = -Mth.sin((player.getXRot() / 180F) * 3.141593F) + player.getEyeHeight();
         float particleZ =
-                Mth.cos(((player.yRot + f1) / 180F) * 3.141593F) * Mth.cos((player.xRot / 180F) * 3.141593F) * f;
-        if (weapon.getItemRand().nextInt(5) == 0) {
+                Mth.cos(((player.getYRot() + f1) / 180F) * 3.141593F) * Mth.cos((player.getXRot() / 180F) * 3.141593F) * f;
+        if (player.getRandom().nextInt(5) == 0) {
             world.addParticle(ParticleTypes.FLAME, player.getX() + particleX, player.getY() + particleY,
                     player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
         }
-        if (weapon.getItemRand().nextInt(5) == 0) {
+        if (player.getRandom().nextInt(5) == 0) {
             world.addParticle(ParticleTypes.SMOKE, player.getX() + particleX, player.getY() + particleY,
                     player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
         }

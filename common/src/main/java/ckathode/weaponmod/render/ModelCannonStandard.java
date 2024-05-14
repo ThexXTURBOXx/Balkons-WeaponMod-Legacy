@@ -1,9 +1,29 @@
 package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.entity.EntityCannon;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.resources.ResourceLocation;
+
+import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
 public class ModelCannonStandard extends WMModel<EntityCannon> {
+
+    public static final ModelLayerLocation CANNON_STANDARD_LAYER =
+            new ModelLayerLocation(new ResourceLocation(MOD_ID, EntityCannon.ID), "standard");
+
+    private static final String CONSOLE_MAIN_ID = "consoleMain";
+    private static final String CONSOLE_SIDE_L1_ID = "consoleSideL1";
+    private static final String CONSOLE_SIDE_R1_ID = "consoleSideR1";
+    private static final String BASE_1_ID = "base1";
+    private static final String BASE_2_ID = "base2";
+    private static final String BASE_STAND_ID = "baseStand";
+    private static final String AXIS_1_ID = "axis1";
 
     public final ModelPart consoleMain;
     public final ModelPart consoleSideL1;
@@ -13,51 +33,56 @@ public class ModelCannonStandard extends WMModel<EntityCannon> {
     public final ModelPart baseStand;
     public final ModelPart axis1;
 
-    public ModelCannonStandard() {
-        texWidth = 32;
-        texHeight = 32;
-        consoleMain = new ModelPart(this, 12, 20);
-        consoleMain.addBox(-2.5f, -1.0f, -1.0f, 5, 1, 2);
-        consoleMain.setPos(0.0f, 20.0f, 0.0f);
-        consoleMain.setTexSize(32, 32);
-        consoleMain.mirror = true;
-        setRotation(consoleMain, 0.0f, 0.0f, 0.0f);
-        consoleSideL1 = new ModelPart(this, 26, 20);
-        consoleSideL1.addBox(2.5f, -4.0f, -1.0f, 1, 5, 2);
-        consoleSideL1.setPos(0.0f, 19.0f, 0.0f);
-        consoleSideL1.setTexSize(32, 32);
-        consoleSideL1.mirror = true;
-        setRotation(consoleSideL1, 0.0f, 0.0f, 0.0f);
-        consoleSideR1 = new ModelPart(this, 26, 20);
-        consoleSideR1.addBox(-3.5f, -4.0f, -1.0f, 1, 5, 2);
-        consoleSideR1.setPos(0.0f, 19.0f, 0.0f);
-        consoleSideR1.setTexSize(32, 32);
-        consoleSideR1.mirror = true;
-        setRotation(consoleSideR1, 0.0f, 0.0f, 0.0f);
-        base1 = new ModelPart(this, 0, 26);
-        base1.addBox(-2.0f, -2.0f, -2.0f, 4, 2, 4);
-        base1.setPos(0.0f, 24.0f, 0.0f);
-        base1.setTexSize(32, 32);
-        base1.mirror = true;
-        setRotation(base1, 0.0f, 0.0f, 0.0f);
-        base2 = new ModelPart(this, 16, 28);
-        base2.addBox(-1.5f, -3.0f, -1.5f, 3, 1, 3);
-        base2.setPos(0.0f, 24.0f, 0.0f);
-        base2.setTexSize(32, 32);
-        base2.mirror = true;
-        setRotation(base2, 0.0f, 0.0f, 0.0f);
-        baseStand = new ModelPart(this, 0, 23);
-        baseStand.addBox(-1.0f, -4.0f, -1.0f, 2, 1, 2);
-        baseStand.setPos(0.0f, 24.0f, 0.0f);
-        baseStand.setTexSize(32, 32);
-        baseStand.mirror = true;
-        setRotation(baseStand, 0.0f, 0.0f, 0.0f);
-        axis1 = new ModelPart(this, 22, 23);
-        axis1.addBox(-0.5f, -5.5f, -0.5f, 1, 3, 1);
-        axis1.setPos(0.0f, 24.0f, 0.0f);
-        axis1.setTexSize(32, 32);
-        axis1.mirror = true;
-        setRotation(axis1, 0.0f, 0.0f, 0.0f);
+    public ModelCannonStandard(ModelPart root) {
+        super(root);
+        consoleMain = root.getChild(CONSOLE_MAIN_ID);
+        consoleSideL1 = root.getChild(CONSOLE_SIDE_L1_ID);
+        consoleSideR1 = root.getChild(CONSOLE_SIDE_R1_ID);
+        base1 = root.getChild(BASE_1_ID);
+        base2 = root.getChild(BASE_2_ID);
+        baseStand = root.getChild(BASE_STAND_ID);
+        axis1 = root.getChild(AXIS_1_ID);
+    }
+
+    public static LayerDefinition createLayer() {
+        MeshDefinition meshDefinition = new MeshDefinition();
+        PartDefinition partDefinition = meshDefinition.getRoot();
+        partDefinition.addOrReplaceChild(CONSOLE_MAIN_ID,
+                CubeListBuilder.create()
+                        .texOffs(12, 20)
+                        .addBox(-2.5f, -1.0f, -1.0f, 5, 1, 2),
+                PartPose.offset(0.0f, 20.0f, 0.0f));
+        partDefinition.addOrReplaceChild(CONSOLE_SIDE_L1_ID,
+                CubeListBuilder.create()
+                        .texOffs(26, 20)
+                        .addBox(2.5f, -4.0f, -1.0f, 1, 5, 2),
+                PartPose.offset(0.0f, 19.0f, 0.0f));
+        partDefinition.addOrReplaceChild(CONSOLE_SIDE_R1_ID,
+                CubeListBuilder.create()
+                        .texOffs(26, 20)
+                        .addBox(-3.5f, -4.0f, -1.0f, 1, 5, 2),
+                PartPose.offset(0.0f, 19.0f, 0.0f));
+        partDefinition.addOrReplaceChild(BASE_1_ID,
+                CubeListBuilder.create()
+                        .texOffs(0, 26)
+                        .addBox(-2.0f, -2.0f, -2.0f, 4, 2, 4),
+                PartPose.offset(0.0f, 24.0f, 0.0f));
+        partDefinition.addOrReplaceChild(BASE_2_ID,
+                CubeListBuilder.create()
+                        .texOffs(16, 28)
+                        .addBox(-1.5f, -3.0f, -1.5f, 3, 1, 3),
+                PartPose.offset(0.0f, 24.0f, 0.0f));
+        partDefinition.addOrReplaceChild(BASE_STAND_ID,
+                CubeListBuilder.create()
+                        .texOffs(0, 23)
+                        .addBox(-1.0f, -4.0f, -1.0f, 2, 1, 2),
+                PartPose.offset(0.0f, 24.0f, 0.0f));
+        partDefinition.addOrReplaceChild(AXIS_1_ID,
+                CubeListBuilder.create()
+                        .texOffs(22, 23)
+                        .addBox(-0.5f, -5.5f, -0.5f, 1, 3, 1),
+                PartPose.offset(0.0f, 24.0f, 0.0f));
+        return LayerDefinition.create(meshDefinition, 32, 32);
     }
 
 }

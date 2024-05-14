@@ -7,8 +7,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -19,10 +19,10 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
     private final ModelCannonBarrel modelBarrel;
     private final ModelCannonStandard modelStandard;
 
-    public RenderCannon(EntityRenderDispatcher renderManager) {
-        super(renderManager);
-        modelBarrel = new ModelCannonBarrel();
-        modelStandard = new ModelCannonStandard();
+    public RenderCannon(Context context) {
+        super(context);
+        modelBarrel = new ModelCannonBarrel(context.bakeLayer(ModelCannonBarrel.CANNON_BARREL_LAYER));
+        modelStandard = new ModelCannonStandard(context.bakeLayer(ModelCannonStandard.CANNON_STANDARD_LAYER));
         shadowRadius = 1.0f;
     }
 
@@ -30,7 +30,7 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
     public void render(@NotNull EntityCannon entitycannon, float f, float f1,
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         ms.pushPose();
-        float rot = entitycannon.xRotO + (entitycannon.xRot - entitycannon.xRotO) * f1;
+        float rot = entitycannon.xRotO + (entitycannon.getXRot() - entitycannon.xRotO) * f1;
         rot = Math.min(rot, 20.0f);
         ms.translate(0, 2.375f, 0);
         ms.mulPose(Vector3f.YP.rotationDegrees(180.0f - f));

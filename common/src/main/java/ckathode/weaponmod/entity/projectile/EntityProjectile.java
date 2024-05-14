@@ -1,9 +1,9 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WeaponModConfig;
+import dev.architectury.extensions.network.EntitySpawnExtension;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import java.util.function.Predicate;
-import me.shedaniel.architectury.extensions.network.EntitySpawnExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -135,12 +135,12 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
                         random.nextGaussian() * 0.0075 * deviation)
                 .scale(speed);
         setDeltaMovement(v);
-        float f2 = Mth.sqrt(getHorizontalDistanceSqr(v));
+        double f2 = v.horizontalDistance();
         float n = (float) (Mth.atan2(v.x, v.z) * 180.0 / Math.PI);
-        yRot = n;
+        setYRot(n);
         yRotO = n;
         float n2 = (float) (Mth.atan2(v.y, f2) * 180.0 / Math.PI);
-        xRot = n2;
+        setXRot(n2);
         xRotO = n2;
         ticksInGround = 0;
     }
@@ -150,14 +150,14 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         Vec3 v = new Vec3(d, d1, d2);
         setDeltaMovement(v);
         if (aimRotation() && xRotO == 0.0f && yRotO == 0.0f) {
-            float f = Mth.sqrt(getHorizontalDistanceSqr(v));
+            double f = v.horizontalDistance();
             float n = (float) (Mth.atan2(d, d2) * 180.0 / Math.PI);
-            yRot = n;
+            setYRot(n);
             yRotO = n;
             float n2 = (float) (Mth.atan2(d1, f) * 180.0 / Math.PI);
-            xRot = n2;
+            setXRot(n2);
             xRotO = n2;
-            moveTo(getX(), getY(), getZ(), yRot, xRot);
+            moveTo(getX(), getY(), getZ(), getYRot(), getXRot());
             ticksInGround = 0;
         }
     }
@@ -172,11 +172,11 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         super.baseTick();
         Vec3 motion = getDeltaMovement();
         if (aimRotation() && xRotO == 0.0f && yRotO == 0.0f) {
-            float f = Mth.sqrt(Entity.getHorizontalDistanceSqr(motion));
-            yRot = (float) (Mth.atan2(motion.x, motion.z) * 180.0 / Math.PI);
-            xRot = (float) (Mth.atan2(motion.y, f) * 180.0 / Math.PI);
-            yRotO = yRot;
-            xRotO = xRot;
+            double f = motion.horizontalDistance();
+            setYRot((float) (Mth.atan2(motion.x, motion.z) * 180.0 / Math.PI));
+            setXRot((float) (Mth.atan2(motion.y, f) * 180.0 / Math.PI));
+            yRotO = getYRot();
+            xRotO = getXRot();
         }
         BlockPos blockpos = new BlockPos(xTile, yTile, zTile);
         BlockState iblockstate = level.getBlockState(blockpos);
@@ -207,7 +207,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {
-                    remove();
+                    remove(RemovalReason.DISCARDED);
                 }
             }
             ++inGroundTime;
@@ -266,12 +266,12 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         setPos(newPos.x, newPos.y, newPos.z);
         if (aimRotation()) {
             Vec3 motion2 = getDeltaMovement();
-            double f2 = Mth.sqrt(getHorizontalDistanceSqr(motion2));
+            double f2 = motion2.horizontalDistance();
             float n3 = (float) (Mth.atan2(motion2.x, motion2.z) * 180.0 / Math.PI);
-            yRot = n3;
+            setYRot(n3);
             yRotO = n3;
             float n4 = (float) (Mth.atan2(motion2.y, f2) * 180.0 / Math.PI);
-            xRot = n4;
+            setXRot(n4);
             xRotO = n4;
         }
         float res = getAirResistance();
@@ -306,10 +306,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         if (isOnFire() && !(entity instanceof EnderMan)) {
             entity.setSecondsOnFire(5);
         }
-        if (entity instanceof LivingEntity) {
-            LivingEntity entityliving = (LivingEntity) entity;
+        if (entity instanceof LivingEntity entityliving) {
             if (knockBack > 0) {
-                double f = getHorizontalDistanceSqr(getDeltaMovement());
+                double f = getDeltaMovement().horizontalDistanceSqr();
                 if (f > 0.0) {
                     Vec3 v = getDeltaMovement().scale(knockBack * 0.6 / f);
                     entity.push(v.x, 0.1, v.z);
@@ -348,7 +347,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
 
     protected void bounceBack() {
         setDeltaMovement(getDeltaMovement().scale(-0.1));
-        yRot += 180.0f;
+        setYRot(getYRot() + 180.0f);
         yRotO += 180.0f;
         ticksInAir = 0;
     }
@@ -381,6 +380,12 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     @Override
     protected ItemStack getPickupItem() {
         return ItemStack.EMPTY;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickResult() {
+        return getPickupItem();
     }
 
     public void playHitSound() {
@@ -435,22 +440,17 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             ItemStack item = getPickupItem();
             if (item.isEmpty()) return;
             if ((pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.isCreative()) ||
-                entityplayer.inventory.add(item)) {
+                entityplayer.getInventory().add(item)) {
                 playSound(SoundEvents.ITEM_PICKUP, 0.2f,
                         ((random.nextFloat() - random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                 onItemPickup(entityplayer);
-                remove();
+                remove(RemovalReason.DISCARDED);
             }
         }
     }
 
     protected void onItemPickup(Player entityplayer) {
         entityplayer.take(this, 1);
-    }
-
-    @Override
-    protected boolean isMovementNoisy() {
-        return false;
     }
 
     @Override

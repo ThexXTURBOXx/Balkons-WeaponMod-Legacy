@@ -4,7 +4,7 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -50,6 +50,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
         setPickupStatusFromEntity(shooter);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -102,7 +103,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
             }
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            remove(RemovalReason.DISCARDED);
         } else {
             bounceBack();
         }

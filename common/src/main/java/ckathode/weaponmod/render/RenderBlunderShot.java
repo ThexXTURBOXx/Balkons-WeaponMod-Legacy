@@ -9,14 +9,15 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
 
-    public RenderBlunderShot(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderBlunderShot(Context context) {
+        super(context);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
         ms.pushPose();
         GlStateManager._disableTexture();
         GlStateManager._disableCull();
-        GlStateManager._lineWidth(1.0f);
+        GL11.glLineWidth(1.0f);
         Matrix4f mat = ms.last().pose();
         builder = bufs.getBuffer(RenderType.lines());
         builder.vertex(mat, (float) entityblundershot.getX(), (float) entityblundershot.getY(),

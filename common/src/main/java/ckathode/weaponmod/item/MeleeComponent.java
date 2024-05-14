@@ -65,7 +65,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
             return meleeSpecs.blockDamage * 10.0f;
         }
         Material material = block.getMaterial();
-        return (material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && material != Material.LEAVES && material != Material.VEGETABLE) ? 1.0f : meleeSpecs.blockDamage;
+        return (material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.WATER_PLANT && material != Material.LEAVES && material != Material.VEGETABLE) ? 1.0f : meleeSpecs.blockDamage;
     }
 
     @Override

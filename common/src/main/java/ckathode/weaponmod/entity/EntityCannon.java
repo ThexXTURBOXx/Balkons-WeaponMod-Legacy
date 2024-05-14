@@ -2,8 +2,8 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
+import dev.architectury.networking.NetworkManager;
 import java.util.List;
-import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -57,8 +57,9 @@ public class EntityCannon extends Boat {
     public EntityCannon(EntityType<EntityCannon> entityType, Level world) {
         super(entityType, world);
         blocksBuilding = true;
-        xRot = -20.0f;
-        setRot(yRot = -180.0f, xRot);
+        setXRot(-20.0f);
+        setYRot(-180.0f);
+        setRot(getYRot(), getXRot());
     }
 
     public EntityCannon(Level world, double d, double d1, double d2) {
@@ -94,8 +95,8 @@ public class EntityCannon extends Boat {
     }
 
     @Override
-    public Type getBoatType() {
-        return null; // Fix for WTHIT
+    public ItemStack getPickResult() {
+        return new ItemStack(WMRegistries.ITEM_CANNON.get());
     }
 
     @Override
@@ -113,13 +114,13 @@ public class EntityCannon extends Boat {
         if (level.isClientSide || !isAlive()) {
             return true;
         }
-        if (damagesource instanceof IndirectEntityDamageSource) {
+        if (damagesource instanceof IndirectEntityDamageSource && damagesource.getEntity() != null) {
             if (hasPassenger(damagesource.getEntity())) {
                 return true;
             }
         } else if (damagesource instanceof EntityDamageSource && damagesource.msgId.equals("player")) {
             Player player = (Player) damagesource.getEntity();
-            if (player.inventory.getSelected().isEmpty()) {
+            if (player.getInventory().getSelected().isEmpty()) {
                 if (!player.isCreative()) {
                     spawnAtLocation(WMRegistries.ITEM_CANNON.get(), 1);
                     if (isLoaded() || isLoading()) {
@@ -127,7 +128,7 @@ public class EntityCannon extends Boat {
                         spawnAtLocation(Items.GUNPOWDER, 1);
                     }
                 }
-                remove();
+                remove(RemovalReason.DISCARDED);
                 return true;
             }
         }
@@ -145,7 +146,7 @@ public class EntityCannon extends Boat {
                 spawnAtLocation(WMRegistries.ITEM_CANNON_BALL.get(), 1);
                 spawnAtLocation(Items.GUNPOWDER, 1);
             }
-            remove();
+            remove(RemovalReason.DISCARDED);
         }
         return true;
     }
@@ -195,12 +196,12 @@ public class EntityCannon extends Boat {
         setDeltaMovement(motion);
         if (isVehicle()) {
             LivingEntity entitylivingbase = (LivingEntity) getControllingPassenger();
-            float yaw = entitylivingbase.yRot;
-            float pitch = entitylivingbase.xRot;
-            yRot = yaw % 360.0f;
-            xRot = pitch;
+            float yaw = entitylivingbase.getYRot();
+            float pitch = entitylivingbase.getXRot();
+            setYRot(yaw % 360.0f);
+            setXRot(pitch);
         }
-        setRot(yRot, xRot);
+        setRot(getYRot(), getXRot());
         move(MoverType.SELF, getDeltaMovement());
         List<Entity> list = level.getEntities(this, getBoundingBox().inflate(0.2,
                 0.0, 0.2), EntitySelector.pushableBy(this));
@@ -218,9 +219,9 @@ public class EntityCannon extends Boat {
     }
 
     @Override
-    public boolean causeFallDamage(float f, float f1) {
-        super.causeFallDamage(f, f1);
-        int i = Mth.floor(f);
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        super.causeFallDamage(fallDistance, multiplier, source);
+        int i = Mth.floor(fallDistance);
         i *= 2;
         hurt(DamageSource.FALL, (float) i);
         return false;
@@ -246,7 +247,7 @@ public class EntityCannon extends Boat {
         Entity entityPassenger = getPassengers().isEmpty() ? null : getPassengers().get(0);
         if (!level.isClientSide) {
             EntityCannonBall entitycannonball = new EntityCannonBall(level, this,
-                    entityPassenger.xRot, entityPassenger.yRot, isSuperPowered());
+                    entityPassenger.getXRot(), entityPassenger.getYRot(), isSuperPowered());
             level.addFreshEntity(entitycannonball);
         }
         setReloadInfo(false, 0);
@@ -256,7 +257,7 @@ public class EntityCannon extends Boat {
     public void fireEffects() {
         playSound(SoundEvents.GENERIC_EXPLODE, 8.0f, 1.0f / (random.nextFloat() * 0.8f + 0.9f));
         playSound(SoundEvents.LIGHTNING_BOLT_THUNDER, 8.0f, 1.0f / (random.nextFloat() * 0.4f + 0.6f));
-        float yaw = (float) Math.toRadians(yRot);
+        float yaw = (float) Math.toRadians(getYRot());
         double d = -Mth.sin(yaw) * -1.0f;
         double d2 = Mth.cos(yaw) * -1.0f;
         for (int i = 0; i < 20; ++i) {
@@ -267,7 +268,7 @@ public class EntityCannon extends Boat {
         }
         if (isVehicle()) {
             for (Entity entity2 : getPassengers()) {
-                entity2.xRot += 10.0f;
+                entity2.setXRot(entity2.getXRot() + 10.0f);
             }
         }
         hurt(DamageSource.GENERIC, 2.0f);
@@ -290,7 +291,7 @@ public class EntityCannon extends Boat {
         if (hasPassenger(passenger)) {
             float f = -0.85f;
             float f2 = (float) ((isAlive() ? getPassengersRidingOffset() : 0.01) + passenger.getMyRidingOffset());
-            Vec3 vec3d = new Vec3(f, 0.0, 0.0).yRot(-yRot * 0.017453292f - 1.5707964f);
+            Vec3 vec3d = new Vec3(f, 0.0, 0.0).yRot(-getYRot() * 0.017453292f - 1.5707964f);
             passenger.setPos(getX() + vec3d.x, getY() + f2, getZ() + vec3d.z);
         }
     }
@@ -305,7 +306,7 @@ public class EntityCannon extends Boat {
     @Override
     protected void readAdditionalSaveData(CompoundTag nbttagcompound) {
         setPos(getX(), getY(), getZ());
-        setRot(yRot, xRot);
+        setRot(getYRot(), getXRot());
         fallDistance = nbttagcompound.getFloat("falld");
         setLoaded(nbttagcompound.getBoolean("load"));
         setLoadTimer(nbttagcompound.getShort("ldtime"));
@@ -334,8 +335,8 @@ public class EntityCannon extends Boat {
     }
 
     private ItemStack findAmmo(Player player, Item itemAmmo) {
-        for (int i = 0; i < player.inventory.getContainerSize(); ++i) {
-            ItemStack itemstack = player.inventory.getItem(i);
+        for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
+            ItemStack itemstack = player.getInventory().getItem(i);
             if (isAmmo(itemstack, itemAmmo)) {
                 return itemstack;
             }
@@ -354,7 +355,7 @@ public class EntityCannon extends Boat {
         }
         stackAmmo.shrink(1);
         if (stackAmmo.isEmpty()) {
-            entityplayer.inventory.removeItem(stackAmmo);
+            entityplayer.getInventory().removeItem(stackAmmo);
         }
         return true;
     }

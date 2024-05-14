@@ -7,15 +7,15 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderDynamite extends WMRenderer<EntityDynamite> {
 
-    public RenderDynamite(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderDynamite(Context context) {
+        super(context);
     }
 
     @Override
@@ -23,8 +23,8 @@ public class RenderDynamite extends WMRenderer<EntityDynamite> {
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitydynamite)));
         ms.pushPose();
-        ms.mulPose(Vector3f.YP.rotationDegrees(entitydynamite.yRot + 90.0f));
-        ms.mulPose(Vector3f.ZP.rotationDegrees(entitydynamite.xRotO + (entitydynamite.xRot - entitydynamite.xRotO) * f1));
+        ms.mulPose(Vector3f.YP.rotationDegrees(entitydynamite.getYRot() + 90.0f));
+        ms.mulPose(Vector3f.ZP.rotationDegrees(entitydynamite.xRotO + (entitydynamite.getXRot() - entitydynamite.xRotO) * f1));
         float f11 = -f1;
         if (f11 > 0.0f) {
             float f12 = -Mth.sin(f11 * 3.0f) * f11;

@@ -2,7 +2,7 @@ package ckathode.weaponmod.forge;
 
 import ckathode.weaponmod.WMUtil;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
+import net.minecraftforge.fml.util.thread.EffectiveSide;
 
 public class WMUtilEffectiveSideImpl {
 

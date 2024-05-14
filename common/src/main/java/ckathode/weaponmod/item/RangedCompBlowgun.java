@@ -29,7 +29,7 @@ public class RangedCompBlowgun extends RangedComponent {
         entityplayer.swing(InteractionHand.MAIN_HAND);
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
                 SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 0.8f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
+                1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.4f));
     }
 
     @Override
@@ -53,13 +53,13 @@ public class RangedCompBlowgun extends RangedComponent {
             && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) == 0) {
             dartstack.shrink(1);
             if (dartstack.isEmpty()) {
-                entityplayer.inventory.removeItem(dartstack);
+                entityplayer.getInventory().removeItem(dartstack);
             }
         }
         if (!world.isClientSide) {
             EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer);
-            entityblowgundart.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f,
-                    f * 1.5f, 1.0f);
+            entityblowgundart.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, f * 1.5f, 1.0f);
             Item item = dartStackCopy.getItem();
             if (item instanceof ItemBlowgunDart)
                 entityblowgundart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
@@ -83,21 +83,20 @@ public class RangedCompBlowgun extends RangedComponent {
     @Override
     public void soundEmpty(ItemStack itemstack, Level world, Player entityplayer) {
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
-                SoundSource.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.5f));
+                SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.2f + 0.5f));
     }
 
     @Override
     public void soundCharge(ItemStack itemstack, Level world, Player entityplayer) {
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
                 SoundEvents.PLAYER_BREATH, SoundSource.PLAYERS, 1.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+                1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
     }
 
     @Override
-    public void effectShoot(Level world, double x, double y, double z, float yaw,
-                            float pitch) {
+    public void effectShoot(Level world, double x, double y, double z, float yaw, float pitch) {
         world.playSound(null, x, y, z, SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.5f));
+                1.0f / (world.getRandom().nextFloat() * 0.2f + 0.5f));
         float particleX = -Mth.sin((yaw + 23.0f) * 0.017453292f) * Mth.cos(pitch * 0.017453292f);
         float particleY = -Mth.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = Mth.cos((yaw + 23.0f) * 0.017453292f) * Mth.cos(pitch * 0.017453292f);

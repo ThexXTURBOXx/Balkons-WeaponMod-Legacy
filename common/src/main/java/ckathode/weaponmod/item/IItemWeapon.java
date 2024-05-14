@@ -1,6 +1,5 @@
 package ckathode.weaponmod.item;
 
-import java.util.Random;
 import java.util.UUID;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -16,8 +15,6 @@ public interface IItemWeapon {
     UUID getUUIDSpeed();
 
     UUID getUUIDDamage();
-
-    Random getItemRand();
 
     MeleeComponent getMeleeComponent();
 

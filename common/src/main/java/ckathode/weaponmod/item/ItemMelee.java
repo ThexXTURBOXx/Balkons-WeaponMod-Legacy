@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.Random;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -158,11 +157,6 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     @Override
     public UUID getUUID() {
         return ItemMelee.WEAPON_MODIFIER;
-    }
-
-    @Override
-    public Random getItemRand() {
-        return random;
     }
 
     @Override

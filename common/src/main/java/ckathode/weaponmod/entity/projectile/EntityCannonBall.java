@@ -5,7 +5,7 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.EntityCannon;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
@@ -58,6 +58,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         setCritArrow(superPowered);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -81,7 +82,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         if (level.isClientSide || !inGround || isInWater()) {
             return;
         }
-        remove();
+        remove(RemovalReason.DISCARDED);
         float f = isCritArrow() ? 5.0f : 2.5f;
         PhysHelper.createAdvancedExplosion(level, this, getX(), getY(), getZ(), f,
                 WeaponModConfig.get().cannonDoesBlockDamage, true, false,

@@ -3,7 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
@@ -96,7 +96,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         }
         float limitedStrength = Math.min(1.0f, floatStrength);
         if (!beenInGround) {
-            yRot += 20.0f * floatStrength;
+            setYRot(getYRot() + 20.0f * floatStrength);
         }
         Entity shooter;
         if (!beenInGround && (shooter = getOwner()) != null && floatStrength > 0.0f) {
@@ -121,22 +121,22 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         }
         Entity shooter = getOwner();
         if (entity == shooter) {
-            if (entity instanceof Player) {
-                Player player = (Player) entity;
+            if (entity instanceof Player player) {
                 ItemStack item = getPickupItem();
                 if (item.isEmpty()) {
                     return;
                 }
-                if (player.isCreative() || player.inventory.add(item)) {
+                if (player.isCreative() || player.getInventory().add(item)) {
                     playSound(SoundEvents.ITEM_PICKUP, 0.2f,
                             ((random.nextFloat() - random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                     onItemPickup(player);
-                    remove();
+                    remove(RemovalReason.DISCARDED);
                 }
             }
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        ItemStack thrownItem = getWeapon();
         float damage =
                 ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 3.0f + extraDamage;
         damage += getMeleeHitDamage(entity);
@@ -148,7 +148,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
-                remove();
+                remove(RemovalReason.DISCARDED);
             } else {
                 if (shooter instanceof LivingEntity) {
                     thrownItem.hurtAndBreak(1, (LivingEntity) shooter, s -> {
@@ -227,11 +227,11 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             if (item.isEmpty()) {
                 return;
             }
-            if (entityplayer.isCreative() || entityplayer.inventory.add(item)) {
+            if (entityplayer.isCreative() || entityplayer.getInventory().add(item)) {
                 playSound(SoundEvents.ITEM_PICKUP, 0.2f,
                         ((random.nextFloat() - random.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                 onItemPickup(entityplayer);
-                remove();
+                remove(RemovalReason.DISCARDED);
                 return;
             }
         }

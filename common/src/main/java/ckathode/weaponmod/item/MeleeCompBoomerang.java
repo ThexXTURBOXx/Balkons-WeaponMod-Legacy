@@ -41,8 +41,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
 
     @Override
     public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        if (entityliving instanceof Player) {
-            Player entityplayer = (Player) entityliving;
+        if (entityliving instanceof Player entityplayer) {
             if (itemstack.isEmpty()) {
                 return;
             }
@@ -60,8 +59,8 @@ public class MeleeCompBoomerang extends MeleeComponent {
             f *= 1.5f;
             if (!world.isClientSide) {
                 EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack.copy());
-                entityboomerang.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, f,
-                        5.0f);
+                entityboomerang.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                        0.0f, f, 5.0f);
                 entityboomerang.setCritArrow(crit);
                 entityboomerang.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK,
                         itemstack));
@@ -72,7 +71,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             }
             world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
                     SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 0.6f,
-                    1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
+                    1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 1.0f));
             if (!entityplayer.isCreative()) {
                 itemstack.shrink(1);
             }

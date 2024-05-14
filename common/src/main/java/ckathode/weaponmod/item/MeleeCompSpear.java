@@ -50,7 +50,8 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
         }
         if (!world.isClientSide) {
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
-            entityspear.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.8f, 3.0f);
+            entityspear.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, 0.8f, 3.0f);
             entityspear.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
             if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                 entityspear.setSecondsOnFire(100);
@@ -58,7 +59,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             world.addFreshEntity(entityspear);
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
-                SoundSource.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+                SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
             itemstack = itemstack.copy();
             itemstack.shrink(1);

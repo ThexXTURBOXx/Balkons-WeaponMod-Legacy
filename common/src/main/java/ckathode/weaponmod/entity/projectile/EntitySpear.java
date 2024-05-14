@@ -3,7 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -16,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
@@ -39,6 +40,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         setThrownItemStack(itemstack);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -62,6 +64,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        ItemStack thrownItem = getWeapon();
         Item item = thrownItem.getItem();
         if (item instanceof IItemWeapon && entity.hurt(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
@@ -69,7 +72,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
-                remove();
+                remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
                 if (shooter instanceof LivingEntity) {

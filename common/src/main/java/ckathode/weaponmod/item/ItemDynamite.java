@@ -34,11 +34,12 @@ public class ItemDynamite extends WMItem {
             itemstack.shrink(1);
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.TNT_PRIMED,
-                SoundSource.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
+                SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClientSide) {
             EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
-                    40 + random.nextInt(10));
-            entitydynamite.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.7f, 4.0f);
+                    40 + entityplayer.getRandom().nextInt(10));
+            entitydynamite.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, 0.7f, 4.0f);
             world.addFreshEntity(entitydynamite);
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);

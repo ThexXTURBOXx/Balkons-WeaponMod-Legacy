@@ -112,8 +112,8 @@ public final class PhysHelper {
             dx = (Math.random() - Math.random()) * 0.01D;
         }
         entityliving.hurtDir =
-                (float) (Math.atan2(dz, dx) * 180.0 / 3.141592653589793) - entityliving.yRot;
-        float f = Mth.sqrt(dx * dx + dz * dz);
+                (float) (Math.atan2(dz, dx) * 180.0 / 3.141592653589793) - entityliving.getYRot();
+        double f = Math.sqrt(dx * dx + dz * dz);
         Vec3 motion = entityliving.getDeltaMovement().add(new Vec3(-dx / f * knockback, knockback,
                 -dz / f * knockback));
         if (motion.y > 0.4) {
@@ -121,8 +121,8 @@ public final class PhysHelper {
         }
         entityliving.setDeltaMovement(motion);
         if (knockBackModifier > 0) {
-            dx = -Math.sin(Math.toRadians(attacker.yRot)) * knockBackModifier * 0.5;
-            dz = Math.cos(Math.toRadians(attacker.yRot)) * knockBackModifier * 0.5;
+            dx = -Math.sin(Math.toRadians(attacker.getYRot())) * knockBackModifier * 0.5;
+            dz = Math.cos(Math.toRadians(attacker.getYRot())) * knockBackModifier * 0.5;
             entityliving.push(dx, 0.1, dz);
         }
         if (entityliving instanceof ServerPlayer) {

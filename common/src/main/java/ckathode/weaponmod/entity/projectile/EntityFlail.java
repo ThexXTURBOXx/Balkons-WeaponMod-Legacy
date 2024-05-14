@@ -4,7 +4,7 @@ import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.ItemFlail;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvents;
@@ -49,6 +49,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         setThrownItemStack(itemstack);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -73,12 +74,13 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
             }
             if (shooter instanceof Player) {
                 ItemStack itemstack = ((Player) shooter).getMainHandItem();
+                ItemStack thrownItem = getWeapon();
                 if (itemstack.isEmpty() || (thrownItem != null && itemstack.getItem() != thrownItem.getItem()) || !shooter.isAlive()) {
                     pickUpByOwner();
                 }
             }
         } else if (!level.isClientSide) {
-            remove();
+            remove(RemovalReason.DISCARDED);
         }
         if (inGround) {
             inGround = false;
@@ -100,8 +102,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         double targetPosZ = shooter.getZ();
         float f = 27.0f;
         float f2 = 2.0f;
-        targetPosX += -Math.sin((shooter.yRot + f) * 0.017453292f) * Math.cos(shooter.xRot * 0.017453292f) * f2;
-        targetPosZ += Math.cos((shooter.yRot + f) * 0.017453292f) * Math.cos(shooter.xRot * 0.017453292f) * f2;
+        targetPosX += -Math.sin((shooter.getYRot() + f) * 0.017453292f) * Math.cos(shooter.getXRot() * 0.017453292f) * f2;
+        targetPosZ += Math.cos((shooter.getYRot() + f) * 0.017453292f) * Math.cos(shooter.getXRot() * 0.017453292f) * f2;
         distance = new Vec3(targetPosX, targetPosY, targetPosZ).subtract(position());
         double distanceTotalSqr = distance.lengthSqr();
         if (distanceTotalSqr > 9.0) {
@@ -112,14 +114,14 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         }
         if (!isSwinging) {
             float f3 = 0.2f;
-            setDeltaMovement(distance.scale(f3 * Mth.sqrt(distanceTotalSqr)));
+            setDeltaMovement(distance.scale(f3 * Math.sqrt(distanceTotalSqr)));
         }
     }
 
     public void pickUpByOwner() {
-        remove();
+        remove(RemovalReason.DISCARDED);
         Entity shooter = getOwner();
-        if (shooter instanceof Player && thrownItem != null) {
+        if (shooter instanceof Player && getWeapon() != null) {
             PlayerWeaponData.setFlailThrown((Player) shooter, false);
         }
     }
@@ -160,7 +162,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     @Override
     public void bounceBack() {
         setDeltaMovement(getDeltaMovement().scale(-0.8));
-        yRot += 180.0f;
+        setYRot(getYRot() + 180.0f);
         yRotO += 180.0f;
         ticksInAir = 0;
     }

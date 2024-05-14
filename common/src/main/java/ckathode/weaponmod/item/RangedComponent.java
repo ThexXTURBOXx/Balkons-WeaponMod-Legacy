@@ -202,8 +202,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     public void postShootingEffects(ItemStack itemstack, Player entityplayer,
                                     Level world) {
         effectPlayer(itemstack, entityplayer, world);
-        effectShoot(world, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), entityplayer.yRot,
-                entityplayer.xRot);
+        effectShoot(world, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), entityplayer.getYRot(),
+                entityplayer.getXRot());
     }
 
     public abstract void effectReloadDone(ItemStack p0, Level p1, Player p2);
@@ -247,8 +247,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         if (isAmmo(entityplayer.getItemInHand(InteractionHand.MAIN_HAND))) {
             return entityplayer.getItemInHand(InteractionHand.MAIN_HAND);
         }
-        for (int i = 0; i < entityplayer.inventory.getContainerSize(); ++i) {
-            ItemStack itemstack = entityplayer.inventory.getItem(i);
+        for (int i = 0; i < entityplayer.getInventory().getContainerSize(); ++i) {
+            ItemStack itemstack = entityplayer.getInventory().getItem(i);
             if (isAmmo(itemstack)) {
                 return itemstack;
             }
@@ -267,7 +267,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         }
         itemAmmo.shrink(1);
         if (itemAmmo.isEmpty()) {
-            entityplayer.inventory.removeItem(itemAmmo);
+            entityplayer.getInventory().removeItem(itemAmmo);
         }
         return true;
     }

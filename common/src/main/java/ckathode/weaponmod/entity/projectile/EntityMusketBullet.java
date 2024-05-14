@@ -2,7 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
@@ -37,6 +37,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         setOwner(shooter);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -80,7 +81,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         if (entity.hurt(damagesource, damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            remove(RemovalReason.DISCARDED);
         }
     }
 

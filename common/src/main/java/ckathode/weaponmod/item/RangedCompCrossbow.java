@@ -24,7 +24,7 @@ public class RangedCompCrossbow extends RangedComponent {
         entityplayer.swing(InteractionHand.MAIN_HAND);
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
                 SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 0.8f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
+                1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.4f));
     }
 
     public void resetReload(Level world, ItemStack itemstack) {
@@ -43,7 +43,8 @@ public class RangedCompCrossbow extends RangedComponent {
         f += 0.02f;
         if (!world.isClientSide) {
             EntityCrossbowBolt entitybolt = new EntityCrossbowBolt(world, entityplayer);
-            entitybolt.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 5.0f, 1.5f / f);
+            entitybolt.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, 5.0f, 1.5f / f);
             applyProjectileEnchantments(entitybolt, itemstack);
             world.addFreshEntity(entitybolt);
         }
@@ -58,14 +59,13 @@ public class RangedCompCrossbow extends RangedComponent {
 
     @Override
     public void effectPlayer(ItemStack itemstack, Player entityplayer, Level world) {
-        entityplayer.xRot -= (entityplayer.isShiftKeyDown() ? 4.0f : 8.0f);
+        entityplayer.setXRot(entityplayer.getXRot() - (entityplayer.isShiftKeyDown() ? 4.0f : 8.0f));
     }
 
     @Override
-    public void effectShoot(Level world, double x, double y, double z, float yaw,
-                            float pitch) {
+    public void effectShoot(Level world, double x, double y, double z, float yaw, float pitch) {
         world.playSound(null, x, y, z, SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+                1.0f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
     }
 
 }

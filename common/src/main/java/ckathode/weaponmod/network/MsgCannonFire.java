@@ -3,7 +3,7 @@ package ckathode.weaponmod.network;
 import ckathode.weaponmod.entity.EntityCannon;
 import io.netty.buffer.ByteBuf;
 import java.util.function.Supplier;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.Entity;

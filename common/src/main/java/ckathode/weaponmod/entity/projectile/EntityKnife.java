@@ -3,7 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -16,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
@@ -42,6 +43,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         soundTimer = 0;
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -65,7 +67,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         if (inGround || beenInGround) {
             return;
         }
-        xRot -= 70.0f;
+        setXRot(getXRot() - 70.0f);
         if (soundTimer >= 3) {
             if (!isInWater()) {
                 playSound(SoundEvents.ARROW_SHOOT, 0.6f,
@@ -82,13 +84,14 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        ItemStack thrownItem = getWeapon();
         Item item = thrownItem.getItem();
         if (item instanceof IItemWeapon && entity.hurt(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
             if (thrownItem.getDamageValue() + 2 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
-                remove();
+                remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
                 if (shooter instanceof LivingEntity) {

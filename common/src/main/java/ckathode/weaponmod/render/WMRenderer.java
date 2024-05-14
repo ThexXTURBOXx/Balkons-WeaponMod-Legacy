@@ -2,8 +2,8 @@ package ckathode.weaponmod.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.Entity;
 
@@ -11,8 +11,8 @@ public abstract class WMRenderer<T extends Entity> extends EntityRenderer<T> {
 
     protected static final float SQRT2 = (float) Math.sqrt(2.0);
 
-    protected WMRenderer(EntityRenderDispatcher manager) {
-        super(manager);
+    protected WMRenderer(Context context) {
+        super(context);
     }
 
     public void drawVertex(PoseStack.Pose entry, VertexConsumer builder, float x, float y, float z,

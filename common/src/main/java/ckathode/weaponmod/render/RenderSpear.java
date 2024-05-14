@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class RenderSpear extends WMRenderer<EntitySpear> {
 
-    public RenderSpear(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderSpear(Context context) {
+        super(context);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class RenderSpear extends WMRenderer<EntitySpear> {
         if (!WeaponModConfig.get().itemModelForEntity) {
             VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityspear)));
             ms.pushPose();
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityspear.yRotO + (entityspear.yRot - entityspear.yRotO) * f1 - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityspear.xRotO + (entityspear.xRot - entityspear.xRotO) * f1));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityspear.yRotO + (entityspear.getYRot() - entityspear.yRotO) * f1 - 90.0f));
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityspear.xRotO + (entityspear.getXRot() - entityspear.xRotO) * f1));
             float[] color = entityspear.getMaterialColor();
             float length = 20.0f;
             float f13 = entityspear.shakeTime - f1;
@@ -72,8 +72,8 @@ public class RenderSpear extends WMRenderer<EntitySpear> {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             ms.pushPose();
             ms.scale(1.7f, 1.7f, 1.7f);
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityspear.yRotO + (entityspear.yRot - entityspear.yRotO) * f1 - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityspear.xRotO + (entityspear.xRot - entityspear.xRotO) * f1 - 45.0f));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityspear.yRotO + (entityspear.getYRot() - entityspear.yRotO) * f1 - 90.0f));
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityspear.xRotO + (entityspear.getXRot() - entityspear.xRotO) * f1 - 45.0f));
             float f15 = entityspear.shakeTime - f1;
             if (f15 > 0.0f) {
                 float f16 = -Mth.sin(f15 * 3.0f) * f15;
@@ -81,7 +81,7 @@ public class RenderSpear extends WMRenderer<EntitySpear> {
             }
             ms.translate(-0.35f, -0.35f, 0.0f);
             itemRender.renderStatic(getStackToRender(entityspear), TransformType.NONE, lm, OverlayTexture.NO_OVERLAY,
-                    ms, bufs);
+                    ms, bufs, entityspear.getId());
             ms.popPose();
         }
         super.render(entityspear, f, f1, ms, bufs, lm);

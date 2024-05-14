@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -21,8 +21,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class RenderJavelin extends WMRenderer<EntityJavelin> {
 
-    public RenderJavelin(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderJavelin(Context context) {
+        super(context);
     }
 
     @Override
@@ -31,9 +31,9 @@ public class RenderJavelin extends WMRenderer<EntityJavelin> {
         if (!WeaponModConfig.get().itemModelForEntity) {
             VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityjavelin)));
             ms.pushPose();
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityjavelin.yRotO + (entityjavelin.yRot - entityjavelin.yRotO) *
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityjavelin.yRotO + (entityjavelin.getYRot() - entityjavelin.yRotO) *
                                                                          f1 - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityjavelin.xRotO + (entityjavelin.xRot - entityjavelin.xRotO) *
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityjavelin.xRotO + (entityjavelin.getXRot() - entityjavelin.xRotO) *
                                                                          f1));
             float length = 20.0f;
             float f11 = entityjavelin.shakeTime - f1;
@@ -66,8 +66,8 @@ public class RenderJavelin extends WMRenderer<EntityJavelin> {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             ms.pushPose();
             ms.scale(1.7f, 1.7f, 1.7f);
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityjavelin.yRotO + (entityjavelin.yRot - entityjavelin.yRotO) * f1 - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityjavelin.xRotO + (entityjavelin.xRot - entityjavelin.xRotO) * f1 - 45.0f));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityjavelin.yRotO + (entityjavelin.getYRot() - entityjavelin.yRotO) * f1 - 90.0f));
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityjavelin.xRotO + (entityjavelin.getXRot() - entityjavelin.xRotO) * f1 - 45.0f));
             float f13 = entityjavelin.shakeTime - f1;
             if (f13 > 0.0f) {
                 float f14 = -Mth.sin(f13 * 3.0f) * f13;
@@ -76,7 +76,7 @@ public class RenderJavelin extends WMRenderer<EntityJavelin> {
             ms.translate(-0.25f, -0.25f, 0.0f);
             ms.mulPose(Vector3f.YP.rotationDegrees(180.0f));
             itemRender.renderStatic(getStackToRender(entityjavelin), TransformType.NONE, lm, OverlayTexture.NO_OVERLAY,
-                    ms, bufs);
+                    ms, bufs, entityjavelin.getId());
             ms.popPose();
         }
         super.render(entityjavelin, f, f1, ms, bufs, lm);

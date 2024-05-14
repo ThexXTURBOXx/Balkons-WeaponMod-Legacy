@@ -26,12 +26,12 @@ public class WarhammerExplosion extends AdvancedExplosion {
         int j3 = Mth.floor(explosionZ + size + 1.0);
         List<Entity> list = worldObj.getEntities(exploder, new AABB(k1, i2, j2, l1, i3, j3));
         for (Entity entity : list) {
-            double dr = Mth.sqrt(entity.distanceToSqr(explosionX, explosionY, explosionZ)) / size;
+            double dr = Math.sqrt(entity.distanceToSqr(explosionX, explosionY, explosionZ)) / size;
             if (dr <= 1.0) {
                 double dx = entity.getX() - explosionX;
                 double dy = entity.getEyeY() - explosionY;
                 double dz = entity.getZ() - explosionZ;
-                double d = Mth.sqrt(dx * dx + dy * dy + dz * dz);
+                double d = Math.sqrt(dx * dx + dy * dy + dz * dz);
                 dx /= d;
                 dy /= d;
                 dz /= d;

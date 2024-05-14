@@ -49,8 +49,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
 
     @Override
     public boolean onLeftClickEntity(ItemStack itemstack, Player player, Entity entity) {
-        if (entity instanceof LivingEntity) {
-            LivingEntity living = (LivingEntity) entity;
+        if (entity instanceof LivingEntity living) {
             Vec3 motion = entity.getDeltaMovement();
             int prevhurtres = living.invulnerableTime;
             int prevhurt = living.hurtTime;

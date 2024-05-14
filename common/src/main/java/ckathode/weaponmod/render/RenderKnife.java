@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class RenderKnife extends WMRenderer<EntityKnife> {
 
-    public RenderKnife(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderKnife(Context context) {
+        super(context);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class RenderKnife extends WMRenderer<EntityKnife> {
         if (!WeaponModConfig.get().itemModelForEntity) {
             VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityknife)));
             ms.pushPose();
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityknife.yRotO + (entityknife.yRot - entityknife.yRotO) * f1 - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityknife.xRotO + (entityknife.xRot - entityknife.xRotO) * f1));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityknife.yRotO + (entityknife.getYRot() - entityknife.yRotO) * f1 - 90.0f));
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityknife.xRotO + (entityknife.getXRot() - entityknife.xRotO) * f1));
             float[] color = entityknife.getMaterialColor();
             float f13 = entityknife.shakeTime - f1;
             if (f13 > 0.0f) {
@@ -71,8 +71,8 @@ public class RenderKnife extends WMRenderer<EntityKnife> {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             ms.pushPose();
             ms.scale(0.85f, 0.85f, 0.85f);
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityknife.yRotO + (entityknife.yRot - entityknife.yRotO) * f1 - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityknife.xRotO + (entityknife.xRot - entityknife.xRotO) * f1 - 45.0f));
+            ms.mulPose(Vector3f.YP.rotationDegrees(entityknife.yRotO + (entityknife.getYRot() - entityknife.yRotO) * f1 - 90.0f));
+            ms.mulPose(Vector3f.ZP.rotationDegrees(entityknife.xRotO + (entityknife.getXRot() - entityknife.xRotO) * f1 - 45.0f));
             float f15 = entityknife.shakeTime - f1;
             if (f15 > 0.0f) {
                 float f16 = -Mth.sin(f15 * 3.0f) * f15;
@@ -80,7 +80,7 @@ public class RenderKnife extends WMRenderer<EntityKnife> {
             }
             ms.translate(-0.15f, -0.15f, 0.0f);
             itemRender.renderStatic(getStackToRender(entityknife), TransformType.NONE, lm, OverlayTexture.NO_OVERLAY,
-                    ms, bufs);
+                    ms, bufs, entityknife.getId());
             ms.popPose();
         }
         super.render(entityknife, f, f1, ms, bufs, lm);

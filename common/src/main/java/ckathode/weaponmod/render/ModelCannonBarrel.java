@@ -1,9 +1,30 @@
 package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.entity.EntityCannon;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.resources.ResourceLocation;
+
+import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
 public class ModelCannonBarrel extends WMModel<EntityCannon> {
+
+    public static final ModelLayerLocation CANNON_BARREL_LAYER =
+            new ModelLayerLocation(new ResourceLocation(MOD_ID, EntityCannon.ID), "barrel");
+
+    private static final String SWIVEL_FRONT_ID = "swivelFront";
+    private static final String SWIVEL_BACK_ID = "swivelBack";
+    private static final String SWIVEL_MAIN_ID = "swivelMain";
+    private static final String AXIS_ID = "axis";
+    private static final String SEAL_ID = "seal";
+    private static final String HAND_CRAP_ID = "handCrap";
+    private static final String FRONT_TIP_ID = "frontTip";
+    private static final String BACK_TIP_ID = "backTip";
 
     public final ModelPart swivelFront;
     public final ModelPart swivelBack;
@@ -14,57 +35,62 @@ public class ModelCannonBarrel extends WMModel<EntityCannon> {
     public final ModelPart frontTip;
     public final ModelPart backTip;
 
-    public ModelCannonBarrel() {
-        texWidth = 32;
-        texHeight = 32;
-        swivelFront = new ModelPart(this, 12, 12);
-        swivelFront.addBox(-2.0f, -2.0f, -11.0f, 4, 4, 2);
-        swivelFront.setPos(0.0f, 16.0f, 0.0f);
-        swivelFront.setTexSize(32, 32);
-        swivelFront.mirror = true;
-        setRotation(swivelFront, 0.0f, 0.0f, 0.0f);
-        swivelBack = new ModelPart(this, 12, 0);
-        swivelBack.addBox(-2.0f, -0.501f, -2.0f, 4, 8, 4);
-        swivelBack.setPos(0.0f, 16.0f, 0.0f);
-        swivelBack.setTexSize(32, 32);
-        swivelBack.mirror = true;
-        setRotation(swivelBack, 1.570796f, 0.0f, 0.0f);
-        swivelMain = new ModelPart(this, 0, 0);
-        swivelMain.addBox(-1.5f, -11.5f, -1.5f, 3, 20, 3);
-        swivelMain.setPos(0.0f, 16.0f, 0.0f);
-        swivelMain.setTexSize(32, 32);
-        swivelMain.mirror = true;
-        setRotation(swivelMain, 1.570796f, 0.0f, 0.0f);
-        axis = new ModelPart(this, 12, 18);
-        axis.addBox(-4.0f, -0.5f, -0.5f, 8, 1, 1);
-        axis.setPos(0.0f, 16.0f, 0.0f);
-        axis.setTexSize(32, 32);
-        axis.mirror = true;
-        setRotation(axis, 1.570796f, 0.0f, 0.0f);
-        seal = new ModelPart(this, 9, 0);
-        seal.addBox(-1.0f, -2.5f, 5.5f, 2, 1, 1);
-        seal.setPos(0.0f, 16.0f, 0.0f);
-        seal.setTexSize(32, 32);
-        seal.mirror = true;
-        setRotation(seal, 0.0f, 0.0f, 0.0f);
-        handCrap = new ModelPart(this, 28, 0);
-        handCrap.addBox(-0.5f, 8.5f, -0.5f, 1, 7, 1);
-        handCrap.setPos(0.0f, 16.0f, 0.0f);
-        handCrap.setTexSize(32, 32);
-        handCrap.mirror = true;
-        setRotation(handCrap, 1.570796f, 0.0f, 0.0f);
-        frontTip = new ModelPart(this, 24, 12);
-        frontTip.addBox(-1.0f, 9.0f, -1.0f, 2, 1, 2);
-        frontTip.setPos(0.0f, 16.0f, 0.0f);
-        frontTip.setTexSize(32, 32);
-        frontTip.mirror = true;
-        setRotation(frontTip, 1.570796f, 0.0f, 0.0f);
-        backTip = new ModelPart(this, 24, 12);
-        backTip.addBox(-1.0f, 15.5f, -1.0f, 2, 1, 2);
-        backTip.setPos(0.0f, 16.0f, 0.0f);
-        backTip.setTexSize(32, 32);
-        backTip.mirror = true;
-        setRotation(backTip, 1.570796f, 0.0f, 0.0f);
+    public ModelCannonBarrel(ModelPart root) {
+        super(root);
+        swivelFront = root.getChild(SWIVEL_FRONT_ID);
+        swivelBack = root.getChild(SWIVEL_BACK_ID);
+        swivelMain = root.getChild(SWIVEL_MAIN_ID);
+        axis = root.getChild(AXIS_ID);
+        seal = root.getChild(SEAL_ID);
+        handCrap = root.getChild(HAND_CRAP_ID);
+        frontTip = root.getChild(FRONT_TIP_ID);
+        backTip = root.getChild(BACK_TIP_ID);
+    }
+
+    public static LayerDefinition createLayer() {
+        MeshDefinition meshDefinition = new MeshDefinition();
+        PartDefinition partDefinition = meshDefinition.getRoot();
+        partDefinition.addOrReplaceChild(SWIVEL_FRONT_ID,
+                CubeListBuilder.create()
+                        .texOffs(12, 12)
+                        .addBox(-2.0f, -2.0f, -11.0f, 4, 4, 2),
+                PartPose.offset(0.0f, 16.0f, 0.0f));
+        partDefinition.addOrReplaceChild(SWIVEL_BACK_ID,
+                CubeListBuilder.create()
+                        .texOffs(12, 0)
+                        .addBox(-2.0f, -0.501f, -2.0f, 4, 8, 4),
+                PartPose.offsetAndRotation(0.0f, 16.0f, 0.0f, 1.570796f, 0.0f, 0.0f));
+        partDefinition.addOrReplaceChild(SWIVEL_MAIN_ID,
+                CubeListBuilder.create()
+                        .texOffs(0, 0)
+                        .addBox(-1.5f, -11.5f, -1.5f, 3, 20, 3),
+                PartPose.offsetAndRotation(0.0f, 16.0f, 0.0f, 1.570796f, 0.0f, 0.0f));
+        partDefinition.addOrReplaceChild(AXIS_ID,
+                CubeListBuilder.create()
+                        .texOffs(12, 18)
+                        .addBox(-4.0f, -0.5f, -0.5f, 8, 1, 1),
+                PartPose.offsetAndRotation(0.0f, 16.0f, 0.0f, 1.570796f, 0.0f, 0.0f));
+        partDefinition.addOrReplaceChild(SEAL_ID,
+                CubeListBuilder.create()
+                        .texOffs(9, 0)
+                        .addBox(-1.0f, -2.5f, 5.5f, 2, 1, 1),
+                PartPose.offset(0.0f, 16.0f, 0.0f));
+        partDefinition.addOrReplaceChild(HAND_CRAP_ID,
+                CubeListBuilder.create()
+                        .texOffs(28, 0)
+                        .addBox(-0.5f, 8.5f, -0.5f, 1, 7, 1),
+                PartPose.offsetAndRotation(0.0f, 16.0f, 0.0f, 1.570796f, 0.0f, 0.0f));
+        partDefinition.addOrReplaceChild(FRONT_TIP_ID,
+                CubeListBuilder.create()
+                        .texOffs(24, 12)
+                        .addBox(-1.0f, 9.0f, -1.0f, 2, 1, 2),
+                PartPose.offsetAndRotation(0.0f, 16.0f, 0.0f, 1.570796f, 0.0f, 0.0f));
+        partDefinition.addOrReplaceChild(BACK_TIP_ID,
+                CubeListBuilder.create()
+                        .texOffs(24, 12)
+                        .addBox(-1.0f, 15.5f, -1.0f, 2, 1, 2),
+                PartPose.offsetAndRotation(0.0f, 16.0f, 0.0f, 1.570796f, 0.0f, 0.0f));
+        return LayerDefinition.create(meshDefinition, 32, 32);
     }
 
 }

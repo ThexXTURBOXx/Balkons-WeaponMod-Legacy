@@ -3,8 +3,8 @@ package ckathode.weaponmod.entity;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
+import dev.architectury.networking.NetworkManager;
 import java.util.List;
-import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -49,8 +49,8 @@ public class EntityDummy extends Entity {
     public EntityDummy(EntityType<EntityDummy> entityType, Level world) {
         super(entityType, world);
         blocksBuilding = true;
-        xRot = -20.0f;
-        setRot(yRot, xRot);
+        setXRot(-20.0f);
+        setRot(getYRot(), getXRot());
         durability = 50;
     }
 
@@ -80,6 +80,11 @@ public class EntityDummy extends Entity {
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
+    }
+
+    @Override
+    public ItemStack getPickResult() {
+        return new ItemStack(WMRegistries.ITEM_DUMMY.get());
     }
 
     @Override
@@ -167,7 +172,7 @@ public class EntityDummy extends Entity {
             fallDistance += (float) (-motionY);
             setDeltaMovement(motionX, motionY, motionZ);
         }
-        setRot(yRot, xRot);
+        setRot(getYRot(), getXRot());
         move(MoverType.SELF, new Vec3(0.0, getDeltaMovement().y, 0.0));
         List<Entity> list = level.getEntities(this, getBoundingBox().inflate(0.2,
                 0.0, 0.2), EntitySelector.pushableBy(this));
@@ -181,12 +186,12 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean causeFallDamage(float f, float f1) {
-        super.causeFallDamage(f, f1);
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        super.causeFallDamage(fallDistance, multiplier, source);
         if (!onGround) {
             return false;
         }
-        int i = Mth.floor(f);
+        int i = Mth.floor(fallDistance);
         hurt(DamageSource.FALL, (float) i);
         return false;
     }
@@ -202,13 +207,13 @@ public class EntityDummy extends Entity {
         } else if (noCreative) {
             spawnAtLocation(WMRegistries.ITEM_DUMMY.get(), 1);
         }
-        remove();
+        remove(RemovalReason.DISCARDED);
     }
 
     @NotNull
     @Override
     public InteractionResult interact(Player entityplayer, @NotNull InteractionHand hand) {
-        ItemStack itemstack = entityplayer.inventory.getSelected();
+        ItemStack itemstack = entityplayer.getInventory().getSelected();
         if (!itemstack.isEmpty()) {
             if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof SwordItem || itemstack.getItem() instanceof BowItem || itemstack.getItem() instanceof ShieldItem) {
                 return InteractionResult.FAIL;
@@ -229,7 +234,7 @@ public class EntityDummy extends Entity {
     @Override
     protected void readAdditionalSaveData(@NotNull CompoundTag nbttagcompound) {
         setPos(getX(), getY(), getZ());
-        setRot(yRot, xRot);
+        setRot(getYRot(), getXRot());
     }
 
     public void setTimeSinceHit(int i) {

@@ -1,8 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.item.IItemWeapon;
-import ckathode.weaponmod.item.ItemFlail;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +24,6 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
             SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}, {0.3f, 0.3f, 0.3f}};
-    protected ItemStack thrownItem;
 
     public EntityMaterialProjectile(EntityType<T> type, Level world) {
         super(type, world);
@@ -56,8 +53,8 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
             int i = EnchantmentHelper.getKnockbackBonus((LivingEntity) shooter);
             if (i != 0) {
                 ((LivingEntity) entity).knockback(i * 0.4f,
-                        -Mth.sin(yRot * 0.017453292f),
-                        -Mth.cos(yRot * 0.017453292f));
+                        -Mth.sin(getYRot() * 0.017453292f),
+                        -Mth.cos(getYRot() * 0.017453292f));
             }
             i = EnchantmentHelper.getFireAspect((LivingEntity) shooter);
             if (i > 0 && !entity.isOnFire()) {
@@ -67,18 +64,14 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     public void setThrownItemStack(@NotNull ItemStack itemstack) {
-        thrownItem = itemstack;
-        if (thrownItem.getItem() instanceof ItemFlail || !WeaponModConfig.get().itemModelForEntity) {
-            updateWeaponMaterial();
-        } else if (thrownItem != null && !(thrownItem.getItem() instanceof ItemFlail) && WeaponModConfig.get().itemModelForEntity) {
-            entityData.set(WEAPON_ITEM, itemstack);
-        }
+        updateWeaponMaterial();
+        entityData.set(WEAPON_ITEM, itemstack);
     }
 
     @NotNull
     @Override
     public ItemStack getPickupItem() {
-        return thrownItem;
+        return getWeapon();
     }
 
     public int getWeaponMaterialId() {
@@ -90,6 +83,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     protected void updateWeaponMaterial() {
+        ItemStack thrownItem = getWeapon();
         if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
@@ -112,6 +106,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @Override
     public void addAdditionalSaveData(CompoundTag nbttagcompound) {
         super.addAdditionalSaveData(nbttagcompound);
+        ItemStack thrownItem = getWeapon();
         if (thrownItem != null) {
             nbttagcompound.put("thrI", thrownItem.save(new CompoundTag()));
         }

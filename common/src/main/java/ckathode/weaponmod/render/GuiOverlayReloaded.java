@@ -5,11 +5,13 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.RangedComponent;
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
@@ -25,9 +27,9 @@ public class GuiOverlayReloaded {
         Minecraft mc = Minecraft.getInstance();
         Player p = mc.player;
         if (p == null) return;
-        int currentItem = p.inventory.selected;
+        int currentItem = p.getInventory().selected;
         ItemStack is = p.getUseItem();
-        ItemStack current = p.inventory.getItem(currentItem);
+        ItemStack current = p.getInventory().getItem(currentItem);
         ItemStack offHandItem = p.getOffhandItem();
         if (is.isEmpty()) return;
         Item item = is.getItem();
@@ -60,7 +62,9 @@ public class GuiOverlayReloaded {
         int height = (int) (f * 24);
 
         // -90 = at the same level as the hotbar itself
-        mc.getEntityRenderDispatcher().textureManager.bind(WeaponModResources.Gui.OVERLAY);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, WeaponModResources.Gui.OVERLAY);
         GuiComponent.blit(matrixStack, x0, y0 - height, -90, tx, offset + 24 - height, width, height, 256, 256);
     }
 

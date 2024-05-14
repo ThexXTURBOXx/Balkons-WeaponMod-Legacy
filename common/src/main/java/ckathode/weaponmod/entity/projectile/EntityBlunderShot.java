@@ -3,7 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.RangedComponent;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,6 +38,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         setOwner(shooter);
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -59,7 +60,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     public void tick() {
         super.tick();
         if (ticksInAir > 4) {
-            remove();
+            remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -72,7 +73,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
             entity.invulnerableTime = prevhurtrestime;
             applyEntityHitEffects(entity);
             playHitSound();
-            remove();
+            remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -107,7 +108,8 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         Player entityplayer = (Player) entityliving;
         for (int i = 0; i < 10; ++i) {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
-            entity.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 5.0f, 15.0f);
+            entity.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }

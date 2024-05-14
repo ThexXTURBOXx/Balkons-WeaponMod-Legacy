@@ -4,7 +4,7 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.WeaponModConfig;
-import me.shedaniel.architectury.networking.NetworkManager;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -51,6 +51,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         explodefuse = i;
     }
 
+    @NotNull
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
@@ -72,9 +73,9 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     public void tick() {
         super.tick();
         if (!inGround && !beenInGround) {
-            xRot -= 50.0f;
+            setXRot(getXRot() - 50.0f);
         } else {
-            xRot = 180.0f;
+            setXRot(180.0f);
         }
         if (isInWater() && !extinguished) {
             extinguished = true;
@@ -91,7 +92,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         if (!extinguished) {
             if (explodefuse <= 0) {
                 detonate();
-                remove();
+                remove(RemovalReason.DISCARDED);
             } else {
                 level.addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
             }
@@ -139,7 +140,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
             return;
         }
         if (extinguished && (ticksInGround >= 200 || ticksInAir >= 200)) {
-            remove();
+            remove(RemovalReason.DISCARDED);
         }
         float f = 2.0f;
         PhysHelper.createAdvancedExplosion(level, this, getX(), getY(), getZ(), f,

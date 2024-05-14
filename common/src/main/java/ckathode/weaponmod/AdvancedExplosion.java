@@ -71,12 +71,12 @@ public class AdvancedExplosion extends Explosion {
         Vec3 vec31 = new Vec3(explosionX, explosionY, explosionZ);
         for (Entity entity : list) {
             if (!entity.ignoreExplosion()) {
-                double dr = Mth.sqrt(entity.distanceToSqr(explosionX, explosionY, explosionZ)) / size;
+                double dr = Math.sqrt(entity.distanceToSqr(explosionX, explosionY, explosionZ)) / size;
                 if (dr <= 1.0) {
                     double dx = entity.getX() - explosionX;
                     double dy = entity.getY() - explosionY;
                     double dz = entity.getZ() - explosionZ;
-                    double d = Mth.sqrt(dx * dx + dy * dy + dz * dz);
+                    double d = Math.sqrt(dx * dx + dy * dy + dz * dz);
                     if (d != 0.0) {
                         dx /= d;
                         dy /= d;
@@ -103,28 +103,27 @@ public class AdvancedExplosion extends Explosion {
         for (BlockPos blockpos : positions) {
             BlockState blockstate = worldObj.getBlockState(blockpos);
             Block block = blockstate.getBlock();
-            if (!blockstate.isAir()) {
-                BlockPos blockpos1 = blockpos.immutable();
-                worldObj.getProfiler().push("explosion_blocks");
-                if (block.dropFromExplosion(this) && worldObj instanceof ServerLevel) {
-                    BlockEntity tileentity = block.isEntityBlock() ? worldObj.getBlockEntity(blockpos) : null;
-                    LootContext.Builder lcBuilder =
-                            new LootContext.Builder((ServerLevel) worldObj)
-                                    .withRandom(worldObj.random)
-                                    .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockpos))
-                                    .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
-                                    .withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity)
-                                    .withOptionalParameter(LootContextParams.THIS_ENTITY, this.exploder)
-                                    .withParameter(LootContextParams.EXPLOSION_RADIUS, explosionSize);
+            if (blockstate.isAir()) continue;
+            BlockPos blockpos1 = blockpos.immutable();
+            worldObj.getProfiler().push("explosion_blocks");
+            if (block.dropFromExplosion(this) && worldObj instanceof ServerLevel) {
+                BlockEntity tileentity = blockstate.hasBlockEntity() ? worldObj.getBlockEntity(blockpos) : null;
+                LootContext.Builder lcBuilder =
+                        new LootContext.Builder((ServerLevel) worldObj)
+                                .withRandom(worldObj.random)
+                                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockpos))
+                                .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+                                .withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity)
+                                .withOptionalParameter(LootContextParams.THIS_ENTITY, this.exploder)
+                                .withParameter(LootContextParams.EXPLOSION_RADIUS, explosionSize);
 
-                    blockstate.getDrops(lcBuilder).forEach((s) -> {
-                        addBlockDrops(objectarraylist, s, blockpos1);
-                    });
-                }
-
-                worldObj.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 3);
-                block.wasExploded(worldObj, blockpos, this);
+                blockstate.getDrops(lcBuilder).forEach((s) -> {
+                    addBlockDrops(objectarraylist, s, blockpos1);
+                });
             }
+
+            worldObj.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 3);
+            block.wasExploded(worldObj, blockpos, this);
         }
 
         for (Pair<ItemStack, BlockPos> pair : objectarraylist) {
@@ -164,7 +163,7 @@ public class AdvancedExplosion extends Explosion {
             double dx = px - explosionX;
             double dy = py - explosionY;
             double dz = pz - explosionZ;
-            double distance = Mth.sqrt(dx * dx + dy * dy + dz * dz);
+            double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
             dx /= distance;
             dy /= distance;
             dz /= distance;

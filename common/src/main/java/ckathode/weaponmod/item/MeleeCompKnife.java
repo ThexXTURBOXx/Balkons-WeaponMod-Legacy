@@ -49,7 +49,8 @@ public class MeleeCompKnife extends MeleeComponent {
         }
         if (!world.isClientSide) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());
-            entityknife.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.8f, 3.0f);
+            entityknife.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+                    0.0f, 0.8f, 3.0f);
             entityknife.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
             if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                 entityknife.setSecondsOnFire(100);
@@ -57,7 +58,7 @@ public class MeleeCompKnife extends MeleeComponent {
             world.addFreshEntity(entityknife);
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
-                SoundSource.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+                SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
             itemstack = itemstack.copy();
             itemstack.shrink(1);

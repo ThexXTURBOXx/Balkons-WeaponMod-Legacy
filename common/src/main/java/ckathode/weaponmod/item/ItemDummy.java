@@ -59,7 +59,7 @@ public class ItemDummy extends WMItem {
             boolean flag1 = block == Blocks.SNOW;
             EntityDummy entitydummy = new EntityDummy(world, raytraceresult.getLocation().x + 0.5,
                     raytraceresult.getLocation().y + (flag1 ? 0.38 : 1.0), raytraceresult.getLocation().z + 0.5);
-            entitydummy.yRot = entityplayer.yRot;
+            entitydummy.setYRot(entityplayer.getYRot());
             if (!world.noCollision(entitydummy, entitydummy.getBoundingBox().inflate(-0.1))) {
                 return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
             } else {

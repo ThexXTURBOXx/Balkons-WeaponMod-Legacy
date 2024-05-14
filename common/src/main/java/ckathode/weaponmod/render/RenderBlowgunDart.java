@@ -7,15 +7,15 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
 
-    public RenderBlowgunDart(EntityRenderDispatcher renderManager) {
-        super(renderManager);
+    public RenderBlowgunDart(Context context) {
+        super(context);
     }
 
     @Override
@@ -23,8 +23,8 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         ms.pushPose();
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityblowgundart)));
-        ms.mulPose(Vector3f.YP.rotationDegrees(entityblowgundart.yRotO + (entityblowgundart.yRot - entityblowgundart.yRotO) * f1 - 90.0f));
-        ms.mulPose(Vector3f.ZP.rotationDegrees(entityblowgundart.xRotO + (entityblowgundart.xRot - entityblowgundart.xRotO) * f1));
+        ms.mulPose(Vector3f.YP.rotationDegrees(entityblowgundart.yRotO + (entityblowgundart.getYRot() - entityblowgundart.yRotO) * f1 - 90.0f));
+        ms.mulPose(Vector3f.ZP.rotationDegrees(entityblowgundart.xRotO + (entityblowgundart.getXRot() - entityblowgundart.xRotO) * f1));
         byte type = entityblowgundart.getDartEffectId();
         float[] color = entityblowgundart.getDartColor();
         float f11 = entityblowgundart.shakeTime - f1;

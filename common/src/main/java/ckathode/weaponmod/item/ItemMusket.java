@@ -89,7 +89,7 @@ public class ItemMusket extends ItemShooter {
         if (hasBayonet()) {
             Material material = block.getMaterial();
             boolean flag =
-                    material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && material != Material.LEAVES && material != Material.VEGETABLE;
+                    material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.WATER_PLANT && material != Material.LEAVES && material != Material.VEGETABLE;
             if (entityliving instanceof Player && !((Player) entityliving).isCreative() && flag) {
                 bayonetDamage(itemstack, (Player) entityliving, 2);
             }
