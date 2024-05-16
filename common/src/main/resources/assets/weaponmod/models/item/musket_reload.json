@@ -1,7 +1,7 @@
 {
   "parent": "weaponmod:item/handheld_block",
   "textures": {
-    "layer0": "weaponmod:items/musket"
+    "layer0": "weaponmod:item/musket"
   },
   "display": {
     "thirdperson_righthand": {

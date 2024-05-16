@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,8 +17,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.EntityDamageSource;
-import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySelector;
@@ -90,7 +90,7 @@ public class EntityCannon extends Boat {
 
     @NotNull
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
     }
 
@@ -114,13 +114,13 @@ public class EntityCannon extends Boat {
         if (level.isClientSide || !isAlive()) {
             return true;
         }
-        if (damagesource instanceof IndirectEntityDamageSource && damagesource.getEntity() != null) {
+        if (damagesource.isIndirect() && damagesource.getEntity() != null) {
             if (hasPassenger(damagesource.getEntity())) {
                 return true;
             }
-        } else if (damagesource instanceof EntityDamageSource && damagesource.msgId.equals("player")) {
+        } else if (damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             Player player = (Player) damagesource.getEntity();
-            if (player.getInventory().getSelected().isEmpty()) {
+            if (player != null && player.getInventory().getSelected().isEmpty()) {
                 if (!player.isCreative()) {
                     spawnAtLocation(WMRegistries.ITEM_CANNON.get(), 1);
                     if (isLoaded() || isLoading()) {
@@ -158,7 +158,7 @@ public class EntityCannon extends Boat {
     }
 
     @Override
-    public void animateHurt() {
+    public void animateHurt(float yaw) {
         setRockDirection(-getRockDirection());
         setHurtTime(10);
         setCurrentDamage(getCurrentDamage() + 10);
@@ -195,7 +195,7 @@ public class EntityCannon extends Boat {
         }
         setDeltaMovement(motion);
         if (isVehicle()) {
-            LivingEntity entitylivingbase = (LivingEntity) getControllingPassenger();
+            LivingEntity entitylivingbase = getControllingPassenger();
             float yaw = entitylivingbase.getYRot();
             float pitch = entitylivingbase.getXRot();
             setYRot(yaw % 360.0f);
@@ -223,7 +223,7 @@ public class EntityCannon extends Boat {
         super.causeFallDamage(fallDistance, multiplier, source);
         int i = Mth.floor(fallDistance);
         i *= 2;
-        hurt(DamageSource.FALL, (float) i);
+        hurt(damageSources().fall(), (float) i);
         return false;
     }
 
@@ -271,7 +271,7 @@ public class EntityCannon extends Boat {
                 entity2.setXRot(entity2.getXRot() + 10.0f);
             }
         }
-        hurt(DamageSource.GENERIC, 2.0f);
+        hurt(damageSources().generic(), 2.0f);
     }
 
     public void setReloadInfo(boolean loaded, int reloadtime) {
@@ -372,7 +372,7 @@ public class EntityCannon extends Boat {
 
     @Override
     public void thunderHit(@NotNull ServerLevel world, @NotNull LightningBolt entitylightningbolt) {
-        hurt(DamageSource.LIGHTNING_BOLT, 100.0f);
+        hurt(damageSources().lightningBolt(), 100.0f);
         setSuperPowered(true);
     }
 

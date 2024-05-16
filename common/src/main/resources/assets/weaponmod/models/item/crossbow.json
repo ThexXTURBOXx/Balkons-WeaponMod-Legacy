@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "weaponmod:items/crossbow"
+    "layer0": "weaponmod:item/crossbow"
   },
   "display": {
     "thirdperson_righthand": {

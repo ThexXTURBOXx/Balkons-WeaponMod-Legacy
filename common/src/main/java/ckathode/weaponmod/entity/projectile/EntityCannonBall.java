@@ -1,14 +1,15 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.PhysHelper;
+import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.EntityCannon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -60,7 +61,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
 
     @NotNull
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
     }
 
@@ -91,7 +92,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         if (entity.hurt(damagesource, 30.0f)) {
             playSound(SoundEvents.PLAYER_HURT, 1.0f, 1.2f / (random.nextFloat() * 0.4f + 0.7f));
         }

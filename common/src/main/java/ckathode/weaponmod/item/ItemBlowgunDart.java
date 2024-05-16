@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
@@ -39,13 +38,13 @@ public class ItemBlowgunDart extends WMItem {
                                 @NotNull List<Component> list, @NotNull TooltipFlag flag) {
         MobEffectInstance potioneffect = dartType.potionEffect;
         MobEffect potion = potioneffect.getEffect();
-        MutableComponent s = new TranslatableComponent(potioneffect.getDescriptionId());
+        MutableComponent s = Component.translatable(potioneffect.getDescriptionId());
         if (potioneffect.getAmplifier() > 0) {
-            s = new TranslatableComponent("potion.withAmplifier",
-                    s, new TranslatableComponent("potion.potency." + potioneffect.getAmplifier()));
+            s = Component.translatable("potion.withAmplifier",
+                    s, Component.translatable("potion.potency." + potioneffect.getAmplifier()));
         }
         if (potioneffect.getDuration() > 20) {
-            s = new TranslatableComponent("potion.withDuration", s, MobEffectUtil.formatDuration(potioneffect, 1.0f));
+            s = Component.translatable("potion.withDuration", s, MobEffectUtil.formatDuration(potioneffect, 1.0f));
         }
         s = s.withStyle(potion.getCategory().getTooltipFormatting());
         list.add(s);

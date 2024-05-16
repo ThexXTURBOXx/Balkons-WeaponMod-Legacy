@@ -4,7 +4,7 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -30,15 +30,15 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
         if (shooterEntity instanceof Player shooter) {
             ms.pushPose();
             ms.pushPose();
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityflail.yRotO + (entityflail.getYRot() - entityflail.yRotO) * partialTicks - 90.0f));
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityflail.xRotO + (entityflail.getXRot() - entityflail.xRotO) * partialTicks));
+            ms.mulPose(Axis.YP.rotationDegrees(entityflail.yRotO + (entityflail.getYRot() - entityflail.yRotO) * partialTicks - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityflail.xRotO + (entityflail.getXRot() - entityflail.xRotO) * partialTicks));
             float[] color = entityflail.getMaterialColor();
             float f11 = -partialTicks;
             if (f11 > 0.0f) {
                 float f12 = -Mth.sin(f11 * 3.0f) * f11;
-                ms.mulPose(Vector3f.ZP.rotationDegrees(f12));
+                ms.mulPose(Axis.ZP.rotationDegrees(f12));
             }
-            ms.mulPose(Vector3f.XP.rotationDegrees(45.0f));
+            ms.mulPose(Axis.XP.rotationDegrees(45.0f));
             ms.scale(0.15f, 0.15f, 0.15f);
             ms.translate(-4.0f, 0.0f, 0.0f);
             PoseStack.Pose last = ms.last();
@@ -60,7 +60,7 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
             drawVertex(last, builder, 1.5f, -2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.3125f, -0.15f, 0.0f,
                     0.0f, lm);
             for (int j = 0; j < 4; ++j) {
-                ms.mulPose(Vector3f.XP.rotationDegrees(90.0f));
+                ms.mulPose(Axis.XP.rotationDegrees(90.0f));
                 last = ms.last();
                 drawVertex(last, builder, -8.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1, 0.0f, 0.0f, 0.0f, 0.0f,
                         0.15f, lm);
@@ -88,7 +88,7 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
             float f3;
             double d9;
             if ((entityRenderDispatcher.options == null || entityRenderDispatcher.options.getCameraType().isFirstPerson()) && shooter == Minecraft.getInstance().player) {
-                d9 = 960.0 / entityRenderDispatcher.options.fov;
+                d9 = 960.0 / entityRenderDispatcher.options.fov().get();
                 Vec3 vec3d = this.entityRenderDispatcher.camera.getNearPlane()
                         .getPointOnPlane((float) i * 0.525f, -0.1f);
                 vec3d = vec3d.scale(d9);

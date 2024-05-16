@@ -1,9 +1,10 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WeaponDamageSource;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -40,7 +41,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
 
     @NotNull
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
     }
 
@@ -63,7 +64,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
         if (isCritArrow()) {
             damage += random.nextInt(damage / 2 + 2);
         }
-        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         if (entity.hurt(damagesource, (float) damage)) {
             applyEntityHitEffects(entity);
             playHitSound();

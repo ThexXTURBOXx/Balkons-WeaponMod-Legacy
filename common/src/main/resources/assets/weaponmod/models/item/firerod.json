@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "weaponmod:items/firerod"
+    "layer0": "weaponmod:item/firerod"
   },
   "display": {
     "thirdperson_righthand": {

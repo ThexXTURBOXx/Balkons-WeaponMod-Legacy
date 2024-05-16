@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "weaponmod:items/halberd.gold"
+    "layer0": "weaponmod:item/halberd.gold"
   },
   "display": {
     "thirdperson_righthand": {

@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "weaponmod:items/warhammer.diamond"
+    "layer0": "weaponmod:item/warhammer.diamond"
   }
 }

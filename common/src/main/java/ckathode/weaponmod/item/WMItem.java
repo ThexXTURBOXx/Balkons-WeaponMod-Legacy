@@ -1,6 +1,6 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 
 public class WMItem extends Item {
@@ -37,7 +37,7 @@ public class WMItem extends Item {
     }
 
     public WMItem(Properties properties) {
-        super(properties.tab(CreativeModeTab.TAB_COMBAT));
+        super(properties.arch$tab(CreativeModeTabs.COMBAT));
     }
 
 }

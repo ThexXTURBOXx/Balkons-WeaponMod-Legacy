@@ -6,15 +6,15 @@ import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,8 +30,8 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
         if (!WeaponModConfig.get().itemModelForEntity) {
             VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityboomerang)));
             ms.pushPose();
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityboomerang.xRotO + (entityboomerang.getXRot() - entityboomerang.xRotO) * f1));
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityboomerang.yRotO + (entityboomerang.getYRot() - entityboomerang.yRotO) * f1 - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityboomerang.xRotO + (entityboomerang.getXRot() - entityboomerang.xRotO) * f1));
+            ms.mulPose(Axis.YP.rotationDegrees(entityboomerang.yRotO + (entityboomerang.getYRot() - entityboomerang.yRotO) * f1 - 90.0f));
             int material = entityboomerang.getWeaponMaterialId();
             float[] color = entityboomerang.getMaterialColor();
             ms.translate(-0.5f, 0.0f, -0.5f);
@@ -99,12 +99,11 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             ms.pushPose();
             ms.scale(0.85f, 0.85f, 0.85f);
-            ms.mulPose(Vector3f.ZP.rotationDegrees(entityboomerang.xRotO + (entityboomerang.getXRot() - entityboomerang.xRotO) * f1));
-            ms.mulPose(Vector3f.YP.rotationDegrees(entityboomerang.yRotO + (entityboomerang.getYRot() - entityboomerang.yRotO) * f1 - 90.0f));
-            ms.mulPose(Vector3f.XP.rotationDegrees(90.0f));
-            itemRender.renderStatic(getStackToRender(entityboomerang), TransformType.NONE, lm,
-                    OverlayTexture.NO_OVERLAY,
-                    ms, bufs, entityboomerang.getId());
+            ms.mulPose(Axis.ZP.rotationDegrees(entityboomerang.xRotO + (entityboomerang.getXRot() - entityboomerang.xRotO) * f1));
+            ms.mulPose(Axis.YP.rotationDegrees(entityboomerang.yRotO + (entityboomerang.getYRot() - entityboomerang.yRotO) * f1 - 90.0f));
+            ms.mulPose(Axis.XP.rotationDegrees(90.0f));
+            itemRender.renderStatic(getStackToRender(entityboomerang), ItemDisplayContext.NONE, lm,
+                    OverlayTexture.NO_OVERLAY, ms, bufs, entityboomerang.level, entityboomerang.getId());
             ms.popPose();
         }
         super.render(entityboomerang, f, f1, ms, bufs, lm);

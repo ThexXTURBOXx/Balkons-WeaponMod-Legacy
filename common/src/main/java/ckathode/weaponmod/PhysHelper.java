@@ -5,7 +5,6 @@ import ckathode.weaponmod.network.WMMessagePipeline;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -111,8 +110,6 @@ public final class PhysHelper {
              dz = (Math.random() - Math.random()) * 0.01D) {
             dx = (Math.random() - Math.random()) * 0.01D;
         }
-        entityliving.hurtDir =
-                (float) (Math.atan2(dz, dx) * 180.0 / 3.141592653589793) - entityliving.getYRot();
         double f = Math.sqrt(dx * dx + dz * dz);
         Vec3 motion = entityliving.getDeltaMovement().add(new Vec3(-dx / f * knockback, knockback,
                 -dz / f * knockback));

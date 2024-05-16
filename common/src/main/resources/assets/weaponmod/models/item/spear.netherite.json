@@ -1,7 +1,7 @@
 {
   "parent": "weaponmod:item/handheld_short",
   "textures": {
-    "layer0": "weaponmod:items/spear.netherite"
+    "layer0": "weaponmod:item/spear.netherite"
   },
   "display": {
     "thirdperson_righthand": {

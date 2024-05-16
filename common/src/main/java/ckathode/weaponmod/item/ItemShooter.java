@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
@@ -32,7 +32,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
 
     public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent,
                        Properties properties) {
-        super(rangedcomponent.setProperties(properties).tab(CreativeModeTab.TAB_COMBAT));
+        super(rangedcomponent.setProperties(properties).arch$tab(CreativeModeTabs.COMBAT));
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);

@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "weaponmod:items/battleaxe.stone"
+    "layer0": "weaponmod:item/battleaxe.stone"
   }
 }

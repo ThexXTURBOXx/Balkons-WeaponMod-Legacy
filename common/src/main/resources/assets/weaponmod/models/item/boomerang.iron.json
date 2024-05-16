@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "weaponmod:items/boomerang.iron"
+    "layer0": "weaponmod:item/boomerang.iron"
   },
   "overrides": [
     {

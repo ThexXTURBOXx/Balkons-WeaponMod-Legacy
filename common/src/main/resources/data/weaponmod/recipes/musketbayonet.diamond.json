@@ -20,5 +20,15 @@
       "type": "weaponmod:config_conditional",
       "weapon": "knife"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "parent": "weaponmod:item/halberd.wood",
   "textures": {
-    "layer0": "weaponmod:items/halberd.wood"
+    "layer0": "weaponmod:item/halberd.wood"
   },
   "display": {
     "thirdperson_righthand": {

@@ -1,12 +1,13 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -52,7 +53,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
 
     @NotNull
     @Override
-    public Packet<?> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
     }
 
@@ -96,7 +97,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         if (entity.hurt(damagesource, 1.0f + extraDamage)) {
             if (entity instanceof LivingEntity) {
                 ((LivingEntity) entity).addEffect(new MobEffectInstance(DartType.dartTypes[getDartEffectId()].potionEffect));

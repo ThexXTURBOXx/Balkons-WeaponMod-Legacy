@@ -4,7 +4,7 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityDummy;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
@@ -28,18 +28,18 @@ public class RenderDummy extends WMRenderer<EntityDummy> {
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         ms.pushPose();
         ms.translate(0, -0.025f, 0);
-        ms.mulPose(Vector3f.YP.rotationDegrees(180.0f - f));
+        ms.mulPose(Axis.YP.rotationDegrees(180.0f - f));
         float f2 = entitydummy.getTimeSinceHit() - f1;
         float f3 = entitydummy.getCurrentDamage() - f1;
         if (f3 < 0.0f) {
             f3 = 0.0f;
         }
         if (f2 > 0.0f) {
-            ms.mulPose(Vector3f.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entitydummy.getRockDirection() / 5.0f));
         }
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitydummy)));
         ms.scale(-1.0f, -1.0f, 1.0f);
-        ms.mulPose(Vector3f.XP.rotationDegrees(180.0f));
+        ms.mulPose(Axis.XP.rotationDegrees(180.0f));
         modelDummy.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
         ms.popPose();
         super.render(entitydummy, f, f1, ms, bufs, lm);

@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "weaponmod:items/halberd.netherite"
+    "layer0": "weaponmod:item/halberd.netherite"
   },
   "display": {
     "thirdperson_righthand": {

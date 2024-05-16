@@ -20,5 +20,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "musket"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "musket"
+    }
   ]
 }

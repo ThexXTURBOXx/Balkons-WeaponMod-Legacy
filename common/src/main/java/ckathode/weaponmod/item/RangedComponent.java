@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -335,7 +335,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public List<Item> getAmmoItems() {
             if (ammoItems == null) {
                 ammoItems = Arrays.stream(ammoItemTags)
-                        .map(t -> Registry.ITEM.get(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
+                        .map(t -> BuiltInRegistries.ITEM.get(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
                         .collect(Collectors.toList());
                 BalkonsWeaponMod.LOGGER.debug("Found items {} for {} @{}", ammoItems,
                         Arrays.toString(ammoItemTags), this);

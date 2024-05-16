@@ -1,6 +1,6 @@
 {
   "parent": "weaponmod:item/flail.gold",
   "textures": {
-    "layer0": "weaponmod:items/flail-thrown"
+    "layer0": "weaponmod:item/flail-thrown"
   }
 }

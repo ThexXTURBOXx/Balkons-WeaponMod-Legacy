@@ -3,10 +3,10 @@ package ckathode.weaponmod;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -32,6 +32,7 @@ public class AdvancedExplosion extends Explosion {
 
     protected static final Random rand = new Random();
     public final Level worldObj;
+    public final DamageSource damageSource;
     public final double explosionX;
     public final double explosionY;
     public final double explosionZ;
@@ -43,6 +44,7 @@ public class AdvancedExplosion extends Explosion {
                              float size, boolean flame, BlockInteraction mode) {
         super(world, entity, null, null, x, y, z, size, flame, mode);
         worldObj = world;
+        damageSource = world.damageSources().explosion(this);
         exploder = entity;
         explosionX = x;
         explosionY = y;
@@ -56,7 +58,7 @@ public class AdvancedExplosion extends Explosion {
     }
 
     public void doEntityExplosion() {
-        doEntityExplosion(DamageSource.explosion(this));
+        doEntityExplosion(damageSource);
     }
 
     public void doEntityExplosion(DamageSource damagesource) {
@@ -98,8 +100,8 @@ public class AdvancedExplosion extends Explosion {
         }
 
         ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
-        List<BlockPos> positions = getToBlow();
-        Collections.shuffle(positions, worldObj.random);
+        ObjectArrayList<BlockPos> positions = new ObjectArrayList<>(getToBlow());
+        Util.shuffle(positions, worldObj.random);
         for (BlockPos blockpos : positions) {
             BlockState blockstate = worldObj.getBlockState(blockpos);
             Block block = blockstate.getBlock();
@@ -198,7 +200,7 @@ public class AdvancedExplosion extends Explosion {
                         double dz = explosionZ;
                         float f = 0.3f;
                         while (strength > 0.0f) {
-                            BlockPos blockpos = new BlockPos(dx, dy, dz);
+                            BlockPos blockpos = BlockPos.containing(dx, dy, dz);
                             BlockState iblockstate = worldObj.getBlockState(blockpos);
                             if (!iblockstate.isAir()) {
                                 strength -= (iblockstate.getBlock().getExplosionResistance() + 0.3f) * f;

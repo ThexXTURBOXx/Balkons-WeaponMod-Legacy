@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "weaponmod:items/bolt"
+    "layer0": "weaponmod:item/bolt"
   }
 }

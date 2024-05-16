@@ -1,7 +1,7 @@
 {
   "parent": "weaponmod:item/halberd.diamond",
   "textures": {
-    "layer0": "weaponmod:items/halberd.diamond"
+    "layer0": "weaponmod:item/halberd.diamond"
   },
   "display": {
     "thirdperson_righthand": {

@@ -28,5 +28,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "flintlock"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "flintlock"
+    }
   ]
 }
