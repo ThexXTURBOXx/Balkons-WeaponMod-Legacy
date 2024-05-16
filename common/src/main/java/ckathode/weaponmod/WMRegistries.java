@@ -51,6 +51,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
@@ -180,8 +181,9 @@ public class WMRegistries {
             ITEMS.register(RangedCompBlowgun.ID, () -> RangedCompBlowgun.ITEM);
     public static final Map<DartType, RegistrySupplier<ItemBlowgunDart>> ITEM_DARTS =
             Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
-                    .map(t -> new Pair<>(t, ItemBlowgunDart.ITEMS.get(t))).collect(Collectors.toMap(Pair::getFirst,
-                            p -> ITEMS.register(p.getFirst().typeName, p::getSecond)));
+                    .map(t -> new Pair<DartType, Supplier<ItemBlowgunDart>>(t, () -> ItemBlowgunDart.ITEMS.get(t)))
+                    .collect(Collectors.toMap(
+                            Pair::getFirst, p -> ITEMS.register(p.getFirst().typeName, p.getSecond())));
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_WOOD =
             ITEMS.register(ItemMusket.WOOD_ID, () -> ItemMusket.WOOD_ITEM);
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_STONE =
@@ -256,17 +258,17 @@ public class WMRegistries {
             ENTITY_TYPES.register(EntityMortarShell.ID, () -> EntityMortarShell.TYPE);
 
     private static void registerDispenserBehaviors() {
-        DispenserBlock.registerBehavior(ItemJavelin.ITEM, new DispenseJavelin());
-        DispenserBlock.registerBehavior(WMItem.CROSSBOW_BOLT_ITEM, new DispenseCrossbowBolt());
-        Arrays.stream(DartType.dartTypes).filter(Objects::nonNull).map(ItemBlowgunDart.ITEMS::get)
-                .forEach(item -> DispenserBlock.registerBehavior(item, new DispenseBlowgunDart()));
-        DispenserBlock.registerBehavior(WMItem.BLUNDER_SHOT_ITEM, new DispenseBlunderShot());
-        DispenserBlock.registerBehavior(ItemDynamite.ITEM, new DispenseDynamite());
+        ITEM_JAVELIN.listen(item -> DispenserBlock.registerBehavior(item, new DispenseJavelin()));
+        ITEM_CROSSBOW_BOLT.listen(item -> DispenserBlock.registerBehavior(item, new DispenseCrossbowBolt()));
+        ITEM_DARTS.values().forEach(supplier -> supplier.listen(item ->
+                DispenserBlock.registerBehavior(item, new DispenseBlowgunDart())));
+        ITEM_BLUNDER_SHOT.listen(item -> DispenserBlock.registerBehavior(item, new DispenseBlunderShot()));
+        ITEM_DYNAMITE.listen(item -> DispenserBlock.registerBehavior(item, new DispenseDynamite()));
         DispenseCannonBall behavior = new DispenseCannonBall();
-        DispenserBlock.registerBehavior(WMItem.CANNON_BALL_ITEM, behavior);
+        ITEM_CANNON_BALL.listen(item -> DispenserBlock.registerBehavior(item, behavior));
         DispenserBlock.registerBehavior(Items.GUNPOWDER, behavior);
-        DispenserBlock.registerBehavior(WMItem.BULLET_MUSKET_ITEM, new DispenseMusketBullet());
-        DispenserBlock.registerBehavior(WMItem.MORTAR_SHELL_ITEM, new DispenseMortarShell());
+        ITEM_MUSKET_BULLET.listen(item -> DispenserBlock.registerBehavior(item, new DispenseMusketBullet()));
+        ITEM_MORTAR_SHELL.listen(item -> DispenserBlock.registerBehavior(item, new DispenseMortarShell()));
     }
 
     public static void init() {

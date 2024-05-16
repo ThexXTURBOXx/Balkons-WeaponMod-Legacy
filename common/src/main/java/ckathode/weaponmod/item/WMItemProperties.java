@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PlayerWeaponData;
+import ckathode.weaponmod.WMRegistries;
 import dev.architectury.registry.item.ItemPropertiesRegistry;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
@@ -45,70 +46,70 @@ public final class WMItemProperties {
     }
 
     public static void init() {
-        ItemPropertiesRegistry.register(RangedCompBlowgun.ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(RangedCompBlunderbuss.ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(RangedCompCrossbow.ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(RangedCompMortar.ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(ItemMusket.ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(ItemMusket.WOOD_ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(ItemMusket.STONE_ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(ItemMusket.IRON_ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(ItemMusket.GOLD_ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(ItemMusket.DIAMOND_ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
-        ItemPropertiesRegistry.register(ItemMusket.NETHERITE_ITEM,
-                RELOAD_GETTER_ID, RELOAD_GETTER);
+        WMRegistries.ITEM_BLOWGUN.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_BLUNDERBUSS.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_CROSSBOW.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MORTAR.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MUSKET.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MUSKET_WOOD.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MUSKET_STONE.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MUSKET_IRON.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MUSKET_GOLD.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MUSKET_DIAMOND.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
+        WMRegistries.ITEM_MUSKET_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOAD_GETTER_ID, RELOAD_GETTER));
 
-        ItemPropertiesRegistry.register(RangedCompCrossbow.ITEM,
-                RELOADED_GETTER_ID, RELOADED_GETTER);
+        WMRegistries.ITEM_CROSSBOW.listen(item -> ItemPropertiesRegistry.register(
+                item, RELOADED_GETTER_ID, RELOADED_GETTER));
 
-        ItemPropertiesRegistry.register(MeleeCompBoomerang.WOOD_ITEM,
-                BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompBoomerang.STONE_ITEM,
-                BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompBoomerang.IRON_ITEM,
-                BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompBoomerang.GOLD_ITEM,
-                BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompBoomerang.DIAMOND_ITEM,
-                BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompBoomerang.NETHERITE_ITEM,
-                BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER);
+        WMRegistries.ITEM_BOOMERANG_WOOD.listen(item -> ItemPropertiesRegistry.register(
+                item, BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER));
+        WMRegistries.ITEM_BOOMERANG_STONE.listen(item -> ItemPropertiesRegistry.register(
+                item, BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER));
+        WMRegistries.ITEM_BOOMERANG_IRON.listen(item -> ItemPropertiesRegistry.register(
+                item, BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER));
+        WMRegistries.ITEM_BOOMERANG_GOLD.listen(item -> ItemPropertiesRegistry.register(
+                item, BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER));
+        WMRegistries.ITEM_BOOMERANG_DIAMOND.listen(item -> ItemPropertiesRegistry.register(
+                item, BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER));
+        WMRegistries.ITEM_BOOMERANG_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
+                item, BOOMERANG_READY_GETTER_ID, BOOMERANG_READY_GETTER));
 
-        ItemPropertiesRegistry.register(ItemFlail.WOOD_ITEM,
-                FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER);
-        ItemPropertiesRegistry.register(ItemFlail.STONE_ITEM,
-                FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER);
-        ItemPropertiesRegistry.register(ItemFlail.IRON_ITEM,
-                FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER);
-        ItemPropertiesRegistry.register(ItemFlail.GOLD_ITEM,
-                FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER);
-        ItemPropertiesRegistry.register(ItemFlail.DIAMOND_ITEM,
-                FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER);
-        ItemPropertiesRegistry.register(ItemFlail.NETHERITE_ITEM,
-                FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER);
+        WMRegistries.ITEM_FLAIL_WOOD.listen(item -> ItemPropertiesRegistry.register(
+                item, FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER));
+        WMRegistries.ITEM_FLAIL_STONE.listen(item -> ItemPropertiesRegistry.register(
+                item, FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER));
+        WMRegistries.ITEM_FLAIL_IRON.listen(item -> ItemPropertiesRegistry.register(
+                item, FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER));
+        WMRegistries.ITEM_FLAIL_GOLD.listen(item -> ItemPropertiesRegistry.register(
+                item, FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER));
+        WMRegistries.ITEM_FLAIL_DIAMOND.listen(item -> ItemPropertiesRegistry.register(
+                item, FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER));
+        WMRegistries.ITEM_FLAIL_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
+                item, FLAIL_THROWN_GETTER_ID, FLAIL_THROWN_GETTER));
 
-        ItemPropertiesRegistry.register(MeleeCompHalberd.WOOD_ITEM,
-                HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompHalberd.STONE_ITEM,
-                HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompHalberd.IRON_ITEM,
-                HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompHalberd.GOLD_ITEM,
-                HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompHalberd.DIAMOND_ITEM,
-                HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
-        ItemPropertiesRegistry.register(MeleeCompHalberd.NETHERITE_ITEM,
-                HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
+        WMRegistries.ITEM_HALBERD_WOOD.listen(item -> ItemPropertiesRegistry.register(
+                item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
+        WMRegistries.ITEM_HALBERD_STONE.listen(item -> ItemPropertiesRegistry.register(
+                item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
+        WMRegistries.ITEM_HALBERD_IRON.listen(item -> ItemPropertiesRegistry.register(
+                item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
+        WMRegistries.ITEM_HALBERD_GOLD.listen(item -> ItemPropertiesRegistry.register(
+                item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
+        WMRegistries.ITEM_HALBERD_DIAMOND.listen(item -> ItemPropertiesRegistry.register(
+                item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
+        WMRegistries.ITEM_HALBERD_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
+                item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
     }
 
 }

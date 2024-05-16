@@ -4,7 +4,7 @@ import ckathode.weaponmod.WMClientEventHandler;
 import ckathode.weaponmod.render.GuiOverlayReloaded;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.FOVModifierEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,7 +19,7 @@ public class WMClientEventHandlerForge {
     }
 
     @SubscribeEvent
-    public void onFOVUpdateEvent(FOVUpdateEvent e) {
+    public void onFOVUpdateEvent(FOVModifierEvent e) {
         e.setNewfov(WMClientEventHandler.getNewFOV(e.getEntity(), e.getFov(), e.getNewfov()));
     }
 
