@@ -7,16 +7,14 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     },
     "X": {
       "item": "minecraft:flint_and_steel"
     },
-    "O": [
-      {
-        "tag": "minecraft:logs"
-      }
-    ]
+    "O": {
+      "tag": "minecraft:logs"
+    }
   },
   "result": {
     "item": "weaponmod:cannon"
