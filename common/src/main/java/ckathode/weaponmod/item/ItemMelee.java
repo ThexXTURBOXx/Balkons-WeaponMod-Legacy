@@ -50,7 +50,7 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
     public ItemMelee(@NotNull MeleeComponent meleecomponent) {
-        this(meleecomponent, new Properties());
+        this(meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial));
     }
 
     public ItemMelee(@NotNull MeleeComponent meleecomponent, Properties properties) {
