@@ -119,7 +119,7 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
     };
 
     public WMItemProjectile() {
-        this(new Properties());
+        this(WMItemProjectile.getBaseProperties(null));
     }
 
     public WMItemProjectile(Properties properties) {

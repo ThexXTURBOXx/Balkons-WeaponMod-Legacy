@@ -22,7 +22,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
     public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
-        this(rangedcomponent, meleecomponent, new Properties());
+        this(rangedcomponent, meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial));
     }
 
     public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent,
