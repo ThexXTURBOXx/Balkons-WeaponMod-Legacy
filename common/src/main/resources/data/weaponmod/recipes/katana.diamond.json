@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "  X",
     " X ",
@@ -14,9 +15,9 @@
     }
   },
   "result": {
-    "item": "weaponmod:katana.diamond"
+    "id": "weaponmod:katana.diamond"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "katana"

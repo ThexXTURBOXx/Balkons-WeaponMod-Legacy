@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "#",
     "X",
@@ -17,10 +18,10 @@
     }
   },
   "result": {
-    "item": "weaponmod:shot",
+    "id": "weaponmod:shot",
     "count": 8
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "blunderbuss"

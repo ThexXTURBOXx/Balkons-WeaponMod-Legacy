@@ -5,20 +5,11 @@ import net.minecraft.world.item.Item;
 
 public class WMItem extends Item {
 
-    public static final String BULLET_MUSKET_ID = "bullet";
-    public static final WMItem BULLET_MUSKET_ITEM = new WMItem();
-
     public static final String CANNON_BALL_ID = "cannonball";
     public static final WMItem CANNON_BALL_ITEM = new WMItem();
 
     public static final String BLUNDER_SHOT_ID = "shot";
     public static final WMItem BLUNDER_SHOT_ITEM = new WMItem();
-
-    public static final String CROSSBOW_BOLT_ID = "bolt";
-    public static final WMItem CROSSBOW_BOLT_ITEM = new WMItem();
-
-    public static final String MORTAR_SHELL_ID = "shell";
-    public static final WMItem MORTAR_SHELL_ITEM = new WMItem();
 
     public static final String MUSKET_IRON_PART_ID = "musket-ironpart";
     public static final WMItem MUSKET_IRON_PART_ITEM = new WMItem();

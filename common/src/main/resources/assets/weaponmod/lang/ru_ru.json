@@ -100,10 +100,10 @@
     "item.weaponmod.mortar-ironpart": "Дуло с большим раструбом",
     "item.weaponmod.shell": "Снаряд",
 
-    "attribute.weaponmod.ignoreArmour": "Пробивание брони",
+    "attribute.weaponmod.ignore-armour": "Пробивание брони",
     "attribute.weaponmod.knockback": "Отбрасывание",
-    "attribute.weaponmod.attackSpeed": "Скорость атаки",
-    "attribute.weaponmod.reloadTime": "Время перезарядки",
+    "attribute.weaponmod.attack-speed": "Скорость атаки",
+    "attribute.weaponmod.reload-time": "Время перезарядки",
     "attribute.weaponmod.reach": "Размах",
 
     "death.attack.weapon": "%1$s больше нет.",

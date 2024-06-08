@@ -1,15 +1,19 @@
 {
-  "type": "minecraft:smithing",
-  "base": {
-    "item": "weaponmod:knife.diamond"
-  },
+  "type": "minecraft:smithing_transform",
   "addition": {
     "item": "minecraft:netherite_ingot"
   },
-  "result": {
-    "item": "weaponmod:knife.netherite"
+  "base": {
+    "item": "weaponmod:knife.diamond"
   },
-  "conditions": [
+  "result": {
+    "count": 1,
+    "id": "weaponmod:knife.netherite"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  },
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "knife"

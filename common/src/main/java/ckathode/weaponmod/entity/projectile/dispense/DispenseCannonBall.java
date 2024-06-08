@@ -3,9 +3,9 @@ package ckathode.weaponmod.entity.projectile.dispense;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import java.util.Random;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -26,39 +26,39 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
     @NotNull
     @Override
     public ItemStack execute(BlockSource blocksource, @NotNull ItemStack itemstack) {
-        boolean canfire = false;
+        boolean canFire = false;
         normalDispense = false;
-        BlockEntity tileentity = blocksource.getLevel().getBlockEntity(blocksource.getPos());
-        if (tileentity instanceof DispenserBlockEntity dispenser) {
-            Item itemtocheck = null;
+        BlockEntity blockEntity = blocksource.level().getBlockEntity(blocksource.pos());
+        if (blockEntity instanceof DispenserBlockEntity dispenser) {
+            Item itemToCheck = null;
             if (itemstack.getItem() == Items.GUNPOWDER) {
-                itemtocheck = WMRegistries.ITEM_CANNON_BALL.get();
+                itemToCheck = WMRegistries.ITEM_CANNON_BALL.get();
             } else if (itemstack.getItem() == WMRegistries.ITEM_CANNON_BALL.get()) {
-                itemtocheck = Items.GUNPOWDER;
+                itemToCheck = Items.GUNPOWDER;
             }
             for (int i = 0; i < dispenser.getContainerSize(); ++i) {
-                ItemStack itemstack2 = dispenser.getItem(i);
-                if (!itemstack2.isEmpty() && itemstack2.getItem() == itemtocheck) {
+                ItemStack itemStack2 = dispenser.getItem(i);
+                if (!itemStack2.isEmpty() && itemStack2.getItem() == itemToCheck) {
                     dispenser.removeItem(i, 1);
-                    canfire = true;
+                    canFire = true;
                     break;
                 }
             }
         }
-        if (!canfire) {
+        if (!canFire) {
             normalDispense = true;
             return super.execute(blocksource, itemstack);
         }
-        Direction face = blocksource.getBlockState().getValue(DispenserBlock.FACING);
-        double xvel = face.getStepX() * 1.5;
-        double yvel = face.getStepY() * 1.5;
-        double zvel = face.getStepZ() * 1.5;
+        Direction face = blocksource.state().getValue(DispenserBlock.FACING);
+        double xVel = face.getStepX() * 1.5;
+        double yVel = face.getStepY() * 1.5;
+        double zVel = face.getStepZ() * 1.5;
         Position pos = DispenserBlock.getDispensePosition(blocksource);
-        EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getLevel(), pos.x() + xvel,
-                pos.y() + yvel, pos.z() + zvel);
-        entitycannonball.shoot(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
-        blocksource.getLevel().addFreshEntity(entitycannonball);
-        itemstack.split(1);
+        EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.level(), pos.x() + xVel,
+                pos.y() + yVel, pos.z() + zVel);
+        entitycannonball.shoot(xVel, yVel + 0.15, zVel, 2.0f, 2.0f);
+        blocksource.level().addFreshEntity(entitycannonball);
+        itemstack.shrink(1);
         return itemstack;
     }
 
@@ -68,9 +68,9 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
             super.playSound(blocksource);
             return;
         }
-        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.GENERIC_EXPLODE,
+        blocksource.level().playSound(null, blocksource.pos(), SoundEvents.GENERIC_EXPLODE.value(),
                 SoundSource.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.8f + 0.9f));
-        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.LIGHTNING_BOLT_THUNDER,
+        blocksource.level().playSound(null, blocksource.pos(), SoundEvents.LIGHTNING_BOLT_THUNDER,
                 SoundSource.NEUTRAL, 8.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
     }
 
@@ -79,7 +79,7 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
         super.playAnimation(blocksource, face);
         if (!normalDispense) {
             Position pos = DispenserBlock.getDispensePosition(blocksource);
-            blocksource.getLevel().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
+            blocksource.level().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
                     pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
         }
     }

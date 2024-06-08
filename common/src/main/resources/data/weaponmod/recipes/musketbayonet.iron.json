@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
   "ingredients": [
     {
       "item": "weaponmod:musket"
@@ -9,9 +10,9 @@
     }
   ],
   "result": {
-    "item": "weaponmod:musketbayonet.iron"
+    "id": "weaponmod:musketbayonet.iron"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "musket"

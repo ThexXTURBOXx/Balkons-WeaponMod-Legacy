@@ -56,13 +56,16 @@ public class RangedCompMusket extends RangedComponent {
         int deltaDamage = 1;
         boolean flag = itemstack.getDamageValue() + deltaDamage >= itemstack.getMaxDamage();
         if (flag && musket != null && musket.hasBayonet()) {
-            int bayonetDamage = itemstack.hasTag() ? itemstack.getTag().getShort("bayonetDamage") : 0;
+            int bayonetDamage = itemstack.has(ItemMusket.BAYONET_DAMAGE_TYPE)
+                    ? itemstack.get(ItemMusket.BAYONET_DAMAGE_TYPE) : 0;
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1);
             newStack.setDamageValue(bayonetDamage);
-            itemstack.hurtAndBreak(deltaDamage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+            itemstack.hurtAndBreak(deltaDamage, entityplayer,
+                    LivingEntity.getSlotForHand(entityplayer.getUsedItemHand()));
             entityplayer.getInventory().add(newStack);
         } else {
-            itemstack.hurtAndBreak(deltaDamage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+            itemstack.hurtAndBreak(deltaDamage, entityplayer,
+                    LivingEntity.getSlotForHand(entityplayer.getUsedItemHand()));
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         postShootingEffects(itemstack, entityplayer, world);
@@ -79,7 +82,7 @@ public class RangedCompMusket extends RangedComponent {
 
     @Override
     public void effectShoot(Level world, double x, double y, double z, float yaw, float pitch) {
-        world.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 3.0f,
+        world.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 3.0f,
                 1.0f / (world.getRandom().nextFloat() * 0.4f + 0.7f));
         world.playSound(null, x, y, z, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 3.0f,
                 1.0f / (world.getRandom().nextFloat() * 0.4f + 0.4f));

@@ -6,6 +6,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,7 +24,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     public static final String ID = "knife";
     public static final EntityType<EntityKnife> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntityKnife::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntityKnife::new);
 
     private int soundTimer;
 
@@ -58,7 +59,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
@@ -81,7 +82,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             return;
         }
         DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
@@ -95,12 +96,8 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
                 remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
-                if (shooter instanceof LivingEntity) {
-                    thrownItem.hurtAndBreak(2, (LivingEntity) shooter, s -> {
-                    });
-                } else {
-                    thrownItem.hurt(2, random, null);
-                }
+                thrownItem.hurtAndBreak(2, random, shooter instanceof ServerPlayer player ? player : null, () -> {
+                });
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {
@@ -124,13 +121,19 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
     }
 
     @Override
-    public float getGravity() {
+    public double getDefaultGravity() {
         return 0.03f;
     }
 
     @Override
     public float getAirResistance() {
         return 0.98f;
+    }
+
+    @NotNull
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(WMRegistries.ITEM_KNIFE_WOOD.get());
     }
 
 }

@@ -23,7 +23,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
         boolean flag = super.hurtEnemy(itemstack, entityliving, entityliving1);
         if (flag) {
-            entityliving.setSecondsOnFire(12 + entityliving.getRandom().nextInt(3));
+            entityliving.igniteForSeconds(12 + entityliving.getRandom().nextInt(3));
         }
         return flag;
     }

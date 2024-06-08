@@ -100,9 +100,9 @@
     "item.weaponmod.mortar-ironpart": "モルタル銃の銃身",
     "item.weaponmod.shell": "モルタルシェル",
 
-    "attribute.weaponmod.ignoreArmour": "アーマー無効",
+    "attribute.weaponmod.ignore-armour": "アーマー無効",
     "attribute.weaponmod.knockback": "ノックバック",
-    "attribute.weaponmod.attackSpeed": "攻撃速度",
-    "attribute.weaponmod.reloadTime": "装填時間",
+    "attribute.weaponmod.attack-speed": "攻撃速度",
+    "attribute.weaponmod.reload-time": "装填時間",
     "attribute.weaponmod.reach": "射程"
 }

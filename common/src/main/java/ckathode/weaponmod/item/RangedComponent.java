@@ -3,10 +3,9 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
-import ckathode.weaponmod.WeaponModAttributes;
+import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
-import com.google.common.collect.Multimap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -20,14 +19,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -59,8 +59,18 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
+    public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
+        attributeBuilder = attributeBuilder
+                .add(WMRegistries.RELOAD_TIME, new AttributeModifier(ItemShooter.RELOAD_TIME_MODIFIER,
+                                "Weapon reloadtime modifier", rangedSpecs.getReloadTime(),
+                                AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.MAINHAND);
+        return attributeBuilder;
+    }
+
+    @Override
     public Properties setProperties(Properties properties) {
-        return properties.defaultDurability(rangedSpecs.durability);
+        return properties.durability(rangedSpecs.durability);
     }
 
     @Override
@@ -71,16 +81,6 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public float getEntityDamage() {
         return 0.0f;
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack itemstack, BlockState block) {
-        return 0.0f;
-    }
-
-    @Override
-    public boolean canHarvestBlock(BlockState block) {
-        return false;
     }
 
     @Override
@@ -110,13 +110,6 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public int getEnchantmentValue() {
         return 1;
-    }
-
-    @Override
-    public void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> multimap) {
-        multimap.put(WeaponModAttributes.RELOAD_TIME, new AttributeModifier(weapon.getUUID(), "Weapon reloadtime "
-                                                                                              + "modifier",
-                rangedSpecs.getReloadTime(), AttributeModifier.Operation.ADDITION));
     }
 
     @Override
@@ -164,7 +157,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         Player entityplayer = (Player) livingEntity;
         if (ReloadHelper.getReloadState(stack) == ReloadState.STATE_NONE
             && getUseDuration(stack) - remainingUseDuration >= getReloadDuration(stack)) {
-            effectReloadDone(stack, entityplayer.level, entityplayer);
+            effectReloadDone(stack, entityplayer.level(), entityplayer);
             setReloadState(stack, ReloadState.STATE_RELOADED);
         }
     }
@@ -216,19 +209,19 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                                      float p4, float p5);
 
     public void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
-        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) > 0) {
+        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0) {
             entity.setPickupStatus(EntityProjectile.PickupStatus.DISALLOWED);
         }
-        int damage = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, itemstack);
+        int damage = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER, itemstack);
         if (damage > 0) {
             entity.setExtraDamage((float) damage);
         }
-        int knockback = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, itemstack);
+        int knockback = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH, itemstack);
         if (knockback > 0) {
             entity.setKnockback(knockback);
         }
-        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, itemstack) > 0) {
-            entity.setSecondsOnFire(100);
+        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAME, itemstack) > 0) {
+            entity.igniteForSeconds(100);
         }
     }
 
@@ -273,18 +266,18 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, Player entityplayer) {
-        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS,
+        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || consumeAmmo(entityplayer);
     }
 
     public boolean hasAmmo(ItemStack itemstack, Level world, Player entityplayer) {
         boolean flag = !findAmmo(entityplayer).isEmpty();
-        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS,
+        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || flag;
     }
 
-    public float getFOVMultiplier(int ticksinuse) {
-        float f1 = ticksinuse / getMaxAimTimeTicks();
+    public float getFOVMultiplier(int ticksInUse) {
+        float f1 = ticksInUse / getMaxAimTimeTicks();
         if (f1 > 1.0f) {
             f1 = 1.0f;
         } else {

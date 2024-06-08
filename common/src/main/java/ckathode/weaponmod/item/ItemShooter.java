@@ -1,21 +1,16 @@
 package ckathode.weaponmod.item;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -32,21 +27,13 @@ public class ItemShooter extends BowItem implements IItemWeapon {
 
     public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent,
                        Properties properties) {
-        super(rangedcomponent.setProperties(properties).arch$tab(CreativeModeTabs.COMBAT));
+        super(rangedcomponent.setProperties(meleecomponent.setProperties(properties))
+                .attributes(rangedcomponent.setAttributes(meleecomponent.setAttributes(ItemAttributeModifiers.builder())).build())
+                .arch$tab(CreativeModeTabs.COMBAT));
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
-    }
-
-    @Override
-    public float getDestroySpeed(@NotNull ItemStack itemstack, @NotNull BlockState block) {
-        return meleeComponent.getDestroySpeed(itemstack, block);
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(BlockState state) {
-        return meleeComponent.canHarvestBlock(state);
     }
 
     @Override
@@ -65,17 +52,6 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     @Override
     public int getEnchantmentValue() {
         return meleeComponent.getEnchantmentValue();
-    }
-
-    @NotNull
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
-        Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
-        if (slot == EquipmentSlot.MAINHAND) {
-            meleeComponent.addItemAttributeModifiers(multimap);
-            rangedComponent.addItemAttributeModifiers(multimap);
-        }
-        return multimap;
     }
 
     @Override
@@ -119,21 +95,6 @@ public class ItemShooter extends BowItem implements IItemWeapon {
                               @NotNull Entity entity, int i, boolean flag) {
         meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
         rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
-    }
-
-    @Override
-    public UUID getUUIDDamage() {
-        return ItemShooter.BASE_ATTACK_DAMAGE_UUID;
-    }
-
-    @Override
-    public UUID getUUIDSpeed() {
-        return ItemShooter.BASE_ATTACK_SPEED_UUID;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return ItemShooter.WEAPON_MODIFIER;
     }
 
     @Override

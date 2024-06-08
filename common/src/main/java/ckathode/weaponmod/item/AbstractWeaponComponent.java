@@ -1,18 +1,16 @@
 package ckathode.weaponmod.item;
 
-import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -34,15 +32,13 @@ public abstract class AbstractWeaponComponent {
 
     protected abstract void onSetItem();
 
+    public abstract ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder);
+
     public abstract Properties setProperties(Properties properties);
 
     public abstract float getDamage();
 
     public abstract float getEntityDamage();
-
-    public abstract float getDestroySpeed(ItemStack p0, BlockState p1);
-
-    public abstract boolean canHarvestBlock(BlockState state);
 
     public abstract boolean mineBlock(ItemStack p0, Level p1, BlockState p2, BlockPos p3, LivingEntity p4);
 
@@ -53,8 +49,6 @@ public abstract class AbstractWeaponComponent {
     public abstract float getKnockBack(ItemStack p0, LivingEntity p1, LivingEntity p2);
 
     public abstract int getEnchantmentValue();
-
-    public abstract void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> p0);
 
     public abstract UseAnim getUseAnimation(ItemStack p0);
 

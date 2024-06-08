@@ -36,7 +36,7 @@ processResources {
     var replaceProperties = [
             minecraft_version          : minecraft_version, minecraft_version_range: minecraft_version_range,
             minecraft_version_condition: minecraft_version_condition,
-            forge_version              : forge_version, forge_version_range: forge_version_range,
+            neoforge_version           : neoforge_version, neoforge_version_range: neoforge_version_range,
             loader_version_range       : loader_version_range,
             architectury_version       : architectury_version, cloth_config_version: cloth_config_version,
             mod_id                     : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,

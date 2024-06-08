@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "  O",
     " XO",
@@ -19,9 +20,9 @@
     }
   },
   "result": {
-    "item": "weaponmod:flail.wood"
+    "id": "weaponmod:flail.wood"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "flail"

@@ -2,39 +2,39 @@ package ckathode.weaponmod.fabric;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModConfig;
-import com.google.gson.JsonObject;
-import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
+import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditionType;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import org.jetbrains.annotations.Nullable;
 
-public class WMConfigConditionFabric implements ConditionJsonProvider {
+public record WMConfigConditionFabric(String weapon) implements ResourceCondition {
 
-    private static final ResourceLocation CONFIG_CONDITION =
+    public static final ResourceLocation CONFIG_CONDITION_ID =
             new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional");
-    private final String weapon;
+    public static final MapCodec<WMConfigConditionFabric> CODEC =
+            RecordCodecBuilder.mapCodec(instance -> instance.group(
+                            Codec.STRING.fieldOf("weapon").forGetter(condition -> condition.weapon))
+                    .apply(instance, WMConfigConditionFabric::new));
+    public static final ResourceConditionType<WMConfigConditionFabric> CONFIG_CONDITION_TYPE =
+            ResourceConditionType.create(CONFIG_CONDITION_ID, CODEC);
 
-    public WMConfigConditionFabric(String weapon) {
-        this.weapon = weapon;
+    @Override
+    public ResourceConditionType<?> getType() {
+        return CONFIG_CONDITION_TYPE;
     }
 
     @Override
-    public ResourceLocation getConditionId() {
-        return CONFIG_CONDITION;
-    }
-
-    @Override
-    public void writeParameters(JsonObject object) {
-        object.addProperty("weapon", weapon);
-    }
-
-    public static boolean test(JsonObject object) {
-        String weapon = GsonHelper.getAsString(object, "weapon");
+    public boolean test(@Nullable HolderLookup.Provider registryLookup) {
         return WeaponModConfig.get().isEnabled(weapon);
     }
 
     public static void init() {
-        ResourceConditions.register(CONFIG_CONDITION, WMConfigConditionFabric::test);
+        ResourceConditions.register(CONFIG_CONDITION_TYPE);
     }
 
 }

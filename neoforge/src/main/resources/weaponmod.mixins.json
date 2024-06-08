@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "ckathode.weaponmod.neoforge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "client": [],
+  "mixins": [
+    "EntityMixin"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

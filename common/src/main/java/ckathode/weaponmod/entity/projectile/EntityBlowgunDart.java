@@ -33,7 +33,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
 
     public static final String ID = "dart";
     public static final EntityType<EntityBlowgunDart> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntityBlowgunDart::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntityBlowgunDart::new);
 
     public EntityBlowgunDart(EntityType<EntityBlowgunDart> entityType, Level world) {
         super(entityType, world);
@@ -65,14 +65,14 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
     @Override
-    public void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(DART_EFFECT_TYPE, (byte) 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DART_EFFECT_TYPE, (byte) 0);
     }
 
     public void setDartEffectType(DartType type) {
@@ -111,7 +111,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     @Override
-    public float getGravity() {
+    public double getDefaultGravity() {
         return 0.05f;
     }
 
@@ -129,6 +129,12 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(ItemBlowgunDart.ITEMS.get(getDartEffectType()));
+    }
+
+    @NotNull
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(ItemBlowgunDart.ITEMS.get(DartType.damage));
     }
 
     @Override

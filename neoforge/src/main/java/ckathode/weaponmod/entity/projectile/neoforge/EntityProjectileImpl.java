@@ -1,13 +1,13 @@
-package ckathode.weaponmod.entity.projectile.forge;
+package ckathode.weaponmod.entity.projectile.neoforge;
 
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class EntityProjectileImpl {
 
     public static boolean onProjectileImpact(EntityProjectile<?> projectile, HitResult hitResult) {
-        return ForgeEventFactory.onProjectileImpact(projectile, hitResult);
+        return EventHooks.onProjectileImpact(projectile, hitResult);
     }
 
 }

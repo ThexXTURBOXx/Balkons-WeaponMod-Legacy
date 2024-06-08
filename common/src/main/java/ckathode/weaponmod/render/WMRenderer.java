@@ -28,7 +28,7 @@ public abstract class WMRenderer<T extends Entity> extends EntityRenderer<T> {
                 .uv(uvX, uvZ)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(lm)
-                .normal(entry.normal(), nmX, nmY, nmZ)
+                .normal(entry, nmX, nmY, nmZ)
                 .endVertex();
     }
 

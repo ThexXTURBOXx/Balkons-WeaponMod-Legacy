@@ -53,6 +53,7 @@ public class BalkonsWeaponMod {
         WMCommonEventHandler.init();
         WMRegistries.init();
         WMMessagePipeline.init();
+        PlayerWeaponData.init();
         EnvExecutor.runInEnv(Env.CLIENT, () -> Client::initializeClient);
     }
 

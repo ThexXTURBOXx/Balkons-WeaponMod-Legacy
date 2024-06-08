@@ -2,9 +2,9 @@ package ckathode.weaponmod.entity.projectile.dispense;
 
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import java.util.Random;
-import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -20,18 +20,18 @@ public class DispenseBlunderShot extends DefaultDispenseItemBehavior {
     @NotNull
     @Override
     public ItemStack execute(BlockSource blocksource, ItemStack itemstack) {
-        Direction face = blocksource.getBlockState().getValue(DispenserBlock.FACING);
+        Direction face = blocksource.state().getValue(DispenserBlock.FACING);
         Position pos = DispenserBlock.getDispensePosition(blocksource);
-        EntityBlunderShot.fireFromDispenser(blocksource.getLevel(), pos.x() + face.getStepX(),
+        EntityBlunderShot.fireFromDispenser(blocksource.level(), pos.x() + face.getStepX(),
                 pos.y() + face.getStepY(), pos.z() + face.getStepZ(), face.getStepX(), face.getStepY(),
                 face.getStepZ());
-        itemstack.split(1);
+        itemstack.shrink(1);
         return itemstack;
     }
 
     @Override
     protected void playSound(BlockSource blocksource) {
-        blocksource.getLevel().playSound(null, blocksource.getPos(), SoundEvents.GENERIC_EXPLODE,
+        blocksource.level().playSound(null, blocksource.pos(), SoundEvents.GENERIC_EXPLODE.value(),
                 SoundSource.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
     }
 
@@ -39,7 +39,7 @@ public class DispenseBlunderShot extends DefaultDispenseItemBehavior {
     protected void playAnimation(@NotNull BlockSource blocksource, @NotNull Direction face) {
         super.playAnimation(blocksource, face);
         Position pos = DispenserBlock.getDispensePosition(blocksource);
-        blocksource.getLevel().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
+        blocksource.level().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
                 pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
     }
 

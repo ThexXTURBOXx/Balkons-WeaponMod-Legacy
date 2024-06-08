@@ -100,10 +100,10 @@
   "item.weaponmod.mortar-ironpart": "Mörserrohr",
   "item.weaponmod.shell": "Mörsergranate",
 
-  "attribute.weaponmod.ignoreArmour": "Rüstungspenetration",
+  "attribute.weaponmod.ignore-armour": "Rüstungspenetration",
   "attribute.weaponmod.knockback": "Rückstoß",
-  "attribute.weaponmod.attackSpeed": "Angriffsgeschwindigkeit",
-  "attribute.weaponmod.reloadTime": "Nachladedauer",
+  "attribute.weaponmod.attack-speed": "Angriffsgeschwindigkeit",
+  "attribute.weaponmod.reload-time": "Nachladedauer",
   "attribute.weaponmod.reach": "Reichweite",
 
   "death.attack.weapon": "%1$s gibt es nicht mehr",

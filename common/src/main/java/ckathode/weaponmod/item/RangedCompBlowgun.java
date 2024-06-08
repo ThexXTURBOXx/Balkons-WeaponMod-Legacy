@@ -50,7 +50,7 @@ public class RangedCompBlowgun extends RangedComponent {
         }
         ItemStack dartStackCopy = dartstack.copy();
         if (!entityplayer.isCreative()
-            && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) == 0) {
+            && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY, itemstack) == 0) {
             dartstack.shrink(1);
             if (dartstack.isEmpty()) {
                 entityplayer.getInventory().removeItem(dartstack);
@@ -70,7 +70,7 @@ public class RangedCompBlowgun extends RangedComponent {
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+        itemstack.hurtAndBreak(damage, entityplayer, LivingEntity.getSlotForHand(entityplayer.getUsedItemHand()));
         postShootingEffects(itemstack, entityplayer, world);
         RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
     }

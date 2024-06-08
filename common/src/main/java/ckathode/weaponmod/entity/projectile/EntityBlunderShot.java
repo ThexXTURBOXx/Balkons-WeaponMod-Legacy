@@ -22,7 +22,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
     public static final String ID = "shot";
     public static final EntityType<EntityBlunderShot> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntityBlunderShot::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntityBlunderShot::new);
 
     public EntityBlunderShot(EntityType<EntityBlunderShot> entityType, Level world) {
         super(entityType, world);
@@ -53,7 +53,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
@@ -94,13 +94,13 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     }
 
     @Override
-    public float getGravity() {
+    public double getDefaultGravity() {
         return (getTotalVelocity() < 2.0) ? 0.04f : 0.0f;
     }
 
     @NotNull
     @Override
-    protected ItemStack getPickupItem() {
+    protected ItemStack getDefaultPickupItem() {
         return new ItemStack(WMRegistries.ITEM_BLUNDER_SHOT.get());
     }
 

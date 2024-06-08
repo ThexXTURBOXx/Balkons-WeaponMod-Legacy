@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "XXX",
     "X#X",
@@ -16,9 +17,9 @@
     }
   },
   "result": {
-    "item": "weaponmod:battleaxe.wood"
+    "id": "weaponmod:battleaxe.wood"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "battleaxe"

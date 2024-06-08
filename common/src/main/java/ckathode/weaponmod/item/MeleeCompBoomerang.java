@@ -65,7 +65,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                 entityboomerang.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK,
                         itemstack));
                 if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                    entityboomerang.setSecondsOnFire(100);
+                    entityboomerang.igniteForSeconds(100);
                 }
                 world.addFreshEntity(entityboomerang);
             }

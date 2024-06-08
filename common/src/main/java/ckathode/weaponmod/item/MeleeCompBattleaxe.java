@@ -1,20 +1,22 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WMDamageSources;
-import ckathode.weaponmod.WeaponModAttributes;
+import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.entity.projectile.MaterialRegistry;
-import com.google.common.collect.Multimap;
+import java.util.List;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
 
@@ -61,22 +63,23 @@ public class MeleeCompBattleaxe extends MeleeComponent {
         return super.onLeftClickEntity(itemstack, player, entity);
     }
 
+    @NotNull
     @Override
-    public float getDestroySpeed(ItemStack itemstack, BlockState block) {
-        return (block.getMaterial() == Material.WOOD) ? (weaponMaterial.getSpeed() * 0.75f) :
-                super.getDestroySpeed(itemstack, block);
+    public Tool getToolComponent() {
+        return new Tool(List.of(
+                Tool.Rule.deniesDrops(weaponMaterial.getIncorrectBlocksForDrops()),
+                Tool.Rule.minesAndDrops(BlockTags.MINEABLE_WITH_AXE, weaponMaterial.getSpeed())),
+                0.75f, 1);
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState block) {
-        return block.getMaterial() == Material.WOOD;
-    }
-
-    @Override
-    public void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> multimap) {
-        super.addItemAttributeModifiers(multimap);
-        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(weapon.getUUID(),
-                "Weapon ignore armour modifier", ignoreArmourAmount, AttributeModifier.Operation.ADDITION));
+    public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
+        attributeBuilder = super.setAttributes(attributeBuilder)
+                .add(WMRegistries.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(ItemMelee.IGNORE_ARMOUR_MODIFIER,
+                                "Weapon ignore armour modifier", ignoreArmourAmount,
+                                AttributeModifier.Operation.ADD_VALUE),
+                        EquipmentSlotGroup.MAINHAND);
+        return attributeBuilder;
     }
 
 }

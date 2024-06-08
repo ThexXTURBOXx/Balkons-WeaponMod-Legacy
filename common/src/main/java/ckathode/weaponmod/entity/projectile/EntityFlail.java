@@ -25,7 +25,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     public static final String ID = "flail";
     public static final EntityType<EntityFlail> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntityFlail::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntityFlail::new);
 
     public boolean isSwinging;
     private float flailDamage;
@@ -59,7 +59,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     @Override
     public void shootFromRotation(Entity entity, float f, float f1, float f2, float f3, float f4) {
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
         swing(f, f1, f3, f4);
     }
@@ -80,7 +80,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
                     pickUpByOwner();
                 }
             }
-        } else if (!level.isClientSide) {
+        } else if (!level().isClientSide) {
             remove(RemovalReason.DISCARDED);
         }
         if (inGround) {
@@ -204,6 +204,12 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     @Override
     public int getMaxArrowShake() {
         return 0;
+    }
+
+    @NotNull
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(WMRegistries.ITEM_FLAIL_WOOD.get());
     }
 
 }

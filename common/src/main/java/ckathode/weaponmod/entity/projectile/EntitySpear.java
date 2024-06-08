@@ -6,6 +6,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,7 +24,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
     public static final String ID = "spear";
     public static final EntityType<EntitySpear> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntitySpear::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntitySpear::new);
 
     public EntitySpear(EntityType<EntitySpear> entityType, Level world) {
         super(entityType, world);
@@ -55,13 +56,13 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             return;
         }
         DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
@@ -76,12 +77,8 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
                 remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
-                if (shooter instanceof LivingEntity) {
-                    thrownItem.hurtAndBreak(1, (LivingEntity) shooter, s -> {
-                    });
-                } else {
-                    thrownItem.hurt(1, random, null);
-                }
+                thrownItem.hurtAndBreak(1, random, shooter instanceof ServerPlayer player ? player : null, () -> {
+                });
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {
@@ -103,4 +100,11 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
     public int getMaxArrowShake() {
         return 10;
     }
+
+    @NotNull
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(WMRegistries.ITEM_SPEAR_WOOD.get());
+    }
+
 }

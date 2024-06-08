@@ -1,9 +1,10 @@
 {
   "type": "minecraft:smelting",
+  "category": "misc",
   "ingredient": [
     {
       "item": "weaponmod:spear.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "spear"
@@ -18,7 +19,7 @@
     },
     {
       "item": "weaponmod:halberd.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "halberd"
@@ -33,7 +34,7 @@
     },
     {
       "item": "weaponmod:knife.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "knife"
@@ -48,7 +49,7 @@
     },
     {
       "item": "weaponmod:battleaxe.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "battleaxe"
@@ -63,7 +64,7 @@
     },
     {
       "item": "weaponmod:warhammer.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "warhammer"
@@ -78,7 +79,7 @@
     },
     {
       "item": "weaponmod:flail.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "flail"
@@ -93,7 +94,7 @@
     },
     {
       "item": "weaponmod:boomerang.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "boomerang"
@@ -108,7 +109,7 @@
     },
     {
       "item": "weaponmod:katana.iron",
-      "conditions": [
+      "neoforge:conditions": [
         {
           "type": "weaponmod:config_conditional",
           "weapon": "katana"
@@ -122,7 +123,9 @@
       ]
     }
   ],
-  "result": "minecraft:iron_nugget",
+  "result": {
+    "id": "minecraft:iron_nugget"
+  },
   "experience": 0.1,
   "cookingtime": 200
 }

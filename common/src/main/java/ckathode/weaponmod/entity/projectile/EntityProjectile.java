@@ -18,11 +18,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -31,7 +29,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -75,9 +72,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(WEAPON_CRITICAL, (byte) 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(WEAPON_CRITICAL, (byte) 0);
     }
 
     @Override
@@ -89,7 +86,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     @Override
     public void loadAdditionalSpawnData(FriendlyByteBuf buf) {
         int shooterId = buf.readInt();
-        if (shooterId >= 0) setOwner(level.getEntity(shooterId));
+        if (shooterId >= 0) setOwner(level().getEntity(shooterId));
     }
 
     @Override
@@ -103,11 +100,6 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     public Entity getOwner() {
         if (shooter != null) return shooter;
         return super.getOwner();
-    }
-
-    @Override
-    protected float getEyeHeight(Pose pose, EntityDimensions dimension) {
-        return 0;
     }
 
     protected void setPickupStatusFromEntity(LivingEntity entityliving) {
@@ -180,9 +172,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             xRotO = getXRot();
         }
         BlockPos blockpos = new BlockPos(xTile, yTile, zTile);
-        BlockState iblockstate = level.getBlockState(blockpos);
-        if (iblockstate.getMaterial() != Material.AIR) {
-            VoxelShape voxelShape = iblockstate.getCollisionShape(level, blockpos);
+        BlockState iblockstate = level().getBlockState(blockpos);
+        if (!iblockstate.isAir()) {
+            VoxelShape voxelShape = iblockstate.getCollisionShape(level(), blockpos);
             if (!voxelShape.isEmpty() && voxelShape.bounds().move(blockpos).contains(
                     new Vec3(getX(), getY(), getZ()))) {
                 inGround = true;
@@ -198,13 +190,13 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
 
         if (inGround) {
             if (!iblockstate.equals(inBlockState) &&
-                level.noCollision(getBoundingBox().inflate(0.06))) {
+                level().noCollision(getBoundingBox().inflate(0.06))) {
                 inGround = false;
                 setDeltaMovement(motion.multiply(random.nextFloat() * 0.2f, random.nextFloat() * 0.2f,
                         random.nextFloat() * 0.2f));
                 ticksInGround = 0;
                 ticksInAir = 0;
-            } else if (!level.isClientSide) {
+            } else if (!level().isClientSide) {
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {
@@ -218,7 +210,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         ++ticksInAir;
         Vec3 vec3d = position();
         Vec3 vec3d2 = vec3d.add(getDeltaMovement());
-        HitResult raytraceresult = level.clip(new ClipContext(vec3d, vec3d2,
+        HitResult raytraceresult = level().clip(new ClipContext(vec3d, vec3d2,
                 ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
         if (raytraceresult.getType() != HitResult.Type.MISS) {
             vec3d2 = raytraceresult.getLocation();
@@ -259,7 +251,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             Vec3 motion2 = getDeltaMovement();
             for (int i1 = 0; i1 < 2; ++i1) {
                 Vec3 pos = position().add(motion2.scale(i1 / 4.0));
-                level.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, -motion2.x,
+                level().addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, -motion2.x,
                         -motion2.y + 0.2, -motion2.z);
             }
         }
@@ -276,14 +268,14 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             xRotO = n4;
         }
         float res = getAirResistance();
-        float grav = getGravity();
+        double grav = getGravity();
         if (isInWater()) {
             Vec3 motion2 = getDeltaMovement();
             beenInGround = true;
             for (int i2 = 0; i2 < 4; ++i2) {
                 float f3 = 0.25f;
                 Vec3 pos = position().subtract(motion2.scale(f3));
-                level.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, motion2.x,
+                level().addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, motion2.x,
                         motion2.y + 0.2, motion2.z);
             }
             res *= 0.6f;
@@ -305,7 +297,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
 
     public void applyEntityHitEffects(Entity entity) {
         if (isOnFire() && !(entity instanceof EnderMan)) {
-            entity.setSecondsOnFire(5);
+            entity.igniteForSeconds(5);
         }
         if (entity instanceof LivingEntity entityliving) {
             if (knockBack > 0) {
@@ -331,7 +323,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
-        inBlockState = level.getBlockState(blockpos);
+        inBlockState = level().getBlockState(blockpos);
         setDeltaMovement(raytraceResult.getLocation().subtract(position()));
         double f1 = getDeltaMovement().length();
         Vec3 pos = position().subtract(getDeltaMovement().scale(0.05 / f1));
@@ -342,7 +334,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         shakeTime = getMaxArrowShake();
         playHitSound();
         if (inBlockState != null) {
-            inBlockState.entityInside(level, blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this);
         }
     }
 
@@ -369,8 +361,8 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         return 0.99f;
     }
 
-    public float getGravity() {
-        return 0.05f;
+    public double getDefaultGravity() {
+        return 0.05;
     }
 
     public int getMaxArrowShake() {
@@ -380,7 +372,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     @NotNull
     @Override
     protected ItemStack getPickupItem() {
-        return ItemStack.EMPTY;
+        return getDefaultPickupItem();
     }
 
     @Nullable
@@ -437,7 +429,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
 
     @Override
     public void playerTouch(@NotNull Player entityplayer) {
-        if (inGround && shakeTime <= 0 && canPickup(entityplayer) && !level.isClientSide) {
+        if (inGround && shakeTime <= 0 && canPickup(entityplayer) && !level().isClientSide) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) return;
             if ((pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.isCreative()) ||
@@ -474,7 +466,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         yTile = nbttagcompound.getInt("yTile");
         zTile = nbttagcompound.getInt("zTile");
         if (nbttagcompound.contains("inBlockState", 10)) {
-            inBlockState = NbtUtils.readBlockState(level.holderLookup(Registries.BLOCK),
+            inBlockState = NbtUtils.readBlockState(level().holderLookup(Registries.BLOCK),
                     nbttagcompound.getCompound("inBlockState"));
         }
         shakeTime = (nbttagcompound.getByte("shake") & 0xFF);

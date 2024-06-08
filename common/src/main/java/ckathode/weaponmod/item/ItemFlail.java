@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -83,10 +84,11 @@ public class ItemFlail extends ItemMelee {
         removePreviousFlail(world, entityplayer);
         if (!itemstack.isEmpty()) {
             entityplayer.swing(hand);
-            itemstack.hurtAndBreak(1, entityplayer, s -> {
-                s.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-                setThrown(entityplayer, false);
-            });
+            if (!entityplayer.isCreative()) {
+                itemstack.hurtAndBreak(1, entityplayer.getRandom(),
+                        entityplayer instanceof ServerPlayer player ? player : null,
+                        () -> setThrown(entityplayer, false));
+            }
             if (!itemstack.isEmpty()) {
                 throwFlail(itemstack, world, entityplayer);
             }
@@ -97,7 +99,7 @@ public class ItemFlail extends ItemMelee {
     @Override
     public boolean hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                              @NotNull LivingEntity attacker) {
-        use(attacker.level, (Player) attacker, InteractionHand.MAIN_HAND);
+        use(attacker.level(), (Player) attacker, InteractionHand.MAIN_HAND);
         return true;
     }
 

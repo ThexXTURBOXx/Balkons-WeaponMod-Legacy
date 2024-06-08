@@ -1,17 +1,23 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
+import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
+import java.util.function.Consumer;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemDynamite extends WMItem {
+public class ItemDynamite extends WMItem implements WMDispenserExtension {
 
     public static final String ID = "dynamite";
     public static final ItemDynamite ITEM = new ItemDynamite();
@@ -43,6 +49,18 @@ public class ItemDynamite extends WMItem {
             world.addFreshEntity(entitydynamite);
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+    }
+
+    @NotNull
+    @Override
+    public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
+        return new EntityDynamite(level, pos.x(), pos.y(), pos.z());
+    }
+
+    @Override
+    public void playSound(@NotNull Consumer<BlockSource> origFn, @NotNull BlockSource blockSource) {
+        blockSource.level().playSound(null, blockSource.pos(), SoundEvents.TNT_PRIMED,
+                SoundSource.NEUTRAL, 1.0f, 1.2f);
     }
 
 }

@@ -28,7 +28,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
 
     public static final String ID = "cannonball";
     public static final EntityType<EntityCannonBall> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntityCannonBall::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntityCannonBall::new);
 
     public EntityCannonBall(EntityType<EntityCannonBall> entityType, Level world) {
         super(entityType, world);
@@ -43,7 +43,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
                             boolean superPowered) {
         this(world, entitycannon.getX(), entitycannon.getY() + 1.0, entitycannon.getZ());
         Entity entityPassenger = entitycannon.getPassengers().isEmpty() ? null :
-                entitycannon.getPassengers().get(0);
+                entitycannon.getPassengers().getFirst();
         setOwner(entitycannon);
         if (entityPassenger instanceof LivingEntity) {
             setPickupStatusFromEntity((LivingEntity) entityPassenger);
@@ -74,18 +74,18 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
             Vec3 motion = getDeltaMovement();
             for (int i1 = 1; i1 < amount; ++i1) {
                 Vec3 pos = position().add(motion.scale(i1 / amount));
-                level.addParticle(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+                level().addParticle(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
             }
         }
     }
 
     public void createCrater() {
-        if (level.isClientSide || !inGround || isInWater()) {
+        if (level().isClientSide || !inGround || isInWater()) {
             return;
         }
         remove(RemovalReason.DISCARDED);
         float f = isCritArrow() ? 5.0f : 2.5f;
-        PhysHelper.createAdvancedExplosion(level, this, getX(), getY(), getZ(), f,
+        PhysHelper.createAdvancedExplosion(level(), this, getX(), getY(), getZ(), f,
                 WeaponModConfig.get().cannonDoesBlockDamage, true, false,
                 Explosion.BlockInteraction.DESTROY);
     }
@@ -104,14 +104,14 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
-        inBlockState = level.getBlockState(blockpos);
+        inBlockState = level().getBlockState(blockpos);
         setDeltaMovement(raytraceResult.getLocation().subtract(position()));
         double f1 = getDeltaMovement().length();
         Vec3 pos = position().subtract(getDeltaMovement().scale(0.05 / f1));
         setPos(pos.x, pos.y, pos.z);
         inGround = true;
         if (inBlockState != null) {
-            inBlockState.entityInside(level, blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this);
         }
         createCrater();
     }
@@ -127,13 +127,13 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     @Override
-    public float getGravity() {
+    public double getDefaultGravity() {
         return 0.04f;
     }
 
     @NotNull
     @Override
-    protected ItemStack getPickupItem() {
+    protected ItemStack getDefaultPickupItem() {
         return new ItemStack(WMRegistries.ITEM_CANNON_BALL.get());
     }
 

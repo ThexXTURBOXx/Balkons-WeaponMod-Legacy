@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "##X"
   ],
@@ -14,11 +15,11 @@
     }
   },
   "result": {
-    "item": "weaponmod:gun-stock"
+    "id": "weaponmod:gun-stock"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:or",
+      "type": "neoforge:or",
       "values": [
         {
           "type": "weaponmod:config_conditional",

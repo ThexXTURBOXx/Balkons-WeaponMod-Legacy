@@ -21,7 +21,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
 
     public static final String ID = "bolt";
     public static final EntityType<EntityCrossbowBolt> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntityCrossbowBolt::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntityCrossbowBolt::new);
 
     public EntityCrossbowBolt(EntityType<EntityCrossbowBolt> entityType, Level world) {
         super(entityType, world);
@@ -53,7 +53,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
@@ -63,7 +63,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
         float damage = vel * 4.0f + extraDamage;
         DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         if (entity.hurt(damagesource, damage)) {
-            if (entity instanceof LivingEntity && level.isClientSide) {
+            if (entity instanceof LivingEntity && level().isClientSide) {
                 ((LivingEntity) entity).setArrowCount(((LivingEntity) entity).getArrowCount() + 1);
             }
             applyEntityHitEffects(entity);
@@ -87,6 +87,12 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
     @NotNull
     @Override
     protected ItemStack getPickupItem() {
+        return getDefaultPickupItem();
+    }
+
+    @NotNull
+    @Override
+    protected ItemStack getDefaultPickupItem() {
         return new ItemStack(WMRegistries.ITEM_CROSSBOW_BOLT.get());
     }
 

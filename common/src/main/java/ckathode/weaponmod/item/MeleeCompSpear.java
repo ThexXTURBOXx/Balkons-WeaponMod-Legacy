@@ -54,7 +54,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
                     0.0f, 0.8f, 3.0f);
             entityspear.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
             if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                entityspear.setSecondsOnFire(100);
+                entityspear.igniteForSeconds(100);
             }
             world.addFreshEntity(entityspear);
         }

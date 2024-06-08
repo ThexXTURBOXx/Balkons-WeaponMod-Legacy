@@ -39,7 +39,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+        itemstack.hurtAndBreak(damage, entityplayer, LivingEntity.getSlotForHand(entityplayer.getUsedItemHand()));
         postShootingEffects(itemstack, entityplayer, world);
     }
 
@@ -54,7 +54,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
 
     @Override
     public void effectShoot(Level world, double x, double y, double z, float yaw, float pitch) {
-        world.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 3.0f,
+        world.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 3.0f,
                 1.0f / (world.getRandom().nextFloat() * 0.4f + 0.6f));
         float particleX = -Mth.sin((yaw + 23.0f) * 0.017453292f) * Mth.cos(pitch * 0.017453292f);
         float particleY = -Mth.sin(pitch * 0.017453292f) + 1.6f;

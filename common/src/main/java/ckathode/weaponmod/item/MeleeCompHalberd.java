@@ -1,6 +1,8 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -31,15 +33,16 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     public static final String NETHERITE_ID = "halberd.netherite";
     public static final ItemMelee NETHERITE_ITEM = new ItemMelee(new MeleeCompHalberd(Tiers.NETHERITE));
 
+    public static final String HALBERD_STATE_TYPE_ID = "halb";
+    public static final DataComponentType<Boolean> HALBERD_STATE_TYPE =
+            DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build();
+
     public static boolean getHalberdState(ItemStack itemstack) {
-        return itemstack.hasTag() && itemstack.getTag().getBoolean("halb");
+        return itemstack.has(HALBERD_STATE_TYPE) && itemstack.get(HALBERD_STATE_TYPE);
     }
 
     public static void setHalberdState(ItemStack itemstack, boolean flag) {
-        if (!itemstack.hasTag()) {
-            itemstack.setTag(new CompoundTag());
-        }
-        itemstack.getTag().putBoolean("halb", flag);
+        itemstack.set(HALBERD_STATE_TYPE, flag);
     }
 
     public MeleeCompHalberd(Tier itemTier) {

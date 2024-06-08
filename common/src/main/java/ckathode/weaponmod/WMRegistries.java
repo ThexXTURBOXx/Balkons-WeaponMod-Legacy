@@ -1,5 +1,6 @@
 package ckathode.weaponmod;
 
+import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.EntityCannon;
 import ckathode.weaponmod.entity.EntityDummy;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
@@ -14,14 +15,9 @@ import ckathode.weaponmod.entity.projectile.EntityKnife;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
-import ckathode.weaponmod.entity.projectile.dispense.DispenseBlowgunDart;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseBlunderShot;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseCannonBall;
-import ckathode.weaponmod.entity.projectile.dispense.DispenseCrossbowBolt;
-import ckathode.weaponmod.entity.projectile.dispense.DispenseDynamite;
-import ckathode.weaponmod.entity.projectile.dispense.DispenseJavelin;
-import ckathode.weaponmod.entity.projectile.dispense.DispenseMortarShell;
-import ckathode.weaponmod.entity.projectile.dispense.DispenseMusketBullet;
+import ckathode.weaponmod.entity.projectile.dispense.DispenseWeaponProjectile;
 import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import ckathode.weaponmod.item.ItemCannon;
@@ -45,6 +41,7 @@ import ckathode.weaponmod.item.RangedCompCrossbow;
 import ckathode.weaponmod.item.RangedCompFlintlock;
 import ckathode.weaponmod.item.RangedCompMortar;
 import ckathode.weaponmod.item.WMItem;
+import ckathode.weaponmod.item.WMItemProjectile;
 import com.mojang.datafixers.util.Pair;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -53,11 +50,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -71,6 +70,10 @@ public class WMRegistries {
             DeferredRegister.create(MOD_ID, Registries.ITEM);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(MOD_ID, Registries.ENTITY_TYPE);
+    public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
+            DeferredRegister.create(MOD_ID, Registries.DATA_COMPONENT_TYPE);
+    public static final DeferredRegister<Attribute> ATTRIBUTES =
+            DeferredRegister.create(MOD_ID, Registries.ATTRIBUTE);
 
     // Items
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_WOOD =
@@ -175,8 +178,8 @@ public class WMRegistries {
             ITEMS.register(ItemJavelin.ID, () -> ItemJavelin.ITEM);
     public static final RegistrySupplier<ItemShooter> ITEM_CROSSBOW =
             ITEMS.register(RangedCompCrossbow.ID, () -> RangedCompCrossbow.ITEM);
-    public static final RegistrySupplier<WMItem> ITEM_CROSSBOW_BOLT =
-            ITEMS.register(WMItem.CROSSBOW_BOLT_ID, () -> WMItem.CROSSBOW_BOLT_ITEM);
+    public static final RegistrySupplier<WMItemProjectile> ITEM_CROSSBOW_BOLT =
+            ITEMS.register(WMItemProjectile.CROSSBOW_BOLT_ID, () -> WMItemProjectile.CROSSBOW_BOLT_ITEM);
     public static final RegistrySupplier<ItemShooter> ITEM_BLOWGUN =
             ITEMS.register(RangedCompBlowgun.ID, () -> RangedCompBlowgun.ITEM);
     public static final Map<DartType, RegistrySupplier<ItemBlowgunDart>> ITEM_DARTS =
@@ -218,14 +221,14 @@ public class WMRegistries {
             ITEMS.register(ItemDummy.ID, () -> ItemDummy.ITEM);
     public static final RegistrySupplier<WMItem> ITEM_GUN_STOCK =
             ITEMS.register(WMItem.GUN_STOCK_ID, () -> WMItem.GUN_STOCK_ITEM);
-    public static final RegistrySupplier<WMItem> ITEM_MUSKET_BULLET =
-            ITEMS.register(WMItem.BULLET_MUSKET_ID, () -> WMItem.BULLET_MUSKET_ITEM);
+    public static final RegistrySupplier<WMItemProjectile> ITEM_MUSKET_BULLET =
+            ITEMS.register(WMItemProjectile.BULLET_MUSKET_ID, () -> WMItemProjectile.BULLET_MUSKET_ITEM);
     public static final RegistrySupplier<ItemShooter> ITEM_MORTAR =
             ITEMS.register(RangedCompMortar.ID, () -> RangedCompMortar.ITEM);
     public static final RegistrySupplier<WMItem> ITEM_MORTAR_IRON_PART =
             ITEMS.register(WMItem.MORTAR_IRON_PART_ID, () -> WMItem.MORTAR_IRON_PART_ITEM);
-    public static final RegistrySupplier<WMItem> ITEM_MORTAR_SHELL =
-            ITEMS.register(WMItem.MORTAR_SHELL_ID, () -> WMItem.MORTAR_SHELL_ITEM);
+    public static final RegistrySupplier<WMItemProjectile> ITEM_MORTAR_SHELL =
+            ITEMS.register(WMItemProjectile.MORTAR_SHELL_ID, () -> WMItemProjectile.MORTAR_SHELL_ITEM);
 
     // Entity Types
     public static final RegistrySupplier<EntityType<EntitySpear>> ENTITY_SPEAR =
@@ -257,23 +260,50 @@ public class WMRegistries {
     public static final RegistrySupplier<EntityType<EntityMortarShell>> ENTITY_MORTAR_SHELL =
             ENTITY_TYPES.register(EntityMortarShell.ID, () -> EntityMortarShell.TYPE);
 
+    // Data Component Types
+    public static final RegistrySupplier<DataComponentType<ReloadState>> RELOAD_STATE_TYPE =
+            DATA_COMPONENT_TYPES.register(ReloadState.TYPE_ID, () -> ReloadState.TYPE);
+    public static final RegistrySupplier<DataComponentType<Short>> BAYONET_DAMAGE_TYPE =
+            DATA_COMPONENT_TYPES.register(ItemMusket.BAYONET_DAMAGE_TYPE_ID, () -> ItemMusket.BAYONET_DAMAGE_TYPE);
+
+    // Attributes
+    public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
+            ATTRIBUTES.register(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getDescriptionId(),
+                    () -> WeaponModAttributes.IGNORE_ARMOUR_DAMAGE);
+    public static final RegistrySupplier<Attribute> WEAPON_KNOCKBACK =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_KNOCKBACK.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_KNOCKBACK);
+    public static final RegistrySupplier<Attribute> RELOAD_TIME =
+            ATTRIBUTES.register(WeaponModAttributes.RELOAD_TIME.getDescriptionId(),
+                    () -> WeaponModAttributes.RELOAD_TIME);
+    public static final RegistrySupplier<Attribute> WEAPON_REACH =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_REACH.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_REACH);
+
     private static void registerDispenserBehaviors() {
-        ITEM_JAVELIN.listen(item -> DispenserBlock.registerBehavior(item, new DispenseJavelin()));
-        ITEM_CROSSBOW_BOLT.listen(item -> DispenserBlock.registerBehavior(item, new DispenseCrossbowBolt()));
-        ITEM_DARTS.values().forEach(supplier -> supplier.listen(item ->
-                DispenserBlock.registerBehavior(item, new DispenseBlowgunDart())));
+        ITEM_JAVELIN.listen(item -> DispenserBlock.registerBehavior(item,
+                new DispenseWeaponProjectile(item, item)));
+        ITEM_CROSSBOW_BOLT.listen(item -> DispenserBlock.registerBehavior(item,
+                new DispenseWeaponProjectile(item, item)));
+        ITEM_DARTS.values().forEach(supplier -> supplier.listen(item -> DispenserBlock.registerBehavior(item,
+                new DispenseWeaponProjectile(item, item))));
         ITEM_BLUNDER_SHOT.listen(item -> DispenserBlock.registerBehavior(item, new DispenseBlunderShot()));
-        ITEM_DYNAMITE.listen(item -> DispenserBlock.registerBehavior(item, new DispenseDynamite()));
+        ITEM_DYNAMITE.listen(item -> DispenserBlock.registerBehavior(item,
+                new DispenseWeaponProjectile(item, item)));
         DispenseCannonBall behavior = new DispenseCannonBall();
         ITEM_CANNON_BALL.listen(item -> DispenserBlock.registerBehavior(item, behavior));
         DispenserBlock.registerBehavior(Items.GUNPOWDER, behavior);
-        ITEM_MUSKET_BULLET.listen(item -> DispenserBlock.registerBehavior(item, new DispenseMusketBullet()));
-        ITEM_MORTAR_SHELL.listen(item -> DispenserBlock.registerBehavior(item, new DispenseMortarShell()));
+        ITEM_MUSKET_BULLET.listen(item -> DispenserBlock.registerBehavior(item,
+                new DispenseWeaponProjectile(item, item)));
+        ITEM_MORTAR_SHELL.listen(item -> DispenserBlock.registerBehavior(item,
+                new DispenseWeaponProjectile(item, item)));
     }
 
     public static void init() {
         ITEMS.register();
         ENTITY_TYPES.register();
+        DATA_COMPONENT_TYPES.register();
+        ATTRIBUTES.register();
         registerDispenserBehaviors();
     }
 
@@ -290,6 +320,6 @@ public class WMRegistries {
             builder.clientTrackingRange(range);
         if (updateFrequency >= 0)
             builder.updateInterval(updateFrequency);
-        return builder.sized(size.width, size.height).build(name);
+        return builder.sized(size.width(), size.height()).build(name);
     }
 }

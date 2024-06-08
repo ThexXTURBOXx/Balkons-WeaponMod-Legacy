@@ -1,43 +1,43 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.entity.EntityCannon;
-import io.netty.buffer.ByteBuf;
-import java.util.function.Supplier;
 import dev.architectury.networking.NetworkManager;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
-public class MsgCannonFire implements WMMessage<MsgCannonFire> {
+import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
-    private int cannonEntityID;
+public class MsgCannonFire implements CustomPacketPayload {
 
-    public MsgCannonFire() {
-        // Needed for WMMessagePipeline instantiation
-    }
+    public static final Type<MsgCannonFire> CANNON_FIRE_PACKET_TYPE =
+            new Type<>(new ResourceLocation(MOD_ID, "cannon_fire"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgCannonFire> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT, p -> p.cannonEntityID,
+            MsgCannonFire::new);
+
+    private final int cannonEntityID;
 
     public MsgCannonFire(EntityCannon entity) {
-        cannonEntityID = entity.getId();
+        this(entity.getId());
     }
 
-    @Override
-    public void decode(ByteBuf buf) {
-        cannonEntityID = buf.readInt();
+    public MsgCannonFire(int id) {
+        cannonEntityID = id;
     }
 
+    @NotNull
     @Override
-    public void encode(ByteBuf buf) {
-        buf.writeInt(cannonEntityID);
+    public Type<? extends CustomPacketPayload> type() {
+        return CANNON_FIRE_PACKET_TYPE;
     }
 
-    @Environment(EnvType.CLIENT)
-    @Override
-    public void handleClientSide(MsgCannonFire msg, Supplier<NetworkManager.PacketContext> ctx) {
-    }
-
-    @Override
-    public void handleServerSide(MsgCannonFire msg, Supplier<NetworkManager.PacketContext> ctx) {
-        Entity entity = ctx.get().getPlayer().level.getEntity(cannonEntityID);
+    public static void handleServerSide(MsgCannonFire msg, NetworkManager.PacketContext ctx) {
+        Entity entity = ctx.getPlayer().level().getEntity(msg.cannonEntityID);
         if (entity instanceof EntityCannon) {
             ((EntityCannon) entity).fireCannon();
         }

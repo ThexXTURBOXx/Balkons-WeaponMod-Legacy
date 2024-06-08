@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "#",
     "X",
@@ -17,12 +18,12 @@
     }
   },
   "result": {
-    "item": "weaponmod:bullet",
+    "id": "weaponmod:bullet",
     "count": 8
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:or",
+      "type": "neoforge:or",
       "values": [
         {
           "type": "weaponmod:config_conditional",

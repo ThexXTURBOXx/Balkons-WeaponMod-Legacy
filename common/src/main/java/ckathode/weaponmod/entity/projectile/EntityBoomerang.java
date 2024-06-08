@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -29,7 +30,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     public static final String ID = "boomerang";
     public static final EntityType<EntityBoomerang> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 0.5f, false), EntityBoomerang::new);
+            ID, EntityDimensions.fixed(0.5f, 0.5f).withEyeHeight(0.0f), EntityBoomerang::new);
 
     private static final EntityDataAccessor<Float> BOOMERANG = SynchedEntityData.defineId(EntityBoomerang.class,
             EntityDataSerializers.FLOAT);
@@ -69,16 +70,16 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
         floatStrength = Math.min(1.5f, f3);
         entityData.set(BOOMERANG, floatStrength);
     }
 
     @Override
-    public void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(BOOMERANG, 0.0f);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(BOOMERANG, 0.0f);
     }
 
     @Override
@@ -117,7 +118,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (level.isClientSide || floatStrength < MIN_FLOAT_STRENGTH) {
+        if (level().isClientSide || floatStrength < MIN_FLOAT_STRENGTH) {
             return;
         }
         Entity shooter = getOwner();
@@ -151,12 +152,8 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                 thrownItem.shrink(1);
                 remove(RemovalReason.DISCARDED);
             } else {
-                if (shooter instanceof LivingEntity) {
-                    thrownItem.hurtAndBreak(1, (LivingEntity) shooter, s -> {
-                    });
-                } else {
-                    thrownItem.hurt(1, random, null);
-                }
+                thrownItem.hurtAndBreak(1, random, shooter instanceof ServerPlayer player ? player : null, () -> {
+                });
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {
@@ -170,7 +167,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
-        inBlockState = level.getBlockState(blockpos);
+        inBlockState = level().getBlockState(blockpos);
         Vec3 motion = raytraceResult.getLocation().subtract(position());
         setDeltaMovement(motion);
         Vec3 newPos = position().subtract(motion.normalize().scale(RETURN_STRENGTH));
@@ -182,7 +179,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         beenInGround = true;
         floatStrength = 0.0f;
         if (inBlockState != null) {
-            inBlockState.entityInside(level, blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this);
         }
     }
 
@@ -212,7 +209,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     }
 
     @Override
-    public float getGravity() {
+    public double getDefaultGravity() {
         return (beenInGround || floatStrength < MIN_FLOAT_STRENGTH) ? (float) RETURN_STRENGTH : 0.0f;
     }
 
@@ -223,7 +220,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void playerTouch(@NotNull Player entityplayer) {
-        if (!beenInGround && ticksInAir > 5 && !level.isClientSide && floatStrength >= MIN_FLOAT_STRENGTH && entityplayer.equals(getOwner())) {
+        if (!beenInGround && ticksInAir > 5 && !level().isClientSide && floatStrength >= MIN_FLOAT_STRENGTH && entityplayer.equals(getOwner())) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) {
                 return;
@@ -237,6 +234,12 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             }
         }
         super.playerTouch(entityplayer);
+    }
+
+    @NotNull
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(WMRegistries.ITEM_BOOMERANG_WOOD.get());
     }
 
 }

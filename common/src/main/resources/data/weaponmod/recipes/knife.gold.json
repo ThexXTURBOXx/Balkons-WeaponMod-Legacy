@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "#",
     "X"
@@ -13,9 +14,9 @@
     }
   },
   "result": {
-    "item": "weaponmod:knife.gold"
+    "id": "weaponmod:knife.gold"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "knife"

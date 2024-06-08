@@ -100,9 +100,9 @@
     "item.weaponmod.mortar-ironpart": "砂漿槍管",
     "item.weaponmod.shell": "砂漿外殼",
 
-    "attribute.weaponmod.ignoreArmour": "無視護甲",
+    "attribute.weaponmod.ignore-armour": "無視護甲",
     "attribute.weaponmod.knockback": "擊退",
-    "attribute.weaponmod.attackSpeed": "攻擊速度",
-    "attribute.weaponmod.reloadTime": "裝彈時間",
+    "attribute.weaponmod.attack-speed": "攻擊速度",
+    "attribute.weaponmod.reload-time": "裝彈時間",
     "attribute.weaponmod.reach": "範圍"
 }

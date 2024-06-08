@@ -103,7 +103,7 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
             ms.mulPose(Axis.YP.rotationDegrees(entityboomerang.yRotO + (entityboomerang.getYRot() - entityboomerang.yRotO) * f1 - 90.0f));
             ms.mulPose(Axis.XP.rotationDegrees(90.0f));
             itemRender.renderStatic(getStackToRender(entityboomerang), ItemDisplayContext.NONE, lm,
-                    OverlayTexture.NO_OVERLAY, ms, bufs, entityboomerang.level, entityboomerang.getId());
+                    OverlayTexture.NO_OVERLAY, ms, bufs, entityboomerang.level(), entityboomerang.getId());
             ms.popPose();
         }
         super.render(entityboomerang, f, f1, ms, bufs, lm);

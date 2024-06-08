@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "  X",
     " # ",
@@ -16,9 +17,9 @@
     }
   },
   "result": {
-    "item": "weaponmod:spear.wood"
+    "id": "weaponmod:spear.wood"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "spear"

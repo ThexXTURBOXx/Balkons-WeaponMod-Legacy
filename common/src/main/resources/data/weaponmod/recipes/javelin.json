@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "  X",
     " # ",
@@ -14,10 +15,10 @@
     }
   },
   "result": {
-    "item": "weaponmod:javelin",
+    "id": "weaponmod:javelin",
     "count": 4
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "javelin"

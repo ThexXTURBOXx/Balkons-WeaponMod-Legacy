@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "##X",
     "  #",
@@ -19,9 +20,9 @@
     ]
   },
   "result": {
-    "item": "weaponmod:cannon"
+    "id": "weaponmod:cannon"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "cannon"

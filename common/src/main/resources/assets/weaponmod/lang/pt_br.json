@@ -100,9 +100,9 @@
     "item.weaponmod.mortar-ironpart": "Culatra do Argamassa",
     "item.weaponmod.shell": "Casca de Morteiro",
 
-    "attribute.weaponmod.ignoreArmour": "Ignora Armadura",
+    "attribute.weaponmod.ignore-armour": "Ignora Armadura",
     "attribute.weaponmod.knockback": "Tranco",
-    "attribute.weaponmod.attackSpeed": "Velocidade de Ataque",
-    "attribute.weaponmod.reloadTime": "Tempo de Recarga",
+    "attribute.weaponmod.attack-speed": "Velocidade de Ataque",
+    "attribute.weaponmod.reload-time": "Tempo de Recarga",
     "attribute.weaponmod.reach": "Alcance"
 }

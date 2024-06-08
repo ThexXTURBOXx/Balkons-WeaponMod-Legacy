@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "X#X",
     "X#X",
@@ -14,9 +15,9 @@
     }
   },
   "result": {
-    "item": "weaponmod:warhammer.diamond"
+    "id": "weaponmod:warhammer.diamond"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "warhammer"

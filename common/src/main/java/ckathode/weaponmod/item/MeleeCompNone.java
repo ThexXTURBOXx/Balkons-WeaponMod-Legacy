@@ -1,20 +1,21 @@
 package ckathode.weaponmod.item;
 
-import com.google.common.collect.Multimap;
+import java.util.Collections;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompNone extends MeleeComponent {
 
@@ -32,14 +33,10 @@ public class MeleeCompNone extends MeleeComponent {
         return 1.0f;
     }
 
+    @NotNull
     @Override
-    public float getDestroySpeed(ItemStack itemstack, BlockState block) {
-        return 1.0f;
-    }
-
-    @Override
-    public boolean canHarvestBlock(BlockState block) {
-        return false;
+    public Tool getToolComponent() {
+        return new Tool(Collections.emptyList(), 1, 1);
     }
 
     @Override
@@ -66,7 +63,8 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> multimap) {
+    public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
+        return ItemAttributeModifiers.builder();
     }
 
     @Override

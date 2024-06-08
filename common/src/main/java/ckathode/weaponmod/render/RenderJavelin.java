@@ -76,7 +76,7 @@ public class RenderJavelin extends WMRenderer<EntityJavelin> {
             ms.translate(-0.25f, -0.25f, 0.0f);
             ms.mulPose(Axis.YP.rotationDegrees(180.0f));
             itemRender.renderStatic(getStackToRender(entityjavelin), ItemDisplayContext.NONE, lm,
-                    OverlayTexture.NO_OVERLAY, ms, bufs, entityjavelin.level, entityjavelin.getId());
+                    OverlayTexture.NO_OVERLAY, ms, bufs, entityjavelin.level(), entityjavelin.getId());
             ms.popPose();
         }
         super.render(entityjavelin, f, f1, ms, bufs, lm);

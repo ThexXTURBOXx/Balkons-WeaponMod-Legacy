@@ -1,15 +1,19 @@
 {
-  "type": "minecraft:smithing",
-  "base": {
-    "item": "weaponmod:boomerang.diamond"
-  },
+  "type": "minecraft:smithing_transform",
   "addition": {
     "item": "minecraft:netherite_ingot"
   },
-  "result": {
-    "item": "weaponmod:boomerang.netherite"
+  "base": {
+    "item": "weaponmod:boomerang.diamond"
   },
-  "conditions": [
+  "result": {
+    "count": 1,
+    "id": "weaponmod:boomerang.netherite"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  },
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "boomerang"

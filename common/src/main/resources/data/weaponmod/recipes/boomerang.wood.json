@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "XXX",
     "  X",
@@ -13,9 +14,9 @@
     ]
   },
   "result": {
-    "item": "weaponmod:boomerang.wood"
+    "id": "weaponmod:boomerang.wood"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "boomerang"

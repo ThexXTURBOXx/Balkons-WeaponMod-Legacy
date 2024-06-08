@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     "#",
     "O",
@@ -17,10 +18,10 @@
     }
   },
   "result": {
-    "item": "weaponmod:dart.slow",
+    "id": "weaponmod:dart.slow",
     "count": 4
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "blowgun"

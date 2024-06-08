@@ -53,7 +53,7 @@ public class MeleeCompKnife extends MeleeComponent {
                     0.0f, 0.8f, 3.0f);
             entityknife.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
             if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                entityknife.setSecondsOnFire(100);
+                entityknife.igniteForSeconds(100);
             }
             world.addFreshEntity(entityknife);
         }

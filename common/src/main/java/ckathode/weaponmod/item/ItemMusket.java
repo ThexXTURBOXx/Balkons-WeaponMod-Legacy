@@ -3,10 +3,13 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.WMRegistries;
+import com.mojang.serialization.Codec;
+import java.util.Objects;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,8 +17,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,6 +50,10 @@ public class ItemMusket extends ItemShooter {
     public static final String NETHERITE_ID = "musketbayonet.netherite";
     public static final ItemMusket NETHERITE_ITEM = new ItemMusket(
             new MeleeCompKnife(Tiers.NETHERITE), MeleeCompKnife.NETHERITE_ITEM);
+
+    public static final String BAYONET_DAMAGE_TYPE_ID = "bayonet-damage";
+    public static final DataComponentType<Short> BAYONET_DAMAGE_TYPE =
+            DataComponentType.<Short>builder().persistent(Codec.SHORT).networkSynchronized(ByteBufCodecs.SHORT).build();
 
     @Nullable
     protected final Item bayonetItem;
@@ -87,10 +94,8 @@ public class ItemMusket extends ItemShooter {
                              @NotNull BlockState block, @NotNull BlockPos pos,
                              @NotNull LivingEntity entityliving) {
         if (hasBayonet()) {
-            Material material = block.getMaterial();
-            boolean flag =
-                    material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.WATER_PLANT && material != Material.LEAVES && material != Material.VEGETABLE;
-            if (entityliving instanceof Player && !((Player) entityliving).isCreative() && flag) {
+            boolean flag = block.is(BlockTags.SWORD_EFFICIENT) || block.is(Blocks.COBWEB);
+            if (entityliving instanceof Player && !((Player) entityliving).isCreative() && !flag) {
                 bayonetDamage(itemstack, (Player) entityliving, 2);
             }
         }
@@ -98,22 +103,22 @@ public class ItemMusket extends ItemShooter {
     }
 
     public void bayonetDamage(ItemStack itemstack, Player entityplayer, int damage) {
-        if (itemstack.getTag() == null) {
-            itemstack.setTag(new CompoundTag());
+        if (!itemstack.has(BAYONET_DAMAGE_TYPE)) {
+            itemstack.set(BAYONET_DAMAGE_TYPE, (short) 0);
         }
-        int bayonetdamage = itemstack.getTag().getShort("bayonetDamage") + damage;
+        int bayonetdamage = Objects.requireNonNull(itemstack.get(BAYONET_DAMAGE_TYPE)) + damage;
         if (bayonetdamage > bayonetDurability) {
-            entityplayer.broadcastBreakEvent(InteractionHand.MAIN_HAND);
+            entityplayer.broadcastBreakEvent(EquipmentSlot.MAINHAND);
             entityplayer.awardStat(Stats.ITEM_BROKEN.get(this));
             bayonetdamage = 0;
             ItemStack itemstack2 = new ItemStack(WMRegistries.ITEM_MUSKET.get(), 1);
             itemstack2.setDamageValue(itemstack.getDamageValue());
             entityplayer.setItemSlot(EquipmentSlot.MAINHAND, itemstack2);
-            if (itemstack.getTag().contains("rld")) {
+            if (itemstack.has(ReloadHelper.ReloadState.TYPE)) {
                 ReloadHelper.setReloadState(itemstack2, ReloadHelper.getReloadState(itemstack));
             }
         }
-        itemstack.getTag().putShort("bayonetDamage", (short) bayonetdamage);
+        itemstack.set(BAYONET_DAMAGE_TYPE, (short) bayonetdamage);
     }
 
 }

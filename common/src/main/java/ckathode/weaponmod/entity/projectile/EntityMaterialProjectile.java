@@ -30,17 +30,17 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     @Override
-    public void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(WEAPON_MATERIAL, (byte) 0);
-        entityData.define(WEAPON_ITEM, ItemStack.EMPTY);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(WEAPON_MATERIAL, (byte) 0);
+        builder.define(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
     public float getMeleeHitDamage(Entity entity) {
         Entity shooter = getOwner();
         if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
             return EnchantmentHelper.getDamageBonus(((LivingEntity) shooter).getMainHandItem(),
-                    ((LivingEntity) entity).getMobType());
+                    ((LivingEntity) entity).getType());
         }
         return 0.0f;
     }
@@ -58,7 +58,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
             }
             i = EnchantmentHelper.getFireAspect((LivingEntity) shooter);
             if (i > 0 && !entity.isOnFire()) {
-                entity.setSecondsOnFire(1);
+                entity.igniteForSeconds(1);
             }
         }
     }
@@ -108,14 +108,14 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
         super.addAdditionalSaveData(nbttagcompound);
         ItemStack thrownItem = getWeapon();
         if (thrownItem != null) {
-            nbttagcompound.put("thrI", thrownItem.save(new CompoundTag()));
+            nbttagcompound.put("thrI", thrownItem.save(registryAccess()));
         }
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
         super.readAdditionalSaveData(nbttagcompound);
-        setThrownItemStack(ItemStack.of(nbttagcompound.getCompound("thrI")));
+        setThrownItemStack(ItemStack.parseOptional(registryAccess(), nbttagcompound.getCompound("thrI")));
     }
 
 }

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "pattern": [
     " XX",
     " #X",
@@ -16,9 +17,9 @@
     }
   },
   "result": {
-    "item": "weaponmod:halberd.wood"
+    "id": "weaponmod:halberd.wood"
   },
-  "conditions": [
+  "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
       "weapon": "halberd"

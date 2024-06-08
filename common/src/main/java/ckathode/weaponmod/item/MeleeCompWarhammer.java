@@ -6,15 +6,17 @@ import ckathode.weaponmod.WarhammerExplosion;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompWarhammer extends MeleeComponent {
 
@@ -43,10 +45,9 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public float getDestroySpeed(ItemStack itemstack, BlockState block) {
-        float f = super.getDestroySpeed(itemstack, block);
-        float f2 = weaponMaterial.getAttackDamageBonus() + 2.0f;
-        return f * f2;
+    public @NotNull Tool getToolComponent() {
+        Tool orig = super.getToolComponent();
+        return new Tool(orig.rules(), orig.defaultMiningSpeed() * (weaponMaterial.getAttackDamageBonus() + 2.0f), 1);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
         expl.doEntityExplosion(world.damageSources().playerAttack(entityplayer));
         expl.doParticleExplosion(true, false);
         PhysHelper.sendExplosion(world, expl, true, false);
-        itemstack.hurtAndBreak(16, entityplayer, s -> s.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        itemstack.hurtAndBreak(16, entityplayer, EquipmentSlot.MAINHAND);
         entityplayer.causeFoodExhaustion(6.0f);
         setSmashed(entityplayer);
     }

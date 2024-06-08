@@ -38,7 +38,7 @@ public class WMClientEventHandler {
 
     public static EventResult onMouseClick(Minecraft client, int button, int action, int mods) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null || !player.level.isClientSide || Minecraft.getInstance().screen != null) {
+        if (player == null || !player.level().isClientSide || Minecraft.getInstance().screen != null) {
             return EventResult.pass();
         }
         if (button == 0 && action == GLFW.GLFW_PRESS) {
@@ -46,7 +46,7 @@ public class WMClientEventHandler {
             if (!itemstack.isEmpty()) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
-                    float reach = ieri.getExtendedReach(player.level, player, itemstack);
+                    float reach = ieri.getExtendedReach(player.level(), player, itemstack);
                     HitResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
                     if (!(raytraceResult instanceof EntityHitResult ertr)) return EventResult.pass();
                     Entity entity = ertr.getEntity();
@@ -61,7 +61,7 @@ public class WMClientEventHandler {
     }
 
     public static void onPlayerTick(Player player) {
-        if (!player.level.isClientSide) {
+        if (!player.level().isClientSide) {
             return;
         }
         if (player instanceof LocalPlayer entity) {

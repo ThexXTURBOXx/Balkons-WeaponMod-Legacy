@@ -1,23 +1,30 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
+import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
 import com.mojang.datafixers.util.Pair;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class ItemBlowgunDart extends WMItem {
+public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
 
     public static final String ID_PREFIX = "dart";
     public static final Map<DartType, ItemBlowgunDart> ITEMS =
@@ -34,25 +41,37 @@ public class ItemBlowgunDart extends WMItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack itemstack, @Nullable Level worldIn,
-                                @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        MobEffectInstance potioneffect = dartType.potionEffect;
-        MobEffect potion = potioneffect.getEffect();
-        MutableComponent s = Component.translatable(potioneffect.getDescriptionId());
-        if (potioneffect.getAmplifier() > 0) {
-            s = Component.translatable("potion.withAmplifier",
-                    s, Component.translatable("potion.potency." + potioneffect.getAmplifier()));
-        }
-        if (potioneffect.getDuration() > 20) {
-            s = Component.translatable("potion.withDuration", s, MobEffectUtil.formatDuration(potioneffect, 1.0f));
-        }
-        s = s.withStyle(potion.getCategory().getTooltipFormatting());
-        list.add(s);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
+                                TooltipFlag tooltipFlag) {
+        PotionContents.addPotionTooltip(Collections.singleton(dartType.potionEffect),
+                tooltipComponents::add, 1.0f, context.tickRate());
     }
 
     @NotNull
     public DartType getDartType() {
         return dartType;
+    }
+
+    @NotNull
+    @Override
+    public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
+        EntityBlowgunDart dart = new EntityBlowgunDart(level, pos.x(), pos.y(), pos.z());
+        Item item = stack.getItem();
+        if (item instanceof ItemBlowgunDart)
+            dart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
+        return dart;
+    }
+
+    @NotNull
+    @Override
+    public DispenseConfig createDispenseConfig() {
+        return DispenseConfig.builder().power(3.0F).uncertainty(2.0F).build();
+    }
+
+    @Override
+    public void playSound(@NotNull Consumer<BlockSource> origFn, @NotNull BlockSource blockSource) {
+        blockSource.level().playSound(null, blockSource.pos(), SoundEvents.ARROW_SHOOT,
+                SoundSource.NEUTRAL, 1.0f, 1.2f);
     }
 
 }

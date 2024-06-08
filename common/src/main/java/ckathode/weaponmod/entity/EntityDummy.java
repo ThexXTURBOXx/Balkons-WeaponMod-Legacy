@@ -36,7 +36,7 @@ public class EntityDummy extends Entity {
 
     public static final String ID = "dummy";
     public static final EntityType<EntityDummy> TYPE = WMRegistries.createEntityType(
-            ID, new EntityDimensions(0.5f, 1.9f, false), 4, 20, EntityDummy::new);
+            ID, EntityDimensions.fixed(0.5f, 1.9f).withEyeHeight(0.0f), 4, 20, EntityDummy::new);
 
     private static final EntityDataAccessor<Integer> TIME_SINCE_HIT = SynchedEntityData.defineId(EntityDummy.class,
             EntityDataSerializers.INT);
@@ -70,10 +70,10 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        entityData.define(TIME_SINCE_HIT, 0);
-        entityData.define(ROCK_DIRECTION, (byte) 1);
-        entityData.define(CURRENT_DAMAGE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(TIME_SINCE_HIT, 0);
+        builder.define(ROCK_DIRECTION, (byte) 1);
+        builder.define(CURRENT_DAMAGE, 0);
     }
 
     @NotNull
@@ -94,7 +94,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean hurt(@NotNull DamageSource damagesource, float damage) {
-        if (level.isClientSide || !isAlive() || damage <= 0.0f) {
+        if (level().isClientSide || !isAlive() || damage <= 0.0f) {
             return false;
         }
         setRockDirection(-getRockDirection());
@@ -120,7 +120,7 @@ public class EntityDummy extends Entity {
         } else {
             playRandomHitSound();
         }
-        if (durability <= 0 && level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+        if (durability <= 0 && level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             dropAsItem(true, true);
         }
         markHurt();
@@ -162,7 +162,7 @@ public class EntityDummy extends Entity {
         xo = getX();
         yo = getY();
         zo = getZ();
-        if (onGround) {
+        if (onGround()) {
             setDeltaMovement(Vec3.ZERO);
         } else {
             Vec3 motion = getDeltaMovement();
@@ -174,7 +174,7 @@ public class EntityDummy extends Entity {
         }
         setRot(getYRot(), getXRot());
         move(MoverType.SELF, new Vec3(0.0, getDeltaMovement().y, 0.0));
-        List<Entity> list = level.getEntities(this, getBoundingBox().inflate(0.2,
+        List<Entity> list = level().getEntities(this, getBoundingBox().inflate(0.2,
                 0.0, 0.2), EntitySelector.pushableBy(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
@@ -188,7 +188,7 @@ public class EntityDummy extends Entity {
     @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         super.causeFallDamage(fallDistance, multiplier, source);
-        if (!onGround) {
+        if (!onGround()) {
             return false;
         }
         int i = Mth.floor(fallDistance);
@@ -197,7 +197,7 @@ public class EntityDummy extends Entity {
     }
 
     public void dropAsItem(boolean destroyed, boolean noCreative) {
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             return;
         }
         if (destroyed) {

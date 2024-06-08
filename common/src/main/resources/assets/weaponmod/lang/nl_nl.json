@@ -100,9 +100,9 @@
     "item.weaponmod.mortar-ironpart": "Mortiervat",
     "item.weaponmod.shell": "Mortel schaal",
 
-    "attribute.weaponmod.ignoreArmour": "Negeer pantser",
+    "attribute.weaponmod.ignore-armour": "Negeer pantser",
     "attribute.weaponmod.knockback": "Terugslag",
-    "attribute.weaponmod.attackSpeed": "Aanvalssnelheid",
-    "attribute.weaponmod.reloadTime": "Herlaadtijd",
+    "attribute.weaponmod.attack-speed": "Aanvalssnelheid",
+    "attribute.weaponmod.reload-time": "Herlaadtijd",
     "attribute.weaponmod.reach": "Bereik"
 }

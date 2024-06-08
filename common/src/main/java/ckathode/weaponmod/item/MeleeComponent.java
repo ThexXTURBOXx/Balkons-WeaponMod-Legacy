@@ -1,28 +1,33 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
-import ckathode.weaponmod.WeaponModAttributes;
-import com.google.common.collect.Multimap;
+import ckathode.weaponmod.WMRegistries;
+import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
+import org.jetbrains.annotations.NotNull;
 
 public class MeleeComponent extends AbstractWeaponComponent {
 
@@ -34,16 +39,66 @@ public class MeleeComponent extends AbstractWeaponComponent {
         weaponMaterial = itemTier;
     }
 
+    @NotNull
+    public Tier getWeaponMaterial() {
+        return weaponMaterial == null ? Tiers.WOOD : weaponMaterial;
+    }
+
     @Override
     protected void onSetItem() {
     }
 
+    @NotNull
+    public Tool getToolComponent() {
+        return new Tool(List.of(
+                Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), meleeSpecs.blockDamage * 10),
+                Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, meleeSpecs.blockDamage)),
+                1.0F, 2);
+    }
+
+    @Override
+    public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
+        float dmg = getEntityDamage();
+        if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
+            attributeBuilder = attributeBuilder
+                    .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_UUID,
+                                    "Weapon modifier", dmg,
+                                    AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.MAINHAND)
+                    .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_UUID,
+                                    "Weapon modifier", -meleeSpecs.attackDelay,
+                                    AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.MAINHAND);
+        }
+        if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
+            attributeBuilder = attributeBuilder
+                    .add(WMRegistries.WEAPON_KNOCKBACK, new AttributeModifier(ItemMelee.KNOCKBACK_MODIFIER,
+                                    "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
+                                    AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.MAINHAND);
+        }
+        if (this instanceof IExtendedReachItem) {
+            try {
+                attributeBuilder = attributeBuilder
+                        .add(WMRegistries.WEAPON_REACH, new AttributeModifier(ItemMelee.REACH_MODIFIER,
+                                        "Weapon reach modifier",
+                                        ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
+                                        AttributeModifier.Operation.ADD_VALUE),
+                                EquipmentSlotGroup.MAINHAND);
+            } catch (NullPointerException ignored) {
+            }
+        }
+        return attributeBuilder;
+    }
+
     @Override
     public Properties setProperties(Properties properties) {
-        return properties.defaultDurability(weaponMaterial == null
-                ? meleeSpecs.durabilityBase
-                : (int) (meleeSpecs.durabilityBase
-                         + weaponMaterial.getUses() * meleeSpecs.durabilityMult));
+        return properties
+                .component(DataComponents.TOOL, getToolComponent())
+                .durability(weaponMaterial == null
+                        ? meleeSpecs.durabilityBase
+                        : (int) (meleeSpecs.durabilityBase
+                                 + weaponMaterial.getUses() * meleeSpecs.durabilityMult));
     }
 
     @Override
@@ -60,26 +115,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public float getDestroySpeed(ItemStack itemstack, BlockState block) {
-        if (canHarvestBlock(block)) {
-            return meleeSpecs.blockDamage * 10.0f;
-        }
-        Material material = block.getMaterial();
-        return (material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.WATER_PLANT && material != Material.LEAVES && material != Material.VEGETABLE) ? 1.0f : meleeSpecs.blockDamage;
-    }
-
-    @Override
-    public boolean canHarvestBlock(BlockState state) {
-        Block block = state.getBlock();
-        return block == Blocks.COBWEB;
-    }
-
-    @Override
     public boolean mineBlock(ItemStack itemstack, Level world, BlockState block,
                              BlockPos pos, LivingEntity entityliving) {
         if (block.getDestroySpeed(world, pos) != 0.0f) {
-            itemstack.hurtAndBreak(meleeSpecs.dmgFromBlock, entityliving,
-                    s -> s.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+            itemstack.hurtAndBreak(meleeSpecs.dmgFromBlock, entityliving, EquipmentSlot.MAINHAND);
         }
         return true;
     }
@@ -97,8 +136,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 entityliving.invulnerableTime -= (int) (f / getAttackDelay(itemstack, entityliving, attacker));
             }
         }
-        itemstack.hurtAndBreak(meleeSpecs.dmgFromEntity, attacker,
-                s -> s.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        itemstack.hurtAndBreak(meleeSpecs.dmgFromEntity, attacker, EquipmentSlot.MAINHAND);
         return true;
     }
 
@@ -117,33 +155,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public int getEnchantmentValue() {
         return (weaponMaterial == null) ? 1 : weaponMaterial.getEnchantmentValue();
-    }
-
-    @Override
-    public void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> multimap) {
-        float dmg = getEntityDamage();
-        if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
-            multimap.put(Attributes.ATTACK_DAMAGE,
-                    new AttributeModifier(weapon.getUUIDDamage(), "Weapon attack damage modifier", dmg,
-                            AttributeModifier.Operation.ADDITION));
-            multimap.put(Attributes.ATTACK_SPEED,
-                    new AttributeModifier(weapon.getUUIDSpeed(), "Weapon attack speed modifier",
-                            -meleeSpecs.attackDelay, AttributeModifier.Operation.ADDITION));
-        }
-        if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
-            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK, new AttributeModifier(weapon.getUUID(),
-                    "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
-                    AttributeModifier.Operation.ADDITION));
-        }
-        if (this instanceof IExtendedReachItem) {
-            try {
-                multimap.put(WeaponModAttributes.WEAPON_REACH, new AttributeModifier(weapon.getUUID(),
-                        "Weapon reach modifier",
-                        ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
-                        AttributeModifier.Operation.ADDITION));
-            } catch (NullPointerException ignored) {
-            }
-        }
     }
 
     @Override

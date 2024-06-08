@@ -100,10 +100,10 @@
   "item.weaponmod.mortar-ironpart": "Mortar Barrel",
   "item.weaponmod.shell": "Mortar Shell",
 
-  "attribute.weaponmod.ignoreArmour": "Ignore Armor",
+  "attribute.weaponmod.ignore-armour": "Ignore Armor",
   "attribute.weaponmod.knockback": "Knockback",
-  "attribute.weaponmod.attackSpeed": "Attack Speed",
-  "attribute.weaponmod.reloadTime": "Reload Time",
+  "attribute.weaponmod.attack-speed": "Attack Speed",
+  "attribute.weaponmod.reload-time": "Reload Time",
   "attribute.weaponmod.reach": "Reach",
 
   "death.attack.weapon": "%1$s is no more",
