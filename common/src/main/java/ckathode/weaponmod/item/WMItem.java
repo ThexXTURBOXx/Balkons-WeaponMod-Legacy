@@ -2,6 +2,9 @@ package ckathode.weaponmod.item;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
+import org.jetbrains.annotations.Nullable;
 
 public class WMItem extends Item {
 
@@ -33,11 +36,19 @@ public class WMItem extends Item {
     public static final WMItem MORTAR_IRON_PART_ITEM = new WMItem();
 
     public WMItem() {
-        this(new Properties());
+        this(getBaseProperties(null));
     }
 
     public WMItem(Properties properties) {
         super(properties.tab(CreativeModeTab.TAB_COMBAT));
+    }
+
+    public static Properties getBaseProperties(@Nullable Tier tier) {
+        Properties properties = new Properties();
+        if (tier == Tiers.NETHERITE) {
+            properties = properties.fireResistant();
+        }
+        return properties;
     }
 
 }

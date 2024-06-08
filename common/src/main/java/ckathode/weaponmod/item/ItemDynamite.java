@@ -17,7 +17,7 @@ public class ItemDynamite extends WMItem {
     public static final ItemDynamite ITEM = new ItemDynamite();
 
     public ItemDynamite() {
-        super(new Properties().stacksTo(64));
+        super(WMItem.getBaseProperties(null).stacksTo(64));
     }
 
     @Override
