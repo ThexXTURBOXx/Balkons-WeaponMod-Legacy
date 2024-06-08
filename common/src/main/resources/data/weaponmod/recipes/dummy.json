@@ -12,12 +12,31 @@
     "#": {
       "item": "minecraft:leather_chestplate"
     },
-    "O": {
-      "item": "minecraft:stick"
-    },
-    "H": {
-      "item": "minecraft:wheat"
-    }
+    "O": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ],
+    "H": [
+      {
+        "item": "minecraft:wheat"
+      },
+      {
+        "tag": "c:grain"
+      },
+      {
+        "tag": "forge:crops/wheat"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:dummy"

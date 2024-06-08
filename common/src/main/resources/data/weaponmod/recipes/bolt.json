@@ -5,12 +5,31 @@
     "X"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:iron_ingot"
-    },
-    "X": {
-      "item": "minecraft:feather"
-    }
+    "#": [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "tag": "c:ingots/iron"
+      },
+      {
+        "tag": "c:iron_ingots"
+      },
+      {
+        "tag": "forge:ingots/iron"
+      }
+    ],
+    "X": [
+      {
+        "item": "minecraft:feather"
+      },
+      {
+        "tag": "c:feathers"
+      },
+      {
+        "tag": "forge:feathers"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:bolt",

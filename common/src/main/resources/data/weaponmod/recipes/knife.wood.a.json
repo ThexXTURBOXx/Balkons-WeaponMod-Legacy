@@ -9,9 +9,20 @@
         "tag": "minecraft:planks"
       }
     ],
-    "X": {
-      "item": "minecraft:stick"
-    }
+    "X": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:knife.wood"

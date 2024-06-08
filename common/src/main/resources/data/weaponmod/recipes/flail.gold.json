@@ -6,15 +6,45 @@
     "X #"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:gold_ingot"
-    },
-    "X": {
-      "item": "minecraft:stick"
-    },
-    "O": {
-      "item": "minecraft:string"
-    }
+    "#": [
+      {
+        "item": "minecraft:gold_ingot"
+      },
+      {
+        "tag": "c:ingots/gold"
+      },
+      {
+        "tag": "c:gold_ingots"
+      },
+      {
+        "tag": "forge:ingots/gold"
+      }
+    ],
+    "X": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ],
+    "O": [
+      {
+        "item": "minecraft:string"
+      },
+      {
+        "tag": "c:strings"
+      },
+      {
+        "tag": "forge:string"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:flail.gold"
