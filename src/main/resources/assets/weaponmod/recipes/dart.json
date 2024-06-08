@@ -20,5 +20,11 @@
     "item": "weaponmod:dart",
     "data": 0,
     "count": 4
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
 }

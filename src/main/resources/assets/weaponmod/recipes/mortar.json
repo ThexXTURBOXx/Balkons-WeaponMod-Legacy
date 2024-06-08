@@ -14,5 +14,11 @@
   },
   "result": {
     "item": "weaponmod:mortar"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "mortar"
+    }
+  ]
 }

@@ -15,5 +15,11 @@
   },
   "result": {
     "item": "weaponmod:mortar-ironpart"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "mortar"
+    }
+  ]
 }

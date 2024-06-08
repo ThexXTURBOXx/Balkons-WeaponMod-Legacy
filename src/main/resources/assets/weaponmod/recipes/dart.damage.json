@@ -13,12 +13,18 @@
       "item": "minecraft:feather"
     },
     "O": {
-      "item": "minecraft:rotten_flesh"
+      "item": "minecraft:spider_eye"
     }
   },
   "result": {
     "item": "weaponmod:dart",
-    "data": 1,
+    "data": 3,
     "count": 4
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
 }

@@ -15,5 +15,11 @@
   },
   "result": {
     "item": "weaponmod:warhammer.iron"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "warhammer"
+    }
+  ]
 }

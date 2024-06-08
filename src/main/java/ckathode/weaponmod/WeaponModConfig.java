@@ -43,7 +43,9 @@ public class WeaponModConfig {
 
     public void loadConfig() {
         config.load();
-        config.addCustomCategoryComment("enable", "Enable or disable certain weapons");
+        config.addCustomCategoryComment("enable", "Enable or disable certain weapons "
+                                                  + "(only disables their recipes; they are still obtainable "
+                                                  + "through Creative mode!)");
         config.addCustomCategoryComment("reloadtime", "The reload durations of the reloadable weapons");
         config.addCustomCategoryComment("settings", "Miscellaneous mod settings");
         cannonDoesBlockDamage = config.get("settings", "cannon-block-damage", true).getBoolean(true);

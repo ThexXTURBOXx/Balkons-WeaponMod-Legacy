@@ -38,5 +38,11 @@
   },
   "result": {
     "item": "weaponmod:spear.wood"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "spear"
+    }
+  ]
 }

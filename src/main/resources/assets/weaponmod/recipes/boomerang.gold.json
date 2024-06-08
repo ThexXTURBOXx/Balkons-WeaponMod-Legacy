@@ -38,5 +38,11 @@
   },
   "result": {
     "item": "weaponmod:boomerang.gold"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "boomerang"
+    }
+  ]
 }

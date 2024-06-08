@@ -19,5 +19,11 @@
   "result": {
     "item": "weaponmod:shot",
     "count": 8
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blunderbuss"
+    }
+  ]
 }

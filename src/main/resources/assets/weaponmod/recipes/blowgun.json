@@ -12,5 +12,11 @@
   },
   "result": {
     "item": "weaponmod:blowgun"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
 }

@@ -14,5 +14,11 @@
   },
   "result": {
     "item": "weaponmod:knife.gold"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
 }

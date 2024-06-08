@@ -15,5 +15,11 @@
   },
   "result": {
     "item": "weaponmod:battleaxe.iron"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "battleaxe"
+    }
+  ]
 }

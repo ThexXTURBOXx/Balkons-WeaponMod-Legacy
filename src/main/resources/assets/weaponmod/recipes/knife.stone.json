@@ -14,5 +14,11 @@
   },
   "result": {
     "item": "weaponmod:knife.stone"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
 }

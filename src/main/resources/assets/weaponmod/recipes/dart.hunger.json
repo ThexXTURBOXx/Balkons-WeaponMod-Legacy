@@ -13,12 +13,18 @@
       "item": "minecraft:feather"
     },
     "O": {
-      "item": "minecraft:slime_ball"
+      "item": "minecraft:rotten_flesh"
     }
   },
   "result": {
     "item": "weaponmod:dart",
-    "data": 2,
+    "data": 1,
     "count": 4
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
 }

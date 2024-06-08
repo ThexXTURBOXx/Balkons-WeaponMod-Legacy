@@ -13,5 +13,11 @@
   },
   "result": {
     "item": "weaponmod:cannonball"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "cannon"
+    }
+  ]
 }

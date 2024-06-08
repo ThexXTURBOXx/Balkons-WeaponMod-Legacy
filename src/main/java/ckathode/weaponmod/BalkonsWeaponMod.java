@@ -56,6 +56,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -150,11 +152,15 @@ public class BalkonsWeaponMod {
     public static Item mortarIronPart;
     public WeaponModConfig modConfig;
     public WMMessagePipeline messagePipeline;
+    public final IConditionFactory configConditional;
 
     public BalkonsWeaponMod() {
         instance = this;
         messagePipeline = new WMMessagePipeline();
         MinecraftForge.EVENT_BUS.register(this);
+
+        configConditional = new WMConfigCondition();
+        CraftingHelper.register(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional"), configConditional);
     }
 
     @Mod.EventHandler
@@ -211,11 +217,38 @@ public class BalkonsWeaponMod {
     }
 
     private void registerWeapons() {
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear", 1,
+                this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife", 2,
+                this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin"
+                , 3, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class,
+                "bullet", 4, this, 16, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt"
+                , 5, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
+                6, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class,
+                "dynamite", 7, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail", 8,
+                this, 32, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
+                9, this, 64, 128, false);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
+                "cannonball", 10, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
+                11, this, 16, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy", 12,
+                this, 64, 20, false);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
+                "boomerang", 13, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell"
+                , 14, this, 64, 20, true);
+
         if (modConfig.isEnabled("spear")) {
             GameRegistry.addSmelting(spearSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(spearGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear", 1,
-                    this, 64, 20, true);
         }
         if (modConfig.isEnabled("halberd")) {
             GameRegistry.addSmelting(halberdSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
@@ -224,16 +257,6 @@ public class BalkonsWeaponMod {
         if (modConfig.isEnabled("knife")) {
             GameRegistry.addSmelting(knifeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(knifeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife", 2,
-                    this, 64, 20, true);
-        }
-        if (modConfig.isEnabled("javelin")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin"
-                    , 3, this, 64, 20, true);
-        }
-        if (modConfig.isEnabled("musket") || modConfig.isEnabled("flintlock")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class,
-                    "bullet", 4, this, 16, 20, true);
         }
         if (modConfig.isEnabled("battleaxe")) {
             GameRegistry.addSmelting(battleaxeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
@@ -243,51 +266,17 @@ public class BalkonsWeaponMod {
             GameRegistry.addSmelting(warhammerSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(warhammerGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
-        if (modConfig.isEnabled("crossbow")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt"
-                    , 5, this, 64, 20, true);
-        }
-        if (modConfig.isEnabled("blowgun")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
-                    6, this, 64, 20, true);
-        }
-        if (modConfig.isEnabled("dynamite")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class,
-                    "dynamite", 7, this, 64, 20, true);
-        }
         if (modConfig.isEnabled("flail")) {
             GameRegistry.addSmelting(flailSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(flailGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail", 8,
-                    this, 32, 20, true);
-        }
-        if (modConfig.isEnabled("cannon")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
-                    9, this, 64, 128, false);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
-                    "cannonball", 10, this, 64, 20, true);
-        }
-        if (modConfig.isEnabled("blunderbuss")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
-                    11, this, 16, 20, true);
-        }
-        if (modConfig.isEnabled("dummy")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy", 12,
-                    this, 64, 20, false);
         }
         if (modConfig.isEnabled("boomerang")) {
             GameRegistry.addSmelting(boomerangSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(boomerangGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
-                    "boomerang", 13, this, 64, 20, true);
         }
         if (modConfig.isEnabled("katana")) {
             GameRegistry.addSmelting(katanaSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
             GameRegistry.addSmelting(katanaGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
-        }
-        if (modConfig.isEnabled("mortar")) {
-            EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell"
-                    , 14, this, 64, 20, true);
         }
     }
 

@@ -15,5 +15,11 @@
   },
   "result": {
     "item": "weaponmod:spear.stone"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "spear"
+    }
+  ]
 }

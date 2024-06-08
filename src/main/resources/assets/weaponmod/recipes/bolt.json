@@ -15,5 +15,11 @@
   "result": {
     "item": "weaponmod:bolt",
     "count": 4
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "crossbow"
+    }
+  ]
 }

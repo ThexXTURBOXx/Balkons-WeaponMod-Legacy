@@ -36,5 +36,24 @@
   },
   "result": {
     "item": "weaponmod:gun-stock"
-  }
+  },
+  "conditions": [
+    {
+      "type": "forge:or",
+      "values": [
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "musket"
+        },
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "blunderbuss"
+        },
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "mortar"
+        }
+      ]
+    }
+  ]
 }

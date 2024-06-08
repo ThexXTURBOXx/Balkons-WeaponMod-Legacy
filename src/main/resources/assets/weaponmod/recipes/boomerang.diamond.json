@@ -38,5 +38,11 @@
   },
   "result": {
     "item": "weaponmod:boomerang.diamond"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "boomerang"
+    }
+  ]
 }

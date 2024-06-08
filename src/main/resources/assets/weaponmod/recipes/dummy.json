@@ -22,5 +22,11 @@
   },
   "result": {
     "item": "weaponmod:dummy"
-  }
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "dummy"
+    }
+  ]
 }
