@@ -7,12 +7,31 @@
     " # "
   ],
   "key": {
-    "X": {
-      "item": "minecraft:diamond"
-    },
-    "#": {
-      "item": "minecraft:stick"
-    }
+    "X": [
+      {
+        "item": "minecraft:diamond"
+      },
+      {
+        "tag": "c:diamonds"
+      },
+      {
+        "tag": "forge:gems/diamond"
+      }
+    ],
+    "#": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ]
   },
   "result": {
     "id": "weaponmod:warhammer.diamond"

@@ -10,9 +10,20 @@
     "X": {
       "item": "minecraft:flint"
     },
-    "#": {
-      "item": "minecraft:stick"
-    }
+    "#": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ]
   },
   "result": {
     "id": "weaponmod:javelin",

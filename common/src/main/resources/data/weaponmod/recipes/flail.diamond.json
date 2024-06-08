@@ -7,15 +7,42 @@
     "X #"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:diamond"
-    },
-    "X": {
-      "item": "minecraft:stick"
-    },
-    "O": {
-      "item": "minecraft:string"
-    }
+    "#": [
+      {
+        "item": "minecraft:diamond"
+      },
+      {
+        "tag": "c:diamonds"
+      },
+      {
+        "tag": "forge:gems/diamond"
+      }
+    ],
+    "X": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ],
+    "O": [
+      {
+        "item": "minecraft:string"
+      },
+      {
+        "tag": "c:strings"
+      },
+      {
+        "tag": "forge:string"
+      }
+    ]
   },
   "result": {
     "id": "weaponmod:flail.diamond"

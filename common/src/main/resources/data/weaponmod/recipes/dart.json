@@ -7,12 +7,31 @@
     "X"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "X": {
-      "item": "minecraft:feather"
-    },
+    "#": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ],
+    "X": [
+      {
+        "item": "minecraft:feather"
+      },
+      {
+        "tag": "c:feathers"
+      },
+      {
+        "tag": "forge:feathers"
+      }
+    ],
     "O": {
       "item": "minecraft:cactus"
     }

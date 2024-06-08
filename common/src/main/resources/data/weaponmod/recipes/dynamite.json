@@ -7,12 +7,25 @@
     "X"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:string"
-    },
-    "X": {
-      "item": "minecraft:gunpowder"
-    }
+    "#": [
+      {
+        "item": "minecraft:string"
+      },
+      {
+        "tag": "c:strings"
+      },
+      {
+        "tag": "forge:string"
+      }
+    ],
+    "X": [
+      {
+        "item": "minecraft:gunpowder"
+      },
+      {
+        "tag": "forge:gunpowder"
+      }
+    ]
   },
   "result": {
     "id": "weaponmod:dynamite",

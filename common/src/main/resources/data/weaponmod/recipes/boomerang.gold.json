@@ -12,9 +12,20 @@
         "tag": "minecraft:planks"
       }
     ],
-    "#": {
-      "item": "minecraft:gold_ingot"
-    }
+    "#": [
+      {
+        "item": "minecraft:gold_ingot"
+      },
+      {
+        "tag": "c:ingots/gold"
+      },
+      {
+        "tag": "c:gold_ingots"
+      },
+      {
+        "tag": "forge:ingots/gold"
+      }
+    ]
   },
   "result": {
     "id": "weaponmod:boomerang.gold"

@@ -12,9 +12,20 @@
         "tag": "minecraft:planks"
       }
     ],
-    "#": {
-      "item": "minecraft:stick"
-    }
+    "#": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ]
   },
   "result": {
     "id": "weaponmod:battleaxe.wood"
