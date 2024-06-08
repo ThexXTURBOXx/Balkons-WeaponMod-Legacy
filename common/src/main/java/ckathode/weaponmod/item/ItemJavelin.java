@@ -20,7 +20,7 @@ public class ItemJavelin extends WMItem {
     public static final ItemJavelin ITEM = new ItemJavelin();
 
     public ItemJavelin() {
-        super(new Item.Properties().stacksTo(16));
+        super(WMItem.getBaseProperties(null).stacksTo(16));
     }
 
     @Override

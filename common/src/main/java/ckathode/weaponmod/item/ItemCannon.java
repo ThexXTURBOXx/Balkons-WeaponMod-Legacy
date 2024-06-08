@@ -29,7 +29,7 @@ public class ItemCannon extends WMItem {
     private static final Predicate<Entity> PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
 
     public ItemCannon() {
-        super(new Properties().stacksTo(1));
+        super(WMItem.getBaseProperties(null).stacksTo(1));
     }
 
     @Override
