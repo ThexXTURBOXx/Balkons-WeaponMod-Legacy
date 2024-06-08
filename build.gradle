@@ -141,6 +141,5 @@ publishing {
 
 // Semi-nice fix for assets not being present in dev
 sourceSets.configureEach {
-    System.out.println(it.output.classesDirs.files)
     it.output.resourcesDir = it.output.classesDirs.files.first()
 }
