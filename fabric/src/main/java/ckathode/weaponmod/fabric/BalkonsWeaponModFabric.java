@@ -8,6 +8,7 @@ public class BalkonsWeaponModFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         BalkonsWeaponMod.init();
+        WMConfigConditionFabric.init();
     }
 
 }

@@ -21,5 +21,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "warhammer"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "warhammer"
+    }
   ]
 }

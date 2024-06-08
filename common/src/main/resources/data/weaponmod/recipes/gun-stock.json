@@ -27,6 +27,29 @@
         {
           "type": "weaponmod:config_conditional",
           "weapon": "blunderbuss"
+        },
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "mortar"
+        }
+      ]
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:or",
+      "values": [
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "musket"
+        },
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "blunderbuss"
+        },
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "mortar"
         }
       ]
     }

@@ -25,5 +25,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "blowgun"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
   ]
 }

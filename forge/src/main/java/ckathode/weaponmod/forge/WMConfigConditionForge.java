@@ -8,7 +8,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
-// TODO: Find something that works on Fabric...
 public class WMConfigConditionForge implements ICondition {
 
     private static final ResourceLocation CONDITION_ID =
@@ -20,6 +19,7 @@ public class WMConfigConditionForge implements ICondition {
     }
 
     @Override
+    @SuppressWarnings("removal")
     public boolean test() {
         return WeaponModConfig.get().isEnabled(weapon);
     }
