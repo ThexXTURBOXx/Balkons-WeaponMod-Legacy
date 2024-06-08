@@ -7,14 +7,33 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:cobblestone"
+      "tag": "minecraft:stone_tool_materials"
     },
-    "X": {
-      "item": "minecraft:stick"
-    },
-    "O": {
-      "item": "minecraft:string"
-    }
+    "X": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ],
+    "O": [
+      {
+        "item": "minecraft:string"
+      },
+      {
+        "tag": "c:strings"
+      },
+      {
+        "tag": "forge:string"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:flail.stone"

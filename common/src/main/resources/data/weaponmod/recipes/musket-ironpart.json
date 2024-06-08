@@ -8,9 +8,20 @@
     "X": {
       "item": "minecraft:flint_and_steel"
     },
-    "#": {
-      "item": "minecraft:iron_ingot"
-    }
+    "#": [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "tag": "c:ingots/iron"
+      },
+      {
+        "tag": "c:iron_ingots"
+      },
+      {
+        "tag": "forge:ingots/iron"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:musket-ironpart"

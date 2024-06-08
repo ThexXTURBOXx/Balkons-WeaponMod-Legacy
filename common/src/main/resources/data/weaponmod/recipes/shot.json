@@ -6,12 +6,28 @@
     "O"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:gravel"
-    },
-    "X": {
-      "item": "minecraft:gunpowder"
-    },
+    "#": [
+      {
+        "item": "minecraft:gravel"
+      },
+      {
+        "tag": "c:gravel"
+      },
+      {
+        "tag": "c:gravels"
+      },
+      {
+        "tag": "forge:gravel"
+      }
+    ],
+    "X": [
+      {
+        "item": "minecraft:gunpowder"
+      },
+      {
+        "tag": "forge:gunpowder"
+      }
+    ],
     "O": {
       "item": "minecraft:paper"
     }

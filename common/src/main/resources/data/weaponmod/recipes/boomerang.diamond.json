@@ -11,9 +11,17 @@
         "tag": "minecraft:planks"
       }
     ],
-    "#": {
-      "item": "minecraft:diamond"
-    }
+    "#": [
+      {
+        "item": "minecraft:diamond"
+      },
+      {
+        "tag": "c:diamonds"
+      },
+      {
+        "tag": "forge:gems/diamond"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:boomerang.diamond"

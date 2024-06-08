@@ -6,15 +6,45 @@
     "X #"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:iron_ingot"
-    },
-    "X": {
-      "item": "minecraft:stick"
-    },
-    "O": {
-      "item": "minecraft:string"
-    }
+    "#": [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "tag": "c:ingots/iron"
+      },
+      {
+        "tag": "c:iron_ingots"
+      },
+      {
+        "tag": "forge:ingots/iron"
+      }
+    ],
+    "X": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ],
+    "O": [
+      {
+        "item": "minecraft:string"
+      },
+      {
+        "tag": "c:strings"
+      },
+      {
+        "tag": "forge:string"
+      }
+    ]
   },
   "result": {
     "item": "weaponmod:flail.iron"
