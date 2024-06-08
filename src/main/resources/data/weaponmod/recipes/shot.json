@@ -7,10 +7,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:gravel"
+      "tag": "forge:gravel"
     },
     "X": {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     },
     "O": {
       "item": "minecraft:paper"

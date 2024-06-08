@@ -6,11 +6,9 @@
     "  X"
   ],
   "key": {
-    "X": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ]
+    "X": {
+      "tag": "minecraft:planks"
+    }
   },
   "result": {
     "item": "weaponmod:boomerang.wood"

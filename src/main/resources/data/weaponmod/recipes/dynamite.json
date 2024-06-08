@@ -7,10 +7,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:string"
+      "tag": "forge:string"
     },
     "X": {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     }
   },
   "result": {

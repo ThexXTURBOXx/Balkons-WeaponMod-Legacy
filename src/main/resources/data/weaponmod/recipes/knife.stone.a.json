@@ -5,10 +5,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:cobblestone"
+      "tag": "forge:cobblestone"
     },
     "X": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     }
   },
   "result": {
