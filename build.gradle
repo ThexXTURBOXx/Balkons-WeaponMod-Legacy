@@ -15,22 +15,9 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
-// this is a properties file which contains various settings about the build, including, among
-// other things, the Minecraft version, the Forge version, and a token that can be added to
-// build outputs signifying the originator of the build
-ext.configFile = file "build.properties"
-
-// reads the configuration from the configuration file. to use these properties elsewhere
-// you will either use 'config.<property>' or 'project.config.<property>' depending on where
-configFile.withReader {
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-
-version = config.mod_version
-group = config.mod_author
-archivesBaseName = config.mod_basename
+version = mod_version
+group = maven_group
+archivesBaseName = archives_base_name
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -90,7 +77,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'weaponmod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', '${mod_id}', '--all', '--output', file('src/generated/resources/')
 
             mods {
                 weaponmod {
@@ -105,7 +92,7 @@ dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft "net.minecraftforge:forge:${config.minecraft_version}-${config.forge_version}"
+    minecraft "net.minecraftforge:forge:${forge_version}"
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -127,33 +114,40 @@ dependencies {
 
 }
 
-// creates a timestamp to be appended to the end of the build; a simple way to keep track of dev
-// builds and not intended to be the end-all be-all; rather, a temporary solution
-/*def getTimestampSuffix() {
-    def date = new Date()
-    return date.format('yyyy-MM-dd_HH-mm-ss')
-}
+processResources {
+    final replaceProperties = [
+            minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version       : forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
+            mod_authors         : mod_authors, mod_authors_list: mod_authors_list, mod_description: mod_description,
+            mod_issues_url      : mod_issues_url, mod_sources_url: mod_sources_url, mod_home_url: mod_home_url,
+    ]
+    inputs.properties replaceProperties
 
-version = "${config.mod_version}-${config.mod_builder_tok}-${getTimestampSuffix()}"*/
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-            "Specification-Title": "Balkon's WeaponMod",
-            "Specification-Vendor": "${config.mod_author}",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${config.mod_version}",
-            "Implementation-Vendor" :"${config.mod_author}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Specification-Title"     : mod_name,
+                "Specification-Vendor"    : mod_authors,
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : mod_name,
+                "Implementation-Version"  : mod_version,
+                "Implementation-Vendor"   : mod_authors,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
+jar.finalizedBy('reobfJar')
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 //publish.dependsOn('reobfJar')
 
