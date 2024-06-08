@@ -75,7 +75,7 @@ import org.apache.logging.log4j.Logger;
         updateJSON = BalkonsWeaponMod.UPDATE_JSON, acceptedMinecraftVersions = "[1.12.2]")
 public class BalkonsWeaponMod {
     public static final String MOD_ID = "weaponmod";
-    public static final String MOD_NAME = "Balkon's WeaponMod";
+    public static final String MOD_NAME = "Balkon's WeaponMod: Legacy";
     public static final String MOD_VERSION = "1.20.0";
     public static final String UPDATE_JSON = "https://raw.githubusercontent.com/"
                                              + "ThexXTURBOXx/UpdateJSONs/master/weaponmod.json";
