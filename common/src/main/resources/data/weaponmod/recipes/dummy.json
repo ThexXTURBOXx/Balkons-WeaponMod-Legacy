@@ -27,5 +27,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "dummy"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "dummy"
+    }
   ]
 }

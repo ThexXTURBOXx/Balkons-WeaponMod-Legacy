@@ -14,5 +14,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "katana"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "katana"
+    }
   ]
 }

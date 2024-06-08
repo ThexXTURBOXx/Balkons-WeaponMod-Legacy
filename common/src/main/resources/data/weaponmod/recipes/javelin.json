@@ -22,5 +22,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "javelin"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "javelin"
+    }
   ]
 }

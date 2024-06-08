@@ -8,6 +8,12 @@
           "type": "weaponmod:config_conditional",
           "weapon": "spear"
         }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "spear"
+        }
       ]
     },
     {
@@ -15,6 +21,12 @@
       "conditions": [
         {
           "type": "weaponmod:config_conditional",
+          "weapon": "halberd"
+        }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
           "weapon": "halberd"
         }
       ]
@@ -26,6 +38,12 @@
           "type": "weaponmod:config_conditional",
           "weapon": "knife"
         }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "knife"
+        }
       ]
     },
     {
@@ -33,6 +51,12 @@
       "conditions": [
         {
           "type": "weaponmod:config_conditional",
+          "weapon": "battleaxe"
+        }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
           "weapon": "battleaxe"
         }
       ]
@@ -44,6 +68,12 @@
           "type": "weaponmod:config_conditional",
           "weapon": "warhammer"
         }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "warhammer"
+        }
       ]
     },
     {
@@ -51,6 +81,12 @@
       "conditions": [
         {
           "type": "weaponmod:config_conditional",
+          "weapon": "flail"
+        }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
           "weapon": "flail"
         }
       ]
@@ -62,6 +98,12 @@
           "type": "weaponmod:config_conditional",
           "weapon": "boomerang"
         }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "boomerang"
+        }
       ]
     },
     {
@@ -69,6 +111,12 @@
       "conditions": [
         {
           "type": "weaponmod:config_conditional",
+          "weapon": "katana"
+        }
+      ],
+      "fabric:load_conditions": [
+        {
+          "condition": "weaponmod:config_conditional",
           "weapon": "katana"
         }
       ]

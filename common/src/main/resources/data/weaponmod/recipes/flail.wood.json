@@ -26,5 +26,11 @@
       "type": "weaponmod:config_conditional",
       "weapon": "flail"
     }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "flail"
+    }
   ]
 }
