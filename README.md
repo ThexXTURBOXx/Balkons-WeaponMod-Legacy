@@ -1,6 +1,6 @@
 # Balkon's WeaponMod: Legacy
 
-<img alt="Balkon's WeaponMod logo" src="src/main/resources/bwm_logo.png" data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="100%" />
+<img alt="Balkon's WeaponMod logo" src="common/src/main/resources/bwm_logo.png" data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="100%" />
 
 Balkon's WeaponMod, a Minecraft mod about weapons.  
 This is [HyperSpeeed](https://nmexis.me/)'s modernisation fork.
@@ -22,4 +22,4 @@ I hope you enjoy playing around with it!
 
 Without anything further to say, enjoy!
 
-![RIP BWM](src/main/resources/rip_bwm.jpg)
+![RIP BWM](common/src/main/resources/rip_bwm.jpg)
