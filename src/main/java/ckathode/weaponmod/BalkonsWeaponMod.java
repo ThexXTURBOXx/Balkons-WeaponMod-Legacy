@@ -72,14 +72,14 @@ import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 @Mod(modid = BalkonsWeaponMod.MOD_ID, name = BalkonsWeaponMod.MOD_NAME, version = BalkonsWeaponMod.MOD_VERSION,
-        updateJSON = BalkonsWeaponMod.UPDATE_JSON, acceptedMinecraftVersions = "[1.12.2]")
+        updateJSON = BalkonsWeaponMod.UPDATE_JSON, acceptedMinecraftVersions = "@MC_RANGE@")
 public class BalkonsWeaponMod {
-    public static final String MOD_ID = "weaponmod";
-    public static final String MOD_NAME = "Balkon's WeaponMod: Legacy";
-    public static final String MOD_VERSION = "1.20.0";
+    public static final String MOD_ID = "@MOD_ID@";
+    public static final String MOD_NAME = "@MOD_NAME@";
+    public static final String MOD_VERSION = "@MOD_VERSION@";
     public static final String UPDATE_JSON = "https://raw.githubusercontent.com/"
                                              + "ThexXTURBOXx/UpdateJSONs/master/weaponmod.json";
-    @Mod.Instance("weaponmod")
+    @Mod.Instance(MOD_ID)
     public static BalkonsWeaponMod instance;
     public static Logger modLog;
     @SidedProxy(clientSide = "ckathode.weaponmod.WMClientProxy", serverSide = "ckathode.weaponmod.WMCommonProxy")
@@ -160,7 +160,7 @@ public class BalkonsWeaponMod {
         MinecraftForge.EVENT_BUS.register(this);
 
         configConditional = new WMConfigCondition();
-        CraftingHelper.register(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional"), configConditional);
+        CraftingHelper.register(new ResourceLocation(MOD_ID, "config_conditional"), configConditional);
     }
 
     @Mod.EventHandler
