@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "#"
+  ],
+  "key": {
+    "X": {
+      "item": "weaponmod:mortar-ironpart"
+    },
+    "#": {
+      "item": "weaponmod:gun-stock"
+    }
+  },
+  "result": {
+    "item": "weaponmod:mortar"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "mortar"
+    }
+  ]
+}

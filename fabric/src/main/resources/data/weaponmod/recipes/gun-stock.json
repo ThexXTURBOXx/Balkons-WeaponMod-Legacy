@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##X"
+  ],
+  "key": {
+    "X": {
+      "tag": "minecraft:planks"
+    },
+    "#": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "weaponmod:gun-stock"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:or",
+      "values": [
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "musket"
+        },
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "blunderbuss"
+        },
+        {
+          "condition": "weaponmod:config_conditional",
+          "weapon": "mortar"
+        }
+      ]
+    }
+  ]
+}

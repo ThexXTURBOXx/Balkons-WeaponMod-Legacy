@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  O",
+    " XO",
+    "X #"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:stone_tool_materials"
+    },
+    "X": {
+      "tag": "forge:rods/wooden"
+    },
+    "O": {
+      "tag": "forge:string"
+    }
+  },
+  "result": {
+    "item": "weaponmod:flail.stone"
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "flail"
+    }
+  ]
+}

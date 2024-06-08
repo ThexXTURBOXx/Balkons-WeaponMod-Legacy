@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "weaponmod:musket"
+    },
+    {
+      "item": "weaponmod:knife.gold"
+    }
+  ],
+  "result": {
+    "item": "weaponmod:musketbayonet.gold"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
+}

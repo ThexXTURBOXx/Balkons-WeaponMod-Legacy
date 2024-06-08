@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##X"
+  ],
+  "key": {
+    "X": {
+      "tag": "minecraft:planks"
+    },
+    "#": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "weaponmod:gun-stock"
+  },
+  "conditions": [
+    {
+      "type": "forge:or",
+      "values": [
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "musket"
+        },
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "blunderbuss"
+        },
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "mortar"
+        }
+      ]
+    }
+  ]
+}

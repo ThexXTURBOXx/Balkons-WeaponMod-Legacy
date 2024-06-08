@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "X",
+    "X"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:string"
+    },
+    "X": {
+      "tag": "forge:gunpowder"
+    }
+  },
+  "result": {
+    "item": "weaponmod:dynamite",
+    "count": 2
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "dynamite"
+    }
+  ]
+}

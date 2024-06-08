@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "O",
+    "X"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:feather"
+    },
+    "O": {
+      "item": "minecraft:rotten_flesh"
+    }
+  },
+  "result": {
+    "item": "weaponmod:dart.hunger",
+    "count": 4
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
+}

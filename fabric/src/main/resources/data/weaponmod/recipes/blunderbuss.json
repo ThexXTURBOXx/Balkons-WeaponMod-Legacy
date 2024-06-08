@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "#"
+  ],
+  "key": {
+    "X": {
+      "item": "weaponmod:blunder-ironpart"
+    },
+    "#": {
+      "item": "weaponmod:gun-stock"
+    }
+  },
+  "result": {
+    "item": "weaponmod:blunderbuss"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "blunderbuss"
+    }
+  ]
+}

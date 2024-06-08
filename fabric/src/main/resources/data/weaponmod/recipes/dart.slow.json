@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "O",
+    "X"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:feather"
+    },
+    "O": {
+      "item": "minecraft:slime_ball"
+    }
+  },
+  "result": {
+    "item": "weaponmod:dart.slow",
+    "count": 4
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
+}

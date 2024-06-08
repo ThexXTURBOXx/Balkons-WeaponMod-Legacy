@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "X",
+    "O"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:gravel"
+    },
+    "X": {
+      "tag": "forge:gunpowder"
+    },
+    "O": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "weaponmod:shot",
+    "count": 8
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blunderbuss"
+    }
+  ]
+}

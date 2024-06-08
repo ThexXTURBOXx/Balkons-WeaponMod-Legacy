@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    " #X",
+    "# #"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "#": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "result": {
+    "item": "weaponmod:blunder-ironpart"
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blunderbuss"
+    }
+  ]
+}

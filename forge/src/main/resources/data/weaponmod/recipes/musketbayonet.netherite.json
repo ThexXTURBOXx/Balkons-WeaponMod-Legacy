@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "weaponmod:musket"
+    },
+    {
+      "item": "weaponmod:knife.netherite"
+    }
+  ],
+  "result": {
+    "item": "weaponmod:musketbayonet.netherite"
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "O",
+    "X"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:rods/wooden"
+    },
+    "X": {
+      "tag": "forge:feathers"
+    },
+    "O": {
+      "tag": "forge:slimeballs"
+    }
+  },
+  "result": {
+    "item": "weaponmod:dart.slow",
+    "count": 4
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
+}

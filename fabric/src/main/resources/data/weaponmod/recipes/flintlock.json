@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXH",
+    " #O"
+  ],
+  "key": {
+    "O": {
+      "tag": "minecraft:planks"
+    },
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },
+    "H": {
+      "item": "minecraft:flint_and_steel"
+    }
+  },
+  "result": {
+    "item": "weaponmod:flintlock"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "flintlock"
+    }
+  ]
+}

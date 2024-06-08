@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "H#H",
+    " O "
+  ],
+  "key": {
+    "X": {
+      "tag": "minecraft:wool"
+    },
+    "#": {
+      "item": "minecraft:leather_chestplate"
+    },
+    "O": {
+      "tag": "forge:rods/wooden"
+    },
+    "H": {
+      "tag": "forge:crops/wheat"
+    }
+  },
+  "result": {
+    "item": "weaponmod:dummy"
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "dummy"
+    }
+  ]
+}
