@@ -13,7 +13,7 @@
       "item": "minecraft:leather_chestplate"
     },
     "O": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "H": {
       "item": "minecraft:wheat"

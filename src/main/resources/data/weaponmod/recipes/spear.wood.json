@@ -6,13 +6,11 @@
     "#  "
   ],
   "key": {
-    "X": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ],
+    "X": {
+      "tag": "minecraft:planks"
+    },
     "#": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     }
   },
   "result": {

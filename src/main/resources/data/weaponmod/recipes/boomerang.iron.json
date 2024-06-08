@@ -6,13 +6,11 @@
     "  X"
   ],
   "key": {
-    "X": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ],
+    "X": {
+      "tag": "minecraft:planks"
+    },
     "#": {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     }
   },
   "result": {

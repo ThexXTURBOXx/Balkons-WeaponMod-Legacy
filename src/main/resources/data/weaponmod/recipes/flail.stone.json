@@ -10,7 +10,7 @@
       "item": "minecraft:cobblestone"
     },
     "X": {
-      "item": "minecraft:stick"
+      "tag": "forge:rods/wooden"
     },
     "O": {
       "item": "minecraft:string"
