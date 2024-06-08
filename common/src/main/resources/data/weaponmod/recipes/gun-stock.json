@@ -27,6 +27,10 @@
         {
           "type": "weaponmod:config_conditional",
           "weapon": "blunderbuss"
+        },
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "mortar"
         }
       ]
     }
