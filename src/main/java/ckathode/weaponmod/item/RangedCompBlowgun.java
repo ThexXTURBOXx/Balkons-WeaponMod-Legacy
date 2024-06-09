@@ -42,10 +42,11 @@ public class RangedCompBlowgun extends RangedComponent {
             f = 1.0f;
         }
         ItemStack dartstack = findAmmo(entityplayer);
-        if (dartstack.isEmpty() && entityplayer.abilities.isCreativeMode) {
+        if (dartstack.isEmpty() && entityplayer.isCreative()) {
             dartstack = new ItemStack(BalkonsWeaponMod.darts.get(DartType.damage), 1);
         }
-        if (!entityplayer.abilities.isCreativeMode
+        ItemStack dartStackCopy = dartstack.copy();
+        if (!entityplayer.isCreative()
             && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) == 0) {
             dartstack.shrink(1);
             if (dartstack.isEmpty()) {
@@ -56,14 +57,14 @@ public class RangedCompBlowgun extends RangedComponent {
             EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer);
             entityblowgundart.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
                     f * 1.5f, 1.0f);
-            Item item = dartstack.getItem();
+            Item item = dartStackCopy.getItem();
             if (item instanceof ItemBlowgunDart)
                 entityblowgundart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
             applyProjectileEnchantments(entityblowgundart, itemstack);
             world.spawnEntity(entityblowgundart);
         }
         int damage = 1;
-        if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getDamage() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);

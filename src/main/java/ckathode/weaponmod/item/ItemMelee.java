@@ -4,7 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Random;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
@@ -144,21 +143,6 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
             meleeComponent.addItemAttributeModifiers(multimap);
         }
         return multimap;
-    }
-
-    @Override
-    public UUID getUUIDDamage() {
-        return ItemMelee.ATTACK_DAMAGE_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUIDSpeed() {
-        return ItemMelee.ATTACK_SPEED_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return ItemMelee.WEAPON_MODIFIER;
     }
 
     @Override

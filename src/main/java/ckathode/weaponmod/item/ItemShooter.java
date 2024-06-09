@@ -4,7 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Random;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
@@ -143,21 +142,6 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
                               @Nonnull Entity entity, int i, boolean flag) {
         meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
         rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
-    }
-
-    @Override
-    public UUID getUUIDDamage() {
-        return ItemShooter.ATTACK_DAMAGE_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUIDSpeed() {
-        return ItemShooter.ATTACK_SPEED_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return ItemShooter.WEAPON_MODIFIER;
     }
 
     @Override

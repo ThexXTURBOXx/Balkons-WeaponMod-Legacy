@@ -17,7 +17,7 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     public static void setHalberdState(ItemStack itemstack, boolean flag) {
-        if (itemstack.getTag() == null) {
+        if (!itemstack.hasTag()) {
             itemstack.setTag(new NBTTagCompound());
         }
         itemstack.getTag().putBoolean("halb", flag);

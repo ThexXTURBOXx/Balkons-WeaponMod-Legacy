@@ -120,20 +120,23 @@ public class MeleeComponent extends AbstractWeaponComponent {
         float dmg = getEntityDamage();
         if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-                    new AttributeModifier(weapon.getUUIDDamage(), "Weapon attack damage modifier", dmg, 0));
+                    new AttributeModifier(IItemWeapon.ATTACK_DAMAGE_MODIFIER,
+                            "Weapon attack damage modifier", dmg, 0));
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-                    new AttributeModifier(weapon.getUUIDSpeed(), "Weapon attack speed modifier",
-                            -meleeSpecs.attackDelay, 0));
+                    new AttributeModifier(IItemWeapon.ATTACK_SPEED_MODIFIER,
+                            "Weapon attack speed modifier", -meleeSpecs.attackDelay, 0));
         }
         if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
-            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getName(), new AttributeModifier(weapon.getUUID(),
-                    "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f, 0));
+            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getName(),
+                    new AttributeModifier(IItemWeapon.KNOCKBACK_MODIFIER,
+                            "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f, 0));
         }
         if (this instanceof IExtendedReachItem) {
             try {
-                multimap.put(WeaponModAttributes.WEAPON_REACH.getName(), new AttributeModifier(weapon.getUUID(),
-                        "Weapon reach modifier",
-                        ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f, 0));
+                multimap.put(WeaponModAttributes.WEAPON_REACH.getName(),
+                        new AttributeModifier(IItemWeapon.REACH_MODIFIER,
+                                "Weapon reach modifier",
+                                ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f, 0));
             } catch (NullPointerException ignored) {
             }
         }

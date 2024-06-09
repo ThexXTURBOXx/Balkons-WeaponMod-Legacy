@@ -16,7 +16,6 @@ import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import org.apache.logging.log4j.Level;
 
 @ChannelHandler.Sharable
 public class WMMessagePipeline {
@@ -50,8 +49,8 @@ public class WMMessagePipeline {
     protected <T extends WMMessage<T>> T decode(PacketBuffer buf) {
         ByteBuf payload = buf.duplicate();
         if (payload.readableBytes() < 1) {
-            BalkonsWeaponMod.modLog.log(Level.ERROR, "The FMLIndexedCodec has received an empty buffer, likely a "
-                                                     + "result of a LAN server issue.");
+            BalkonsWeaponMod.modLog.error("The FMLIndexedCodec has received an empty buffer, likely a "
+                                          + "result of a LAN server issue.");
         }
         int discriminator = payload.readInt();
         Class<T> clazz = (Class<T>) idToPacket.get(discriminator);
@@ -59,7 +58,7 @@ public class WMMessagePipeline {
             throw new NullPointerException("No packet registered for discriminator: " + discriminator);
         }
         try {
-            T pkt = clazz.newInstance();
+            T pkt = clazz.getDeclaredConstructor().newInstance();
             pkt.decode(payload.slice());
             return pkt;
         } catch (Throwable t) {

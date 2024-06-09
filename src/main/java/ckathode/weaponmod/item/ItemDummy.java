@@ -64,7 +64,7 @@ public class ItemDummy extends WMItem {
         if (!world.isRemote) {
             world.spawnEntity(entitydummy);
         }
-        if (!entityplayer.abilities.isCreativeMode) {
+        if (!entityplayer.isCreative()) {
             itemstack.shrink(1);
         }
         entityplayer.addStat(StatList.ITEM_USED.get(this));

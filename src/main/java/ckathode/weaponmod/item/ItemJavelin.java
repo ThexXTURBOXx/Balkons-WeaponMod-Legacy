@@ -49,7 +49,7 @@ public class ItemJavelin extends WMItem {
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.abilities.isCreativeMode) {
+        if (!entityplayer.isCreative()) {
             itemstack.shrink(1);
             if (itemstack.isEmpty()) {
                 entityplayer.inventory.deleteStack(itemstack);
@@ -73,7 +73,7 @@ public class ItemJavelin extends WMItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
                                                     @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!entityplayer.abilities.isCreativeMode && itemstack.isEmpty()) {
+        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);

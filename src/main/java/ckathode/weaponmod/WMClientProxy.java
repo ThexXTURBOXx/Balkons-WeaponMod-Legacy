@@ -29,7 +29,6 @@ import ckathode.weaponmod.render.RenderKnife;
 import ckathode.weaponmod.render.RenderMortarShell;
 import ckathode.weaponmod.render.RenderMusketBullet;
 import ckathode.weaponmod.render.RenderSpear;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
@@ -37,11 +36,8 @@ public class WMClientProxy extends WMCommonProxy {
     @Override
     public void registerEventHandlers() {
         super.registerEventHandlers();
-        WMClientEventHandler eventhandler = new WMClientEventHandler();
-        MinecraftForge.EVENT_BUS.register(eventhandler);
-        if (BalkonsWeaponMod.instance.modConfig.guiOverlayReloaded.get()) {
-            MinecraftForge.EVENT_BUS.register(new GuiOverlayReloaded(Minecraft.getInstance()));
-        }
+        MinecraftForge.EVENT_BUS.register(new WMClientEventHandler());
+        MinecraftForge.EVENT_BUS.register(new GuiOverlayReloaded());
     }
 
     @Override

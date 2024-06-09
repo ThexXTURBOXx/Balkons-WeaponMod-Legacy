@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -121,7 +122,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                 if (item.isEmpty()) {
                     return;
                 }
-                if (player.abilities.isCreativeMode || player.inventory.addItemStackToInventory(item)) {
+                if (player.isCreative() || player.inventory.addItemStackToInventory(item)) {
                     playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
                             ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                     onItemPickup(player);
@@ -140,15 +141,12 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         if (entity.attackEntityFrom(damagesource, damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
-            if (thrownItem.getDamage() + 1 > thrownItem.getMaxDamage()) {
+            if (thrownItem.getDamage() + 1 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
                 remove();
             } else {
-                if (shooter instanceof EntityLivingBase) {
-                    thrownItem.damageItem(1, (EntityLivingBase) shooter);
-                } else {
-                    thrownItem.attemptDamageItem(1, rand, null);
-                }
+                thrownItem.attemptDamageItem(1, rand,
+                        shooter instanceof EntityPlayerMP ? (EntityPlayerMP) shooter : null);
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {
@@ -220,13 +218,13 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
-        if (!beenInGround && ticksInAir > 5 && floatStrength >= MIN_FLOAT_STRENGTH &&
+        if (!beenInGround && ticksInAir > 5 && !world.isRemote && floatStrength >= MIN_FLOAT_STRENGTH &&
             entityplayer.getUniqueID().equals(shootingEntity)) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) {
                 return;
             }
-            if (entityplayer.abilities.isCreativeMode || entityplayer.inventory.addItemStackToInventory(item)) {
+            if (entityplayer.isCreative() || entityplayer.inventory.addItemStackToInventory(item)) {
                 playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
                         ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
                 onItemPickup(entityplayer);

@@ -26,7 +26,7 @@ public class ItemDynamite extends WMItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
                                                     @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!entityplayer.abilities.isCreativeMode) {
+        if (!entityplayer.isCreative()) {
             itemstack.shrink(1);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED,

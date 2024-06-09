@@ -43,7 +43,7 @@ public class RangedCompMortar extends RangedComponent {
             world.spawnEntity(entitymortarshell);
         }
         int damage = 1;
-        if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getDamage() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
