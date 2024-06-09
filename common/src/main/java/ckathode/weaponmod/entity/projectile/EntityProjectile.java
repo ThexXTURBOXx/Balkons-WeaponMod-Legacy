@@ -115,7 +115,6 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
                 setPickupStatus(PickupStatus.CREATIVE_ONLY);
             } else {
                 setPickupStatus(WeaponModConfig.get().allCanPickup ? PickupStatus.ALLOWED : PickupStatus.OWNER_ONLY);
-                setPickupStatus(PickupStatus.ALLOWED);
             }
         } else {
             setPickupStatus(PickupStatus.DISALLOWED);

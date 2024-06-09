@@ -50,7 +50,7 @@ public final class WMMessagePipeline {
             throw new NullPointerException("No packet registered for discriminator: " + discriminator);
         }
         try {
-            T pkt = clazz.newInstance();
+            T pkt = clazz.getDeclaredConstructor().newInstance();
             pkt.decode(payload.slice());
             return pkt;
         } catch (Throwable t) {

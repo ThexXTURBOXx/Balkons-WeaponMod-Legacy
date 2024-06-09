@@ -1,8 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.item.IItemWeapon;
-import ckathode.weaponmod.item.ItemFlail;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
@@ -68,11 +66,8 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
 
     public void setThrownItemStack(@NotNull ItemStack itemstack) {
         thrownItem = itemstack;
-        if (thrownItem.getItem() instanceof ItemFlail || !WeaponModConfig.get().itemModelForEntity) {
-            updateWeaponMaterial();
-        } else if (thrownItem != null && !(thrownItem.getItem() instanceof ItemFlail) && WeaponModConfig.get().itemModelForEntity) {
-            entityData.set(WEAPON_ITEM, itemstack);
-        }
+        updateWeaponMaterial();
+        entityData.set(WEAPON_ITEM, itemstack);
     }
 
     @NotNull
