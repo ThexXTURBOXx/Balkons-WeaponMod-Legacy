@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -142,21 +141,6 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
             meleeComponent.addItemAttributeModifiers(multimap);
         }
         return multimap;
-    }
-
-    @Override
-    public UUID getUUIDDamage() {
-        return ItemMelee.BASE_ATTACK_DAMAGE_UUID;
-    }
-
-    @Override
-    public UUID getUUIDSpeed() {
-        return ItemMelee.BASE_ATTACK_SPEED_UUID;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return ItemMelee.WEAPON_MODIFIER;
     }
 
     @Override

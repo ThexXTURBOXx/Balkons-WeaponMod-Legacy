@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -119,21 +118,6 @@ public class ItemShooter extends BowItem implements IItemWeapon {
                               @NotNull Entity entity, int i, boolean flag) {
         meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
         rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
-    }
-
-    @Override
-    public UUID getUUIDDamage() {
-        return ItemShooter.BASE_ATTACK_DAMAGE_UUID;
-    }
-
-    @Override
-    public UUID getUUIDSpeed() {
-        return ItemShooter.BASE_ATTACK_SPEED_UUID;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return ItemShooter.WEAPON_MODIFIER;
     }
 
     @Override

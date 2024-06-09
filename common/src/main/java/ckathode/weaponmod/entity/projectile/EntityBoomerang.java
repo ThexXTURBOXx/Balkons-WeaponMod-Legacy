@@ -10,6 +10,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -150,12 +151,8 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                 thrownItem.shrink(1);
                 remove(RemovalReason.DISCARDED);
             } else {
-                if (shooter instanceof LivingEntity) {
-                    thrownItem.hurtAndBreak(1, (LivingEntity) shooter, s -> {
-                    });
-                } else {
-                    thrownItem.hurt(1, random, null);
-                }
+                thrownItem.hurt(1, random,
+                        shooter instanceof ServerPlayer ? (ServerPlayer) shooter : null);
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {

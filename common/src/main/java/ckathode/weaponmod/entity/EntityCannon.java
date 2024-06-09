@@ -120,7 +120,7 @@ public class EntityCannon extends Boat {
             }
         } else if (damagesource instanceof EntityDamageSource && damagesource.msgId.equals("player")) {
             Player player = (Player) damagesource.getEntity();
-            if (player.getInventory().getSelected().isEmpty()) {
+            if (player != null && player.getInventory().getSelected().isEmpty()) {
                 if (!player.isCreative()) {
                     spawnAtLocation(WMRegistries.ITEM_CANNON.get(), 1);
                     if (isLoaded() || isLoading()) {
