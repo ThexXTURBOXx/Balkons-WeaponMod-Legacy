@@ -77,8 +77,7 @@ public class BalkonsWeaponMod {
     public static final String MOD_ID = "@MOD_ID@";
     public static final String MOD_NAME = "@MOD_NAME@";
     public static final String MOD_VERSION = "@MOD_VERSION@";
-    public static final String UPDATE_JSON = "https://raw.githubusercontent.com/"
-                                             + "ThexXTURBOXx/UpdateJSONs/master/weaponmod.json";
+    public static final String UPDATE_JSON = "@MOD_UPDATE_JSON@";
     @Mod.Instance(MOD_ID)
     public static BalkonsWeaponMod instance;
     public static Logger modLog;
