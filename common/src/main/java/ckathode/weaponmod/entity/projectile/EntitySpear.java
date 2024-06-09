@@ -6,6 +6,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -76,12 +77,8 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
                 remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
-                if (shooter instanceof LivingEntity) {
-                    thrownItem.hurtAndBreak(1, (LivingEntity) shooter, s -> {
-                    });
-                } else {
-                    thrownItem.hurt(1, random, null);
-                }
+                thrownItem.hurt(1, random,
+                        shooter instanceof ServerPlayer ? (ServerPlayer) shooter : null);
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {

@@ -22,7 +22,7 @@ public abstract class DispenseWeaponProjectile extends AbstractProjectileDispens
         projectile.shoot(face.getStepX(), face.getStepY() + getYVel(), face.getStepZ(), getPower(),
                 getUncertainty());
         world.addFreshEntity(projectile);
-        itemstack.split(1);
+        itemstack.shrink(1);
         return itemstack;
     }
 

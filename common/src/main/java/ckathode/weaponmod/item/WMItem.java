@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import java.util.UUID;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
@@ -49,6 +50,14 @@ public class WMItem extends Item {
             properties = properties.fireResistant();
         }
         return properties;
+    }
+
+    public static UUID getAttackDamageModifierUUID() {
+        return Item.BASE_ATTACK_DAMAGE_UUID;
+    }
+
+    public static UUID getAttackSpeedModifierUUID() {
+        return Item.BASE_ATTACK_SPEED_UUID;
     }
 
 }

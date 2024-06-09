@@ -6,6 +6,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -95,12 +96,8 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
                 remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
-                if (shooter instanceof LivingEntity) {
-                    thrownItem.hurtAndBreak(2, (LivingEntity) shooter, s -> {
-                    });
-                } else {
-                    thrownItem.hurt(2, random, null);
-                }
+                thrownItem.hurt(2, random,
+                        shooter instanceof ServerPlayer ? (ServerPlayer) shooter : null);
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {

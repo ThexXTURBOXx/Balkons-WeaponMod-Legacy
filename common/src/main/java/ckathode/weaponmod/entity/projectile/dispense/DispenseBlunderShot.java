@@ -25,7 +25,7 @@ public class DispenseBlunderShot extends DefaultDispenseItemBehavior {
         EntityBlunderShot.fireFromDispenser(blocksource.getLevel(), pos.x() + face.getStepX(),
                 pos.y() + face.getStepY(), pos.z() + face.getStepZ(), face.getStepX(), face.getStepY(),
                 face.getStepZ());
-        itemstack.split(1);
+        itemstack.shrink(1);
         return itemstack;
     }
 
