@@ -118,7 +118,7 @@ processResources {
     final replaceProperties = [
             minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
             forge_version       : forge_version, forge_version_range: forge_version_range,
-            loader_version_range: loader_version_range,
+            loader_version_range: loader_version_range, mod_update_json: mod_update_json,
             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
             mod_authors         : mod_authors, mod_authors_list: mod_authors_list, mod_description: mod_description,
             mod_issues_url      : mod_issues_url, mod_sources_url: mod_sources_url, mod_home_url: mod_home_url,
