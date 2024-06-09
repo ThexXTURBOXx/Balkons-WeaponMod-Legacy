@@ -4,11 +4,11 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -52,16 +52,16 @@ public class RangedCompMusket extends RangedComponent {
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             world.addEntity(entitymusketbullet);
         }
-        int deltadamage = 1;
-        boolean flag = itemstack.getDamage() + deltadamage > itemstack.getMaxDamage();
-        itemstack.damageItem(deltadamage, entityplayer, s -> s.sendBreakAnimation(s.getActiveHand()));
-        if (flag && musket != null) {
-            int bayonetdamage = (itemstack.getTag() == null) ? 0 : itemstack.getTag().getShort(
-                    "bayonetDamage");
+        int deltaDamage = 1;
+        boolean flag = itemstack.getDamage() + deltaDamage >= itemstack.getMaxDamage();
+        if (flag && musket != null && musket.hasBayonet()) {
+            int bayonetDamage = itemstack.hasTag() ? itemstack.getTag().getShort("bayonetDamage") : 0;
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1);
-            newStack.setDamage(bayonetdamage);
+            newStack.setDamage(bayonetDamage);
+            itemstack.damageItem(deltaDamage, entityplayer, s -> s.sendBreakAnimation(s.getActiveHand()));
             entityplayer.inventory.addItemStackToInventory(newStack);
         } else {
+            itemstack.damageItem(deltaDamage, entityplayer, s -> s.sendBreakAnimation(s.getActiveHand()));
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         postShootingEffects(itemstack, entityplayer, world);

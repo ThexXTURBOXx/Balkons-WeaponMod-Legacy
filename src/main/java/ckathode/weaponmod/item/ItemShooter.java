@@ -4,7 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Random;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
@@ -14,10 +13,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BowItem;
-import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -143,21 +142,6 @@ public class ItemShooter extends BowItem implements IItemWeapon {
                               @Nonnull Entity entity, int i, boolean flag) {
         meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
         rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
-    }
-
-    @Override
-    public UUID getUUIDDamage() {
-        return ItemShooter.ATTACK_DAMAGE_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUIDSpeed() {
-        return ItemShooter.ATTACK_SPEED_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return ItemShooter.WEAPON_MODIFIER;
     }
 
     @Override

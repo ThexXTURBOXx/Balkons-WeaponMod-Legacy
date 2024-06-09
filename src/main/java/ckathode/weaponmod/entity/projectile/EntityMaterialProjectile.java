@@ -1,8 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.item.IItemWeapon;
-import ckathode.weaponmod.item.ItemFlail;
 import javax.annotation.Nonnull;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -67,11 +65,8 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
 
     public void setThrownItemStack(@Nonnull ItemStack itemstack) {
         thrownItem = itemstack;
-        if (thrownItem.getItem() instanceof ItemFlail || !BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
-            updateWeaponMaterial();
-        } else if (thrownItem != null && !(thrownItem.getItem() instanceof ItemFlail) && BalkonsWeaponMod.instance.modConfig.itemModelForEntity.get()) {
-            dataManager.set(WEAPON_ITEM, itemstack);
-        }
+        updateWeaponMaterial();
+        dataManager.set(WEAPON_ITEM, itemstack);
     }
 
     @Nonnull
@@ -102,7 +97,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @OnlyIn(Dist.CLIENT)
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
-        if (id < 5) {
+        if (id >= 0 && id < MATERIAL_COLORS.length) {
             return MATERIAL_COLORS[id];
         }
         return MaterialRegistry.getColorFromMaterialID(id);

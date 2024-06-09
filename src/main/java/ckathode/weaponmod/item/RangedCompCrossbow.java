@@ -44,7 +44,7 @@ public class RangedCompCrossbow extends RangedComponent {
             world.addEntity(entitybolt);
         }
         int damage = 1;
-        if (itemstack.getDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getDamage() + damage < itemstack.getMaxDamage()) {
             resetReload(world, itemstack);
         }
         itemstack.damageItem(damage, entityplayer, s -> s.sendBreakAnimation(s.getActiveHand()));

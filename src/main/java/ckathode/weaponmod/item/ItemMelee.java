@@ -4,7 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Random;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
@@ -13,12 +12,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.UseAction;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -144,21 +143,6 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
             meleeComponent.addItemAttributeModifiers(multimap);
         }
         return multimap;
-    }
-
-    @Override
-    public UUID getUUIDDamage() {
-        return ItemMelee.ATTACK_DAMAGE_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUIDSpeed() {
-        return ItemMelee.ATTACK_SPEED_MODIFIER;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return ItemMelee.WEAPON_MODIFIER;
     }
 
     @Override

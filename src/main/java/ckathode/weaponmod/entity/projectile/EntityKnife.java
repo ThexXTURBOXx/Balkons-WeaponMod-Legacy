@@ -6,6 +6,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
@@ -75,17 +76,13 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         if (item instanceof IItemWeapon && entity.attackEntityFrom(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
-            if (thrownItem.getDamage() + 2 > thrownItem.getMaxDamage()) {
+            if (thrownItem.getDamage() + 2 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
                 remove();
             } else {
                 Entity shooter = getShooter();
-                if (shooter instanceof LivingEntity) {
-                    thrownItem.damageItem(2, (LivingEntity) shooter, s -> {
-                    });
-                } else {
-                    thrownItem.attemptDamageItem(2, rand, null);
-                }
+                thrownItem.attemptDamageItem(2, rand,
+                        shooter instanceof ServerPlayerEntity ? (ServerPlayerEntity) shooter : null);
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {

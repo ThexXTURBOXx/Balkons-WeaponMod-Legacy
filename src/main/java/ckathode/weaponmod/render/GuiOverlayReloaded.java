@@ -1,5 +1,6 @@
 package ckathode.weaponmod.render;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.RangedComponent;
@@ -18,17 +19,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiOverlayReloaded extends AbstractGui {
-    private final Minecraft mc;
-
-    public GuiOverlayReloaded(Minecraft minecraft) {
-        mc = minecraft;
-    }
-
     @SubscribeEvent
     public void renderGUIOverlay(RenderGameOverlayEvent.Pre e) {
-        if (e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR)
+        if (!BalkonsWeaponMod.instance.modConfig.guiOverlayReloaded.get() ||
+            e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR)
             return;
 
+        Minecraft mc = Minecraft.getInstance();
         PlayerEntity p = mc.player;
         if (p == null) return;
         int currentItem = p.inventory.currentItem;

@@ -121,23 +121,27 @@ public class MeleeComponent extends AbstractWeaponComponent {
         float dmg = getEntityDamage();
         if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
             multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
-                    new AttributeModifier(weapon.getUUIDDamage(), "Weapon attack damage modifier", dmg,
+                    new AttributeModifier(IItemWeapon.ATTACK_DAMAGE_MODIFIER,
+                            "Weapon attack damage modifier", dmg,
                             AttributeModifier.Operation.ADDITION));
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
-                    new AttributeModifier(weapon.getUUIDSpeed(), "Weapon attack speed modifier",
-                            -meleeSpecs.attackDelay, AttributeModifier.Operation.ADDITION));
+                    new AttributeModifier(IItemWeapon.ATTACK_SPEED_MODIFIER,
+                            "Weapon attack speed modifier", -meleeSpecs.attackDelay,
+                            AttributeModifier.Operation.ADDITION));
         }
         if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
-            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getName(), new AttributeModifier(weapon.getUUID(),
-                    "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
-                    AttributeModifier.Operation.ADDITION));
+            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getName(),
+                    new AttributeModifier(IItemWeapon.KNOCKBACK_MODIFIER,
+                            "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
+                            AttributeModifier.Operation.ADDITION));
         }
         if (this instanceof IExtendedReachItem) {
             try {
-                multimap.put(WeaponModAttributes.WEAPON_REACH.getName(), new AttributeModifier(weapon.getUUID(),
-                        "Weapon reach modifier",
-                        ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
-                        AttributeModifier.Operation.ADDITION));
+                multimap.put(WeaponModAttributes.WEAPON_REACH.getName(),
+                        new AttributeModifier(IItemWeapon.REACH_MODIFIER,
+                                "Weapon reach modifier",
+                                ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
+                                AttributeModifier.Operation.ADDITION));
             } catch (NullPointerException ignored) {
             }
         }

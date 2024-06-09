@@ -58,7 +58,7 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
                 pos.getY() + yvel, pos.getZ() + zvel);
         entitycannonball.shoot(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
         blocksource.getWorld().addEntity(entitycannonball);
-        itemstack.split(1);
+        itemstack.shrink(1);
         return itemstack;
     }
 
