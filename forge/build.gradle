@@ -39,7 +39,7 @@ processResources {
             minecraft_version          : minecraft_version, minecraft_version_range: minecraft_version_range,
             minecraft_version_condition: minecraft_version_condition,
             forge_version              : forge_version, forge_version_range: forge_version_range,
-            loader_version_range       : loader_version_range,
+            loader_version_range       : loader_version_range, mod_update_json: mod_update_json,
             architectury_version       : architectury_version, cloth_config_version: cloth_config_version,
             mod_id                     : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
             mod_authors                : mod_authors, mod_authors_list: mod_authors_list, mod_description: mod_description,
