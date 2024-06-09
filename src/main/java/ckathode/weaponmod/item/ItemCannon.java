@@ -71,7 +71,7 @@ public class ItemCannon extends WMItem {
                         world.addEntity(entitycannon);
                     }
 
-                    if (!entityplayer.abilities.isCreativeMode) {
+                    if (!entityplayer.isCreative()) {
                         itemstack.shrink(1);
                     }
 

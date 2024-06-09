@@ -82,7 +82,9 @@ public class ItemFlail extends ItemMelee {
             if (!entityplayer.isCreative()) {
                 itemstack.damageItem(1, entityplayer, s -> s.sendBreakAnimation(Hand.MAIN_HAND));
             }
-            throwFlail(itemstack, world, entityplayer);
+            if (!itemstack.isEmpty()) {
+                throwFlail(itemstack, world, entityplayer);
+            }
         }
         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
@@ -102,8 +104,8 @@ public class ItemFlail extends ItemMelee {
             entityflail.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
             PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getEntityId());
             world.addEntity(entityflail);
+            setThrown(entityplayer, true);
         }
-        setThrown(entityplayer, true);
     }
 
     public void setThrown(PlayerEntity entityplayer, boolean flag) {

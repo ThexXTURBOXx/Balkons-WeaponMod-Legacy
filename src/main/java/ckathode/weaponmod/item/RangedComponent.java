@@ -111,11 +111,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     @Override
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
-        multimap.put(WeaponModAttributes.RELOAD_TIME.getName(), new AttributeModifier(weapon.getUUID(), "Weapon "
-                                                                                                        +
-                                                                                                        "reloadtime "
-                                                                                                        + "modifier",
-                rangedSpecs.getReloadTime(), AttributeModifier.Operation.ADDITION));
+        multimap.put(WeaponModAttributes.RELOAD_TIME.getName(), new AttributeModifier(IItemWeapon.RELOAD_TIME_MODIFIER,
+                "Weapon reloadtime modifier", rangedSpecs.getReloadTime(), AttributeModifier.Operation.ADDITION));
     }
 
     @Override
@@ -271,13 +268,13 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, World world, PlayerEntity entityplayer) {
-        return entityplayer.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
+        return entityplayer.isCreative() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || consumeAmmo(entityplayer);
     }
 
     public boolean hasAmmo(ItemStack itemstack, World world, PlayerEntity entityplayer) {
         boolean flag = !findAmmo(entityplayer).isEmpty();
-        return entityplayer.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
+        return entityplayer.isCreative() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || flag;
     }
 
@@ -325,7 +322,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public int getReloadTime() {
             if (reloadTime < 0 && BalkonsWeaponMod.instance != null) {
                 reloadTime = BalkonsWeaponMod.instance.modConfig.getReloadTime(reloadTimeTag);
-                BalkonsWeaponMod.modLog.debug("Found reload time " + reloadTime + " for " + reloadTimeTag + " @" + this);
+                BalkonsWeaponMod.modLog.debug("Found reload time {} for {} @{}",
+                        reloadTime, reloadTimeTag, this);
             }
             return reloadTime;
         }
@@ -335,8 +333,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                 ammoItems = Arrays.stream(ammoItemTags)
                         .map(t -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
                         .collect(Collectors.toList());
-                BalkonsWeaponMod.modLog.debug("Found items " + ammoItems + " for " + Arrays.toString(ammoItemTags) +
-                                              " @" + this);
+                BalkonsWeaponMod.modLog.debug("Found items {} for {} @{}",
+                        ammoItems, Arrays.toString(ammoItemTags), this);
             }
             return ammoItems;
         }

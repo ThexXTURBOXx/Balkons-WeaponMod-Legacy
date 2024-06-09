@@ -113,7 +113,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
 
     protected void setPickupStatusFromEntity(LivingEntity entityliving) {
         if (entityliving instanceof PlayerEntity) {
-            if (((PlayerEntity) entityliving).abilities.isCreativeMode) {
+            if (((PlayerEntity) entityliving).isCreative()) {
                 setPickupStatus(PickupStatus.CREATIVE_ONLY);
             } else {
                 setPickupStatus(BalkonsWeaponMod.instance.modConfig.allCanPickup.get()
@@ -192,6 +192,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         if (arrowShake > 0) {
             --arrowShake;
         }
+        if (isWet()) {
+            extinguish();
+        }
         if (inGround) {
             if (!iblockstate.equals(inBlockState) &&
                 !world.areCollisionShapesEmpty(this.getBoundingBox().grow(0.05))) {
@@ -199,7 +202,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
                 setMotion(motion.mul(rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f));
                 ticksInGround = 0;
                 ticksInAir = 0;
-            } else {
+            } else if (!world.isRemote) {
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {
@@ -422,7 +425,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             return true;
         }
         if (pickupStatus == PickupStatus.CREATIVE_ONLY) {
-            return entityplayer.abilities.isCreativeMode;
+            return entityplayer.isCreative();
         }
         return pickupStatus == PickupStatus.OWNER_ONLY && entityplayer.getUniqueID().equals(shootingEntity);
     }
@@ -434,7 +437,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             if (item == null) {
                 return;
             }
-            if ((pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.abilities.isCreativeMode) ||
+            if ((pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.isCreative()) ||
                 entityplayer.inventory.addItemStackToInventory(item)) {
                 playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
                         ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);

@@ -66,7 +66,7 @@ public class ItemDummy extends WMItem {
                         world.addEntity(entitydummy);
                     }
 
-                    if (!entityplayer.abilities.isCreativeMode) {
+                    if (!entityplayer.isCreative()) {
                         itemstack.shrink(1);
                     }
 
