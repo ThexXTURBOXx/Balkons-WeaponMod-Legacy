@@ -16,7 +16,6 @@ public class MsgCannonFire extends WMMessage {
     }
 
     public MsgCannonFire(EntityCannon entity) {
-        cannonEntityID = 0;
         cannonEntityID = entity.getEntityId();
     }
 

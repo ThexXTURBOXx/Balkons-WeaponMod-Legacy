@@ -55,8 +55,9 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     @Override
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
         super.addItemAttributeModifiers(multimap);
-        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getName(), new AttributeModifier(weapon.getUUID(),
-                "Weapon ignore armour modifier", ignoreArmourAmount, 0));
+        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getName(),
+                new AttributeModifier(IItemWeapon.IGNORE_ARMOUR_MODIFIER,
+                        "Weapon ignore armour modifier", ignoreArmourAmount, 0));
     }
 
 }

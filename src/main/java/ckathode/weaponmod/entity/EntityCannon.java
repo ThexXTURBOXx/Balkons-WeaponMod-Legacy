@@ -100,14 +100,14 @@ public class EntityCannon extends EntityBoat {
         if (world.isRemote || isDead) {
             return true;
         }
-        if (damagesource instanceof EntityDamageSourceIndirect) {
+        if (damagesource instanceof EntityDamageSourceIndirect && damagesource.getTrueSource() != null) {
             if (isPassenger(damagesource.getTrueSource())) {
                 return true;
             }
         } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
             EntityPlayer player = (EntityPlayer) damagesource.getTrueSource();
-            if (player.inventory.getCurrentItem().isEmpty()) {
-                if (!player.capabilities.isCreativeMode) {
+            if (player != null && player.inventory.getCurrentItem().isEmpty()) {
+                if (!player.isCreative()) {
                     dropItem(BalkonsWeaponMod.cannon, 1);
                     if (isLoaded() || isLoading()) {
                         dropItem(BalkonsWeaponMod.cannonBall, 1);
@@ -303,8 +303,8 @@ public class EntityCannon extends EntityBoat {
     public boolean processInitialInteract(EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading()
-            && (entityplayer.capabilities.isCreativeMode || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
-            if (entityplayer.capabilities.isCreativeMode || consumeAmmo(entityplayer, BalkonsWeaponMod.cannonBall)) {
+            && (entityplayer.isCreative() || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
+            if (entityplayer.isCreative() || consumeAmmo(entityplayer, BalkonsWeaponMod.cannonBall)) {
                 startLoadingCannon();
                 return true;
             }

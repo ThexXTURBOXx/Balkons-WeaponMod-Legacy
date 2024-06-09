@@ -45,7 +45,7 @@ public class ItemMusket extends ItemShooter {
                 PhysHelper.knockBack(entityliving, attacker, kb);
                 entityliving.hurtResistantTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);
             }
-            if (attacker instanceof EntityPlayer && !((EntityPlayer) attacker).capabilities.isCreativeMode) {
+            if (attacker instanceof EntityPlayer && !((EntityPlayer) attacker).isCreative()) {
                 bayonetDamage(itemstack, attacker, 1);
             }
         }
@@ -60,7 +60,7 @@ public class ItemMusket extends ItemShooter {
             Material material = block.getMaterial();
             boolean flag =
                     material != Material.PLANTS && material != Material.VINE && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD;
-            if (entityliving instanceof EntityPlayer && !((EntityPlayer) entityliving).capabilities.isCreativeMode && flag) {
+            if (entityliving instanceof EntityPlayer && !((EntityPlayer) entityliving).isCreative() && flag) {
                 bayonetDamage(itemstack, entityliving, 2);
             }
         }
@@ -75,11 +75,7 @@ public class ItemMusket extends ItemShooter {
         int bayonetdamage = itemstack.getTagCompound().getShort("bayonetDamage") + damage;
         if (bayonetdamage > bayonetDurability) {
             entityplayer.renderBrokenItemStack(itemstack);
-            int id = Item.getIdFromItem(this);
-            if (id != 0) {
-                BalkonsWeaponMod.modLog.debug("Musket Item (" + this + ") ID = " + id);
-                entityplayer.addStat(StatList.getObjectBreakStats(this));
-            }
+            entityplayer.addStat(StatList.getObjectBreakStats(this));
             bayonetdamage = 0;
             ItemStack itemstack2 = new ItemStack(BalkonsWeaponMod.musket, 1);
             itemstack2.setItemDamage(itemstack.getItemDamage());

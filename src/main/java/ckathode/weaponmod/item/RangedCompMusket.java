@@ -52,14 +52,15 @@ public class RangedCompMusket extends RangedComponent {
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             world.spawnEntity(entitymusketbullet);
         }
-        int deltadamage = 1;
-        boolean flag = itemstack.getItemDamage() + deltadamage > itemstack.getMaxDamage();
-        itemstack.damageItem(deltadamage, entityplayer);
-        if (flag && musket != null) {
-            int bayonetdamage = (itemstack.getTagCompound() == null) ? 0 : itemstack.getTagCompound().getShort(
-                    "bayonetDamage");
-            entityplayer.inventory.addItemStackToInventory(new ItemStack(musket.bayonetItem, 1, bayonetdamage));
+        int deltaDamage = 1;
+        boolean flag = itemstack.getItemDamage() + deltaDamage >= itemstack.getMaxDamage();
+        if (flag && musket != null && musket.hasBayonet()) {
+            int bayonetDamage = itemstack.hasTagCompound() ? itemstack.getTagCompound().getShort("bayonetDamage") : 0;
+            ItemStack newStack = new ItemStack(musket.bayonetItem, 1, bayonetDamage);
+            itemstack.damageItem(deltaDamage, entityplayer);
+            entityplayer.inventory.addItemStackToInventory(newStack);
         } else {
+            itemstack.damageItem(deltaDamage, entityplayer);
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         postShootingEffects(itemstack, entityplayer, world);

@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.Level;
 
 @ChannelHandler.Sharable
 public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMMessage> {
@@ -71,8 +70,8 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
     protected void decode(final ChannelHandlerContext ctx, final FMLProxyPacket msg, final List<Object> out) throws Exception {
         final ByteBuf payload = msg.payload().duplicate();
         if (payload.readableBytes() < 1) {
-            FMLLog.log.log(Level.ERROR, "The FMLIndexedCodec has received an empty buffer on channel %s, likely a "
-                                        + "result of a LAN server issue. Pipeline parts : %s",
+            FMLLog.log.error("The FMLIndexedCodec has received an empty buffer on channel %s, likely a "
+                             + "result of a LAN server issue. Pipeline parts : %s",
                     new Object[]{ctx.channel().attr(NetworkRegistry.FML_CHANNEL), ctx.pipeline().toString()});
         }
         final byte discriminator = payload.readByte();
@@ -80,7 +79,7 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
         if (clazz == null) {
             throw new NullPointerException("No packet registered for discriminator: " + discriminator);
         }
-        final WMMessage pkt = clazz.newInstance();
+        final WMMessage pkt = clazz.getDeclaredConstructor().newInstance();
         pkt.decodeInto(ctx, payload.slice());
         switch (FMLCommonHandler.instance().getEffectiveSide()) {
         case CLIENT: {

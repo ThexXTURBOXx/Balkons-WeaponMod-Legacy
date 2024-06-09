@@ -63,7 +63,7 @@ public class ItemDummy extends WMItem {
             return EnumActionResult.FAIL;
         }
         world.spawnEntity(entitydummy);
-        if (!entityplayer.capabilities.isCreativeMode) {
+        if (!entityplayer.isCreative()) {
             itemstack.shrink(1);
         }
         entityplayer.addStat(StatList.getObjectUseStats(this));

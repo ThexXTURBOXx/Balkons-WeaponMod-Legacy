@@ -66,7 +66,7 @@ public class ItemCannon extends WMItem {
         if (!world.isRemote) {
             world.spawnEntity(entitycannon);
         }
-        if (!entityplayer.capabilities.isCreativeMode) {
+        if (!entityplayer.isCreative()) {
             itemstack.shrink(1);
         }
         entityplayer.addStat(StatList.getObjectUseStats(this));

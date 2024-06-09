@@ -40,7 +40,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             }
             f *= 1.5f;
             if (!world.isRemote) {
-                EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack);
+                EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack.copy());
                 entityboomerang.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f,
                         5.0f);
                 entityboomerang.setIsCritical(crit);
@@ -54,13 +54,8 @@ public class MeleeCompBoomerang extends MeleeComponent {
             world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
                     SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
                     1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
-            if (!entityplayer.capabilities.isCreativeMode) {
-                ItemStack itemstack2 = itemstack.copy();
-                itemstack2.shrink(1);
-                if (itemstack2.isEmpty()) {
-                    itemstack2 = ItemStack.EMPTY;
-                }
-                entityplayer.inventory.mainInventory.set(entityplayer.inventory.currentItem, itemstack2);
+            if (!entityplayer.isCreative()) {
+                itemstack.shrink(1);
             }
         }
     }
@@ -77,7 +72,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
         if (hand != EnumHand.MAIN_HAND) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
-        if (!entityplayer.capabilities.isCreativeMode && itemstack.isEmpty()) {
+        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);

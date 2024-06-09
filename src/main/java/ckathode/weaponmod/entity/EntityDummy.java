@@ -207,7 +207,7 @@ public class EntityDummy extends Entity {
                 return false;
             }
         }
-        if (entityplayer.capabilities.isCreativeMode) {
+        if (entityplayer.isCreative()) {
             dropAsItem(false, false);
             return true;
         }

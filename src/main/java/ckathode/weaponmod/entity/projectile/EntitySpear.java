@@ -4,6 +4,7 @@ import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,15 +56,12 @@ public class EntitySpear extends EntityMaterialProjectile {
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
             playHitSound();
-            if (thrownItem.getItemDamage() + 1 > thrownItem.getMaxDamage()) {
+            if (thrownItem.getItemDamage() + 1 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
                 setDead();
             } else {
-                if (shootingEntity instanceof EntityLivingBase) {
-                    thrownItem.damageItem(1, (EntityLivingBase) shootingEntity);
-                } else {
-                    thrownItem.attemptDamageItem(1, rand, null);
-                }
+                thrownItem.attemptDamageItem(1, rand,
+                        shootingEntity instanceof EntityPlayerMP ? (EntityPlayerMP) shootingEntity : null);
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {

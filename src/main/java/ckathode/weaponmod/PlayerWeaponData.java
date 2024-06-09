@@ -15,25 +15,28 @@ public final class PlayerWeaponData {
 
     public static void initPlayerWeaponData(EntityPlayer player) {
         String playername = getPlayerName(player);
-        BalkonsWeaponMod.modLog.trace("Initializing DataManager values for " + playername);
+        BalkonsWeaponMod.modLog.trace("Initializing DataManager values for {}", playername);
         EntityDataManager dataManager = player.getDataManager();
         try {
             dataManager.get(WARHAMMER_LAST_SMASH_TICKS);
-            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + WARHAMMER_LAST_SMASH_TICKS.getId());
+            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for {} @ {}",
+                    playername, WARHAMMER_LAST_SMASH_TICKS.getId());
         } catch (NullPointerException ignored) {
         } finally {
             dataManager.register(WARHAMMER_LAST_SMASH_TICKS, player.ticksExisted);
         }
         try {
             dataManager.get(FLAIL_THROWN);
-            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + FLAIL_THROWN.getId());
+            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for {} @ {}",
+                    playername, FLAIL_THROWN.getId());
         } catch (NullPointerException ignored) {
         } finally {
             dataManager.register(FLAIL_THROWN, false);
         }
         try {
             dataManager.get(FLAIL_ENTITY_ID);
-            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for " + playername + " @ " + FLAIL_ENTITY_ID.getId());
+            BalkonsWeaponMod.modLog.warn("DataManager ID conflict for {} @ {}",
+                    playername, FLAIL_ENTITY_ID.getId());
         } catch (NullPointerException ignored) {
         } finally {
             dataManager.register(FLAIL_ENTITY_ID, 0);
@@ -53,8 +56,8 @@ public final class PlayerWeaponData {
     }
 
     private static void unavailableError(EntityPlayer player, int id) {
-        BalkonsWeaponMod.modLog.error("DataManager ID " + id + " for " + getPlayerName(player) + " unavailable, " +
-                                      "trying to reinitialize");
+        BalkonsWeaponMod.modLog.error("DataManager ID {} for {} unavailable, trying to reinitialize",
+                id, getPlayerName(player));
         initPlayerWeaponData(player);
     }
 

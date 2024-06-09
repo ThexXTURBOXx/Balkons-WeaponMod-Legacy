@@ -32,7 +32,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
             EntityBlunderShot.fireSpreadShot(world, entityplayer, this, itemstack);
         }
         int damage = 1;
-        if (itemstack.getItemDamage() + damage <= itemstack.getMaxDamage()) {
+        if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
