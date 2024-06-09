@@ -320,7 +320,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public int getReloadTime() {
             if (reloadTime < 0) {
                 reloadTime = WeaponModConfig.get().getReloadTime(reloadTimeTag);
-                BalkonsWeaponMod.LOGGER.debug("Found reload time {} for {} @{}", reloadTime, reloadTimeTag, this);
+                BalkonsWeaponMod.LOGGER.debug("Found reload time {} for {} @{}",
+                        reloadTime, reloadTimeTag, this);
             }
             return reloadTime;
         }
@@ -330,8 +331,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                 ammoItems = Arrays.stream(ammoItemTags)
                         .map(t -> BuiltInRegistries.ITEM.get(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
                         .collect(Collectors.toList());
-                BalkonsWeaponMod.LOGGER.debug("Found items {} for {} @{}", ammoItems,
-                        Arrays.toString(ammoItemTags), this);
+                BalkonsWeaponMod.LOGGER.debug("Found items {} for {} @{}",
+                        ammoItems, Arrays.toString(ammoItemTags), this);
             }
             return ammoItems;
         }
