@@ -1,0 +1,52 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:blunder-ironpart"
+    ]
+  },
+  "criteria": {
+    "has_flint_and_steel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:flint_and_steel"
+          }
+        ]
+      }
+    },
+    "has_iron_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:iron_ingot"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:blunder-ironpart"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_flint_and_steel",
+      "has_the_recipe"
+    ],
+    [
+      "has_iron_ingot",
+      "has_the_recipe"
+    ]
+  ],
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blunderbuss"
+    }
+  ]
+}
