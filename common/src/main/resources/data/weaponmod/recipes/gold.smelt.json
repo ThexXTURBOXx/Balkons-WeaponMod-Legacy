@@ -2,124 +2,28 @@
   "type": "minecraft:smelting",
   "ingredient": [
     {
-      "item": "weaponmod:spear.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "spear"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "spear"
-        }
-      ]
+      "item": "weaponmod:spear.gold"
     },
     {
-      "item": "weaponmod:halberd.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "halberd"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "halberd"
-        }
-      ]
+      "item": "weaponmod:halberd.gold"
     },
     {
-      "item": "weaponmod:knife.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "knife"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "knife"
-        }
-      ]
+      "item": "weaponmod:knife.gold"
     },
     {
-      "item": "weaponmod:battleaxe.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "battleaxe"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "battleaxe"
-        }
-      ]
+      "item": "weaponmod:battleaxe.gold"
     },
     {
-      "item": "weaponmod:warhammer.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "warhammer"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "warhammer"
-        }
-      ]
+      "item": "weaponmod:warhammer.gold"
     },
     {
-      "item": "weaponmod:flail.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "flail"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "flail"
-        }
-      ]
+      "item": "weaponmod:flail.gold"
     },
     {
-      "item": "weaponmod:boomerang.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "boomerang"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "boomerang"
-        }
-      ]
+      "item": "weaponmod:boomerang.gold"
     },
     {
-      "item": "weaponmod:katana.gold",
-      "conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "katana"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "katana"
-        }
-      ]
+      "item": "weaponmod:katana.gold"
     }
   ],
   "result": "minecraft:gold_nugget",

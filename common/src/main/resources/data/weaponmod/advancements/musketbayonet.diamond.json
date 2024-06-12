@@ -1,0 +1,70 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:musketbayonet.diamond"
+    ]
+  },
+  "criteria": {
+    "has_musket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:musket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_knife.diamond": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:knife.diamond"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:musketbayonet.diamond"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_musket",
+      "has_the_recipe"
+    ],
+    [
+      "has_knife.diamond",
+      "has_the_recipe"
+    ]
+  ],
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
+}

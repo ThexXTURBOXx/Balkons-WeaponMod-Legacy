@@ -1,0 +1,62 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:mortar"
+    ]
+  },
+  "criteria": {
+    "has_weaponmod_mortar-ironpart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:mortar-ironpart"
+            ]
+          }
+        ]
+      }
+    },
+    "has_weaponmod_gun-stock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:gun-stock"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:mortar"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_weaponmod_mortar-ironpart",
+      "has_the_recipe"
+    ],
+    [
+      "has_weaponmod_gun-stock",
+      "has_the_recipe"
+    ]
+  ],
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "mortar"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "mortar"
+    }
+  ]
+}
