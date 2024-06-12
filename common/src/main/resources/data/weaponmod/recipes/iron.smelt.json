@@ -3,124 +3,28 @@
   "category": "misc",
   "ingredient": [
     {
-      "item": "weaponmod:spear.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "spear"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "spear"
-        }
-      ]
+      "item": "weaponmod:spear.iron"
     },
     {
-      "item": "weaponmod:halberd.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "halberd"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "halberd"
-        }
-      ]
+      "item": "weaponmod:halberd.iron"
     },
     {
-      "item": "weaponmod:knife.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "knife"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "knife"
-        }
-      ]
+      "item": "weaponmod:knife.iron"
     },
     {
-      "item": "weaponmod:battleaxe.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "battleaxe"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "battleaxe"
-        }
-      ]
+      "item": "weaponmod:battleaxe.iron"
     },
     {
-      "item": "weaponmod:warhammer.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "warhammer"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "warhammer"
-        }
-      ]
+      "item": "weaponmod:warhammer.iron"
     },
     {
-      "item": "weaponmod:flail.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "flail"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "flail"
-        }
-      ]
+      "item": "weaponmod:flail.iron"
     },
     {
-      "item": "weaponmod:boomerang.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "boomerang"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "boomerang"
-        }
-      ]
+      "item": "weaponmod:boomerang.iron"
     },
     {
-      "item": "weaponmod:katana.iron",
-      "neoforge:conditions": [
-        {
-          "type": "weaponmod:config_conditional",
-          "weapon": "katana"
-        }
-      ],
-      "fabric:load_conditions": [
-        {
-          "condition": "weaponmod:config_conditional",
-          "weapon": "katana"
-        }
-      ]
+      "item": "weaponmod:katana.iron"
     }
   ],
   "result": {

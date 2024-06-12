@@ -1,0 +1,58 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:musket"
+    ]
+  },
+  "criteria": {
+    "has_weaponmod_musket-ironpart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:musket-ironpart"
+          }
+        ]
+      }
+    },
+    "has_weaponmod_gun-stock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:gun-stock"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:musket"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_weaponmod_musket-ironpart",
+      "has_the_recipe"
+    ],
+    [
+      "has_weaponmod_gun-stock",
+      "has_the_recipe"
+    ]
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "musket"
+    }
+  ]
+}
