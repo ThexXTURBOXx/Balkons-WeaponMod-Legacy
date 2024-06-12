@@ -1,0 +1,109 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:iron.smelt"
+    ]
+  },
+  "criteria": {
+    "has_spear.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:spear.iron"
+          }
+        ]
+      }
+    },
+    "has_halberd.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:halberd.iron"
+          }
+        ]
+      }
+    },
+    "has_knife.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:knife.iron"
+          }
+        ]
+      }
+    },
+    "has_battleaxe.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:battleaxe.iron"
+          }
+        ]
+      }
+    },
+    "has_warhammer.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:warhammer.iron"
+          }
+        ]
+      }
+    },
+    "has_flail.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:flail.iron"
+          }
+        ]
+      }
+    },
+    "has_boomerang.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:boomerang.iron"
+          }
+        ]
+      }
+    },
+    "has_katana.iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:katana.iron"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:iron.smelt"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_spear.iron",
+      "has_halberd.iron",
+      "has_knife.iron",
+      "has_battleaxe.iron",
+      "has_warhammer.iron",
+      "has_flail.iron",
+      "has_boomerang.iron",
+      "has_katana.iron",
+      "has_the_recipe"
+    ]
+  ]
+}

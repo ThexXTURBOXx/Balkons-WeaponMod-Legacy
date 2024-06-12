@@ -1,0 +1,66 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:dart.hunger"
+    ]
+  },
+  "criteria": {
+    "has_rods/wooden": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:rods/wooden"
+          }
+        ]
+      }
+    },
+    "has_feathers": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:feathers"
+          }
+        ]
+      }
+    },
+    "has_rotten_flesh": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:rotten_flesh"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:dart.hunger"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rods/wooden",
+      "has_the_recipe"
+    ],
+    [
+      "has_feathers",
+      "has_the_recipe"
+    ],
+    [
+      "has_rotten_flesh",
+      "has_the_recipe"
+    ]
+  ],
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "blowgun"
+    }
+  ]
+}

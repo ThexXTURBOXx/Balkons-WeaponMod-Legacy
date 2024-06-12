@@ -1,0 +1,46 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:firerod"
+    ]
+  },
+  "criteria": {
+    "has_torch": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:torch"
+          }
+        ]
+      }
+    },
+    "has_stick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stick"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:firerod"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_torch",
+      "has_the_recipe"
+    ],
+    [
+      "has_stick",
+      "has_the_recipe"
+    ]
+  ]
+}

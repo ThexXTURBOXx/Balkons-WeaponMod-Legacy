@@ -1,0 +1,46 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:blunderbuss"
+    ]
+  },
+  "criteria": {
+    "has_blunder-ironpart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:blunder-ironpart"
+          }
+        ]
+      }
+    },
+    "has_gun-stock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:gun-stock"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:blunderbuss"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_blunder-ironpart",
+      "has_the_recipe"
+    ],
+    [
+      "has_gun-stock",
+      "has_the_recipe"
+    ]
+  ]
+}

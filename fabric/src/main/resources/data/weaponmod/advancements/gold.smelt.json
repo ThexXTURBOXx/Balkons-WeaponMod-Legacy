@@ -1,0 +1,109 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:gold.smelt"
+    ]
+  },
+  "criteria": {
+    "has_spear.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:spear.gold"
+          }
+        ]
+      }
+    },
+    "has_halberd.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:halberd.gold"
+          }
+        ]
+      }
+    },
+    "has_knife.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:knife.gold"
+          }
+        ]
+      }
+    },
+    "has_battleaxe.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:battleaxe.gold"
+          }
+        ]
+      }
+    },
+    "has_warhammer.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:warhammer.gold"
+          }
+        ]
+      }
+    },
+    "has_flail.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:flail.gold"
+          }
+        ]
+      }
+    },
+    "has_boomerang.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:boomerang.gold"
+          }
+        ]
+      }
+    },
+    "has_katana.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:katana.gold"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:gold.smelt"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_spear.gold",
+      "has_halberd.gold",
+      "has_knife.gold",
+      "has_battleaxe.gold",
+      "has_warhammer.gold",
+      "has_flail.gold",
+      "has_boomerang.gold",
+      "has_katana.gold",
+      "has_the_recipe"
+    ]
+  ]
+}

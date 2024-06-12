@@ -1,0 +1,52 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:knife.netherite"
+    ]
+  },
+  "criteria": {
+    "has_knife.diamond": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:knife.diamond"
+          }
+        ]
+      }
+    },
+    "has_netherite_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:netherite_ingot"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:knife.netherite"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_knife.diamond",
+      "has_the_recipe"
+    ],
+    [
+      "has_netherite_ingot",
+      "has_the_recipe"
+    ]
+  ],
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
+}

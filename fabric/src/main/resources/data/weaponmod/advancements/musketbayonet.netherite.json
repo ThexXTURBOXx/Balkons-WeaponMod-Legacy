@@ -1,0 +1,46 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:musketbayonet.netherite"
+    ]
+  },
+  "criteria": {
+    "has_musket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:musket"
+          }
+        ]
+      }
+    },
+    "has_knife.netherite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:knife.netherite"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:musketbayonet.netherite"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_musket",
+      "has_the_recipe"
+    ],
+    [
+      "has_knife.netherite",
+      "has_the_recipe"
+    ]
+  ]
+}

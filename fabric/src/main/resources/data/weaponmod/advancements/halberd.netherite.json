@@ -1,0 +1,46 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:halberd.netherite"
+    ]
+  },
+  "criteria": {
+    "has_halberd.diamond": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "weaponmod:halberd.diamond"
+          }
+        ]
+      }
+    },
+    "has_netherite_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:netherite_ingot"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:halberd.netherite"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_halberd.diamond",
+      "has_the_recipe"
+    ],
+    [
+      "has_netherite_ingot",
+      "has_the_recipe"
+    ]
+  ]
+}
