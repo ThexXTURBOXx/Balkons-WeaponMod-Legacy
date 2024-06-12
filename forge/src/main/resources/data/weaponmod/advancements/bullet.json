@@ -1,0 +1,77 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:bullet"
+    ]
+  },
+  "criteria": {
+    "has_ingots/iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:ingots/iron"
+          }
+        ]
+      }
+    },
+    "has_gunpowder": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:gunpowder"
+          }
+        ]
+      }
+    },
+    "has_paper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:paper"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:bullet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ingots/iron",
+      "has_the_recipe"
+    ],
+    [
+      "has_gunpowder",
+      "has_the_recipe"
+    ],
+    [
+      "has_paper",
+      "has_the_recipe"
+    ]
+  ],
+  "conditions": [
+    {
+      "type": "forge:or",
+      "values": [
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "musket"
+        },
+        {
+          "type": "weaponmod:config_conditional",
+          "weapon": "flintlock"
+        }
+      ]
+    }
+  ]
+}

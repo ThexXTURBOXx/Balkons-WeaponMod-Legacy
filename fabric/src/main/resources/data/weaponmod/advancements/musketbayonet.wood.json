@@ -1,0 +1,60 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:musketbayonet.wood"
+    ]
+  },
+  "criteria": {
+    "has_musket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:musket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_knife.wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:knife.wood"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:musketbayonet.wood"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_musket",
+      "has_the_recipe"
+    ],
+    [
+      "has_knife.wood",
+      "has_the_recipe"
+    ]
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
+}

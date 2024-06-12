@@ -1,0 +1,125 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:gold.smelt"
+    ]
+  },
+  "criteria": {
+    "has_spear.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:spear.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_halberd.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:halberd.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_knife.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:knife.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_battleaxe.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:battleaxe.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_warhammer.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:warhammer.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_flail.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:flail.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_boomerang.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:boomerang.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_katana.gold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "weaponmod:katana.gold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:gold.smelt"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_spear.gold",
+      "has_halberd.gold",
+      "has_knife.gold",
+      "has_battleaxe.gold",
+      "has_warhammer.gold",
+      "has_flail.gold",
+      "has_boomerang.gold",
+      "has_katana.gold",
+      "has_the_recipe"
+    ]
+  ]
+}
