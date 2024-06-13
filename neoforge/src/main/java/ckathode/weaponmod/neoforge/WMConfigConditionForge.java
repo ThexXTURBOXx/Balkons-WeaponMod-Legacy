@@ -16,7 +16,7 @@ public record WMConfigConditionForge(String weapon) implements ICondition {
                     .group(Codec.STRING.fieldOf("weapon").forGetter(WMConfigConditionForge::weapon))
                     .apply(builder, WMConfigConditionForge::new));
     public static final ResourceLocation CONDITION_ID =
-            new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional");
+            ResourceLocation.fromNamespaceAndPath(BalkonsWeaponMod.MOD_ID, "config_conditional");
 
     @Override
     public boolean test(@NotNull IContext context) {

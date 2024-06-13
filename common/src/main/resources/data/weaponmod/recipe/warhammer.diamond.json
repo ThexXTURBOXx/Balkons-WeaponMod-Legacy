@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "  O",
-    " XO",
-    "X #"
+    "X#X",
+    "X#X",
+    " # "
   ],
   "key": {
-    "#": [
+    "X": [
       {
         "item": "minecraft:diamond"
       },
@@ -15,10 +15,13 @@
         "tag": "c:diamonds"
       },
       {
+        "tag": "c:gems/diamonds"
+      },
+      {
         "tag": "forge:gems/diamond"
       }
     ],
-    "X": [
+    "#": [
       {
         "item": "minecraft:stick"
       },
@@ -31,32 +34,21 @@
       {
         "tag": "forge:rods/wooden"
       }
-    ],
-    "O": [
-      {
-        "item": "minecraft:string"
-      },
-      {
-        "tag": "c:strings"
-      },
-      {
-        "tag": "forge:string"
-      }
     ]
   },
   "result": {
-    "id": "weaponmod:flail.diamond"
+    "id": "weaponmod:warhammer.diamond"
   },
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "flail"
+      "weapon": "warhammer"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "flail"
+      "weapon": "warhammer"
     }
   ]
 }

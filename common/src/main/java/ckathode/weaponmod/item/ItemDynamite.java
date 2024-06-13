@@ -36,6 +36,7 @@ public class ItemDynamite extends WMItem implements WMDispenserExtension {
     public InteractionResultHolder<ItemStack> use(@NotNull Level world, Player entityplayer,
                                                   @NotNull InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
+        ItemStack copy = itemstack.copy();
         if (!entityplayer.isCreative()) {
             itemstack.shrink(1);
         }
@@ -43,7 +44,7 @@ public class ItemDynamite extends WMItem implements WMDispenserExtension {
                 SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!world.isClientSide) {
             EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
-                    40 + entityplayer.getRandom().nextInt(10));
+                    40 + entityplayer.getRandom().nextInt(10), copy);
             entitydynamite.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 0.7f, 4.0f);
             world.addFreshEntity(entitydynamite);
@@ -54,7 +55,7 @@ public class ItemDynamite extends WMItem implements WMDispenserExtension {
     @NotNull
     @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-        return new EntityDynamite(level, pos.x(), pos.y(), pos.z());
+        return new EntityDynamite(level, pos.x(), pos.y(), pos.z(), null);
     }
 
     @Override

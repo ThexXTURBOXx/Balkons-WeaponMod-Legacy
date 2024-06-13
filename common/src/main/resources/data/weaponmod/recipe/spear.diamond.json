@@ -3,7 +3,7 @@
   "category": "equipment",
   "pattern": [
     "  X",
-    " X ",
+    " # ",
     "#  "
   ],
   "key": {
@@ -13,6 +13,9 @@
       },
       {
         "tag": "c:diamonds"
+      },
+      {
+        "tag": "c:gems/diamonds"
       },
       {
         "tag": "forge:gems/diamond"
@@ -34,18 +37,18 @@
     ]
   },
   "result": {
-    "id": "weaponmod:katana.diamond"
+    "id": "weaponmod:spear.diamond"
   },
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "katana"
+      "weapon": "spear"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "katana"
+      "weapon": "spear"
     }
   ]
 }

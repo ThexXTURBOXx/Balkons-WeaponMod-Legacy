@@ -2,7 +2,7 @@
   "parent": "weaponmod:root",
   "rewards": {
     "recipes": [
-      "weaponmod:flail.diamond"
+      "weaponmod:warhammer.diamond"
     ]
   },
   "criteria": {
@@ -22,6 +22,16 @@
         "items": [
           {
             "items": "#c:diamonds"
+          }
+        ]
+      }
+    },
+    "has_c_gems/diamonds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:gems/diamonds"
           }
         ]
       }
@@ -76,40 +86,10 @@
         ]
       }
     },
-    "has_minecraft_string": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:string"
-          }
-        ]
-      }
-    },
-    "has_c_strings": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:strings"
-          }
-        ]
-      }
-    },
-    "has_forge_string": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:string"
-          }
-        ]
-      }
-    },
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:flail.diamond"
+        "recipe": "weaponmod:warhammer.diamond"
       }
     }
   },
@@ -117,6 +97,7 @@
     [
       "has_minecraft_diamond",
       "has_c_diamonds",
+      "has_c_gems/diamonds",
       "has_forge_gems/diamond",
       "has_the_recipe"
     ],
@@ -126,24 +107,18 @@
       "has_c_wooden_rods",
       "has_forge_rods/wooden",
       "has_the_recipe"
-    ],
-    [
-      "has_minecraft_string",
-      "has_c_strings",
-      "has_forge_string",
-      "has_the_recipe"
     ]
   ],
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "flail"
+      "weapon": "warhammer"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "flail"
+      "weapon": "warhammer"
     }
   ]
 }

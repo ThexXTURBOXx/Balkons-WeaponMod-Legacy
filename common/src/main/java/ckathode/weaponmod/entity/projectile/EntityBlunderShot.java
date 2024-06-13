@@ -6,6 +6,7 @@ import ckathode.weaponmod.item.RangedComponent;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
@@ -29,20 +31,20 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         setPickupStatus(PickupStatus.DISALLOWED);
     }
 
-    public EntityBlunderShot(Level world, double x, double y, double z) {
-        this(TYPE, world);
+    public EntityBlunderShot(Level world, double x, double y, double z, @Nullable ItemStack firedFromWeapon) {
+        super(TYPE, world, firedFromWeapon);
         setPos(x, y, z);
     }
 
-    public EntityBlunderShot(Level world, LivingEntity shooter) {
-        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+    public EntityBlunderShot(Level world, LivingEntity shooter, @Nullable ItemStack firedFromWeapon) {
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ(), firedFromWeapon);
         setOwner(shooter);
     }
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -65,12 +67,17 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         }
     }
 
+    @NotNull
+    @Override
+    public DamageSource getDamageSource() {
+        return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
     @Override
     public void onEntityHit(Entity entity) {
         float damage = 4.0f + extraDamage;
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         int prevhurtrestime = entity.invulnerableTime;
-        if (entity.hurt(damagesource, damage)) {
+        if (entity.hurt(getDamageSource(), damage)) {
             entity.invulnerableTime = prevhurtrestime;
             applyEntityHitEffects(entity);
             playHitSound();
@@ -108,7 +115,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
                                       RangedComponent item, ItemStack itemstack) {
         Player entityplayer = (Player) entityliving;
         for (int i = 0; i < 10; ++i) {
-            EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
+            EntityBlunderShot entity = new EntityBlunderShot(world, entityliving, itemstack);
             entity.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
@@ -119,15 +126,19 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     }
 
     public static void fireSpreadShot(Level world, double x, double y, double z) {
+        fireSpreadShot(world, x, y, z, null);
+    }
+
+    public static void fireSpreadShot(Level world, double x, double y, double z, @Nullable ItemStack firedFromWeapon) {
         for (int i = 0; i < 10; ++i) {
-            world.addFreshEntity(new EntityBlunderShot(world, x, y, z));
+            world.addFreshEntity(new EntityBlunderShot(world, x, y, z, firedFromWeapon));
         }
     }
 
     public static void fireFromDispenser(Level world, double d, double d1, double d2,
                                          int i, int j, int k) {
         for (int i2 = 0; i2 < 10; ++i2) {
-            EntityBlunderShot entityblundershot = new EntityBlunderShot(world, d, d1, d2);
+            EntityBlunderShot entityblundershot = new EntityBlunderShot(world, d, d1, d2, null);
             entityblundershot.shoot(i, j, k, 5.0f, 15.0f);
             world.addFreshEntity(entityblundershot);
         }

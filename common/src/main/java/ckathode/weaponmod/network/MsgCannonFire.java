@@ -15,7 +15,7 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 public class MsgCannonFire implements CustomPacketPayload {
 
     public static final Type<MsgCannonFire> CANNON_FIRE_PACKET_TYPE =
-            new Type<>(new ResourceLocation(MOD_ID, "cannon_fire"));
+            new Type<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, "cannon_fire"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgCannonFire> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, p -> p.cannonEntityID,
             MsgCannonFire::new);

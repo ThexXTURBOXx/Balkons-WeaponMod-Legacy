@@ -20,6 +20,9 @@
         "tag": "c:diamonds"
       },
       {
+        "tag": "c:gems/diamonds"
+      },
+      {
         "tag": "forge:gems/diamond"
       }
     ]

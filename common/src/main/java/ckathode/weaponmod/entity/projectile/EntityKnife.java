@@ -6,6 +6,8 @@ import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -19,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
@@ -32,13 +35,13 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         super(entityType, world);
     }
 
-    public EntityKnife(Level world, double d, double d1, double d2) {
-        this(TYPE, world);
+    public EntityKnife(Level world, double d, double d1, double d2, @Nullable ItemStack firedFromWeapon) {
+        super(TYPE, world, firedFromWeapon);
         setPos(d, d1, d2);
     }
 
     public EntityKnife(Level world, LivingEntity shooter, ItemStack itemstack) {
-        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ(), itemstack);
         setOwner(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
@@ -47,8 +50,8 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -80,28 +83,40 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         ++soundTimer;
     }
 
+    @NotNull
+    @Override
+    public DamageSource getDamageSource() {
+        return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
     @Override
     public void onEntityHit(Entity entity) {
         if (level().isClientSide) {
             return;
         }
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         ItemStack thrownItem = getWeapon();
         Item item = thrownItem.getItem();
-        if (item instanceof IItemWeapon && entity.hurt(damagesource,
-                ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + 1.0f + getMeleeHitDamage(entity))) {
+        if (!(item instanceof IItemWeapon iweapon)) {
+            bounceBack();
+            return;
+        }
+        float damage = iweapon.getMeleeComponent().getEntityDamage() + 1.0f;
+        damage = getMeleeHitDamage(entity, damage);
+        if (entity.hurt(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             if (thrownItem.getDamageValue() + 2 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
                 remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
-                thrownItem.hurtAndBreak(2, random, shooter instanceof ServerPlayer player ? player : null, () -> {
-                });
+                Level level = level();
+                if (level instanceof ServerLevel serverLevel) {
+                    thrownItem.hurtAndBreak(2, serverLevel, shooter instanceof ServerPlayer player ? player : null,
+                            i -> {
+                            });
+                }
                 lerpMotion(0.0, 0.0, 0.0);
             }
-        } else {
-            bounceBack();
         }
     }
 

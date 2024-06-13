@@ -1,6 +1,7 @@
 package ckathode.weaponmod.fabric.mixin;
 
 import ckathode.weaponmod.render.GuiOverlayReloaded;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GuiMixin {
 
     @Inject(method = "renderHotbarAndDecorations", at = @At("HEAD"))
-    public void renderHotbarAndDecorations(GuiGraphics guiGraphics, float partialTick, CallbackInfo ci) {
+    public void renderHotbarAndDecorations(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         GuiOverlayReloaded.renderGUIOverlay(guiGraphics);
     }
 

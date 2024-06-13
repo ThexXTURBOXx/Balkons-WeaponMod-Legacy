@@ -11,6 +11,8 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
@@ -43,13 +46,13 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         super(entityType, world);
     }
 
-    public EntityBoomerang(Level world, double x, double y, double z) {
-        this(TYPE, world);
+    public EntityBoomerang(Level world, double x, double y, double z, @Nullable ItemStack firedFromWeapon) {
+        super(TYPE, world, firedFromWeapon);
         setPos(x, y, z);
     }
 
     public EntityBoomerang(Level world, LivingEntity shooter, ItemStack itemstack) {
-        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ(), itemstack);
         setOwner(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
@@ -58,8 +61,8 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -116,6 +119,12 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         entityData.set(BOOMERANG, floatStrength);
     }
 
+    @NotNull
+    @Override
+    public DamageSource getDamageSource() {
+        return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
     @Override
     public void onEntityHit(Entity entity) {
         if (level().isClientSide || floatStrength < MIN_FLOAT_STRENGTH) {
@@ -137,23 +146,26 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             }
             return;
         }
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         ItemStack thrownItem = getWeapon();
         float damage =
                 ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 3.0f + extraDamage;
-        damage += getMeleeHitDamage(entity);
+        damage = getMeleeHitDamage(entity, damage);
         if (isCritArrow()) {
             damage += 2.0f;
         }
-        if (entity.hurt(damagesource, damage)) {
+        if (entity.hurt(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);
                 remove(RemovalReason.DISCARDED);
             } else {
-                thrownItem.hurtAndBreak(1, random, shooter instanceof ServerPlayer player ? player : null, () -> {
-                });
+                Level level = level();
+                if (level instanceof ServerLevel serverLevel) {
+                    thrownItem.hurtAndBreak(1, serverLevel, shooter instanceof ServerPlayer player ? player : null,
+                            i -> {
+                            });
+                }
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {

@@ -80,7 +80,7 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack itemstack) {
+    public int getUseDuration(@NotNull ItemStack itemstack, LivingEntity livingEntity) {
         return meleeComponent.getUseDuration(itemstack);
     }
 

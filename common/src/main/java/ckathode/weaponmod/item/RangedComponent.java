@@ -4,6 +4,7 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import java.util.Arrays;
@@ -11,7 +12,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -28,6 +32,7 @@ import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -61,9 +66,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
         attributeBuilder = attributeBuilder
-                .add(WMRegistries.RELOAD_TIME, new AttributeModifier(ItemShooter.RELOAD_TIME_MODIFIER,
-                                "Weapon reloadtime modifier", rangedSpecs.getReloadTime(),
-                                AttributeModifier.Operation.ADD_VALUE),
+                .add(WMRegistries.RELOAD_TIME, new AttributeModifier(WeaponModAttributes.RELOAD_TIME_ID,
+                                rangedSpecs.getReloadTime(), AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.MAINHAND);
         return attributeBuilder;
     }
@@ -209,18 +213,18 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                                      float p4, float p5);
 
     public void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
-        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0) {
+        Registry<Enchantment> enchRegistry = entity.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> infinity = enchRegistry.getHolderOrThrow(Enchantments.INFINITY);
+        Holder<Enchantment> power = enchRegistry.getHolderOrThrow(Enchantments.POWER);
+        Holder<Enchantment> flame = enchRegistry.getHolderOrThrow(Enchantments.FLAME);
+        if (EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) > 0) {
             entity.setPickupStatus(EntityProjectile.PickupStatus.DISALLOWED);
         }
-        int damage = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER, itemstack);
+        int damage = EnchantmentHelper.getItemEnchantmentLevel(power, itemstack);
         if (damage > 0) {
             entity.setExtraDamage((float) damage);
         }
-        int knockback = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH, itemstack);
-        if (knockback > 0) {
-            entity.setKnockback(knockback);
-        }
-        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAME, itemstack) > 0) {
+        if (EnchantmentHelper.getItemEnchantmentLevel(flame, itemstack) > 0) {
             entity.igniteForSeconds(100);
         }
     }
@@ -266,13 +270,17 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, Player entityplayer) {
-        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY,
+        Holder<Enchantment> infinity = entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                .getHolderOrThrow(Enchantments.INFINITY);
+        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(infinity,
                 itemstack) > 0 || consumeAmmo(entityplayer);
     }
 
     public boolean hasAmmo(ItemStack itemstack, Level world, Player entityplayer) {
+        Holder<Enchantment> infinity = entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                .getHolderOrThrow(Enchantments.INFINITY);
         boolean flag = !findAmmo(entityplayer).isEmpty();
-        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY,
+        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(infinity,
                 itemstack) > 0 || flag;
     }
 
@@ -329,7 +337,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public List<Item> getAmmoItems() {
             if (ammoItems == null) {
                 ammoItems = Arrays.stream(ammoItemTags)
-                        .map(t -> BuiltInRegistries.ITEM.get(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
+                        .map(t -> BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(BalkonsWeaponMod.MOD_ID, t)))
                         .collect(Collectors.toList());
                 BalkonsWeaponMod.LOGGER.debug("Found items {} for {} @{}",
                         ammoItems, Arrays.toString(ammoItemTags), this);

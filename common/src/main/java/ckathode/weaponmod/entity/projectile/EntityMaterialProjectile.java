@@ -3,18 +3,25 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.item.IItemWeapon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
 
@@ -29,6 +36,10 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
         super(type, world);
     }
 
+    public EntityMaterialProjectile(EntityType<T> type, Level world, @Nullable ItemStack firedFromWeapon) {
+        super(type, world, firedFromWeapon);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
@@ -36,29 +47,33 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
         builder.define(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
-    public float getMeleeHitDamage(Entity entity) {
+    public float getMeleeHitDamage(Entity entity, float baseDamage) {
         Entity shooter = getOwner();
-        if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
-            return EnchantmentHelper.getDamageBonus(((LivingEntity) shooter).getMainHandItem(),
-                    ((LivingEntity) entity).getType());
+        ItemStack weaponItem = getWeaponItem();
+        if (weaponItem != null && shooter instanceof LivingEntity livingShooter
+            && entity instanceof LivingEntity livingEntity && level() instanceof ServerLevel serverLevel) {
+            baseDamage = EnchantmentHelper.modifyDamage(serverLevel, weaponItem, entity, getDamageSource(), baseDamage);
         }
-        return 0.0f;
+        return baseDamage;
     }
 
     @Override
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
         Entity shooter = getOwner();
-        if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
-            int i = EnchantmentHelper.getKnockbackBonus((LivingEntity) shooter);
+        if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
+            Registry<Enchantment> enchRegistry = registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+            Holder<Enchantment> knockBack = enchRegistry.getHolderOrThrow(Enchantments.KNOCKBACK);
+            Holder<Enchantment> fireAspect = enchRegistry.getHolderOrThrow(Enchantments.FIRE_ASPECT);
+            int i = EnchantmentHelper.getEnchantmentLevel(knockBack, livingShooter);
             if (i != 0) {
-                ((LivingEntity) entity).knockback(i * 0.4f,
+                livingEntity.knockback(i * 0.4f,
                         -Mth.sin(getYRot() * 0.017453292f),
                         -Mth.cos(getYRot() * 0.017453292f));
             }
-            i = EnchantmentHelper.getFireAspect((LivingEntity) shooter);
-            if (i > 0 && !entity.isOnFire()) {
-                entity.igniteForSeconds(1);
+            i = EnchantmentHelper.getEnchantmentLevel(fireAspect, livingShooter);
+            if (i > 0 && !livingEntity.isOnFire()) {
+                livingEntity.igniteForSeconds(1);
             }
         }
     }

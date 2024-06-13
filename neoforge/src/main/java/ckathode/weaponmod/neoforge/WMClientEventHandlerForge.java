@@ -29,7 +29,7 @@ public class WMClientEventHandlerForge {
 
         @SubscribeEvent
         public void registerGameOverlay(RegisterGuiLayersEvent e) {
-            e.registerBelow(VanillaGuiLayers.HOTBAR, new ResourceLocation(MOD_ID, "overlay"),
+            e.registerBelow(VanillaGuiLayers.HOTBAR, ResourceLocation.fromNamespaceAndPath(MOD_ID, "overlay"),
                     (guiGraphics, partialTicks) -> GuiOverlayReloaded.renderGUIOverlay(guiGraphics));
         }
 

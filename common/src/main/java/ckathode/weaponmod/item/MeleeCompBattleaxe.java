@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.MaterialRegistry;
 import java.util.List;
 import net.minecraft.tags.BlockTags;
@@ -75,9 +76,9 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     @Override
     public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
         attributeBuilder = super.setAttributes(attributeBuilder)
-                .add(WMRegistries.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(ItemMelee.IGNORE_ARMOUR_MODIFIER,
-                                "Weapon ignore armour modifier", ignoreArmourAmount,
-                                AttributeModifier.Operation.ADD_VALUE),
+                .add(WMRegistries.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(
+                                WeaponModAttributes.IGNORE_ARMOUR_DAMAGE_ID,
+                                ignoreArmourAmount, AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.MAINHAND);
         return attributeBuilder;
     }

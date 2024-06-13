@@ -23,13 +23,12 @@ public abstract class WMRenderer<T extends Entity> extends EntityRenderer<T> {
     public void drawVertex(PoseStack.Pose entry, VertexConsumer builder, float x, float y, float z,
                            float r, float g, float b, float a, float uvX, float uvZ,
                            float nmX, float nmY, float nmZ, int lm) {
-        builder.vertex(entry.pose(), x, y, z)
-                .color(r, g, b, a)
-                .uv(uvX, uvZ)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(lm)
-                .normal(entry, nmX, nmY, nmZ)
-                .endVertex();
+        builder.addVertex(entry.pose(), x, y, z)
+                .setColor(r, g, b, a)
+                .setUv(uvX, uvZ)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(lm)
+                .setNormal(entry, nmX, nmY, nmZ);
     }
 
 }

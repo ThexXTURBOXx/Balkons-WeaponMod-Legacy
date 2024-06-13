@@ -40,7 +40,7 @@ public class RenderDummy extends WMRenderer<EntityDummy> {
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitydummy)));
         ms.scale(-1.0f, -1.0f, 1.0f);
         ms.mulPose(Axis.XP.rotationDegrees(180.0f));
-        modelDummy.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        modelDummy.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY);
         ms.popPose();
         super.render(entitydummy, f, f1, ms, bufs, lm);
     }

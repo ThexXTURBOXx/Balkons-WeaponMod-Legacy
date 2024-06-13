@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WeaponModAttributes;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -61,27 +62,24 @@ public class MeleeComponent extends AbstractWeaponComponent {
         float dmg = getEntityDamage();
         if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
             attributeBuilder = attributeBuilder
-                    .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_UUID,
-                                    "Weapon modifier", dmg,
-                                    AttributeModifier.Operation.ADD_VALUE),
+                    .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID,
+                                    dmg, AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND)
-                    .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_UUID,
-                                    "Weapon modifier", -meleeSpecs.attackDelay,
-                                    AttributeModifier.Operation.ADD_VALUE),
+                    .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID,
+                                    -meleeSpecs.attackDelay, AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND);
         }
         if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
             attributeBuilder = attributeBuilder
-                    .add(WMRegistries.WEAPON_KNOCKBACK, new AttributeModifier(ItemMelee.KNOCKBACK_MODIFIER,
-                                    "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
+                    .add(WMRegistries.WEAPON_KNOCKBACK, new AttributeModifier(WeaponModAttributes.WEAPON_KNOCKBACK_ID,
+                                    meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
                                     AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND);
         }
         if (this instanceof IExtendedReachItem) {
             try {
                 attributeBuilder = attributeBuilder
-                        .add(WMRegistries.WEAPON_REACH, new AttributeModifier(ItemMelee.REACH_MODIFIER,
-                                        "Weapon reach modifier",
+                        .add(WMRegistries.WEAPON_REACH, new AttributeModifier(WeaponModAttributes.WEAPON_REACH_ID,
                                         ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
                                         AttributeModifier.Operation.ADD_VALUE),
                                 EquipmentSlotGroup.MAINHAND);

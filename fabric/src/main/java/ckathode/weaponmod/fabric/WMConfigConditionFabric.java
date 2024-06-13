@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public record WMConfigConditionFabric(String weapon) implements ResourceCondition {
 
     public static final ResourceLocation CONFIG_CONDITION_ID =
-            new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional");
+            ResourceLocation.fromNamespaceAndPath(BalkonsWeaponMod.MOD_ID, "config_conditional");
     public static final MapCodec<WMConfigConditionFabric> CODEC =
             RecordCodecBuilder.mapCodec(instance -> instance.group(
                             Codec.STRING.fieldOf("weapon").forGetter(condition -> condition.weapon))

@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityDynamite extends EntityProjectile<EntityDynamite> {
 
@@ -41,21 +43,24 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         explodefuse = random.nextInt(30) + 20;
     }
 
-    public EntityDynamite(Level world, double d, double d1, double d2) {
-        this(TYPE, world);
+    public EntityDynamite(Level world, double d, double d1, double d2, @Nullable ItemStack firedFromWeapon) {
+        super(TYPE, world, firedFromWeapon);
+        setPickupStatus(PickupStatus.DISALLOWED);
+        extinguished = false;
+        explodefuse = random.nextInt(30) + 20;
         setPos(d, d1, d2);
     }
 
-    public EntityDynamite(Level world, LivingEntity shooter, int i) {
-        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+    public EntityDynamite(Level world, LivingEntity shooter, int i, @Nullable ItemStack firedFromWeapon) {
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ(), firedFromWeapon);
         setOwner(shooter);
         explodefuse = i;
     }
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -100,10 +105,15 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         }
     }
 
+    @NotNull
+    @Override
+    public DamageSource getDamageSource() {
+        return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
     @Override
     public void onEntityHit(Entity entity) {
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
-        if (entity.hurt(damagesource, 1.0f)) {
+        if (entity.hurt(getDamageSource(), 1.0f)) {
             applyEntityHitEffects(entity);
             playHitSound();
             lerpMotion(0.0, 0.0, 0.0);

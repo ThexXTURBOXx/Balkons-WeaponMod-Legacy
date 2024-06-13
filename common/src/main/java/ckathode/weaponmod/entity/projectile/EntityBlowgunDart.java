@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
 
@@ -39,22 +41,22 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
         super(entityType, world);
     }
 
-    public EntityBlowgunDart(Level world, double d, double d1, double d2) {
-        this(TYPE, world);
+    public EntityBlowgunDart(Level world, double d, double d1, double d2, @Nullable ItemStack firedFromWeapon) {
+        super(TYPE, world, firedFromWeapon);
         setPickupStatus(PickupStatus.ALLOWED);
         setPos(d, d1, d2);
     }
 
-    public EntityBlowgunDart(Level world, LivingEntity shooter) {
-        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
+    public EntityBlowgunDart(Level world, LivingEntity shooter, @Nullable ItemStack firedFromWeapon) {
+        this(world, shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ(), firedFromWeapon);
         setOwner(shooter);
         setPickupStatusFromEntity(shooter);
     }
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -95,10 +97,15 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
         return DART_COLORS[getDartEffectId()];
     }
 
+    @NotNull
+    @Override
+    public DamageSource getDamageSource() {
+        return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
     @Override
     public void onEntityHit(Entity entity) {
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
-        if (entity.hurt(damagesource, 1.0f + extraDamage)) {
+        if (entity.hurt(getDamageSource(), 1.0f + extraDamage)) {
             if (entity instanceof LivingEntity) {
                 ((LivingEntity) entity).addEffect(new MobEffectInstance(DartType.dartTypes[getDartEffectId()].potionEffect));
             }

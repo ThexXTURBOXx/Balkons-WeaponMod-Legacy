@@ -49,16 +49,14 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
         GL11.glLineWidth(1.0f);
         Matrix4f mat = ms.last().pose();
         builder = bufs.getBuffer(RenderType.lines());
-        builder.vertex(mat, (float) entityblundershot.getX(), (float) entityblundershot.getY(),
+        builder.addVertex(mat, (float) entityblundershot.getX(), (float) entityblundershot.getY(),
                         (float) entityblundershot.getZ())
-                .color(1.0f, 1.0f, 0.8f, 1.0f)
-                .normal(0.0f, 0.0f, 0.05625f)
-                .endVertex();
-        builder.vertex(mat, (float) entityblundershot.xo, (float) entityblundershot.yo,
+                .setColor(1.0f, 1.0f, 0.8f, 1.0f)
+                .setNormal(0.0f, 0.0f, 0.05625f);
+        builder.addVertex(mat, (float) entityblundershot.xo, (float) entityblundershot.yo,
                         (float) entityblundershot.zo)
-                .color(1.0f, 1.0f, 0.8f, 1.0f)
-                .normal(0.0f, 0.0f, 0.05625f)
-                .endVertex();
+                .setColor(1.0f, 1.0f, 0.8f, 1.0f)
+                .setNormal(0.0f, 0.0f, 0.05625f);
         GlStateManager._enableCull();
         ms.popPose();
         super.render(entityblundershot, f, f1, ms, bufs, lm);

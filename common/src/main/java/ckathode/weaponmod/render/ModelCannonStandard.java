@@ -15,7 +15,7 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 public class ModelCannonStandard extends WMModel<EntityCannon> {
 
     public static final ModelLayerLocation CANNON_STANDARD_LAYER =
-            new ModelLayerLocation(new ResourceLocation(MOD_ID, EntityCannon.ID), "standard");
+            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, EntityCannon.ID), "standard");
 
     private static final String CONSOLE_MAIN_ID = "consoleMain";
     private static final String CONSOLE_SIDE_L1_ID = "consoleSideL1";

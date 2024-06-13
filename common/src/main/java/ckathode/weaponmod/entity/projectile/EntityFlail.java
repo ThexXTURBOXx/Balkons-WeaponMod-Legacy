@@ -8,6 +8,7 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -20,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
@@ -38,13 +40,16 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         distance = Vec3.ZERO;
     }
 
-    public EntityFlail(Level world, double d, double d1, double d2) {
-        this(TYPE, world);
+    public EntityFlail(Level world, double d, double d1, double d2, @Nullable ItemStack firedFromWeapon) {
+        super(TYPE, world, firedFromWeapon);
+        noCulling = true;
+        flailDamage = 1.0f;
+        distance = Vec3.ZERO;
         setPos(d, d1, d2);
     }
 
     public EntityFlail(Level worldIn, LivingEntity shooter, ItemStack itemstack) {
-        this(worldIn, shooter.getX(), shooter.getEyeY() - 0.3, shooter.getZ());
+        this(worldIn, shooter.getX(), shooter.getEyeY() - 0.3, shooter.getZ(), itemstack);
         setOwner(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
@@ -52,8 +57,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -140,19 +145,23 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         inGround = false;
     }
 
+    @NotNull
+    @Override
+    public DamageSource getDamageSource() {
+        Entity shooter = getDamagingEntity();
+        if (shooter instanceof LivingEntity) {
+            return damageSources().mobAttack((LivingEntity) shooter);
+        } else {
+            return damageSources().source(WMDamageSources.WEAPON, this, shooter);
+        }
+    }
+
     @Override
     public void onEntityHit(Entity entity) {
         if (entity.equals(getOwner())) {
             return;
         }
-        Entity shooter = getDamagingEntity();
-        DamageSource damagesource;
-        if (shooter instanceof LivingEntity) {
-            damagesource = damageSources().mobAttack((LivingEntity) shooter);
-        } else {
-            damagesource = damageSources().source(WMDamageSources.WEAPON, this, shooter);
-        }
-        if (entity.hurt(damagesource, flailDamage + extraDamage)) {
+        if (entity.hurt(getDamageSource(), flailDamage + extraDamage)) {
             playHitSound();
             returnToOwner(true);
         } else {

@@ -2,6 +2,8 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -12,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -51,8 +54,9 @@ public class MeleeCompKnife extends MeleeComponent {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());
             entityknife.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 0.8f, 3.0f);
-            entityknife.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
-            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+            Holder<Enchantment> fireAspect = entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                    .getHolderOrThrow(Enchantments.FIRE_ASPECT);
+            if (EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
                 entityknife.igniteForSeconds(100);
             }
             world.addFreshEntity(entityknife);

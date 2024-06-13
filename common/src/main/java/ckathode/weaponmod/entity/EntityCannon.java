@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -90,8 +91,8 @@ public class EntityCannon extends Boat {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -109,7 +110,7 @@ public class EntityCannon extends Boat {
         if (level().isClientSide || !isAlive()) {
             return true;
         }
-        if (damagesource.isIndirect() && damagesource.getEntity() != null) {
+        if (!damagesource.isDirect() && damagesource.getEntity() != null) {
             if (hasPassenger(damagesource.getEntity())) {
                 return true;
             }
@@ -242,7 +243,7 @@ public class EntityCannon extends Boat {
         Entity entityPassenger = getPassengers().isEmpty() ? null : getPassengers().getFirst();
         if (!level().isClientSide) {
             EntityCannonBall entitycannonball = new EntityCannonBall(level(), this,
-                    entityPassenger.getXRot(), entityPassenger.getYRot(), isSuperPowered());
+                    entityPassenger.getXRot(), entityPassenger.getYRot(), isSuperPowered(), null);
             level().addFreshEntity(entitycannonball);
         }
         setReloadInfo(false, 0);

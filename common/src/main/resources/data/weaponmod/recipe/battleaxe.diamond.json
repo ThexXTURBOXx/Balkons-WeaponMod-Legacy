@@ -2,11 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "#",
-    "X"
+    "XXX",
+    "X#X",
+    " # "
   ],
   "key": {
-    "#": [
+    "X": [
       {
         "item": "minecraft:diamond"
       },
@@ -14,10 +15,13 @@
         "tag": "c:diamonds"
       },
       {
+        "tag": "c:gems/diamonds"
+      },
+      {
         "tag": "forge:gems/diamond"
       }
     ],
-    "X": [
+    "#": [
       {
         "item": "minecraft:stick"
       },
@@ -33,18 +37,18 @@
     ]
   },
   "result": {
-    "id": "weaponmod:knife.diamond"
+    "id": "weaponmod:battleaxe.diamond"
   },
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "knife"
+      "weapon": "battleaxe"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "knife"
+      "weapon": "battleaxe"
     }
   ]
 }

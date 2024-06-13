@@ -21,7 +21,7 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 public class MsgExplosion implements CustomPacketPayload {
 
     public static final Type<MsgExplosion> EXPLOSION_PACKET_TYPE =
-            new Type<>(new ResourceLocation(MOD_ID, "explosion"));
+            new Type<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, "explosion"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgExplosion> STREAM_CODEC = new StreamCodec<>() {
         @NotNull
         @Override

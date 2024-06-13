@@ -36,6 +36,16 @@
         ]
       }
     },
+    "has_c_gems/diamonds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:gems/diamonds"
+          }
+        ]
+      }
+    },
     "has_forge_gems/diamond": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -61,6 +71,7 @@
     [
       "has_minecraft_diamond",
       "has_c_diamonds",
+      "has_c_gems/diamonds",
       "has_forge_gems/diamond",
       "has_the_recipe"
     ]

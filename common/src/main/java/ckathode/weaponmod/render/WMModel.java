@@ -24,9 +24,9 @@ public class WMModel<T extends Entity> extends EntityModel<T> {
     }
 
     @Override
-    public void renderToBuffer(@NotNull PoseStack ms, @NotNull VertexConsumer buf, int lm, int ov, float r, float g,
-                               float b, float a) {
-        root.getAllParts().forEach(modelPart -> modelPart.render(ms, buf, lm, ov, r, g, b, a));
+    public void renderToBuffer(@NotNull PoseStack poseStack, @NotNull VertexConsumer vertexConsumer,
+                               int lm, int ov, int color) {
+        root.getAllParts().forEach(modelPart -> modelPart.render(poseStack, vertexConsumer, lm, ov, color));
     }
 
     @Override

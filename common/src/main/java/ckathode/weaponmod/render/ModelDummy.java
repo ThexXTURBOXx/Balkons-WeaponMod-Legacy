@@ -16,7 +16,7 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 public class ModelDummy extends WMModel<EntityDummy> {
 
     public static final ModelLayerLocation MAIN_LAYER =
-            new ModelLayerLocation(new ResourceLocation(MOD_ID, EntityDummy.ID), "main");
+            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, EntityDummy.ID), "main");
 
     private static final String ARM_LEFT_ID = "armLeft";
     private static final String ARM_RIGHT_ID = "armRight";

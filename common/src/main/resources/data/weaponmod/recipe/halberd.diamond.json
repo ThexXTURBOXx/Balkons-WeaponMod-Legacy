@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "X#X",
-    "X#X",
-    " # "
+    " XX",
+    " #X",
+    "#  "
   ],
   "key": {
     "X": [
@@ -13,6 +13,9 @@
       },
       {
         "tag": "c:diamonds"
+      },
+      {
+        "tag": "c:gems/diamonds"
       },
       {
         "tag": "forge:gems/diamond"
@@ -34,18 +37,18 @@
     ]
   },
   "result": {
-    "id": "weaponmod:warhammer.diamond"
+    "id": "weaponmod:halberd.diamond"
   },
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "warhammer"
+      "weapon": "halberd"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "warhammer"
+      "weapon": "halberd"
     }
   ]
 }

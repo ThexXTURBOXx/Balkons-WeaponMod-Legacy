@@ -2,13 +2,17 @@ package ckathode.weaponmod;
 
 import ckathode.weaponmod.network.MsgExplosion;
 import ckathode.weaponmod.network.WMMessagePipeline;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -130,7 +134,9 @@ public final class PhysHelper {
     }
 
     public static void prepareKnockbackOnEntity(LivingEntity attacker, LivingEntity entity) {
-        knockBackModifier = EnchantmentHelper.getKnockbackBonus(attacker);
+        Holder<Enchantment> knockBack = attacker.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                .getHolderOrThrow(Enchantments.KNOCKBACK);
+        knockBackModifier = EnchantmentHelper.getEnchantmentLevel(knockBack, attacker);
         if (attacker.isSprinting()) {
             ++knockBackModifier;
         }

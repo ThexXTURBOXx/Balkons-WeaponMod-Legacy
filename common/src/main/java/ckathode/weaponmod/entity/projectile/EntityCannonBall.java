@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
 
@@ -34,14 +36,14 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         super(entityType, world);
     }
 
-    public EntityCannonBall(Level world, double d, double d1, double d2) {
-        this(TYPE, world);
+    public EntityCannonBall(Level world, double d, double d1, double d2, @Nullable ItemStack firedFromWeapon) {
+        super(TYPE, world, firedFromWeapon);
         setPos(d, d1, d2);
     }
 
     public EntityCannonBall(Level world, EntityCannon entitycannon, float f, float f1,
-                            boolean superPowered) {
-        this(world, entitycannon.getX(), entitycannon.getY() + 1.0, entitycannon.getZ());
+                            boolean superPowered, @Nullable ItemStack firedFromWeapon) {
+        this(world, entitycannon.getX(), entitycannon.getY() + 1.0, entitycannon.getZ(), firedFromWeapon);
         Entity entityPassenger = entitycannon.getPassengers().isEmpty() ? null :
                 entitycannon.getPassengers().getFirst();
         setOwner(entitycannon);
@@ -61,8 +63,8 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -90,10 +92,15 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
                 Explosion.BlockInteraction.DESTROY);
     }
 
+    @NotNull
+    @Override
+    public DamageSource getDamageSource() {
+        return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
     @Override
     public void onEntityHit(Entity entity) {
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
-        if (entity.hurt(damagesource, 30.0f)) {
+        if (entity.hurt(getDamageSource(), 30.0f)) {
             playSound(SoundEvents.PLAYER_HURT, 1.0f, 1.2f / (random.nextFloat() * 0.4f + 0.7f));
         }
     }

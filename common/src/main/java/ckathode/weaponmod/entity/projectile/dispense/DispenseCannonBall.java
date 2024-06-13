@@ -55,7 +55,7 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
         double zVel = face.getStepZ() * 1.5;
         Position pos = DispenserBlock.getDispensePosition(blocksource);
         EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.level(), pos.x() + xVel,
-                pos.y() + yVel, pos.z() + zVel);
+                pos.y() + yVel, pos.z() + zVel, null);
         entitycannonball.shoot(xVel, yVel + 0.15, zVel, 2.0f, 2.0f);
         blocksource.level().addFreshEntity(entitycannonball);
         itemstack.shrink(1);

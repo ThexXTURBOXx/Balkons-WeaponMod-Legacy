@@ -108,7 +108,7 @@ public class ItemMusket extends ItemShooter {
         }
         int bayonetdamage = Objects.requireNonNull(itemstack.get(BAYONET_DAMAGE_TYPE)) + damage;
         if (bayonetdamage > bayonetDurability) {
-            entityplayer.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+            entityplayer.onEquippedItemBroken(this, EquipmentSlot.MAINHAND);
             entityplayer.awardStat(Stats.ITEM_BROKEN.get(this));
             bayonetdamage = 0;
             ItemStack itemstack2 = new ItemStack(WMRegistries.ITEM_MUSKET.get(), 1);

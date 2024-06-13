@@ -67,7 +67,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack itemstack) {
+    public int getUseDuration(@NotNull ItemStack itemstack, LivingEntity livingEntity) {
         return rangedComponent.getUseDuration(itemstack);
     }
 

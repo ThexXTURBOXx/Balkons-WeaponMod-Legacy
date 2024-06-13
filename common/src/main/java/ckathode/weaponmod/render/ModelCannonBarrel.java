@@ -15,7 +15,7 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 public class ModelCannonBarrel extends WMModel<EntityCannon> {
 
     public static final ModelLayerLocation CANNON_BARREL_LAYER =
-            new ModelLayerLocation(new ResourceLocation(MOD_ID, EntityCannon.ID), "barrel");
+            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, EntityCannon.ID), "barrel");
 
     private static final String SWIVEL_FRONT_ID = "swivelFront";
     private static final String SWIVEL_BACK_ID = "swivelBack";

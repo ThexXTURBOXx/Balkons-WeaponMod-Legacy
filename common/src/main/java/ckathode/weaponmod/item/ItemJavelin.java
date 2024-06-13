@@ -14,7 +14,6 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
@@ -41,7 +40,7 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
         if (itemstack.isEmpty()) {
             return;
         }
-        int j = getUseDuration(itemstack) - i;
+        int j = getUseDuration(itemstack, entityLiving) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f < 0.1f) {
@@ -52,7 +51,7 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
         }
         boolean crit = !entityplayer.onGround() && !entityplayer.isInWater();
         if (!world.isClientSide) {
-            EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
+            EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer, itemstack);
             entityjavelin.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
             entityjavelin.setCritArrow(crit);
@@ -69,7 +68,7 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack itemstack) {
+    public int getUseDuration(@NotNull ItemStack itemstack, LivingEntity livingEntity) {
         return 72000;
     }
 
@@ -94,7 +93,7 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
     @NotNull
     @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-        return new EntityJavelin(level, pos.x(), pos.y(), pos.z());
+        return new EntityJavelin(level, pos.x(), pos.y(), pos.z(), null);
     }
 
     @NotNull

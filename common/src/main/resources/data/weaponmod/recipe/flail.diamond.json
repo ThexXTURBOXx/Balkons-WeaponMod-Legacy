@@ -2,12 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "XXX",
-    "X#X",
-    " # "
+    "  O",
+    " XO",
+    "X #"
   ],
   "key": {
-    "X": [
+    "#": [
       {
         "item": "minecraft:diamond"
       },
@@ -15,10 +15,13 @@
         "tag": "c:diamonds"
       },
       {
+        "tag": "c:gems/diamonds"
+      },
+      {
         "tag": "forge:gems/diamond"
       }
     ],
-    "#": [
+    "X": [
       {
         "item": "minecraft:stick"
       },
@@ -31,21 +34,32 @@
       {
         "tag": "forge:rods/wooden"
       }
+    ],
+    "O": [
+      {
+        "item": "minecraft:string"
+      },
+      {
+        "tag": "c:strings"
+      },
+      {
+        "tag": "forge:string"
+      }
     ]
   },
   "result": {
-    "id": "weaponmod:battleaxe.diamond"
+    "id": "weaponmod:flail.diamond"
   },
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "battleaxe"
+      "weapon": "flail"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "battleaxe"
+      "weapon": "flail"
     }
   ]
 }

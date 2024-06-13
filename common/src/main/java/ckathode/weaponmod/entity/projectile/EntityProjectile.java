@@ -14,13 +14,16 @@ import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -54,8 +57,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     protected int ticksInAir;
     public boolean beenInGround;
     public float extraDamage;
-    public int knockBack;
     private Entity shooter;
+    @Nullable
+    private ItemStack firedFromWeapon = null;
 
     public EntityProjectile(EntityType<T> type, Level world) {
         super(type, world);
@@ -68,7 +72,19 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         ticksInAir = 0;
         pickupStatus = PickupStatus.DISALLOWED;
         extraDamage = 0.0f;
-        knockBack = 0;
+    }
+
+    public EntityProjectile(EntityType<T> type, Level level, @Nullable ItemStack firedFromWeapon) {
+        this(type, level);
+        if (firedFromWeapon != null && level instanceof ServerLevel serverLevel) {
+            this.firedFromWeapon = firedFromWeapon.copy();
+            if (this.firedFromWeapon.isEmpty()) {
+                throw new IllegalArgumentException("Invalid weapon firing an arrow");
+            }
+            EnchantmentHelper.onProjectileSpawned(serverLevel, this.firedFromWeapon, this, item -> {
+                this.firedFromWeapon = null;
+            });
+        }
     }
 
     @Override
@@ -294,22 +310,19 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         applyEntityHitEffects(entity);
     }
 
+    @NotNull
+    public abstract DamageSource getDamageSource();
+
     public void applyEntityHitEffects(Entity entity) {
         if (isOnFire() && !(entity instanceof EnderMan)) {
             entity.igniteForSeconds(5);
         }
-        if (entity instanceof LivingEntity entityliving) {
-            if (knockBack > 0) {
-                double f = getDeltaMovement().horizontalDistanceSqr();
-                if (f > 0.0) {
-                    Vec3 v = getDeltaMovement().scale(knockBack * 0.6 / f);
-                    entity.push(v.x, 0.1, v.z);
-                }
-            }
+        if (entity instanceof LivingEntity livingEntity) {
+            doKnockback(livingEntity, getDamageSource());
             Entity shooter = getOwner();
-            if (shooter instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects(entityliving, shooter);
-                EnchantmentHelper.doPostDamageEffects((LivingEntity) shooter, entityliving);
+            if (shooter != null && level() instanceof ServerLevel serverLevel) {
+                EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, shooter,
+                        getDamageSource(), getWeaponItem());
             }
             if (shooter instanceof ServerPlayer && !entity.equals(getOwner()) && entity instanceof Player) {
                 ((ServerPlayer) shooter).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0f));
@@ -404,8 +417,22 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     }
 
     @Override
-    public void setKnockback(int i) {
-        knockBack = i;
+    protected void doKnockback(LivingEntity livingEntity, DamageSource damageSource) {
+        float f;
+        Level level = this.level();
+        if (firedFromWeapon != null && level instanceof ServerLevel serverLevel) {
+            f = EnchantmentHelper.modifyKnockback(serverLevel, firedFromWeapon, livingEntity, damageSource, 0.0f);
+        } else {
+            f = 0.0f;
+        }
+        double d = f;
+        if (d > 0.0) {
+            double e = Math.max(0.0, 1.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            Vec3 vec3 = this.getDeltaMovement().multiply(1.0, 0.0, 1.0).normalize().scale(d * 0.6 * e);
+            if (vec3.lengthSqr() > 0.0) {
+                livingEntity.push(vec3.x, 0.1, vec3.z);
+            }
+        }
     }
 
     public void setPickupStatus(PickupStatus i) {
@@ -445,6 +472,12 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         entityplayer.take(this, 1);
     }
 
+    @Nullable
+    @Override
+    public ItemStack getWeaponItem() {
+        return firedFromWeapon;
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag nbttagcompound) {
         nbttagcompound.putInt("xTile", xTile);
@@ -457,6 +490,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         nbttagcompound.putBoolean("inGround", inGround);
         nbttagcompound.putBoolean("beenInGround", beenInGround);
         nbttagcompound.putByte("pickup", (byte) pickupStatus.ordinal());
+        if (firedFromWeapon != null) {
+            nbttagcompound.put("weapon", firedFromWeapon.save(registryAccess(), new CompoundTag()));
+        }
     }
 
     @Override
@@ -472,6 +508,8 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         inGround = nbttagcompound.getBoolean("inGround");
         beenInGround = nbttagcompound.getBoolean("beenInGrond");
         pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
+        firedFromWeapon = nbttagcompound.contains("weapon", 10) ?
+                ItemStack.parse(registryAccess(), nbttagcompound.getCompound("weapon")).orElse(null) : null;
     }
 
     public enum PickupStatus {

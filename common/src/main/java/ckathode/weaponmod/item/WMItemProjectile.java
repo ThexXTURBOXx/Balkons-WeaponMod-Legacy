@@ -31,7 +31,7 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
         @NotNull
         @Override
         public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-            return new EntityMusketBullet(level, pos.x(), pos.y(), pos.z());
+            return new EntityMusketBullet(level, pos.x(), pos.y(), pos.z(), null);
         }
 
         @NotNull
@@ -72,7 +72,7 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
         @NotNull
         @Override
         public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-            return new EntityCrossbowBolt(level, pos.x(), pos.y(), pos.z());
+            return new EntityCrossbowBolt(level, pos.x(), pos.y(), pos.z(), null);
         }
 
         @NotNull
@@ -97,7 +97,7 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
         @NotNull
         @Override
         public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-            return new EntityMortarShell(level, pos.x(), pos.y(), pos.z());
+            return new EntityMortarShell(level, pos.x(), pos.y(), pos.z(), null);
         }
 
         @Override

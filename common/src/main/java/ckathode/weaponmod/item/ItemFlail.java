@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -85,9 +86,11 @@ public class ItemFlail extends ItemMelee {
         if (!itemstack.isEmpty()) {
             entityplayer.swing(hand);
             if (!entityplayer.isCreative()) {
-                itemstack.hurtAndBreak(1, entityplayer.getRandom(),
-                        entityplayer instanceof ServerPlayer player ? player : null,
-                        () -> setThrown(entityplayer, false));
+                Level level = entityplayer.level();
+                if (level instanceof ServerLevel serverLevel) {
+                    itemstack.hurtAndBreak(1, serverLevel, entityplayer instanceof ServerPlayer player ? player : null,
+                            i -> setThrown(entityplayer, false));
+                }
             }
             if (!itemstack.isEmpty()) {
                 throwFlail(itemstack, world, entityplayer);

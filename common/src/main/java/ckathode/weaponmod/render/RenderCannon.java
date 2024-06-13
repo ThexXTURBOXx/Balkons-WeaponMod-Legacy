@@ -44,19 +44,19 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
         }
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitycannon)));
         ms.scale(-1.6f, -1.6f, 1.6f);
-        float f4 = 1f;
-        if (entitycannon.isSuperPowered() && entitycannon.tickCount % 5 < 2) f4 = 1.5f;
+        int color = 0xFFCCCCCC;
+        if (entitycannon.isSuperPowered() && entitycannon.tickCount % 5 < 2) color = 0xFFFFFFFF;
         ms.pushPose();
         ms.translate(0.0f, 1.0f, 0.0f);
         ms.mulPose(Axis.XP.rotationDegrees(rot));
         ms.translate(0.0f, -1.0f, 0.0f);
-        modelBarrel.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, f4, f4, f4, 1);
+        modelBarrel.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, color);
         ms.popPose();
         float yaw = -(float) Math.toRadians(f);
         modelStandard.base1.yRot = yaw;
         modelStandard.base2.yRot = yaw;
         modelStandard.baseStand.yRot = yaw;
-        modelStandard.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, f4, f4, f4, 1);
+        modelStandard.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, color);
         ms.popPose();
         super.render(entitycannon, f, f1, ms, bufs, lm);
     }

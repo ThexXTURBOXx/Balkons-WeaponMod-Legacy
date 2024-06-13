@@ -55,7 +55,7 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     @NotNull
     @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
-        EntityBlowgunDart dart = new EntityBlowgunDart(level, pos.x(), pos.y(), pos.z());
+        EntityBlowgunDart dart = new EntityBlowgunDart(level, pos.x(), pos.y(), pos.z(), null);
         Item item = stack.getItem();
         if (item instanceof ItemBlowgunDart)
             dart.setDartEffectType(((ItemBlowgunDart) item).getDartType());

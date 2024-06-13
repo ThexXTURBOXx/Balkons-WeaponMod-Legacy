@@ -2,7 +2,9 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -11,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -49,15 +52,18 @@ public class RangedCompBlowgun extends RangedComponent {
             dartstack = new ItemStack(ItemBlowgunDart.ITEMS.get(DartType.damage), 1);
         }
         ItemStack dartStackCopy = dartstack.copy();
+        Holder<Enchantment> infinity =
+                entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
+                        .getHolderOrThrow(Enchantments.INFINITY);
         if (!entityplayer.isCreative()
-            && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY, itemstack) == 0) {
+            && EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) == 0) {
             dartstack.shrink(1);
             if (dartstack.isEmpty()) {
                 entityplayer.getInventory().removeItem(dartstack);
             }
         }
         if (!world.isClientSide) {
-            EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer);
+            EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer, itemstack);
             entityblowgundart.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, f * 1.5f, 1.0f);
             Item item = dartStackCopy.getItem();

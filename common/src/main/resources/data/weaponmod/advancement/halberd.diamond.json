@@ -2,7 +2,7 @@
   "parent": "weaponmod:root",
   "rewards": {
     "recipes": [
-      "weaponmod:warhammer.diamond"
+      "weaponmod:halberd.diamond"
     ]
   },
   "criteria": {
@@ -22,6 +22,16 @@
         "items": [
           {
             "items": "#c:diamonds"
+          }
+        ]
+      }
+    },
+    "has_c_gems/diamonds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:gems/diamonds"
           }
         ]
       }
@@ -79,7 +89,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:warhammer.diamond"
+        "recipe": "weaponmod:halberd.diamond"
       }
     }
   },
@@ -87,6 +97,7 @@
     [
       "has_minecraft_diamond",
       "has_c_diamonds",
+      "has_c_gems/diamonds",
       "has_forge_gems/diamond",
       "has_the_recipe"
     ],
@@ -101,13 +112,13 @@
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "warhammer"
+      "weapon": "halberd"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "warhammer"
+      "weapon": "halberd"
     }
   ]
 }
