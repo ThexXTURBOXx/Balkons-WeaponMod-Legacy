@@ -16,11 +16,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Generate dependency graphs
-        uses: gradle/actions/dependency-submission@v3
-        with:
-          dependency-graph: generate
-
       - name: Build with Gradle
         run: ./gradlew build
 
