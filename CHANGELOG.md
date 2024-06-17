@@ -1,0 +1,3 @@
+- Fix update checker
+- Add CI/CD
+- Better versioning for `< 1.16.5` versions
