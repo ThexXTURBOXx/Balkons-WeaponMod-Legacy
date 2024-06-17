@@ -98,8 +98,9 @@ tasks.processResources {
     inputs.property("mod_issues_url", mod_issues_url)
     inputs.property("mod_sources_url", mod_sources_url)
     inputs.property("mod_home_url", mod_home_url)
+    inputs.property("mod_update_json", mod_update_json)
 
-    filesMatching(listOf("mcmod.info", "pack.mcmeta")) {
+    filesMatching(listOf("META-INF/mods.toml", "pack.mcmeta")) {
         expand(inputs.properties)
     }
 }
