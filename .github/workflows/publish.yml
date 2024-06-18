@@ -26,6 +26,14 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
+      - name: crowdin action
+        uses: crowdin/github-action@v2
+        with:
+          download_bundle: 4
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+
       - name: Build with Gradle
         run: ./gradlew build
 
