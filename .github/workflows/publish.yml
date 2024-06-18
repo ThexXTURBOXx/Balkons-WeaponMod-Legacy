@@ -2,10 +2,20 @@ name: Publish
 
 on:
   workflow_dispatch:
+    inputs:
+      mod_version:
+        description: 'Mod Version'
+        default: '1.20.0'
+        required: true
+
+env:
+  MOD_VERSION: ${{ inputs.mod_version }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -19,7 +29,17 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Publish to CurseForge and Modrinth
+      - name: Tag release on GitHub
+        uses: Kir-Antipov/mc-publish@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: LICENSE
+          name: 1.15.2-${{ env.MOD_VERSION }}
+          version: 1.15.2-${{ env.MOD_VERSION }}
+          github-tag: 1.15.2-${{ env.MOD_VERSION }}
+          github-generate-changelog: true
+
+      - name: Publish Forge build to CurseForge and Modrinth
         uses: Kir-Antipov/mc-publish@v3
         with:
           modrinth-id: MCF15nCy
@@ -27,12 +47,12 @@ jobs:
           curseforge-id: 1033985
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
-            build/libs/!(*-@(dev|dev-shadow|sources|javadoc)).jar
-            build/libs/*-@(dev|dev-shadow|sources|javadoc).jar
-          name: Sodium 0.3.2 for Minecraft 1.17.1
-          version: mc1.17.1-0.3.2
-          version-type: release
-          changelog-file: CHANGELOG.md
+            build/libs/!(*-@(dev|dev-shadow)).jar
+            build/libs/*-@(dev|dev-shadow).jar
+          name: Forge-1.15.2-${{ env.MOD_VERSION }}
+          version: Forge-1.15.2-${{ env.MOD_VERSION }}
+          changelog: |
+            Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: forge
-          game-versions: 1.12.2
+          game-versions: 1.15.2
           java: 8
