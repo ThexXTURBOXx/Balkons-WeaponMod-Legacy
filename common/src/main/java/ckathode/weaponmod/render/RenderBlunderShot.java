@@ -5,13 +5,13 @@ import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 
 public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
@@ -36,7 +36,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
         drawVertex(last, builder, 0.0f, -1.0f, 1.0f, 0.3125f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
         drawVertex(last, builder, 0.0f, -1.0f, -1.0f, 0.0f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
         for (int j = 0; j < 4; ++j) {
-            ms.mulPose(Axis.XP.rotationDegrees(90.0f));
+            ms.mulPose(Vector3f.XP.rotationDegrees(90.0f));
             last = ms.last();
             drawVertex(last, builder, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
             drawVertex(last, builder, 1.0f, -1.0f, 0.0f, 0.3125f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);

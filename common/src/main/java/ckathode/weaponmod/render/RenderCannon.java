@@ -4,7 +4,7 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityCannon;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -33,14 +33,14 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
         float rot = entitycannon.xRotO + (entitycannon.getXRot() - entitycannon.xRotO) * f1;
         rot = Math.min(rot, 20.0f);
         ms.translate(0, 2.375f, 0);
-        ms.mulPose(Axis.YP.rotationDegrees(180.0f - f));
+        ms.mulPose(Vector3f.YP.rotationDegrees(180.0f - f));
         float f2 = entitycannon.getHurtTime() - f1;
         float f3 = entitycannon.getCurrentDamage() - f1;
         if (f3 < 0.0f) {
             f3 = 0.0f;
         }
         if (f2 > 0.0f) {
-            ms.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f));
+            ms.mulPose(Vector3f.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f));
         }
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitycannon)));
         ms.scale(-1.6f, -1.6f, 1.6f);
@@ -48,7 +48,7 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
         if (entitycannon.isSuperPowered() && entitycannon.tickCount % 5 < 2) f4 = 1.5f;
         ms.pushPose();
         ms.translate(0.0f, 1.0f, 0.0f);
-        ms.mulPose(Axis.XP.rotationDegrees(rot));
+        ms.mulPose(Vector3f.XP.rotationDegrees(rot));
         ms.translate(0.0f, -1.0f, 0.0f);
         modelBarrel.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, f4, f4, f4, 1);
         ms.popPose();

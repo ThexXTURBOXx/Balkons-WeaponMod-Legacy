@@ -1,6 +1,6 @@
 package ckathode.weaponmod.item;
 
-import ckathode.weaponmod.WMDamageSources;
+import ckathode.weaponmod.DamageSourceAxe;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.MaterialRegistry;
 import com.google.common.collect.Multimap;
@@ -53,7 +53,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
             Vec3 motion = entity.getDeltaMovement();
             int prevhurtres = living.invulnerableTime;
             int prevhurt = living.hurtTime;
-            living.hurt(player.damageSources().source(WMDamageSources.BATTLEAXE), ignoreArmourAmount);
+            living.hurt(new DamageSourceAxe(), ignoreArmourAmount);
             entity.setDeltaMovement(motion);
             living.invulnerableTime = prevhurtres;
             living.hurtTime = prevhurt;

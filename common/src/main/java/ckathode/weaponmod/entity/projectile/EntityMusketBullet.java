@@ -1,11 +1,10 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WeaponDamageSource;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -40,7 +39,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
     }
 
@@ -78,7 +77,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     @Override
     public void onEntityHit(Entity entity) {
         float damage = 20.0f + extraDamage;
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.hurt(damagesource, damage)) {
             applyEntityHitEffects(entity);
             playHitSound();

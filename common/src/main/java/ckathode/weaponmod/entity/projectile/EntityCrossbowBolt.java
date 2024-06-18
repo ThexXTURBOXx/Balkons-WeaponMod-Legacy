@@ -1,10 +1,9 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WeaponDamageSource;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -41,7 +40,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
     }
 
@@ -61,7 +60,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
     public void onEntityHit(Entity entity) {
         float vel = (float) getTotalVelocity();
         float damage = vel * 4.0f + extraDamage;
-        DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+        DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.hurt(damagesource, damage)) {
             if (entity instanceof LivingEntity && level.isClientSide) {
                 ((LivingEntity) entity).setArrowCount(((LivingEntity) entity).getArrowCount() + 1);

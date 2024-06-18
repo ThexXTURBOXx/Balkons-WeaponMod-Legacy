@@ -53,7 +53,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -68,9 +68,9 @@ public class WMRegistries {
 
     // Registries
     public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(MOD_ID, Registries.ITEM);
+            DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(MOD_ID, Registries.ENTITY_TYPE);
+            DeferredRegister.create(MOD_ID, Registry.ENTITY_TYPE_REGISTRY);
 
     // Items
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_WOOD =

@@ -34,9 +34,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: LICENSE
-          name: 1.19.4-${{ env.MOD_VERSION }}
-          version: 1.19.4-${{ env.MOD_VERSION }}
-          github-tag: 1.19.4-${{ env.MOD_VERSION }}
+          name: 1.19.2-${{ env.MOD_VERSION }}
+          version: 1.19.2-${{ env.MOD_VERSION }}
+          github-tag: 1.19.2-${{ env.MOD_VERSION }}
           github-generate-changelog: true
 
       - name: Publish Forge build to CurseForge and Modrinth
@@ -49,12 +49,12 @@ jobs:
           files: |
             forge/build/libs/!(*-@(dev|dev-shadow)).jar
             forge/build/libs/*-@(dev|dev-shadow).jar
-          name: Forge-1.19.4-${{ env.MOD_VERSION }}
-          version: Forge-1.19.4-${{ env.MOD_VERSION }}
+          name: Forge-1.19.2-${{ env.MOD_VERSION }}
+          version: Forge-1.19.2-${{ env.MOD_VERSION }}
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: forge
-          game-versions: 1.19.4
+          game-versions: 1.19.2
           java: 17
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)
@@ -70,14 +70,14 @@ jobs:
           files: |
             fabric/build/libs/!(*-@(dev|dev-shadow)).jar
             fabric/build/libs/*-@(dev|dev-shadow).jar
-          name: Fabric-1.19.4-${{ env.MOD_VERSION }}
-          version: Fabric-1.19.4-${{ env.MOD_VERSION }}
+          name: Fabric-1.19.2-${{ env.MOD_VERSION }}
+          version: Fabric-1.19.2-${{ env.MOD_VERSION }}
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: |
             fabric
             quilt
-          game-versions: 1.19.4
+          game-versions: 1.19.2
           java: 17
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)

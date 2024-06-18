@@ -1,7 +1,7 @@
 package ckathode.weaponmod.item;
 
 import java.util.UUID;
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
@@ -41,7 +41,7 @@ public class WMItem extends Item {
     }
 
     public WMItem(Properties properties) {
-        super(properties.arch$tab(CreativeModeTabs.COMBAT));
+        super(properties.tab(CreativeModeTab.TAB_COMBAT));
     }
 
     public static Properties getBaseProperties(@Nullable Tier tier) {

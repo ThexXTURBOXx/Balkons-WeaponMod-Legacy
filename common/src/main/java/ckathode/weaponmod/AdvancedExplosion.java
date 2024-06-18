@@ -32,7 +32,6 @@ public class AdvancedExplosion extends Explosion {
 
     protected static final Random rand = new Random();
     public final Level worldObj;
-    public final DamageSource damageSource;
     public final double explosionX;
     public final double explosionY;
     public final double explosionZ;
@@ -44,7 +43,6 @@ public class AdvancedExplosion extends Explosion {
                              float size, boolean flame, BlockInteraction mode) {
         super(world, entity, null, null, x, y, z, size, flame, mode);
         worldObj = world;
-        damageSource = world.damageSources().explosion(this);
         exploder = entity;
         explosionX = x;
         explosionY = y;
@@ -58,7 +56,7 @@ public class AdvancedExplosion extends Explosion {
     }
 
     public void doEntityExplosion() {
-        doEntityExplosion(damageSource);
+        doEntityExplosion(DamageSource.explosion(this));
     }
 
     public void doEntityExplosion(DamageSource damagesource) {
@@ -200,7 +198,7 @@ public class AdvancedExplosion extends Explosion {
                         double dz = explosionZ;
                         float f = 0.3f;
                         while (strength > 0.0f) {
-                            BlockPos blockpos = BlockPos.containing(dx, dy, dz);
+                            BlockPos blockpos = new BlockPos(dx, dy, dz);
                             BlockState iblockstate = worldObj.getBlockState(blockpos);
                             if (!iblockstate.isAir()) {
                                 strength -= (iblockstate.getBlock().getExplosionResistance() + 0.3f) * f;

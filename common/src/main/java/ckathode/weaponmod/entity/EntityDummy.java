@@ -1,13 +1,12 @@
 package ckathode.weaponmod.entity;
 
-import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import java.util.List;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySelector;
@@ -78,7 +78,7 @@ public class EntityDummy extends Entity {
 
     @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkManager.createAddEntityPacket(this);
     }
 
@@ -106,10 +106,10 @@ public class EntityDummy extends Entity {
         }
         setCurrentDamage(i);
         markHurt();
-        Entity entity = damagesource.getEntity();
-        if (entity == null) {
+        if (!(damagesource instanceof EntityDamageSource)) {
             durability -= (int) damage;
-        } else if (damagesource.is(WMDamageSources.WEAPON)) {
+        } else if (damagesource instanceof WeaponDamageSource weaponDamageSource) {
+            Entity entity = weaponDamageSource.getProjectile();
             if (entity.getDeltaMovement().length() > 0.5) {
                 entity.setDeltaMovement(entity.getDeltaMovement().scale(0.10000000149011612));
                 playRandomHitSound();
@@ -137,7 +137,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public void animateHurt(float yaw) {
+    public void animateHurt() {
         setRockDirection(-getRockDirection());
         setTimeSinceHit(10);
         setCurrentDamage(getCurrentDamage() + 10);
@@ -192,7 +192,7 @@ public class EntityDummy extends Entity {
             return false;
         }
         int i = Mth.floor(fallDistance);
-        hurt(damageSources().fall(), (float) i);
+        hurt(DamageSource.FALL, (float) i);
         return false;
     }
 

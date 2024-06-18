@@ -6,7 +6,6 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -473,8 +472,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         yTile = nbttagcompound.getInt("yTile");
         zTile = nbttagcompound.getInt("zTile");
         if (nbttagcompound.contains("inBlockState", 10)) {
-            inBlockState = NbtUtils.readBlockState(level.holderLookup(Registries.BLOCK),
-                    nbttagcompound.getCompound("inBlockState"));
+            inBlockState = NbtUtils.readBlockState(nbttagcompound.getCompound("inBlockState"));
         }
         shakeTime = (nbttagcompound.getByte("shake") & 0xFF);
         inGround = nbttagcompound.getBoolean("inGround");

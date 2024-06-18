@@ -6,6 +6,7 @@ import ckathode.weaponmod.WarhammerExplosion;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -66,7 +67,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
         float f = getEntityDamage() / 2.0f;
         WarhammerExplosion expl = new WarhammerExplosion(world, entityplayer, entityplayer.getX(),
                 entityplayer.getY(), entityplayer.getZ(), f, false, Explosion.BlockInteraction.DESTROY);
-        expl.doEntityExplosion(world.damageSources().playerAttack(entityplayer));
+        expl.doEntityExplosion(DamageSource.playerAttack(entityplayer));
         expl.doParticleExplosion(true, false);
         PhysHelper.sendExplosion(world, expl, true, false);
         itemstack.hurtAndBreak(16, entityplayer, s -> s.broadcastBreakEvent(InteractionHand.MAIN_HAND));
