@@ -80,7 +80,7 @@ public class RenderKnife extends WMRenderer<EntityKnife> {
             }
             ms.translate(-0.15f, -0.15f, 0.0f);
             itemRender.renderStatic(getStackToRender(entityknife), ItemDisplayContext.NONE, lm,
-                    OverlayTexture.NO_OVERLAY, ms, bufs, entityknife.level, entityknife.getId());
+                    OverlayTexture.NO_OVERLAY, ms, bufs, entityknife.level(), entityknife.getId());
             ms.popPose();
         }
         super.render(entityknife, f, f1, ms, bufs, lm);

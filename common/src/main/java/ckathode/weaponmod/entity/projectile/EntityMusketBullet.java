@@ -52,7 +52,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
@@ -61,7 +61,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         super.tick();
         if (inGround) {
             if (random.nextInt(4) == 0) {
-                level.addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                level().addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
             }
             return;
         }
@@ -70,7 +70,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         if (speed > 2.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
                 Vec3 pos = position().add(getDeltaMovement().scale(i1 / amount));
-                level.addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+                level().addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
             }
         }
     }

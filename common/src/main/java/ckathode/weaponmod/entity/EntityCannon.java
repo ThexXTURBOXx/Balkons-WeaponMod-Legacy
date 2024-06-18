@@ -111,7 +111,7 @@ public class EntityCannon extends Boat {
 
     @Override
     public boolean hurt(@NotNull DamageSource damagesource, float damage) {
-        if (level.isClientSide || !isAlive()) {
+        if (level().isClientSide || !isAlive()) {
             return true;
         }
         if (damagesource.isIndirect() && damagesource.getEntity() != null) {
@@ -186,11 +186,11 @@ public class EntityCannon extends Boat {
             setCurrentDamage(i - random.nextInt(2));
         }
         Vec3 motion = getDeltaMovement().subtract(0, 0.1, 0);
-        if (onGround) {
+        if (onGround()) {
             motion = new Vec3(0.1 * motion.x, motion.y, 0.1 * motion.z);
         }
         motion = motion.scale(0.98);
-        if (!onGround) {
+        if (!onGround()) {
             fallDistance += (float) (-motion.y);
         }
         setDeltaMovement(motion);
@@ -203,7 +203,7 @@ public class EntityCannon extends Boat {
         }
         setRot(getYRot(), getXRot());
         move(MoverType.SELF, getDeltaMovement());
-        List<Entity> list = level.getEntities(this, getBoundingBox().inflate(0.2,
+        List<Entity> list = level().getEntities(this, getBoundingBox().inflate(0.2,
                 0.0, 0.2), EntitySelector.pushableBy(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
@@ -245,10 +245,10 @@ public class EntityCannon extends Boat {
             return;
         }
         Entity entityPassenger = getPassengers().isEmpty() ? null : getPassengers().get(0);
-        if (!level.isClientSide) {
-            EntityCannonBall entitycannonball = new EntityCannonBall(level, this,
+        if (!level().isClientSide) {
+            EntityCannonBall entitycannonball = new EntityCannonBall(level(), this,
                     entityPassenger.getXRot(), entityPassenger.getYRot(), isSuperPowered());
-            level.addFreshEntity(entitycannonball);
+            level().addFreshEntity(entitycannonball);
         }
         setReloadInfo(false, 0);
         fireEffects();
@@ -261,7 +261,7 @@ public class EntityCannon extends Boat {
         double d = -Mth.sin(yaw) * -1.0f;
         double d2 = Mth.cos(yaw) * -1.0f;
         for (int i = 0; i < 20; ++i) {
-            level.addParticle(ParticleTypes.SMOKE,
+            level().addParticle(ParticleTypes.SMOKE,
                     getX() + d + random.nextDouble() * 0.5 - 0.25, getY() + random.nextDouble() * 0.5,
                     getZ() + d2 + random.nextDouble() * 0.5 - 0.25, random.nextDouble() * 0.1 - 0.05,
                     random.nextDouble() * 0.1 - 0.05, random.nextDouble() * 0.1 - 0.05);
@@ -287,13 +287,11 @@ public class EntityCannon extends Boat {
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger) {
-        if (hasPassenger(passenger)) {
-            float f = -0.85f;
-            float f2 = (float) ((isAlive() ? getPassengersRidingOffset() : 0.01) + passenger.getMyRidingOffset());
-            Vec3 vec3d = new Vec3(f, 0.0, 0.0).yRot(-getYRot() * 0.017453292f - 1.5707964f);
-            passenger.setPos(getX() + vec3d.x, getY() + f2, getZ() + vec3d.z);
-        }
+    public void positionRider(@NotNull Entity passenger, MoveFunction callback) {
+        float f = -0.85f;
+        float f2 = isAlive() ? 0.35f : 0.01f;
+        Vec3 vec3d = new Vec3(f, 0.0, 0.0).yRot(-getYRot() * 0.017453292f - 1.5707964f);
+        callback.accept(passenger, getX() + vec3d.x, getY() + f2, getZ() + vec3d.z);
     }
 
     @Override
@@ -327,7 +325,7 @@ public class EntityCannon extends Boat {
             if (isVehicle() && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return InteractionResult.PASS;
             }
-            if (!level.isClientSide && !entityplayer.isShiftKeyDown()) {
+            if (!level().isClientSide && !entityplayer.isShiftKeyDown()) {
                 entityplayer.startRiding(this);
             }
         }

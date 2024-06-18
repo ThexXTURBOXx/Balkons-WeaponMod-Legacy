@@ -18,12 +18,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -110,16 +110,15 @@ public class AdvancedExplosion extends Explosion {
             worldObj.getProfiler().push("explosion_blocks");
             if (block.dropFromExplosion(this) && worldObj instanceof ServerLevel) {
                 BlockEntity tileentity = blockstate.hasBlockEntity() ? worldObj.getBlockEntity(blockpos) : null;
-                LootContext.Builder lcBuilder =
-                        new LootContext.Builder((ServerLevel) worldObj)
-                                .withRandom(worldObj.random)
+                LootParams.Builder builder =
+                        new LootParams.Builder((ServerLevel) worldObj)
                                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockpos))
                                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
                                 .withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity)
-                                .withOptionalParameter(LootContextParams.THIS_ENTITY, this.exploder)
+                                .withOptionalParameter(LootContextParams.THIS_ENTITY, this.source)
                                 .withParameter(LootContextParams.EXPLOSION_RADIUS, explosionSize);
 
-                blockstate.getDrops(lcBuilder).forEach((s) -> {
+                blockstate.getDrops(builder).forEach((s) -> {
                     addBlockDrops(objectarraylist, s, blockpos1);
                 });
             }
@@ -138,9 +137,9 @@ public class AdvancedExplosion extends Explosion {
             calculateBlockExplosion();
         }
         for (BlockPos blockpos : getToBlow()) {
-            if (worldObj.getBlockState(blockpos).getMaterial() == Material.AIR && worldObj.getBlockState(blockpos.below()).isSolidRender(worldObj, blockpos.below()) && rand.nextInt(3) == 0) {
-                worldObj.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
-            }
+            if (rand.nextInt(3) != 0 || !worldObj.getBlockState(blockpos).isAir() ||
+                !worldObj.getBlockState(blockpos.below()).isSolidRender(worldObj, blockpos.below())) continue;
+            worldObj.setBlockAndUpdate(blockpos, BaseFireBlock.getState(worldObj, blockpos));
         }
     }
 

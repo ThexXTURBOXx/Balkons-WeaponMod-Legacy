@@ -66,7 +66,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
@@ -86,7 +86,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                 float f6 = 0.25f;
                 Vec3 motion = getDeltaMovement();
                 Vec3 pos = position().subtract(motion.scale(f6));
-                level.addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, motion.x, motion.y, motion.z);
+                level().addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, motion.x, motion.y, motion.z);
             }
         }
         --explodefuse;
@@ -95,7 +95,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                 detonate();
                 remove(RemovalReason.DISCARDED);
             } else {
-                level.addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                level().addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
             }
         }
     }
@@ -117,7 +117,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
-        inBlockState = level.getBlockState(blockpos);
+        inBlockState = level().getBlockState(blockpos);
         Vec3 motion = raytraceResult.getLocation().subtract(position());
         setDeltaMovement(motion);
         Vec3 newPos = position().subtract(motion.normalize().scale(0.05));
@@ -132,19 +132,19 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                     1.2f / (random.nextFloat() * 0.2f + 0.9f));
         }
         if (inBlockState != null) {
-            inBlockState.entityInside(level, blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this);
         }
     }
 
     private void detonate() {
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             return;
         }
         if (extinguished && (ticksInGround >= 200 || ticksInAir >= 200)) {
             remove(RemovalReason.DISCARDED);
         }
         float f = 2.0f;
-        PhysHelper.createAdvancedExplosion(level, this, getX(), getY(), getZ(), f,
+        PhysHelper.createAdvancedExplosion(level(), this, getX(), getY(), getZ(), f,
                 WeaponModConfig.get().dynamiteDoesBlockDamage, true, false, Explosion.BlockInteraction.DESTROY);
     }
 

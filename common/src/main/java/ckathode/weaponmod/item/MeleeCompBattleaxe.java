@@ -4,6 +4,7 @@ import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.MaterialRegistry;
 import com.google.common.collect.Multimap;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -13,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
@@ -63,13 +63,13 @@ public class MeleeCompBattleaxe extends MeleeComponent {
 
     @Override
     public float getDestroySpeed(ItemStack itemstack, BlockState block) {
-        return (block.getMaterial() == Material.WOOD) ? (weaponMaterial.getSpeed() * 0.75f) :
+        return canHarvestBlock(block) ? (weaponMaterial.getSpeed() * 0.75f) :
                 super.getDestroySpeed(itemstack, block);
     }
 
     @Override
     public boolean canHarvestBlock(BlockState block) {
-        return block.getMaterial() == Material.WOOD;
+        return block.is(BlockTags.MINEABLE_WITH_AXE);
     }
 
     @Override

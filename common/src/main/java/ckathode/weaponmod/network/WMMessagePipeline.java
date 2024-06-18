@@ -81,7 +81,7 @@ public final class WMMessagePipeline {
                                                              @NotNull ServerLevel level, double x, double y, double z,
                                                              double radius, ResourceKey<Level> dimension) {
         for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
-            if (player.level.dimension() == dimension) {
+            if (player.level().dimension() == dimension) {
                 double d = x - player.getX();
                 double e = y - player.getY();
                 double f = z - player.getZ();

@@ -81,7 +81,7 @@ public class RenderSpear extends WMRenderer<EntitySpear> {
             }
             ms.translate(-0.35f, -0.35f, 0.0f);
             itemRender.renderStatic(getStackToRender(entityspear), ItemDisplayContext.NONE, lm,
-                    OverlayTexture.NO_OVERLAY, ms, bufs, entityspear.level, entityspear.getId());
+                    OverlayTexture.NO_OVERLAY, ms, bufs, entityspear.level(), entityspear.getId());
             ms.popPose();
         }
         super.render(entityspear, f, f1, ms, bufs, lm);

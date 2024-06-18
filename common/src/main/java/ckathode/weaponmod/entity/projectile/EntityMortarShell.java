@@ -64,7 +64,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         float z = Mth.cos(f1 * 0.017453292f) * Mth.cos(f * 0.017453292f);
         shoot(x, y, z, f3, f4);
         Vec3 entityMotion = entity.getDeltaMovement();
-        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.isOnGround() ? 0 : entityMotion.y,
+        setDeltaMovement(getDeltaMovement().add(entityMotion.x, entity.onGround() ? 0 : entityMotion.y,
                 entityMotion.z));
     }
 
@@ -76,13 +76,13 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
                 Vec3 pos = position().add(getDeltaMovement().scale(i1 / amount));
-                level.addParticle(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+                level().addParticle(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
             }
         }
     }
 
     public void createCrater() {
-        if (level.isClientSide || !inGround || isInWater()) {
+        if (level().isClientSide || !inGround || isInWater()) {
             return;
         }
         remove(RemovalReason.DISCARDED);
@@ -95,7 +95,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         }
         boolean flag =
                 EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAMING_ARROWS, (LivingEntity) shooter) > 0;
-        PhysHelper.createAdvancedExplosion(level, this, getX(), getY(), getZ(), explosiveSize,
+        PhysHelper.createAdvancedExplosion(level(), this, getX(), getY(), getZ(), explosiveSize,
                 WeaponModConfig.get().mortarDoesBlockDamage, true, flag,
                 Explosion.BlockInteraction.DESTROY);
     }
@@ -115,14 +115,14 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
-        inBlockState = level.getBlockState(blockpos);
+        inBlockState = level().getBlockState(blockpos);
         setDeltaMovement(raytraceResult.getLocation().subtract(position()));
         double f1 = getDeltaMovement().length();
         Vec3 pos = position().subtract(getDeltaMovement().scale(0.05 / f1));
         setPos(pos.x, pos.y, pos.z);
         inGround = true;
         if (inBlockState != null) {
-            inBlockState.entityInside(level, blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this);
         }
         createCrater();
     }

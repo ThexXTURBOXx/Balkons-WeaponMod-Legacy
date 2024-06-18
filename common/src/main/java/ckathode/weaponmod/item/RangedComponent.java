@@ -163,7 +163,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         Player entityplayer = (Player) livingEntity;
         if (ReloadHelper.getReloadState(stack) == ReloadState.STATE_NONE
             && getUseDuration(stack) - remainingUseDuration >= getReloadDuration(stack)) {
-            effectReloadDone(stack, entityplayer.level, entityplayer);
+            effectReloadDone(stack, entityplayer.level(), entityplayer);
             setReloadState(stack, ReloadState.STATE_RELOADED);
         }
     }

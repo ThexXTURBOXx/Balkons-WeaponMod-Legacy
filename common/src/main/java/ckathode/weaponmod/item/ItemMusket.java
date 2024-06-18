@@ -6,6 +6,7 @@ import ckathode.weaponmod.WMRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,8 +15,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,10 +88,8 @@ public class ItemMusket extends ItemShooter {
                              @NotNull BlockState block, @NotNull BlockPos pos,
                              @NotNull LivingEntity entityliving) {
         if (hasBayonet()) {
-            Material material = block.getMaterial();
-            boolean flag =
-                    material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.WATER_PLANT && material != Material.LEAVES && material != Material.VEGETABLE;
-            if (entityliving instanceof Player && !((Player) entityliving).isCreative() && flag) {
+            boolean flag = block.is(BlockTags.SWORD_EFFICIENT) || block.is(Blocks.COBWEB);
+            if (entityliving instanceof Player && !((Player) entityliving).isCreative() && !flag) {
                 bayonetDamage(itemstack, (Player) entityliving, 2);
             }
         }
