@@ -41,7 +41,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             f *= 1.5f;
             if (!world.isRemote) {
                 EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack.copy());
-                entityboomerang.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f,
+                entityboomerang.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f,
                         5.0f);
                 entityboomerang.setIsCritical(crit);
                 entityboomerang.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK,

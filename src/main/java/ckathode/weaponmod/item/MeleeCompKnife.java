@@ -29,7 +29,7 @@ public class MeleeCompKnife extends MeleeComponent {
         }
         if (!world.isRemote) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());
-            entityknife.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.8f, 3.0f);
+            entityknife.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.8f, 3.0f);
             entityknife.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
             if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                 entityknife.setFire(100);

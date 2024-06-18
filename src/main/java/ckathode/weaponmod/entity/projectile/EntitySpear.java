@@ -4,7 +4,6 @@ import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,12 +31,11 @@ public class EntitySpear extends EntityMaterialProjectile {
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void setAim(Entity entity, float f, float f1, float f2, float f3, float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        shoot(x, y, z, f3, f4);
+        setThrowableHeading(x, y, z, f3, f4);
         motionX += entity.motionX;
         motionZ += entity.motionZ;
         if (!entity.onGround) {
@@ -60,8 +58,7 @@ public class EntitySpear extends EntityMaterialProjectile {
                 thrownItem.shrink(1);
                 setDead();
             } else {
-                thrownItem.attemptDamageItem(1, rand,
-                        shootingEntity instanceof EntityPlayerMP ? (EntityPlayerMP) shootingEntity : null);
+                thrownItem.attemptDamageItem(1, rand);
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {

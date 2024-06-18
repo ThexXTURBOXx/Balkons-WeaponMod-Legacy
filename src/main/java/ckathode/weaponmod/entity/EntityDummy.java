@@ -92,7 +92,7 @@ public class EntityDummy extends Entity {
             i = 50;
         }
         setCurrentDamage(i);
-        markVelocityChanged();
+        setBeenAttacked();
         if (!(damagesource instanceof EntityDamageSource)) {
             durability -= (int) damage;
         } else if (damagesource instanceof WeaponDamageSource) {
@@ -113,7 +113,7 @@ public class EntityDummy extends Entity {
         if (durability <= 0 && world.getGameRules().getBoolean("doEntityDrops")) {
             dropAsItem(true, true);
         }
-        markVelocityChanged();
+        setBeenAttacked();
         return false;
     }
 

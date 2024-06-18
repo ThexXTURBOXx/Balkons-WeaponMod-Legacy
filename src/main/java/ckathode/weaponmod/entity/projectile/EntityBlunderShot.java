@@ -31,12 +31,11 @@ public class EntityBlunderShot extends EntityProjectile {
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void setAim(Entity entity, float f, float f1, float f2, float f3, float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        shoot(x, y, z, f3, f4);
+        setThrowableHeading(x, y, z, f3, f4);
         motionX += entity.motionX;
         motionZ += entity.motionZ;
         if (!entity.onGround) {
@@ -96,7 +95,7 @@ public class EntityBlunderShot extends EntityProjectile {
         EntityPlayer entityplayer = (EntityPlayer) entityliving;
         for (int i = 0; i < 10; ++i) {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
-            entity.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 15.0f);
+            entity.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }
@@ -114,7 +113,7 @@ public class EntityBlunderShot extends EntityProjectile {
                                          int i, int j, int k) {
         for (int i2 = 0; i2 < 10; ++i2) {
             EntityBlunderShot entityblundershot = new EntityBlunderShot(world, d, d1, d2);
-            entityblundershot.shoot(i, j, k, 5.0f, 15.0f);
+            entityblundershot.setThrowableHeading(i, j, k, 5.0f, 15.0f);
             world.spawnEntity(entityblundershot);
         }
     }

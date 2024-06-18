@@ -72,7 +72,7 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
         if (payload.readableBytes() < 1) {
             FMLLog.log.error("The FMLIndexedCodec has received an empty buffer on channel %s, likely a "
                              + "result of a LAN server issue. Pipeline parts : %s",
-                    new Object[]{ctx.channel().attr(NetworkRegistry.FML_CHANNEL), ctx.pipeline().toString()});
+                    ctx.channel().attr(NetworkRegistry.FML_CHANNEL), ctx.pipeline().toString());
         }
         final byte discriminator = payload.readByte();
         final Class<? extends WMMessage> clazz = packets.get(discriminator);

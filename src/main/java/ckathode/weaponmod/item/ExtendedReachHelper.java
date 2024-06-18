@@ -30,7 +30,7 @@ public final class ExtendedReachHelper {
             }
 
             Vec3d lookVec = entity.getLook(1.0F);
-            Vec3d traced = pos.add(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew);
+            Vec3d traced = pos.addVector(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew);
             Entity pointedEntity = null;
             float f = 1.0F;
             List<Entity> list = mc.world.getEntitiesInAABBexcluding(entity,

@@ -3,9 +3,9 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -21,7 +21,7 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
     public void doRender(@Nonnull EntityMortarShell entitymortarshell, double d, double d1,
                          double d2, float f, float f1) {
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        VertexBuffer vertexbuffer = tessellator.getBuffer();
         GlStateManager.pushMatrix();
         bindEntityTexture(entitymortarshell);
         GlStateManager.disableLighting();

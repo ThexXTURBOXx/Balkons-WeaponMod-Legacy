@@ -22,6 +22,7 @@ import ckathode.weaponmod.entity.projectile.dispense.DispenseDynamite;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseJavelin;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseMortarShell;
 import ckathode.weaponmod.entity.projectile.dispense.DispenseMusketBullet;
+import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import ckathode.weaponmod.item.ItemCannon;
 import ckathode.weaponmod.item.ItemDummy;
@@ -48,6 +49,7 @@ import ckathode.weaponmod.item.RangedCompMortar;
 import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.network.WMMessagePipeline;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
@@ -56,8 +58,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -67,7 +67,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
@@ -151,15 +152,11 @@ public class BalkonsWeaponMod {
     public static Item mortarIronPart;
     public WeaponModConfig modConfig;
     public WMMessagePipeline messagePipeline;
-    public final IConditionFactory configConditional;
 
     public BalkonsWeaponMod() {
         instance = this;
         messagePipeline = new WMMessagePipeline();
         MinecraftForge.EVENT_BUS.register(this);
-
-        configConditional = new WMConfigCondition();
-        CraftingHelper.register(new ResourceLocation(MOD_ID, "config_conditional"), configConditional);
     }
 
     @Mod.EventHandler
@@ -216,66 +213,237 @@ public class BalkonsWeaponMod {
     }
 
     private void registerWeapons() {
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear", 1,
-                this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife", 2,
-                this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin"
-                , 3, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class,
-                "bullet", 4, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt"
-                , 5, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear",
+                1, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife",
+                2, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin",
+                3, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class, "bullet",
+                4, this, 16, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt",
+                5, this, 64, 20, true);
         EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
                 6, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class,
-                "dynamite", 7, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail", 8,
-                this, 32, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class, "dynamite",
+                7, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail",
+                8, this, 32, 20, true);
         EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
                 9, this, 64, 128, false);
         EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
                 "cannonball", 10, this, 64, 20, true);
         EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
                 11, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy", 12,
-                this, 64, 20, false);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy",
+                12, this, 64, 20, false);
         EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
                 "boomerang", 13, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell"
-                , 14, this, 64, 20, true);
+        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell",
+                14, this, 64, 20, true);
 
         if (modConfig.isEnabled("spear")) {
-            GameRegistry.addSmelting(spearSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearWood, "  #", " X ", "X  ",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearStone, "  #", " X ", "X  ",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearSteel, "  #", " X ", "X  ",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearDiamond, "  #", " X ", "X  ",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearGold, "  #", " X ", "X  ",
+                    'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addSmelting(spearSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(spearGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("halberd")) {
-            GameRegistry.addSmelting(halberdSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(halberdWood, " ##", " X#", "X  ",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(halberdStone, " ##", " X#", "X  ",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(halberdSteel, " ##", " X#", "X  ",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(halberdDiamond, " ##", " X#", "X  ",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(halberdGold, " ##", " X#", "X  ",
+                    'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addSmelting(halberdSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(halberdGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("knife")) {
-            GameRegistry.addSmelting(knifeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeWood, "#X",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeStone, "#X",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeSteel, "#X",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeDiamond, "#X",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeGold, "#X",
+                    'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeWood, "#", "X",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeStone, "#", "X",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeSteel, "#", "X",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeDiamond, "#", "X",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(knifeGold, "#", "X",
+                    'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addSmelting(knifeSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(knifeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
+        if (modConfig.isEnabled("javelin")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(javelin, 4), "  #", " X ", "X  ",
+                    'X', "stickWood", '#', Items.FLINT));
+        }
+        if (modConfig.isEnabled("musket")) {
+            if (modConfig.isEnabled("knife")) {
+                GameRegistry.addShapelessRecipe(new ItemStack(bayonetWood), knifeWood, musket);
+                GameRegistry.addShapelessRecipe(new ItemStack(bayonetStone), knifeStone, musket);
+                GameRegistry.addShapelessRecipe(new ItemStack(bayonetSteel), knifeSteel, musket);
+                GameRegistry.addShapelessRecipe(new ItemStack(bayonetDiamond), knifeDiamond, musket);
+                GameRegistry.addShapelessRecipe(new ItemStack(bayonetGold), knifeGold, musket);
+            }
+            GameRegistry.addRecipe(new ItemStack(musket), "#", "X",
+                    'X', gunStock, '#', musketIronPart);
+            GameRegistry.addRecipe(new ShapedOreRecipe(musketIronPart, "XX#", "  X",
+                    'X', "ingotIron", '#', Items.FLINT_AND_STEEL));
+        }
+        if (modConfig.isEnabled("musket") || modConfig.isEnabled("flintlock")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(musketBullet, 8), "X", "#", "O",
+                    'X', "ingotIron", '#', "gunpowder", 'O', "paper"));
+        }
         if (modConfig.isEnabled("battleaxe")) {
-            GameRegistry.addSmelting(battleaxeSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(battleaxeWood, "###", "#X#", " X ",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(battleaxeStone, "###", "#X#", " X ",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(battleaxeSteel, "###", "#X#", " X ",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(battleaxeDiamond, "###", "#X#", " X ",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(battleaxeGold, "###", "#X#", " X ",
+                    'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addSmelting(battleaxeSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(battleaxeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("warhammer")) {
-            GameRegistry.addSmelting(warhammerSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(warhammerWood, "#X#", "#X#", " X ",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(warhammerStone, "#X#", "#X#", " X ",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(warhammerSteel, "#X#", "#X#", " X ",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(warhammerDiamond, "#X#", "#X#", " X ",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(warhammerGold, "#X#", "#X#", " X ",
+                    'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addSmelting(warhammerSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(warhammerGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
+        if (modConfig.isEnabled("crossbow")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(crossbow, "O##", "#X ", "# X",
+                    'X', "plankWood", '#', "ingotIron", 'O', Items.BOW));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(bolt, 4), "#", "X",
+                    'X', "feather", '#', "ingotIron"));
+        }
+        if (modConfig.isEnabled("blowgun")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blowgun), "X  ", " X ", "  X",
+                    'X', "sugarcane"));
+            for (DartType type : DartType.dartTypes) {
+                if (type != null) {
+                    GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(dart, 4, type.typeID), "#", "X", "O",
+                            'X', type.craftItem, '#', "stickWood", 'O', "feather"));
+                }
+            }
+        }
+        if (modConfig.isEnabled("dynamite")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(dynamite, 2), "#", "X", "X",
+                    'X', "gunpowder", '#', "string"));
+        }
         if (modConfig.isEnabled("flail")) {
-            GameRegistry.addSmelting(flailSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(flailWood, "  O", " XO", "X #",
+                    'X', "stickWood", 'O', "string", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(flailStone, "  O", " XO", "X #",
+                    'X', "stickWood", 'O', "string", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(flailSteel, "  O", " XO", "X #",
+                    'X', "stickWood", 'O', "string", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(flailDiamond, "  O", " XO", "X #",
+                    'X', "stickWood", 'O', "string", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(flailGold, "  O", " XO", "X #",
+                    'X', "stickWood", 'O', "string", '#', "ingotGold"));
+            GameRegistry.addSmelting(flailSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(flailGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
+        if (modConfig.isEnabled("firerod")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(fireRod, "#  ", " X ", "  X",
+                    'X', "stickWood", '#', "torch"));
+        }
+        if (modConfig.isEnabled("cannon")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(cannon, "XX#", "  X", "XXO",
+                    'X', "ingotIron", '#', Items.FLINT_AND_STEEL, 'O', "logWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cannonBall, 4), " X ", "XXX", " X ",
+                    'X', "stone"));
+        }
+        if (modConfig.isEnabled("blunderbuss")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blunderShot, 8), "X", "#", "O",
+                    'X', "gravel", '#', "gunpowder", 'O', "paper"));
+            GameRegistry.addRecipe(new ItemStack(blunderbuss), "#", "X",
+                    'X', gunStock, '#', blunderIronPart);
+            GameRegistry.addRecipe(new ShapedOreRecipe(blunderIronPart, "X  ", " X#", "X X",
+                    'X', "ingotIron", '#', Items.FLINT_AND_STEEL));
+        }
+        if (modConfig.isEnabled("musket") || modConfig.isEnabled("blunderbuss") || modConfig.isEnabled("mortar")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(gunStock, "XX#",
+                    'X', "stickWood", '#', "plankWood"));
+        }
+        if (modConfig.isEnabled("dummy")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(dummy, " U ", "XOX", " # ",
+                    '#', "stickWood", 'X', "cropWheat", 'O', Items.LEATHER_CHESTPLATE, 'U', Blocks.WOOL));
+        }
         if (modConfig.isEnabled("boomerang")) {
-            GameRegistry.addSmelting(boomerangSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(boomerangWood, "XX#", "  X", "  X",
+                    'X', "plankWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(boomerangStone, "XX#", "  X", "  X",
+                    'X', "plankWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(boomerangSteel, "XX#", "  X", "  X",
+                    'X', "plankWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(boomerangDiamond, "XX#", "  X", "  X",
+                    'X', "plankWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(boomerangGold, "XX#", "  X", "  X",
+                    'X', "plankWood", '#', "ingotGold"));
+            GameRegistry.addSmelting(boomerangSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(boomerangGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("katana")) {
-            GameRegistry.addSmelting(katanaSteel, new ItemStack(Items.IRON_NUGGET), 0.1f);
+            GameRegistry.addRecipe(new ShapedOreRecipe(katanaWood, "  #", " # ", "X  ",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(katanaStone, "  #", " # ", "X  ",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(katanaSteel, "  #", " # ", "X  ",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(katanaDiamond, "  #", " # ", "X  ",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(katanaGold, "  #", " # ", "X  ",
+                    'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addSmelting(katanaSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(katanaGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
+        }
+        if (modConfig.isEnabled("flintlock")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(flintlockPistol, "XX#", " -O",
+                    'X', "ingotIron", '#', Items.FLINT_AND_STEEL, '-', "stickWood", 'O', "plankWood"));
+        }
+        if (modConfig.isEnabled("mortar")) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(mortarIronPart, "## ", "##X", "  #",
+                    'X', Items.FLINT_AND_STEEL, '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(mortarShell, 2), "#", "X", "X",
+                    'X', "gunpowder", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(mortarShell, 2), "#", "X",
+                    'X', dynamite, '#', "ingotIron"));
+            GameRegistry.addRecipe(new ItemStack(mortar), "X", "#",
+                    'X', mortarIronPart, '#', gunStock);
         }
     }
 

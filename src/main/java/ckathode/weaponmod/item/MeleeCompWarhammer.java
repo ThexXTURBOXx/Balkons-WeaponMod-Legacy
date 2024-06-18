@@ -25,7 +25,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     @Override
     public float getBlockDamage(ItemStack itemstack, IBlockState block) {
         float f = super.getBlockDamage(itemstack, block);
-        float f2 = weaponMaterial.getAttackDamage() + 2.0f;
+        float f2 = weaponMaterial.getDamageVsEntity() + 2.0f;
         return f * f2;
     }
 

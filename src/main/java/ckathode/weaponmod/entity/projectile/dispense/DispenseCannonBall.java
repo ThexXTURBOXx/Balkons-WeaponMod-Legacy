@@ -50,13 +50,13 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
             return super.dispenseStack(blocksource, itemstack);
         }
         EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
-        double xvel = face.getXOffset() * 1.5;
-        double yvel = face.getYOffset() * 1.5;
-        double zvel = face.getZOffset() * 1.5;
+        double xvel = face.getFrontOffsetX() * 1.5;
+        double yvel = face.getFrontOffsetY() * 1.5;
+        double zvel = face.getFrontOffsetZ() * 1.5;
         IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getWorld(), pos.getX() + xvel,
                 pos.getY() + yvel, pos.getZ() + zvel);
-        entitycannonball.shoot(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
+        entitycannonball.setThrowableHeading(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
         blocksource.getWorld().spawnEntity(entitycannonball);
         itemstack.shrink(1);
         return itemstack;
@@ -79,8 +79,8 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
         super.spawnDispenseParticles(blocksource, face);
         if (!normalDispense) {
             IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-            blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getXOffset(),
-                    pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
+            blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getFrontOffsetX(),
+                    pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), 0.0, 0.0, 0.0);
         }
     }
 }

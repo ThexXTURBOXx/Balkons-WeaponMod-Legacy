@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 public class WMItem extends Item {
     public WMItem(String id) {
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
-        setTranslationKey(id);
+        setUnlocalizedName(id);
         setCreativeTab(CreativeTabs.COMBAT);
     }
 

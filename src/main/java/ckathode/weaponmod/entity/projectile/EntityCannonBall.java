@@ -43,7 +43,7 @@ public class EntityCannonBall extends EntityProjectile {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        shoot(x, y, z, superPowered ? 4.0f : 2.0f, superPowered ? 0.1f : 2.0f);
+        setThrowableHeading(x, y, z, superPowered ? 4.0f : 2.0f, superPowered ? 0.1f : 2.0f);
         motionX += entitycannon.motionX;
         motionZ += entitycannon.motionZ;
         setIsCritical(superPowered);
@@ -98,7 +98,7 @@ public class EntityCannonBall extends EntityProjectile {
         posZ -= motionZ / f1 * 0.05;
         inGround = true;
         if (inBlockState != null) {
-            inBlockState.getBlock().onEntityCollision(world, blockpos, inBlockState, this);
+            inBlockState.getBlock().onEntityCollidedWithBlock(world, blockpos, inBlockState, this);
         }
         createCrater();
     }

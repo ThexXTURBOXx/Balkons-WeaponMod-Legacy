@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -47,12 +46,11 @@ public class EntityBoomerang extends EntityMaterialProjectile {
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void setAim(Entity entity, float f, float f1, float f2, float f3, float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        shoot(x, y, z, f3, f4);
+        setThrowableHeading(x, y, z, f3, f4);
         motionX += entity.motionX;
         motionZ += entity.motionZ;
         if (!entity.onGround) {
@@ -144,8 +142,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
                 thrownItem.shrink(1);
                 setDead();
             } else {
-                thrownItem.attemptDamageItem(1, rand,
-                        shooter instanceof EntityPlayerMP ? (EntityPlayerMP) shooter : null);
+                thrownItem.attemptDamageItem(1, rand);
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {
@@ -176,7 +173,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
         beenInGround = true;
         floatStrength = 0.0f;
         if (inBlockState != null) {
-            inBlockState.getBlock().onEntityCollision(world, blockpos, inBlockState, this);
+            inBlockState.getBlock().onEntityCollidedWithBlock(world, blockpos, inBlockState, this);
         }
     }
 

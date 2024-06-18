@@ -37,7 +37,7 @@ public class RangedCompMortar extends RangedComponent {
         f += 0.02f;
         if (!world.isRemote) {
             EntityMortarShell entitymortarshell = new EntityMortarShell(world, entityplayer);
-            entitymortarshell.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 1.4f,
+            entitymortarshell.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 1.4f,
                     1.0f / f);
             applyProjectileEnchantments(entitymortarshell, itemstack);
             world.spawnEntity(entitymortarshell);

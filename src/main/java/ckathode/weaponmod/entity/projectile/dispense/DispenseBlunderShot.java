@@ -21,9 +21,9 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     public ItemStack dispenseStack(IBlockSource blocksource, ItemStack itemstack) {
         EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
         IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getXOffset(),
-                pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), face.getXOffset(), face.getYOffset(),
-                face.getZOffset());
+        EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getFrontOffsetX(),
+                pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), face.getFrontOffsetX(),
+                face.getFrontOffsetY(), face.getFrontOffsetZ());
         itemstack.shrink(1);
         return itemstack;
     }
@@ -38,7 +38,7 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
         IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getXOffset(),
-                pos.getY() + face.getYOffset(), pos.getZ() + face.getZOffset(), 0.0, 0.0, 0.0);
+        blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getFrontOffsetX(),
+                pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), 0.0, 0.0, 0.0);
     }
 }

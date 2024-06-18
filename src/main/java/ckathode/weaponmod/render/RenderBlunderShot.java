@@ -3,9 +3,9 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -25,7 +25,7 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         GlStateManager.disableLighting();
         GlStateManager.translate(d, d1, d2);
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder vertexbuffer = tessellator.getBuffer();
+        VertexBuffer vertexbuffer = tessellator.getBuffer();
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(0.04f, 0.04f, 0.04f);
         if (renderOutlines) {

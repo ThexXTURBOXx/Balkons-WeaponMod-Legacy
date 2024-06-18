@@ -41,8 +41,8 @@ public class RenderCannon extends Render<EntityCannon> {
         GlStateManager.scale(-1.6f, -1.6f, 1.6f);
         if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
             float f4 = 1.5f;
-            GlStateManager.color(entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4,
-                    entitycannon.getBrightness() * f4);
+            GlStateManager.color(entitycannon.getBrightness(f1) * f4, entitycannon.getBrightness(f1) * f4,
+                    entitycannon.getBrightness(f1) * f4);
         }
         if (renderOutlines) {
             GlStateManager.disableOutlineMode();

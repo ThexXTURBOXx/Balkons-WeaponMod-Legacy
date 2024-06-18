@@ -103,7 +103,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     }
 
     @Override
-    public void shoot(double x, double y, double z, float speed, float deviation) {
+    public void setThrowableHeading(double x, double y, double z, float speed, float deviation) {
         float f = MathHelper.sqrt(x * x + y * y + z * z);
         x /= f;
         y /= f;
@@ -306,7 +306,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         arrowShake = getMaxArrowShake();
         playHitSound();
         if (inBlockState != null) {
-            inBlockState.getBlock().onEntityCollision(world, blockpos, inBlockState, this);
+            inBlockState.getBlock().onEntityCollidedWithBlock(world, blockpos, inBlockState, this);
         }
     }
 

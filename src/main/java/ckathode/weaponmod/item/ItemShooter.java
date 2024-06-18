@@ -31,7 +31,7 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
-        setTranslationKey(id);
+        setUnlocalizedName(id);
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);
@@ -56,7 +56,7 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     }
 
     @Override
-    public float getDestroySpeed(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
+    public float getStrVsBlock(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
         return meleeComponent.getBlockDamage(itemstack, block);
     }
 

@@ -47,7 +47,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         if (weaponMaterial == null) {
             return 0.0f;
         }
-        return weaponMaterial.getAttackDamage() * meleeSpecs.damageMult;
+        return weaponMaterial.getDamageVsEntity() * meleeSpecs.damageMult;
     }
 
     @Override

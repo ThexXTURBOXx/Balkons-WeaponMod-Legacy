@@ -121,7 +121,7 @@ public class EntityCannon extends EntityBoat {
         setRockDirection(-getRockDirection());
         setTimeSinceHit(10);
         setCurrentDamage(getCurrentDamage() + (int) damage * 5);
-        markVelocityChanged();
+        setBeenAttacked();
         if (getCurrentDamage() > 100) {
             for (int j = 0; j < 6; ++j) {
                 dropItemWithChance(Items.IRON_INGOT, (int) damage, 1);

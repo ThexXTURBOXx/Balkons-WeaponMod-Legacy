@@ -55,7 +55,7 @@ public class RangedCompBlowgun extends RangedComponent {
         }
         if (!world.isRemote) {
             EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer);
-            entityblowgundart.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
+            entityblowgundart.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
                     f * 1.5f, 1.0f);
             Item item = dartStackCopy.getItem();
             if (item instanceof ItemBlowgunDart)

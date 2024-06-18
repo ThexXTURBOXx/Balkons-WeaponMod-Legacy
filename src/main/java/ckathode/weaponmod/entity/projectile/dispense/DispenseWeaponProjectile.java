@@ -20,8 +20,8 @@ public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispens
         IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
         IProjectile projectile = getProjectileEntity(world, pos, itemstack);
-        projectile.shoot(face.getXOffset(), face.getYOffset() + getYVel(), face.getZOffset(), getProjectileVelocity(),
-                getProjectileInaccuracy());
+        projectile.setThrowableHeading(face.getFrontOffsetX(), face.getFrontOffsetY() + getYVel(),
+                face.getFrontOffsetZ(), getProjectileVelocity(), getProjectileInaccuracy());
         world.spawnEntity((Entity) projectile);
         itemstack.shrink(1);
         return itemstack;

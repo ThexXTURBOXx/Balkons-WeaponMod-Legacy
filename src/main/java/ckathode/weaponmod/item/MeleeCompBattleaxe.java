@@ -43,7 +43,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
 
     @Override
     public float getBlockDamage(ItemStack itemstack, IBlockState block) {
-        return (block.getMaterial() == Material.WOOD) ? (weaponMaterial.getEfficiency() * 0.75f) :
+        return (block.getMaterial() == Material.WOOD) ? (weaponMaterial.getEfficiencyOnProperMaterial() * 0.75f) :
                 super.getBlockDamage(itemstack, block);
     }
 

@@ -2,9 +2,9 @@ package ckathode.weaponmod.item;
 
 import java.util.List;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -14,7 +14,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,21 +24,19 @@ public class ItemBlowgunDart extends WMItem {
     }
 
     @Override
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-        if (isInCreativeTab(tab)) {
-            for (int j = 0; j < DartType.dartTypes.length; ++j) {
-                if (DartType.dartTypes[j] != null) {
-                    list.add(new ItemStack(this, 1, j));
-                }
+    public void getSubItems(@Nonnull Item itemIn, @Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
+        for (int j = 0; j < DartType.dartTypes.length; ++j) {
+            if (DartType.dartTypes[j] != null) {
+                subItems.add(new ItemStack(this, 1, j));
             }
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack itemstack, @Nullable World worldIn,
-                               @Nonnull List<String> list, @Nonnull ITooltipFlag flag) {
-        DartType type = DartType.getDartTypeFromStack(itemstack);
+    public void addInformation(@Nonnull ItemStack stack, @Nonnull EntityPlayer playerIn,
+                               @Nonnull List<String> tooltip, boolean advanced) {
+        DartType type = DartType.getDartTypeFromStack(stack);
         if (type == null) {
             return;
         }
@@ -60,7 +57,7 @@ public class ItemBlowgunDart extends WMItem {
         } else {
             s = s.setStyle(new Style().setColor(TextFormatting.GRAY));
         }
-        list.add(s.getFormattedText());
+        tooltip.add(s.getFormattedText());
     }
 
 }

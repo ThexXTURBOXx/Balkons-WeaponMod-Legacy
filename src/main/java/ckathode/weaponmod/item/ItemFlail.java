@@ -25,7 +25,7 @@ public class ItemFlail extends ItemMelee {
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
         super(id, meleecomponent);
-        flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamage();
+        flailDamage = 4.0f + meleecomponent.weaponMaterial.getDamageVsEntity();
         addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)
@@ -107,7 +107,7 @@ public class ItemFlail extends ItemMelee {
                 SoundCategory.PLAYERS, 0.5f, 0.4f / (ItemFlail.itemRand.nextFloat() * 0.4f + 0.8f));
         if (!world.isRemote) {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
-            entityflail.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
+            entityflail.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
             PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getEntityId());
             world.spawnEntity(entityflail);
             setThrown(entityplayer, true);

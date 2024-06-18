@@ -50,7 +50,7 @@ public class ItemCannon extends WMItem {
         float f8 = f5 * f6;
         float f10 = f4 * f6;
         double d4 = 5.0;
-        Vec3d vec3d2 = vec3d.add(f8 * d4, f7 * d4, f10 * d4);
+        Vec3d vec3d2 = vec3d.addVector(f8 * d4, f7 * d4, f10 * d4);
         RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, true);
         if (raytraceresult == null || raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK || raytraceresult.sideHit != EnumFacing.UP) {
             return EnumActionResult.FAIL;

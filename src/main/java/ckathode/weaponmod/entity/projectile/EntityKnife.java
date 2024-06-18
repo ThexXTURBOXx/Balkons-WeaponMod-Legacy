@@ -5,7 +5,6 @@ import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,12 +35,11 @@ public class EntityKnife extends EntityMaterialProjectile {
     }
 
     @Override
-    public void shoot(Entity entity, float f, float f1, float f2, float f3,
-                      float f4) {
+    public void setAim(Entity entity, float f, float f1, float f2, float f3, float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
-        shoot(x, y, z, f3, f4);
+        setThrowableHeading(x, y, z, f3, f4);
         motionX += entity.motionX;
         motionZ += entity.motionZ;
         if (!entity.onGround) {
@@ -81,8 +79,7 @@ public class EntityKnife extends EntityMaterialProjectile {
                 setDead();
             } else {
                 Entity shooter = getThrower();
-                thrownItem.attemptDamageItem(2, rand,
-                        shooter instanceof EntityPlayerMP ? (EntityPlayerMP) shooter : null);
+                thrownItem.attemptDamageItem(2, rand);
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {

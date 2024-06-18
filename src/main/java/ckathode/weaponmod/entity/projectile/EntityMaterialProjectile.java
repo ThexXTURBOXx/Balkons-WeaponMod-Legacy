@@ -19,7 +19,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     private static final DataParameter<Byte> WEAPON_MATERIAL =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
     private static final DataParameter<ItemStack> WEAPON_ITEM =
-            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEM_STACK);
+            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
     protected ItemStack thrownItem;

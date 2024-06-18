@@ -32,7 +32,7 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     public ItemMelee(String id, MeleeComponent meleecomponent) {
         super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
-        setTranslationKey(id);
+        setUnlocalizedName(id);
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.COMBAT);
@@ -55,12 +55,12 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
-    public float getAttackDamage() {
+    public float getDamageVsEntity() {
         return meleeComponent.getEntityDamageMaterialPart();
     }
 
     @Override
-    public float getDestroySpeed(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
+    public float getStrVsBlock(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
         return meleeComponent.getBlockDamage(itemstack, block);
     }
 
