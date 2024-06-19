@@ -440,10 +440,12 @@ public class BalkonsWeaponMod {
                     'X', Items.FLINT_AND_STEEL, '#', "ingotIron"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(mortarShell, 2), "#", "X", "X",
                     'X', "gunpowder", '#', "ingotIron"));
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(mortarShell, 2), "#", "X",
-                    'X', dynamite, '#', "ingotIron"));
             GameRegistry.addRecipe(new ItemStack(mortar), "X", "#",
                     'X', mortarIronPart, '#', gunStock);
+            if (modConfig.isEnabled("dynamite")) {
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(mortarShell, 2), "#", "X",
+                        'X', dynamite, '#', "ingotIron"));
+            }
         }
     }
 
