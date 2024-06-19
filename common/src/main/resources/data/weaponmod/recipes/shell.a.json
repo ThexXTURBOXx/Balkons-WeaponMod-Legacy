@@ -32,12 +32,20 @@
     {
       "type": "weaponmod:config_conditional",
       "weapon": "mortar"
+    },
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "dynamite"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
       "weapon": "mortar"
+    },
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "dynamite"
     }
   ]
 }
