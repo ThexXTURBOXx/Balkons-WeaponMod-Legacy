@@ -110,8 +110,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     @Override
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
-        multimap.put(WeaponModAttributes.RELOAD_TIME.getName(), new AttributeModifier(IItemWeapon.RELOAD_TIME_MODIFIER,
-                "Weapon reloadtime modifier", rangedSpecs.getReloadTime(), 0));
+        multimap.put(WeaponModAttributes.RELOAD_TIME.getAttributeUnlocalizedName(),
+                new AttributeModifier(IItemWeapon.RELOAD_TIME_MODIFIER, "Weapon reloadtime modifier",
+                        rangedSpecs.getReloadTime(), 0));
     }
 
     @Override
@@ -157,7 +158,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     public void onUsingTick(ItemStack itemstack, EntityLivingBase entityliving, int count) {
         EntityPlayer entityplayer = (EntityPlayer) entityliving;
         if (ReloadHelper.getReloadState(itemstack) == ReloadState.STATE_NONE && getMaxItemUseDuration(itemstack) - count >= getReloadDuration(itemstack)) {
-            effectReloadDone(itemstack, entityplayer.world, entityplayer);
+            effectReloadDone(itemstack, entityplayer.worldObj, entityplayer);
             setReloadState(itemstack, ReloadState.STATE_RELOADED);
         }
     }

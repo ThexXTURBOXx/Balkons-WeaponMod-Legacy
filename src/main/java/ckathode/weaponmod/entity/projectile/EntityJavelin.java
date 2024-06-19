@@ -46,7 +46,7 @@ public class EntityJavelin extends EntityProjectile {
     @Override
     public void onEntityHit(Entity entity) {
         double vel = getTotalVelocity();
-        int damage = MathHelper.ceil(vel * (3.0 + extraDamage));
+        int damage = MathHelper.ceiling_double_int(vel * (3.0 + extraDamage));
         if (getIsCritical()) {
             damage += rand.nextInt(damage / 2 + 2);
         }

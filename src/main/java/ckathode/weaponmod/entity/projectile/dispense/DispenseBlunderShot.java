@@ -19,7 +19,7 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     @Nonnull
     @Override
     public ItemStack dispenseStack(IBlockSource blocksource, ItemStack itemstack) {
-        EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
+        EnumFacing face = BlockDispenser.getFacing(blocksource.getBlockMetadata());
         IPosition pos = BlockDispenser.getDispensePosition(blocksource);
         EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getFrontOffsetX(),
                 pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), face.getFrontOffsetX(),

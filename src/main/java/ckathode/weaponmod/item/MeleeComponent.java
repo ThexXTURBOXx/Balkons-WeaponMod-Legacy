@@ -117,21 +117,21 @@ public class MeleeComponent extends AbstractWeaponComponent {
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
         float dmg = getEntityDamage();
         if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(),
                     new AttributeModifier(IItemWeapon.ATTACK_DAMAGE_MODIFIER,
                             "Weapon attack damage modifier", dmg, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
                     new AttributeModifier(IItemWeapon.ATTACK_SPEED_MODIFIER,
                             "Weapon attack speed modifier", -meleeSpecs.attackDelay, 0));
         }
         if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
-            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getName(),
+            multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getAttributeUnlocalizedName(),
                     new AttributeModifier(IItemWeapon.KNOCKBACK_MODIFIER,
                             "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f, 0));
         }
         if (this instanceof IExtendedReachItem) {
             try {
-                multimap.put(WeaponModAttributes.WEAPON_REACH.getName(),
+                multimap.put(WeaponModAttributes.WEAPON_REACH.getAttributeUnlocalizedName(),
                         new AttributeModifier(IItemWeapon.REACH_MODIFIER,
                                 "Weapon reach modifier",
                                 ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f, 0));

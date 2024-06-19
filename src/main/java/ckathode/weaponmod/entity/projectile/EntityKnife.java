@@ -66,7 +66,7 @@ public class EntityKnife extends EntityMaterialProjectile {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());

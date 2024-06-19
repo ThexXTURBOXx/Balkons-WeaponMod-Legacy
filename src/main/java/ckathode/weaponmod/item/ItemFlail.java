@@ -96,7 +96,7 @@ public class ItemFlail extends ItemMelee {
     @Override
     public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityliving,
                              @Nonnull EntityLivingBase attacker) {
-        onItemRightClick(itemstack, attacker.world, (EntityPlayer) attacker, EnumHand.MAIN_HAND);
+        onItemRightClick(itemstack, attacker.worldObj, (EntityPlayer) attacker, EnumHand.MAIN_HAND);
         return true;
     }
 
@@ -107,7 +107,7 @@ public class ItemFlail extends ItemMelee {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
             entityflail.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
             PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getEntityId());
-            world.spawnEntity(entityflail);
+            world.spawnEntityInWorld(entityflail);
             setThrown(entityplayer, true);
         }
     }

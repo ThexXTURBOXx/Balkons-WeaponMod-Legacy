@@ -29,7 +29,7 @@ jobs:
       - name: crowdin action
         uses: crowdin/github-action@v2
         with:
-          download_bundle: 4
+          download_bundle: 6
         env:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
@@ -42,9 +42,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: LICENSE
-          name: 1.11.2-${{ env.MOD_VERSION }}
-          version: 1.11.2-${{ env.MOD_VERSION }}
-          github-tag: 1.11.2-${{ env.MOD_VERSION }}
+          name: 1.9.4-${{ env.MOD_VERSION }}
+          version: 1.9.4-${{ env.MOD_VERSION }}
+          github-tag: 1.9.4-${{ env.MOD_VERSION }}
           github-generate-changelog: true
 
       - name: Publish Forge build to CurseForge and Modrinth
@@ -57,10 +57,10 @@ jobs:
           files: |
             build/libs/!(*-@(dev|dev-shadow)).jar
             build/libs/*-@(dev|dev-shadow).jar
-          name: Forge-1.11.2-${{ env.MOD_VERSION }}
-          version: Forge-1.11.2-${{ env.MOD_VERSION }}
+          name: Forge-1.9.4-${{ env.MOD_VERSION }}
+          version: Forge-1.9.4-${{ env.MOD_VERSION }}
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: forge
-          game-versions: 1.11.2
+          game-versions: 1.9.4
           java: 8

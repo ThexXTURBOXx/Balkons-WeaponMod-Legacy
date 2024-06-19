@@ -49,7 +49,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                 if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                     entityboomerang.setFire(100);
                 }
-                world.spawnEntity(entityboomerang);
+                world.spawnEntityInWorld(entityboomerang);
             }
             world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
                     SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,

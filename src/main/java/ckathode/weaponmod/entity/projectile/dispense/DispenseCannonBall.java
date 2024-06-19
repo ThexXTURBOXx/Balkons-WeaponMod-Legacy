@@ -49,7 +49,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
             normalDispense = true;
             return super.dispenseStack(blocksource, itemstack);
         }
-        EnumFacing face = blocksource.getBlockState().getValue(BlockDispenser.FACING);
+        EnumFacing face = BlockDispenser.getFacing(blocksource.getBlockMetadata());
         double xvel = face.getFrontOffsetX() * 1.5;
         double yvel = face.getFrontOffsetY() * 1.5;
         double zvel = face.getFrontOffsetZ() * 1.5;
@@ -57,7 +57,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
         EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getWorld(), pos.getX() + xvel,
                 pos.getY() + yvel, pos.getZ() + zvel);
         entitycannonball.setThrowableHeading(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
-        blocksource.getWorld().spawnEntity(entitycannonball);
+        blocksource.getWorld().spawnEntityInWorld(entitycannonball);
         itemstack.splitStack(1);
         return itemstack;
     }

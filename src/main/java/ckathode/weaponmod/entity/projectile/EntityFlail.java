@@ -76,7 +76,7 @@ public class EntityFlail extends EntityMaterialProjectile {
                     pickUpByOwner();
                 }
             }
-        } else if (!world.isRemote) {
+        } else if (!worldObj.isRemote) {
             setDead();
         }
         if (inGround) {

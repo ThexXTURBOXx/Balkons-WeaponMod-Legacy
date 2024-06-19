@@ -99,13 +99,13 @@ public class EntityBlunderShot extends EntityProjectile {
             if (item != null && itemstack != null) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }
-            world.spawnEntity(entity);
+            world.spawnEntityInWorld(entity);
         }
     }
 
     public static void fireSpreadShot(World world, double x, double y, double z) {
         for (int i = 0; i < 10; ++i) {
-            world.spawnEntity(new EntityBlunderShot(world, x, y, z));
+            world.spawnEntityInWorld(new EntityBlunderShot(world, x, y, z));
         }
     }
 
@@ -114,7 +114,7 @@ public class EntityBlunderShot extends EntityProjectile {
         for (int i2 = 0; i2 < 10; ++i2) {
             EntityBlunderShot entityblundershot = new EntityBlunderShot(world, d, d1, d2);
             entityblundershot.setThrowableHeading(i, j, k, 5.0f, 15.0f);
-            world.spawnEntity(entityblundershot);
+            world.spawnEntityInWorld(entityblundershot);
         }
     }
 }

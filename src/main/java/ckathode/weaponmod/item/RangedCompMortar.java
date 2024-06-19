@@ -40,7 +40,7 @@ public class RangedCompMortar extends RangedComponent {
             entitymortarshell.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 1.4f,
                     1.0f / f);
             applyProjectileEnchantments(entitymortarshell, itemstack);
-            world.spawnEntity(entitymortarshell);
+            world.spawnEntityInWorld(entitymortarshell);
         }
         int damage = 1;
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {

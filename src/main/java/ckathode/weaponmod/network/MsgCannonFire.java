@@ -36,7 +36,7 @@ public class MsgCannonFire extends WMMessage {
 
     @Override
     public void handleServerSide(EntityPlayer player) {
-        Entity entity = player.world.getEntityByID(cannonEntityID);
+        Entity entity = player.worldObj.getEntityByID(cannonEntityID);
         if (entity instanceof EntityCannon) {
             ((EntityCannon) entity).fireCannon();
         }

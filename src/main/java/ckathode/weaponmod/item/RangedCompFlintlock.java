@@ -41,7 +41,7 @@ public class RangedCompFlintlock extends RangedComponent {
                     4.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             entitymusketbullet.setExtraDamage(entitymusketbullet.extraDamage - 10.0f);
-            world.spawnEntity(entitymusketbullet);
+            world.spawnEntityInWorld(entitymusketbullet);
         }
         int damage = 1;
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {

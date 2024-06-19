@@ -63,7 +63,7 @@ public class ItemCannon extends WMItem {
             return EnumActionResult.FAIL;
         }
         if (!world.isRemote) {
-            world.spawnEntity(entitycannon);
+            world.spawnEntityInWorld(entitycannon);
         }
         if (!entityplayer.isCreative()) {
             itemstack.splitStack(1);

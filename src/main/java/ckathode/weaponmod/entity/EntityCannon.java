@@ -97,7 +97,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
-        if (world.isRemote || isDead) {
+        if (worldObj.isRemote || isDead) {
             return true;
         }
         if (damagesource instanceof EntityDamageSourceIndirect && damagesource.getSourceOfDamage() != null) {
@@ -190,8 +190,8 @@ public class EntityCannon extends EntityBoat {
             rotationPitch = pitch;
         }
         setRotation(rotationYaw, rotationPitch);
-        move(motionX, motionY, motionZ);
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
+        moveEntity(motionX, motionY, motionZ);
+        List<Entity> list = worldObj.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
                 0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
@@ -209,7 +209,7 @@ public class EntityCannon extends EntityBoat {
     @Override
     public void fall(float f, float f1) {
         super.fall(f, f1);
-        int i = MathHelper.floor(f);
+        int i = MathHelper.floor_float(f);
         i *= 2;
         attackEntityFrom(DamageSource.fall, (float) i);
     }
@@ -232,10 +232,10 @@ public class EntityCannon extends EntityBoat {
             return;
         }
         Entity entityPassenger = getPassengers().isEmpty() ? null : getPassengers().get(0);
-        if (!world.isRemote) {
-            EntityCannonBall entitycannonball = new EntityCannonBall(world, this,
+        if (!worldObj.isRemote) {
+            EntityCannonBall entitycannonball = new EntityCannonBall(worldObj, this,
                     entityPassenger.rotationPitch, entityPassenger.rotationYaw, isSuperPowered());
-            world.spawnEntity(entitycannonball);
+            worldObj.spawnEntityInWorld(entitycannonball);
         }
         setReloadInfo(false, 0);
         fireEffects();
@@ -248,7 +248,7 @@ public class EntityCannon extends EntityBoat {
         double d = -MathHelper.sin(yaw) * -1.0f;
         double d2 = MathHelper.cos(yaw) * -1.0f;
         for (int i = 0; i < 20; ++i) {
-            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,
+            worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,
                     posX + d + rand.nextDouble() * 0.5 - 0.25, posY + rand.nextDouble() * 0.5,
                     posZ + d2 + rand.nextDouble() * 0.5 - 0.25, rand.nextDouble() * 0.1 - 0.05,
                     rand.nextDouble() * 0.1 - 0.05, rand.nextDouble() * 0.1 - 0.05);
@@ -314,7 +314,7 @@ public class EntityCannon extends EntityBoat {
             if (isBeingRidden() && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return true;
             }
-            if (!world.isRemote && !entityplayer.isSneaking()) {
+            if (!worldObj.isRemote && !entityplayer.isSneaking()) {
                 entityplayer.startRiding(this);
             }
         }

@@ -52,12 +52,12 @@ public class AdvancedExplosion extends Explosion {
 
     public void doEntityExplosion(DamageSource damagesource) {
         float size = explosionSize * 2.0f;
-        int k1 = MathHelper.floor(explosionX - size - 1.0);
-        int l1 = MathHelper.floor(explosionX + size + 1.0);
-        int i2 = MathHelper.floor(explosionY - size - 1.0);
-        int i3 = MathHelper.floor(explosionY + size + 1.0);
-        int j2 = MathHelper.floor(explosionZ - size - 1.0);
-        int j3 = MathHelper.floor(explosionZ + size + 1.0);
+        int k1 = MathHelper.floor_double(explosionX - size - 1.0);
+        int l1 = MathHelper.floor_double(explosionX + size + 1.0);
+        int i2 = MathHelper.floor_double(explosionY - size - 1.0);
+        int i3 = MathHelper.floor_double(explosionY + size + 1.0);
+        int j2 = MathHelper.floor_double(explosionZ - size - 1.0);
+        int j3 = MathHelper.floor_double(explosionZ + size + 1.0);
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder,
                 new AxisAlignedBB(k1, i2, j2, l1, i3, j3));
         Vec3d vec31 = new Vec3d(explosionX, explosionY, explosionZ);
@@ -68,7 +68,7 @@ public class AdvancedExplosion extends Explosion {
                     double dx = entity.posX - explosionX;
                     double dy = entity.posY - explosionY;
                     double dz = entity.posZ - explosionZ;
-                    double d = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+                    double d = MathHelper.sqrt_double(dx * dx + dy * dy + dz * dz);
                     if (d != 0.0) {
                         dx /= d;
                         dy /= d;
@@ -135,7 +135,7 @@ public class AdvancedExplosion extends Explosion {
             double dx = px - explosionX;
             double dy = py - explosionY;
             double dz = pz - explosionZ;
-            double distance = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+            double distance = MathHelper.sqrt_double(dx * dx + dy * dy + dz * dz);
             dx /= distance;
             dy /= distance;
             dz /= distance;

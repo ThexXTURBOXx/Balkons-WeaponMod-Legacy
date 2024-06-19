@@ -50,7 +50,7 @@ public class RangedCompMusket extends RangedComponent {
             entitymusketbullet.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f,
                     1.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
-            world.spawnEntity(entitymusketbullet);
+            world.spawnEntityInWorld(entitymusketbullet);
         }
         int deltaDamage = 1;
         boolean flag = itemstack.getItemDamage() + deltaDamage >= itemstack.getMaxDamage();

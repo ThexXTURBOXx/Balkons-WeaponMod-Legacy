@@ -81,7 +81,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
-        if (world.isRemote || isDead || damage <= 0.0f) {
+        if (worldObj.isRemote || isDead || damage <= 0.0f) {
             return false;
         }
         setRockDirection(-getRockDirection());
@@ -97,7 +97,7 @@ public class EntityDummy extends Entity {
             durability -= (int) damage;
         } else if (damagesource instanceof WeaponDamageSource) {
             Entity entity = ((WeaponDamageSource) damagesource).getProjectile();
-            if (MathHelper.sqrt(entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ) > 0.5) {
+            if (MathHelper.sqrt_double(entity.motionX * entity.motionX + entity.motionY * entity.motionY + entity.motionZ * entity.motionZ) > 0.5) {
                 entity.motionX *= 0.10000000149011612;
                 entity.motionY *= 0.10000000149011612;
                 entity.motionZ *= 0.10000000149011612;
@@ -110,7 +110,7 @@ public class EntityDummy extends Entity {
         } else {
             playRandomHitSound();
         }
-        if (durability <= 0 && world.getGameRules().getBoolean("doEntityDrops")) {
+        if (durability <= 0 && worldObj.getGameRules().getBoolean("doEntityDrops")) {
             dropAsItem(true, true);
         }
         setBeenAttacked();
@@ -163,8 +163,8 @@ public class EntityDummy extends Entity {
             fallDistance += (float) (-motionY);
         }
         setRotation(rotationYaw, rotationPitch);
-        move(0.0, motionY, 0.0);
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
+        moveEntity(0.0, motionY, 0.0);
+        List<Entity> list = worldObj.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
                 0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
@@ -181,12 +181,12 @@ public class EntityDummy extends Entity {
         if (!onGround) {
             return;
         }
-        int i = MathHelper.floor(f);
+        int i = MathHelper.floor_float(f);
         attackEntityFrom(DamageSource.fall, (float) i);
     }
 
     public void dropAsItem(boolean destroyed, boolean noCreative) {
-        if (world.isRemote) {
+        if (worldObj.isRemote) {
             return;
         }
         if (destroyed) {

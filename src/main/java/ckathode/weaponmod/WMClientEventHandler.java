@@ -22,8 +22,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class WMClientEventHandler {
     @SubscribeEvent
     public void onMouseClick(final MouseEvent e) {
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
-        if (player == null || !player.world.isRemote || Minecraft.getMinecraft().currentScreen != null) {
+        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        if (player == null || !player.worldObj.isRemote || Minecraft.getMinecraft().currentScreen != null) {
             return;
         }
         if (e.getButton() == 0 && e.isButtonstate()) {
@@ -31,7 +31,7 @@ public class WMClientEventHandler {
             if (itemstack != null) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
-                    float reach = ieri.getExtendedReach(player.world, player, itemstack);
+                    float reach = ieri.getExtendedReach(player.worldObj, player, itemstack);
                     RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
                     if (raytraceResult != null && raytraceResult.entityHit != null && raytraceResult.entityHit != player && raytraceResult.entityHit.hurtResistantTime == 0) {
                         Minecraft.getMinecraft().playerController.attackEntity(player,
@@ -55,7 +55,7 @@ public class WMClientEventHandler {
 
     @SubscribeEvent
     public void onPlayerTick(final TickEvent.PlayerTickEvent e) {
-        if (!e.player.world.isRemote) {
+        if (!e.player.worldObj.isRemote) {
             return;
         }
         if (e.phase == TickEvent.Phase.START && e.player instanceof EntityPlayerSP) {

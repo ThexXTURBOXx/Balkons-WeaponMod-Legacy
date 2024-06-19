@@ -106,7 +106,7 @@ public final class PhysHelper {
         }
         entityliving.attackedAtYaw =
                 (float) (Math.atan2(dz, dx) * 180.0 / 3.141592653589793) - entityliving.rotationYaw;
-        float f = MathHelper.sqrt(dx * dx + dz * dz);
+        float f = MathHelper.sqrt_double(dx * dx + dz * dz);
         entityliving.motionX -= dx / f * knockback;
         entityliving.motionY += knockback;
         entityliving.motionZ -= dz / f * knockback;

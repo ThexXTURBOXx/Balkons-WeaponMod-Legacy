@@ -37,7 +37,7 @@ public class MeleeCompKnife extends MeleeComponent {
             if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
                 entityknife.setFire(100);
             }
-            world.spawnEntity(entityknife);
+            world.spawnEntityInWorld(entityknife);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
                 SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));

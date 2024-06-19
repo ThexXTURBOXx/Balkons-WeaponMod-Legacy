@@ -117,7 +117,7 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
 
     @SideOnly(Side.CLIENT)
     private EntityPlayer getClientPlayer() {
-        return Minecraft.getMinecraft().player;
+        return Minecraft.getMinecraft().thePlayer;
     }
 
     public void sendToAll(final WMMessage message) {

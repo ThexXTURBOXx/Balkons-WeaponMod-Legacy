@@ -86,7 +86,7 @@ public class RenderFlail extends Render<EntityFlail> {
             int k = (((EntityLivingBase) shooter).getPrimaryHand() == EnumHandSide.RIGHT) ?
                     1 : -1;
             float f13 = shooter.getSwingProgress(f1);
-            float f14 = MathHelper.sin(MathHelper.sqrt(f13) * 3.1415927f);
+            float f14 = MathHelper.sin(MathHelper.sqrt_float(f13) * 3.1415927f);
             float f15 =
                     (shooter.prevRenderYawOffset + (shooter.renderYawOffset - shooter.prevRenderYawOffset) * f1) * 0.017453292f;
             double d3 = MathHelper.sin(f15);
@@ -96,7 +96,7 @@ public class RenderFlail extends Render<EntityFlail> {
             double d8;
             double d9;
             double d10;
-            if (renderManager.options != null && renderManager.options.thirdPersonView <= 0 && shooter == Minecraft.getMinecraft().player) {
+            if (renderManager.options != null && renderManager.options.thirdPersonView <= 0 && shooter == Minecraft.getMinecraft().thePlayer) {
                 double f16 = renderManager.options.fovSetting;
                 f16 /= 100.0f;
                 Vec3d vec3d = new Vec3d(k * -0.36 * f16, -0.045 * f16, 0.4);

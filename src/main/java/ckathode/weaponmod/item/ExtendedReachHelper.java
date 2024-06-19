@@ -18,7 +18,7 @@ public final class ExtendedReachHelper {
     public static RayTraceResult getMouseOver(float frame, float dist) {
         RayTraceResult result = null;
         Entity entity = mc.getRenderViewEntity();
-        if (entity != null && mc.world != null) {
+        if (entity != null && mc.theWorld != null) {
             double distNew = dist;
             result = entity.rayTrace(distNew, frame);
             double calcDist = distNew;
@@ -33,7 +33,7 @@ public final class ExtendedReachHelper {
             Vec3d traced = pos.addVector(lookVec.xCoord * distNew, lookVec.yCoord * distNew, lookVec.zCoord * distNew);
             Entity pointedEntity = null;
             float f = 1.0F;
-            List<Entity> list = mc.world.getEntitiesInAABBexcluding(entity,
+            List<Entity> list = mc.theWorld.getEntitiesInAABBexcluding(entity,
                     entity.getEntityBoundingBox()
                             .expand(lookVec.xCoord * distNew, lookVec.yCoord * distNew, lookVec.zCoord * distNew)
                             .expand(f, f, f),

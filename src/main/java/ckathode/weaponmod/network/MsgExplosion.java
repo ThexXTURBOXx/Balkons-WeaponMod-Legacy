@@ -75,7 +75,7 @@ public class MsgExplosion extends WMMessage {
     @SideOnly(Side.CLIENT)
     @Override
     public void handleClientSide(EntityPlayer player) {
-        World world = Minecraft.getMinecraft().world;
+        World world = Minecraft.getMinecraft().theWorld;
         AdvancedExplosion expl = new AdvancedExplosion(world, null, x, y, z, size,
                 false, true);
         expl.setAffectedBlockPositions(blocks);

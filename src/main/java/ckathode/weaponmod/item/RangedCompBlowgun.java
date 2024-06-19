@@ -62,7 +62,7 @@ public class RangedCompBlowgun extends RangedComponent {
             if (item instanceof ItemBlowgunDart)
                 entityblowgundart.setDartEffectType((byte) dartStackCopy.getMetadata());
             applyProjectileEnchantments(entityblowgundart, itemstack);
-            world.spawnEntity(entityblowgundart);
+            world.spawnEntityInWorld(entityblowgundart);
         }
         int damage = 1;
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {

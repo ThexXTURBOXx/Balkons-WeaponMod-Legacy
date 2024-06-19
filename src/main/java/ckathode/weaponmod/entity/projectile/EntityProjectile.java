@@ -19,13 +19,13 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketChangeGameState;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -44,8 +44,8 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     protected int yTile;
     protected int zTile;
     @Nullable
-    protected IBlockState inBlockState;
-    protected boolean inGround;
+    protected Block inTile;
+    protected int inData;
     public PickupStatus pickupStatus;
     protected int ticksInGround;
     protected int ticksInAir;
@@ -58,7 +58,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         xTile = -1;
         yTile = -1;
         zTile = -1;
-        inBlockState = null;
+        inTile = null;
         inGround = false;
         arrowShake = 0;
         ticksInAir = 0;
@@ -104,7 +104,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
 
     @Override
     public void setThrowableHeading(double x, double y, double z, float speed, float deviation) {
-        float f = MathHelper.sqrt(x * x + y * y + z * z);
+        float f = MathHelper.sqrt_double(x * x + y * y + z * z);
         x /= f;
         y /= f;
         z /= f;
@@ -117,7 +117,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         motionX = x;
         motionY = y;
         motionZ = z;
-        float f2 = MathHelper.sqrt(x * x + z * z);
+        float f2 = MathHelper.sqrt_double(x * x + z * z);
         float n = (float) (MathHelper.atan2(x, z) * 180.0 / 3.141592653589793);
         rotationYaw = n;
         prevRotationYaw = n;
@@ -133,7 +133,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         motionY = d1;
         motionZ = d2;
         if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
-            float f = MathHelper.sqrt(d * d + d2 * d2);
+            float f = MathHelper.sqrt_double(d * d + d2 * d2);
             float n = (float) (MathHelper.atan2(d, d2) * 180.0 / 3.141592653589793);
             rotationYaw = n;
             prevRotationYaw = n;
@@ -154,7 +154,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     public void onEntityUpdate() {
         super.onEntityUpdate();
         if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
-            float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+            float f = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
             float n = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
             rotationYaw = n;
             prevRotationYaw = n;
@@ -163,9 +163,10 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
             prevRotationPitch = n2;
         }
         BlockPos blockpos = new BlockPos(xTile, yTile, zTile);
-        IBlockState iblockstate = world.getBlockState(blockpos);
+        IBlockState iblockstate = worldObj.getBlockState(blockpos);
+        Block block = iblockstate.getBlock();
         if (iblockstate.getMaterial() != Material.AIR) {
-            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(world, blockpos);
+            AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(worldObj, blockpos);
             if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(
                     new Vec3d(posX, posY, posZ))) {
                 inGround = true;
@@ -178,15 +179,15 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
             extinguish();
         }
         if (inGround) {
-            if (!iblockstate.equals(inBlockState) &&
-                !world.collidesWithAnyBlock(getEntityBoundingBox().expandXyz(0.05))) {
+            int i = block.getMetaFromState(iblockstate);
+            if (block != inTile || i != inData) {
                 inGround = false;
                 motionX *= rand.nextFloat() * 0.2f;
                 motionY *= rand.nextFloat() * 0.2f;
                 motionZ *= rand.nextFloat() * 0.2f;
                 ticksInGround = 0;
                 ticksInAir = 0;
-            } else if (!world.isRemote) {
+            } else if (!worldObj.isRemote) {
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {
@@ -200,7 +201,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         ++ticksInAir;
         Vec3d vec3d = new Vec3d(posX, posY, posZ);
         Vec3d vec3d2 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
-        RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d2, false, true, false);
+        RayTraceResult raytraceresult = worldObj.rayTraceBlocks(vec3d, vec3d2, false, true, false);
         vec3d = new Vec3d(posX, posY, posZ);
         vec3d2 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
         if (raytraceresult != null) {
@@ -220,7 +221,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         }
         if (getIsCritical()) {
             for (int i1 = 0; i1 < 2; ++i1) {
-                world.spawnParticle(EnumParticleTypes.CRIT, posX + motionX * i1 / 4.0,
+                worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + motionX * i1 / 4.0,
                         posY + motionY * i1 / 4.0, posZ + motionZ * i1 / 4.0, -motionX,
                         -motionY + 0.2, -motionZ);
             }
@@ -229,7 +230,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         posY += motionY;
         posZ += motionZ;
         if (aimRotation()) {
-            float f2 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+            float f2 = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
             float n3 = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
             rotationYaw = n3;
             prevRotationYaw = n3;
@@ -243,7 +244,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
             beenInGround = true;
             for (int i2 = 0; i2 < 4; ++i2) {
                 float f3 = 0.25f;
-                world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * f3,
+                worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * f3,
                         posY - motionY * f3, posZ - motionZ * f3, motionX, motionY,
                         motionZ);
             }
@@ -252,9 +253,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         motionX *= res;
         motionY *= res;
         motionZ *= res;
-        if (!hasNoGravity()) {
-            motionY -= grav;
-        }
+        motionY -= grav;
         setPosition(posX, posY, posZ);
         doBlockCollisions();
     }
@@ -271,7 +270,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         if (entity instanceof EntityLivingBase) {
             EntityLivingBase entityliving = (EntityLivingBase) entity;
             if (knockBack > 0) {
-                float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+                float f = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
                 if (f > 0.0f) {
                     entity.addVelocity(motionX * knockBack * 0.6 / f, 0.1,
                             motionZ * knockBack * 0.6 / f);
@@ -292,12 +291,14 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
-        inBlockState = world.getBlockState(blockpos);
+        IBlockState iBlockState = worldObj.getBlockState(blockpos);
+        inTile = iBlockState.getBlock();
+        inData = inTile.getMetaFromState(iBlockState);
         motionX = raytraceResult.hitVec.xCoord - posX;
         motionY = raytraceResult.hitVec.yCoord - posY;
         motionZ = raytraceResult.hitVec.zCoord - posZ;
         float f1 =
-                MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+                MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
         posX -= motionX / f1 * 0.05;
         posY -= motionY / f1 * 0.05;
         posZ -= motionZ / f1 * 0.05;
@@ -306,8 +307,8 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         setIsCritical(false);
         arrowShake = getMaxArrowShake();
         playHitSound();
-        if (inBlockState != null) {
-            inBlockState.getBlock().onEntityCollidedWithBlock(world, blockpos, inBlockState, this);
+        if (iBlockState.getMaterial() != Material.AIR) {
+            inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
         }
     }
 
@@ -323,7 +324,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     @Nullable
     protected Entity findEntity(Vec3d vec3d, Vec3d vec3d1) {
         Entity entity = null;
-        List<Entity> list = world.getEntitiesInAABBexcluding(this,
+        List<Entity> list = worldObj.getEntitiesInAABBexcluding(this,
                 getEntityBoundingBox().expand(motionX, motionY, motionZ).expandXyz(1.0),
                 WEAPON_TARGETS);
         double d = 0.0;
@@ -344,7 +345,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     }
 
     public double getTotalVelocity() {
-        return MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+        return MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
     }
 
     public boolean aimRotation() {
@@ -419,7 +420,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
 
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
-        if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote) {
+        if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !worldObj.isRemote) {
             ItemStack item = getPickupItem();
             if (item == null) {
                 return;
@@ -453,11 +454,11 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         nbttagcompound.setInteger("xTile", xTile);
         nbttagcompound.setInteger("yTile", yTile);
         nbttagcompound.setInteger("zTile", zTile);
-        if (inBlockState != null) {
-            NBTTagCompound compound = new NBTTagCompound();
-            NBTUtil.writeBlockState(compound, inBlockState);
-            nbttagcompound.setTag("inBlockState", compound);
+        if (inTile != null) {
+            ResourceLocation resourceLocation = Block.REGISTRY.getNameForObject(inTile);
+            nbttagcompound.setString("inTile", resourceLocation.toString());
         }
+        nbttagcompound.setByte("inData", (byte) inData);
         nbttagcompound.setByte("shake", (byte) arrowShake);
         nbttagcompound.setBoolean("inGround", inGround);
         nbttagcompound.setBoolean("beenInGround", beenInGround);
@@ -469,9 +470,9 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         xTile = nbttagcompound.getInteger("xTile");
         yTile = nbttagcompound.getInteger("yTile");
         zTile = nbttagcompound.getInteger("zTile");
-        if (nbttagcompound.hasKey("inBlockState", 10)) {
-            inBlockState = NBTUtil.readBlockState(nbttagcompound.getCompoundTag("inBlockState"));
-        }
+        inTile = nbttagcompound.hasKey("inTile", 8) ? Block.getBlockFromName(nbttagcompound.getString("inTile")) :
+                Block.getBlockById(nbttagcompound.getByte("inTile") & 0xFF);
+        inData = nbttagcompound.getByte("inData") & 0xFF;
         arrowShake = (nbttagcompound.getByte("shake") & 0xFF);
         inGround = nbttagcompound.getBoolean("inGround");
         beenInGround = nbttagcompound.getBoolean("beenInGrond");

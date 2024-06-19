@@ -54,23 +54,17 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Logger;
 
-@Mod.EventBusSubscriber
 @Mod(modid = BalkonsWeaponMod.MOD_ID, name = BalkonsWeaponMod.MOD_NAME, version = BalkonsWeaponMod.MOD_VERSION,
         updateJSON = BalkonsWeaponMod.UPDATE_JSON, acceptedMinecraftVersions = "@MC_RANGE@")
 public class BalkonsWeaponMod {
@@ -155,7 +149,6 @@ public class BalkonsWeaponMod {
     public BalkonsWeaponMod() {
         instance = this;
         messagePipeline = new WMMessagePipeline();
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Mod.EventHandler
@@ -189,7 +182,9 @@ public class BalkonsWeaponMod {
         modConfig.addReloadTimeSetting("flintlock", 15);
         modConfig.addReloadTimeSetting("mortar", 50);
         modConfig.loadConfig();
+        registerItems();
         proxy.registerRenderersEntity(modConfig);
+        proxy.registerRenderersItem(modConfig);
     }
 
     @Mod.EventHandler
@@ -204,11 +199,6 @@ public class BalkonsWeaponMod {
     @Mod.EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
         messagePipeline.postInitialize();
-    }
-
-    @SubscribeEvent
-    public static void registerModels(ModelRegistryEvent event) {
-        proxy.registerRenderersItem(instance.modConfig);
     }
 
     private void registerWeapons() {
@@ -440,115 +430,122 @@ public class BalkonsWeaponMod {
         }
     }
 
-    @SubscribeEvent
-    public void registerItems(RegistryEvent.Register<Item> event) {
-        IForgeRegistry<Item> registry = event.getRegistry();
-        registry.register(spearWood = new ItemMelee("spear.wood", new MeleeCompSpear(ToolMaterial.WOOD)));
-        registry.register(spearStone = new ItemMelee("spear.stone", new MeleeCompSpear(ToolMaterial.STONE)));
-        registry.register(spearSteel = new ItemMelee("spear.iron", new MeleeCompSpear(ToolMaterial.IRON)));
-        registry.register(spearGold = new ItemMelee("spear.gold", new MeleeCompSpear(ToolMaterial.GOLD)));
-        registry.register(spearDiamond = new ItemMelee("spear.diamond", new MeleeCompSpear(ToolMaterial.DIAMOND)));
+    public void registerItems() {
+        GameRegistry.register(spearWood = new ItemMelee("spear.wood", new MeleeCompSpear(ToolMaterial.WOOD)));
+        GameRegistry.register(spearStone = new ItemMelee("spear.stone", new MeleeCompSpear(ToolMaterial.STONE)));
+        GameRegistry.register(spearSteel = new ItemMelee("spear.iron", new MeleeCompSpear(ToolMaterial.IRON)));
+        GameRegistry.register(spearGold = new ItemMelee("spear.gold", new MeleeCompSpear(ToolMaterial.GOLD)));
+        GameRegistry.register(spearDiamond = new ItemMelee("spear.diamond", new MeleeCompSpear(ToolMaterial.DIAMOND)));
 
-        registry.register(halberdWood = new ItemMelee("halberd.wood", new MeleeCompHalberd(ToolMaterial.WOOD)));
-        registry.register(halberdStone = new ItemMelee("halberd.stone", new MeleeCompHalberd(ToolMaterial.STONE)));
-        registry.register(halberdSteel = new ItemMelee("halberd.iron", new MeleeCompHalberd(ToolMaterial.IRON)));
-        registry.register(halberdGold = new ItemMelee("halberd.gold", new MeleeCompHalberd(ToolMaterial.GOLD)));
-        registry.register(halberdDiamond = new ItemMelee("halberd.diamond",
+        GameRegistry.register(halberdWood = new ItemMelee("halberd.wood", new MeleeCompHalberd(ToolMaterial.WOOD)));
+        GameRegistry.register(halberdStone = new ItemMelee("halberd.stone", new MeleeCompHalberd(ToolMaterial.STONE)));
+        GameRegistry.register(halberdSteel = new ItemMelee("halberd.iron", new MeleeCompHalberd(ToolMaterial.IRON)));
+        GameRegistry.register(halberdGold = new ItemMelee("halberd.gold", new MeleeCompHalberd(ToolMaterial.GOLD)));
+        GameRegistry.register(halberdDiamond = new ItemMelee("halberd.diamond",
                 new MeleeCompHalberd(ToolMaterial.DIAMOND)));
 
-        registry.register(battleaxeWood = new ItemMelee("battleaxe.wood", new MeleeCompBattleaxe(ToolMaterial.WOOD)));
-        registry.register(battleaxeStone = new ItemMelee("battleaxe.stone",
+        GameRegistry.register(battleaxeWood = new ItemMelee("battleaxe.wood",
+                new MeleeCompBattleaxe(ToolMaterial.WOOD)));
+        GameRegistry.register(battleaxeStone = new ItemMelee("battleaxe.stone",
                 new MeleeCompBattleaxe(ToolMaterial.STONE)));
-        registry.register(battleaxeSteel = new ItemMelee("battleaxe.iron", new MeleeCompBattleaxe(ToolMaterial.IRON)));
-        registry.register(battleaxeGold = new ItemMelee("battleaxe.gold", new MeleeCompBattleaxe(ToolMaterial.GOLD)));
-        registry.register(battleaxeDiamond = new ItemMelee("battleaxe.diamond",
+        GameRegistry.register(battleaxeSteel = new ItemMelee("battleaxe.iron",
+                new MeleeCompBattleaxe(ToolMaterial.IRON)));
+        GameRegistry.register(battleaxeGold = new ItemMelee("battleaxe.gold",
+                new MeleeCompBattleaxe(ToolMaterial.GOLD)));
+        GameRegistry.register(battleaxeDiamond = new ItemMelee("battleaxe.diamond",
                 new MeleeCompBattleaxe(ToolMaterial.DIAMOND)));
 
-        registry.register(knifeWood = new ItemMelee("knife.wood", new MeleeCompKnife(ToolMaterial.WOOD)));
-        registry.register(knifeStone = new ItemMelee("knife.stone", new MeleeCompKnife(ToolMaterial.STONE)));
-        registry.register(knifeSteel = new ItemMelee("knife.iron", new MeleeCompKnife(ToolMaterial.IRON)));
-        registry.register(knifeGold = new ItemMelee("knife.gold", new MeleeCompKnife(ToolMaterial.GOLD)));
-        registry.register(knifeDiamond = new ItemMelee("knife.diamond", new MeleeCompKnife(ToolMaterial.DIAMOND)));
+        GameRegistry.register(knifeWood = new ItemMelee("knife.wood", new MeleeCompKnife(ToolMaterial.WOOD)));
+        GameRegistry.register(knifeStone = new ItemMelee("knife.stone", new MeleeCompKnife(ToolMaterial.STONE)));
+        GameRegistry.register(knifeSteel = new ItemMelee("knife.iron", new MeleeCompKnife(ToolMaterial.IRON)));
+        GameRegistry.register(knifeGold = new ItemMelee("knife.gold", new MeleeCompKnife(ToolMaterial.GOLD)));
+        GameRegistry.register(knifeDiamond = new ItemMelee("knife.diamond", new MeleeCompKnife(ToolMaterial.DIAMOND)));
 
-        registry.register(warhammerWood = new ItemMelee("warhammer.wood", new MeleeCompWarhammer(ToolMaterial.WOOD)));
-        registry.register(warhammerStone = new ItemMelee("warhammer.stone",
+        GameRegistry.register(warhammerWood = new ItemMelee("warhammer.wood",
+                new MeleeCompWarhammer(ToolMaterial.WOOD)));
+        GameRegistry.register(warhammerStone = new ItemMelee("warhammer.stone",
                 new MeleeCompWarhammer(ToolMaterial.STONE)));
-        registry.register(warhammerSteel = new ItemMelee("warhammer.iron", new MeleeCompWarhammer(ToolMaterial.IRON)));
-        registry.register(warhammerGold = new ItemMelee("warhammer.gold", new MeleeCompWarhammer(ToolMaterial.GOLD)));
-        registry.register(warhammerDiamond = new ItemMelee("warhammer.diamond",
+        GameRegistry.register(warhammerSteel = new ItemMelee("warhammer.iron",
+                new MeleeCompWarhammer(ToolMaterial.IRON)));
+        GameRegistry.register(warhammerGold = new ItemMelee("warhammer.gold",
+                new MeleeCompWarhammer(ToolMaterial.GOLD)));
+        GameRegistry.register(warhammerDiamond = new ItemMelee("warhammer.diamond",
                 new MeleeCompWarhammer(ToolMaterial.DIAMOND)));
 
-        registry.register(flailWood = new ItemFlail("flail.wood", new MeleeCompNone(ToolMaterial.WOOD)));
-        registry.register(flailStone = new ItemFlail("flail.stone", new MeleeCompNone(ToolMaterial.STONE)));
-        registry.register(flailSteel = new ItemFlail("flail.iron", new MeleeCompNone(ToolMaterial.IRON)));
-        registry.register(flailGold = new ItemFlail("flail.gold", new MeleeCompNone(ToolMaterial.GOLD)));
-        registry.register(flailDiamond = new ItemFlail("flail.diamond", new MeleeCompNone(ToolMaterial.DIAMOND)));
+        GameRegistry.register(flailWood = new ItemFlail("flail.wood", new MeleeCompNone(ToolMaterial.WOOD)));
+        GameRegistry.register(flailStone = new ItemFlail("flail.stone", new MeleeCompNone(ToolMaterial.STONE)));
+        GameRegistry.register(flailSteel = new ItemFlail("flail.iron", new MeleeCompNone(ToolMaterial.IRON)));
+        GameRegistry.register(flailGold = new ItemFlail("flail.gold", new MeleeCompNone(ToolMaterial.GOLD)));
+        GameRegistry.register(flailDiamond = new ItemFlail("flail.diamond", new MeleeCompNone(ToolMaterial.DIAMOND)));
 
-        registry.register(katanaWood = new ItemMelee("katana.wood",
+        GameRegistry.register(katanaWood = new ItemMelee("katana.wood",
                 new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.WOOD)));
-        registry.register(katanaStone = new ItemMelee("katana.stone",
+        GameRegistry.register(katanaStone = new ItemMelee("katana.stone",
                 new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.STONE)));
-        registry.register(katanaSteel = new ItemMelee("katana.iron",
+        GameRegistry.register(katanaSteel = new ItemMelee("katana.iron",
                 new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.IRON)));
-        registry.register(katanaGold = new ItemMelee("katana.gold",
+        GameRegistry.register(katanaGold = new ItemMelee("katana.gold",
                 new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.GOLD)));
-        registry.register(katanaDiamond = new ItemMelee("katana.diamond",
+        GameRegistry.register(katanaDiamond = new ItemMelee("katana.diamond",
                 new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, ToolMaterial.DIAMOND)));
 
-        registry.register(boomerangWood = new ItemMelee("boomerang.wood", new MeleeCompBoomerang(ToolMaterial.WOOD)));
-        registry.register(boomerangStone = new ItemMelee("boomerang.stone",
+        GameRegistry.register(boomerangWood = new ItemMelee("boomerang.wood",
+                new MeleeCompBoomerang(ToolMaterial.WOOD)));
+        GameRegistry.register(boomerangStone = new ItemMelee("boomerang.stone",
                 new MeleeCompBoomerang(ToolMaterial.STONE)));
-        registry.register(boomerangSteel = new ItemMelee("boomerang.iron", new MeleeCompBoomerang(ToolMaterial.IRON)));
-        registry.register(boomerangGold = new ItemMelee("boomerang.gold", new MeleeCompBoomerang(ToolMaterial.GOLD)));
-        registry.register(boomerangDiamond = new ItemMelee("boomerang.diamond",
+        GameRegistry.register(boomerangSteel = new ItemMelee("boomerang.iron",
+                new MeleeCompBoomerang(ToolMaterial.IRON)));
+        GameRegistry.register(boomerangGold = new ItemMelee("boomerang.gold",
+                new MeleeCompBoomerang(ToolMaterial.GOLD)));
+        GameRegistry.register(boomerangDiamond = new ItemMelee("boomerang.diamond",
                 new MeleeCompBoomerang(ToolMaterial.DIAMOND)));
 
-        registry.register(fireRod = new ItemMelee("firerod", new MeleeCompFirerod()));
+        GameRegistry.register(fireRod = new ItemMelee("firerod", new MeleeCompFirerod()));
 
-        registry.register(javelin = new ItemJavelin("javelin"));
+        GameRegistry.register(javelin = new ItemJavelin("javelin"));
 
-        registry.register(crossbow = new ItemShooter("crossbow", new RangedCompCrossbow(),
+        GameRegistry.register(crossbow = new ItemShooter("crossbow", new RangedCompCrossbow(),
                 new MeleeCompNone(null)));
-        registry.register(bolt = new WMItem("bolt"));
+        GameRegistry.register(bolt = new WMItem("bolt"));
 
-        registry.register(blowgun = new ItemShooter("blowgun", new RangedCompBlowgun(), new MeleeCompNone(null)));
-        registry.register(dart = new ItemBlowgunDart("dart"));
+        GameRegistry.register(blowgun = new ItemShooter("blowgun", new RangedCompBlowgun(), new MeleeCompNone(null)));
+        GameRegistry.register(dart = new ItemBlowgunDart("dart"));
 
-        registry.register(bayonetWood = new ItemMusket("musketbayonet.wood",
+        GameRegistry.register(bayonetWood = new ItemMusket("musketbayonet.wood",
                 new MeleeCompKnife(ToolMaterial.WOOD), knifeWood));
-        registry.register(bayonetStone = new ItemMusket("musketbayonet.stone",
+        GameRegistry.register(bayonetStone = new ItemMusket("musketbayonet.stone",
                 new MeleeCompKnife(ToolMaterial.STONE), knifeStone));
-        registry.register(bayonetSteel = new ItemMusket("musketbayonet.iron",
+        GameRegistry.register(bayonetSteel = new ItemMusket("musketbayonet.iron",
                 new MeleeCompKnife(ToolMaterial.IRON), knifeSteel));
-        registry.register(bayonetGold = new ItemMusket("musketbayonet.gold",
+        GameRegistry.register(bayonetGold = new ItemMusket("musketbayonet.gold",
                 new MeleeCompKnife(ToolMaterial.GOLD), knifeGold));
-        registry.register(bayonetDiamond = new ItemMusket("musketbayonet.diamond",
+        GameRegistry.register(bayonetDiamond = new ItemMusket("musketbayonet.diamond",
                 new MeleeCompKnife(ToolMaterial.DIAMOND), knifeDiamond));
-        registry.register(musket = new ItemMusket("musket", new MeleeCompNone(null), null));
-        registry.register(musketIronPart = new WMItem("musket-ironpart"));
+        GameRegistry.register(musket = new ItemMusket("musket", new MeleeCompNone(null), null));
+        GameRegistry.register(musketIronPart = new WMItem("musket-ironpart"));
 
-        registry.register(blunderbuss = new ItemShooter("blunderbuss", new RangedCompBlunderbuss(),
+        GameRegistry.register(blunderbuss = new ItemShooter("blunderbuss", new RangedCompBlunderbuss(),
                 new MeleeCompNone(null)));
-        registry.register(blunderIronPart = new WMItem("blunder-ironpart"));
-        registry.register(blunderShot = new WMItem("shot"));
+        GameRegistry.register(blunderIronPart = new WMItem("blunder-ironpart"));
+        GameRegistry.register(blunderShot = new WMItem("shot"));
 
-        registry.register(flintlockPistol = new ItemShooter("flintlock", new RangedCompFlintlock(),
+        GameRegistry.register(flintlockPistol = new ItemShooter("flintlock", new RangedCompFlintlock(),
                 new MeleeCompNone(null)));
 
-        registry.register(dynamite = new ItemDynamite("dynamite"));
+        GameRegistry.register(dynamite = new ItemDynamite("dynamite"));
 
-        registry.register(cannon = new ItemCannon("cannon"));
-        registry.register(cannonBall = new WMItem("cannonball"));
+        GameRegistry.register(cannon = new ItemCannon("cannon"));
+        GameRegistry.register(cannonBall = new WMItem("cannonball"));
 
-        registry.register(dummy = new ItemDummy("dummy"));
+        GameRegistry.register(dummy = new ItemDummy("dummy"));
 
-        registry.register(gunStock = new WMItem("gun-stock"));
+        GameRegistry.register(gunStock = new WMItem("gun-stock"));
 
-        registry.register(musketBullet = new WMItem("bullet"));
+        GameRegistry.register(musketBullet = new WMItem("bullet"));
 
-        registry.register(mortar = new ItemShooter("mortar", new RangedCompMortar(), new MeleeCompNone(null)));
-        registry.register(mortarIronPart = new WMItem("mortar-ironpart"));
-        registry.register(mortarShell = new WMItem("shell"));
+        GameRegistry.register(mortar = new ItemShooter("mortar", new RangedCompMortar(), new MeleeCompNone(null)));
+        GameRegistry.register(mortarIronPart = new WMItem("mortar-ironpart"));
+        GameRegistry.register(mortarShell = new WMItem("shell"));
 
         registerDispenseBehavior();
     }

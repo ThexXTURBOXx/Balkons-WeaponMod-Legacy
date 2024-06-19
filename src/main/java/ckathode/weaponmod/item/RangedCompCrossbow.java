@@ -41,7 +41,7 @@ public class RangedCompCrossbow extends RangedComponent {
             EntityCrossbowBolt entitybolt = new EntityCrossbowBolt(world, entityplayer);
             entitybolt.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 1.5f / f);
             applyProjectileEnchantments(entitybolt, itemstack);
-            world.spawnEntity(entitybolt);
+            world.spawnEntityInWorld(entitybolt);
         }
         int damage = 1;
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {

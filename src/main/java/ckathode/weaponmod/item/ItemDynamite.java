@@ -37,7 +37,7 @@ public class ItemDynamite extends WMItem {
             EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
                     40 + itemRand.nextInt(10));
             entitydynamite.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.7f, 4.0f);
-            world.spawnEntity(entitydynamite);
+            world.spawnEntityInWorld(entitydynamite);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }

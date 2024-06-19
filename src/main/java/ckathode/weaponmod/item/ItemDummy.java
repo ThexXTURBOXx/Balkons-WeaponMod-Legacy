@@ -61,7 +61,7 @@ public class ItemDummy extends WMItem {
         if (!world.getCollisionBoxes(entitydummy, entitydummy.getEntityBoundingBox().expandXyz(-0.1)).isEmpty()) {
             return EnumActionResult.FAIL;
         }
-        world.spawnEntity(entitydummy);
+        world.spawnEntityInWorld(entitydummy);
         if (!entityplayer.isCreative()) {
             itemstack.splitStack(1);
         }
