@@ -12,7 +12,8 @@
     }
   },
   "result": {
-    "item": "weaponmod:cannonball"
+    "item": "weaponmod:cannonball",
+    "count": 4
   },
   "conditions": [
     {
