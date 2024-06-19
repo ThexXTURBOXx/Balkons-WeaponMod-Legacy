@@ -125,7 +125,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
     }
 
     public ItemStack getStackToRender(EntityBoomerang entity) {
-        return entity.getWeapon();
+        return entity.getWeapon().or(() -> new ItemStack(BalkonsWeaponMod.boomerangWood));
     }
 
     @Override

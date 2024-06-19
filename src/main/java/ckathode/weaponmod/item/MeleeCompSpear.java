@@ -25,6 +25,9 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
                                                     EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
+        if (itemstack == null) {
+            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+        }
         if (!BalkonsWeaponMod.instance.modConfig.canThrowSpear) {
             return super.onItemRightClick(world, entityplayer, hand);
         }
@@ -37,11 +40,11 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             }
             world.spawnEntity(entityspear);
         }
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
-                , SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
+                SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
             itemstack = itemstack.copy();
-            itemstack.shrink(1);
+            itemstack.splitStack(1);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }

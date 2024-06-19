@@ -88,9 +88,9 @@ public class EntityCannonBall extends EntityProjectile {
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = world.getBlockState(blockpos);
-        motionX = raytraceResult.hitVec.x - posX;
-        motionY = raytraceResult.hitVec.y - posY;
-        motionZ = raytraceResult.hitVec.z - posZ;
+        motionX = raytraceResult.hitVec.xCoord - posX;
+        motionY = raytraceResult.hitVec.yCoord - posY;
+        motionZ = raytraceResult.hitVec.zCoord - posZ;
         float f1 =
                 MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
         posX -= motionX / f1 * 0.05;

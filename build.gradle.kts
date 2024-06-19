@@ -63,7 +63,7 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
-    mappings("de.oceanlabs.mcp:mcp_stable:32-1.11")
+    mappings("de.oceanlabs.mcp:mcp_stable:29-1.10.2")
     forge("net.minecraftforge:forge:$forge_version")
 }
 

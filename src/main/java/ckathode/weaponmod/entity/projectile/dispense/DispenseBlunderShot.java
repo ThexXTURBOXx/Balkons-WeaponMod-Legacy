@@ -24,7 +24,7 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
         EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getFrontOffsetX(),
                 pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), face.getFrontOffsetX(),
                 face.getFrontOffsetY(), face.getFrontOffsetZ());
-        itemstack.shrink(1);
+        itemstack.splitStack(1);
         return itemstack;
     }
 

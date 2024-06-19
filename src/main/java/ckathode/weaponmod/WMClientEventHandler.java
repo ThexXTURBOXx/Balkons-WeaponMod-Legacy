@@ -28,7 +28,7 @@ public class WMClientEventHandler {
         }
         if (e.getButton() == 0 && e.isButtonstate()) {
             ItemStack itemstack = player.getHeldItemMainhand();
-            if (!itemstack.isEmpty()) {
+            if (itemstack != null) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
                     float reach = ieri.getExtendedReach(player.world, player, itemstack);

@@ -54,7 +54,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -213,33 +212,33 @@ public class BalkonsWeaponMod {
     }
 
     private void registerWeapons() {
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear",
+        EntityRegistry.registerModEntity(EntitySpear.class, "spear",
                 1, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife",
+        EntityRegistry.registerModEntity(EntityKnife.class, "knife",
                 2, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin",
+        EntityRegistry.registerModEntity(EntityJavelin.class, "javelin",
                 3, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class, "bullet",
+        EntityRegistry.registerModEntity(EntityMusketBullet.class, "bullet",
                 4, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt",
+        EntityRegistry.registerModEntity(EntityCrossbowBolt.class, "bolt",
                 5, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
+        EntityRegistry.registerModEntity(EntityBlowgunDart.class, "dart",
                 6, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class, "dynamite",
+        EntityRegistry.registerModEntity(EntityDynamite.class, "dynamite",
                 7, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail",
+        EntityRegistry.registerModEntity(EntityFlail.class, "flail",
                 8, this, 32, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
+        EntityRegistry.registerModEntity(EntityCannon.class, "cannon",
                 9, this, 64, 128, false);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
+        EntityRegistry.registerModEntity(EntityCannonBall.class,
                 "cannonball", 10, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
+        EntityRegistry.registerModEntity(EntityBlunderShot.class, "shot",
                 11, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy",
+        EntityRegistry.registerModEntity(EntityDummy.class, "dummy",
                 12, this, 64, 20, false);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
+        EntityRegistry.registerModEntity(EntityBoomerang.class,
                 "boomerang", 13, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell",
+        EntityRegistry.registerModEntity(EntityMortarShell.class, "shell",
                 14, this, 64, 20, true);
 
         if (modConfig.isEnabled("spear")) {
@@ -253,7 +252,6 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(spearGold, "  #", " X ", "X  ",
                     'X', "stickWood", '#', "ingotGold"));
-            GameRegistry.addSmelting(spearSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(spearGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("halberd")) {
@@ -267,7 +265,6 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(halberdGold, " ##", " X#", "X  ",
                     'X', "stickWood", '#', "ingotGold"));
-            GameRegistry.addSmelting(halberdSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(halberdGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("knife")) {
@@ -291,7 +288,6 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(knifeGold, "#", "X",
                     'X', "stickWood", '#', "ingotGold"));
-            GameRegistry.addSmelting(knifeSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(knifeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("javelin")) {
@@ -326,7 +322,6 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(battleaxeGold, "###", "#X#", " X ",
                     'X', "stickWood", '#', "ingotGold"));
-            GameRegistry.addSmelting(battleaxeSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(battleaxeGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("warhammer")) {
@@ -340,7 +335,6 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(warhammerGold, "#X#", "#X#", " X ",
                     'X', "stickWood", '#', "ingotGold"));
-            GameRegistry.addSmelting(warhammerSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(warhammerGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("crossbow")) {
@@ -374,7 +368,6 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", 'O', "string", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(flailGold, "  O", " XO", "X #",
                     'X', "stickWood", 'O', "string", '#', "ingotGold"));
-            GameRegistry.addSmelting(flailSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(flailGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("firerod")) {
@@ -414,7 +407,6 @@ public class BalkonsWeaponMod {
                     'X', "plankWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(boomerangGold, "XX#", "  X", "  X",
                     'X', "plankWood", '#', "ingotGold"));
-            GameRegistry.addSmelting(boomerangSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(boomerangGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("katana")) {
@@ -428,7 +420,6 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(katanaGold, "  #", " # ", "X  ",
                     'X', "stickWood", '#', "ingotGold"));
-            GameRegistry.addSmelting(katanaSteel, new ItemStack(Items.field_191525_da), 0.1f);
             GameRegistry.addSmelting(katanaGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("flintlock")) {

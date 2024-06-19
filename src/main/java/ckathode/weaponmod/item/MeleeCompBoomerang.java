@@ -24,7 +24,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                                      EntityLivingBase entityliving, int i) {
         if (entityliving instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) entityliving;
-            if (itemstack.isEmpty()) {
+            if (itemstack == null) {
                 return;
             }
             int j = getMaxItemUseDuration(itemstack) - i;
@@ -55,7 +55,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                     SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.6f,
                     1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
             if (!entityplayer.isCreative()) {
-                itemstack.shrink(1);
+                itemstack.splitStack(1);
             }
         }
     }
@@ -72,7 +72,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
         if (hand != EnumHand.MAIN_HAND) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
-        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
+        if (!entityplayer.isCreative() && itemstack == null) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);

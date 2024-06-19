@@ -6,7 +6,6 @@ import ckathode.weaponmod.item.IItemWeapon;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -25,6 +24,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityDummy extends Entity {
     public static final String NAME = "dummy";
@@ -163,8 +163,8 @@ public class EntityDummy extends Entity {
             fallDistance += (float) (-motionY);
         }
         setRotation(rotationYaw, rotationPitch);
-        move(MoverType.SELF, 0.0, motionY, 0.0);
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(0.2,
+        move(0.0, motionY, 0.0);
+        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
                 0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
@@ -182,7 +182,7 @@ public class EntityDummy extends Entity {
             return;
         }
         int i = MathHelper.floor(f);
-        attackEntityFrom(DamageSource.FALL, (float) i);
+        attackEntityFrom(DamageSource.fall, (float) i);
     }
 
     public void dropAsItem(boolean destroyed, boolean noCreative) {
@@ -200,9 +200,10 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer entityplayer, @Nonnull EnumHand hand) {
+    public boolean processInitialInteract(@Nonnull EntityPlayer entityplayer, @Nullable ItemStack stack,
+                                          @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-        if (!itemstack.isEmpty()) {
+        if (itemstack != null) {
             if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof ItemSword || itemstack.getItem() instanceof ItemBow || itemstack.getItem() instanceof ItemShield) {
                 return false;
             }

@@ -26,11 +26,10 @@ public class ItemDynamite extends WMItem {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
-                                                    @Nonnull EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
+                                                    EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         if (!entityplayer.isCreative()) {
-            itemstack.shrink(1);
+            itemstack.splitStack(1);
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED,
                 SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));

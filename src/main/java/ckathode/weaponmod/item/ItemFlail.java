@@ -59,7 +59,7 @@ public class ItemFlail extends ItemMelee {
             return;
         }
         ItemStack itemstack2 = player.getHeldItemMainhand();
-        if (itemstack2.isEmpty() || !((itemstack2.getItem()) instanceof ItemFlail)) {
+        if (itemstack2 == null || !((itemstack2.getItem()) instanceof ItemFlail)) {
             setThrown(player, false);
         } else if (itemstack2.getItem() == this) {
             int id = PlayerWeaponData.getFlailEntityId(player);
@@ -75,20 +75,18 @@ public class ItemFlail extends ItemMelee {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world,
-                                                    @Nonnull EntityPlayer entityplayer,
-                                                    @Nonnull EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
+                                                    @Nonnull EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         if (hand != EnumHand.MAIN_HAND) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         removePreviousFlail(world, entityplayer);
-        if (!itemstack.isEmpty()) {
+        if (itemstack.stackSize > 0) {
             entityplayer.swingArm(hand);
             if (!entityplayer.isCreative()) {
                 itemstack.damageItem(1, entityplayer);
             }
-            if (!itemstack.isEmpty()) {
+            if (itemstack.stackSize > 0) {
                 throwFlail(itemstack, world, entityplayer);
             }
         }
@@ -98,7 +96,7 @@ public class ItemFlail extends ItemMelee {
     @Override
     public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityliving,
                              @Nonnull EntityLivingBase attacker) {
-        onItemRightClick(attacker.world, (EntityPlayer) attacker, EnumHand.MAIN_HAND);
+        onItemRightClick(itemstack, attacker.world, (EntityPlayer) attacker, EnumHand.MAIN_HAND);
         return true;
     }
 

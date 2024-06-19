@@ -1,10 +1,13 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import com.google.common.base.Optional;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -18,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class EntityMaterialProjectile extends EntityProjectile {
     private static final DataParameter<Byte> WEAPON_MATERIAL =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
-    private static final DataParameter<ItemStack> WEAPON_ITEM =
+    private static final DataParameter<Optional<ItemStack>> WEAPON_ITEM =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
@@ -32,7 +35,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     public void entityInit() {
         super.entityInit();
         dataManager.register(WEAPON_MATERIAL, (byte) 0);
-        dataManager.register(WEAPON_ITEM, ItemStack.EMPTY);
+        dataManager.register(WEAPON_ITEM, Optional.absent());
     }
 
     public float getMeleeHitDamage(Entity entity) {
@@ -60,23 +63,29 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
         }
     }
 
-    public void setThrownItemStack(@Nonnull ItemStack itemstack) {
+    public void setThrownItemStack(@Nullable ItemStack itemstack) {
         thrownItem = itemstack;
         updateWeaponMaterial();
-        dataManager.set(WEAPON_ITEM, itemstack);
+        dataManager.set(WEAPON_ITEM, Optional.fromNullable(itemstack));
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickupItem() {
+        return thrownItem;
     }
 
     @Nonnull
     @Override
-    public ItemStack getPickupItem() {
-        return thrownItem;
+    protected ItemStack getArrowStack() {
+        return thrownItem == null ? new ItemStack(Items.ARROW) : thrownItem;
     }
 
     public int getWeaponMaterialId() {
         return dataManager.get(WEAPON_MATERIAL);
     }
 
-    public ItemStack getWeapon() {
+    public Optional<ItemStack> getWeapon() {
         return dataManager.get(WEAPON_ITEM);
     }
 
@@ -110,7 +119,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
         super.readEntityFromNBT(nbttagcompound);
-        setThrownItemStack(new ItemStack(nbttagcompound.getCompoundTag("thrI")));
+        setThrownItemStack(ItemStack.loadItemStackFromNBT(nbttagcompound.getCompoundTag("thrI")));
     }
 
 }

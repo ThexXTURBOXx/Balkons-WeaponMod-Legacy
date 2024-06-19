@@ -27,10 +27,10 @@ public class ItemJavelin extends WMItem {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack itemstack, @Nonnull World world,
+    public void onPlayerStoppedUsing(@Nonnull ItemStack itemstack, @Nonnull World world,
                                      @Nonnull EntityLivingBase entityLiving, int i) {
         EntityPlayer entityplayer = (EntityPlayer) entityLiving;
-        if (itemstack.isEmpty()) {
+        if (itemstack.stackSize <= 0) {
             return;
         }
         int j = getMaxItemUseDuration(itemstack) - i;
@@ -53,10 +53,7 @@ public class ItemJavelin extends WMItem {
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
-            itemstack.shrink(1);
-            if (itemstack.isEmpty()) {
-                entityplayer.inventory.deleteStack(itemstack);
-            }
+            itemstack.splitStack(1);
         }
     }
 
@@ -73,10 +70,9 @@ public class ItemJavelin extends WMItem {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, EntityPlayer entityplayer,
-                                                    @Nonnull EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
+                                                    EntityPlayer entityplayer, @Nonnull EnumHand hand) {
+        if (!entityplayer.isCreative() && itemstack.stackSize <= 0) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);

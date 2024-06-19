@@ -38,7 +38,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
             }
             for (int i = 0; i < dispenser.getSizeInventory(); ++i) {
                 ItemStack itemstack2 = dispenser.getStackInSlot(i);
-                if (!itemstack2.isEmpty() && itemstack2.getItem() == itemtocheck) {
+                if (itemstack2 != null && itemstack2.getItem() == itemtocheck) {
                     dispenser.decrStackSize(i, 1);
                     canfire = true;
                     break;
@@ -58,7 +58,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
                 pos.getY() + yvel, pos.getZ() + zvel);
         entitycannonball.setThrowableHeading(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
         blocksource.getWorld().spawnEntity(entitycannonball);
-        itemstack.shrink(1);
+        itemstack.splitStack(1);
         return itemstack;
     }
 

@@ -104,9 +104,9 @@ public class RenderFlail extends Render<EntityFlail> {
                 vec3d = vec3d.rotateYaw(-(shooter.prevRotationYaw + (shooter.rotationYaw - shooter.prevRotationYaw) * f1) * 0.017453292f);
                 vec3d = vec3d.rotateYaw(f14 * 0.5f);
                 vec3d = vec3d.rotatePitch(-f14 * 0.7f);
-                d7 = shooter.prevPosX + (shooter.posX - shooter.prevPosX) * f1 + vec3d.x;
-                d8 = shooter.prevPosY + (shooter.posY - shooter.prevPosY) * f1 + vec3d.y;
-                d9 = shooter.prevPosZ + (shooter.posZ - shooter.prevPosZ) * f1 + vec3d.z;
+                d7 = shooter.prevPosX + (shooter.posX - shooter.prevPosX) * f1 + vec3d.xCoord;
+                d8 = shooter.prevPosY + (shooter.posY - shooter.prevPosY) * f1 + vec3d.yCoord;
+                d9 = shooter.prevPosZ + (shooter.posZ - shooter.prevPosZ) * f1 + vec3d.zCoord;
                 d10 = shooter.getEyeHeight();
             } else {
                 d7 = shooter.prevPosX + (shooter.posX - shooter.prevPosX) * f1 - d4 * d5 - d3 * 0.8;

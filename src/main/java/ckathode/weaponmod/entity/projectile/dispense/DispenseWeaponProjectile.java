@@ -23,7 +23,7 @@ public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispens
         projectile.setThrowableHeading(face.getFrontOffsetX(), face.getFrontOffsetY() + getYVel(),
                 face.getFrontOffsetZ(), getProjectileVelocity(), getProjectileInaccuracy());
         world.spawnEntity((Entity) projectile);
-        itemstack.shrink(1);
+        itemstack.splitStack(1);
         return itemstack;
     }
 

@@ -116,7 +116,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
                 ItemStack item = getPickupItem();
-                if (item.isEmpty()) {
+                if (item == null) {
                     return;
                 }
                 if (player.isCreative() || player.inventory.addItemStackToInventory(item)) {
@@ -139,7 +139,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getItemDamage() + 1 >= thrownItem.getMaxDamage()) {
-                thrownItem.shrink(1);
+                thrownItem.splitStack(1);
                 setDead();
             } else {
                 thrownItem.attemptDamageItem(1, rand);
@@ -157,9 +157,9 @@ public class EntityBoomerang extends EntityMaterialProjectile {
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = world.getBlockState(blockpos);
-        motionX = raytraceResult.hitVec.x - posX;
-        motionY = raytraceResult.hitVec.y - posY;
-        motionZ = raytraceResult.hitVec.z - posZ;
+        motionX = raytraceResult.hitVec.xCoord - posX;
+        motionY = raytraceResult.hitVec.yCoord - posY;
+        motionZ = raytraceResult.hitVec.zCoord - posZ;
         float f1 =
                 MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
         posX -= motionX / f1 * RETURN_STRENGTH;
@@ -217,7 +217,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
         if (!beenInGround && ticksInAir > 5 && !world.isRemote && floatStrength >= MIN_FLOAT_STRENGTH &&
             entityplayer == shootingEntity) {
             ItemStack item = getPickupItem();
-            if (item.isEmpty()) {
+            if (item == null) {
                 return;
             }
             if (entityplayer.isCreative() || entityplayer.inventory.addItemStackToInventory(item)) {

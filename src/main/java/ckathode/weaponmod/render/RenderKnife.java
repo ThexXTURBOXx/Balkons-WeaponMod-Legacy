@@ -115,7 +115,7 @@ public class RenderKnife extends Render<EntityKnife> {
     }
 
     public ItemStack getStackToRender(EntityKnife entity) {
-        return entity.getWeapon();
+        return entity.getWeapon().or(() -> new ItemStack(BalkonsWeaponMod.knifeWood));
     }
 
     @Override

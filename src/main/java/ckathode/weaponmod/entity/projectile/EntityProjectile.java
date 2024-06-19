@@ -166,7 +166,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         IBlockState iblockstate = world.getBlockState(blockpos);
         if (iblockstate.getMaterial() != Material.AIR) {
             AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(world, blockpos);
-            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).contains(
+            if (axisalignedbb != Block.NULL_AABB && axisalignedbb.offset(blockpos).isVecInside(
                     new Vec3d(posX, posY, posZ))) {
                 inGround = true;
             }
@@ -179,7 +179,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         }
         if (inGround) {
             if (!iblockstate.equals(inBlockState) &&
-                !world.collidesWithAnyBlock(getEntityBoundingBox().grow(0.05))) {
+                !world.collidesWithAnyBlock(getEntityBoundingBox().expandXyz(0.05))) {
                 inGround = false;
                 motionX *= rand.nextFloat() * 0.2f;
                 motionY *= rand.nextFloat() * 0.2f;
@@ -204,7 +204,8 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         vec3d = new Vec3d(posX, posY, posZ);
         vec3d2 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
         if (raytraceresult != null) {
-            vec3d2 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+            vec3d2 = new Vec3d(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord,
+                    raytraceresult.hitVec.zCoord);
         }
         Entity entity = findEntity(vec3d, vec3d2);
         if (entity != null) {
@@ -292,9 +293,9 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = world.getBlockState(blockpos);
-        motionX = raytraceResult.hitVec.x - posX;
-        motionY = raytraceResult.hitVec.y - posY;
-        motionZ = raytraceResult.hitVec.z - posZ;
+        motionX = raytraceResult.hitVec.xCoord - posX;
+        motionY = raytraceResult.hitVec.yCoord - posY;
+        motionZ = raytraceResult.hitVec.zCoord - posZ;
         float f1 =
                 MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
         posX -= motionX / f1 * 0.05;
@@ -323,12 +324,12 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     protected Entity findEntity(Vec3d vec3d, Vec3d vec3d1) {
         Entity entity = null;
         List<Entity> list = world.getEntitiesInAABBexcluding(this,
-                getEntityBoundingBox().expand(motionX, motionY, motionZ).grow(1.0),
+                getEntityBoundingBox().expand(motionX, motionY, motionZ).expandXyz(1.0),
                 WEAPON_TARGETS);
         double d = 0.0;
         for (Entity entity2 : list) {
             if (entity2 != shootingEntity || ticksInAir >= 5) {
-                AxisAlignedBB axisalignedbb = entity2.getEntityBoundingBox().grow(0.3);
+                AxisAlignedBB axisalignedbb = entity2.getEntityBoundingBox().expandXyz(0.3);
                 RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d1);
                 if (raytraceresult != null) {
                     double d2 = vec3d.squareDistanceTo(raytraceresult.hitVec);
@@ -368,12 +369,6 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
 
     public int getMaxArrowShake() {
         return 7;
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return ItemStack.EMPTY;
     }
 
     public void playHitSound() {

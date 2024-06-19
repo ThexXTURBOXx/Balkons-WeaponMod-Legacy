@@ -30,21 +30,21 @@ public final class ExtendedReachHelper {
             }
 
             Vec3d lookVec = entity.getLook(1.0F);
-            Vec3d traced = pos.addVector(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew);
+            Vec3d traced = pos.addVector(lookVec.xCoord * distNew, lookVec.yCoord * distNew, lookVec.zCoord * distNew);
             Entity pointedEntity = null;
             float f = 1.0F;
             List<Entity> list = mc.world.getEntitiesInAABBexcluding(entity,
                     entity.getEntityBoundingBox()
-                            .expand(lookVec.x * distNew, lookVec.y * distNew, lookVec.z * distNew)
-                            .grow(f, f, f),
+                            .expand(lookVec.xCoord * distNew, lookVec.yCoord * distNew, lookVec.zCoord * distNew)
+                            .expand(f, f, f),
                     Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
             double d = calcDist;
 
             Vec3d hitVec = null;
             for (Entity entity1 : list) {
-                AxisAlignedBB aabb = entity1.getEntityBoundingBox().grow(entity1.getCollisionBorderSize());
+                AxisAlignedBB aabb = entity1.getEntityBoundingBox().expandXyz(entity1.getCollisionBorderSize());
                 RayTraceResult intercept = aabb.calculateIntercept(pos, traced);
-                if (aabb.contains(pos)) {
+                if (aabb.isVecInside(pos)) {
                     if (d >= 0.0D) {
                         pointedEntity = entity1;
                         hitVec = intercept == null ? pos : intercept.hitVec;

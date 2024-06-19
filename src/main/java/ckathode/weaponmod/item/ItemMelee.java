@@ -106,9 +106,8 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World world,
-                                                    @Nonnull EntityPlayer entityplayer,
-                                                    @Nonnull EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack stack, @Nonnull World world,
+                                                    @Nonnull EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         return meleeComponent.onItemRightClick(world, entityplayer, hand);
     }
 

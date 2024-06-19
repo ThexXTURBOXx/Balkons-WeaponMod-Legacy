@@ -70,8 +70,8 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
     protected void decode(final ChannelHandlerContext ctx, final FMLProxyPacket msg, final List<Object> out) throws Exception {
         final ByteBuf payload = msg.payload().duplicate();
         if (payload.readableBytes() < 1) {
-            FMLLog.log.error("The FMLIndexedCodec has received an empty buffer on channel %s, likely a "
-                             + "result of a LAN server issue. Pipeline parts : %s",
+            FMLLog.getLogger().error("The FMLIndexedCodec has received an empty buffer on channel {}, likely a "
+                                     + "result of a LAN server issue. Pipeline parts : {}",
                     ctx.channel().attr(NetworkRegistry.FML_CHANNEL), ctx.pipeline().toString());
         }
         final byte discriminator = payload.readByte();
@@ -89,7 +89,7 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
         }
         case SERVER: {
             final INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-            final EntityPlayer player = ((NetHandlerPlayServer) netHandler).player;
+            final EntityPlayer player = ((NetHandlerPlayServer) netHandler).playerEntity;
             pkt.handleServerSide(player);
             break;
         }

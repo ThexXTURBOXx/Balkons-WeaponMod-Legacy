@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,6 +28,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityCannon extends EntityBoat {
     public static final String NAME = "cannon";
@@ -100,13 +100,13 @@ public class EntityCannon extends EntityBoat {
         if (world.isRemote || isDead) {
             return true;
         }
-        if (damagesource instanceof EntityDamageSourceIndirect && damagesource.getTrueSource() != null) {
-            if (isPassenger(damagesource.getTrueSource())) {
+        if (damagesource instanceof EntityDamageSourceIndirect && damagesource.getSourceOfDamage() != null) {
+            if (isPassenger(damagesource.getSourceOfDamage())) {
                 return true;
             }
         } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
-            EntityPlayer player = (EntityPlayer) damagesource.getTrueSource();
-            if (player != null && player.inventory.getCurrentItem().isEmpty()) {
+            EntityPlayer player = (EntityPlayer) damagesource.getSourceOfDamage();
+            if (player != null && player.inventory.getCurrentItem() == null) {
                 if (!player.isCreative()) {
                     dropItem(BalkonsWeaponMod.cannon, 1);
                     if (isLoaded() || isLoading()) {
@@ -190,8 +190,8 @@ public class EntityCannon extends EntityBoat {
             rotationPitch = pitch;
         }
         setRotation(rotationYaw, rotationPitch);
-        move(MoverType.SELF, motionX, motionY, motionZ);
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().grow(0.2,
+        move(motionX, motionY, motionZ);
+        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
                 0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
@@ -211,7 +211,7 @@ public class EntityCannon extends EntityBoat {
         super.fall(f, f1);
         int i = MathHelper.floor(f);
         i *= 2;
-        attackEntityFrom(DamageSource.FALL, (float) i);
+        attackEntityFrom(DamageSource.fall, (float) i);
     }
 
     public void handleReloadTime() {
@@ -258,7 +258,7 @@ public class EntityCannon extends EntityBoat {
                 entity2.rotationPitch += 10.0f;
             }
         }
-        attackEntityFrom(DamageSource.GENERIC, 2.0f);
+        attackEntityFrom(DamageSource.generic, 2.0f);
     }
 
     public void setReloadInfo(boolean loaded, int reloadtime) {
@@ -279,7 +279,7 @@ public class EntityCannon extends EntityBoat {
             float f = -0.85f;
             float f2 = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
             Vec3d vec3d = new Vec3d(f, 0.0, 0.0).rotateYaw(-rotationYaw * 0.017453292f - 1.5707964f);
-            passenger.setPosition(posX + vec3d.x, posY + f2, posZ + vec3d.z);
+            passenger.setPosition(posX + vec3d.xCoord, posY + f2, posZ + vec3d.zCoord);
         }
     }
 
@@ -300,9 +300,10 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer entityplayer, @Nonnull EnumHand hand) {
+    public boolean processInitialInteract(@Nonnull EntityPlayer entityplayer, @Nullable ItemStack stack,
+                                          @Nonnull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading()
+        if (itemstack != null && itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading()
             && (entityplayer.isCreative() || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
             if (entityplayer.isCreative() || consumeAmmo(entityplayer, BalkonsWeaponMod.cannonBall)) {
                 startLoadingCannon();
@@ -327,22 +328,19 @@ public class EntityCannon extends EntityBoat {
                 return itemstack;
             }
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
-    protected boolean isAmmo(ItemStack stack, Item itemAmmo) {
-        return stack.getItem() == itemAmmo;
+    protected boolean isAmmo(@Nullable ItemStack stack, Item itemAmmo) {
+        return stack != null && stack.getItem() == itemAmmo;
     }
 
     protected boolean consumeAmmo(EntityPlayer entityplayer, Item itemAmmo) {
         ItemStack stackAmmo = findAmmo(entityplayer, itemAmmo);
-        if (stackAmmo.isEmpty()) {
+        if (stackAmmo == null) {
             return false;
         }
-        stackAmmo.shrink(1);
-        if (stackAmmo.isEmpty()) {
-            entityplayer.inventory.deleteStack(stackAmmo);
-        }
+        stackAmmo.splitStack(1);
         return true;
     }
 
@@ -358,7 +356,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public void onStruckByLightning(@Nonnull EntityLightningBolt entitylightningbolt) {
-        attackEntityFrom(DamageSource.LIGHTNING_BOLT, 100.0f);
+        attackEntityFrom(DamageSource.lightningBolt, 100.0f);
         setSuperPowered(true);
     }
 

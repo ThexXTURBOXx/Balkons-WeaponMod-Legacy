@@ -116,7 +116,7 @@ public class RenderSpear extends Render<EntitySpear> {
     }
 
     public ItemStack getStackToRender(EntitySpear entity) {
-        return entity.getWeapon();
+        return entity.getWeapon().or(() -> new ItemStack(BalkonsWeaponMod.spearWood));
     }
 
     @Override

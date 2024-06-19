@@ -29,11 +29,10 @@ public class ItemCannon extends WMItem {
 
     @Nonnull
     @Override
-    public EnumActionResult onItemUse(@Nonnull EntityPlayer entityplayer, @Nonnull World world,
-                                      @Nonnull BlockPos p_180614_3_, @Nonnull EnumHand hand,
-                                      @Nonnull EnumFacing p_180614_5_, float p_180614_6_, float p_180614_7_,
-                                      float p_180614_8_) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public EnumActionResult onItemUse(@Nonnull ItemStack itemstack, @Nonnull EntityPlayer entityplayer,
+                                      @Nonnull World world, @Nonnull BlockPos pos,
+                                      @Nonnull EnumHand hand, @Nonnull EnumFacing facing,
+                                      float hitX, float hitY, float hitZ) {
         float f = 1.0f;
         float f2 =
                 entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch) * f;
@@ -60,14 +59,14 @@ public class ItemCannon extends WMItem {
         boolean flag1 = block == Blocks.SNOW;
         EntityCannon entitycannon = new EntityCannon(world, blockpos.getX() + 0.5,
                 blockpos.getY() + (flag1 ? 0.38 : 1.0), blockpos.getZ() + 0.5);
-        if (!world.getCollisionBoxes(entitycannon, entitycannon.getEntityBoundingBox().grow(-0.1)).isEmpty()) {
+        if (!world.getCollisionBoxes(entitycannon, entitycannon.getEntityBoundingBox().expandXyz(-0.1)).isEmpty()) {
             return EnumActionResult.FAIL;
         }
         if (!world.isRemote) {
             world.spawnEntity(entitycannon);
         }
         if (!entityplayer.isCreative()) {
-            itemstack.shrink(1);
+            itemstack.splitStack(1);
         }
         entityplayer.addStat(StatList.getObjectUseStats(this));
         return EnumActionResult.SUCCESS;

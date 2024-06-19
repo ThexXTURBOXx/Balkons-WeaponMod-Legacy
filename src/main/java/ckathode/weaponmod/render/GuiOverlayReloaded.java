@@ -33,7 +33,7 @@ public class GuiOverlayReloaded extends Gui {
         ItemStack is = p.getActiveItemStack();
         ItemStack current = p.inventory.getStackInSlot(currentItem);
         ItemStack offHandItem = p.getHeldItemOffhand();
-        if (is.isEmpty()) return;
+        if (is == null) return;
         Item item = is.getItem();
         if (!(item instanceof IItemWeapon)) return;
         RangedComponent rc = ((IItemWeapon) item).getRangedComponent();

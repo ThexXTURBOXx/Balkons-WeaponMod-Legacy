@@ -76,7 +76,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
                                                     EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (itemstack.isEmpty()) {
+        if (itemstack == null) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         if (isCharged(entityplayer)) {

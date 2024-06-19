@@ -42,16 +42,17 @@ public class RangedCompBlowgun extends RangedComponent {
             f = 1.0f;
         }
         ItemStack dartstack = findAmmo(entityplayer);
-        if (dartstack.isEmpty() && entityplayer.isCreative()) {
-            dartstack = new ItemStack(BalkonsWeaponMod.dart, 1);
+        if (dartstack == null) {
+            if (entityplayer.isCreative()) {
+                dartstack = new ItemStack(BalkonsWeaponMod.dart, 1);
+            } else {
+                return;
+            }
         }
         ItemStack dartStackCopy = dartstack.copy();
         if (!entityplayer.isCreative()
             && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) == 0) {
-            dartstack.shrink(1);
-            if (dartstack.isEmpty()) {
-                entityplayer.inventory.deleteStack(dartstack);
-            }
+            dartstack.splitStack(1);
         }
         if (!world.isRemote) {
             EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer);

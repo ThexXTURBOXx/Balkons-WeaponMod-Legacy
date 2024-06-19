@@ -9,6 +9,7 @@ import com.google.common.collect.Multimap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -133,10 +134,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer, EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (itemstack.isEmpty() || entityplayer.isHandActive()) {
+        if (itemstack == null || entityplayer.isHandActive()) {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         if (!hasAmmo(itemstack, world, entityplayer)) {
@@ -246,22 +246,19 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                 return itemstack;
             }
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
-    protected boolean isAmmo(ItemStack stack) {
-        return getAmmoItems().contains(stack.getItem());
+    protected boolean isAmmo(@Nullable ItemStack stack) {
+        return stack != null && getAmmoItems().contains(stack.getItem());
     }
 
     protected boolean consumeAmmo(EntityPlayer entityplayer) {
         ItemStack itemAmmo = findAmmo(entityplayer);
-        if (itemAmmo.isEmpty()) {
+        if (itemAmmo == null) {
             return false;
         }
-        itemAmmo.shrink(1);
-        if (itemAmmo.isEmpty()) {
-            entityplayer.inventory.deleteStack(itemAmmo);
-        }
+        itemAmmo.splitStack(1);
         return true;
     }
 
@@ -271,7 +268,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public boolean hasAmmo(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        boolean flag = !findAmmo(entityplayer).isEmpty();
+        boolean flag = findAmmo(entityplayer) != null;
         return entityplayer.isCreative() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || flag;
     }
