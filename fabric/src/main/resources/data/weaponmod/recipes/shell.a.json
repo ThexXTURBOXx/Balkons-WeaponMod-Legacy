@@ -20,6 +20,10 @@
     {
       "condition": "weaponmod:config_conditional",
       "weapon": "mortar"
+    },
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "dynamite"
     }
   ]
 }

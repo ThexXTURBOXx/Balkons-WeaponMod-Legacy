@@ -11,7 +11,8 @@
     }
   },
   "result": {
-    "item": "weaponmod:cannonball"
+    "item": "weaponmod:cannonball",
+    "count": 4
   },
   "fabric:load_conditions": [
     {
