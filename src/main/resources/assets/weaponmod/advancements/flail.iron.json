@@ -11,7 +11,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:iron_ingot"
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
           }
         ]
       }
@@ -21,7 +22,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:stick"
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
           }
         ]
       }
@@ -31,7 +33,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:string"
+            "type": "forge:ore_dict",
+            "ore": "string"
           }
         ]
       }

@@ -7,13 +7,16 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:stick"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     },
     "X": {
-      "item": "minecraft:feather"
+      "type": "forge:ore_dict",
+      "ore": "feather"
     },
     "O": {
-      "item": "minecraft:slime_ball"
+      "type": "forge:ore_dict",
+      "ore": "slimeball"
     }
   },
   "result": {

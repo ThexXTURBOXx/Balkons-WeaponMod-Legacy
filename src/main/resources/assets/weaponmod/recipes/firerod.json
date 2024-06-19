@@ -7,10 +7,12 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:torch"
+      "type": "forge:ore_dict",
+      "ore": "torch"
     },
     "X": {
-      "item": "minecraft:stick"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     }
   },
   "result": {

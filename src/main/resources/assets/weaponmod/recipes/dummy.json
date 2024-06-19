@@ -14,10 +14,12 @@
       "item": "minecraft:leather_chestplate"
     },
     "O": {
-      "item": "minecraft:stick"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     },
     "H": {
-      "item": "minecraft:wheat"
+      "type": "forge:ore_dict",
+      "ore": "cropWheat"
     }
   },
   "result": {

@@ -7,10 +7,12 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:string"
+      "type": "forge:ore_dict",
+      "ore": "string"
     },
     "X": {
-      "item": "minecraft:gunpowder"
+      "type": "forge:ore_dict",
+      "ore": "gunpowder"
     }
   },
   "result": {

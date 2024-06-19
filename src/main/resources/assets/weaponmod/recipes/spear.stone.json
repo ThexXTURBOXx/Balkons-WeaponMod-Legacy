@@ -7,10 +7,12 @@
   ],
   "key": {
     "X": {
-      "item": "minecraft:cobblestone"
+      "type": "forge:ore_dict",
+      "ore": "cobblestone"
     },
     "#": {
-      "item": "minecraft:stick"
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
     }
   },
   "result": {

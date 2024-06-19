@@ -11,7 +11,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:stick"
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
           }
         ]
       }
@@ -21,7 +22,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:feather"
+            "type": "forge:ore_dict",
+            "ore": "feather"
           }
         ]
       }
@@ -31,7 +33,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:slime_ball"
+            "type": "forge:ore_dict",
+            "ore": "slimeball"
           }
         ]
       }

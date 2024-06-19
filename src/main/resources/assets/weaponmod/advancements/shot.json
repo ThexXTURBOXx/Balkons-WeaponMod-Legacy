@@ -11,7 +11,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:gravel"
+            "type": "forge:ore_dict",
+            "ore": "gravel"
           }
         ]
       }
@@ -21,7 +22,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:gunpowder"
+            "type": "forge:ore_dict",
+            "ore": "gunpowder"
           }
         ]
       }
@@ -31,7 +33,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:paper"
+            "type": "forge:ore_dict",
+            "ore": "paper"
           }
         ]
       }

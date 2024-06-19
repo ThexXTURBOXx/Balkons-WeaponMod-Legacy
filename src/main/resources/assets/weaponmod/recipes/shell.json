@@ -7,10 +7,12 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:iron_ingot"
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     },
     "X": {
-      "item": "minecraft:gunpowder"
+      "type": "forge:ore_dict",
+      "ore": "gunpowder"
     }
   },
   "result": {

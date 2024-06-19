@@ -11,8 +11,8 @@
       "conditions": {
         "items": [
           {
-            "item": "stone",
-            "data": 0
+            "type": "forge:ore_dict",
+            "ore": "stone"
           }
         ]
       }

@@ -32,7 +32,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:stick"
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
           }
         ]
       }
@@ -42,7 +43,8 @@
       "conditions": {
         "items": [
           {
-            "item": "minecraft:wheat"
+            "type": "forge:ore_dict",
+            "ore": "cropWheat"
           }
         ]
       }
