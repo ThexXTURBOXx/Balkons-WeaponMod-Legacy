@@ -49,6 +49,10 @@
     {
       "type": "weaponmod:config_conditional",
       "weapon": "mortar"
+    },
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "dynamite"
     }
   ]
 }
