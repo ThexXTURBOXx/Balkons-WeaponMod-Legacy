@@ -56,9 +56,15 @@ public class EntitySpear extends EntityMaterialProjectile {
             playHitSound();
             if (thrownItem.getItemDamage() + 1 >= thrownItem.getMaxDamage()) {
                 thrownItem.splitStack(1);
+                if (thrownItem.stackSize <= 0) {
+                    setThrownItemStack(null);
+                }
                 setDead();
             } else {
                 thrownItem.attemptDamageItem(1, rand);
+                if (thrownItem.stackSize <= 0) {
+                    setThrownItemStack(null);
+                }
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {

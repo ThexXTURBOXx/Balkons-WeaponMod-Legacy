@@ -76,9 +76,15 @@ public class EntityKnife extends EntityMaterialProjectile {
             applyEntityHitEffects(entity);
             if (thrownItem.getItemDamage() + 2 >= thrownItem.getMaxDamage()) {
                 thrownItem.splitStack(1);
+                if (thrownItem.stackSize <= 0) {
+                    setThrownItemStack(null);
+                }
                 setDead();
             } else {
                 thrownItem.attemptDamageItem(2, rand);
+                if (thrownItem.stackSize <= 0) {
+                    setThrownItemStack(null);
+                }
                 setVelocity(0.0, 0.0, 0.0);
             }
         } else {

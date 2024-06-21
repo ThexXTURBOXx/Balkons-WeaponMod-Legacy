@@ -58,9 +58,15 @@ public class RangedCompMusket extends RangedComponent {
             int bayonetDamage = itemstack.hasTagCompound() ? itemstack.getTagCompound().getShort("bayonetDamage") : 0;
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1, bayonetDamage);
             itemstack.damageItem(deltaDamage, entityplayer);
+            if (itemstack.stackSize <= 0) {
+                entityplayer.inventory.deleteStack(itemstack);
+            }
             entityplayer.inventory.addItemStackToInventory(newStack);
         } else {
             itemstack.damageItem(deltaDamage, entityplayer);
+            if (itemstack.stackSize <= 0) {
+                entityplayer.inventory.deleteStack(itemstack);
+            }
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         postShootingEffects(itemstack, entityplayer, world);

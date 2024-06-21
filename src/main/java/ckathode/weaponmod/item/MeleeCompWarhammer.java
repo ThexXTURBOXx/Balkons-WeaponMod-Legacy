@@ -50,6 +50,9 @@ public class MeleeCompWarhammer extends MeleeComponent {
         expl.doParticleExplosion(true, false);
         PhysHelper.sendExplosion(world, expl, true, false);
         itemstack.damageItem(16, entityplayer);
+        if (itemstack.stackSize <= 0) {
+            entityplayer.inventory.deleteStack(itemstack);
+        }
         entityplayer.addExhaustion(6.0f);
         setSmashed(entityplayer);
     }

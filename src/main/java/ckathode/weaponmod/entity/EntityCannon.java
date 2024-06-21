@@ -341,6 +341,9 @@ public class EntityCannon extends EntityBoat {
             return false;
         }
         stackAmmo.splitStack(1);
+        if (stackAmmo.stackSize <= 0) {
+            entityplayer.inventory.deleteStack(stackAmmo);
+        }
         return true;
     }
 
