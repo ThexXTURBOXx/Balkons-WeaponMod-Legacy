@@ -30,6 +30,9 @@ public class ItemDynamite extends WMItem {
                                                     EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         if (!entityplayer.isCreative()) {
             itemstack.splitStack(1);
+            if (itemstack.stackSize <= 0) {
+                entityplayer.inventory.deleteStack(itemstack);
+            }
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED,
                 SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));

@@ -64,6 +64,9 @@ public class ItemDummy extends WMItem {
         world.spawnEntity(entitydummy);
         if (!entityplayer.isCreative()) {
             itemstack.splitStack(1);
+            if (itemstack.stackSize <= 0) {
+                entityplayer.inventory.deleteStack(itemstack);
+            }
         }
         entityplayer.addStat(StatList.getObjectUseStats(this));
         return EnumActionResult.SUCCESS;

@@ -27,7 +27,7 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
     public ItemStack dispenseStack(IBlockSource blocksource, @Nonnull ItemStack itemstack) {
         boolean canfire = false;
         normalDispense = false;
-        TileEntity tileentity = blocksource.getWorld().getTileEntity(blocksource.getBlockPos());
+        TileEntity tileentity = blocksource.getBlockTileEntity();
         if (tileentity instanceof TileEntityDispenser) {
             TileEntityDispenser dispenser = (TileEntityDispenser) tileentity;
             Item itemtocheck = null;

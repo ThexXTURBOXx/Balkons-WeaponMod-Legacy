@@ -259,6 +259,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             return false;
         }
         itemAmmo.splitStack(1);
+        if (itemAmmo.stackSize <= 0) {
+            entityplayer.inventory.deleteStack(itemAmmo);
+        }
         return true;
     }
 

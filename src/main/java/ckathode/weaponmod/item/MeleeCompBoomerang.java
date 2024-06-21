@@ -56,6 +56,9 @@ public class MeleeCompBoomerang extends MeleeComponent {
                     1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
             if (!entityplayer.isCreative()) {
                 itemstack.splitStack(1);
+                if (itemstack.stackSize <= 0) {
+                    entityplayer.inventory.deleteStack(itemstack);
+                }
             }
         }
     }

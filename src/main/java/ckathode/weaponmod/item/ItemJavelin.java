@@ -31,6 +31,7 @@ public class ItemJavelin extends WMItem {
                                      @Nonnull EntityLivingBase entityLiving, int i) {
         EntityPlayer entityplayer = (EntityPlayer) entityLiving;
         if (itemstack.stackSize <= 0) {
+            entityplayer.inventory.deleteStack(itemstack);
             return;
         }
         int j = getMaxItemUseDuration(itemstack) - i;
@@ -54,6 +55,9 @@ public class ItemJavelin extends WMItem {
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
             itemstack.splitStack(1);
+            if (itemstack.stackSize <= 0) {
+                entityplayer.inventory.deleteStack(itemstack);
+            }
         }
     }
 
@@ -73,6 +77,7 @@ public class ItemJavelin extends WMItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
                                                     EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         if (!entityplayer.isCreative() && itemstack.stackSize <= 0) {
+            entityplayer.inventory.deleteStack(itemstack);
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         entityplayer.setActiveHand(hand);
