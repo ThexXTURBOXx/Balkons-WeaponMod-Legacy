@@ -5,7 +5,6 @@ import ckathode.weaponmod.WeaponModAttributes;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -15,10 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class MeleeComponent extends AbstractWeaponComponent {
@@ -56,27 +52,26 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
+    public float getBlockDamage(ItemStack itemstack, Block block) {
         if (canHarvestBlock(block)) {
             return meleeSpecs.blockDamage * 10.0f;
         }
         Material material = block.getMaterial();
-        return (material != Material.PLANTS && material != Material.VINE && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD) ? 1.0f : meleeSpecs.blockDamage;
+        return (material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd) ? 1.0f : meleeSpecs.blockDamage;
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState state) {
-        Block block = state.getBlock();
-        return block == Blocks.WEB;
+    public boolean canHarvestBlock(Block block) {
+        return block == Blocks.web;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, IBlockState block,
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block,
                                     BlockPos pos, EntityLivingBase entityliving) {
         if (block.getBlockHardness(world, pos) != 0.0f) {
             itemstack.damageItem(meleeSpecs.dmgFromBlock, entityliving);
             if (itemstack.stackSize <= 0 && entityliving instanceof EntityPlayer) {
-                ((EntityPlayer) entityliving).inventory.deleteStack(itemstack);
+                WMItem.deleteStack(((EntityPlayer) entityliving).inventory, itemstack);
             }
         }
         return true;
@@ -97,7 +92,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         }
         itemstack.damageItem(meleeSpecs.dmgFromEntity, attacker);
         if (itemstack.stackSize <= 0 && attacker instanceof EntityPlayer) {
-            ((EntityPlayer) attacker).inventory.deleteStack(itemstack);
+            WMItem.deleteStack(((EntityPlayer) attacker).inventory, itemstack);
         }
         return true;
     }
@@ -123,10 +118,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
         float dmg = getEntityDamage();
         if (dmg > 0.0f || meleeSpecs.damageMult > 0.0f) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(),
+            multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
                     new AttributeModifier(IItemWeapon.ATTACK_DAMAGE_MODIFIER,
                             "Weapon attack damage modifier", dmg, 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
+            multimap.put(WeaponModAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
                     new AttributeModifier(IItemWeapon.ATTACK_SPEED_MODIFIER,
                             "Weapon attack speed modifier", -meleeSpecs.attackDelay, 0));
         }
@@ -165,10 +160,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        return new ActionResult<>(EnumActionResult.PASS, itemstack);
+    public ItemStack onItemRightClick(World world, EntityPlayer entityplayer, ItemStack itemstack) {
+        return itemstack;
     }
 
     @Override

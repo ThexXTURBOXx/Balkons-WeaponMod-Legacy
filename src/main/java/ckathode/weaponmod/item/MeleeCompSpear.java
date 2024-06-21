@@ -2,18 +2,13 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem {
@@ -22,31 +17,30 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ItemStack onItemRightClick(World world, EntityPlayer entityplayer, ItemStack itemstack) {
         if (itemstack == null) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+            return itemstack;
         }
         if (!BalkonsWeaponMod.instance.modConfig.canThrowSpear) {
-            return super.onItemRightClick(world, entityplayer, hand);
+            return super.onItemRightClick(world, entityplayer, itemstack);
         }
         if (!world.isRemote) {
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
             entityspear.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.8f, 3.0f);
-            entityspear.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+            entityspear.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId,
+                    itemstack));
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, itemstack) > 0) {
                 entityspear.setFire(100);
             }
             world.spawnEntityInWorld(entityspear);
         }
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.isCreative()) {
+        world.playSoundAtEntity(entityplayer, "random.bow", 1.0F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.8F));
+        if (!entityplayer.capabilities.isCreativeMode) {
             itemstack = itemstack.copy();
             itemstack.splitStack(1);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return itemstack;
     }
 
     @Override

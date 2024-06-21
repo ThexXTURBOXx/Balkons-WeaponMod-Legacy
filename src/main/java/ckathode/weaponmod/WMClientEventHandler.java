@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,13 +26,13 @@ public class WMClientEventHandler {
         if (player == null || !player.worldObj.isRemote || Minecraft.getMinecraft().currentScreen != null) {
             return;
         }
-        if (e.getButton() == 0 && e.isButtonstate()) {
-            ItemStack itemstack = player.getHeldItemMainhand();
+        if (e.button == 0 && e.buttonstate) {
+            ItemStack itemstack = player.getCurrentEquippedItem();
             if (itemstack != null) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
                     float reach = ieri.getExtendedReach(player.worldObj, player, itemstack);
-                    RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
+                    MovingObjectPosition raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
                     if (raytraceResult != null && raytraceResult.entityHit != null && raytraceResult.entityHit != player && raytraceResult.entityHit.hurtResistantTime == 0) {
                         Minecraft.getMinecraft().playerController.attackEntity(player,
                                 raytraceResult.entityHit);
@@ -60,8 +60,8 @@ public class WMClientEventHandler {
         }
         if (e.phase == TickEvent.Phase.START && e.player instanceof EntityPlayerSP) {
             final EntityPlayerSP entity = (EntityPlayerSP) e.player;
-            if (entity.movementInput.jump && entity.getRidingEntity() instanceof EntityCannon && ((EntityCannon) entity.getRidingEntity()).isLoaded()) {
-                final MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getRidingEntity());
+            if (entity.movementInput.jump && entity.ridingEntity instanceof EntityCannon && ((EntityCannon) entity.ridingEntity).isLoaded()) {
+                final MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.ridingEntity);
                 BalkonsWeaponMod.instance.messagePipeline.sendToServer(msg);
             }
         }
@@ -69,11 +69,11 @@ public class WMClientEventHandler {
 
     @SubscribeEvent
     public void onFOVUpdateEvent(final FOVUpdateEvent e) {
-        if (e.getEntity().isHandActive() && e.getEntity().getActiveItemStack().getItem() instanceof IItemWeapon) {
+        if (e.entity.isUsingItem() && e.entity.getItemInUse().getItem() instanceof IItemWeapon) {
             final RangedComponent rc =
-                    ((IItemWeapon) e.getEntity().getActiveItemStack().getItem()).getRangedComponent();
-            if (rc != null && RangedComponent.isReadyToFire(e.getEntity().getActiveItemStack())) {
-                e.setNewfov(e.getFov() * rc.getFOVMultiplier(e.getEntity().getItemInUseMaxCount()));
+                    ((IItemWeapon) e.entity.getItemInUse().getItem()).getRangedComponent();
+            if (rc != null && RangedComponent.isReadyToFire(e.entity.getItemInUse())) {
+                e.newfov = e.fov * rc.getFOVMultiplier(e.entity.getItemInUseDuration());
             }
         }
     }

@@ -5,9 +5,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -89,7 +89,7 @@ public final class PhysHelper {
         if (world instanceof WorldServer && !world.isRemote) {
             MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
             BalkonsWeaponMod.instance.messagePipeline.sendToAllAround(msg,
-                    new NetworkRegistry.TargetPoint(world.provider.getDimension(), explosion.explosionX,
+                    new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), explosion.explosionX,
                             explosion.explosionY, explosion.explosionZ, 64.0));
         }
     }
@@ -119,7 +119,7 @@ public final class PhysHelper {
             entityliving.addVelocity(dx, 0.1, dz);
         }
         if (entityliving instanceof EntityPlayerMP) {
-            ((EntityPlayerMP) entityliving).connection.sendPacket(new SPacketEntityVelocity(entityliving));
+            ((EntityPlayerMP) entityliving).playerNetServerHandler.sendPacket(new S12PacketEntityVelocity(entityliving));
         }
         knockBackModifier = 0;
         kbMotionX = (kbMotionY = (kbMotionZ = 0.0));

@@ -6,16 +6,17 @@ import ckathode.weaponmod.entity.projectile.EntitySpear;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class RenderSpear extends Render<EntitySpear> {
     public RenderSpear(RenderManager renderManager) {
@@ -34,7 +35,7 @@ public class RenderSpear extends Render<EntitySpear> {
             GlStateManager.rotate(entityspear.prevRotationYaw + (entityspear.rotationYaw - entityspear.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(entityspear.prevRotationPitch + (entityspear.rotationPitch - entityspear.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
             float[] color = entityspear.getMaterialColor();
             double length = 20.0;
             GlStateManager.enableRescaleNormal();
@@ -46,18 +47,14 @@ public class RenderSpear extends Render<EntitySpear> {
             GlStateManager.rotate(45.0f, 1.0f, 0.0f, 0.0f);
             GlStateManager.scale(0.05625f, 0.05625f, 0.05625f);
             GlStateManager.translate(-4.0f, 0.0f, 0.0f);
-            if (renderOutlines) {
-                GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityspear));
-            }
-            GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
+            GL11.glNormal3f(0.05625f, 0.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
             vertexbuffer.pos(-length, -2.0, -2.0).tex(0.0, 0.15625).endVertex();
             vertexbuffer.pos(-length, -2.0, 2.0).tex(0.15625, 0.15625).endVertex();
             vertexbuffer.pos(-length, 2.0, 2.0).tex(0.15625, 0.3125).endVertex();
             vertexbuffer.pos(-length, 2.0, -2.0).tex(0.0, 0.3125).endVertex();
             tessellator.draw();
-            GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
+            GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
             vertexbuffer.pos(-length, 2.0, -2.0).tex(0.0, 0.15625).endVertex();
             vertexbuffer.pos(-length, 2.0, 2.0).tex(0.15625, 0.15625).endVertex();
@@ -66,7 +63,7 @@ public class RenderSpear extends Render<EntitySpear> {
             tessellator.draw();
             for (int j = 0; j < 4; ++j) {
                 GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-                GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
+                GL11.glNormal3f(0.0f, 0.0f, 0.05625f);
                 vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
                 vertexbuffer.pos(-length, -2.0, 0.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
                 vertexbuffer.pos(length, -2.0, 0.0).tex(1.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -77,10 +74,6 @@ public class RenderSpear extends Render<EntitySpear> {
                 vertexbuffer.pos(length, 2.0, 0.0).tex(1.0, 0.46875).color(color[0], color[1], color[2], 1.0f).endVertex();
                 vertexbuffer.pos(-length, 2.0, 0.0).tex(0.0, 0.46875).color(color[0], color[1], color[2], 1.0f).endVertex();
                 tessellator.draw();
-            }
-            if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
-                GlStateManager.disableColorMaterial();
             }
             GlStateManager.disableRescaleNormal();
             GlStateManager.enableLighting();
@@ -100,15 +93,7 @@ public class RenderSpear extends Render<EntitySpear> {
                 GlStateManager.rotate(f16, 0.0f, 0.0f, 1.0f);
             }
             GlStateManager.translate(-0.35f, -0.35f, 0.0f);
-            if (renderOutlines) {
-                GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityspear));
-            }
             itemRender.renderItem(getStackToRender(entityspear), TransformType.NONE);
-            if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
-                GlStateManager.disableColorMaterial();
-            }
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }
@@ -116,7 +101,7 @@ public class RenderSpear extends Render<EntitySpear> {
     }
 
     public ItemStack getStackToRender(EntitySpear entity) {
-        return entity.getWeapon().or(() -> new ItemStack(BalkonsWeaponMod.spearWood));
+        return entity.getWeapon();
     }
 
     @Override

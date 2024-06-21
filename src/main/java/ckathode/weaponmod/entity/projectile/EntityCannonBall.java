@@ -9,13 +9,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityCannonBall extends EntityProjectile {
@@ -33,8 +32,7 @@ public class EntityCannonBall extends EntityProjectile {
     public EntityCannonBall(World world, EntityCannon entitycannon, float f, float f1,
                             boolean superPowered) {
         this(world, entitycannon.posX, entitycannon.posY + 1.0, entitycannon.posZ);
-        Entity entityPassenger = entitycannon.getPassengers().isEmpty() ? null :
-                entitycannon.getPassengers().get(0);
+        Entity entityPassenger = entitycannon.riddenByEntity;
         setThrower(entitycannon);
         if (entityPassenger instanceof EntityLivingBase) {
             setPickupStatusFromEntity((EntityLivingBase) entityPassenger);
@@ -78,12 +76,12 @@ public class EntityCannonBall extends EntityProjectile {
     public void onEntityHit(Entity entity) {
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 30.0f)) {
-            playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
+            worldObj.playSoundAtEntity(this, "game.player.hurt", 1.0F, 1.2F / (rand.nextFloat() * 0.4F + 0.7F));
         }
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onGroundHit(MovingObjectPosition raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
@@ -99,7 +97,7 @@ public class EntityCannonBall extends EntityProjectile {
         posY -= motionY / f1 * 0.05;
         posZ -= motionZ / f1 * 0.05;
         inGround = true;
-        if (iBlockState.getMaterial() != Material.AIR) {
+        if (inTile.getMaterial() != Material.air) {
             inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
         }
         createCrater();
@@ -124,11 +122,5 @@ public class EntityCannonBall extends EntityProjectile {
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.cannonBall, 1);
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.cannonBall);
     }
 }

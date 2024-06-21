@@ -1,28 +1,20 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
-import com.google.common.base.Optional;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class EntityMaterialProjectile extends EntityProjectile {
-    private static final DataParameter<Byte> WEAPON_MATERIAL =
-            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
-    private static final DataParameter<Optional<ItemStack>> WEAPON_ITEM =
-            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
+    private static final int WEAPON_MATERIAL = 18;
+    private static final int WEAPON_ITEM = 19;
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
     protected ItemStack thrownItem;
@@ -34,13 +26,13 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void entityInit() {
         super.entityInit();
-        dataManager.register(WEAPON_MATERIAL, (byte) 0);
-        dataManager.register(WEAPON_ITEM, Optional.absent());
+        dataWatcher.addObject(WEAPON_MATERIAL, (byte) 0);
+        dataWatcher.addObjectByDataType(WEAPON_ITEM, 5); // 5 = ItemStack type
     }
 
     public float getMeleeHitDamage(Entity entity) {
         if (shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) shootingEntity).getHeldItemMainhand(),
+            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) shootingEntity).getHeldItem(),
                     ((EntityLivingBase) entity).getCreatureAttribute());
         }
         return 0.0f;
@@ -66,7 +58,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     public void setThrownItemStack(@Nullable ItemStack itemstack) {
         thrownItem = itemstack;
         updateWeaponMaterial();
-        dataManager.set(WEAPON_ITEM, Optional.fromNullable(itemstack));
+        dataWatcher.updateObject(WEAPON_ITEM, itemstack);
     }
 
     @Nullable
@@ -75,18 +67,12 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
         return thrownItem;
     }
 
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return thrownItem == null ? new ItemStack(Items.ARROW) : thrownItem;
-    }
-
     public int getWeaponMaterialId() {
-        return dataManager.get(WEAPON_MATERIAL);
+        return dataWatcher.getWatchableObjectByte(WEAPON_MATERIAL);
     }
 
-    public Optional<ItemStack> getWeapon() {
-        return dataManager.get(WEAPON_ITEM);
+    public ItemStack getWeapon() {
+        return dataWatcher.getWatchableObjectItemStack(WEAPON_ITEM);
     }
 
     protected void updateWeaponMaterial() {
@@ -95,7 +81,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
             if (material < 0) {
                 material = ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial.ordinal();
             }
-            dataManager.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
+            dataWatcher.updateObject(WEAPON_MATERIAL, (byte) (material & 0xFF));
         }
     }
 

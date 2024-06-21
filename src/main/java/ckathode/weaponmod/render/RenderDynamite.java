@@ -5,12 +5,13 @@ import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class RenderDynamite extends Render<EntityDynamite> {
 
@@ -29,7 +30,7 @@ public class RenderDynamite extends Render<EntityDynamite> {
         GlStateManager.rotate(entitydynamite.rotationYaw + 90.0f, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(entitydynamite.prevRotationPitch + (entitydynamite.rotationPitch - entitydynamite.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
         GlStateManager.enableRescaleNormal();
         float f11 = -f1;
         if (f11 > 0.0f) {
@@ -39,18 +40,14 @@ public class RenderDynamite extends Render<EntityDynamite> {
         GlStateManager.rotate(45.0f, 1.0f, 0.0f, 0.0f);
         GlStateManager.scale(0.05625f, 0.05625f, 0.05625f);
         GlStateManager.translate(-4.0f, 0.0f, 0.0f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitydynamite));
-        }
-        GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
+        GL11.glNormal3f(0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(-7.0, -2.0, -2.0).tex(0.0, 0.15625).endVertex();
         vertexbuffer.pos(-7.0, -2.0, 2.0).tex(0.15625, 0.15625).endVertex();
         vertexbuffer.pos(-7.0, 2.0, 2.0).tex(0.15625, 0.3125).endVertex();
         vertexbuffer.pos(-7.0, 2.0, -2.0).tex(0.0, 0.3125).endVertex();
         tessellator.draw();
-        GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
+        GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(-7.0, 2.0, -2.0).tex(0.0, 0.15625).endVertex();
         vertexbuffer.pos(-7.0, 2.0, 2.0).tex(0.15625, 0.15625).endVertex();
@@ -59,17 +56,13 @@ public class RenderDynamite extends Render<EntityDynamite> {
         tessellator.draw();
         for (int j = 0; j < 4; ++j) {
             GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
+            GL11.glNormal3f(0.0f, 0.0f, 0.05625f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
             vertexbuffer.pos(-8.0, -2.0, 0.0).tex(0.0, 0.0).endVertex();
             vertexbuffer.pos(8.0, -2.0, 0.0).tex(0.5, 0.0).endVertex();
             vertexbuffer.pos(8.0, 2.0, 0.0).tex(0.5, 0.15625).endVertex();
             vertexbuffer.pos(-8.0, 2.0, 0.0).tex(0.0, 0.15625).endVertex();
             tessellator.draw();
-        }
-        if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
         }
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();

@@ -5,10 +5,9 @@ import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityJavelin extends EntityProjectile {
@@ -62,7 +61,7 @@ public class EntityJavelin extends EntityProjectile {
 
     @Override
     public void playHitSound() {
-        playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.9f));
+        worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.9F));
     }
 
     @Override
@@ -84,11 +83,5 @@ public class EntityJavelin extends EntityProjectile {
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.javelin, 1);
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.javelin);
     }
 }

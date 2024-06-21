@@ -49,6 +49,7 @@ loom {
     }
     forge {
         pack200Provider.set(Pack200Adapter())
+        accessTransformer(file("src/main/resources/META-INF/weaponmod_at.cfg"))
     }
 }
 
@@ -63,7 +64,7 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
-    mappings("de.oceanlabs.mcp:mcp_stable:26-1.9.4")
+    mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
     forge("net.minecraftforge:forge:$forge_version")
 }
 
@@ -98,6 +99,7 @@ tasks.withType(Jar::class) {
         this["Implementation-Vendor"] = mod_authors
         this["Implementation-Timestamp"] =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ").format(OffsetDateTime.now())
+        this["FMLAT"] = "${mod_id}_at.cfg"
     }
 }
 

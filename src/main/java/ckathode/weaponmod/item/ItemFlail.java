@@ -2,39 +2,30 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
+import ckathode.weaponmod.WMItemVariants;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFlail extends ItemMelee {
     private final float flailDamage;
+    private final ModelResourceLocation thrownModel;
+    private Boolean thrownModelExists;
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
         super(id, meleecomponent);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getDamageVsEntity();
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World worldIn,
-                               @Nullable EntityLivingBase entityIn) {
-                return entityIn instanceof EntityPlayer && entityIn.getHeldItemMainhand() == stack
-                       && isThrown((EntityPlayer) entityIn) ? 1.0f : 0.0f;
-            }
-        });
+        thrownModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
+                rawId + "-thrown"), "inventory");
+        thrownModelExists = null;
     }
 
     @Override
@@ -58,7 +49,7 @@ public class ItemFlail extends ItemMelee {
         if (!isThrown(player)) {
             return;
         }
-        ItemStack itemstack2 = player.getHeldItemMainhand();
+        ItemStack itemstack2 = player.getCurrentEquippedItem();
         if (itemstack2 == null || !((itemstack2.getItem()) instanceof ItemFlail)) {
             setThrown(player, false);
         } else if (itemstack2.getItem() == this) {
@@ -73,43 +64,37 @@ public class ItemFlail extends ItemMelee {
         }
     }
 
-    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                                    @Nonnull EntityPlayer entityplayer, @Nonnull EnumHand hand) {
-        if (hand != EnumHand.MAIN_HAND) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
-        }
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         removePreviousFlail(world, entityplayer);
         if (itemstack.stackSize > 0) {
-            entityplayer.swingArm(hand);
-            if (!entityplayer.isCreative()) {
+            entityplayer.swingItem();
+            if (!entityplayer.capabilities.isCreativeMode) {
                 itemstack.damageItem(1, entityplayer);
                 if (itemstack.stackSize <= 0) {
-                    entityplayer.inventory.deleteStack(itemstack);
+                    WMItem.deleteStack(entityplayer.inventory, itemstack);
                 }
             }
             if (itemstack.stackSize > 0) {
                 throwFlail(itemstack, world, entityplayer);
             } else {
-                entityplayer.inventory.deleteStack(itemstack);
+                WMItem.deleteStack(entityplayer.inventory, itemstack);
             }
         } else {
-            entityplayer.inventory.deleteStack(itemstack);
+            WMItem.deleteStack(entityplayer.inventory, itemstack);
         }
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return itemstack;
     }
 
     @Override
     public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityliving,
                              @Nonnull EntityLivingBase attacker) {
-        onItemRightClick(itemstack, attacker.worldObj, (EntityPlayer) attacker, EnumHand.MAIN_HAND);
+        onItemRightClick(itemstack, attacker.worldObj, (EntityPlayer) attacker);
         return true;
     }
 
     public void throwFlail(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.PLAYERS, 0.5f, 0.4f / (ItemFlail.itemRand.nextFloat() * 0.4f + 0.8f));
+        world.playSoundAtEntity(entityplayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
         if (!world.isRemote) {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
             entityflail.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
@@ -139,5 +124,16 @@ public class ItemFlail extends ItemMelee {
 
     public float getFlailDamage() {
         return flailDamage;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        if (thrownModelExists == null)
+            thrownModelExists = WMItemVariants.itemVariantExists(thrownModel);
+        if (thrownModelExists && isThrown(player))
+            return thrownModel;
+
+        return super.getModel(stack, player, useRemaining);
     }
 }

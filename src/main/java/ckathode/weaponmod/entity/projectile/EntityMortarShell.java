@@ -6,17 +6,16 @@ import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityMortarShell extends EntityProjectile {
@@ -74,13 +73,14 @@ public class EntityMortarShell extends EntityProjectile {
         setDead();
         Entity shooter = getThrower();
         if (!(shooter instanceof EntityLivingBase)) return;
-        if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase) shooter) > 0) {
-            float f1 = (float) EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
-                    (EntityLivingBase) shooter);
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId,
+                ((EntityLivingBase) shooter).getHeldItem()) > 0) {
+            float f1 = (float) EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId,
+                    ((EntityLivingBase) shooter).getHeldItem());
             explosiveSize += f1 / 4.0f;
         }
-        boolean flag =
-                EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase) shooter) > 0;
+        boolean flag = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId,
+                ((EntityLivingBase) shooter).getHeldItem()) > 0;
         PhysHelper.createAdvancedExplosion(worldObj, this, posX, posY, posZ, explosiveSize,
                 BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage, true, flag, false);
     }
@@ -92,12 +92,12 @@ public class EntityMortarShell extends EntityProjectile {
         motionY -= motionY / 2.0;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 5.0f)) {
-            playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
+            worldObj.playSoundAtEntity(this, "damage.hurtflesh", 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
         }
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onGroundHit(MovingObjectPosition raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
@@ -113,7 +113,7 @@ public class EntityMortarShell extends EntityProjectile {
         posY -= motionY / f1 * 0.05;
         posZ -= motionZ / f1 * 0.05;
         inGround = true;
-        if (iBlockState.getMaterial() != Material.AIR) {
+        if (inTile.getMaterial() != Material.air) {
             inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
         }
         createCrater();
@@ -133,11 +133,5 @@ public class EntityMortarShell extends EntityProjectile {
     @Override
     public ItemStack getPickupItem() {
         return new ItemStack(BalkonsWeaponMod.mortarShell, 1);
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.mortarShell);
     }
 }

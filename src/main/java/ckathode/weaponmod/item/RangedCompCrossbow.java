@@ -4,10 +4,7 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class RangedCompCrossbow extends RangedComponent {
@@ -17,10 +14,9 @@ public class RangedCompCrossbow extends RangedComponent {
 
     @Override
     public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingArm(EnumHand.MAIN_HAND);
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
-                SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.PLAYERS, 0.8f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
+        entityplayer.swingItem();
+        world.playSoundAtEntity(entityplayer, "random.click", 0.8F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.4F));
     }
 
     public void resetReload(World world, ItemStack itemstack) {
@@ -49,7 +45,7 @@ public class RangedCompCrossbow extends RangedComponent {
         }
         itemstack.damageItem(damage, entityplayer);
         if (itemstack.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(itemstack);
+            WMItem.deleteStack(entityplayer.inventory, itemstack);
         }
         postShootingEffects(itemstack, entityplayer, world);
         resetReload(world, itemstack);
@@ -63,7 +59,6 @@ public class RangedCompCrossbow extends RangedComponent {
     @Override
     public void effectShoot(World world, double x, double y, double z, float yaw,
                             float pitch) {
-        world.playSound(null, x, y, z, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+        world.playSoundEffect(x, y, z, "random.bow", 1.0F, 1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.8F));
     }
 }

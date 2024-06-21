@@ -2,49 +2,37 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
+import ckathode.weaponmod.item.WMItem;
 import java.util.List;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityCannon extends EntityBoat {
     public static final String NAME = "cannon";
 
-    private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(EntityCannon.class,
-            DataSerializers.VARINT);
-    private static final DataParameter<Byte> ROCK_DIRECTION = EntityDataManager.createKey(EntityCannon.class,
-            DataSerializers.BYTE);
-    private static final DataParameter<Integer> CURRENT_DAMAGE = EntityDataManager.createKey(EntityCannon.class,
-            DataSerializers.VARINT);
-    private static final DataParameter<Byte> LOADED = EntityDataManager.createKey(EntityCannon.class,
-            DataSerializers.BYTE);
-    private static final DataParameter<Integer> LOAD_TIMER = EntityDataManager.createKey(EntityCannon.class,
-            DataSerializers.VARINT);
-    private static final DataParameter<Byte> SUPER_POWERED = EntityDataManager.createKey(EntityCannon.class,
-            DataSerializers.BYTE);
+    private static final int TIME_SINCE_HIT = 20;
+    private static final int ROCK_DIRECTION = 21;
+    private static final int CURRENT_DAMAGE = 22;
+    private static final int LOADED = 23;
+    private static final int LOAD_TIMER = 24;
+    private static final int SUPER_POWERED = 25;
 
     public EntityCannon(World world) {
         super(world);
@@ -67,12 +55,12 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     protected void entityInit() {
-        dataManager.register(TIME_SINCE_HIT, 0);
-        dataManager.register(ROCK_DIRECTION, (byte) 1);
-        dataManager.register(CURRENT_DAMAGE, 0);
-        dataManager.register(LOADED, (byte) 0);
-        dataManager.register(LOAD_TIMER, 0);
-        dataManager.register(SUPER_POWERED, (byte) 0);
+        dataWatcher.addObject(TIME_SINCE_HIT, 0);
+        dataWatcher.addObject(ROCK_DIRECTION, (byte) 1);
+        dataWatcher.addObject(CURRENT_DAMAGE, 0);
+        dataWatcher.addObject(LOADED, (byte) 0);
+        dataWatcher.addObject(LOAD_TIMER, 0);
+        dataWatcher.addObject(SUPER_POWERED, (byte) 0);
     }
 
     @Override
@@ -101,17 +89,17 @@ public class EntityCannon extends EntityBoat {
             return true;
         }
         if (damagesource instanceof EntityDamageSourceIndirect && damagesource.getSourceOfDamage() != null) {
-            if (isPassenger(damagesource.getSourceOfDamage())) {
+            if (damagesource.getSourceOfDamage() == riddenByEntity) {
                 return true;
             }
         } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
             EntityPlayer player = (EntityPlayer) damagesource.getSourceOfDamage();
             if (player != null && player.inventory.getCurrentItem() == null) {
-                if (!player.isCreative()) {
+                if (!player.capabilities.isCreativeMode) {
                     dropItem(BalkonsWeaponMod.cannon, 1);
                     if (isLoaded() || isLoading()) {
                         dropItem(BalkonsWeaponMod.cannonBall, 1);
-                        dropItem(Items.GUNPOWDER, 1);
+                        dropItem(Items.gunpowder, 1);
                     }
                 }
                 setDead();
@@ -124,13 +112,13 @@ public class EntityCannon extends EntityBoat {
         setBeenAttacked();
         if (getCurrentDamage() > 100) {
             for (int j = 0; j < 6; ++j) {
-                dropItemWithChance(Items.IRON_INGOT, (int) damage, 1);
+                dropItemWithChance(Items.iron_ingot, (int) damage, 1);
             }
-            dropItemWithChance(Items.FLINT, (int) damage, 1);
-            dropItemWithChance(Item.getItemFromBlock(Blocks.LOG), (int) damage, 1);
+            dropItemWithChance(Items.flint, (int) damage, 1);
+            dropItemWithChance(Item.getItemFromBlock(Blocks.log), (int) damage, 1);
             if (isLoaded() || isLoading()) {
                 dropItem(BalkonsWeaponMod.cannonBall, 1);
-                dropItem(Items.GUNPOWDER, 1);
+                dropItem(Items.gunpowder, 1);
             }
             setDead();
         }
@@ -182,20 +170,19 @@ public class EntityCannon extends EntityBoat {
         if (!onGround) {
             fallDistance += (float) (-motionY);
         }
-        if (isBeingRidden()) {
-            EntityLivingBase entitylivingbase = (EntityLivingBase) getControllingPassenger();
-            float yaw = entitylivingbase.rotationYaw;
-            float pitch = entitylivingbase.rotationPitch;
+        if (riddenByEntity != null) {
+            float yaw = riddenByEntity.rotationYaw;
+            float pitch = riddenByEntity.rotationPitch;
             rotationYaw = yaw % 360.0f;
             rotationPitch = pitch;
         }
         setRotation(rotationYaw, rotationPitch);
         moveEntity(motionX, motionY, motionZ);
-        List<Entity> list = worldObj.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
-                0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
+        List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
+                getEntityBoundingBox().expand(0.2, 0.0, 0.2));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
-                if (!entity.isPassenger(this) && !entity.isRiding()) {
+                if (entity != riddenByEntity && entity.canBePushed()) {
                     applyEntityCollision(entity);
                 }
             }
@@ -218,9 +205,10 @@ public class EntityCannon extends EntityBoat {
         int l = getLoadTimer();
         if (l > 0) {
             if (l == 80 || l == 70 || l == 60) {
-                playSound(SoundEvents.BLOCK_PISTON_CONTRACT, 0.5f, 1.2f / (rand.nextFloat() * 0.8f + 0.6f));
+                worldObj.playSoundAtEntity(this, "tile.piston.in", 0.5f, 1.2f / (rand.nextFloat() * 0.8f + 0.6f));
             } else if (l == 40) {
-                playSound(SoundEvents.ENTITY_PLAYER_BREATH, 0.7f, 1.2f / (rand.nextFloat() * 0.2f + 10.0f));
+                worldObj.playSoundAtEntity(this, "random.breath", 0.7f,
+                        1.2f / (rand.nextFloat() * 0.2f + 10.0f));
             }
         } else {
             setReloadInfo(true, 0);
@@ -231,10 +219,9 @@ public class EntityCannon extends EntityBoat {
         if (!isLoaded()) {
             return;
         }
-        Entity entityPassenger = getPassengers().isEmpty() ? null : getPassengers().get(0);
         if (!worldObj.isRemote) {
             EntityCannonBall entitycannonball = new EntityCannonBall(worldObj, this,
-                    entityPassenger.rotationPitch, entityPassenger.rotationYaw, isSuperPowered());
+                    riddenByEntity.rotationPitch, riddenByEntity.rotationYaw, isSuperPowered());
             worldObj.spawnEntityInWorld(entitycannonball);
         }
         setReloadInfo(false, 0);
@@ -242,8 +229,8 @@ public class EntityCannon extends EntityBoat {
     }
 
     public void fireEffects() {
-        playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 8.0f, 1.0f / (rand.nextFloat() * 0.8f + 0.9f));
-        playSound(SoundEvents.ENTITY_LIGHTNING_THUNDER, 8.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
+        worldObj.playSoundAtEntity(this, "random.explode", 8.0F, 1.0F / (rand.nextFloat() * 0.8F + 0.9F));
+        worldObj.playSoundAtEntity(this, "ambient.weather.thunder", 8.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.6F));
         float yaw = (float) Math.toRadians(rotationYaw);
         double d = -MathHelper.sin(yaw) * -1.0f;
         double d2 = MathHelper.cos(yaw) * -1.0f;
@@ -253,10 +240,8 @@ public class EntityCannon extends EntityBoat {
                     posZ + d2 + rand.nextDouble() * 0.5 - 0.25, rand.nextDouble() * 0.1 - 0.05,
                     rand.nextDouble() * 0.1 - 0.05, rand.nextDouble() * 0.1 - 0.05);
         }
-        if (isBeingRidden()) {
-            for (Entity entity2 : getPassengers()) {
-                entity2.rotationPitch += 10.0f;
-            }
+        if (riddenByEntity != null) {
+            riddenByEntity.rotationPitch += 10.0f;
         }
         attackEntityFrom(DamageSource.generic, 2.0f);
     }
@@ -274,12 +259,12 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public void updatePassenger(@Nonnull Entity passenger) {
-        if (isPassenger(passenger)) {
+    public void updateRiderPosition() {
+        if (riddenByEntity != null) {
             float f = -0.85f;
-            float f2 = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
-            Vec3d vec3d = new Vec3d(f, 0.0, 0.0).rotateYaw(-rotationYaw * 0.017453292f - 1.5707964f);
-            passenger.setPosition(posX + vec3d.xCoord, posY + f2, posZ + vec3d.zCoord);
+            float f2 = (float) ((isDead ? 0.01 : getMountedYOffset()) + riddenByEntity.getYOffset());
+            Vec3 vec3d = new Vec3(f, 0.0, 0.0).rotateYaw(-rotationYaw * 0.017453292f - 1.5707964f);
+            riddenByEntity.setPosition(posX + vec3d.xCoord, posY + f2, posZ + vec3d.zCoord);
         }
     }
 
@@ -300,22 +285,21 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public boolean processInitialInteract(@Nonnull EntityPlayer entityplayer, @Nullable ItemStack stack,
-                                          @Nonnull EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public boolean interactFirst(@Nonnull EntityPlayer entityplayer) {
+        ItemStack itemstack = entityplayer.getCurrentEquippedItem();
         if (itemstack != null && itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading()
-            && (entityplayer.isCreative() || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
-            if (entityplayer.isCreative() || consumeAmmo(entityplayer, BalkonsWeaponMod.cannonBall)) {
+            && (entityplayer.capabilities.isCreativeMode || consumeAmmo(entityplayer, Items.gunpowder))) {
+            if (entityplayer.capabilities.isCreativeMode || consumeAmmo(entityplayer, BalkonsWeaponMod.cannonBall)) {
                 startLoadingCannon();
                 return true;
             }
-            dropItem(Items.GUNPOWDER, 1);
+            dropItem(Items.gunpowder, 1);
         } else {
-            if (isBeingRidden() && riddenByPlayer() && notThisPlayer(entityplayer)) {
+            if (riddenByEntity != null && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return true;
             }
             if (!worldObj.isRemote && !entityplayer.isSneaking()) {
-                entityplayer.startRiding(this);
+                entityplayer.mountEntity(this);
             }
         }
         return true;
@@ -342,18 +326,18 @@ public class EntityCannon extends EntityBoat {
         }
         stackAmmo.splitStack(1);
         if (stackAmmo.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(stackAmmo);
+            WMItem.deleteStack(entityplayer.inventory, stackAmmo);
         }
         return true;
     }
 
     public boolean riddenByPlayer() {
-        Entity entity = getControllingPassenger();
+        Entity entity = riddenByEntity;
         return entity instanceof EntityPlayer;
     }
 
     public boolean notThisPlayer(Entity player) {
-        Entity entity = getControllingPassenger();
+        Entity entity = riddenByEntity;
         return entity != player;
     }
 
@@ -364,15 +348,15 @@ public class EntityCannon extends EntityBoat {
     }
 
     public void setLoaded(boolean flag) {
-        dataManager.set(LOADED, (byte) (flag ? 1 : 0));
+        dataWatcher.updateObject(LOADED, (byte) (flag ? 1 : 0));
     }
 
     public void setLoadTimer(int time) {
-        dataManager.set(LOAD_TIMER, time);
+        dataWatcher.updateObject(LOAD_TIMER, time);
     }
 
     public void setSuperPowered(boolean flag) {
-        dataManager.set(SUPER_POWERED, (byte) (flag ? 1 : 0));
+        dataWatcher.updateObject(SUPER_POWERED, (byte) (flag ? 1 : 0));
     }
 
     public boolean isLoading() {
@@ -380,41 +364,41 @@ public class EntityCannon extends EntityBoat {
     }
 
     public boolean isLoaded() {
-        return dataManager.get(LOADED) != 0;
+        return dataWatcher.getWatchableObjectByte(LOADED) != 0;
     }
 
     public int getLoadTimer() {
-        return dataManager.get(LOAD_TIMER);
+        return dataWatcher.getWatchableObjectInt(LOAD_TIMER);
     }
 
     public boolean isSuperPowered() {
-        return dataManager.get(SUPER_POWERED) != 0;
+        return dataWatcher.getWatchableObjectByte(SUPER_POWERED) != 0;
     }
 
     @Override
     public void setTimeSinceHit(int i) {
-        dataManager.set(TIME_SINCE_HIT, i);
+        dataWatcher.updateObject(TIME_SINCE_HIT, i);
     }
 
     public void setRockDirection(int i) {
-        dataManager.set(ROCK_DIRECTION, (byte) i);
+        dataWatcher.updateObject(ROCK_DIRECTION, (byte) i);
     }
 
     public void setCurrentDamage(int i) {
-        dataManager.set(CURRENT_DAMAGE, i);
+        dataWatcher.updateObject(CURRENT_DAMAGE, i);
     }
 
     @Override
     public int getTimeSinceHit() {
-        return dataManager.get(TIME_SINCE_HIT);
+        return dataWatcher.getWatchableObjectInt(TIME_SINCE_HIT);
     }
 
     public int getRockDirection() {
-        return dataManager.get(ROCK_DIRECTION);
+        return dataWatcher.getWatchableObjectByte(ROCK_DIRECTION);
     }
 
     public int getCurrentDamage() {
-        return dataManager.get(CURRENT_DAMAGE);
+        return dataWatcher.getWatchableObjectInt(CURRENT_DAMAGE);
     }
 
 }

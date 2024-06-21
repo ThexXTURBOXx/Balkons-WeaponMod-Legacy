@@ -3,16 +3,13 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WarhammerExplosion;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class MeleeCompWarhammer extends MeleeComponent {
@@ -23,7 +20,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
+    public float getBlockDamage(ItemStack itemstack, Block block) {
         float f = super.getBlockDamage(itemstack, block);
         float f2 = weaponMaterial.getDamageVsEntity() + 2.0f;
         return f * f2;
@@ -42,7 +39,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     protected void superSmash(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingArm(EnumHand.MAIN_HAND);
+        entityplayer.swingItem();
         float f = getEntityDamage() / 2.0f;
         WarhammerExplosion expl = new WarhammerExplosion(world, entityplayer, entityplayer.posX,
                 entityplayer.posY, entityplayer.posZ, f, false, true);
@@ -51,7 +48,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
         PhysHelper.sendExplosion(world, expl, true, false);
         itemstack.damageItem(16, entityplayer);
         if (itemstack.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(itemstack);
+            WMItem.deleteStack(entityplayer.inventory, itemstack);
         }
         entityplayer.addExhaustion(6.0f);
         setSmashed(entityplayer);
@@ -76,16 +73,12 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (itemstack == null) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
-        }
+    public ItemStack onItemRightClick(World world, EntityPlayer entityplayer, ItemStack itemstack) {
+        if (itemstack == null || itemstack.stackSize <= 0) return itemstack;
         if (isCharged(entityplayer)) {
-            entityplayer.setActiveHand(hand);
-            return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+            int i = getMaxItemUseDuration(itemstack);
+            entityplayer.setItemInUse(itemstack, i);
         }
-        return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+        return itemstack;
     }
 }

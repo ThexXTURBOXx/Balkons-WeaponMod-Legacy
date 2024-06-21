@@ -5,11 +5,10 @@ import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityKnife extends EntityMaterialProjectile {
@@ -55,9 +54,9 @@ public class EntityKnife extends EntityMaterialProjectile {
         }
         rotationPitch -= 70.0f;
         if (soundTimer >= 3) {
-            if (!isInsideOfMaterial(Material.WATER)) {
-                playSound(SoundEvents.ENTITY_ARROW_SHOOT, 0.6f,
-                        1.0f / (rand.nextFloat() * 0.2f + 0.6f + ticksInAir / 15.0f));
+            if (!isInsideOfMaterial(Material.water)) {
+                worldObj.playSoundAtEntity(this, "random.bow", 0.6F,
+                        1.0F / (rand.nextFloat() * 0.2F + 0.6F + ticksInAir / 15F));
             }
             soundTimer = 0;
         }

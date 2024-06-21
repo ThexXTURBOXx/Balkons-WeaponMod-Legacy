@@ -7,11 +7,10 @@ import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityFlail extends EntityMaterialProjectile {
@@ -71,7 +70,7 @@ public class EntityFlail extends EntityMaterialProjectile {
                 returnToOwner(true);
             }
             if (shooter instanceof EntityPlayer) {
-                ItemStack itemstack = ((EntityPlayer) shooter).getHeldItemMainhand();
+                ItemStack itemstack = ((EntityPlayer) shootingEntity).getCurrentEquippedItem();
                 if (itemstack == null || (thrownItem != null && itemstack.getItem() != thrownItem.getItem()) || !shooter.isEntityAlive()) {
                     pickUpByOwner();
                 }
@@ -136,7 +135,7 @@ public class EntityFlail extends EntityMaterialProjectile {
         if (isSwinging) {
             return;
         }
-        playSound(SoundEvents.ENTITY_ARROW_SHOOT, 0.5f, 0.4f / (rand.nextFloat() * 0.4f + 0.8f));
+        worldObj.playSoundAtEntity(shootingEntity, "random.bow", 0.5F, 0.4F / (rand.nextFloat() * 0.4F + 0.8F));
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);
         float z = MathHelper.cos(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
@@ -180,7 +179,7 @@ public class EntityFlail extends EntityMaterialProjectile {
         if (inGround) {
             return;
         }
-        playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, rand.nextFloat() * 0.4f + 0.8f);
+        worldObj.playSoundAtEntity(this, "game.player.hurt", 1.0F, rand.nextFloat() * 0.4F + 0.8F);
     }
 
     @Override

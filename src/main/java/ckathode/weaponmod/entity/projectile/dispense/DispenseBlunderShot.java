@@ -7,11 +7,9 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 
 public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     private final Random rand = new Random();
@@ -30,8 +28,8 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
 
     @Override
     protected void playDispenseSound(IBlockSource blocksource) {
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
-                SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.6f));
+        blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(),
+                "random.explode", 3.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.6F));
     }
 
     @Override

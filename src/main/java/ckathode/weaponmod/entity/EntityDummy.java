@@ -8,33 +8,22 @@ import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 public class EntityDummy extends Entity {
     public static final String NAME = "dummy";
 
-    private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(EntityDummy.class,
-            DataSerializers.VARINT);
-    private static final DataParameter<Byte> ROCK_DIRECTION = EntityDataManager.createKey(EntityDummy.class,
-            DataSerializers.BYTE);
-    private static final DataParameter<Integer> CURRENT_DAMAGE = EntityDataManager.createKey(EntityDummy.class,
-            DataSerializers.VARINT);
+    private static final int TIME_SINCE_HIT = 17;
+    private static final int ROCK_DIRECTION = 18;
+    private static final int CURRENT_DAMAGE = 19;
     private int durability;
 
     public EntityDummy(World world) {
@@ -59,9 +48,9 @@ public class EntityDummy extends Entity {
 
     @Override
     protected void entityInit() {
-        dataManager.register(TIME_SINCE_HIT, 0);
-        dataManager.register(ROCK_DIRECTION, (byte) 1);
-        dataManager.register(CURRENT_DAMAGE, 0);
+        dataWatcher.addObject(TIME_SINCE_HIT, 0);
+        dataWatcher.addObject(ROCK_DIRECTION, (byte) 1);
+        dataWatcher.addObject(CURRENT_DAMAGE, 0);
     }
 
     @Override
@@ -120,9 +109,9 @@ public class EntityDummy extends Entity {
     public void playRandomHitSound() {
         int i = rand.nextInt(2);
         if (i == 0) {
-            playSound(SoundEvents.BLOCK_CLOTH_STEP, 0.7f, 1.0f / (rand.nextFloat() * 0.2f + 0.4f));
+            worldObj.playSoundAtEntity(this, "step.cloth", 0.7F, 1F / rand.nextFloat() * 0.2F + 0.4F);
         } else {
-            playSound(SoundEvents.BLOCK_WOOD_STEP, 0.7f, 1.0f / (rand.nextFloat() * 0.2f + 0.2f));
+            worldObj.playSoundAtEntity(this, "step.wood", 0.7F, 1F / rand.nextFloat() * 0.2F + 0.2F);
         }
     }
 
@@ -164,11 +153,11 @@ public class EntityDummy extends Entity {
         }
         setRotation(rotationYaw, rotationPitch);
         moveEntity(0.0, motionY, 0.0);
-        List<Entity> list = worldObj.getEntitiesInAABBexcluding(this, getEntityBoundingBox().expand(0.2,
-                0.0, 0.2), EntitySelectors.getTeamCollisionPredicate(this));
+        List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
+                getEntityBoundingBox().expand(0.2D, 0.0D, 0.2D));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
-                if (!entity.isPassenger(this)) {
+                if (entity != riddenByEntity && entity.canBePushed()) {
                     applyEntityCollision(entity);
                 }
             }
@@ -191,7 +180,7 @@ public class EntityDummy extends Entity {
         }
         if (destroyed) {
             for (int i = 0; i < rand.nextInt(8); ++i) {
-                dropItem(Items.LEATHER, 1);
+                dropItem(Items.leather, 1);
             }
         } else if (noCreative) {
             dropItem(BalkonsWeaponMod.dummy, 1);
@@ -200,15 +189,14 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean processInitialInteract(@Nonnull EntityPlayer entityplayer, @Nullable ItemStack stack,
-                                          @Nonnull EnumHand hand) {
+    public boolean interactFirst(EntityPlayer entityplayer) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
         if (itemstack != null) {
-            if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof ItemSword || itemstack.getItem() instanceof ItemBow || itemstack.getItem() instanceof ItemShield) {
+            if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof ItemSword || itemstack.getItem() instanceof ItemBow) {
                 return false;
             }
         }
-        if (entityplayer.isCreative()) {
+        if (entityplayer.capabilities.isCreativeMode) {
             dropAsItem(false, false);
             return true;
         }
@@ -227,27 +215,27 @@ public class EntityDummy extends Entity {
     }
 
     public void setTimeSinceHit(int i) {
-        dataManager.set(TIME_SINCE_HIT, i);
+        dataWatcher.updateObject(TIME_SINCE_HIT, i);
     }
 
     public void setRockDirection(int i) {
-        dataManager.set(ROCK_DIRECTION, (byte) i);
+        dataWatcher.updateObject(ROCK_DIRECTION, (byte) i);
     }
 
     public void setCurrentDamage(int i) {
-        dataManager.set(CURRENT_DAMAGE, i);
+        dataWatcher.updateObject(CURRENT_DAMAGE, i);
     }
 
     public int getTimeSinceHit() {
-        return dataManager.get(TIME_SINCE_HIT);
+        return dataWatcher.getWatchableObjectInt(TIME_SINCE_HIT);
     }
 
     public int getRockDirection() {
-        return dataManager.get(ROCK_DIRECTION);
+        return dataWatcher.getWatchableObjectByte(ROCK_DIRECTION);
     }
 
     public int getCurrentDamage() {
-        return dataManager.get(CURRENT_DAMAGE);
+        return dataWatcher.getWatchableObjectInt(CURRENT_DAMAGE);
     }
 
 }

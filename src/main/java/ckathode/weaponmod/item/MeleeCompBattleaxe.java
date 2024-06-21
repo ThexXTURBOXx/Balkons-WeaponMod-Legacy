@@ -3,8 +3,8 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.DamageSourceAxe;
 import ckathode.weaponmod.WeaponModAttributes;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -42,14 +42,14 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
-        return (block.getMaterial() == Material.WOOD) ? (weaponMaterial.getEfficiencyOnProperMaterial() * 0.75f) :
+    public float getBlockDamage(ItemStack itemstack, Block block) {
+        return (block.getMaterial() == Material.wood) ? (weaponMaterial.getEfficiencyOnProperMaterial() * 0.75f) :
                 super.getBlockDamage(itemstack, block);
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState block) {
-        return block.getMaterial() == Material.WOOD;
+    public boolean canHarvestBlock(Block block) {
+        return block.getMaterial() == Material.wood;
     }
 
     @Override

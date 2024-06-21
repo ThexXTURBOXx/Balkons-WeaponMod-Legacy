@@ -2,15 +2,9 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import javax.annotation.Nonnull;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,11 +21,10 @@ public class ItemJavelin extends WMItem {
     }
 
     @Override
-    public void onPlayerStoppedUsing(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                     @Nonnull EntityLivingBase entityLiving, int i) {
+    public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityLiving, int i) {
         EntityPlayer entityplayer = (EntityPlayer) entityLiving;
         if (itemstack.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(itemstack);
+            deleteStack(entityplayer.inventory, itemstack);
             return;
         }
         int j = getMaxItemUseDuration(itemstack) - i;
@@ -51,12 +44,11 @@ public class ItemJavelin extends WMItem {
             entityjavelin.setIsCritical(crit);
             world.spawnEntityInWorld(entityjavelin);
         }
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.isCreative()) {
+        world.playSoundAtEntity(entityplayer, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+        if (!entityplayer.capabilities.isCreativeMode) {
             itemstack.splitStack(1);
             if (itemstack.stackSize <= 0) {
-                entityplayer.inventory.deleteStack(itemstack);
+                deleteStack(entityplayer.inventory, itemstack);
             }
         }
     }
@@ -72,16 +64,14 @@ public class ItemJavelin extends WMItem {
         return EnumAction.BOW;
     }
 
-    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                                    EntityPlayer entityplayer, @Nonnull EnumHand hand) {
-        if (!entityplayer.isCreative() && itemstack.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(itemstack);
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        if (!entityplayer.capabilities.isCreativeMode && itemstack.stackSize <= 0) {
+            deleteStack(entityplayer.inventory, itemstack);
+            return itemstack;
         }
-        entityplayer.setActiveHand(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+        return itemstack;
     }
 
     @Override

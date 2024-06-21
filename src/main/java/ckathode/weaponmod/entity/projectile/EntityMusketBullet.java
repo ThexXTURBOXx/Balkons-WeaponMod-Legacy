@@ -1,14 +1,11 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
-import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityMusketBullet extends EntityProjectile {
@@ -95,11 +92,5 @@ public class EntityMusketBullet extends EntityProjectile {
     @Override
     public int getMaxArrowShake() {
         return 0;
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.musketBullet);
     }
 }

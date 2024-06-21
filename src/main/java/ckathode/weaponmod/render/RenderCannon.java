@@ -6,8 +6,8 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 
 public class RenderCannon extends Render<EntityCannon> {
     private final ModelCannonBarrel modelBarrel;
@@ -44,10 +44,6 @@ public class RenderCannon extends Render<EntityCannon> {
             GlStateManager.color(entitycannon.getBrightness(f1) * f4, entitycannon.getBrightness(f1) * f4,
                     entitycannon.getBrightness(f1) * f4);
         }
-        if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
-        }
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(rot, 1.0f, 0.0f, 0.0f);
@@ -59,10 +55,6 @@ public class RenderCannon extends Render<EntityCannon> {
         modelStandard.base2.rotateAngleY = yaw;
         modelStandard.baseStand.rotateAngleY = yaw;
         modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitycannon));
-        }
         GlStateManager.popMatrix();
         super.doRender(entitycannon, d, d1, d2, f, f1);
     }

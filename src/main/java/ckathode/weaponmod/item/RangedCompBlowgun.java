@@ -3,17 +3,14 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class RangedCompBlowgun extends RangedComponent {
@@ -23,10 +20,9 @@ public class RangedCompBlowgun extends RangedComponent {
 
     @Override
     public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingArm(EnumHand.MAIN_HAND);
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
-                SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.PLAYERS, 0.8f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
+        entityplayer.swingItem();
+        world.playSoundAtEntity(entityplayer, "random.click", 0.8F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.4F));
     }
 
     @Override
@@ -43,18 +39,18 @@ public class RangedCompBlowgun extends RangedComponent {
         }
         ItemStack dartstack = findAmmo(entityplayer);
         if (dartstack == null) {
-            if (entityplayer.isCreative()) {
+            if (entityplayer.capabilities.isCreativeMode) {
                 dartstack = new ItemStack(BalkonsWeaponMod.dart, 1);
             } else {
                 return;
             }
         }
         ItemStack dartStackCopy = dartstack.copy();
-        if (!entityplayer.isCreative()
-            && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) == 0) {
+        if (!entityplayer.capabilities.isCreativeMode
+            && EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemstack) == 0) {
             dartstack.splitStack(1);
             if (dartstack.stackSize <= 0) {
-                entityplayer.inventory.deleteStack(dartstack);
+                WMItem.deleteStack(entityplayer.inventory, dartstack);
             }
         }
         if (!world.isRemote) {
@@ -73,7 +69,7 @@ public class RangedCompBlowgun extends RangedComponent {
         }
         itemstack.damageItem(damage, entityplayer);
         if (itemstack.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(itemstack);
+            WMItem.deleteStack(entityplayer.inventory, itemstack);
         }
         postShootingEffects(itemstack, entityplayer, world);
         RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
@@ -86,22 +82,20 @@ public class RangedCompBlowgun extends RangedComponent {
 
     @Override
     public void soundEmpty(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.PLAYERS, 1.0f, 1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.5f));
+        world.playSoundAtEntity(entityplayer, "random.bow", 1.0F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.2F + 0.5F));
     }
 
     @Override
     public void soundCharge(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
-                SoundEvents.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 1.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+        world.playSoundAtEntity(entityplayer, "random.breath", 1.0F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.8F));
     }
 
     @Override
     public void effectShoot(World world, double x, double y, double z, float yaw,
                             float pitch) {
-        world.playSound(null, x, y, z, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.5f));
+        world.playSoundEffect(x, y, z, "random.bow", 1.0F, 1.0F / (weapon.getItemRand().nextFloat() * 0.2F + 0.5F));
         float particleX = -MathHelper.sin((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);

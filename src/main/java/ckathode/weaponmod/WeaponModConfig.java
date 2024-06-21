@@ -16,11 +16,13 @@ public class WeaponModConfig {
     public boolean itemModelForEntity;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
+    private final Map<String, DataWatcherIdSetting> dataWatcherIds;
 
     public WeaponModConfig(final Configuration configuration) {
         config = configuration;
         enableSettings = new LinkedHashMap<>();
         reloadTimeSettings = new LinkedHashMap<>();
+        dataWatcherIds = new LinkedHashMap<>();
     }
 
     public void addEnableSetting(final String weapon) {
@@ -29,6 +31,10 @@ public class WeaponModConfig {
 
     public void addReloadTimeSetting(final String weapon, final int defaulttime) {
         reloadTimeSettings.put(weapon, new ReloadTimeSetting(weapon, defaulttime));
+    }
+
+    public void addDataWatcherIdSetting(final String desc, final int defaultId) {
+        dataWatcherIds.put(desc, new DataWatcherIdSetting(desc, defaultId));
     }
 
     public boolean isEnabled(final String weapon) {
@@ -41,6 +47,11 @@ public class WeaponModConfig {
         return (rs == null) ? 0 : rs.reloadTime;
     }
 
+    public int getDataWatcherId(final String desc) {
+        final DataWatcherIdSetting ds = dataWatcherIds.get(desc);
+        return (ds == null) ? 0 : ds.id;
+    }
+
     public void loadConfig() {
         config.load();
         config.addCustomCategoryComment("enable", "Enable or disable certain weapons "
@@ -48,6 +59,9 @@ public class WeaponModConfig {
                                                   + "through Creative mode!)");
         config.addCustomCategoryComment("reloadtime", "The reload durations of the reloadable weapons");
         config.addCustomCategoryComment("settings", "Miscellaneous mod settings");
+        config.addCustomCategoryComment("datawatcher", "Data Watcher IDs - if your game crashes because there is a "
+                                                       + "conflict with another mod's Data Watcher entries, you can "
+                                                       + "fix it here by changing the ID(s)!");
         cannonDoesBlockDamage = config.get("settings", "cannon-block-damage", true).getBoolean(true);
         dynamiteDoesBlockDamage = config.get("settings", "dynamite-block-damage", true).getBoolean(true);
         mortarDoesBlockDamage = config.get("settings", "mortar-block-damage", true).getBoolean(true);
@@ -66,6 +80,9 @@ public class WeaponModConfig {
         }
         for (final ReloadTimeSetting rs : reloadTimeSettings.values()) {
             rs.reloadTime = config.get("reloadtime", rs.settingName, rs.reloadTime).getInt(rs.reloadTime);
+        }
+        for (final DataWatcherIdSetting ds : dataWatcherIds.values()) {
+            ds.id = config.get("datawatcher", ds.settingName, ds.id).getInt(ds.id);
         }
         config.save();
     }
@@ -93,6 +110,15 @@ public class WeaponModConfig {
         EnableSetting(final String name, boolean enabled) {
             super(name + ".enabled");
             this.enabled = enabled;
+        }
+    }
+
+    private static class DataWatcherIdSetting extends Setting {
+        int id;
+
+        DataWatcherIdSetting(final String desc, int id) {
+            super(desc);
+            this.id = id;
         }
     }
 }

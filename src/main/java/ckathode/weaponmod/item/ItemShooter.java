@@ -1,25 +1,22 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WMItemVariants;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Random;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,8 +25,13 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     protected static final int MAX_DELAY = 72000;
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
+    public final String rawId;
+    private final ModelResourceLocation reloadModel;
+    private final ModelResourceLocation loadedModel;
+    private Boolean reloadModelExists, loadedModelExists;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
+        rawId = id;
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
         setUnlocalizedName(id);
         rangedComponent = rangedcomponent;
@@ -37,31 +39,21 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
         rangedcomponent.setThisItemProperties();
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reload"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World world,
-                               @Nullable EntityLivingBase entity) {
-                return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f;
-            }
-        });
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reloaded"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World world,
-                               @Nullable EntityLivingBase entity) {
-                return RangedComponent.isReloaded(stack) ? 1.0f : 0.0f;
-            }
-        });
+        reloadModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
+                rawId + "_reload"), "inventory");
+        loadedModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
+                rawId + "-loaded"), "inventory");
+        reloadModelExists = null;
+        loadedModelExists = null;
     }
 
     @Override
-    public float getStrVsBlock(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
+    public float getStrVsBlock(ItemStack itemstack, Block block) {
         return meleeComponent.getBlockDamage(itemstack, block);
     }
 
     @Override
-    public boolean canHarvestBlock(@Nonnull IBlockState block) {
+    public boolean canHarvestBlock(Block block) {
         return meleeComponent.canHarvestBlock(block);
     }
 
@@ -72,9 +64,8 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     }
 
     @Override
-    public boolean onBlockDestroyed(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                    @Nonnull IBlockState block, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos,
+                                    EntityLivingBase entityliving) {
         return meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
     }
 
@@ -83,15 +74,11 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         return meleeComponent.getItemEnchantability();
     }
 
-    @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot
-            , @Nonnull ItemStack itemstack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack) {
         Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-        if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-            meleeComponent.addItemAttributeModifiers(multimap);
-            rangedComponent.addItemAttributeModifiers(multimap);
-        }
+        meleeComponent.addItemAttributeModifiers(multimap);
+        rangedComponent.addItemAttributeModifiers(multimap);
         return multimap;
     }
 
@@ -112,22 +99,18 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         return rangedComponent.getMaxItemUseDuration(itemstack);
     }
 
-    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                                    @Nonnull EntityPlayer entityplayer, @Nonnull EnumHand hand) {
-        return rangedComponent.onItemRightClick(world, entityplayer, hand);
+    public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn) {
+        return rangedComponent.onItemRightClick(worldIn, playerIn, itemStackIn);
     }
 
     @Override
-    public void onUsingTick(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityplayer,
-                            int count) {
+    public void onUsingTick(ItemStack itemstack, EntityPlayer entityplayer, int count) {
         rangedComponent.onUsingTick(itemstack, entityplayer, count);
     }
 
     @Override
-    public void onPlayerStoppedUsing(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                     @Nonnull EntityLivingBase entityplayer, int i) {
+    public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityplayer, int i) {
         rangedComponent.onPlayerStoppedUsing(itemstack, world, entityplayer, i);
     }
 
@@ -157,5 +140,20 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
+    }
+
+    @Override
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        if (reloadModelExists == null)
+            reloadModelExists = WMItemVariants.itemVariantExists(reloadModel);
+        if (reloadModelExists && player != null && player.isUsingItem() && !RangedComponent.isReloaded(stack))
+            return reloadModel;
+
+        if (loadedModelExists == null)
+            loadedModelExists = WMItemVariants.itemVariantExists(loadedModel);
+        if (loadedModelExists && RangedComponent.isReloaded(stack))
+            return loadedModel;
+
+        return super.getModel(stack, player, useRemaining);
     }
 }

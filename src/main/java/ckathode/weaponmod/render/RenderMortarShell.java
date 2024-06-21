@@ -5,7 +5,7 @@ import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -21,7 +21,7 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
     public void doRender(@Nonnull EntityMortarShell entitymortarshell, double d, double d1,
                          double d2, float f, float f1) {
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
         GlStateManager.pushMatrix();
         bindEntityTexture(entitymortarshell);
         GlStateManager.disableLighting();
@@ -30,10 +30,6 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
         GlStateManager.scale(-1.0f, -1.0f, 1.0f);
         GlStateManager.scale(0.2f, 0.2f, 0.2f);
         GlStateManager.rotate(180.0f, 1.0f, 0.0f, 0.0f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitymortarshell));
-        }
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(-0.5, 0.5, -0.5).tex(0.0, 1.0).endVertex();
         vertexbuffer.pos(0.5, 0.5, -0.5).tex(1.0, 1.0).endVertex();
@@ -60,10 +56,6 @@ public class RenderMortarShell extends Render<EntityMortarShell> {
         vertexbuffer.pos(0.5, 0.5, 0.5).tex(1.0, 1.0).endVertex();
         vertexbuffer.pos(0.5, -0.5, 0.5).tex(0.0, 1.0).endVertex();
         tessellator.draw();
-        if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
-        }
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
         super.doRender(entitymortarshell, d, d1, d2, f, f1);

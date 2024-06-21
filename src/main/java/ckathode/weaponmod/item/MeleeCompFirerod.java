@@ -6,9 +6,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class MeleeCompFirerod extends MeleeComponent {
@@ -30,13 +29,10 @@ public class MeleeCompFirerod extends MeleeComponent {
         super.onUpdate(itemstack, world, entity, i, flag);
         if (!(entity instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) entity;
-        if (player.isInsideOfMaterial(Material.WATER)) return;
-        boolean mainHand = player.getHeldItemMainhand() == itemstack;
-        boolean offHand = player.getHeldItemOffhand() == itemstack;
-        if (!mainHand && !offHand) return;
+        if (player.isInsideOfMaterial(Material.water)) return;
 
         float f = 1.0f;
-        float f1 = offHand ^ (player.getPrimaryHand() == EnumHandSide.LEFT) ? -28.0f : 28.0f;
+        float f1 = 28.0f;
         float particleX =
                 -MathHelper.sin(((player.rotationYaw + f1) / 180F) * 3.141593F) * MathHelper.cos((player.rotationPitch / 180F) * 3.141593F) * f;
         float particleY = -MathHelper.sin((player.rotationPitch / 180F) * 3.141593F) + player.getEyeHeight();

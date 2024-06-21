@@ -5,16 +5,17 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemMusket extends ItemShooter {
@@ -45,7 +46,7 @@ public class ItemMusket extends ItemShooter {
                 PhysHelper.knockBack(entityliving, attacker, kb);
                 entityliving.hurtResistantTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);
             }
-            if (attacker instanceof EntityPlayer && !((EntityPlayer) attacker).isCreative()) {
+            if (attacker instanceof EntityPlayer && !((EntityPlayer) attacker).capabilities.isCreativeMode) {
                 bayonetDamage(itemstack, attacker, 1);
             }
         }
@@ -53,14 +54,13 @@ public class ItemMusket extends ItemShooter {
     }
 
     @Override
-    public boolean onBlockDestroyed(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                    @Nonnull IBlockState block, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos,
+                                    EntityLivingBase entityliving) {
         if (hasBayonet()) {
             Material material = block.getMaterial();
             boolean flag =
-                    material != Material.PLANTS && material != Material.VINE && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD;
-            if (entityliving instanceof EntityPlayer && !((EntityPlayer) entityliving).isCreative() && flag) {
+                    material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd;
+            if (entityliving instanceof EntityPlayer && !((EntityPlayer) entityliving).capabilities.isCreativeMode && flag) {
                 bayonetDamage(itemstack, entityliving, 2);
             }
         }
@@ -75,15 +75,24 @@ public class ItemMusket extends ItemShooter {
         int bayonetdamage = itemstack.getTagCompound().getShort("bayonetDamage") + damage;
         if (bayonetdamage > bayonetDurability) {
             entityplayer.renderBrokenItemStack(itemstack);
-            entityplayer.addStat(StatList.getObjectBreakStats(this));
+            entityplayer.triggerAchievement(StatList.objectBreakStats[Item.getIdFromItem(this)]);
             bayonetdamage = 0;
             ItemStack itemstack2 = new ItemStack(BalkonsWeaponMod.musket, 1);
             itemstack2.setItemDamage(itemstack.getItemDamage());
-            entityplayer.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, itemstack2);
+            entityplayer.setCurrentItemOrArmor(0, itemstack2);
             if (itemstack.getTagCompound().hasKey("rld")) {
                 ReloadHelper.setReloadState(itemstack2, ReloadHelper.getReloadState(itemstack));
             }
         }
         itemstack.getTagCompound().setShort("bayonetDamage", (short) bayonetdamage);
+    }
+
+    @Override
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        if (player != null && player.isUsingItem() && player.getItemInUse() == stack && !RangedComponent.isReloaded(stack)) {
+            return new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
+                    rawId + "_reload"), "inventory");
+        }
+        return null;
     }
 }

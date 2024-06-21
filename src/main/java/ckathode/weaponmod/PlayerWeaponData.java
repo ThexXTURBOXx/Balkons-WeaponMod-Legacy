@@ -1,45 +1,43 @@
 package ckathode.weaponmod;
 
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 
 public final class PlayerWeaponData {
-    private static final DataParameter<Integer> WARHAMMER_LAST_SMASH_TICKS =
-            EntityDataManager.createKey(EntityPlayer.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> FLAIL_THROWN = EntityDataManager.createKey(EntityPlayer.class,
-            DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> FLAIL_ENTITY_ID = EntityDataManager.createKey(EntityPlayer.class,
-            DataSerializers.VARINT);
+    private static final int WARHAMMER_LAST_SMASH_TICKS =
+            BalkonsWeaponMod.instance.modConfig.getDataWatcherId("warhammer_last_smash_ticks");
+    private static final int FLAIL_THROWN =
+            BalkonsWeaponMod.instance.modConfig.getDataWatcherId("flail_thrown");
+    private static final int FLAIL_ENTITY_ID =
+            BalkonsWeaponMod.instance.modConfig.getDataWatcherId("flail_entity_id");
 
     public static void initPlayerWeaponData(EntityPlayer player) {
         String playername = getPlayerName(player);
         BalkonsWeaponMod.modLog.trace("Initializing DataManager values for {}", playername);
-        EntityDataManager dataManager = player.getDataManager();
+        DataWatcher dataWatcher = player.getDataWatcher();
         try {
-            dataManager.get(WARHAMMER_LAST_SMASH_TICKS);
+            dataWatcher.getWatchableObjectInt(WARHAMMER_LAST_SMASH_TICKS);
             BalkonsWeaponMod.modLog.warn("DataManager ID conflict for {} @ {}",
-                    playername, WARHAMMER_LAST_SMASH_TICKS.getId());
+                    playername, WARHAMMER_LAST_SMASH_TICKS);
         } catch (NullPointerException ignored) {
         } finally {
-            dataManager.register(WARHAMMER_LAST_SMASH_TICKS, player.ticksExisted);
+            dataWatcher.addObject(WARHAMMER_LAST_SMASH_TICKS, player.ticksExisted);
         }
         try {
-            dataManager.get(FLAIL_THROWN);
+            dataWatcher.getWatchableObjectInt(FLAIL_THROWN);
             BalkonsWeaponMod.modLog.warn("DataManager ID conflict for {} @ {}",
-                    playername, FLAIL_THROWN.getId());
+                    playername, FLAIL_THROWN);
         } catch (NullPointerException ignored) {
         } finally {
-            dataManager.register(FLAIL_THROWN, false);
+            dataWatcher.addObject(FLAIL_THROWN, 0);
         }
         try {
-            dataManager.get(FLAIL_ENTITY_ID);
+            dataWatcher.getWatchableObjectInt(FLAIL_ENTITY_ID);
             BalkonsWeaponMod.modLog.warn("DataManager ID conflict for {} @ {}",
-                    playername, FLAIL_ENTITY_ID.getId());
+                    playername, FLAIL_ENTITY_ID);
         } catch (NullPointerException ignored) {
         } finally {
-            dataManager.register(FLAIL_ENTITY_ID, 0);
+            dataWatcher.addObject(FLAIL_ENTITY_ID, 0);
         }
     }
 
@@ -63,52 +61,52 @@ public final class PlayerWeaponData {
 
     public static int getLastWarhammerSmashTicks(EntityPlayer player) {
         try {
-            return player.getDataManager().get(WARHAMMER_LAST_SMASH_TICKS);
+            return player.getDataWatcher().getWatchableObjectInt(WARHAMMER_LAST_SMASH_TICKS);
         } catch (NullPointerException e) {
-            unavailableError(player, WARHAMMER_LAST_SMASH_TICKS.getId());
+            unavailableError(player, WARHAMMER_LAST_SMASH_TICKS);
             return 0;
         }
     }
 
     public static void setLastWarhammerSmashTicks(EntityPlayer player, int age) {
         try {
-            player.getDataManager().set(WARHAMMER_LAST_SMASH_TICKS, age);
+            player.getDataWatcher().updateObject(WARHAMMER_LAST_SMASH_TICKS, age);
         } catch (NullPointerException e) {
-            unavailableError(player, WARHAMMER_LAST_SMASH_TICKS.getId());
+            unavailableError(player, WARHAMMER_LAST_SMASH_TICKS);
         }
     }
 
     public static boolean isFlailThrown(EntityPlayer player) {
         try {
-            return player.getDataManager().get(FLAIL_THROWN);
+            return player.getDataWatcher().getWatchableObjectInt(FLAIL_THROWN) == 1;
         } catch (NullPointerException e) {
-            unavailableError(player, FLAIL_THROWN.getId());
+            unavailableError(player, FLAIL_THROWN);
             return false;
         }
     }
 
     public static void setFlailThrown(EntityPlayer player, boolean flag) {
         try {
-            player.getDataManager().set(FLAIL_THROWN, flag);
+            player.getDataWatcher().updateObject(FLAIL_THROWN, flag ? 1 : 0);
         } catch (NullPointerException e) {
-            unavailableError(player, FLAIL_THROWN.getId());
+            unavailableError(player, FLAIL_THROWN);
         }
     }
 
     public static int getFlailEntityId(EntityPlayer player) {
         try {
-            return player.getDataManager().get(FLAIL_ENTITY_ID);
+            return player.getDataWatcher().getWatchableObjectInt(FLAIL_ENTITY_ID);
         } catch (NullPointerException e) {
-            unavailableError(player, FLAIL_ENTITY_ID.getId());
+            unavailableError(player, FLAIL_ENTITY_ID);
             return 0;
         }
     }
 
     public static void setFlailEntityId(EntityPlayer player, int id) {
         try {
-            player.getDataManager().set(FLAIL_ENTITY_ID, id);
+            player.getDataWatcher().updateObject(FLAIL_ENTITY_ID, id);
         } catch (NullPointerException e) {
-            unavailableError(player, FLAIL_ENTITY_ID.getId());
+            unavailableError(player, FLAIL_ENTITY_ID);
         }
     }
 

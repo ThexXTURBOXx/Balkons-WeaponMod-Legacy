@@ -8,15 +8,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityDynamite extends EntityProjectile {
@@ -70,8 +69,7 @@ public class EntityDynamite extends EntityProjectile {
         }
         if (isInWater() && !extinguished) {
             extinguished = true;
-            playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f,
-                    1.2f / (rand.nextFloat() * 0.2f + 0.9f));
+            worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
             for (int k = 0; k < 8; ++k) {
                 float f6 = 0.25f;
                 worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX - motionX * f6,
@@ -102,7 +100,7 @@ public class EntityDynamite extends EntityProjectile {
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onGroundHit(MovingObjectPosition raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
@@ -124,10 +122,9 @@ public class EntityDynamite extends EntityProjectile {
             beenInGround = true;
         } else {
             inGround = false;
-            playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f,
-                    1.2f / (rand.nextFloat() * 0.2f + 0.9f));
+            worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
         }
-        if (iBlockState.getMaterial() != Material.AIR) {
+        if (inTile.getMaterial() != Material.air) {
             inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
         }
     }
@@ -160,15 +157,9 @@ public class EntityDynamite extends EntityProjectile {
         return new ItemStack(BalkonsWeaponMod.dynamite, 1);
     }
 
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.dynamite);
-    }
-
     @Override
     public void playHitSound() {
-        playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.0f, 1.2f / (rand.nextFloat() * 0.2f + 0.9f));
+        worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
     }
 
     @Override

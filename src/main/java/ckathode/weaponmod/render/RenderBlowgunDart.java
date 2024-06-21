@@ -5,12 +5,13 @@ import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
     public RenderBlowgunDart(RenderManager renderManager) {
@@ -28,7 +29,7 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
         GlStateManager.rotate(entityblowgundart.prevRotationYaw + (entityblowgundart.rotationYaw - entityblowgundart.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(entityblowgundart.prevRotationPitch + (entityblowgundart.rotationPitch - entityblowgundart.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
         byte type = entityblowgundart.getDartEffectId();
         float[] color = entityblowgundart.getDartColor();
         GlStateManager.enableRescaleNormal();
@@ -40,11 +41,7 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
         GlStateManager.rotate(45.0f, 1.0f, 0.0f, 0.0f);
         GlStateManager.scale(0.05625f, 0.05625f, 0.05625f);
         GlStateManager.translate(-1.0f, 0.0f, 0.0f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entityblowgundart));
-        }
-        GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
+        GL11.glNormal3f(0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         vertexbuffer.pos(-5.0, -2.0, -2.0).tex(0.0, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
         vertexbuffer.pos(-5.0, -2.0, 2.0).tex(0.15625, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -57,7 +54,7 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
             vertexbuffer.pos(-5.0, 2.0, -2.0).tex(0.0, 0.625).color(color[0], color[1], color[2], 1.0f).endVertex();
         }
         tessellator.draw();
-        GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
+        GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         vertexbuffer.pos(-5.0, 2.0, -2.0).tex(0.0, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
         vertexbuffer.pos(-5.0, 2.0, 2.0).tex(0.15625, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -72,7 +69,7 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
         tessellator.draw();
         for (int j = 0; j < 4; ++j) {
             GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
+            GL11.glNormal3f(0.0f, 0.0f, 0.05625f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
             vertexbuffer.pos(-6.0, -2.0, 0.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
             vertexbuffer.pos(6.0, -2.0, 0.0).tex(0.5, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -85,10 +82,6 @@ public class RenderBlowgunDart extends Render<EntityBlowgunDart> {
                 vertexbuffer.pos(-6.0, 2.0, 0.0).tex(0.0, 0.46875).color(color[0], color[1], color[2], 1.0f).endVertex();
             }
             tessellator.draw();
-        }
-        if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
         }
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();

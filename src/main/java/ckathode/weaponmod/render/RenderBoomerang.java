@@ -6,15 +6,16 @@ import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import javax.annotation.Nonnull;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBoomerang extends Render<EntityBoomerang> {
     public RenderBoomerang(RenderManager renderManager) {
@@ -32,16 +33,12 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             GlStateManager.rotate(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotate(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
             int mat = entityboomerang.getWeaponMaterialId();
             float[] color = entityboomerang.getMaterialColor();
             GlStateManager.translate(-0.5f, 0.0f, -0.5f);
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            if (renderOutlines) {
-                GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityboomerang));
-            }
-            GlStateManager.glNormal3f(0.0f, 1.0f, 0.0f);
+            GL11.glNormal3f(0.0f, 1.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
             vertexbuffer.pos(0.0, 0.0, 1.0).tex(0.5, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
             vertexbuffer.pos(1.0, 0.0, 1.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -54,7 +51,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
                 vertexbuffer.pos(0.0, 0.0, 0.0).tex(1.0, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
             }
             tessellator.draw();
-            GlStateManager.glNormal3f(0.0f, -1.0f, 0.0f);
+            GL11.glNormal3f(0.0f, -1.0f, 0.0f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
             vertexbuffer.pos(1.0, 0.0, 0.0).tex(0.0, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
             vertexbuffer.pos(1.0, 0.0, 1.0).tex(0.5, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -69,7 +66,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             tessellator.draw();
             float sqrt2 = (float) Math.sqrt(2.0);
             GlStateManager.disableCull();
-            GlStateManager.glNormal3f(-sqrt2, 0.0f, sqrt2);
+            GL11.glNormal3f(-sqrt2, 0.0f, sqrt2);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
             vertexbuffer.pos(0.2, -0.08, 0.8).tex(0.5, 0.5).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
             vertexbuffer.pos(0.2, 0.08, 0.8).tex(0.5, 0.65625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
@@ -92,10 +89,6 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
                 vertexbuffer.pos(0.2, -0.08, 0.2).tex(0.5, 0.5).color(color[0], color[1], color[2], 1.0f).endVertex();
             }
             tessellator.draw();
-            if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
-                GlStateManager.disableColorMaterial();
-            }
             GlStateManager.enableCull();
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
@@ -109,15 +102,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             GlStateManager.rotate(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotate(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-            if (renderOutlines) {
-                GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entityboomerang));
-            }
             itemRender.renderItem(getStackToRender(entityboomerang), TransformType.NONE);
-            if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
-                GlStateManager.disableColorMaterial();
-            }
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }
@@ -125,7 +110,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
     }
 
     public ItemStack getStackToRender(EntityBoomerang entity) {
-        return entity.getWeapon().or(() -> new ItemStack(BalkonsWeaponMod.boomerangWood));
+        return entity.getWeapon();
     }
 
     @Override

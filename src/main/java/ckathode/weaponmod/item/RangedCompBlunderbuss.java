@@ -4,12 +4,9 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class RangedCompBlunderbuss extends RangedComponent {
@@ -19,10 +16,9 @@ public class RangedCompBlunderbuss extends RangedComponent {
 
     @Override
     public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingArm(EnumHand.MAIN_HAND);
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
-                SoundEvents.BLOCK_WOODEN_DOOR_CLOSE, SoundCategory.PLAYERS, 0.8f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.0f));
+        entityplayer.swingItem();
+        world.playSoundAtEntity(entityplayer, "random.door_close", 0.8F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.2F + 0.0F));
     }
 
     @Override
@@ -37,7 +33,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
         }
         itemstack.damageItem(damage, entityplayer);
         if (itemstack.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(itemstack);
+            WMItem.deleteStack(entityplayer.inventory, itemstack);
         }
         postShootingEffects(itemstack, entityplayer, world);
     }
@@ -54,8 +50,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
     @Override
     public void effectShoot(World world, double x, double y, double z, float yaw,
                             float pitch) {
-        world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 3.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.6f));
+        world.playSoundEffect(x, y, z, "random.explode", 3.0F, 1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.6F));
         float particleX = -MathHelper.sin((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);

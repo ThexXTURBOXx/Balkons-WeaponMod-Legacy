@@ -5,32 +5,28 @@ import javax.annotation.Nonnull;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class DispenseJavelin extends DispenseWeaponProjectile {
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
-                                              @Nonnull ItemStack stack) {
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos) {
         return new EntityJavelin(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
-    protected float getProjectileInaccuracy() {
+    protected float func_82498_a() {
         return 4.0f;
     }
 
     @Override
-    public float getProjectileVelocity() {
+    public float func_82500_b() {
         return 1.1f;
     }
 
     @Override
     protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.NEUTRAL, 1.0f, 1.2f);
+        blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(),
+                "random.bow", 1.0F, 1.2F);
     }
 }

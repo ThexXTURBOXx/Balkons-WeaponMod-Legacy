@@ -1,57 +1,47 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WMItemVariants;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Random;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
+    public final String rawId;
+    private final ModelResourceLocation readyModel;
+    private final ModelResourceLocation halberdStateModel;
+    private Boolean readyModelExists, halberdStateModelExists;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
         super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
+        rawId = id;
         setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
         setUnlocalizedName(id);
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
-        setCreativeTab(CreativeTabs.COMBAT);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World world,
-                               @Nullable EntityLivingBase entity) {
-                return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ? 1.0f : 0.0f;
-            }
-        });
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World world,
-                               @Nullable EntityLivingBase entity) {
-                return MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
-            }
-        });
+        setCreativeTab(CreativeTabs.tabCombat);
+        readyModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
+                rawId + "_ready"), "inventory");
+        halberdStateModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
+                rawId + "_state"), "inventory");
+        readyModelExists = null;
+        halberdStateModelExists = null;
     }
 
     @Override
@@ -60,12 +50,12 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
-    public float getStrVsBlock(@Nonnull ItemStack itemstack, @Nonnull IBlockState block) {
+    public float getStrVsBlock(ItemStack itemstack, Block block) {
         return meleeComponent.getBlockDamage(itemstack, block);
     }
 
     @Override
-    public boolean canHarvestBlock(@Nonnull IBlockState block) {
+    public boolean canHarvestBlock(Block block) {
         return meleeComponent.canHarvestBlock(block);
     }
 
@@ -76,9 +66,8 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
-    public boolean onBlockDestroyed(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                    @Nonnull IBlockState block, @Nonnull BlockPos pos,
-                                    @Nonnull EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos,
+                                    EntityLivingBase entityliving) {
         return meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
     }
 
@@ -104,22 +93,18 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
         return meleeComponent.onLeftClickEntity(itemstack, player, entity);
     }
 
-    @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack stack, @Nonnull World world,
-                                                    @Nonnull EntityPlayer entityplayer, @Nonnull EnumHand hand) {
-        return meleeComponent.onItemRightClick(world, entityplayer, hand);
+    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer entityplayer) {
+        return meleeComponent.onItemRightClick(world, entityplayer, stack);
     }
 
     @Override
-    public void onUsingTick(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityplayer,
-                            int count) {
+    public void onUsingTick(ItemStack itemstack, EntityPlayer entityplayer, int count) {
         meleeComponent.onUsingTick(itemstack, entityplayer, count);
     }
 
     @Override
-    public void onPlayerStoppedUsing(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                     @Nonnull EntityLivingBase entityplayer, int i) {
+    public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityplayer, int i) {
         meleeComponent.onPlayerStoppedUsing(itemstack, world, entityplayer, i);
     }
 
@@ -129,14 +114,10 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
         meleeComponent.onUpdate(itemstack, world, entity, i, flag);
     }
 
-    @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot
-            , @Nonnull ItemStack itemstack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack) {
         Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-        if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
-            meleeComponent.addItemAttributeModifiers(multimap);
-        }
+        meleeComponent.addItemAttributeModifiers(multimap);
         return multimap;
     }
 
@@ -153,5 +134,20 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     @Override
     public RangedComponent getRangedComponent() {
         return null;
+    }
+
+    @Override
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        if (readyModelExists == null)
+            readyModelExists = WMItemVariants.itemVariantExists(readyModel);
+        if (readyModelExists && player != null && player.isUsingItem())
+            return readyModel;
+
+        if (halberdStateModelExists == null)
+            halberdStateModelExists = WMItemVariants.itemVariantExists(halberdStateModel);
+        if (halberdStateModelExists && MeleeCompHalberd.getHalberdState(stack))
+            return halberdStateModel;
+
+        return super.getModel(stack, player, useRemaining);
     }
 }

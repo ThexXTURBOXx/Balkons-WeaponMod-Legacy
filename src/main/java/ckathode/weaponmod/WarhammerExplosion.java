@@ -2,9 +2,9 @@ package ckathode.weaponmod;
 
 import java.util.List;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class WarhammerExplosion extends AdvancedExplosion {

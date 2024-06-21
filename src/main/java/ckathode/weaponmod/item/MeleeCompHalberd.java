@@ -6,9 +6,6 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachItem {
@@ -47,11 +44,9 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ItemStack onItemRightClick(World world, EntityPlayer entityplayer, ItemStack itemstack) {
         setHalberdState(itemstack, !getHalberdState(itemstack));
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        return itemstack;
     }
 
     @Override

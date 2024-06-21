@@ -8,11 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,23 +37,20 @@ public class ItemBlowgunDart extends WMItem {
             return;
         }
         PotionEffect potioneffect = type.potionEffect;
-        Potion potion = potioneffect.getPotion();
-        ITextComponent s = new TextComponentTranslation(potioneffect.getEffectName());
+        String string = StatCollector.translateToLocal(potioneffect.getEffectName()).trim();
+        Potion potion = Potion.potionTypes[potioneffect.getPotionID()];
         if (potioneffect.getAmplifier() > 0) {
-            s = s.appendSibling(new TextComponentString(" "))
-                    .appendSibling(new TextComponentTranslation("potion.potency." + potioneffect.getAmplifier()));
+            string += " " + StatCollector.translateToLocal("potion.potency." + potioneffect.getAmplifier()).trim();
         }
         if (potioneffect.getDuration() > 20) {
-            s = s.appendSibling(new TextComponentString(" ("))
-                    .appendSibling(new TextComponentString(Potion.getPotionDurationString(potioneffect, 1.0f)))
-                    .appendSibling(new TextComponentString(")"));
+            string += " (" + Potion.getDurationString(potioneffect) + ")";
         }
         if (potion.isBadEffect()) {
-            s = s.setStyle(new Style().setColor(TextFormatting.RED));
+            string = EnumChatFormatting.RED + string;
         } else {
-            s = s.setStyle(new Style().setColor(TextFormatting.GRAY));
+            string = EnumChatFormatting.GRAY + string;
         }
-        tooltip.add(s.getFormattedText());
+        tooltip.add(string);
     }
 
 }

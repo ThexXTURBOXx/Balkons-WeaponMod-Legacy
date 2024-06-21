@@ -5,11 +5,12 @@ import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBlunderShot extends Render<EntityBlunderShot> {
     public RenderBlunderShot(RenderManager renderManager) {
@@ -25,21 +26,17 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         GlStateManager.disableLighting();
         GlStateManager.translate(d, d1, d2);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(0.04f, 0.04f, 0.04f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entityblundershot));
-        }
-        GlStateManager.glNormal3f(0.05625f, 0.0f, 0.0f);
+        GL11.glNormal3f(0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.0).endVertex();
         vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.0).endVertex();
         vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.3125).endVertex();
         vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.3125).endVertex();
         tessellator.draw();
-        GlStateManager.glNormal3f(-0.05625f, 0.0f, 0.0f);
+        GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.0).endVertex();
         vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.0).endVertex();
@@ -48,17 +45,13 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         tessellator.draw();
         for (int j = 0; j < 4; ++j) {
             GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.glNormal3f(0.0f, 0.0f, 0.05625f);
+            GL11.glNormal3f(0.0f, 0.0f, 0.05625f);
             vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
             vertexbuffer.pos(-1.0, -1.0, 0.0).tex(0.0, 0.0).endVertex();
             vertexbuffer.pos(1.0, -1.0, 0.0).tex(0.3125, 0.0).endVertex();
             vertexbuffer.pos(1.0, 1.0, 0.0).tex(0.3125, 0.3125).endVertex();
             vertexbuffer.pos(-1.0, 1.0, 0.0).tex(0.0, 0.3125).endVertex();
             tessellator.draw();
-        }
-        if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
         }
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();
@@ -67,7 +60,7 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
         GlStateManager.color(1.0f, 1.0f, 0.8f, 1.0f);
-        GlStateManager.glLineWidth(1.0f);
+        GL11.glLineWidth(1.0f);
         vertexbuffer.begin(1, DefaultVertexFormats.POSITION_COLOR);
         vertexbuffer.pos(entityblundershot.posX, entityblundershot.posY, entityblundershot.posZ);
         vertexbuffer.pos(entityblundershot.prevPosX, entityblundershot.prevPosY, entityblundershot.prevPosZ);

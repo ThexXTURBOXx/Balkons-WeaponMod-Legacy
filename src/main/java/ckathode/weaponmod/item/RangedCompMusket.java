@@ -4,12 +4,9 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class RangedCompMusket extends RangedComponent {
@@ -29,10 +26,9 @@ public class RangedCompMusket extends RangedComponent {
 
     @Override
     public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingArm(EnumHand.MAIN_HAND);
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
-                SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.PLAYERS, 1.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
+        entityplayer.swingItem();
+        world.playSoundAtEntity(entityplayer, "random.click", 1.0F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.8F));
     }
 
     @Override
@@ -59,13 +55,13 @@ public class RangedCompMusket extends RangedComponent {
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1, bayonetDamage);
             itemstack.damageItem(deltaDamage, entityplayer);
             if (itemstack.stackSize <= 0) {
-                entityplayer.inventory.deleteStack(itemstack);
+                WMItem.deleteStack(entityplayer.inventory, itemstack);
             }
             entityplayer.inventory.addItemStackToInventory(newStack);
         } else {
             itemstack.damageItem(deltaDamage, entityplayer);
             if (itemstack.stackSize <= 0) {
-                entityplayer.inventory.deleteStack(itemstack);
+                WMItem.deleteStack(entityplayer.inventory, itemstack);
             }
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
@@ -84,10 +80,9 @@ public class RangedCompMusket extends RangedComponent {
     @Override
     public void effectShoot(World world, double x, double y, double z, float yaw,
                             float pitch) {
-        world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 3.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.7f));
-        world.playSound(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.PLAYERS, 3.0f,
-                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
+        world.playSoundEffect(x, y, z, "random.explode", 3F, 1F / (weapon.getItemRand().nextFloat() * 0.4F + 0.7F));
+        world.playSoundEffect(x, y, z, "ambient.weather.thunder", 3F,
+                1F / (weapon.getItemRand().nextFloat() * 0.4F + 0.4F));
         float particleX = -MathHelper.sin((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);

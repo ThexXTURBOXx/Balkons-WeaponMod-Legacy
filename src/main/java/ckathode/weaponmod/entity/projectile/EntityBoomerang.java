@@ -8,23 +8,18 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityBoomerang extends EntityMaterialProjectile {
     public static final String NAME = "boomerang";
 
-    private static final DataParameter<Float> BOOMERANG = EntityDataManager.createKey(EntityBoomerang.class,
-            DataSerializers.FLOAT);
+    private static final int BOOMERANG = 20;
     public static final double RETURN_STRENGTH = 0.05;
     public static final float MIN_FLOAT_STRENGTH = 0.4f;
     private float soundTimer;
@@ -59,19 +54,19 @@ public class EntityBoomerang extends EntityMaterialProjectile {
             motionY += entity.motionY;
         }
         floatStrength = Math.min(1.5f, f3);
-        dataManager.set(BOOMERANG, floatStrength);
+        dataWatcher.updateObject(BOOMERANG, floatStrength);
     }
 
     @Override
     public void entityInit() {
         super.entityInit();
-        dataManager.register(BOOMERANG, 0.0f);
+        dataWatcher.addObject(BOOMERANG, 0.0f);
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
-        floatStrength = dataManager.get(BOOMERANG);
+        floatStrength = dataWatcher.getWatchableObjectFloat(BOOMERANG);
         if (inGround) {
             return;
         }
@@ -100,12 +95,12 @@ public class EntityBoomerang extends EntityMaterialProjectile {
             motionZ -= RETURN_STRENGTH * dz;
             soundTimer += limitedStrength;
             if (soundTimer > 3.0f) {
-                playSound(SoundEvents.ENTITY_ARROW_SHOOT, 0.6f,
-                        1.0f / (rand.nextFloat() * 0.2f + 2.2f - limitedStrength));
+                worldObj.playSoundAtEntity(this, "random.bow", 0.6F,
+                        1.0F / (rand.nextFloat() * 0.2F + 2.2F - limitedStrength));
                 soundTimer %= 3.0f;
             }
         }
-        dataManager.set(BOOMERANG, floatStrength);
+        dataWatcher.updateObject(BOOMERANG, floatStrength);
     }
 
     @Override
@@ -121,9 +116,9 @@ public class EntityBoomerang extends EntityMaterialProjectile {
                 if (item == null) {
                     return;
                 }
-                if (player.isCreative() || player.inventory.addItemStackToInventory(item)) {
-                    playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
-                            ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+                if (player.capabilities.isCreativeMode || player.inventory.addItemStackToInventory(item)) {
+                    worldObj.playSoundAtEntity(this, "random.pop", 0.2F,
+                            ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                     onItemPickup(player);
                     setDead();
                 }
@@ -159,7 +154,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onGroundHit(MovingObjectPosition raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
@@ -181,14 +176,14 @@ public class EntityBoomerang extends EntityMaterialProjectile {
         setIsCritical(false);
         beenInGround = true;
         floatStrength = 0.0f;
-        if (iBlockState.getMaterial() != Material.AIR) {
+        if (inTile.getMaterial() != Material.air) {
             inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
         }
     }
 
     @Override
     public void playHitSound() {
-        playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.9f));
+        worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.9F));
     }
 
     @Override
@@ -229,9 +224,9 @@ public class EntityBoomerang extends EntityMaterialProjectile {
             if (item == null) {
                 return;
             }
-            if (entityplayer.isCreative() || entityplayer.inventory.addItemStackToInventory(item)) {
-                playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2f,
-                        ((rand.nextFloat() - rand.nextFloat()) * 0.7f + 1.0f) * 2.0f);
+            if (entityplayer.capabilities.isCreativeMode || entityplayer.inventory.addItemStackToInventory(item)) {
+                worldObj.playSoundAtEntity(this, "random.pop", 0.2F,
+                        ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 onItemPickup(entityplayer);
                 setDead();
                 return;

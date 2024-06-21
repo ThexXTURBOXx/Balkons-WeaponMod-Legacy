@@ -7,11 +7,8 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class DispenseMusketBullet extends DispenseWeaponProjectile {
@@ -19,8 +16,7 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
 
     @Nonnull
     @Override
-    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
-                                              @Nonnull ItemStack stack) {
+    protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos) {
         return new EntityMusketBullet(world, pos.getX(), pos.getY(), pos.getZ());
     }
 
@@ -30,21 +26,21 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
     }
 
     @Override
-    protected float getProjectileInaccuracy() {
+    protected float func_82498_a() {
         return 3.0f;
     }
 
     @Override
-    public float getProjectileVelocity() {
+    public float func_82500_b() {
         return 5.0f;
     }
 
     @Override
     protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
-                SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.7f));
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_LIGHTNING_THUNDER,
-                SoundCategory.NEUTRAL, 3.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.4f));
+        blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(),
+                "random.explode", 3.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.7F));
+        blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(),
+                "ambient.weather.thunder", 3.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.4F));
     }
 
     @Override

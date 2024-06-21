@@ -6,8 +6,8 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 
 public class RenderDummy extends Render<EntityDummy> {
     private final ModelDummy modelDummy;
@@ -36,15 +36,7 @@ public class RenderDummy extends Render<EntityDummy> {
         bindEntityTexture(entitydummy);
         GlStateManager.scale(-1.0f, -1.0f, 1.0f);
         GlStateManager.rotate(180.0f, 1.0f, 0.0f, 0.0f);
-        if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitydummy));
-        }
         modelDummy.render(entitydummy, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
-        if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
-        }
         GlStateManager.popMatrix();
         super.doRender(entitydummy, d, d1, d2, f, f1);
     }

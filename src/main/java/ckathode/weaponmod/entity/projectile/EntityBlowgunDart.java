@@ -6,22 +6,17 @@ import ckathode.weaponmod.item.DartType;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityBlowgunDart extends EntityProjectile {
     public static final String NAME = "dart";
 
-    private static final DataParameter<Byte> DART_EFFECT_TYPE = EntityDataManager.createKey(EntityBlowgunDart.class,
-            DataSerializers.BYTE);
+    private static final int DART_EFFECT_TYPE = 18;
     private static final float[][] DART_COLORS = new float[][]{{0.2f, 0.8f, 0.3f}, {0.9f, 0.7f, 1.0f},
             {0.6f, 1.0f, 0.9f}, {0.8f, 0.5f, 0.2f}};
 
@@ -57,7 +52,7 @@ public class EntityBlowgunDart extends EntityProjectile {
     @Override
     public void entityInit() {
         super.entityInit();
-        dataManager.register(DART_EFFECT_TYPE, (byte) 0);
+        dataWatcher.addObject(DART_EFFECT_TYPE, (byte) 0);
     }
 
     public void setDartEffectType(DartType type) {
@@ -65,7 +60,7 @@ public class EntityBlowgunDart extends EntityProjectile {
     }
 
     public void setDartEffectType(byte i) {
-        dataManager.set(DART_EFFECT_TYPE, i);
+        dataWatcher.updateObject(DART_EFFECT_TYPE, i);
     }
 
     public DartType getDartEffectType() {
@@ -73,7 +68,7 @@ public class EntityBlowgunDart extends EntityProjectile {
     }
 
     public byte getDartEffectId() {
-        return dataManager.get(DART_EFFECT_TYPE);
+        return dataWatcher.getWatchableObjectByte(DART_EFFECT_TYPE);
     }
 
     public float[] getDartColor() {
@@ -102,7 +97,7 @@ public class EntityBlowgunDart extends EntityProjectile {
 
     @Override
     public void playHitSound() {
-        playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0f, 1.2f / (rand.nextFloat() * 0.2f + 0.2f));
+        worldObj.playSoundAtEntity(this, "random.bowhit", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.2F));
     }
 
     @Override
@@ -113,12 +108,6 @@ public class EntityBlowgunDart extends EntityProjectile {
     @Nonnull
     @Override
     public ItemStack getPickupItem() {
-        return getArrowStack();
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
         return new ItemStack(BalkonsWeaponMod.dart, 1, getDartEffectId());
     }
 

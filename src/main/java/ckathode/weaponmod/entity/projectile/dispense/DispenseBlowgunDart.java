@@ -1,15 +1,11 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
-import ckathode.weaponmod.item.ItemBlowgunDart;
 import javax.annotation.Nonnull;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class DispenseBlowgunDart extends DispenseWeaponProjectile {
@@ -18,26 +14,29 @@ public class DispenseBlowgunDart extends DispenseWeaponProjectile {
     @Override
     protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
                                               @Nonnull ItemStack itemstack) {
-        EntityBlowgunDart dart = new EntityBlowgunDart(world, pos.getX(), pos.getY(), pos.getZ());
-        Item item = itemstack.getItem();
-        if (item instanceof ItemBlowgunDart)
-            dart.setDartEffectType((byte) itemstack.getMetadata());
+        EntityBlowgunDart dart = getProjectileEntity(world, pos);
+        dart.setDartEffectType((byte) itemstack.getMetadata());
         return dart;
     }
 
     @Override
-    public float getProjectileVelocity() {
+    protected EntityBlowgunDart getProjectileEntity(World world, IPosition pos) {
+        return new EntityBlowgunDart(world, pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    @Override
+    public float func_82500_b() {
         return 3.0f;
     }
 
     @Override
-    protected float getProjectileInaccuracy() {
+    protected float func_82498_a() {
         return 2.0f;
     }
 
     @Override
     protected void playDispenseSound(@Nonnull IBlockSource blocksource) {
-        blocksource.getWorld().playSound(null, blocksource.getBlockPos(), SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.NEUTRAL, 1.0f, 1.2f);
+        blocksource.getWorld().playSoundEffect(blocksource.getX(), blocksource.getY(), blocksource.getZ(),
+                "random.bow", 1.0F, 1.2F);
     }
 }

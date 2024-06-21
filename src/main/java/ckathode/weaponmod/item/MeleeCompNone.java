@@ -1,7 +1,7 @@
 package ckathode.weaponmod.item;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -9,10 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class MeleeCompNone extends MeleeComponent {
@@ -31,18 +28,18 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public float getBlockDamage(ItemStack itemstack, IBlockState block) {
+    public float getBlockDamage(ItemStack itemstack, Block block) {
         return 1.0f;
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState block) {
+    public boolean canHarvestBlock(Block block) {
         return false;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, IBlockState block,
-                                    BlockPos pos, EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos,
+                                    EntityLivingBase entityliving) {
         return true;
     }
 
@@ -78,9 +75,7 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        return new ActionResult<>(EnumActionResult.PASS, itemstack);
+    public ItemStack onItemRightClick(World world, EntityPlayer entityplayer, ItemStack itemstack) {
+        return itemstack;
     }
 }

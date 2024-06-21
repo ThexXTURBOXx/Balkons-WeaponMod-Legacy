@@ -1,7 +1,7 @@
 package ckathode.weaponmod.item;
 
 import com.google.common.collect.Multimap;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -9,9 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class AbstractWeaponComponent {
@@ -37,11 +35,11 @@ public abstract class AbstractWeaponComponent {
 
     public abstract float getEntityDamage();
 
-    public abstract float getBlockDamage(ItemStack p0, IBlockState p1);
+    public abstract float getBlockDamage(ItemStack p0, Block p1);
 
-    public abstract boolean canHarvestBlock(IBlockState p0);
+    public abstract boolean canHarvestBlock(Block p0);
 
-    public abstract boolean onBlockDestroyed(ItemStack p0, World p1, IBlockState p2,
+    public abstract boolean onBlockDestroyed(ItemStack p0, World p1, Block p2,
                                              BlockPos p3, EntityLivingBase p4);
 
     public abstract boolean hitEntity(ItemStack p0, EntityLivingBase p1, EntityLivingBase p2);
@@ -60,7 +58,7 @@ public abstract class AbstractWeaponComponent {
 
     public abstract boolean onLeftClickEntity(ItemStack p0, EntityPlayer p1, Entity p2);
 
-    public abstract ActionResult<ItemStack> onItemRightClick(World p0, EntityPlayer p1, EnumHand p2);
+    public abstract ItemStack onItemRightClick(World p0, EntityPlayer p1, ItemStack p2);
 
     public abstract void onUsingTick(ItemStack p0, EntityLivingBase p1, int p2);
 
