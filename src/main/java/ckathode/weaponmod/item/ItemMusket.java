@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemMusket extends ItemShooter {
@@ -85,14 +83,5 @@ public class ItemMusket extends ItemShooter {
             }
         }
         itemstack.getTagCompound().setShort("bayonetDamage", (short) bayonetdamage);
-    }
-
-    @Override
-    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-        if (player != null && player.isUsingItem() && player.getItemInUse() == stack && !RangedComponent.isReloaded(stack)) {
-            return new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                    rawId + "_reload"), "inventory");
-        }
-        return null;
     }
 }
