@@ -52,6 +52,14 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
                 return MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
             }
         });
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "block"), new IItemPropertyGetter() {
+            @Override
+            @SideOnly(Side.CLIENT)
+            public float apply(@Nonnull ItemStack stack, @Nullable World world,
+                               @Nullable EntityLivingBase entity) {
+                return entity != null && entity.getActiveItemStack() == stack ? 1.0f : 0.0f;
+            }
+        });
     }
 
     @Override
