@@ -93,7 +93,7 @@ public class AdvancedExplosion extends Explosion {
             int y = blockpos.chunkPosY;
             int z = blockpos.chunkPosZ;
             Block block = worldObj.getBlock(x, y, z);
-            if (block != null) {
+            if (worldObj.isAirBlock(x, y, z) && block != null) {
                 if (block.canDropFromExplosion(this)) {
                     block.dropBlockAsItemWithChance(worldObj, x, y, z, worldObj.getBlockMetadata(x, y, z),
                             1.0f / explosionSize, 0);
@@ -112,7 +112,7 @@ public class AdvancedExplosion extends Explosion {
             int x = blockpos.chunkPosX;
             int y = blockpos.chunkPosY;
             int z = blockpos.chunkPosZ;
-            if (worldObj.getBlock(x, y, z) == null && worldObj.getBlock(x, y - 1, z) != null
+            if (worldObj.isAirBlock(x, y, z) && !worldObj.isAirBlock(x, y - 1, z)
                 && worldObj.getBlock(x, y - 1, z).func_149730_j() && rand.nextInt(3) == 0) {
                 worldObj.setBlock(x, y, z, Blocks.fire);
             }
@@ -178,7 +178,7 @@ public class AdvancedExplosion extends Explosion {
                             int y = MathHelper.floor_double(dy);
                             int z = MathHelper.floor_double(dz);
                             Block block = worldObj.getBlock(x, y, z);
-                            if (block != null) {
+                            if (!worldObj.isAirBlock(x, y, z) && block != null) {
                                 strength -= (block.getExplosionResistance(exploder, worldObj, x, y, z,
                                         explosionX, explosionY, explosionZ) + 0.3f) * f;
                             }
