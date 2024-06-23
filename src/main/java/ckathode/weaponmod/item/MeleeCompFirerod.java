@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
@@ -23,6 +24,11 @@ public class MeleeCompFirerod extends MeleeComponent {
             entityliving.setFire(12 + weapon.getItemRand().nextInt(3));
         }
         return flag;
+    }
+
+    @Override
+    public EnumAction getItemUseAction(ItemStack itemstack) {
+        return EnumAction.NONE;
     }
 
     @Override

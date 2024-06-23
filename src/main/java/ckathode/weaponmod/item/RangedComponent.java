@@ -122,6 +122,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
         ReloadState state = ReloadHelper.getReloadState(itemstack);
+        if (state == ReloadState.STATE_NONE) {
+            return EnumAction.BLOCK;
+        }
         if (state == ReloadState.STATE_READY) {
             return EnumAction.BOW;
         }
