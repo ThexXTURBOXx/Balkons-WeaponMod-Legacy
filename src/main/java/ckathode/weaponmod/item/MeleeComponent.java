@@ -157,18 +157,20 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public UseAction getUseAction(ItemStack itemstack) {
-        return UseAction.NONE;
+        return UseAction.BLOCK;
     }
 
     @Override
     public int getUseDuration(ItemStack itemstack) {
-        return 0;
+        return 72000;
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
                                                     Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
+        if (getUseAction(itemstack) != UseAction.NONE)
+            entityplayer.setActiveHand(hand);
         return new ActionResult<>(ActionResultType.PASS, itemstack);
     }
 

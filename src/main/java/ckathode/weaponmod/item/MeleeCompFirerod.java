@@ -3,9 +3,10 @@ package ckathode.weaponmod.item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.item.UseAction;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.math.MathHelper;
@@ -23,6 +24,11 @@ public class MeleeCompFirerod extends MeleeComponent {
             entityliving.setFire(12 + weapon.getItemRand().nextInt(3));
         }
         return flag;
+    }
+
+    @Override
+    public UseAction getUseAction(ItemStack itemstack) {
+        return UseAction.NONE;
     }
 
     @Override
