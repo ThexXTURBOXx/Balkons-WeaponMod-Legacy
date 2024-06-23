@@ -29,7 +29,9 @@ jobs:
       - name: crowdin action
         uses: crowdin/github-action@v2
         with:
+          push_sources: false
           upload_sources: false
+          push_translations: false
           upload_translations: false
           download_translations: false
           create_pull_request: false
