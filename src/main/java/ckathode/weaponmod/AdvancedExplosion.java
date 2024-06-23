@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -91,13 +90,13 @@ public class AdvancedExplosion extends Explosion {
             calculateBlockExplosion();
         }
         for (BlockPos blockpos : getAffectedBlockPositions()) {
-            IBlockState iblockstate = worldObj.getBlockState(blockpos);
-            if (iblockstate.getMaterial() != Material.AIR) {
+            if (!worldObj.isAirBlock(blockpos)) {
+                IBlockState iblockstate = worldObj.getBlockState(blockpos);
                 Block block = iblockstate.getBlock();
                 if (block.canDropFromExplosion(this)) {
                     iblockstate.dropBlockAsItemWithChance(worldObj, blockpos, 1.0f / explosionSize, 0);
                 }
-                worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 3);
+                worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
                 iblockstate.onBlockExploded(worldObj, blockpos, this);
             }
         }
@@ -108,7 +107,7 @@ public class AdvancedExplosion extends Explosion {
             calculateBlockExplosion();
         }
         for (BlockPos blockpos : getAffectedBlockPositions()) {
-            if (worldObj.getBlockState(blockpos).getMaterial() == Material.AIR && worldObj.getBlockState(blockpos.down()).isFullCube() && rand.nextInt(3) == 0) {
+            if (worldObj.isAirBlock(blockpos) && worldObj.getBlockState(blockpos.down()).isFullCube() && rand.nextInt(3) == 0) {
                 worldObj.setBlockState(blockpos, Blocks.FIRE.getDefaultState());
             }
         }
@@ -171,9 +170,9 @@ public class AdvancedExplosion extends Explosion {
                         float f = 0.3f;
                         while (strength > 0.0f) {
                             BlockPos blockpos = new BlockPos(dx, dy, dz);
-                            IBlockState iblockstate = worldObj.getBlockState(blockpos);
-                            if (iblockstate.getMaterial() != Material.AIR) {
-                                strength -= (iblockstate.getExplosionResistance(worldObj, blockpos, null, this) + 0.3f) * f;
+                            if (!worldObj.isAirBlock(blockpos)) {
+                                IBlockState iblockstate = worldObj.getBlockState(blockpos);
+                                strength -= (iblockstate.getExplosionResistance(worldObj, blockpos, exploder, this) + 0.3f) * f;
                             }
                             if (strength > 0.0f) {
                                 set.add(blockpos);
