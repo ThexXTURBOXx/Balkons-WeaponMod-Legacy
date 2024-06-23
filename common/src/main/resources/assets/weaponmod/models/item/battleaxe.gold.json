@@ -2,5 +2,13 @@
   "parent": "item/handheld",
   "textures": {
     "layer0": "weaponmod:item/battleaxe.gold"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "weaponmod:block": 1
+      },
+      "model": "weaponmod:item/battleaxe.gold.block"
+    }
+  ]
 }

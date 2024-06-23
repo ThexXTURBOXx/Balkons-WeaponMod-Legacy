@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 public class MeleeCompFirerod extends MeleeComponent {
@@ -26,6 +27,11 @@ public class MeleeCompFirerod extends MeleeComponent {
             entityliving.setSecondsOnFire(12 + entityliving.getRandom().nextInt(3));
         }
         return flag;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack itemstack) {
+        return UseAnim.NONE;
     }
 
     @Override
