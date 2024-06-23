@@ -40,6 +40,11 @@ public final class WMItemProperties {
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) ->
                     MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
 
+    private static final ResourceLocation BLOCK_GETTER_ID = new ResourceLocation(MOD_ID, "block");
+    private static final ItemPropertyFunction BLOCK_GETTER =
+            (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity) ->
+                    entity != null && entity.getUseItem() == stack ? 1.0f : 0.0f;
+
     private WMItemProperties() {
         throw new UnsupportedOperationException();
     }
@@ -109,6 +114,19 @@ public final class WMItemProperties {
                 HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
         ItemPropertiesRegistry.register(MeleeCompHalberd.NETHERITE_ITEM,
                 HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER);
+
+        ItemPropertiesRegistry.register(MeleeCompBattleaxe.WOOD_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(MeleeCompBattleaxe.STONE_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(MeleeCompBattleaxe.IRON_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(MeleeCompBattleaxe.GOLD_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(MeleeCompBattleaxe.DIAMOND_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(MeleeCompBattleaxe.NETHERITE_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
     }
 
 }

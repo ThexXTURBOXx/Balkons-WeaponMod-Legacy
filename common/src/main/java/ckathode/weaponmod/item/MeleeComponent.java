@@ -160,18 +160,20 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public UseAnim getUseAnimation(ItemStack itemstack) {
-        return UseAnim.NONE;
+        return UseAnim.BLOCK;
     }
 
     @Override
     public int getUseDuration(ItemStack itemstack) {
-        return 0;
+        return 72000;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
                                                   InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
+        if (getUseAnimation(itemstack) != UseAnim.NONE)
+            entityplayer.startUsingItem(hand);
         return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
     }
 

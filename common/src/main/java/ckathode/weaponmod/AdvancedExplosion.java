@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
@@ -122,7 +121,7 @@ public class AdvancedExplosion extends Explosion {
                     });
                 }
 
-                worldObj.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 3);
+                worldObj.setBlockAndUpdate(blockpos, Blocks.AIR.defaultBlockState());
                 block.wasExploded(worldObj, blockpos, this);
             }
         }
@@ -137,7 +136,7 @@ public class AdvancedExplosion extends Explosion {
             calculateBlockExplosion();
         }
         for (BlockPos blockpos : getToBlow()) {
-            if (worldObj.getBlockState(blockpos).getMaterial() == Material.AIR && worldObj.getBlockState(blockpos.below()).isSolidRender(worldObj, blockpos.below()) && rand.nextInt(3) == 0) {
+            if (worldObj.getBlockState(blockpos).isAir() && worldObj.getBlockState(blockpos.below()).isSolidRender(worldObj, blockpos.below()) && rand.nextInt(3) == 0) {
                 worldObj.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
             }
         }
