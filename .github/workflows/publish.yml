@@ -47,7 +47,7 @@ jobs:
           github-tag: 1.21-${{ env.MOD_VERSION }}
           github-generate-changelog: true
 
-      - name: Publish Forge build to CurseForge and Modrinth
+      - name: Publish NeoForge build to CurseForge and Modrinth
         uses: Kir-Antipov/mc-publish@v3
         with:
           modrinth-id: MCF15nCy
@@ -55,13 +55,13 @@ jobs:
           curseforge-id: 1033985
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
-            forge/build/libs/!(*-@(dev|dev-shadow)).jar
-            forge/build/libs/*-@(dev|dev-shadow).jar
-          name: Forge-1.21-${{ env.MOD_VERSION }}
-          version: Forge-1.21-${{ env.MOD_VERSION }}
+            neoforge/build/libs/!(*-@(dev|dev-shadow)).jar
+            neoforge/build/libs/*-@(dev|dev-shadow).jar
+          name: NeoForge-1.21-${{ env.MOD_VERSION }}
+          version: NeoForge-1.21-${{ env.MOD_VERSION }}
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
-          loaders: forge
+          loaders: neoforge
           game-versions: 1.21
           java: 21
           dependencies: |
