@@ -463,6 +463,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
 
     public static AxisAlignedBB getBoundingBox(Entity entity) {
         AxisAlignedBB box = entity == null ? null : entity.getBoundingBox();
+        box = box != null || entity == null ? box : entity.boundingBox;
         return box == null ? AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0) : box;
     }
 
