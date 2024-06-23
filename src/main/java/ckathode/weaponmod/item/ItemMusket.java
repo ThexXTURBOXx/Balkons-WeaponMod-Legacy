@@ -13,7 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemMusket extends ItemShooter {
@@ -52,8 +51,8 @@ public class ItemMusket extends ItemShooter {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos,
-                                    EntityLivingBase entityliving) {
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block,
+                                    int x, int y, int z, EntityLivingBase entityliving) {
         if (hasBayonet()) {
             Material material = block.getMaterial();
             boolean flag =

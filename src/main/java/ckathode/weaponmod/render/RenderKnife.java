@@ -1,102 +1,96 @@
 package ckathode.weaponmod.render;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
-import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
 
-public class RenderKnife extends Render<EntityKnife> {
-    public RenderKnife(RenderManager renderManager) {
-        super(renderManager);
+public class RenderKnife extends Render {
+    @Override
+    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
+        renderKnife((EntityKnife) entity, d, d1, d2, f, f1);
     }
 
-    @Override
-    public void doRender(@Nonnull EntityKnife entityknife, double d, double d1, double d2,
-                         float f, float f1) {
-        if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
+    public void renderKnife(EntityKnife entityknife, double d, double d1, double d2, float f, float f1) {
+        //if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
+        bindEntityTexture(entityknife);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glTranslated(d, d1, d2);
+        GL11.glRotatef(entityknife.prevRotationYaw + (entityknife.rotationYaw - entityknife.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(entityknife.prevRotationPitch + (entityknife.rotationPitch - entityknife.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
+        Tessellator tess = Tessellator.instance;
+        float[] color = entityknife.getMaterialColor();
+        GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
+        float f13 = entityknife.arrowShake - f1;
+        if (f13 > 0.0f) {
+            float f14 = -MathHelper.sin(f13 * 3.0f) * f13;
+            GL11.glRotatef(f14, 0.0f, 0.0f, 1.0f);
+        }
+        GL11.glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+        GL11.glScalef(0.05625f, 0.05625f, 0.05625f);
+        GL11.glTranslatef(-4.0f, 0.0f, 0.0f);
+        GL11.glNormal3f(0.05625f, 0.0f, 0.0f);
+        tess.startDrawingQuads();
+        tess.addVertexWithUV(-7.0, -2.0, -2.0, 0.0, 0.15625);
+        tess.addVertexWithUV(-7.0, -2.0, 2.0, 0.15625, 0.15625);
+        tess.addVertexWithUV(-7.0, 2.0, 2.0, 0.15625, 0.3125);
+        tess.addVertexWithUV(-7.0, 2.0, -2.0, 0.0, 0.3125);
+        tess.draw();
+        GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
+        tess.startDrawingQuads();
+        tess.addVertexWithUV(-7.0, 2.0, -2.0, 0.0, 0.15625);
+        tess.addVertexWithUV(-7.0, 2.0, 2.0, 0.15625, 0.15625);
+        tess.addVertexWithUV(-7.0, -2.0, 2.0, 0.15625, 0.3125);
+        tess.addVertexWithUV(-7.0, -2.0, -2.0, 0.0, 0.3125);
+        tess.draw();
+        for (int j = 0; j < 4; ++j) {
+            GL11.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+            GL11.glNormal3f(0.0f, 0.0f, 0.05625f);
+            tess.startDrawingQuads();
+            tess.setColorOpaque_F(1F, 1F, 1F);
+            tess.addVertexWithUV(-8.0, -2.0, 0.0, 0.0, 0.0);
+            tess.addVertexWithUV(8.0, -2.0, 0.0, 0.5, 0.0);
+            tess.addVertexWithUV(8.0, 2.0, 0.0, 0.5, 0.15625);
+            tess.addVertexWithUV(-8.0, 2.0, 0.0, 0.0, 0.15625);
+            tess.setColorOpaque_F(color[0], color[1], color[2]);
+            tess.addVertexWithUV(-8.0, -2.0, 0.0, 0.0, 0.3125);
+            tess.addVertexWithUV(8.0, -2.0, 0.0, 0.5, 0.3125);
+            tess.addVertexWithUV(8.0, 2.0, 0.0, 0.5, 0.46875);
+            tess.addVertexWithUV(-8.0, 2.0, 0.0, 0.0, 0.46875);
+            tess.draw();
+        }
+        GL11.glDisable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glPopMatrix();
+        /*} else {
+            RenderItem itemRender = RenderItem.getInstance();
+            GL11.glPushMatrix();
             bindEntityTexture(entityknife);
-            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-            GlStateManager.pushMatrix();
-            GlStateManager.disableLighting();
-            GlStateManager.translate(d, d1, d2);
-            GlStateManager.rotate(entityknife.prevRotationYaw + (entityknife.rotationYaw - entityknife.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(entityknife.prevRotationPitch + (entityknife.rotationPitch - entityknife.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
-            Tessellator tessellator = Tessellator.getInstance();
-            WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
-            float[] color = entityknife.getMaterialColor();
-            GlStateManager.enableRescaleNormal();
-            float f13 = entityknife.arrowShake - f1;
-            if (f13 > 0.0f) {
-                float f14 = -MathHelper.sin(f13 * 3.0f) * f13;
-                GlStateManager.rotate(f14, 0.0f, 0.0f, 1.0f);
-            }
-            GlStateManager.rotate(45.0f, 1.0f, 0.0f, 0.0f);
-            GlStateManager.scale(0.05625f, 0.05625f, 0.05625f);
-            GlStateManager.translate(-4.0f, 0.0f, 0.0f);
-            GL11.glNormal3f(0.05625f, 0.0f, 0.0f);
-            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-            vertexbuffer.pos(-7.0, -2.0, -2.0).tex(0.0, 0.15625).endVertex();
-            vertexbuffer.pos(-7.0, -2.0, 2.0).tex(0.15625, 0.15625).endVertex();
-            vertexbuffer.pos(-7.0, 2.0, 2.0).tex(0.15625, 0.3125).endVertex();
-            vertexbuffer.pos(-7.0, 2.0, -2.0).tex(0.0, 0.3125).endVertex();
-            tessellator.draw();
-            GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
-            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-            vertexbuffer.pos(-7.0, 2.0, -2.0).tex(0.0, 0.15625).endVertex();
-            vertexbuffer.pos(-7.0, 2.0, 2.0).tex(0.15625, 0.15625).endVertex();
-            vertexbuffer.pos(-7.0, -2.0, 2.0).tex(0.15625, 0.3125).endVertex();
-            vertexbuffer.pos(-7.0, -2.0, -2.0).tex(0.0, 0.3125).endVertex();
-            tessellator.draw();
-            for (int j = 0; j < 4; ++j) {
-                GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-                GL11.glNormal3f(0.0f, 0.0f, 0.05625f);
-                vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                vertexbuffer.pos(-8.0, -2.0, 0.0).tex(0.0, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-                vertexbuffer.pos(8.0, -2.0, 0.0).tex(0.5, 0.0).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-                vertexbuffer.pos(8.0, 2.0, 0.0).tex(0.5, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-                vertexbuffer.pos(-8.0, 2.0, 0.0).tex(0.0, 0.15625).color(1.0f, 1.0f, 1.0f, 1.0f).endVertex();
-                vertexbuffer.pos(-8.0, -2.0, 0.0).tex(0.0, 0.3125).color(color[0], color[1], color[2], 1.0f).endVertex();
-                vertexbuffer.pos(8.0, -2.0, 0.0).tex(0.5, 0.3125).color(color[0], color[1], color[2], 1.0f).endVertex();
-                vertexbuffer.pos(8.0, 2.0, 0.0).tex(0.5, 0.46875).color(color[0], color[1], color[2], 1.0f).endVertex();
-                vertexbuffer.pos(-8.0, 2.0, 0.0).tex(0.0, 0.46875).color(color[0], color[1], color[2], 1.0f).endVertex();
-                tessellator.draw();
-            }
-            GlStateManager.disableRescaleNormal();
-            GlStateManager.enableLighting();
-            GlStateManager.popMatrix();
-        } else {
-            RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
-            GlStateManager.pushMatrix();
-            bindEntityTexture(entityknife);
-            GlStateManager.translate(d, d1, d2);
-            GlStateManager.enableRescaleNormal();
-            GlStateManager.scale(0.85f, 0.85f, 0.85f);
-            GlStateManager.rotate(entityknife.prevRotationYaw + (entityknife.rotationYaw - entityknife.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
-            GlStateManager.rotate(entityknife.prevRotationPitch + (entityknife.rotationPitch - entityknife.prevRotationPitch) * f1 - 45.0f, 0.0f, 0.0f, 1.0f);
+            GL11.glTranslated(d, d1, d2);
+            GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
+            GL11.glScalef(0.85f, 0.85f, 0.85f);
+            GL11.glRotatef(entityknife.prevRotationYaw + (entityknife.rotationYaw - entityknife.prevRotationYaw) * f1
+             - 90.0f, 0.0f, 1.0f, 0.0f);
+            GL11.glRotatef(entityknife.prevRotationPitch + (entityknife.rotationPitch - entityknife
+            .prevRotationPitch) * f1 - 45.0f, 0.0f, 0.0f, 1.0f);
             float f15 = entityknife.arrowShake - f1;
             if (f15 > 0.0f) {
                 float f16 = -MathHelper.sin(f15 * 3.0f) * f15;
-                GlStateManager.rotate(f16, 0.0f, 0.0f, 1.0f);
+                GL11.glRotatef(f16, 0.0f, 0.0f, 1.0f);
             }
-            GlStateManager.translate(-0.15f, -0.15f, 0.0f);
-            itemRender.renderItem(getStackToRender(entityknife), TransformType.NONE);
-            GlStateManager.disableRescaleNormal();
-            GlStateManager.popMatrix();
-        }
-        super.doRender(entityknife, d, d1, d2, f, f1);
+            GL11.glTranslatef(-0.15f, -0.15f, 0.0f);
+            itemRender.doRender(EntityItemFake.INSTANCE.setItem(getStackToRender(entityknife)), d, d1, d2, f, f1);
+            GL11.glDisable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
+            GL11.glPopMatrix();
+        }*/
     }
 
     public ItemStack getStackToRender(EntityKnife entity) {
@@ -104,7 +98,7 @@ public class RenderKnife extends Render<EntityKnife> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull EntityKnife entity) {
+    protected ResourceLocation getEntityTexture(Entity entity) {
         return WeaponModResources.Entity.KNIFE;
     }
 }

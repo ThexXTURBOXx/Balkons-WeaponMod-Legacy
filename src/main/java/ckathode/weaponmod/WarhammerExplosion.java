@@ -23,7 +23,7 @@ public class WarhammerExplosion extends AdvancedExplosion {
         int j2 = MathHelper.floor_double(explosionZ - size - 1.0);
         int j3 = MathHelper.floor_double(explosionZ + size + 1.0);
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(exploder,
-                new AxisAlignedBB(k1, i2, j2, l1, i3, j3));
+                AxisAlignedBB.getBoundingBox(k1, i2, j2, l1, i3, j3));
         for (Entity entity : list) {
             double dr = entity.getDistance(explosionX, explosionY, explosionZ) / size;
             if (dr <= 1.0) {

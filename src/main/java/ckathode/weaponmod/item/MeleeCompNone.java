@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class MeleeCompNone extends MeleeComponent {
@@ -38,7 +37,7 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos,
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, int x, int y, int z,
                                     EntityLivingBase entityliving) {
         return true;
     }
@@ -71,7 +70,7 @@ public class MeleeCompNone extends MeleeComponent {
 
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
-        return EnumAction.NONE;
+        return EnumAction.none;
     }
 
     @Override

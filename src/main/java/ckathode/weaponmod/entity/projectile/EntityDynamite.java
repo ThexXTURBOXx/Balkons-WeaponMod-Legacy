@@ -4,16 +4,11 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -72,7 +67,7 @@ public class EntityDynamite extends EntityProjectile {
             worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
             for (int k = 0; k < 8; ++k) {
                 float f6 = 0.25f;
-                worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX - motionX * f6,
+                worldObj.spawnParticle("explode", posX - motionX * f6,
                         posY - motionY * f6, posZ - motionZ * f6, motionX, motionY,
                         motionZ);
             }
@@ -83,7 +78,7 @@ public class EntityDynamite extends EntityProjectile {
                 detonate();
                 setDead();
             } else {
-                worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY, posZ, 0.0, 0.0, 0.0);
+                worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0, 0.0, 0.0);
             }
         }
     }
@@ -101,13 +96,11 @@ public class EntityDynamite extends EntityProjectile {
 
     @Override
     public void onGroundHit(MovingObjectPosition raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
-        xTile = blockpos.getX();
-        yTile = blockpos.getY();
-        zTile = blockpos.getZ();
-        IBlockState iBlockState = worldObj.getBlockState(blockpos);
-        inTile = iBlockState.getBlock();
-        inData = inTile.getMetaFromState(iBlockState);
+        xTile = raytraceResult.blockX;
+        yTile = raytraceResult.blockY;
+        zTile = raytraceResult.blockZ;
+        inTile = worldObj.getBlock(xTile, yTile, zTile);
+        inData = worldObj.getBlockMetadata(xTile, yTile, zTile);
         motionX = raytraceResult.hitVec.xCoord - posX;
         motionY = raytraceResult.hitVec.yCoord - posY;
         motionZ = raytraceResult.hitVec.zCoord - posZ;
@@ -117,15 +110,15 @@ public class EntityDynamite extends EntityProjectile {
         posZ -= motionZ / f1 * 0.05;
         motionX *= -0.2;
         motionZ *= -0.2;
-        if (raytraceResult.sideHit == EnumFacing.UP) {
+        if (raytraceResult.sideHit == 1) {
             inGround = true;
             beenInGround = true;
         } else {
             inGround = false;
             worldObj.playSoundAtEntity(this, "random.fizz", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
         }
-        if (inTile.getMaterial() != Material.air) {
-            inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
+        if (inTile != null) {
+            inTile.onEntityCollidedWithBlock(worldObj, xTile, yTile, zTile, this);
         }
     }
 

@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
+import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import ckathode.weaponmod.item.WMItem;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -18,7 +19,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -44,7 +44,7 @@ public class EntityCannon extends EntityBoat {
 
     public EntityCannon(World world, double d, double d1, double d2) {
         this(world);
-        setPosition(d, d1, d2);
+        setPosition(d, d1 + yOffset, d2);
         motionX = 0.0;
         motionY = 0.0;
         motionZ = 0.0;
@@ -65,12 +65,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity.getEntityBoundingBox();
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return getEntityBoundingBox();
+        return entity.getBoundingBox();
     }
 
     @Override
@@ -80,7 +75,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public double getMountedYOffset() {
-        return 0.35;
+        return 0.15;
     }
 
     @Override
@@ -179,12 +174,17 @@ public class EntityCannon extends EntityBoat {
         setRotation(rotationYaw, rotationPitch);
         moveEntity(motionX, motionY, motionZ);
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
-                getEntityBoundingBox().expand(0.2, 0.0, 0.2));
-        if (!list.isEmpty()) {
+                EntityProjectile.getBoundingBox(this).expand(0.2, 0.0, 0.2));
+        if (list != null) {
             for (Entity entity : list) {
                 if (entity != riddenByEntity && entity.canBePushed()) {
                     applyEntityCollision(entity);
                 }
+            }
+        }
+        if (riddenByEntity != null) {
+            if (riddenByEntity.isDead) {
+                riddenByEntity = null;
             }
         }
         if (isLoading()) {
@@ -194,8 +194,8 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public void fall(float f, float f1) {
-        super.fall(f, f1);
+    protected void fall(float f) {
+        super.fall(f);
         int i = MathHelper.floor_float(f);
         i *= 2;
         attackEntityFrom(DamageSource.fall, (float) i);
@@ -235,7 +235,7 @@ public class EntityCannon extends EntityBoat {
         double d = -MathHelper.sin(yaw) * -1.0f;
         double d2 = MathHelper.cos(yaw) * -1.0f;
         for (int i = 0; i < 20; ++i) {
-            worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,
+            worldObj.spawnParticle("smoke",
                     posX + d + rand.nextDouble() * 0.5 - 0.25, posY + rand.nextDouble() * 0.5,
                     posZ + d2 + rand.nextDouble() * 0.5 - 0.25, rand.nextDouble() * 0.1 - 0.05,
                     rand.nextDouble() * 0.1 - 0.05, rand.nextDouble() * 0.1 - 0.05);
@@ -263,7 +263,8 @@ public class EntityCannon extends EntityBoat {
         if (riddenByEntity != null) {
             float f = -0.85f;
             float f2 = (float) ((isDead ? 0.01 : getMountedYOffset()) + riddenByEntity.getYOffset());
-            Vec3 vec3d = new Vec3(f, 0.0, 0.0).rotateYaw(-rotationYaw * 0.017453292f - 1.5707964f);
+            Vec3 vec3d = Vec3.createVectorHelper(f, 0.0, 0.0);
+            vec3d.rotateAroundY(-rotationYaw * 0.017453292f - 1.5707964f);
             riddenByEntity.setPosition(posX + vec3d.xCoord, posY + f2, posZ + vec3d.zCoord);
         }
     }
@@ -343,7 +344,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public void onStruckByLightning(@Nonnull EntityLightningBolt entitylightningbolt) {
-        attackEntityFrom(DamageSource.lightningBolt, 100.0f);
+        dealFireDamage(100);
         setSuperPowered(true);
     }
 

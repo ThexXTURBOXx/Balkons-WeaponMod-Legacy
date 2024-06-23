@@ -1,23 +1,23 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.AdvancedExplosion;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MsgExplosion extends WMMessage {
     private double x;
     private double y;
     private double z;
     private float size;
-    private List<BlockPos> blocks;
+    private List<ChunkPosition> blocks;
     private boolean smallParticles;
     private boolean bigParticles;
 
@@ -30,7 +30,7 @@ public class MsgExplosion extends WMMessage {
         y = explosion.explosionY;
         z = explosion.explosionZ;
         size = explosion.explosionSize;
-        blocks = explosion.getAffectedBlockPositions();
+        blocks = explosion.affectedBlockPositions;
         smallParticles = smallparts;
         bigParticles = bigparts;
     }
@@ -49,7 +49,7 @@ public class MsgExplosion extends WMMessage {
             int ix = buf.readByte() + (int) x;
             int iy = buf.readByte() + (int) y;
             int iz = buf.readByte() + (int) z;
-            blocks.add(new BlockPos(ix, iy, iz));
+            blocks.add(new ChunkPosition(ix, iy, iz));
         }
     }
 
@@ -62,10 +62,10 @@ public class MsgExplosion extends WMMessage {
         buf.writeBoolean(smallParticles);
         buf.writeBoolean(bigParticles);
         buf.writeInt(blocks.size());
-        for (BlockPos pos : blocks) {
-            int dx = pos.getX() - (int) x;
-            int dy = pos.getY() - (int) y;
-            int dz = pos.getZ() - (int) z;
+        for (ChunkPosition pos : blocks) {
+            int dx = pos.chunkPosX - (int) x;
+            int dy = pos.chunkPosY - (int) y;
+            int dz = pos.chunkPosZ - (int) z;
             buf.writeByte(dx);
             buf.writeByte(dy);
             buf.writeByte(dz);

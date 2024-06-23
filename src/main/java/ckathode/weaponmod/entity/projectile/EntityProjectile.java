@@ -1,14 +1,11 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import cpw.mods.fml.common.registry.IThrowableEntity;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,20 +17,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IThrowableEntity;
 
 public abstract class EntityProjectile extends EntityArrow implements IThrowableEntity {
-    @SuppressWarnings("unchecked")
-    private static final Predicate<Entity> WEAPON_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING,
-            EntitySelectors.selectAnything, Entity::canBeCollidedWith);
     private static final int WEAPON_CRITICAL = 17;
     protected int xTile;
     protected int yTile;
@@ -117,10 +106,10 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         motionY = y;
         motionZ = z;
         float f2 = MathHelper.sqrt_double(x * x + z * z);
-        float n = (float) (MathHelper.atan2(x, z) * 180.0 / 3.141592653589793);
+        float n = (float) (Math.atan2(x, z) * 180.0 / 3.141592653589793);
         rotationYaw = n;
         prevRotationYaw = n;
-        float n2 = (float) (MathHelper.atan2(y, f2) * 180.0 / 3.141592653589793);
+        float n2 = (float) (Math.atan2(y, f2) * 180.0 / 3.141592653589793);
         rotationPitch = n2;
         prevRotationPitch = n2;
         ticksInGround = 0;
@@ -133,10 +122,10 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         motionZ = d2;
         if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
             float f = MathHelper.sqrt_double(d * d + d2 * d2);
-            float n = (float) (MathHelper.atan2(d, d2) * 180.0 / 3.141592653589793);
+            float n = (float) (Math.atan2(d, d2) * 180.0 / 3.141592653589793);
             rotationYaw = n;
             prevRotationYaw = n;
-            float n2 = (float) (MathHelper.atan2(d1, f) * 180.0 / 3.141592653589793);
+            float n2 = (float) (Math.atan2(d1, f) * 180.0 / 3.141592653589793);
             rotationPitch = n2;
             prevRotationPitch = n2;
             setLocationAndAngles(posX, posY, posZ, rotationYaw, rotationPitch);
@@ -154,20 +143,18 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         super.onEntityUpdate();
         if (aimRotation() && prevRotationPitch == 0.0f && prevRotationYaw == 0.0f) {
             float f = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
-            float n = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
+            float n = (float) (Math.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
             rotationYaw = n;
             prevRotationYaw = n;
-            float n2 = (float) (MathHelper.atan2(motionY, f) * 180.0 / 3.141592653589793);
+            float n2 = (float) (Math.atan2(motionY, f) * 180.0 / 3.141592653589793);
             rotationPitch = n2;
             prevRotationPitch = n2;
         }
-        BlockPos blockpos = new BlockPos(xTile, yTile, zTile);
-        IBlockState iblockstate = worldObj.getBlockState(blockpos);
-        Block block = iblockstate.getBlock();
-        if (block.getMaterial() != Material.air) {
-            block.setBlockBoundsBasedOnState(worldObj, blockpos);
-            AxisAlignedBB axisAlignedBB = block.getCollisionBoundingBox(worldObj, blockpos, iblockstate);
-            if (axisAlignedBB != null && axisAlignedBB.isVecInside(new Vec3(posX, posY, posZ))) {
+        Block block = worldObj.getBlock(xTile, yTile, zTile);
+        if (block != null) {
+            block.setBlockBoundsBasedOnState(worldObj, xTile, yTile, zTile);
+            AxisAlignedBB axisAlignedBB = block.getCollisionBoundingBoxFromPool(worldObj, xTile, yTile, zTile);
+            if (axisAlignedBB != null && axisAlignedBB.isVecInside(Vec3.createVectorHelper(posX, posY, posZ))) {
                 inGround = true;
             }
         }
@@ -178,7 +165,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
             extinguish();
         }
         if (inGround) {
-            int i = block.getMetaFromState(iblockstate);
+            int i = worldObj.getBlockMetadata(xTile, yTile, zTile);
             if (block != inTile || i != inData) {
                 inGround = false;
                 motionX *= rand.nextFloat() * 0.2f;
@@ -198,13 +185,14 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         }
         ticksInGround = 0;
         ++ticksInAir;
-        Vec3 vec3d = new Vec3(posX, posY, posZ);
-        Vec3 vec3d2 = new Vec3(posX + motionX, posY + motionY, posZ + motionZ);
-        MovingObjectPosition raytraceresult = worldObj.rayTraceBlocks(vec3d, vec3d2, false, true, false);
-        vec3d = new Vec3(posX, posY, posZ);
-        vec3d2 = new Vec3(posX + motionX, posY + motionY, posZ + motionZ);
+        Vec3 vec3d = Vec3.createVectorHelper(posX, posY, posZ);
+        Vec3 vec3d2 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
+        MovingObjectPosition raytraceresult = worldObj.func_147447_a(vec3d, vec3d2, false, true, false);
+        vec3d = Vec3.createVectorHelper(posX, posY, posZ);
+        vec3d2 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
         if (raytraceresult != null) {
-            vec3d2 = new Vec3(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
+            vec3d2 = Vec3.createVectorHelper(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord,
+                    raytraceresult.hitVec.zCoord);
         }
         Entity entity = findEntity(vec3d, vec3d2);
         if (entity != null) {
@@ -219,7 +207,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         }
         if (getIsCritical()) {
             for (int i1 = 0; i1 < 2; ++i1) {
-                worldObj.spawnParticle(EnumParticleTypes.CRIT, posX + motionX * i1 / 4.0,
+                worldObj.spawnParticle("crit", posX + motionX * i1 / 4.0,
                         posY + motionY * i1 / 4.0, posZ + motionZ * i1 / 4.0, -motionX,
                         -motionY + 0.2, -motionZ);
             }
@@ -229,10 +217,10 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         posZ += motionZ;
         if (aimRotation()) {
             float f2 = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
-            float n3 = (float) (MathHelper.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
+            float n3 = (float) (Math.atan2(motionX, motionZ) * 180.0 / 3.141592653589793);
             rotationYaw = n3;
             prevRotationYaw = n3;
-            float n4 = (float) (MathHelper.atan2(motionY, f2) * 180.0 / 3.141592653589793);
+            float n4 = (float) (Math.atan2(motionY, f2) * 180.0 / 3.141592653589793);
             rotationPitch = n4;
             prevRotationPitch = n4;
         }
@@ -242,7 +230,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
             beenInGround = true;
             for (int i2 = 0; i2 < 4; ++i2) {
                 float f3 = 0.25f;
-                worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * f3,
+                worldObj.spawnParticle("bubble", posX - motionX * f3,
                         posY - motionY * f3, posZ - motionZ * f3, motionX, motionY,
                         motionZ);
             }
@@ -253,7 +241,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         motionZ *= res;
         motionY -= grav;
         setPosition(posX, posY, posZ);
-        doBlockCollisions();
+        func_145775_I();
     }
 
     public void onEntityHit(Entity entity) {
@@ -275,8 +263,8 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
                 }
             }
             if (shootingEntity instanceof EntityLivingBase) {
-                EnchantmentHelper.applyThornEnchantments(entityliving, shootingEntity);
-                EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shootingEntity, entityliving);
+                EnchantmentHelper.func_151384_a(entityliving, shootingEntity);
+                EnchantmentHelper.func_151385_b((EntityLivingBase) shootingEntity, entityliving);
             }
             if (shootingEntity instanceof EntityPlayerMP && shootingEntity != entity && entity instanceof EntityPlayer) {
                 ((EntityPlayerMP) shootingEntity).playerNetServerHandler.sendPacket(
@@ -286,13 +274,11 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     }
 
     public void onGroundHit(MovingObjectPosition raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
-        xTile = blockpos.getX();
-        yTile = blockpos.getY();
-        zTile = blockpos.getZ();
-        IBlockState iBlockState = worldObj.getBlockState(blockpos);
-        inTile = iBlockState.getBlock();
-        inData = inTile.getMetaFromState(iBlockState);
+        xTile = raytraceResult.blockX;
+        yTile = raytraceResult.blockY;
+        zTile = raytraceResult.blockZ;
+        inTile = worldObj.getBlock(xTile, yTile, zTile);
+        inData = worldObj.getBlockMetadata(xTile, yTile, zTile);
         motionX = raytraceResult.hitVec.xCoord - posX;
         motionY = raytraceResult.hitVec.yCoord - posY;
         motionZ = raytraceResult.hitVec.zCoord - posZ;
@@ -306,8 +292,8 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         setIsCritical(false);
         arrowShake = getMaxArrowShake();
         playHitSound();
-        if (inTile.getMaterial() != Material.air) {
-            inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
+        if (inTile != null) {
+            inTile.onEntityCollidedWithBlock(worldObj, xTile, yTile, zTile, this);
         }
     }
 
@@ -323,13 +309,12 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     @Nullable
     protected Entity findEntity(Vec3 vec3d, Vec3 vec3d1) {
         Entity entity = null;
-        List<Entity> list = worldObj.getEntitiesInAABBexcluding(this,
-                getEntityBoundingBox().expand(motionX, motionY, motionZ).expand(1.0, 1.0, 1.0),
-                WEAPON_TARGETS);
+        List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
+                EntityProjectile.getBoundingBox(this).addCoord(motionX, motionY, motionZ).expand(1.0, 1.0, 1.0));
         double d = 0.0;
         for (Entity entity2 : list) {
             if (entity2 != shootingEntity || ticksInAir >= 5) {
-                AxisAlignedBB axisalignedbb = entity2.getEntityBoundingBox().expand(0.3, 0.3, 0.3);
+                AxisAlignedBB axisalignedbb = EntityProjectile.getBoundingBox(entity2).expand(0.3, 0.3, 0.3);
                 MovingObjectPosition raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d1);
                 if (raytraceresult != null) {
                     double d2 = vec3d.squareDistanceTo(raytraceresult.hitVec);
@@ -453,8 +438,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         nbttagcompound.setInteger("yTile", yTile);
         nbttagcompound.setInteger("zTile", zTile);
         if (inTile != null) {
-            ResourceLocation resourceLocation = Block.blockRegistry.getNameForObject(inTile);
-            nbttagcompound.setString("inTile", resourceLocation.toString());
+            nbttagcompound.setByte("inTile", (byte) Block.getIdFromBlock(inTile));
         }
         nbttagcompound.setByte("inData", (byte) inData);
         nbttagcompound.setByte("shake", (byte) arrowShake);
@@ -475,6 +459,11 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         inGround = nbttagcompound.getBoolean("inGround");
         beenInGround = nbttagcompound.getBoolean("beenInGrond");
         pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
+    }
+
+    public static AxisAlignedBB getBoundingBox(Entity entity) {
+        AxisAlignedBB box = entity == null ? null : entity.getBoundingBox();
+        return box == null ? AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0) : box;
     }
 
     public enum PickupStatus {

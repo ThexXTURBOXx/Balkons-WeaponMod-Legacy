@@ -1,5 +1,8 @@
 package ckathode.weaponmod.item;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -40,7 +43,7 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
 
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
-        return EnumAction.NONE;
+        return EnumAction.none;
     }
 
     @Override
@@ -52,5 +55,15 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     @Override
     public float getExtendedReach(World world, EntityLivingBase living, ItemStack itemstack) {
         return 4.0f;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRotateAroundWhenRendering() {
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        ItemStack is = player.inventory.getCurrentItem();
+        if (is != null && is.getItem() == item)
+            return getHalberdState(is);
+        return false;
     }
 }

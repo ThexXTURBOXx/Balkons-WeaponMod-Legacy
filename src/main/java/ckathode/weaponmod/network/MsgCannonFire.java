@@ -1,12 +1,12 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.entity.EntityCannon;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MsgCannonFire extends WMMessage {
     private int cannonEntityID;

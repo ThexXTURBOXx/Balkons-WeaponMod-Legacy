@@ -4,7 +4,6 @@ import ckathode.weaponmod.WeaponDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -44,7 +43,7 @@ public class EntityMusketBullet extends EntityProjectile {
         super.onUpdate();
         if (inGround) {
             if (rand.nextInt(4) == 0) {
-                worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY, posZ, 0.0, 0.0, 0.0);
+                worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0, 0.0, 0.0);
             }
             return;
         }
@@ -52,7 +51,7 @@ public class EntityMusketBullet extends EntityProjectile {
         double amount = 16.0;
         if (speed > 2.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX + motionX * i1 / amount,
+                worldObj.spawnParticle("explode", posX + motionX * i1 / amount,
                         posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }

@@ -9,7 +9,6 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 
 public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     private final Random rand = new Random();
@@ -17,8 +16,8 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     @Nonnull
     @Override
     public ItemStack dispenseStack(IBlockSource blocksource, ItemStack itemstack) {
-        EnumFacing face = BlockDispenser.getFacing(blocksource.getBlockMetadata());
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        IPosition pos = BlockDispenser.func_149939_a(blocksource);
+        EnumFacing face = BlockDispenser.func_149937_b(blocksource.getBlockMetadata());
         EntityBlunderShot.fireFromDispenser(blocksource.getWorld(), pos.getX() + face.getFrontOffsetX(),
                 pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), face.getFrontOffsetX(),
                 face.getFrontOffsetY(), face.getFrontOffsetZ());
@@ -35,8 +34,8 @@ public class DispenseBlunderShot extends BehaviorDefaultDispenseItem {
     @Override
     protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getFrontOffsetX(),
+        IPosition pos = BlockDispenser.func_149939_a(blocksource);
+        blocksource.getWorld().spawnParticle("flame", pos.getX() + face.getFrontOffsetX(),
                 pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), 0.0, 0.0, 0.0);
     }
 }

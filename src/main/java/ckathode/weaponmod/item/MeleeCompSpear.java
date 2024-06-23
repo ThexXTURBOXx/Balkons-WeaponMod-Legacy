@@ -2,6 +2,8 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -45,11 +47,17 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
 
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
-        return BalkonsWeaponMod.instance.modConfig.canThrowSpear ? EnumAction.NONE : super.getItemUseAction(itemstack);
+        return BalkonsWeaponMod.instance.modConfig.canThrowSpear ? EnumAction.none : super.getItemUseAction(itemstack);
     }
 
     @Override
     public float getExtendedReach(World world, EntityLivingBase living, ItemStack itemstack) {
         return 4.0f;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRotateAroundWhenRendering() {
+        return true;
     }
 }

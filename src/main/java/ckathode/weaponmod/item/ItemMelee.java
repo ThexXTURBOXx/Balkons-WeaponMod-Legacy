@@ -4,10 +4,14 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemVariants;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
 import java.util.Random;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,45 +21,42 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
     public final String rawId;
-    private final ModelResourceLocation readyModel;
-    private final ModelResourceLocation halberdStateModel;
-    private Boolean readyModelExists, halberdStateModelExists;
+    private IIcon readyIcon, halberdStateIcon;
+    private Boolean readyIconExists, halberdStateIconExists;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
         super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
         rawId = id;
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        GameRegistry.registerItem(this, id, BalkonsWeaponMod.MOD_ID);
+        setTextureName(BalkonsWeaponMod.MOD_ID + ":" + id);
         setUnlocalizedName(id);
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.tabCombat);
-        readyModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "_ready"), "inventory");
-        halberdStateModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "_state"), "inventory");
-        readyModelExists = null;
-        halberdStateModelExists = null;
+        readyIcon = null;
+        halberdStateIcon = null;
+        readyIconExists = null;
+        halberdStateIconExists = null;
     }
 
     @Override
-    public float getDamageVsEntity() {
+    public float func_150931_i() {
         return meleeComponent.getEntityDamageMaterialPart();
     }
 
     @Override
-    public float getStrVsBlock(ItemStack itemstack, Block block) {
+    public float func_150893_a(ItemStack itemstack, Block block) {
         return meleeComponent.getBlockDamage(itemstack, block);
     }
 
     @Override
-    public boolean canHarvestBlock(Block block) {
+    public boolean func_150897_b(Block block) {
         return meleeComponent.canHarvestBlock(block);
     }
 
@@ -66,9 +67,9 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block, BlockPos pos,
-                                    EntityLivingBase entityliving) {
-        return meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
+    public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block,
+                                    int x, int y, int z, EntityLivingBase entityliving) {
+        return meleeComponent.onBlockDestroyed(itemstack, world, block, x, y, z, entityliving);
     }
 
     @Override
@@ -137,17 +138,31 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
-    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-        if (readyModelExists == null)
-            readyModelExists = WMItemVariants.itemVariantExists(readyModel);
-        if (readyModelExists && player != null && player.isUsingItem())
-            return readyModel;
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRotateAroundWhenRendering() {
+        return meleeComponent.shouldRotateAroundWhenRendering();
+    }
 
-        if (halberdStateModelExists == null)
-            halberdStateModelExists = WMItemVariants.itemVariantExists(halberdStateModel);
-        if (halberdStateModelExists && MeleeCompHalberd.getHalberdState(stack))
-            return halberdStateModel;
+    @Override
+    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+        if (readyIconExists == null)
+            readyIconExists = WMItemVariants.itemVariantExists(readyIcon);
+        if (readyIconExists && player != null && player.isUsingItem())
+            return readyIcon;
 
-        return super.getModel(stack, player, useRemaining);
+        if (halberdStateIconExists == null)
+            halberdStateIconExists = WMItemVariants.itemVariantExists(halberdStateIcon);
+        if (halberdStateIconExists && MeleeCompHalberd.getHalberdState(stack))
+            return halberdStateIcon;
+
+        return super.getIcon(stack, renderPass, player, usingItem, useRemaining);
+    }
+
+    @Override
+    public void registerIcons(IIconRegister register) {
+        itemIcon = register.registerIcon(getIconString());
+        List<IIcon> icons = WMItemVariants.registerItemVariants(register, this, "_ready", "_state");
+        readyIcon = icons.get(0);
+        halberdStateIcon = icons.get(1);
     }
 }

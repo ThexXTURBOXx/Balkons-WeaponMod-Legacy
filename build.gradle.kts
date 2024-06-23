@@ -7,8 +7,9 @@ import java.time.format.DateTimeFormatter
 plugins {
     idea
     java
-    id("gg.essential.loom") version "1.6.+"
+    id("gg.essential.loom") version "1.6.9999-fg1"
     id("dev.architectury.architectury-pack200") version "0.1.3"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 val minecraft_version: String by project
@@ -60,12 +61,34 @@ sourceSets.main {
 repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
+    maven("https://jitpack.io/")
+}
+
+val shadowImpl: Configuration by configurations.creating {
+    configurations.implementation.get().extendsFrom(this)
+}
+
+tasks.shadowJar {
+    archiveClassifier.set("dev")
+    configurations = listOf(shadowImpl)
+    doLast {
+        configurations.forEach {
+            println("Copying jars into mod: ${it.files}")
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    fun relocate(name: String) = relocate(name, "$maven_group.repackage.$name")
+    relocate("makamys.mclib")
+    relocate("net.sf")
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
-    mappings("de.oceanlabs.mcp:mcp_stable:22-1.8.9")
-    forge("net.minecraftforge:forge:$forge_version")
+    mappings("net.minecraftforge:forge:$forge_version:userdev")
+    forgeLegacy("net.minecraftforge:forge:$forge_version")
+    shadowImpl("com.github.makamys:MCLib:0.3.7.6") {
+        exclude(group = "codechicken")
+    }
 }
 
 // Genius approach to replace @VERSION@ from https://stackoverflow.com/a/54094378/5894824
@@ -129,6 +152,7 @@ tasks.remapJar {
     archiveBaseName.set(archives_base_name)
     archiveVersion.set(version.toString())
     archiveClassifier.set("")
+    inputFile.set(tasks.shadowJar.get().archiveFile)
 }
 
 tasks.assemble.get().dependsOn(tasks.remapJar)

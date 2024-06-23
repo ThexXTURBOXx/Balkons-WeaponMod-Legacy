@@ -4,6 +4,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.IIcon;
 
 public class DartType {
     public static final DartType[] dartTypes = new DartType[128];
@@ -19,6 +20,7 @@ public class DartType {
     public final String typeName;
     public final PotionEffect potionEffect;
     public final Object craftItem;
+    public IIcon itemIcon;
 
     public static DartType getDartTypeFromStack(final ItemStack itemstack) {
         final int damage = itemstack.getItemDamage();
@@ -34,6 +36,10 @@ public class DartType {
         typeName = typename;
         potionEffect = potioneffect;
         craftItem = craftitem;
+    }
+
+    public String getIconVariantName() {
+        return typeName.replaceFirst("dart.?", ".").replaceFirst("\\.$", "");
     }
 
 }

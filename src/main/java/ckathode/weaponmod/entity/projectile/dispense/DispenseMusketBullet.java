@@ -8,7 +8,6 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 public class DispenseMusketBullet extends DispenseWeaponProjectile {
@@ -46,8 +45,8 @@ public class DispenseMusketBullet extends DispenseWeaponProjectile {
     @Override
     protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getFrontOffsetX(),
+        IPosition pos = BlockDispenser.func_149939_a(blocksource);
+        blocksource.getWorld().spawnParticle("flame", pos.getX() + face.getFrontOffsetX(),
                 pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), 0.0, 0.2, 0.0);
     }
 }

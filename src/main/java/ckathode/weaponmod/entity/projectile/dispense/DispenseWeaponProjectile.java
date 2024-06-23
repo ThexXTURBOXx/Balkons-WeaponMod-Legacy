@@ -17,8 +17,8 @@ public abstract class DispenseWeaponProjectile extends BehaviorProjectileDispens
     @Override
     public ItemStack dispenseStack(IBlockSource blocksource, @Nonnull ItemStack itemstack) {
         World world = blocksource.getWorld();
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-        EnumFacing face = BlockDispenser.getFacing(blocksource.getBlockMetadata());
+        IPosition pos = BlockDispenser.func_149939_a(blocksource);
+        EnumFacing face = BlockDispenser.func_149937_b(blocksource.getBlockMetadata());
         IProjectile projectile = getProjectileEntity(world, pos, itemstack);
         projectile.setThrowableHeading(face.getFrontOffsetX(), face.getFrontOffsetY() + getYVel(),
                 face.getFrontOffsetZ(), func_82500_b(), func_82498_a());

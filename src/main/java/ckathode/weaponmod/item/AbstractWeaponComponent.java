@@ -1,6 +1,8 @@
 package ckathode.weaponmod.item;
 
 import com.google.common.collect.Multimap;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class AbstractWeaponComponent {
@@ -40,7 +41,7 @@ public abstract class AbstractWeaponComponent {
     public abstract boolean canHarvestBlock(Block p0);
 
     public abstract boolean onBlockDestroyed(ItemStack p0, World p1, Block p2,
-                                             BlockPos p3, EntityLivingBase p4);
+                                             int p3, int p4, int p5, EntityLivingBase p6);
 
     public abstract boolean hitEntity(ItemStack p0, EntityLivingBase p1, EntityLivingBase p2);
 
@@ -67,4 +68,7 @@ public abstract class AbstractWeaponComponent {
 
     public abstract void onUpdate(ItemStack p0, World p1, Entity p2, int p3,
                                   boolean p4);
+
+    @SideOnly(Side.CLIENT)
+    public abstract boolean shouldRotateAroundWhenRendering();
 }

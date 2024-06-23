@@ -2,77 +2,71 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
-import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBlunderShot extends Render<EntityBlunderShot> {
-    public RenderBlunderShot(RenderManager renderManager) {
-        super(renderManager);
+public class RenderBlunderShot extends Render {
+    @Override
+    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
+        renderShot((EntityBlunderShot) entity, d, d1, d2, f, f1);
     }
 
-    @Override
-    public void doRender(@Nonnull EntityBlunderShot entityblundershot, double d, double d1,
-                         double d2, float f, float f1) {
+    public void renderShot(EntityBlunderShot entityblundershot, double d, double d1, double d2, float f, float f1) {
         bindEntityTexture(entityblundershot);
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-        GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
-        GlStateManager.translate(d, d1, d2);
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer vertexbuffer = tessellator.getWorldRenderer();
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.scale(0.04f, 0.04f, 0.04f);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glTranslated(d, d1, d2);
+        Tessellator tess = Tessellator.instance;
+        GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
+        GL11.glScalef(0.04f, 0.04f, 0.04f);
         GL11.glNormal3f(0.05625f, 0.0f, 0.0f);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.0).endVertex();
-        vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.3125).endVertex();
-        vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.3125).endVertex();
-        tessellator.draw();
+        tess.startDrawingQuads();
+        tess.addVertexWithUV(0.0, -1.0, -1.0, 0.0, 0.0);
+        tess.addVertexWithUV(0.0, -1.0, 1.0, 0.3125, 0.0);
+        tess.addVertexWithUV(0.0, 1.0, 1.0, 0.3125, 0.3125);
+        tess.addVertexWithUV(0.0, 1.0, -1.0, 0.0, 0.3125);
+        tess.draw();
         GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
-        vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos(0.0, 1.0, -1.0).tex(0.0, 0.0).endVertex();
-        vertexbuffer.pos(0.0, 1.0, 1.0).tex(0.3125, 0.0).endVertex();
-        vertexbuffer.pos(0.0, -1.0, 1.0).tex(0.3125, 0.3125).endVertex();
-        vertexbuffer.pos(0.0, -1.0, -1.0).tex(0.0, 0.3125).endVertex();
-        tessellator.draw();
+        tess.startDrawingQuads();
+        tess.addVertexWithUV(0.0, 1.0, -1.0, 0.0, 0.0);
+        tess.addVertexWithUV(0.0, 1.0, 1.0, 0.3125, 0.0);
+        tess.addVertexWithUV(0.0, -1.0, 1.0, 0.3125, 0.3125);
+        tess.addVertexWithUV(0.0, -1.0, -1.0, 0.0, 0.3125);
+        tess.draw();
         for (int j = 0; j < 4; ++j) {
-            GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
+            GL11.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
             GL11.glNormal3f(0.0f, 0.0f, 0.05625f);
-            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-            vertexbuffer.pos(-1.0, -1.0, 0.0).tex(0.0, 0.0).endVertex();
-            vertexbuffer.pos(1.0, -1.0, 0.0).tex(0.3125, 0.0).endVertex();
-            vertexbuffer.pos(1.0, 1.0, 0.0).tex(0.3125, 0.3125).endVertex();
-            vertexbuffer.pos(-1.0, 1.0, 0.0).tex(0.0, 0.3125).endVertex();
-            tessellator.draw();
+            tess.startDrawingQuads();
+            tess.addVertexWithUV(-1.0, -1.0, 0.0, 0.0, 0.0);
+            tess.addVertexWithUV(1.0, -1.0, 0.0, 0.3125, 0.0);
+            tess.addVertexWithUV(1.0, 1.0, 0.0, 0.3125, 0.3125);
+            tess.addVertexWithUV(-1.0, 1.0, 0.0, 0.0, 0.3125);
+            tess.draw();
         }
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableCull();
-        GlStateManager.color(1.0f, 1.0f, 0.8f, 1.0f);
+        GL11.glDisable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glPopMatrix();
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glColor4f(1.0f, 1.0f, 0.8f, 1.0f);
         GL11.glLineWidth(1.0f);
-        vertexbuffer.begin(1, DefaultVertexFormats.POSITION_COLOR);
-        vertexbuffer.pos(entityblundershot.posX, entityblundershot.posY, entityblundershot.posZ);
-        vertexbuffer.pos(entityblundershot.prevPosX, entityblundershot.prevPosY, entityblundershot.prevPosZ);
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableCull();
-        GlStateManager.popMatrix();
-        super.doRender(entityblundershot, d, d1, d2, f, f1);
+        tess.startDrawingQuads();
+        tess.addVertex(entityblundershot.posX, entityblundershot.posY, entityblundershot.posZ);
+        tess.addVertex(entityblundershot.prevPosX, entityblundershot.prevPosY, entityblundershot.prevPosZ);
+        tess.draw();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glPopMatrix();
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull EntityBlunderShot entity) {
+    protected ResourceLocation getEntityTexture(Entity entity) {
         return WeaponModResources.Entity.BULLET;
     }
 }

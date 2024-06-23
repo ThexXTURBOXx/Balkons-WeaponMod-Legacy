@@ -1,31 +1,29 @@
 package ckathode.weaponmod.item;
 
-import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemVariants;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFlail extends ItemMelee {
     private final float flailDamage;
-    private final ModelResourceLocation thrownModel;
-    private Boolean thrownModelExists;
+    private IIcon thrownIcon;
+    private Boolean thrownIconExists;
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
         super(id, meleecomponent);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getDamageVsEntity();
-        thrownModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "-thrown"), "inventory");
-        thrownModelExists = null;
+        thrownIcon = null;
+        thrownIconExists = null;
     }
 
     @Override
@@ -128,12 +126,23 @@ public class ItemFlail extends ItemMelee {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-        if (thrownModelExists == null)
-            thrownModelExists = WMItemVariants.itemVariantExists(thrownModel);
-        if (thrownModelExists && isThrown(player))
-            return thrownModel;
+    public boolean shouldRotateAroundWhenRendering() {
+        return true;
+    }
 
-        return super.getModel(stack, player, useRemaining);
+    @Override
+    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+        if (thrownIconExists == null)
+            thrownIconExists = WMItemVariants.itemVariantExists(thrownIcon);
+        if (thrownIconExists && isThrown(player))
+            return thrownIcon;
+
+        return super.getIcon(stack, renderPass, player, usingItem, useRemaining);
+    }
+
+    @Override
+    public void registerIcons(IIconRegister register) {
+        super.registerIcons(register);
+        thrownIcon = WMItemVariants.registerItemVariants(register, "weaponmod:flail", "-thrown").get(0);
     }
 }

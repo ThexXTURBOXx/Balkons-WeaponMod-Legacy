@@ -1,22 +1,23 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
+import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.UUID;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 public class WMItem extends Item {
     public WMItem(String id) {
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setTextureName(BalkonsWeaponMod.MOD_ID + ":" + id);
+        GameRegistry.registerItem(this, id, BalkonsWeaponMod.MOD_ID);
         setUnlocalizedName(id);
         setCreativeTab(CreativeTabs.tabCombat);
     }
 
     public static UUID getAttackDamageModifierUUID() {
-        return Item.itemModifierUUID;
+        return Item.field_111210_e;
     }
 
     public static void deleteStack(IInventory inv, ItemStack stack) {

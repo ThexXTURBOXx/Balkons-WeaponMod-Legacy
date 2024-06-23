@@ -94,7 +94,7 @@ public class EntityFlail extends EntityMaterialProjectile {
             return;
         }
         double targetPosX = shooter.posX;
-        double targetPosY = shooter.getEntityBoundingBox().minY + 0.4000000059604645;
+        double targetPosY = EntityProjectile.getBoundingBox(shooter).minY + 0.4000000059604645;
         double targetPosZ = shooter.posZ;
         float f = 27.0f;
         float f2 = 2.0f;

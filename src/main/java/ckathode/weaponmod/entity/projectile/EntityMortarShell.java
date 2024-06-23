@@ -4,16 +4,12 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -60,7 +56,7 @@ public class EntityMortarShell extends EntityProjectile {
         double amount = 8.0;
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
-                worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX + motionX * i1 / amount,
+                worldObj.spawnParticle("smoke", posX + motionX * i1 / amount,
                         posY + motionY * i1 / amount, posZ + motionZ * i1 / amount, 0.0, 0.0, 0.0);
             }
         }
@@ -98,13 +94,11 @@ public class EntityMortarShell extends EntityProjectile {
 
     @Override
     public void onGroundHit(MovingObjectPosition raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
-        xTile = blockpos.getX();
-        yTile = blockpos.getY();
-        zTile = blockpos.getZ();
-        IBlockState iBlockState = worldObj.getBlockState(blockpos);
-        inTile = iBlockState.getBlock();
-        inData = inTile.getMetaFromState(iBlockState);
+        xTile = raytraceResult.blockX;
+        yTile = raytraceResult.blockY;
+        zTile = raytraceResult.blockZ;
+        inTile = worldObj.getBlock(xTile, yTile, zTile);
+        inData = worldObj.getBlockMetadata(xTile, yTile, zTile);
         motionX = raytraceResult.hitVec.xCoord - posX;
         motionY = raytraceResult.hitVec.yCoord - posY;
         motionZ = raytraceResult.hitVec.zCoord - posZ;
@@ -113,8 +107,8 @@ public class EntityMortarShell extends EntityProjectile {
         posY -= motionY / f1 * 0.05;
         posZ -= motionZ / f1 * 0.05;
         inGround = true;
-        if (inTile.getMaterial() != Material.air) {
-            inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
+        if (inTile != null) {
+            inTile.onEntityCollidedWithBlock(worldObj, xTile, yTile, zTile, this);
         }
         createCrater();
     }

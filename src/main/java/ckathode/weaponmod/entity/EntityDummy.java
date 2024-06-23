@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
+import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import ckathode.weaponmod.item.IItemWeapon;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -55,12 +56,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity.getEntityBoundingBox();
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return getEntityBoundingBox();
+        return entity.getBoundingBox();
     }
 
     @Override
@@ -99,7 +95,7 @@ public class EntityDummy extends Entity {
         } else {
             playRandomHitSound();
         }
-        if (durability <= 0 && worldObj.getGameRules().getBoolean("doEntityDrops")) {
+        if (durability <= 0 && worldObj.getGameRules().getGameRuleBooleanValue("doEntityDrops")) {
             dropAsItem(true, true);
         }
         setBeenAttacked();
@@ -154,7 +150,7 @@ public class EntityDummy extends Entity {
         setRotation(rotationYaw, rotationPitch);
         moveEntity(0.0, motionY, 0.0);
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
-                getEntityBoundingBox().expand(0.2D, 0.0D, 0.2D));
+                EntityProjectile.getBoundingBox(this).expand(0.2D, 0.0D, 0.2D));
         if (!list.isEmpty()) {
             for (Entity entity : list) {
                 if (entity != riddenByEntity && entity.canBePushed()) {
@@ -165,8 +161,8 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public void fall(float f, float f1) {
-        super.fall(f, f1);
+    public void fall(float f) {
+        super.fall(f);
         if (!onGround) {
             return;
         }

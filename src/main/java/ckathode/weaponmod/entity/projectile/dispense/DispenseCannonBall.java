@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 
 public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
     private final Random rand = new Random();
@@ -47,11 +46,11 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
             normalDispense = true;
             return super.dispenseStack(blocksource, itemstack);
         }
-        EnumFacing face = BlockDispenser.getFacing(blocksource.getBlockMetadata());
+        EnumFacing face = BlockDispenser.func_149937_b(blocksource.getBlockMetadata());
         double xvel = face.getFrontOffsetX() * 1.5;
         double yvel = face.getFrontOffsetY() * 1.5;
         double zvel = face.getFrontOffsetZ() * 1.5;
-        IPosition pos = BlockDispenser.getDispensePosition(blocksource);
+        IPosition pos = BlockDispenser.func_149939_a(blocksource);
         EntityCannonBall entitycannonball = new EntityCannonBall(blocksource.getWorld(), pos.getX() + xvel,
                 pos.getY() + yvel, pos.getZ() + zvel);
         entitycannonball.setThrowableHeading(xvel, yvel + 0.15, zvel, 2.0f, 2.0f);
@@ -76,8 +75,8 @@ public class DispenseCannonBall extends BehaviorDefaultDispenseItem {
     protected void spawnDispenseParticles(@Nonnull IBlockSource blocksource, @Nonnull EnumFacing face) {
         super.spawnDispenseParticles(blocksource, face);
         if (!normalDispense) {
-            IPosition pos = BlockDispenser.getDispensePosition(blocksource);
-            blocksource.getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX() + face.getFrontOffsetX(),
+            IPosition pos = BlockDispenser.func_149939_a(blocksource);
+            blocksource.getWorld().spawnParticle("flame", pos.getX() + face.getFrontOffsetX(),
                     pos.getY() + face.getFrontOffsetY(), pos.getZ() + face.getFrontOffsetZ(), 0.0, 0.0, 0.0);
         }
     }

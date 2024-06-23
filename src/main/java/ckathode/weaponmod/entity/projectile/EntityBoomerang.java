@@ -3,15 +3,11 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import javax.annotation.Nonnull;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -155,13 +151,11 @@ public class EntityBoomerang extends EntityMaterialProjectile {
 
     @Override
     public void onGroundHit(MovingObjectPosition raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
-        xTile = blockpos.getX();
-        yTile = blockpos.getY();
-        zTile = blockpos.getZ();
-        IBlockState iBlockState = worldObj.getBlockState(blockpos);
-        inTile = iBlockState.getBlock();
-        inData = inTile.getMetaFromState(iBlockState);
+        xTile = raytraceResult.blockX;
+        yTile = raytraceResult.blockY;
+        zTile = raytraceResult.blockZ;
+        inTile = worldObj.getBlock(xTile, yTile, zTile);
+        inData = worldObj.getBlockMetadata(xTile, yTile, zTile);
         motionX = raytraceResult.hitVec.xCoord - posX;
         motionY = raytraceResult.hitVec.yCoord - posY;
         motionZ = raytraceResult.hitVec.zCoord - posZ;
@@ -172,12 +166,12 @@ public class EntityBoomerang extends EntityMaterialProjectile {
         motionX *= -rand.nextFloat() * 0.5f;
         motionZ *= -rand.nextFloat() * 0.5f;
         motionY = rand.nextFloat() * 0.1f;
-        inGround = raytraceResult.sideHit == EnumFacing.UP;
+        inGround = raytraceResult.sideHit == 1;
         setIsCritical(false);
         beenInGround = true;
         floatStrength = 0.0f;
-        if (inTile.getMaterial() != Material.air) {
-            inTile.onEntityCollidedWithBlock(worldObj, blockpos, iBlockState, this);
+        if (inTile != null) {
+            inTile.onEntityCollidedWithBlock(worldObj, xTile, yTile, zTile, this);
         }
     }
 

@@ -6,6 +6,8 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -75,7 +76,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     @Override
     public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block,
-                                    BlockPos pos, EntityLivingBase entityliving) {
+                                    int x, int y, int z, EntityLivingBase entityliving) {
         return false;
     }
 
@@ -117,10 +118,13 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
         ReloadState state = ReloadHelper.getReloadState(itemstack);
-        if (state == ReloadState.STATE_READY) {
-            return EnumAction.BOW;
+        if (state == ReloadState.STATE_NONE) {
+            return EnumAction.block;
         }
-        return EnumAction.NONE;
+        if (state == ReloadState.STATE_READY) {
+            return EnumAction.bow;
+        }
+        return EnumAction.none;
     }
 
     @Override
@@ -284,6 +288,12 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return 0.15f;
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRotateAroundWhenRendering() {
+        return false;
+    }
+
     public enum RangedSpecs {
         BLOWGUN("blowgun", 250, "dart"),
         CROSSBOW("crossbow", 250, "bolt"),
@@ -318,7 +328,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public List<Item> getAmmoItems() {
             if (ammoItems == null) {
                 ammoItems = Arrays.stream(ammoItemTags)
-                        .map(t -> Item.itemRegistry.getObject(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
+                        .map(t -> (Item) Item.itemRegistry.getObject(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t).toString()))
                         .collect(Collectors.toList());
                 BalkonsWeaponMod.modLog.debug("Found items {} for {} @{}",
                         ammoItems, Arrays.toString(ammoItemTags), this);

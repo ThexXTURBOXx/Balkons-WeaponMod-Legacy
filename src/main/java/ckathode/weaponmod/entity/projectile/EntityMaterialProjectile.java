@@ -1,6 +1,8 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -9,8 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class EntityMaterialProjectile extends EntityProjectile {
     private static final int WEAPON_MATERIAL = 18;
@@ -32,8 +32,8 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
 
     public float getMeleeHitDamage(Entity entity) {
         if (shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            return EnchantmentHelper.getModifierForCreature(((EntityLivingBase) shootingEntity).getHeldItem(),
-                    ((EntityLivingBase) entity).getCreatureAttribute());
+            return EnchantmentHelper.getEnchantmentModifierLiving((EntityLivingBase) shootingEntity,
+                    (EntityLivingBase) entity);
         }
         return 0.0f;
     }
@@ -42,7 +42,8 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
         if (shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) shootingEntity);
+            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) shootingEntity,
+                    (EntityLivingBase) entity);
             if (i != 0) {
                 ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
                         -MathHelper.sin(rotationYaw * 0.017453292f),

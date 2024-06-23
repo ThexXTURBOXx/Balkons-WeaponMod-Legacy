@@ -1,6 +1,5 @@
 package ckathode.weaponmod.render;
 
-import javax.annotation.Nonnull;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -35,7 +34,7 @@ public class ModelDummy extends ModelBase {
     }
 
     @Override
-    public void render(@Nonnull Entity entity, float f, float f1, float f2, float f3, float f4, float scale) {
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float scale) {
         armLeft.render(scale);
         armRight.render(scale);
         body.render(scale);

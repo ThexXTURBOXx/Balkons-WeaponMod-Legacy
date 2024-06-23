@@ -1,6 +1,7 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.network.MsgExplosion;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,7 +11,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 public final class PhysHelper {
     private static double kbMotionX = 0.0;
@@ -89,7 +89,7 @@ public final class PhysHelper {
         if (world instanceof WorldServer && !world.isRemote) {
             MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
             BalkonsWeaponMod.instance.messagePipeline.sendToAllAround(msg,
-                    new NetworkRegistry.TargetPoint(world.provider.getDimensionId(), explosion.explosionX,
+                    new NetworkRegistry.TargetPoint(world.provider.dimensionId, explosion.explosionX,
                             explosion.explosionY, explosion.explosionZ, 64.0));
         }
     }
@@ -126,7 +126,7 @@ public final class PhysHelper {
     }
 
     public static void prepareKnockbackOnEntity(EntityLivingBase attacker, EntityLivingBase entity) {
-        knockBackModifier = EnchantmentHelper.getKnockbackModifier(attacker);
+        knockBackModifier = EnchantmentHelper.getKnockbackModifier(attacker, entity);
         if (attacker.isSprinting()) {
             ++knockBackModifier;
         }

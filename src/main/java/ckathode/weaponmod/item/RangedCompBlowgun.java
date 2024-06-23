@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -59,7 +58,7 @@ public class RangedCompBlowgun extends RangedComponent {
                     f * 1.5f, 1.0f);
             Item item = dartStackCopy.getItem();
             if (item instanceof ItemBlowgunDart)
-                entityblowgundart.setDartEffectType((byte) dartStackCopy.getMetadata());
+                entityblowgundart.setDartEffectType((byte) dartStackCopy.getItemDamage());
             applyProjectileEnchantments(entityblowgundart, itemstack);
             world.spawnEntityInWorld(entityblowgundart);
         }
@@ -99,7 +98,7 @@ public class RangedCompBlowgun extends RangedComponent {
         float particleX = -MathHelper.sin((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
         float particleY = -MathHelper.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = MathHelper.cos((yaw + 23.0f) * 0.017453292f) * MathHelper.cos(pitch * 0.017453292f);
-        world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, x + particleX, y + particleY, z + particleZ, 0.0, 0.0,
+        world.spawnParticle("explode", x + particleX, y + particleY, z + particleZ, 0.0, 0.0,
                 0.0);
     }
 

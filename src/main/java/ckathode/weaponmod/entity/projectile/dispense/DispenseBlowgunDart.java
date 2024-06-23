@@ -15,7 +15,7 @@ public class DispenseBlowgunDart extends DispenseWeaponProjectile {
     protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
                                               @Nonnull ItemStack itemstack) {
         EntityBlowgunDart dart = getProjectileEntity(world, pos);
-        dart.setDartEffectType((byte) itemstack.getMetadata());
+        dart.setDartEffectType((byte) itemstack.getItemDamage());
         return dart;
     }
 

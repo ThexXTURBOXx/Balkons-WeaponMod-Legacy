@@ -4,6 +4,9 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.RangedComponent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -11,13 +14,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlayReloaded extends Gui {
-
     @SubscribeEvent
     public void renderGUIOverlay(RenderGameOverlayEvent.Pre e) {
         if (!BalkonsWeaponMod.instance.modConfig.guiOverlayReloaded ||
@@ -52,7 +51,7 @@ public class GuiOverlayReloaded extends Gui {
         int height = (int) (f * 24);
 
         zLevel = -90; // at the same level as the hotbar itself
-        mc.getRenderManager().renderEngine.bindTexture(WeaponModResources.Gui.OVERLAY);
+        mc.renderEngine.bindTexture(WeaponModResources.Gui.OVERLAY);
         drawTexturedModalRect(x0, y0 - height, 0, offset + 24 - height, 24, height);
     }
 }

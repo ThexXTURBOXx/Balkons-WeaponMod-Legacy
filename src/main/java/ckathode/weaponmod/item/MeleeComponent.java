@@ -3,6 +3,8 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponModAttributes;
 import com.google.common.collect.Multimap;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -14,7 +16,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 public class MeleeComponent extends AbstractWeaponComponent {
@@ -67,8 +68,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block,
-                                    BlockPos pos, EntityLivingBase entityliving) {
-        if (block.getBlockHardness(world, pos) != 0.0f) {
+                                    int x, int y, int z, EntityLivingBase entityliving) {
+        if (block.getBlockHardness(world, x, y, z) != 0.0f) {
             itemstack.damageItem(meleeSpecs.dmgFromBlock, entityliving);
             if (itemstack.stackSize <= 0 && entityliving instanceof EntityPlayer) {
                 WMItem.deleteStack(((EntityPlayer) entityliving).inventory, itemstack);
@@ -151,16 +152,18 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
-        return EnumAction.NONE;
+        return EnumAction.block;
     }
 
     @Override
     public int getMaxItemUseDuration(ItemStack itemstack) {
-        return 0;
+        return 72000;
     }
 
     @Override
     public ItemStack onItemRightClick(World world, EntityPlayer entityplayer, ItemStack itemstack) {
+        if (getItemUseAction(itemstack) != EnumAction.none)
+            entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
         return itemstack;
     }
 
@@ -176,6 +179,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int i,
                          boolean flag) {
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRotateAroundWhenRendering() {
+        return false;
     }
 
     public enum MeleeSpecs {

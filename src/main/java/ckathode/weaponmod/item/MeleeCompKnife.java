@@ -2,6 +2,8 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,6 +46,12 @@ public class MeleeCompKnife extends MeleeComponent {
 
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
-        return BalkonsWeaponMod.instance.modConfig.canThrowKnife ? EnumAction.NONE : super.getItemUseAction(itemstack);
+        return BalkonsWeaponMod.instance.modConfig.canThrowKnife ? EnumAction.none : super.getItemUseAction(itemstack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRotateAroundWhenRendering() {
+        return true;
     }
 }

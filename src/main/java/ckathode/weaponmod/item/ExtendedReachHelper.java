@@ -1,15 +1,15 @@
 package ckathode.weaponmod.item;
 
-import com.google.common.base.Predicates;
+import ckathode.weaponmod.entity.projectile.EntityProjectile;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public final class ExtendedReachHelper {
@@ -17,12 +17,12 @@ public final class ExtendedReachHelper {
 
     public static MovingObjectPosition getMouseOver(float frame, float dist) {
         MovingObjectPosition result = null;
-        Entity entity = mc.getRenderViewEntity();
+        EntityLivingBase entity = mc.renderViewEntity;
         if (entity != null && mc.theWorld != null) {
             double distNew = dist;
             result = entity.rayTrace(distNew, frame);
             double calcDist = distNew;
-            Vec3 pos = entity.getPositionEyes(frame);
+            Vec3 pos = entity.getPosition(frame);
             distNew = calcDist;
 
             if (result != null) {
@@ -33,17 +33,16 @@ public final class ExtendedReachHelper {
             Vec3 traced = pos.addVector(lookVec.xCoord * distNew, lookVec.yCoord * distNew, lookVec.zCoord * distNew);
             Entity pointedEntity = null;
             float f = 1.0F;
-            List<Entity> list = mc.theWorld.getEntitiesInAABBexcluding(entity,
-                    entity.getEntityBoundingBox()
-                            .expand(lookVec.xCoord * distNew, lookVec.yCoord * distNew, lookVec.zCoord * distNew)
-                            .expand(f, f, f),
-                    Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
+            List<Entity> list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(entity,
+                    EntityProjectile.getBoundingBox(entity)
+                            .addCoord(lookVec.xCoord * distNew, lookVec.yCoord * distNew, lookVec.zCoord * distNew)
+                            .expand(f, f, f));
             double d = calcDist;
 
             Vec3 hitVec = null;
             for (Entity entity1 : list) {
                 float bordersize = entity1.getCollisionBorderSize();
-                AxisAlignedBB aabb = entity1.getEntityBoundingBox().expand(bordersize, bordersize, bordersize);
+                AxisAlignedBB aabb = entity1.getBoundingBox().expand(bordersize, bordersize, bordersize);
                 MovingObjectPosition intercept = aabb.calculateIntercept(pos, traced);
                 if (aabb.isVecInside(pos)) {
                     if (d >= 0.0D) {
