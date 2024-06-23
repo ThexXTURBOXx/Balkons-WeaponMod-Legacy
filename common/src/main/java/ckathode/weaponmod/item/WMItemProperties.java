@@ -41,6 +41,11 @@ public final class WMItemProperties {
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
                     MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
 
+    private static final ResourceLocation BLOCK_GETTER_ID = ResourceLocation.fromNamespaceAndPath(MOD_ID, "block");
+    private static final ClampedItemPropertyFunction BLOCK_GETTER =
+            (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
+                    entity != null && entity.getUseItem() == stack ? 1.0f : 0.0f;
+
     private WMItemProperties() {
         throw new UnsupportedOperationException();
     }
@@ -110,6 +115,19 @@ public final class WMItemProperties {
                 item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
         WMRegistries.ITEM_HALBERD_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
                 item, HALBERD_STATE_GETTER_ID, HALBERD_STATE_GETTER));
+
+        WMRegistries.ITEM_BATTLEAXE_WOOD.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_BATTLEAXE_STONE.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_BATTLEAXE_IRON.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_BATTLEAXE_GOLD.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_BATTLEAXE_DIAMOND.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_BATTLEAXE_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
     }
 
 }
