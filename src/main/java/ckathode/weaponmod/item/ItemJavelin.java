@@ -22,9 +22,8 @@ public class ItemJavelin extends WMItem {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityLiving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityLiving;
         if (itemstack.stackSize <= 0) {
-            deleteStack(entityplayer.inventory, itemstack);
+            deleteStack(entityLiving.inventory, itemstack);
             return;
         }
         int j = getMaxItemUseDuration(itemstack) - i;
@@ -36,19 +35,19 @@ public class ItemJavelin extends WMItem {
         if (f > 1.0f) {
             f = 1.0f;
         }
-        boolean crit = !entityplayer.onGround && !entityplayer.isInWater();
+        boolean crit = !entityLiving.onGround && !entityLiving.isInWater();
         if (!world.isRemote) {
-            EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
-            entityjavelin.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
+            EntityJavelin entityjavelin = new EntityJavelin(world, entityLiving);
+            entityjavelin.setAim(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0f,
                     f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
             entityjavelin.setIsCritical(crit);
             world.spawnEntityInWorld(entityjavelin);
         }
-        world.playSoundAtEntity(entityplayer, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
-        if (!entityplayer.capabilities.isCreativeMode) {
+        world.playSoundAtEntity(entityLiving, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
+        if (!entityLiving.capabilities.isCreativeMode) {
             itemstack.splitStack(1);
             if (itemstack.stackSize <= 0) {
-                deleteStack(entityplayer.inventory, itemstack);
+                deleteStack(entityLiving.inventory, itemstack);
             }
         }
     }

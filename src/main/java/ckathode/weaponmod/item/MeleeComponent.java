@@ -151,16 +151,18 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
-        return EnumAction.NONE;
+        return EnumAction.BLOCK;
     }
 
     @Override
     public int getMaxItemUseDuration(ItemStack itemstack) {
-        return 0;
+        return 72000;
     }
 
     @Override
     public ItemStack onItemRightClick(World world, EntityPlayer entityplayer, ItemStack itemstack) {
+        if (getItemUseAction(itemstack) != EnumAction.NONE)
+            entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
         return itemstack;
     }
 

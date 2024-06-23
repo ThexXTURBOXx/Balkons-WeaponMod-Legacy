@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
@@ -25,11 +26,17 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
+    public EnumAction getItemUseAction(ItemStack itemstack) {
+        return EnumAction.NONE;
+    }
+
+    @Override
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
         super.onUpdate(itemstack, world, entity, i, flag);
         if (!(entity instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) entity;
         if (player.isInsideOfMaterial(Material.water)) return;
+        if (player.inventory.getCurrentItem() != itemstack) return;
 
         float f = 1.0f;
         float f1 = 28.0f;

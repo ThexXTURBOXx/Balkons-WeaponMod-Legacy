@@ -24,9 +24,8 @@ import net.minecraft.world.World;
 public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
     public final String rawId;
-    private final ModelResourceLocation readyModel;
     private final ModelResourceLocation halberdStateModel;
-    private Boolean readyModelExists, halberdStateModelExists;
+    private Boolean halberdStateModelExists;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
         super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
@@ -36,11 +35,8 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.tabCombat);
-        readyModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "_ready"), "inventory");
         halberdStateModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
                 rawId + "_state"), "inventory");
-        readyModelExists = null;
         halberdStateModelExists = null;
     }
 
@@ -138,11 +134,6 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
 
     @Override
     public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-        if (readyModelExists == null)
-            readyModelExists = WMItemVariants.itemVariantExists(readyModel);
-        if (readyModelExists && player != null && player.isUsingItem())
-            return readyModel;
-
         if (halberdStateModelExists == null)
             halberdStateModelExists = WMItemVariants.itemVariantExists(halberdStateModel);
         if (halberdStateModelExists && MeleeCompHalberd.getHalberdState(stack))

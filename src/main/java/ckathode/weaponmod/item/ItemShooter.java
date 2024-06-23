@@ -26,9 +26,8 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
     public final String rawId;
-    private final ModelResourceLocation reloadModel;
     private final ModelResourceLocation loadedModel;
-    private Boolean reloadModelExists, loadedModelExists;
+    private Boolean loadedModelExists;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
         rawId = id;
@@ -39,11 +38,8 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
         rangedcomponent.setThisItemProperties();
-        reloadModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "_reload"), "inventory");
         loadedModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
                 rawId + "-loaded"), "inventory");
-        reloadModelExists = null;
         loadedModelExists = null;
     }
 
@@ -144,11 +140,6 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
 
     @Override
     public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
-        if (reloadModelExists == null)
-            reloadModelExists = WMItemVariants.itemVariantExists(reloadModel);
-        if (reloadModelExists && player != null && player.isUsingItem() && !RangedComponent.isReloaded(stack))
-            return reloadModel;
-
         if (loadedModelExists == null)
             loadedModelExists = WMItemVariants.itemVariantExists(loadedModel);
         if (loadedModelExists && RangedComponent.isReloaded(stack))
