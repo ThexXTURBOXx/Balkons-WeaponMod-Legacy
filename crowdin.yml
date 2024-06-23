@@ -1,3 +1,29 @@
 "api_token_env": "CROWDIN_PERSONAL_TOKEN"
 "project_id_env": "CROWDIN_PROJECT_ID"
 "preserve_hierarchy": true
+
+"files": [
+  {
+    "source": "src/main/resources/assets/weaponmod/lang/en_us.lang",
+    "translation": "src/main/resources/assets/weaponmod/lang/%locale_with_underscore%.lang",
+    "languages_mapping": {
+      "locale_with_underscore": {
+        "de": "de_de",
+        "en-GB": "en_gb",
+        "en-PT": "en_pt",
+        "en-US": "en_us",
+        "es-ES": "es_es",
+        "fr": "fr_fr",
+        "fr-CA": "fr_ca",
+        "it": "it_it",
+        "ja": "ja_jp",
+        "nl": "nl_nl",
+        "pl": "pl_pl",
+        "pt-BR": "pt_br",
+        "ru": "ru_ru",
+        "zh-CN": "zh_cn",
+        "zh-TW": "zh_tw",
+      }
+    }
+  }
+]
