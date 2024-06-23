@@ -126,6 +126,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public UseAnim getUseAnimation(ItemStack itemstack) {
         ReloadState state = ReloadHelper.getReloadState(itemstack);
+        if (state == ReloadState.STATE_NONE) {
+            return UseAnim.BLOCK;
+        }
         if (state == ReloadState.STATE_READY) {
             return UseAnim.BOW;
         }

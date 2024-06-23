@@ -123,7 +123,7 @@ public class AdvancedExplosion extends Explosion {
                 });
             }
 
-            worldObj.setBlock(blockpos, Blocks.AIR.defaultBlockState(), 3);
+            worldObj.setBlockAndUpdate(blockpos, Blocks.AIR.defaultBlockState());
             block.wasExploded(worldObj, blockpos, this);
         }
 
