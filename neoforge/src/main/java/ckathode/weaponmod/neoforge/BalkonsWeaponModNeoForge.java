@@ -33,6 +33,7 @@ public class BalkonsWeaponModNeoForge {
         DATA_COMPONENT_TYPES.register(modEventBus);
 
         BalkonsWeaponMod.init();
+        BalkonsWeaponModConfigIntegration.registerConfigScreen();
     }
 
 }
