@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "ckathode.weaponmod.fabric.BalkonsWeaponModFabric"
+    ],
+    "modmenu": [
+      "ckathode.weaponmod.fabric.BalkonsWeaponModModMenuIntegration"
     ]
   },
   "mixins": [

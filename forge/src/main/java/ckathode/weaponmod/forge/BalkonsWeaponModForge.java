@@ -27,6 +27,7 @@ public class BalkonsWeaponModForge {
         configConditional = CraftingHelper.register(new WMConfigConditionForge.Serializer());
 
         BalkonsWeaponMod.init();
+        BalkonsWeaponModConfigIntegration.registerConfigScreen();
     }
 
 }
