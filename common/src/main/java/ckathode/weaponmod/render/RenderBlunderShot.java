@@ -2,10 +2,8 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -43,7 +41,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
             drawVertex(last, builder, -1.0f, 1.0f, 0.0f, 0.0f, 0.3125f, 0.0f, 0.0f, 0.05625f, lm);
         }
         ms.popPose();
-        ms.pushPose();
+        /*ms.pushPose();
         GlStateManager._disableTexture();
         GlStateManager._disableCull();
         GlStateManager._lineWidth(1.0f);
@@ -61,7 +59,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
                 .endVertex();
         GlStateManager._enableTexture();
         GlStateManager._enableCull();
-        ms.popPose();
+        ms.popPose();*/
         super.render(entityblundershot, f, f1, ms, bufs, lm);
     }
 
