@@ -89,7 +89,6 @@ public class BalkonsWeaponMod {
             registerRenderers();
             WMClientEventHandler.init();
             WMItemProperties.init();
-            WMMessagePipeline.initClient();
             WeaponModConfigGui.init();
         }
 
