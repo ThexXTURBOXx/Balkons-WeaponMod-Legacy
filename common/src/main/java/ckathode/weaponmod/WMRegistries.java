@@ -265,6 +265,9 @@ public class WMRegistries {
             DATA_COMPONENT_TYPES.register(ReloadState.TYPE_ID, () -> ReloadState.TYPE);
     public static final RegistrySupplier<DataComponentType<Short>> BAYONET_DAMAGE_TYPE =
             DATA_COMPONENT_TYPES.register(ItemMusket.BAYONET_DAMAGE_TYPE_ID, () -> ItemMusket.BAYONET_DAMAGE_TYPE);
+    public static final RegistrySupplier<DataComponentType<Boolean>> HALBERD_STATE_TYPE =
+            DATA_COMPONENT_TYPES.register(MeleeCompHalberd.HALBERD_STATE_TYPE_ID,
+                    () -> MeleeCompHalberd.HALBERD_STATE_TYPE);
 
     // Attributes
     public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =

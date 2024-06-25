@@ -1,6 +1,8 @@
 package ckathode.weaponmod.network;
 
 import dev.architectury.networking.NetworkManager;
+import dev.architectury.platform.Platform;
+import dev.architectury.utils.Env;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -35,13 +37,15 @@ public final class WMMessagePipeline {
     }
 
     public static void init() {
-        NetworkManager.registerReceiver(NetworkManager.Side.C2S, MsgCannonFire.CANNON_FIRE_PACKET_TYPE,
+        NetworkManager.registerReceiver(NetworkManager.c2s(), MsgCannonFire.CANNON_FIRE_PACKET_TYPE,
                 MsgCannonFire.STREAM_CODEC, MsgCannonFire::handleServerSide);
-    }
 
-    public static void initClient() {
-        NetworkManager.registerReceiver(NetworkManager.Side.S2C, MsgExplosion.EXPLOSION_PACKET_TYPE,
-                MsgExplosion.STREAM_CODEC, MsgExplosion::handleClientSide);
+        if (Platform.getEnvironment() == Env.CLIENT) {
+            NetworkManager.registerReceiver(NetworkManager.s2c(), MsgExplosion.EXPLOSION_PACKET_TYPE,
+                    MsgExplosion.STREAM_CODEC, MsgExplosion::handleClientSide);
+        } else {
+            NetworkManager.registerS2CPayloadType(MsgExplosion.EXPLOSION_PACKET_TYPE, MsgExplosion.STREAM_CODEC);
+        }
     }
 
 }
