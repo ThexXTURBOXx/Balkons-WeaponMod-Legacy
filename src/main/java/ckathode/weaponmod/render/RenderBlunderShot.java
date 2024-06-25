@@ -51,7 +51,7 @@ public class RenderBlunderShot extends Render {
         GL11.glDisable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
-        GL11.glPushMatrix();
+        /*GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glColor4f(1.0f, 1.0f, 0.8f, 1.0f);
@@ -62,7 +62,7 @@ public class RenderBlunderShot extends Render {
         tess.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopMatrix();
+        GL11.glPopMatrix();*/
     }
 
     @Override
