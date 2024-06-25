@@ -1,0 +1,6 @@
+{
+  "parent": "weaponmod:item/handheld_block",
+  "textures": {
+    "layer0": "weaponmod:items/katana.netherite"
+  }
+}
