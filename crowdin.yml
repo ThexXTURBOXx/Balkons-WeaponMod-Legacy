@@ -6,9 +6,9 @@
 "files": [
   {
     "source": "src/main/resources/assets/weaponmod/lang/en_us.json",
-    "translation": "src/main/resources/assets/weaponmod/lang/%locale_with_underscore%.json",
+    "translation": "src/main/resources/assets/weaponmod/lang/%locale%.json",
     "languages_mapping": {
-      "locale_with_underscore": {
+      "locale": {
         "de": "de_de",
         "en-GB": "en_gb",
         "en-PT": "en_pt",
