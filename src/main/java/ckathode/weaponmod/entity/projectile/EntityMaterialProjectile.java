@@ -62,8 +62,8 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
 
     public void setThrownItemStack(@Nonnull ItemStack itemstack) {
         thrownItem = itemstack;
-        updateWeaponMaterial();
         dataManager.set(WEAPON_ITEM, itemstack);
+        updateWeaponMaterial();
     }
 
     @Nonnull
