@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -100,7 +99,7 @@ public class MsgExplosion implements CustomPacketPayload {
 
     @Environment(EnvType.CLIENT)
     public static void handleClientSide(MsgExplosion msg, NetworkManager.PacketContext ctx) {
-        Level level = Minecraft.getInstance().level;
+        Level level = ctx.getPlayer().level();
         AdvancedExplosion expl = new AdvancedExplosion(level, null, msg.x, msg.y, msg.z, msg.size,
                 false, Explosion.BlockInteraction.DESTROY);
         expl.setAffectedBlockPositions(msg.blocks);

@@ -37,6 +37,9 @@ public final class WMMessagePipeline {
     public static void init() {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, MsgCannonFire.CANNON_FIRE_PACKET_TYPE,
                 MsgCannonFire.STREAM_CODEC, MsgCannonFire::handleServerSide);
+    }
+
+    public static void initClient() {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, MsgExplosion.EXPLOSION_PACKET_TYPE,
                 MsgExplosion.STREAM_CODEC, MsgExplosion::handleClientSide);
     }
