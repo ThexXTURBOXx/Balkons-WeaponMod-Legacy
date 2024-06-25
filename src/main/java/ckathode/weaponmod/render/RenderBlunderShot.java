@@ -2,9 +2,9 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
+import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.BufferBuilder;
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -63,7 +63,7 @@ public class RenderBlunderShot extends EntityRenderer<EntityBlunderShot> {
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        /*GlStateManager.pushMatrix();
         GlStateManager.disableTexture();
         GlStateManager.disableCull();
         GlStateManager.color4f(1.0f, 1.0f, 0.8f, 1.0f);
@@ -74,7 +74,7 @@ public class RenderBlunderShot extends EntityRenderer<EntityBlunderShot> {
         tessellator.draw();
         GlStateManager.enableTexture();
         GlStateManager.enableCull();
-        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();*/
         super.doRender(entityblundershot, d, d1, d2, f, f1);
     }
 
