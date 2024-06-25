@@ -64,8 +64,7 @@ jobs:
           curseforge-id: 1033985
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
-            build/libs/!(*-@(dev|dev-shadow)).jar
-            build/libs/*-@(dev|dev-shadow).jar
+            build/libs/*-${{ env.MOD_VERSION }}.jar
           name: Forge-1.14.4-${{ env.MOD_VERSION }}
           version: Forge-1.14.4-${{ env.MOD_VERSION }}
           changelog: |
