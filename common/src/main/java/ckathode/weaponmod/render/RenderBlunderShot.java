@@ -2,17 +2,14 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
 
@@ -44,7 +41,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
             drawVertex(last, builder, -1.0f, 1.0f, 0.0f, 0.0f, 0.3125f, 0.0f, 0.0f, 0.05625f, lm);
         }
         ms.popPose();
-        ms.pushPose();
+        /*ms.pushPose();
         GlStateManager._disableCull();
         GL11.glLineWidth(1.0f);
         Matrix4f mat = ms.last().pose();
@@ -60,7 +57,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
                 .normal(0.0f, 0.0f, 0.05625f)
                 .endVertex();
         GlStateManager._enableCull();
-        ms.popPose();
+        ms.popPose();*/
         super.render(entityblundershot, f, f1, ms, bufs, lm);
     }
 
