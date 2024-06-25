@@ -47,7 +47,7 @@ public class WeaponModConfig implements ConfigData {
 
     @Category("enable")
     @StringBooleanMap
-    @Comment("Enable/disable recipes for the different weapons (only works in Forge).")
+    @Comment("Enable/disable recipes for the different weapons.")
     private volatile Map<String, Boolean> enableSettings = new HashMap<>();
     @Category("reloadTimes")
     @StringIntMap
