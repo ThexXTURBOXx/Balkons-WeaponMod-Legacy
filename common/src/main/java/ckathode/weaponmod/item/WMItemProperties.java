@@ -16,33 +16,33 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
 public final class WMItemProperties {
 
-    private static final ResourceLocation RELOAD_GETTER_ID = new ResourceLocation(MOD_ID, "reload");
-    private static final ClampedItemPropertyFunction RELOAD_GETTER =
+    public static final ResourceLocation RELOAD_GETTER_ID = new ResourceLocation(MOD_ID, "reload");
+    public static final ClampedItemPropertyFunction RELOAD_GETTER =
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
                     (entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f;
 
-    private static final ResourceLocation RELOADED_GETTER_ID = new ResourceLocation(MOD_ID, "reloaded");
-    private static final ClampedItemPropertyFunction RELOADED_GETTER =
+    public static final ResourceLocation RELOADED_GETTER_ID = new ResourceLocation(MOD_ID, "reloaded");
+    public static final ClampedItemPropertyFunction RELOADED_GETTER =
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
                     RangedComponent.isReloaded(stack) ? 1.0f : 0.0f;
 
-    private static final ResourceLocation BOOMERANG_READY_GETTER_ID = new ResourceLocation(MOD_ID, "boomerang-ready");
-    private static final ClampedItemPropertyFunction BOOMERANG_READY_GETTER =
+    public static final ResourceLocation BOOMERANG_READY_GETTER_ID = new ResourceLocation(MOD_ID, "boomerang-ready");
+    public static final ClampedItemPropertyFunction BOOMERANG_READY_GETTER =
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
                     (entity != null && entity.isUsingItem() && entity.getUseItem() == stack) ? 1.0f : 0.0f;
 
-    private static final ResourceLocation FLAIL_THROWN_GETTER_ID = new ResourceLocation(MOD_ID, "flail-thrown");
-    private static final ClampedItemPropertyFunction FLAIL_THROWN_GETTER =
+    public static final ResourceLocation FLAIL_THROWN_GETTER_ID = new ResourceLocation(MOD_ID, "flail-thrown");
+    public static final ClampedItemPropertyFunction FLAIL_THROWN_GETTER =
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
                     entity instanceof Player && entity.getMainHandItem() == stack && PlayerWeaponData.isFlailThrown((Player) entity) ? 1.0f : 0.0f;
 
-    private static final ResourceLocation HALBERD_STATE_GETTER_ID = new ResourceLocation(MOD_ID, "halberd-state");
-    private static final ClampedItemPropertyFunction HALBERD_STATE_GETTER =
+    public static final ResourceLocation HALBERD_STATE_GETTER_ID = new ResourceLocation(MOD_ID, "halberd-state");
+    public static final ClampedItemPropertyFunction HALBERD_STATE_GETTER =
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
                     MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
 
-    private static final ResourceLocation BLOCK_GETTER_ID = new ResourceLocation(MOD_ID, "block");
-    private static final ClampedItemPropertyFunction BLOCK_GETTER =
+    public static final ResourceLocation BLOCK_GETTER_ID = new ResourceLocation(MOD_ID, "block");
+    public static final ClampedItemPropertyFunction BLOCK_GETTER =
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
                     entity != null && entity.getUseItem() == stack ? 1.0f : 0.0f;
 
