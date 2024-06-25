@@ -54,6 +54,7 @@ jobs:
           name: 1.12.2-${{ env.MOD_VERSION }}
           version: 1.12.2-${{ env.MOD_VERSION }}
           github-tag: 1.12.2-${{ env.MOD_VERSION }}
+          github-commitish: ${{ github.sha }}
           github-generate-changelog: true
 
       - name: Publish Forge build to CurseForge and Modrinth
