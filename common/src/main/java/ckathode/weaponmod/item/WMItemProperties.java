@@ -128,6 +128,19 @@ public final class WMItemProperties {
                 item, BLOCK_GETTER_ID, BLOCK_GETTER));
         WMRegistries.ITEM_BATTLEAXE_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
                 item, BLOCK_GETTER_ID, BLOCK_GETTER));
+
+        WMRegistries.ITEM_KATANA_WOOD.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_KATANA_STONE.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_KATANA_IRON.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_KATANA_GOLD.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_KATANA_DIAMOND.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
+        WMRegistries.ITEM_KATANA_NETHERITE.listen(item -> ItemPropertiesRegistry.register(
+                item, BLOCK_GETTER_ID, BLOCK_GETTER));
     }
 
 }
