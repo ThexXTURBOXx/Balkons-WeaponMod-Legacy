@@ -127,6 +127,19 @@ public final class WMItemProperties {
                 BLOCK_GETTER_ID, BLOCK_GETTER);
         ItemPropertiesRegistry.register(MeleeCompBattleaxe.NETHERITE_ITEM,
                 BLOCK_GETTER_ID, BLOCK_GETTER);
+
+        ItemPropertiesRegistry.register(ItemMelee.KATANA_WOOD_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(ItemMelee.KATANA_STONE_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(ItemMelee.KATANA_IRON_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(ItemMelee.KATANA_GOLD_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(ItemMelee.KATANA_DIAMOND_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
+        ItemPropertiesRegistry.register(ItemMelee.KATANA_NETHERITE_ITEM,
+                BLOCK_GETTER_ID, BLOCK_GETTER);
     }
 
 }
