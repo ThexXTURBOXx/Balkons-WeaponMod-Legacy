@@ -64,7 +64,7 @@ jobs:
           curseforge-id: 1033985
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
-            neoforge/build/libs/!(*-@(dev|dev-shadow|sources)).jar
+            neoforge/build/libs/*-${{ env.MOD_VERSION }}.jar
           name: NeoForge-1.21-${{ env.MOD_VERSION }}
           version: NeoForge-1.21-${{ env.MOD_VERSION }}
           changelog: |
@@ -84,7 +84,7 @@ jobs:
           curseforge-id: 1033985
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
-            fabric/build/libs/!(*-@(dev|dev-shadow|sources)).jar
+            fabric/build/libs/*-${{ env.MOD_VERSION }}.jar
           name: Fabric-1.21-${{ env.MOD_VERSION }}
           version: Fabric-1.21-${{ env.MOD_VERSION }}
           changelog: |
