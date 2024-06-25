@@ -64,8 +64,8 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     }
 
     public void setThrownItemStack(@NotNull ItemStack itemstack) {
-        updateWeaponMaterial();
         entityData.set(WEAPON_ITEM, itemstack);
+        updateWeaponMaterial();
     }
 
     @NotNull
@@ -84,11 +84,10 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
 
     protected void updateWeaponMaterial() {
         ItemStack thrownItem = getWeapon();
-        if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
+        if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon weapon && weapon.getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
-                material =
-                        MaterialRegistry.getOrdinal(((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial);
+                material = MaterialRegistry.getOrdinal(weapon.getMeleeComponent().weaponMaterial);
             }
             entityData.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
         }
