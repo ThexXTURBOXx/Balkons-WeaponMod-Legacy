@@ -63,7 +63,7 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
+        /*GlStateManager.pushMatrix();
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
         GlStateManager.color(1.0f, 1.0f, 0.8f, 1.0f);
@@ -74,7 +74,7 @@ public class RenderBlunderShot extends Render<EntityBlunderShot> {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
-        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();*/
         super.doRender(entityblundershot, d, d1, d2, f, f1);
     }
 
