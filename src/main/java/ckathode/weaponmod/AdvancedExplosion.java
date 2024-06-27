@@ -93,7 +93,7 @@ public class AdvancedExplosion extends Explosion {
             int y = blockpos.chunkPosY;
             int z = blockpos.chunkPosZ;
             Block block = worldObj.getBlock(x, y, z);
-            if (worldObj.isAirBlock(x, y, z) && block != null) {
+            if (!worldObj.isAirBlock(x, y, z) && block != null) {
                 if (block.canDropFromExplosion(this)) {
                     block.dropBlockAsItemWithChance(worldObj, x, y, z, worldObj.getBlockMetadata(x, y, z),
                             1.0f / explosionSize, 0);
