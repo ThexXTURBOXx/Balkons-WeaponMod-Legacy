@@ -45,10 +45,10 @@ Development should be rather easy. BWM: Legacy currently uses Loom in three diff
   Architectury Loom does not officially support Minecraft versions that old. So,
   the [Essential team](https://github.com/EssentialGG) added many fixes to Architectury Loom to support these legacy
   versions.
-- [My own Loom](https://github.com/EssentialGG/architectury-loom) for everything between and below. Sadly, even
-  Essential Loom is not even able to handle some of these other versions correctly. So, I forked it and hence created
-  a fourth fork layer of the official Loom - perfect! I added fixes and hacks to make Loom even 1.7.10-compatible and
-  fixed a few additional bugs that I found in upstream versions; that's all.
+- [My own Loom](https://github.com/ThexXTURBOXx/architectury-loom/tree/dev/1.6-1.7.10) for everything between and below.
+  Sadly, even Essential Loom is not even able to handle some of these other versions correctly. So, I forked it and
+  hence created a fourth fork layer of the official Loom - perfect! I added fixes and hacks to make Loom even
+  1.7.10-compatible and fixed a few additional bugs that I found in upstream versions; that's all.
 
 This way, you don't have to worry about most of the background tasks.  
 If you want to change the mod's code, you can just do the following:
@@ -154,7 +154,7 @@ for that.
 
 ### Full example
 
-As an example, I have fully implemented bronze boomerangs in the bronze Fabric mod, as
+As an example, I have fully implemented Bronze Boomerangs in the Bronze Fabric mod, as
 seen [here](https://github.com/ThexXTURBOXx/bronze/commit/e2d792b15da0b6c5a27bc71f5301eb795ce8e133).
 
 ## Resource pack patches
