@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
 
-    private static final EntityDataAccessor<Byte> WEAPON_MATERIAL =
-            SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> WEAPON_MATERIAL =
+            SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> WEAPON_ITEM =
             SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
@@ -32,15 +32,14 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(WEAPON_MATERIAL, (byte) 0);
+        builder.define(WEAPON_MATERIAL, 0);
         builder.define(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
     public float getMeleeHitDamage(Entity entity) {
         Entity shooter = getOwner();
         if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
-            return EnchantmentHelper.getDamageBonus(((LivingEntity) shooter).getMainHandItem(),
-                    ((LivingEntity) entity).getType());
+            return EnchantmentHelper.getDamageBonus(((LivingEntity) shooter).getMainHandItem(), entity.getType());
         }
         return 0.0f;
     }
@@ -89,7 +88,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
             if (material < 0) {
                 material = MaterialRegistry.getOrdinal(weapon.getMeleeComponent().weaponMaterial);
             }
-            entityData.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
+            entityData.set(WEAPON_MATERIAL, material);
         }
     }
 
