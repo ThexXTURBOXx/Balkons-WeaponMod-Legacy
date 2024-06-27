@@ -5,25 +5,6 @@
 "files": [
   {
     "source": "src/main/resources/assets/weaponmod/lang/en_US.lang",
-    "translation": "src/main/resources/assets/weaponmod/lang/%language%.lang",
-    "languages_mapping": {
-      "language": {
-        "de": "de_DE",
-        "en-GB": "en_GB",
-        "en-PT": "en_PT",
-        "en-US": "en_US",
-        "es-ES": "es_ES",
-        "fr": "fr_FR",
-        "fr-CA": "fr_CA",
-        "it": "it_IT",
-        "ja": "ja_JP",
-        "nl": "nl_NL",
-        "pl": "pl_PL",
-        "pt-BR": "pt_BR",
-        "ru": "ru_RU",
-        "zh-CN": "zh_CN",
-        "zh-TW": "zh_TW",
-      }
-    }
+    "translation": "src/main/resources/assets/weaponmod/lang/%language%.lang"
   }
 ]
