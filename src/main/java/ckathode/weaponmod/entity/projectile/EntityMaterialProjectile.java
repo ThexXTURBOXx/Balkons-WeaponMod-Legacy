@@ -26,7 +26,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void entityInit() {
         super.entityInit();
-        dataWatcher.addObject(WEAPON_MATERIAL, (byte) 0);
+        dataWatcher.addObject(WEAPON_MATERIAL, 0);
         dataWatcher.addObjectByDataType(WEAPON_ITEM, 5); // 5 = ItemStack type
     }
 
@@ -69,7 +69,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     }
 
     public int getWeaponMaterialId() {
-        return dataWatcher.getWatchableObjectByte(WEAPON_MATERIAL);
+        return dataWatcher.getWatchableObjectInt(WEAPON_MATERIAL);
     }
 
     public ItemStack getWeapon() {
@@ -82,7 +82,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
             if (material < 0) {
                 material = ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial.ordinal();
             }
-            dataWatcher.updateObject(WEAPON_MATERIAL, (byte) (material & 0xFF));
+            dataWatcher.updateObject(WEAPON_MATERIAL, material);
         }
     }
 
