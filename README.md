@@ -102,6 +102,7 @@ public class BWMLegacyIntegration {
 
     // 5 is the ID of Netherite, so we need to start labelling at 6.
     // In your mod, it should be best to make these IDs configurable for the user.
+    // Alternatively, use the `ordinal()` method of the material.
     // This way, you will avoid conflicts with other mods.
     public static final int COPPER_ID = 6;
     public static final int TIN_ID = 7;
@@ -142,7 +143,6 @@ public class BWMLegacyIntegration {
 
 This will make BWM: Legacy aware about the modded item tiers `COPPER` and `TIN`.  
 You can also just add a single one or more than that, of course!  
-The current API is limited to 249 custom item tiers being registered at once (which should be enough, anyway...).  
 The registration can happen at any point - during world load, during the start, doesn't matter!  
 You can register the weapons for your custom item tier just like any other item.
 

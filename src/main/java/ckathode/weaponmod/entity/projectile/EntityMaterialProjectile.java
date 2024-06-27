@@ -19,8 +19,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class EntityMaterialProjectile extends EntityProjectile {
-    private static final DataParameter<Byte> WEAPON_MATERIAL =
-            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> WEAPON_MATERIAL =
+            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.VARINT);
     private static final DataParameter<Optional<ItemStack>> WEAPON_ITEM =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
@@ -34,7 +34,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void entityInit() {
         super.entityInit();
-        dataManager.register(WEAPON_MATERIAL, (byte) 0);
+        dataManager.register(WEAPON_MATERIAL, 0);
         dataManager.register(WEAPON_ITEM, Optional.absent());
     }
 
@@ -95,7 +95,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
             if (material < 0) {
                 material = ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial.ordinal();
             }
-            dataManager.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
+            dataManager.set(WEAPON_MATERIAL, material);
         }
     }
 
