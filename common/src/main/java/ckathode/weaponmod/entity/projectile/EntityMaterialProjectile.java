@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
 
-    private static final EntityDataAccessor<Byte> WEAPON_MATERIAL =
-            SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> WEAPON_MATERIAL =
+            SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> WEAPON_ITEM =
             SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
@@ -33,7 +33,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @Override
     public void defineSynchedData() {
         super.defineSynchedData();
-        entityData.define(WEAPON_MATERIAL, (byte) 0);
+        entityData.define(WEAPON_MATERIAL, 0);
         entityData.define(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
@@ -91,7 +91,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
                 material =
                         MaterialRegistry.getOrdinal(((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial);
             }
-            entityData.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
+            entityData.set(WEAPON_MATERIAL, material);
         }
     }
 
