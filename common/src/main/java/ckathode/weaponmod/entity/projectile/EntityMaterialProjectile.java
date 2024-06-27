@@ -25,8 +25,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
 
-    private static final EntityDataAccessor<Byte> WEAPON_MATERIAL =
-            SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> WEAPON_MATERIAL =
+            SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<ItemStack> WEAPON_ITEM =
             SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
@@ -43,15 +43,15 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(WEAPON_MATERIAL, (byte) 0);
+        builder.define(WEAPON_MATERIAL, 0);
         builder.define(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
     public float getMeleeHitDamage(Entity entity, float baseDamage) {
         Entity shooter = getOwner();
         ItemStack weaponItem = getWeaponItem();
-        if (weaponItem != null && shooter instanceof LivingEntity livingShooter
-            && entity instanceof LivingEntity livingEntity && level() instanceof ServerLevel serverLevel) {
+        if (weaponItem != null && shooter instanceof LivingEntity && entity instanceof LivingEntity &&
+            level() instanceof ServerLevel serverLevel) {
             baseDamage = EnchantmentHelper.modifyDamage(serverLevel, weaponItem, entity, getDamageSource(), baseDamage);
         }
         return baseDamage;
@@ -104,7 +104,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
             if (material < 0) {
                 material = MaterialRegistry.getOrdinal(weapon.getMeleeComponent().weaponMaterial);
             }
-            entityData.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
+            entityData.set(WEAPON_MATERIAL, material);
         }
     }
 
