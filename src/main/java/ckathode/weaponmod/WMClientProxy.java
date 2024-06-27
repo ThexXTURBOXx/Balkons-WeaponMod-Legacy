@@ -34,6 +34,13 @@ import ckathode.weaponmod.render.RenderMusketBullet;
 import ckathode.weaponmod.render.RenderSpear;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.client.audio.SoundList;
+import net.minecraft.client.audio.SoundList$SoundEntry;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -94,5 +101,26 @@ public class WMClientProxy extends WMCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityBoomerang.class, new RenderBoomerang());
         RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, new RenderMusketBullet());
         RenderingRegistry.registerEntityRenderingHandler(EntityMortarShell.class, new RenderMortarShell());
+    }
+
+    @Override
+    public void registerSounds(WeaponModConfig config) {
+        super.registerSounds(config);
+        applySoundFix();
+        IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+        if (resourceManager instanceof IReloadableResourceManager) {
+            ((IReloadableResourceManager) resourceManager).registerReloadListener(a -> applySoundFix());
+        }
+    }
+
+    private void applySoundFix() {
+        // Add random.breath sound to game (can also be accessed via /playsound then!)
+        SoundList list = new SoundList();
+        SoundList$SoundEntry entry = new SoundList$SoundEntry();
+        entry.setSoundEntryName("random/breath");
+        list.setSoundCategory(SoundCategory.PLAYERS);
+        list.getSoundList().add(entry);
+        Minecraft.getMinecraft().getSoundHandler().loadSoundResource(
+                new ResourceLocation("minecraft", "random.breath"), list);
     }
 }
