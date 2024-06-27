@@ -49,17 +49,11 @@ import ckathode.weaponmod.item.RangedCompMortar;
 import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.network.WMMessagePipeline;
 import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
-import net.minecraft.client.audio.SoundList;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -210,23 +204,7 @@ public class BalkonsWeaponMod {
     @Mod.EventHandler
     public void postInitMod(FMLPostInitializationEvent event) {
         messagePipeline.postInitialize();
-        registerSounds();
-
-        IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
-        if (resourceManager instanceof IReloadableResourceManager) {
-            ((IReloadableResourceManager) resourceManager).registerReloadListener(a -> registerSounds());
-        }
-    }
-
-    private void registerSounds() {
-        // Add random.breath sound to game (can also be accessed via /playsound then!)
-        SoundList list = new SoundList();
-        SoundList.SoundEntry entry = new SoundList.SoundEntry();
-        entry.setSoundEntryName("random/breath");
-        list.setSoundCategory(SoundCategory.PLAYERS);
-        list.getSoundList().add(entry);
-        Minecraft.getMinecraft().getSoundHandler().loadSoundResource(
-                new ResourceLocation("minecraft", "random.breath"), list);
+        proxy.registerSounds(modConfig);
     }
 
     private void registerEntities() {

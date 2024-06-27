@@ -20,4 +20,7 @@ public class WMCommonProxy {
 
     public void registerRenderersEntity(WeaponModConfig config) {
     }
+
+    public void registerSounds(WeaponModConfig config) {
+    }
 }

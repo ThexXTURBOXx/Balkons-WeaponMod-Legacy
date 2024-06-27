@@ -30,7 +30,13 @@ import ckathode.weaponmod.render.RenderKnife;
 import ckathode.weaponmod.render.RenderMortarShell;
 import ckathode.weaponmod.render.RenderMusketBullet;
 import ckathode.weaponmod.render.RenderSpear;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.client.audio.SoundList;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -196,5 +202,26 @@ public class WMClientProxy extends WMCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityBoomerang.class, RenderBoomerang::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityMusketBullet.class, RenderMusketBullet::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityMortarShell.class, RenderMortarShell::new);
+    }
+
+    @Override
+    public void registerSounds(WeaponModConfig config) {
+        super.registerSounds(config);
+        applySoundFix();
+        IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+        if (resourceManager instanceof IReloadableResourceManager) {
+            ((IReloadableResourceManager) resourceManager).registerReloadListener(a -> applySoundFix());
+        }
+    }
+
+    private void applySoundFix() {
+        // Add random.breath sound to game (can also be accessed via /playsound then!)
+        SoundList list = new SoundList();
+        SoundList.SoundEntry entry = new SoundList.SoundEntry();
+        entry.setSoundEntryName("random/breath");
+        list.setSoundCategory(SoundCategory.PLAYERS);
+        list.getSoundList().add(entry);
+        Minecraft.getMinecraft().getSoundHandler().loadSoundResource(
+                new ResourceLocation("minecraft", "random.breath"), list);
     }
 }
