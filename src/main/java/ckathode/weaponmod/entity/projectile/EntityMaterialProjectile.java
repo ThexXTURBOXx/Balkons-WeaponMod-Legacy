@@ -17,8 +17,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
-    private static final DataParameter<Byte> WEAPON_MATERIAL =
-            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> WEAPON_MATERIAL =
+            EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.VARINT);
     private static final DataParameter<ItemStack> WEAPON_ITEM =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEMSTACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
@@ -32,7 +32,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
     @Override
     public void registerData() {
         super.registerData();
-        dataManager.register(WEAPON_MATERIAL, (byte) 0);
+        dataManager.register(WEAPON_MATERIAL, 0);
         dataManager.register(WEAPON_ITEM, ItemStack.EMPTY);
     }
 
@@ -90,7 +90,7 @@ public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectil
                 material =
                         MaterialRegistry.getOrdinal(((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial);
             }
-            dataManager.set(WEAPON_MATERIAL, (byte) (material & 0xFF));
+            dataManager.set(WEAPON_MATERIAL, material);
         }
     }
 
