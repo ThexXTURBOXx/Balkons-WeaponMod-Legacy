@@ -57,6 +57,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -70,6 +71,8 @@ public class WMRegistries {
             DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(MOD_ID, Registry.ENTITY_TYPE_REGISTRY);
+    public static final DeferredRegister<Attribute> ATTRIBUTES =
+            DeferredRegister.create(MOD_ID, Registry.ATTRIBUTE_REGISTRY);
 
     // Items
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_WOOD =
@@ -255,6 +258,20 @@ public class WMRegistries {
     public static final RegistrySupplier<EntityType<EntityMortarShell>> ENTITY_MORTAR_SHELL =
             ENTITY_TYPES.register(EntityMortarShell.ID, () -> EntityMortarShell.TYPE);
 
+    // Attributes
+    public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
+            ATTRIBUTES.register(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getDescriptionId(),
+                    () -> WeaponModAttributes.IGNORE_ARMOUR_DAMAGE);
+    public static final RegistrySupplier<Attribute> WEAPON_KNOCKBACK =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_KNOCKBACK.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_KNOCKBACK);
+    public static final RegistrySupplier<Attribute> RELOAD_TIME =
+            ATTRIBUTES.register(WeaponModAttributes.RELOAD_TIME.getDescriptionId(),
+                    () -> WeaponModAttributes.RELOAD_TIME);
+    public static final RegistrySupplier<Attribute> WEAPON_REACH =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_REACH.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_REACH);
+
     private static void registerDispenserBehaviors() {
         DispenserBlock.registerBehavior(ItemJavelin.ITEM, new DispenseJavelin());
         DispenserBlock.registerBehavior(WMItem.CROSSBOW_BOLT_ITEM, new DispenseCrossbowBolt());
@@ -272,6 +289,7 @@ public class WMRegistries {
     public static void init() {
         ITEMS.register();
         ENTITY_TYPES.register();
+        ATTRIBUTES.register();
         registerDispenserBehaviors();
     }
 
