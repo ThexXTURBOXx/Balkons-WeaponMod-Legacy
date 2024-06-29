@@ -85,8 +85,8 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
 
     @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot
-            , @Nonnull ItemStack itemstack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot,
+                                                                     @Nonnull ItemStack itemstack) {
         Multimap<String, AttributeModifier> multimap = HashMultimap.create();
         if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {
             meleeComponent.addItemAttributeModifiers(multimap);
@@ -158,5 +158,13 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
+    }
+
+    @Override
+    public boolean isShield(@Nonnull ItemStack stack, @Nullable EntityLivingBase entity) {
+        if (entity != null && entity.getActiveItemStack() == stack && stack.getItem() instanceof ItemShooter &&
+            entity.isActiveItemStackBlocking())
+            return true;
+        return super.isShield(stack, entity);
     }
 }
