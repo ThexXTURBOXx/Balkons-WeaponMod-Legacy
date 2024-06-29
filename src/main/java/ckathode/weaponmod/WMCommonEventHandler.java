@@ -1,8 +1,8 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.ItemMelee;
-import ckathode.weaponmod.item.MeleeCompBattleaxe;
-import ckathode.weaponmod.item.MeleeComponent;
+import ckathode.weaponmod.item.ItemShooter;
+import ckathode.weaponmod.item.WMItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,15 +28,14 @@ public class WMCommonEventHandler {
         if (!(entity instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) entity;
         ItemStack stack = player.getActiveItemStack();
-        if (stack == null || !(stack.getItem() instanceof ItemMelee)) return;
-        ItemMelee item = (ItemMelee) stack.getItem();
-        if (item.meleeComponent instanceof MeleeCompBattleaxe ||
-            item.meleeComponent.meleeSpecs == MeleeComponent.MeleeSpecs.KATANA) {
-            int i = 1 + MathHelper.floor_float(event.getAmount());
-            stack.damageItem(i, player);
-            if (stack.stackSize <= 0) {
-                player.inventory.deleteStack(stack);
-            }
+        if (stack == null) return;
+        if (!player.isActiveItemStackBlocking()) return;
+        if (!(stack.getItem() instanceof ItemMelee) && !(stack.getItem() instanceof ItemShooter) &&
+            !(stack.getItem() instanceof WMItem)) return;
+        int i = 1 + MathHelper.floor_float(event.getAmount());
+        stack.damageItem(i, player);
+        if (stack.stackSize <= 0) {
+            player.inventory.deleteStack(stack);
         }
     }
 }
