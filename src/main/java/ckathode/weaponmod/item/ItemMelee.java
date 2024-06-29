@@ -167,4 +167,13 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     public RangedComponent getRangedComponent() {
         return null;
     }
+
+    @Override
+    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
+        if (entity != null && entity.getActiveItemStack() == stack && stack.getItem() instanceof ItemMelee &&
+            entity.isActiveItemStackBlocking())
+            return true;
+        return super.isShield(stack, entity);
+    }
+
 }

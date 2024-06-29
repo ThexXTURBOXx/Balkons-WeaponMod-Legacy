@@ -90,8 +90,8 @@ public class ItemShooter extends BowItem implements IItemWeapon {
 
     @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EquipmentSlotType equipmentSlot
-            , @Nonnull ItemStack itemstack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EquipmentSlotType equipmentSlot,
+                                                                     @Nonnull ItemStack itemstack) {
         Multimap<String, AttributeModifier> multimap = HashMultimap.create();
         if (equipmentSlot == EquipmentSlotType.MAINHAND) {
             meleeComponent.addItemAttributeModifiers(multimap);
@@ -157,6 +157,14 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     @Override
     public RangedComponent getRangedComponent() {
         return rangedComponent;
+    }
+
+    @Override
+    public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
+        if (entity != null && entity.getActiveItemStack() == stack && stack.getItem() instanceof ItemShooter &&
+            entity.isActiveItemStackBlocking())
+            return true;
+        return super.isShield(stack, entity);
     }
 
 }
