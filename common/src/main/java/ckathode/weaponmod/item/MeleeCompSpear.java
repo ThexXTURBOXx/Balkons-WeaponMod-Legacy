@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import net.minecraft.sounds.SoundEvents;
@@ -20,22 +21,22 @@ import net.minecraft.world.level.Level;
 public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem {
 
     public static final String WOOD_ID = "spear.wood";
-    public static final ItemMelee WOOD_ITEM = new ItemMelee(new MeleeCompSpear(Tiers.WOOD));
+    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardSpear(Tiers.WOOD);
 
     public static final String STONE_ID = "spear.stone";
-    public static final ItemMelee STONE_ITEM = new ItemMelee(new MeleeCompSpear(Tiers.STONE));
+    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardSpear(Tiers.STONE);
 
     public static final String IRON_ID = "spear.iron";
-    public static final ItemMelee IRON_ITEM = new ItemMelee(new MeleeCompSpear(Tiers.IRON));
+    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardSpear(Tiers.IRON);
 
     public static final String GOLD_ID = "spear.gold";
-    public static final ItemMelee GOLD_ITEM = new ItemMelee(new MeleeCompSpear(Tiers.GOLD));
+    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardSpear(Tiers.GOLD);
 
     public static final String DIAMOND_ID = "spear.diamond";
-    public static final ItemMelee DIAMOND_ITEM = new ItemMelee(new MeleeCompSpear(Tiers.DIAMOND));
+    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardSpear(Tiers.DIAMOND);
 
     public static final String NETHERITE_ID = "spear.netherite";
-    public static final ItemMelee NETHERITE_ITEM = new ItemMelee(new MeleeCompSpear(Tiers.NETHERITE));
+    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardSpear(Tiers.NETHERITE);
 
     public MeleeCompSpear(Tier itemTier) {
         super(MeleeSpecs.SPEAR, itemTier);

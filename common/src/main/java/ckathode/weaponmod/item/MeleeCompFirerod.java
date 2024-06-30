@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.Level;
 public class MeleeCompFirerod extends MeleeComponent {
 
     public static final String ID = "firerod";
-    public static final ItemMelee ITEM = new ItemMelee(new MeleeCompFirerod());
+    public static final ItemMelee ITEM = WMItemBuilder.createStandardFirerod();
 
     public MeleeCompFirerod() {
         super(MeleeSpecs.FIREROD, Tiers.WOOD);

@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemDynamite extends WMItem {
 
     public static final String ID = "dynamite";
-    public static final ItemDynamite ITEM = new ItemDynamite();
+    public static final ItemDynamite ITEM = WMItemBuilder.createStandardDynamite();
 
     public ItemDynamite() {
         super(WMItem.getBaseProperties(null).stacksTo(64));
