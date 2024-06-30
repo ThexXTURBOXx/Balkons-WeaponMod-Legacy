@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.EntityDummy;
 import java.util.List;
 import java.util.function.Predicate;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemDummy extends WMItem {
 
     public static final String ID = "dummy";
-    public static final ItemDummy ITEM = new ItemDummy();
+    public static final ItemDummy ITEM = WMItemBuilder.createStandardDummy();
 
     private static final Predicate<Entity> PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
 

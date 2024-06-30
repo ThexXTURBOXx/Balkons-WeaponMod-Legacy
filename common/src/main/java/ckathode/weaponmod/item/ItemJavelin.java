@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemJavelin extends WMItem {
 
     public static final String ID = "javelin";
-    public static final ItemJavelin ITEM = new ItemJavelin();
+    public static final ItemJavelin ITEM = WMItemBuilder.createStandardJavelin();
 
     public ItemJavelin() {
         super(WMItem.getBaseProperties(null).stacksTo(16));

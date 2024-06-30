@@ -310,4 +310,5 @@ public class WMRegistries {
             builder.updateInterval(updateFrequency);
         return builder.sized(size.width, size.height).build(name);
     }
+
 }
