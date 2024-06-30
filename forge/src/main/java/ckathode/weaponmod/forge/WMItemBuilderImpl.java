@@ -25,7 +25,7 @@ public class WMItemBuilderImpl {
         return new ItemBlowgunDart(dartType) {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemBlowgunDart &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -37,7 +37,7 @@ public class WMItemBuilderImpl {
         return new ItemCannon() {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemCannon &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -49,7 +49,7 @@ public class WMItemBuilderImpl {
         return new ItemDummy() {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemDummy &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -61,7 +61,7 @@ public class WMItemBuilderImpl {
         return new ItemDynamite() {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemDynamite &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -73,7 +73,7 @@ public class WMItemBuilderImpl {
         return new ItemFlail(meleeComponent) {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemFlail &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -85,7 +85,7 @@ public class WMItemBuilderImpl {
         return new ItemJavelin() {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemJavelin &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -121,7 +121,7 @@ public class WMItemBuilderImpl {
         return new ItemMusket(meleeComponent, bayonetItem) {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMusket &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -133,7 +133,7 @@ public class WMItemBuilderImpl {
         return new ItemShooter(rangedComponent, meleeComponent) {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemShooter &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -146,7 +146,7 @@ public class WMItemBuilderImpl {
         return new ItemShooter(rangedComponent, meleeComponent, properties) {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemShooter &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -158,7 +158,7 @@ public class WMItemBuilderImpl {
         return new WMItem() {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof WMItem &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
@@ -170,7 +170,7 @@ public class WMItemBuilderImpl {
         return new WMItem(properties) {
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
-                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
+                if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof WMItem &&
                     entity.isBlocking())
                     return true;
                 return super.isShield(stack, entity);
