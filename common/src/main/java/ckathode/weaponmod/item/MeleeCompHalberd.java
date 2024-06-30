@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,22 +15,22 @@ import net.minecraft.world.level.Level;
 public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachItem {
 
     public static final String WOOD_ID = "halberd.wood";
-    public static final ItemMelee WOOD_ITEM = new ItemMelee(new MeleeCompHalberd(Tiers.WOOD));
+    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardHalberd(Tiers.WOOD);
 
     public static final String STONE_ID = "halberd.stone";
-    public static final ItemMelee STONE_ITEM = new ItemMelee(new MeleeCompHalberd(Tiers.STONE));
+    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardHalberd(Tiers.STONE);
 
     public static final String IRON_ID = "halberd.iron";
-    public static final ItemMelee IRON_ITEM = new ItemMelee(new MeleeCompHalberd(Tiers.IRON));
+    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardHalberd(Tiers.IRON);
 
     public static final String GOLD_ID = "halberd.gold";
-    public static final ItemMelee GOLD_ITEM = new ItemMelee(new MeleeCompHalberd(Tiers.GOLD));
+    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardHalberd(Tiers.GOLD);
 
     public static final String DIAMOND_ID = "halberd.diamond";
-    public static final ItemMelee DIAMOND_ITEM = new ItemMelee(new MeleeCompHalberd(Tiers.DIAMOND));
+    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardHalberd(Tiers.DIAMOND);
 
     public static final String NETHERITE_ID = "halberd.netherite";
-    public static final ItemMelee NETHERITE_ITEM = new ItemMelee(new MeleeCompHalberd(Tiers.NETHERITE));
+    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardHalberd(Tiers.NETHERITE);
 
     public static boolean getHalberdState(ItemStack itemstack) {
         return itemstack.hasTag() && itemstack.getTag().getBoolean("halb");

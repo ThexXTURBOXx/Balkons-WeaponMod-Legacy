@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WarhammerExplosion;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,22 +23,22 @@ public class MeleeCompWarhammer extends MeleeComponent {
     public static final int CHARGE_DELAY = 400;
 
     public static final String WOOD_ID = "warhammer.wood";
-    public static final ItemMelee WOOD_ITEM = new ItemMelee(new MeleeCompWarhammer(Tiers.WOOD));
+    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardWarhammer(Tiers.WOOD);
 
     public static final String STONE_ID = "warhammer.stone";
-    public static final ItemMelee STONE_ITEM = new ItemMelee(new MeleeCompWarhammer(Tiers.STONE));
+    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardWarhammer(Tiers.STONE);
 
     public static final String IRON_ID = "warhammer.iron";
-    public static final ItemMelee IRON_ITEM = new ItemMelee(new MeleeCompWarhammer(Tiers.IRON));
+    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardWarhammer(Tiers.IRON);
 
     public static final String GOLD_ID = "warhammer.gold";
-    public static final ItemMelee GOLD_ITEM = new ItemMelee(new MeleeCompWarhammer(Tiers.GOLD));
+    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardWarhammer(Tiers.GOLD);
 
     public static final String DIAMOND_ID = "warhammer.diamond";
-    public static final ItemMelee DIAMOND_ITEM = new ItemMelee(new MeleeCompWarhammer(Tiers.DIAMOND));
+    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardWarhammer(Tiers.DIAMOND);
 
     public static final String NETHERITE_ID = "warhammer.netherite";
-    public static final ItemMelee NETHERITE_ITEM = new ItemMelee(new MeleeCompWarhammer(Tiers.NETHERITE));
+    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardWarhammer(Tiers.NETHERITE);
 
     public MeleeCompWarhammer(Tier itemTier) {
         super(MeleeSpecs.WARHAMMER, itemTier);
