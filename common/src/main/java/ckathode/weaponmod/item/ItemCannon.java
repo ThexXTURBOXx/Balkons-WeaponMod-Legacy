@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.EntityCannon;
 import java.util.List;
 import java.util.function.Predicate;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemCannon extends WMItem {
 
     public static final String ID = "cannon";
-    public static final ItemCannon ITEM = new ItemCannon();
+    public static final ItemCannon ITEM = WMItemBuilder.createStandardCannon();
 
     private static final Predicate<Entity> PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
 
