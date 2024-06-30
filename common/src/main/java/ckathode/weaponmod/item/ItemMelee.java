@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -19,28 +20,22 @@ import org.jetbrains.annotations.NotNull;
 public class ItemMelee extends SwordItem implements IItemWeapon {
 
     public static final String KATANA_WOOD_ID = "katana.wood";
-    public static final ItemMelee KATANA_WOOD_ITEM =
-            new ItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Tiers.WOOD));
+    public static final ItemMelee KATANA_WOOD_ITEM = WMItemBuilder.createStandardKatana(Tiers.WOOD);
 
     public static final String KATANA_STONE_ID = "katana.stone";
-    public static final ItemMelee KATANA_STONE_ITEM =
-            new ItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Tiers.STONE));
+    public static final ItemMelee KATANA_STONE_ITEM = WMItemBuilder.createStandardKatana(Tiers.STONE);
 
     public static final String KATANA_IRON_ID = "katana.iron";
-    public static final ItemMelee KATANA_IRON_ITEM =
-            new ItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Tiers.IRON));
+    public static final ItemMelee KATANA_IRON_ITEM = WMItemBuilder.createStandardKatana(Tiers.IRON);
 
     public static final String KATANA_GOLD_ID = "katana.gold";
-    public static final ItemMelee KATANA_GOLD_ITEM =
-            new ItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Tiers.GOLD));
+    public static final ItemMelee KATANA_GOLD_ITEM = WMItemBuilder.createStandardKatana(Tiers.GOLD);
 
     public static final String KATANA_DIAMOND_ID = "katana.diamond";
-    public static final ItemMelee KATANA_DIAMOND_ITEM =
-            new ItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Tiers.DIAMOND));
+    public static final ItemMelee KATANA_DIAMOND_ITEM = WMItemBuilder.createStandardKatana(Tiers.DIAMOND);
 
     public static final String KATANA_NETHERITE_ID = "katana.netherite";
-    public static final ItemMelee KATANA_NETHERITE_ITEM =
-            new ItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, Tiers.NETHERITE));
+    public static final ItemMelee KATANA_NETHERITE_ITEM = WMItemBuilder.createStandardKatana(Tiers.NETHERITE);
 
     public final MeleeComponent meleeComponent;
 

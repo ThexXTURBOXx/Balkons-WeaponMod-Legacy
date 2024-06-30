@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.ReloadHelper.ReloadState;
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.Level;
 public class RangedCompCrossbow extends RangedComponent {
 
     public static final String ID = "crossbow";
-    public static final ItemShooter ITEM = new ItemShooter(new RangedCompCrossbow(), new MeleeCompNone(null));
+    public static final ItemShooter ITEM = WMItemBuilder.createStandardCrossbow();
 
     public RangedCompCrossbow() {
         super(RangedSpecs.CROSSBOW);

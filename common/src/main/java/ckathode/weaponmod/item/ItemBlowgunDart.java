@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
 import com.mojang.datafixers.util.Pair;
@@ -29,7 +30,7 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     public static final String ID_PREFIX = "dart";
     public static final Map<DartType, ItemBlowgunDart> ITEMS =
             Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
-                    .map(t -> new Pair<>(t, new ItemBlowgunDart(t)))
+                    .map(t -> new Pair<>(t, WMItemBuilder.createStandardBlowgunDart(t)))
                     .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 
     @NotNull

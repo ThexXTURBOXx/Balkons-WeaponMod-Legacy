@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
 import net.minecraft.sounds.SoundEvents;
@@ -19,22 +20,22 @@ import net.minecraft.world.level.Level;
 public class MeleeCompKnife extends MeleeComponent {
 
     public static final String WOOD_ID = "knife.wood";
-    public static final ItemMelee WOOD_ITEM = new ItemMelee(new MeleeCompKnife(Tiers.WOOD));
+    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardKnife(Tiers.WOOD);
 
     public static final String STONE_ID = "knife.stone";
-    public static final ItemMelee STONE_ITEM = new ItemMelee(new MeleeCompKnife(Tiers.STONE));
+    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardKnife(Tiers.STONE);
 
     public static final String IRON_ID = "knife.iron";
-    public static final ItemMelee IRON_ITEM = new ItemMelee(new MeleeCompKnife(Tiers.IRON));
+    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardKnife(Tiers.IRON);
 
     public static final String GOLD_ID = "knife.gold";
-    public static final ItemMelee GOLD_ITEM = new ItemMelee(new MeleeCompKnife(Tiers.GOLD));
+    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardKnife(Tiers.GOLD);
 
     public static final String DIAMOND_ID = "knife.diamond";
-    public static final ItemMelee DIAMOND_ITEM = new ItemMelee(new MeleeCompKnife(Tiers.DIAMOND));
+    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardKnife(Tiers.DIAMOND);
 
     public static final String NETHERITE_ID = "knife.netherite";
-    public static final ItemMelee NETHERITE_ITEM = new ItemMelee(new MeleeCompKnife(Tiers.NETHERITE));
+    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardKnife(Tiers.NETHERITE);
 
     public MeleeCompKnife(Tier itemTier) {
         super(MeleeSpecs.KNIFE, itemTier);
