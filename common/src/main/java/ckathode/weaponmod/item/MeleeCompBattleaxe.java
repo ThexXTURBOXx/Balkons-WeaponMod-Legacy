@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WMDamageSources;
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.MaterialRegistry;
@@ -24,22 +25,22 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     public static final float[] DEFAULT_IGNORES = new float[]{1, 1, 1, 1, 1, 1};
 
     public static final String WOOD_ID = "battleaxe.wood";
-    public static final ItemMelee WOOD_ITEM = new ItemMelee(new MeleeCompBattleaxe(Tiers.WOOD));
+    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.WOOD);
 
     public static final String STONE_ID = "battleaxe.stone";
-    public static final ItemMelee STONE_ITEM = new ItemMelee(new MeleeCompBattleaxe(Tiers.STONE));
+    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.STONE);
 
     public static final String IRON_ID = "battleaxe.iron";
-    public static final ItemMelee IRON_ITEM = new ItemMelee(new MeleeCompBattleaxe(Tiers.IRON));
+    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.IRON);
 
     public static final String GOLD_ID = "battleaxe.gold";
-    public static final ItemMelee GOLD_ITEM = new ItemMelee(new MeleeCompBattleaxe(Tiers.GOLD));
+    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.GOLD);
 
     public static final String DIAMOND_ID = "battleaxe.diamond";
-    public static final ItemMelee DIAMOND_ITEM = new ItemMelee(new MeleeCompBattleaxe(Tiers.DIAMOND));
+    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.DIAMOND);
 
     public static final String NETHERITE_ID = "battleaxe.netherite";
-    public static final ItemMelee NETHERITE_ITEM = new ItemMelee(new MeleeCompBattleaxe(Tiers.NETHERITE));
+    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.NETHERITE);
 
     public final float ignoreArmourAmount;
 

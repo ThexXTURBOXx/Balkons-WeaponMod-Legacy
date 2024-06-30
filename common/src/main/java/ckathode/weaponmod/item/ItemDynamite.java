@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
 import java.util.function.Consumer;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemDynamite extends WMItem implements WMDispenserExtension {
 
     public static final String ID = "dynamite";
-    public static final ItemDynamite ITEM = new ItemDynamite();
+    public static final ItemDynamite ITEM = WMItemBuilder.createStandardDynamite();
 
     public ItemDynamite() {
         super(WMItem.getBaseProperties(null).stacksTo(64));

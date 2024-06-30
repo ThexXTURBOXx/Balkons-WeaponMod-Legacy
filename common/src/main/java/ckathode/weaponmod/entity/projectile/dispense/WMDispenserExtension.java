@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -10,6 +11,8 @@ import net.minecraft.world.item.ProjectileItem;
 import org.jetbrains.annotations.NotNull;
 
 public interface WMDispenserExtension extends ProjectileItem {
+
+    Random RANDOM = new Random();
 
     default void playSound(@NotNull Consumer<BlockSource> origFn, @NotNull BlockSource blockSource) {
         origFn.accept(blockSource);

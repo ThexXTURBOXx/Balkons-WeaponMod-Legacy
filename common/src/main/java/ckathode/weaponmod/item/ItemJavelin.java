@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
 import java.util.function.Consumer;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemJavelin extends WMItem implements WMDispenserExtension {
 
     public static final String ID = "javelin";
-    public static final ItemJavelin ITEM = new ItemJavelin();
+    public static final ItemJavelin ITEM = WMItemBuilder.createStandardJavelin();
 
     public ItemJavelin() {
         super(WMItem.getBaseProperties(null).stacksTo(16));

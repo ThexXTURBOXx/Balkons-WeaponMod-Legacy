@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.ReloadHelper.ReloadState;
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -21,7 +22,7 @@ import net.minecraft.world.level.Level;
 public class RangedCompBlowgun extends RangedComponent {
 
     public static final String ID = "blowgun";
-    public static final ItemShooter ITEM = new ItemShooter(new RangedCompBlowgun(), new MeleeCompNone(null));
+    public static final ItemShooter ITEM = WMItemBuilder.createStandardBlowgun();
 
     public RangedCompBlowgun() {
         super(RangedSpecs.BLOWGUN);

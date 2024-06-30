@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMRegistries;
 import com.mojang.serialization.Codec;
 import java.util.Objects;
@@ -25,31 +26,31 @@ import org.jetbrains.annotations.Nullable;
 public class ItemMusket extends ItemShooter {
 
     public static final String ID = "musket";
-    public static final ItemMusket ITEM = new ItemMusket(new MeleeCompNone(null), null);
+    public static final ItemMusket ITEM = WMItemBuilder.createStandardMusket();
 
     public static final String WOOD_ID = "musketbayonet.wood";
-    public static final ItemMusket WOOD_ITEM = new ItemMusket(
-            new MeleeCompKnife(Tiers.WOOD), MeleeCompKnife.WOOD_ITEM);
+    public static final ItemMusket WOOD_ITEM =
+            WMItemBuilder.createStandardMusketWithBayonet(Tiers.WOOD, MeleeCompKnife.WOOD_ITEM);
 
     public static final String STONE_ID = "musketbayonet.stone";
-    public static final ItemMusket STONE_ITEM = new ItemMusket(
-            new MeleeCompKnife(Tiers.STONE), MeleeCompKnife.STONE_ITEM);
+    public static final ItemMusket STONE_ITEM =
+            WMItemBuilder.createStandardMusketWithBayonet(Tiers.STONE, MeleeCompKnife.STONE_ITEM);
 
     public static final String IRON_ID = "musketbayonet.iron";
-    public static final ItemMusket IRON_ITEM = new ItemMusket(
-            new MeleeCompKnife(Tiers.IRON), MeleeCompKnife.IRON_ITEM);
+    public static final ItemMusket IRON_ITEM =
+            WMItemBuilder.createStandardMusketWithBayonet(Tiers.IRON, MeleeCompKnife.IRON_ITEM);
 
     public static final String GOLD_ID = "musketbayonet.gold";
-    public static final ItemMusket GOLD_ITEM = new ItemMusket(
-            new MeleeCompKnife(Tiers.GOLD), MeleeCompKnife.GOLD_ITEM);
+    public static final ItemMusket GOLD_ITEM =
+            WMItemBuilder.createStandardMusketWithBayonet(Tiers.GOLD, MeleeCompKnife.GOLD_ITEM);
 
     public static final String DIAMOND_ID = "musketbayonet.diamond";
-    public static final ItemMusket DIAMOND_ITEM = new ItemMusket(
-            new MeleeCompKnife(Tiers.DIAMOND), MeleeCompKnife.DIAMOND_ITEM);
+    public static final ItemMusket DIAMOND_ITEM =
+            WMItemBuilder.createStandardMusketWithBayonet(Tiers.DIAMOND, MeleeCompKnife.DIAMOND_ITEM);
 
     public static final String NETHERITE_ID = "musketbayonet.netherite";
-    public static final ItemMusket NETHERITE_ITEM = new ItemMusket(
-            new MeleeCompKnife(Tiers.NETHERITE), MeleeCompKnife.NETHERITE_ITEM);
+    public static final ItemMusket NETHERITE_ITEM =
+            WMItemBuilder.createStandardMusketWithBayonet(Tiers.NETHERITE, MeleeCompKnife.NETHERITE_ITEM);
 
     public static final String BAYONET_DAMAGE_TYPE_ID = "bayonet-damage";
     public static final DataComponentType<Short> BAYONET_DAMAGE_TYPE =

@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PlayerWeaponData;
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,22 +21,22 @@ import org.jetbrains.annotations.NotNull;
 public class ItemFlail extends ItemMelee {
 
     public static final String WOOD_ID = "flail.wood";
-    public static final ItemFlail WOOD_ITEM = new ItemFlail(new MeleeCompNone(Tiers.WOOD));
+    public static final ItemFlail WOOD_ITEM = WMItemBuilder.createStandardFlail(Tiers.WOOD);
 
     public static final String STONE_ID = "flail.stone";
-    public static final ItemFlail STONE_ITEM = new ItemFlail(new MeleeCompNone(Tiers.STONE));
+    public static final ItemFlail STONE_ITEM = WMItemBuilder.createStandardFlail(Tiers.STONE);
 
     public static final String IRON_ID = "flail.iron";
-    public static final ItemFlail IRON_ITEM = new ItemFlail(new MeleeCompNone(Tiers.IRON));
+    public static final ItemFlail IRON_ITEM = WMItemBuilder.createStandardFlail(Tiers.IRON);
 
     public static final String GOLD_ID = "flail.gold";
-    public static final ItemFlail GOLD_ITEM = new ItemFlail(new MeleeCompNone(Tiers.GOLD));
+    public static final ItemFlail GOLD_ITEM = WMItemBuilder.createStandardFlail(Tiers.GOLD);
 
     public static final String DIAMOND_ID = "flail.diamond";
-    public static final ItemFlail DIAMOND_ITEM = new ItemFlail(new MeleeCompNone(Tiers.DIAMOND));
+    public static final ItemFlail DIAMOND_ITEM = WMItemBuilder.createStandardFlail(Tiers.DIAMOND);
 
     public static final String NETHERITE_ID = "flail.netherite";
-    public static final ItemFlail NETHERITE_ITEM = new ItemFlail(new MeleeCompNone(Tiers.NETHERITE));
+    public static final ItemFlail NETHERITE_ITEM = WMItemBuilder.createStandardFlail(Tiers.NETHERITE);
 
     private final float flailDamage;
 

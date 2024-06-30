@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -21,22 +22,22 @@ import net.minecraft.world.level.Level;
 public class MeleeCompBoomerang extends MeleeComponent {
 
     public static final String WOOD_ID = "boomerang.wood";
-    public static final ItemMelee WOOD_ITEM = new ItemMelee(new MeleeCompBoomerang(Tiers.WOOD));
+    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.WOOD);
 
     public static final String STONE_ID = "boomerang.stone";
-    public static final ItemMelee STONE_ITEM = new ItemMelee(new MeleeCompBoomerang(Tiers.STONE));
+    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.STONE);
 
     public static final String IRON_ID = "boomerang.iron";
-    public static final ItemMelee IRON_ITEM = new ItemMelee(new MeleeCompBoomerang(Tiers.IRON));
+    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.IRON);
 
     public static final String GOLD_ID = "boomerang.gold";
-    public static final ItemMelee GOLD_ITEM = new ItemMelee(new MeleeCompBoomerang(Tiers.GOLD));
+    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.GOLD);
 
     public static final String DIAMOND_ID = "boomerang.diamond";
-    public static final ItemMelee DIAMOND_ITEM = new ItemMelee(new MeleeCompBoomerang(Tiers.DIAMOND));
+    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.DIAMOND);
 
     public static final String NETHERITE_ID = "boomerang.netherite";
-    public static final ItemMelee NETHERITE_ITEM = new ItemMelee(new MeleeCompBoomerang(Tiers.NETHERITE));
+    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.NETHERITE);
 
     public MeleeCompBoomerang(Tier itemTier) {
         super(MeleeSpecs.BOOMERANG, itemTier);
