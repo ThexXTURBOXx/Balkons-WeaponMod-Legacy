@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.WMItemBuilder;
 import com.mojang.datafixers.util.Pair;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ItemBlowgunDart extends WMItem {
     public static final String ID_PREFIX = "dart";
     public static final Map<DartType, ItemBlowgunDart> ITEMS =
             Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
-                    .map(t -> new Pair<>(t, new ItemBlowgunDart(t)))
+                    .map(t -> new Pair<>(t, WMItemBuilder.createStandardBlowgunDart(t)))
                     .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 
     @NotNull
