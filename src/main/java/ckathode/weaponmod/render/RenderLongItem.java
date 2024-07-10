@@ -2,6 +2,7 @@ package ckathode.weaponmod.render;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -9,7 +10,7 @@ import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class RenderLongItem extends RemderWeaponItem {
+public class RenderLongItem extends RenderWeaponItem {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tess = Tessellator.instance;
@@ -21,8 +22,8 @@ public class RenderLongItem extends RemderWeaponItem {
         GL11.glScalef(2F, 2F, 1.4F);
 
         float t = 0.0625F;
-        renderItemIn2D(tess, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth() * 16
-                , icon.getIconHeight() * 16, t);
+        ItemRenderer.renderItemIn2D(tess, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(),
+                icon.getIconWidth() * 16, icon.getIconHeight() * 16, t);
         renderEnchantEffect(tess, item, 256, 256, t);
     }
 }
