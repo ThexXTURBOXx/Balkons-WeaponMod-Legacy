@@ -173,6 +173,7 @@ public class EntityCannon extends EntityBoat {
         }
         setRotation(rotationYaw, rotationPitch);
         moveEntity(motionX, motionY, motionZ);
+        @SuppressWarnings("unchecked")
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
                 EntityProjectile.getBoundingBox(this).expand(0.2, 0.0, 0.2));
         if (list != null) {
