@@ -19,18 +19,18 @@ public class RenderCannon extends Render {
     }
 
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderCannon((EntityCannon) entity, d, d1, d2, f, f1);
+    public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
+        renderCannon((EntityCannon) entity, x, y, z, yaw, partialTicks);
     }
 
-    public void renderCannon(EntityCannon entitycannon, double d, double d1, double d2, float f, float f1) {
+    public void renderCannon(EntityCannon entitycannon, double x, double y, double z, float yaw, float partialTicks) {
         GL11.glPushMatrix();
-        float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
+        float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * partialTicks;
         rot = Math.min(rot, 20.0f);
-        GL11.glTranslated(d, d1 + 2.1, d2);
-        GL11.glRotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
-        float f2 = entitycannon.getTimeSinceHit() - f1;
-        float f3 = entitycannon.getCurrentDamage() - f1;
+        GL11.glTranslated(x, y + 2.1, z);
+        GL11.glRotatef(180.0f - yaw, 0.0f, 1.0f, 0.0f);
+        float f2 = entitycannon.getTimeSinceHit() - partialTicks;
+        float f3 = entitycannon.getCurrentDamage() - partialTicks;
         if (f3 < 0.0f) {
             f3 = 0.0f;
         }
@@ -42,20 +42,20 @@ public class RenderCannon extends Render {
         GL11.glScalef(-1.6f, -1.6f, 1.6f);
         if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
             float f4 = 1.5f;
-            GL11.glColor3f(entitycannon.getBrightness(f1) * f4, entitycannon.getBrightness(f1) * f4,
-                    entitycannon.getBrightness(f1) * f4);
+            GL11.glColor3f(entitycannon.getBrightness(partialTicks) * f4, entitycannon.getBrightness(partialTicks) * f4,
+                    entitycannon.getBrightness(partialTicks) * f4);
         }
         GL11.glPushMatrix();
         GL11.glTranslatef(0.0f, 1.0f, 0.0f);
         GL11.glRotatef(rot, 1.0f, 0.0f, 0.0f);
         GL11.glTranslatef(0.0f, -1.0f, 0.0f);
-        modelBarrel.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        modelBarrel.render(entitycannon, partialTicks, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GL11.glPopMatrix();
-        float yaw = -(float) Math.toRadians(f);
-        modelStandard.base1.rotateAngleY = yaw;
-        modelStandard.base2.rotateAngleY = yaw;
-        modelStandard.baseStand.rotateAngleY = yaw;
-        modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        float yawRadians = -(float) Math.toRadians(yaw);
+        modelStandard.base1.rotateAngleY = yawRadians;
+        modelStandard.base2.rotateAngleY = yawRadians;
+        modelStandard.baseStand.rotateAngleY = yawRadians;
+        modelStandard.render(entitycannon, partialTicks, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GL11.glPopMatrix();
     }
 
