@@ -27,6 +27,7 @@ public class RenderCannon extends Render {
         GL11.glPushMatrix();
         float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * partialTicks;
         rot = Math.min(rot, 20.0f);
+        yaw = interpolateRotation(entitycannon.prevRotationYaw, entitycannon.rotationYaw, partialTicks);
         GL11.glTranslated(x, y + 2.1, z);
         GL11.glRotatef(180.0f - yaw, 0.0f, 1.0f, 0.0f);
         float f2 = entitycannon.getTimeSinceHit() - partialTicks;
@@ -57,6 +58,10 @@ public class RenderCannon extends Render {
         modelStandard.baseStand.rotateAngleY = yawRadians;
         modelStandard.render(entitycannon, partialTicks, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GL11.glPopMatrix();
+    }
+
+    private float interpolateRotation(float from, float to, float by) {
+        return (from + MathHelper.wrapAngleTo180_float(to - from) * by) % 360.0f;
     }
 
     @Override
