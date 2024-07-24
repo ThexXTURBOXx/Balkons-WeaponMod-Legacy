@@ -21,6 +21,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -347,6 +348,11 @@ public class EntityCannon extends EntityBoat {
     public void onStruckByLightning(@Nonnull EntityLightningBolt entitylightningbolt) {
         dealFireDamage(100);
         setSuperPowered(true);
+    }
+
+    @Override
+    public ItemStack getPickedResult(MovingObjectPosition target) {
+        return new ItemStack(BalkonsWeaponMod.cannon);
     }
 
     public void setLoaded(boolean flag) {
