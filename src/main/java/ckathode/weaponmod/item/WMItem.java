@@ -10,8 +10,12 @@ import net.minecraft.item.ItemStack;
 
 public class WMItem extends Item {
     public WMItem(String id) {
-        setTextureName(BalkonsWeaponMod.MOD_ID + ":" + id);
-        GameRegistry.registerItem(this, id, BalkonsWeaponMod.MOD_ID);
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public WMItem(String modId, String id) {
+        setTextureName(modId + ":" + id);
+        GameRegistry.registerItem(this, id, modId);
         setUnlocalizedName(id);
         setCreativeTab(CreativeTabs.tabCombat);
     }

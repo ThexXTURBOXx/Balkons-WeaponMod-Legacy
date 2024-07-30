@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemVariants;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
@@ -12,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemFlail extends ItemMelee {
@@ -20,7 +22,11 @@ public class ItemFlail extends ItemMelee {
     private Boolean thrownIconExists;
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
-        super(id, meleecomponent);
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent);
+    }
+
+    public ItemFlail(String modId, String id, MeleeComponent meleecomponent) {
+        super(modId, id, meleecomponent);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getDamageVsEntity();
         thrownIcon = null;
         thrownIconExists = null;
@@ -143,6 +149,7 @@ public class ItemFlail extends ItemMelee {
     @Override
     public void registerIcons(IIconRegister register) {
         super.registerIcons(register);
-        thrownIcon = WMItemVariants.registerItemVariants(register, "weaponmod:flail", "-thrown").get(0);
+        thrownIcon = WMItemVariants.registerItemVariants(register,
+                new ResourceLocation(BalkonsWeaponMod.MOD_ID, "flail").toString(), "-thrown").get(0);
     }
 }

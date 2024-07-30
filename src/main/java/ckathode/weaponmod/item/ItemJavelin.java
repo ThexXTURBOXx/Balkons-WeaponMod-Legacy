@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,7 +12,11 @@ import net.minecraft.world.World;
 
 public class ItemJavelin extends WMItem {
     public ItemJavelin(String id) {
-        super(id);
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemJavelin(String modId, String id) {
+        super(modId, id);
         maxStackSize = 16;
     }
 

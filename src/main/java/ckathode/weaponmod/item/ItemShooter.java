@@ -31,9 +31,13 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     private Boolean reloadIconExists, loadedIconExists;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
+        this(BalkonsWeaponMod.MOD_ID, id, rangedcomponent, meleecomponent);
+    }
+
+    public ItemShooter(String modId, String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
         rawId = id;
-        GameRegistry.registerItem(this, id, BalkonsWeaponMod.MOD_ID);
-        setTextureName(BalkonsWeaponMod.MOD_ID + ":" + id);
+        GameRegistry.registerItem(this, id, modId);
+        setTextureName(modId + ":" + id);
         setUnlocalizedName(id);
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;

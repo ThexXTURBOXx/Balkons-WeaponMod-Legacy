@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemVariants;
 import java.util.List;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -15,7 +16,11 @@ import net.minecraft.util.StatCollector;
 
 public class ItemBlowgunDart extends WMItem {
     public ItemBlowgunDart(String id) {
-        super(id);
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemBlowgunDart(String modId, String id) {
+        super(modId, id);
         setHasSubtypes(true);
     }
 

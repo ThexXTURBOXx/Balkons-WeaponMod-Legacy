@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -9,7 +10,11 @@ import net.minecraft.world.World;
 
 public class ItemDynamite extends WMItem {
     public ItemDynamite(String id) {
-        super(id);
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemDynamite(String modId, String id) {
+        super(modId, id);
         maxStackSize = 64;
     }
 

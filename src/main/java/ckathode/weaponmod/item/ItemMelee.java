@@ -31,10 +31,14 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     private Boolean readyIconExists, halberdStateIconExists;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent);
+    }
+
+    public ItemMelee(String modId, String id, MeleeComponent meleecomponent) {
         super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
         rawId = id;
-        GameRegistry.registerItem(this, id, BalkonsWeaponMod.MOD_ID);
-        setTextureName(BalkonsWeaponMod.MOD_ID + ":" + id);
+        GameRegistry.registerItem(this, id, modId);
+        setTextureName(modId + ":" + id);
         setUnlocalizedName(id);
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();

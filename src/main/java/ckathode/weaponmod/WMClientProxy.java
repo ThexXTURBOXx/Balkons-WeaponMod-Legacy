@@ -62,7 +62,7 @@ public class WMClientProxy extends WMCommonProxy {
     @Override
     public void registerRenderersItem(final WeaponModConfig config) {
         WMItemVariants.expectItemVariants(BalkonsWeaponMod.crossbow, "-loaded");
-        WMItemVariants.expectItemVariants("weaponmod:flail", "-thrown");
+        WMItemVariants.expectItemVariants(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "flail").toString(), "-thrown");
         for (DartType type : DartType.dartTypes) {
             if (type != null) {
                 String variant = type.getIconVariantName();

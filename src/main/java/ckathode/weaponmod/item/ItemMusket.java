@@ -21,7 +21,11 @@ public class ItemMusket extends ItemShooter {
     private final int bayonetDurability;
 
     public ItemMusket(String id, MeleeComponent meleecomponent, @Nullable Item bayonetitem) {
-        super(id, new RangedCompMusket(), meleecomponent);
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent, bayonetitem);
+    }
+
+    public ItemMusket(String modId, String id, MeleeComponent meleecomponent, @Nullable Item bayonetitem) {
+        super(modId, id, new RangedCompMusket(), meleecomponent);
         bayonetItem = bayonetitem;
         bayonetDurability =
                 meleecomponent.meleeSpecs != MeleeComponent.MeleeSpecs.NONE && meleecomponent.weaponMaterial != null
