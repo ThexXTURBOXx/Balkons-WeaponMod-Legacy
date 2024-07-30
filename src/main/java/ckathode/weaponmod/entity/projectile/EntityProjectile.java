@@ -359,6 +359,11 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         return null;
     }
 
+    @Override
+    public ItemStack getPickedResult(MovingObjectPosition target) {
+        return getPickupItem();
+    }
+
     public float getAirResistance() {
         return 0.99f;
     }
