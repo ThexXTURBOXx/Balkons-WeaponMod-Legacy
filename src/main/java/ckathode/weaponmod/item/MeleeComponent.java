@@ -196,15 +196,15 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     public enum MeleeSpecs {
-        SPEAR(0, 1.0f, 2.0f, 1.0f, 1.0f, 0.2f, 1, 2, 2.7f),
-        HALBERD(0, 1.0f, 3.0f, 1.0f, 1.5f, 0.6f, 1, 2, 3.2f),
-        BATTLEAXE(0, 1.0f, 2.0f, 1.0f, 1.5f, 0.5f, 1, 2, 3.0f),
-        WARHAMMER(0, 1.0f, 3.0f, 1.0f, 1.0f, 0.7f, 1, 2, 3.0f),
-        KNIFE(0, 0.5f, 2.0f, 1.0f, 1.5f, 0.2f, 1, 2, 2.0f),
-        KATANA(0, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1, 2, 0.2f),
-        FIREROD(1, 0.0f, 0.0f, 0.0f, 1.0f, 0.4f, 2, 0, 0.0f),
-        BOOMERANG(0, 0.5f, 1.0f, 1.0f, 1.0f, 0.4f, 1, 1, 2.0f),
-        NONE(0, 1.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 0.0f);
+        SPEAR(0, 1.0f, 3.0f, 1.0f, 1.0f, 0.2f, 1, 2, 2.7f),
+        HALBERD(0, 1.0f, 4.0f, 1.0f, 1.5f, 0.6f, 1, 2, 3.2f),
+        BATTLEAXE(0, 1.0f, 3.0f, 1.0f, 1.5f, 0.5f, 1, 2, 3.0f),
+        WARHAMMER(0, 1.0f, 4.0f, 1.0f, 1.0f, 0.7f, 1, 2, 3.0f),
+        KNIFE(0, 0.5f, 3.0f, 1.0f, 1.5f, 0.2f, 1, 2, 2.0f),
+        KATANA(0, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1, 2, 0.2f),
+        FIREROD(1, 0.0f, 1.0f, 0.0f, 1.0f, 0.4f, 2, 0, 0.0f),
+        BOOMERANG(0, 0.5f, 2.0f, 1.0f, 1.0f, 0.4f, 1, 1, 2.0f),
+        NONE(0, 0.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 0.0f);
 
         public final int durabilityBase;
         public final float durabilityMult;
