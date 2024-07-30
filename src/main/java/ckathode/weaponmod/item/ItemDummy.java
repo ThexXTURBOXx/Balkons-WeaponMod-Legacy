@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.EntityDummy;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +17,11 @@ import net.minecraft.world.World;
 
 public class ItemDummy extends WMItem {
     public ItemDummy(String id) {
-        super(id);
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemDummy(String modId, String id) {
+        super(modId, id);
         maxStackSize = 1;
     }
 

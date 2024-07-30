@@ -21,10 +21,13 @@ public class ItemFlail extends ItemMelee {
     private Boolean thrownModelExists;
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
-        super(id, meleecomponent);
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent);
+    }
+
+    public ItemFlail(String modId, String id, MeleeComponent meleecomponent) {
+        super(modId, id, meleecomponent);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getDamageVsEntity();
-        thrownModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "-thrown"), "inventory");
+        thrownModel = new ModelResourceLocation(new ResourceLocation(modId, rawId + "-thrown"), "inventory");
         thrownModelExists = null;
     }
 

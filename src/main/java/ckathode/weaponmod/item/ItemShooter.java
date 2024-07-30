@@ -30,16 +30,19 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     private Boolean loadedModelExists;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
+        this(BalkonsWeaponMod.MOD_ID, id, rangedcomponent, meleecomponent);
+    }
+
+    public ItemShooter(String modId, String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
         rawId = id;
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setRegistryName(new ResourceLocation(modId, id));
         setUnlocalizedName(id);
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
         rangedcomponent.setThisItemProperties();
-        loadedModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "-loaded"), "inventory");
+        loadedModel = new ModelResourceLocation(new ResourceLocation(modId, rawId + "-loaded"), "inventory");
         loadedModelExists = null;
     }
 

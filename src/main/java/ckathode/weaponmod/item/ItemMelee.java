@@ -28,15 +28,18 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     private Boolean halberdStateModelExists;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent);
+    }
+
+    public ItemMelee(String modId, String id, MeleeComponent meleecomponent) {
         super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
         rawId = id;
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setRegistryName(new ResourceLocation(modId, id));
         setUnlocalizedName(id);
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.tabCombat);
-        halberdStateModel = new ModelResourceLocation(new ResourceLocation(BalkonsWeaponMod.MOD_ID,
-                rawId + "_state"), "inventory");
+        halberdStateModel = new ModelResourceLocation(new ResourceLocation(modId, rawId + "_state"), "inventory");
         halberdStateModelExists = null;
     }
 
