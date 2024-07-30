@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ItemFlail extends ItemMelee {
+    private final String modId;
     private final float flailDamage;
     private IIcon thrownIcon;
     private Boolean thrownIconExists;
@@ -27,6 +28,7 @@ public class ItemFlail extends ItemMelee {
 
     public ItemFlail(String modId, String id, MeleeComponent meleecomponent) {
         super(modId, id, meleecomponent);
+        this.modId = modId;
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getDamageVsEntity();
         thrownIcon = null;
         thrownIconExists = null;
@@ -150,6 +152,6 @@ public class ItemFlail extends ItemMelee {
     public void registerIcons(IIconRegister register) {
         super.registerIcons(register);
         thrownIcon = WMItemVariants.registerItemVariants(register,
-                new ResourceLocation(BalkonsWeaponMod.MOD_ID, "flail").toString(), "-thrown").get(0);
+                new ResourceLocation(modId, "flail").toString(), "-thrown").get(0);
     }
 }
