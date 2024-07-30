@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MeleeComponent extends AbstractWeaponComponent {
     public final MeleeSpecs meleeSpecs;
@@ -178,6 +180,16 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int i,
                          boolean flag) {
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getCooldown() {
+        return 0;
     }
 
     public enum MeleeSpecs {
