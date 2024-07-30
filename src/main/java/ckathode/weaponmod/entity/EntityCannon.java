@@ -6,6 +6,7 @@ import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import ckathode.weaponmod.item.WMItem;
 import java.util.List;
 import javax.annotation.Nonnull;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
@@ -21,6 +22,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -173,6 +175,7 @@ public class EntityCannon extends EntityBoat {
         }
         setRotation(rotationYaw, rotationPitch);
         moveEntity(motionX, motionY, motionZ);
+        @SuppressWarnings("unchecked")
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
                 EntityProjectile.getBoundingBox(this).expand(0.2, 0.0, 0.2));
         if (list != null) {
@@ -199,6 +202,32 @@ public class EntityCannon extends EntityBoat {
         int i = MathHelper.floor_float(f);
         i *= 2;
         attackEntityFrom(DamageSource.fall, (float) i);
+    }
+
+    @Override
+    protected void updateFallState(double tickFallDist, boolean isOnGround) {
+        int x = MathHelper.floor_double(posX);
+        int y = MathHelper.floor_double(posY);
+        int z = MathHelper.floor_double(posZ);
+        if(!isOnGround) {
+            if(worldObj.getBlock(x, y - 1, z).getMaterial() != Material.water && tickFallDist < 0.0) {
+                fallDistance = (float)((double)fallDistance - tickFallDist);
+            }
+            return;
+        }
+        if(!(fallDistance > 3.0F)) {
+            return;
+        }
+        fall(fallDistance);
+        if(!worldObj.isRemote && !isDead) {
+            dropItem(BalkonsWeaponMod.cannon, 1);
+            if (isLoaded() || isLoading()) {
+                dropItem(BalkonsWeaponMod.cannonBall, 1);
+                dropItem(Items.gunpowder, 1);
+            }
+            setDead();
+        }
+        fallDistance = 0.0F;
     }
 
     public void handleReloadTime() {
@@ -346,6 +375,11 @@ public class EntityCannon extends EntityBoat {
     public void onStruckByLightning(@Nonnull EntityLightningBolt entitylightningbolt) {
         dealFireDamage(100);
         setSuperPowered(true);
+    }
+
+    @Override
+    public ItemStack getPickedResult(MovingObjectPosition target) {
+        return new ItemStack(BalkonsWeaponMod.cannon);
     }
 
     public void setLoaded(boolean flag) {
