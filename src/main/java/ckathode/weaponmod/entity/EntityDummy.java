@@ -17,6 +17,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityDummy extends Entity {
@@ -198,6 +199,11 @@ public class EntityDummy extends Entity {
         }
         dropAsItem(false, true);
         return true;
+    }
+
+    @Override
+    public ItemStack getPickedResult(MovingObjectPosition target) {
+        return new ItemStack(BalkonsWeaponMod.dummy);
     }
 
     @Override
