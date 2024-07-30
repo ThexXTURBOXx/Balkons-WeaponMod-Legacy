@@ -21,8 +21,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -209,25 +209,28 @@ public class EntityCannon extends EntityBoat {
         int x = MathHelper.floor_double(posX);
         int y = MathHelper.floor_double(posY);
         int z = MathHelper.floor_double(posZ);
-        if(!isOnGround) {
-            if(worldObj.getBlock(x, y - 1, z).getMaterial() != Material.water && tickFallDist < 0.0) {
-                fallDistance = (float)((double)fallDistance - tickFallDist);
+        if (isOnGround) {
+            if (fallDistance > 3.0F) {
+                fall(fallDistance);
+                if (!worldObj.isRemote && !isDead) {
+                    setDead();
+                    for (int j = 0; j < 5; ++j) {
+                        // Yes, one iron ingot should vanish as penalty...
+                        func_145778_a(Items.iron_ingot, 1, 0.0F);
+                    }
+                    func_145778_a(Items.flint, 1, 0.0F);
+                    func_145778_a(Item.getItemFromBlock(Blocks.log), 1, 0.0F);
+                    if (isLoaded() || isLoading()) {
+                        func_145778_a(BalkonsWeaponMod.cannonBall, 1, 0.0F);
+                        func_145778_a(Items.gunpowder, 1, 0.0F);
+                    }
+                }
+
+                fallDistance = 0.0F;
             }
-            return;
+        } else if (worldObj.getBlock(x, y - 1, z).getMaterial() != Material.water && tickFallDist < 0.0) {
+            fallDistance = (float) ((double) fallDistance - tickFallDist);
         }
-        if(!(fallDistance > 3.0F)) {
-            return;
-        }
-        fall(fallDistance);
-        if(!worldObj.isRemote && !isDead) {
-            dropItem(BalkonsWeaponMod.cannon, 1);
-            if (isLoaded() || isLoading()) {
-                dropItem(BalkonsWeaponMod.cannonBall, 1);
-                dropItem(Items.gunpowder, 1);
-            }
-            setDead();
-        }
-        fallDistance = 0.0F;
     }
 
     public void handleReloadTime() {
