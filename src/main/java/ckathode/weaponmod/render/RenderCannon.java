@@ -26,6 +26,7 @@ public class RenderCannon extends Render<EntityCannon> {
         GlStateManager.pushMatrix();
         float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
         rot = Math.min(rot, 20.0f);
+        f = interpolateRotation(entitycannon.prevRotationYaw, entitycannon.rotationYaw, f1);
         GlStateManager.translate(d, d1 + 2.375f, d2);
         GlStateManager.rotate(180.0f - f, 0.0f, 1.0f, 0.0f);
         float f2 = entitycannon.getTimeSinceHit() - f1;
@@ -50,13 +51,17 @@ public class RenderCannon extends Render<EntityCannon> {
         GlStateManager.translate(0.0f, -1.0f, 0.0f);
         modelBarrel.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GlStateManager.popMatrix();
-        float yaw = -(float) Math.toRadians(f);
-        modelStandard.base1.rotateAngleY = yaw;
-        modelStandard.base2.rotateAngleY = yaw;
-        modelStandard.baseStand.rotateAngleY = yaw;
+        float yawRadians = -(float) Math.toRadians(f);
+        modelStandard.base1.rotateAngleY = yawRadians;
+        modelStandard.base2.rotateAngleY = yawRadians;
+        modelStandard.baseStand.rotateAngleY = yawRadians;
         modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         GlStateManager.popMatrix();
         super.doRender(entitycannon, d, d1, d2, f, f1);
+    }
+
+    private float interpolateRotation(float from, float to, float by) {
+        return (from + MathHelper.wrapAngleTo180_float(to - from) * by) % 360.0f;
     }
 
     @Override

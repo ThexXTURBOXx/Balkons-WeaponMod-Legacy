@@ -5,6 +5,8 @@ import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import ckathode.weaponmod.item.WMItem;
 import java.util.List;
 import javax.annotation.Nonnull;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
@@ -15,11 +17,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -178,6 +182,7 @@ public class EntityCannon extends EntityBoat {
         }
         setRotation(rotationYaw, rotationPitch);
         moveEntity(motionX, motionY, motionZ);
+        @SuppressWarnings("unchecked")
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,
                 getEntityBoundingBox().expand(0.2, 0.0, 0.2));
         if (!list.isEmpty()) {
@@ -199,6 +204,33 @@ public class EntityCannon extends EntityBoat {
         int i = MathHelper.floor_float(f);
         i *= 2;
         attackEntityFrom(DamageSource.fall, (float) i);
+    }
+
+    @Override
+    protected void updateFallState(double y, boolean isOnGround, Block blockIn, BlockPos pos) {
+        if (isOnGround) {
+            if (fallDistance > 3.0f) {
+                fall(fallDistance, 1.0f);
+                if (!worldObj.isRemote && !isDead) {
+                    setDead();
+                    if (worldObj.getGameRules().getBoolean("doEntityDrops")) {
+                        for (int j = 0; j < 5; ++j) {
+                            // Yes, one iron ingot should vanish as penalty...
+                            dropItemWithOffset(Items.iron_ingot, 1, 0.0F);
+                        }
+                        dropItemWithOffset(Items.flint, 1, 0.0F);
+                        dropItemWithOffset(Item.getItemFromBlock(Blocks.log), 1, 0.0F);
+                        if (isLoaded() || isLoading()) {
+                            dropItemWithOffset(BalkonsWeaponMod.cannonBall, 1, 0.0F);
+                            dropItemWithOffset(Items.gunpowder, 1, 0.0F);
+                        }
+                    }
+                }
+                fallDistance = 0.0f;
+            }
+        } else if (worldObj.getBlockState(new BlockPos(this).down()).getBlock().getMaterial() != Material.water && y < 0.0) {
+            fallDistance = (float) ((double) fallDistance - y);
+        }
     }
 
     public void handleReloadTime() {
@@ -345,6 +377,11 @@ public class EntityCannon extends EntityBoat {
     public void onStruckByLightning(@Nonnull EntityLightningBolt entitylightningbolt) {
         attackEntityFrom(DamageSource.lightningBolt, 100.0f);
         setSuperPowered(true);
+    }
+
+    @Override
+    public ItemStack getPickedResult(MovingObjectPosition target) {
+        return new ItemStack(BalkonsWeaponMod.cannon);
     }
 
     public void setLoaded(boolean flag) {
