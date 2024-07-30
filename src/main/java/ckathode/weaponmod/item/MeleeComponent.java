@@ -187,6 +187,16 @@ public class MeleeComponent extends AbstractWeaponComponent {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getCooldown() {
+        return 0;
+    }
+
     public enum MeleeSpecs {
         SPEAR(0, 1.0f, 2.0f, 1.0f, 1.0f, 0.2f, 1, 2, 2.7f),
         HALBERD(0, 1.0f, 3.0f, 1.0f, 1.5f, 0.6f, 1, 2, 3.2f),

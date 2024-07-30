@@ -3,6 +3,9 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WarhammerExplosion;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,7 +62,15 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     public boolean isCharged(EntityPlayer entityplayer) {
-        return entityplayer.ticksExisted > PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY;
+        return getCooldown(entityplayer) <= 0;
+    }
+
+    public float getScaledCooldown(EntityPlayer entityplayer) {
+        return (float) getCooldown(entityplayer) / CHARGE_DELAY;
+    }
+
+    public int getCooldown(EntityPlayer entityplayer) {
+        return PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY - entityplayer.ticksExisted;
     }
 
     @Override
@@ -80,5 +91,17 @@ public class MeleeCompWarhammer extends MeleeComponent {
             entityplayer.setItemInUse(itemstack, i);
         }
         return itemstack;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return !isCharged(FMLClientHandler.instance().getClientPlayerEntity());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getCooldown() {
+        return getScaledCooldown(FMLClientHandler.instance().getClientPlayerEntity());
     }
 }
