@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,7 +21,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlowgunDart extends WMItem {
     public ItemBlowgunDart(String id) {
-        super(id);
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemBlowgunDart(String modId, String id) {
+        super(modId, id);
         setHasSubtypes(true);
     }
 

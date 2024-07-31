@@ -97,7 +97,7 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
         out.add(pkt);
     }
 
-    public void initalize() {
+    public void initialize() {
         channels = NetworkRegistry.INSTANCE.newChannel("WeaponMod", this);
     }
 

@@ -30,7 +30,11 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        this(BalkonsWeaponMod.MOD_ID, id, rangedcomponent, meleecomponent);
+    }
+
+    public ItemShooter(String modId, String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
+        setRegistryName(new ResourceLocation(modId, id));
         setTranslationKey(id);
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
