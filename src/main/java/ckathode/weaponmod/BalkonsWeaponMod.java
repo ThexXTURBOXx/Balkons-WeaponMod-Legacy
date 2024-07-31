@@ -174,7 +174,7 @@ public class BalkonsWeaponMod {
 
     @Mod.EventHandler
     public void initMod(final FMLInitializationEvent event) {
-        messagePipeline.initalize();
+        messagePipeline.initialize();
         proxy.registerPackets(messagePipeline);
         proxy.registerEventHandlers();
         registerWeapons();

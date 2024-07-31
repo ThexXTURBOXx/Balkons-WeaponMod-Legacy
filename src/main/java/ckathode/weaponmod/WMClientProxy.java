@@ -35,6 +35,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
+import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
+
 public class WMClientProxy extends WMCommonProxy {
     @Override
     public void registerEventHandlers() {
@@ -51,143 +53,143 @@ public class WMClientProxy extends WMCommonProxy {
     @Override
     public void registerRenderersItem(final WeaponModConfig config) {
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.halberdWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.halberdWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.halberdWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.halberdStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.halberdStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.halberdStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.halberdSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.halberdSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.halberdSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.halberdDiamond, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.halberdDiamond.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.halberdDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.halberdGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.halberdGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.halberdGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.knifeWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.knifeWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.knifeWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.knifeStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.knifeStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.knifeStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.knifeSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.knifeSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.knifeSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.knifeDiamond, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.knifeDiamond.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.knifeDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.knifeGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.knifeGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.knifeGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.spearWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.spearWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.spearWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.spearStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.spearStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.spearStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.spearSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.spearSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.spearSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.spearDiamond, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.spearDiamond.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.spearDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.spearGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.spearGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.spearGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.javelin, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.javelin.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.javelin.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.fireRod, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.fireRod.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.fireRod.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.musket, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.musket.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.musket.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.bayonetWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.bayonetWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.bayonetWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.bayonetStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.bayonetStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.bayonetStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.bayonetSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.bayonetSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.bayonetSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.bayonetDiamond, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.bayonetDiamond.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.bayonetDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.bayonetGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.bayonetGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.bayonetGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.musketBullet, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.musketBullet.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.musketBullet.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.gunStock, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.gunStock.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.gunStock.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.musketIronPart, 0,
-                new ModelResourceLocation("weaponmod:" + BalkonsWeaponMod.musketIronPart.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(MOD_ID + ":" + BalkonsWeaponMod.musketIronPart.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.crossbow, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.crossbow.getUnlocalizedName().substring(5), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.bolt, 0, new ModelResourceLocation("weaponmod"
-                                                                                                       + ":" + BalkonsWeaponMod.bolt.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.crossbow.getUnlocalizedName().substring(5), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.bolt, 0, new ModelResourceLocation(
+                MOD_ID + ":" + BalkonsWeaponMod.bolt.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.blowgun, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.blowgun.getUnlocalizedName().substring(5), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 0, new ModelResourceLocation("weaponmod"
-                                                                                                       + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 1, new ModelResourceLocation("weaponmod"
-                                                                                                       + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5) + ".hunger", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 2, new ModelResourceLocation("weaponmod"
-                                                                                                       + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5) + ".slow", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 3, new ModelResourceLocation("weaponmod"
-                                                                                                       + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5) + ".damage", "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.blowgun.getUnlocalizedName().substring(5), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 0, new ModelResourceLocation(
+                MOD_ID + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 1, new ModelResourceLocation(
+                MOD_ID + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5) + ".hunger", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 2, new ModelResourceLocation(
+                MOD_ID + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5) + ".slow", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 3, new ModelResourceLocation(
+                MOD_ID + ":" + BalkonsWeaponMod.dart.getUnlocalizedName().substring(5) + ".damage", "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dynamite, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.dynamite.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.dynamite.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.flailWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.flailWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.flailWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.flailStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.flailStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.flailStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.flailSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.flailSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.flailSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.flailDiamond, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.flailDiamond.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.flailDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.flailGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.flailGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.flailGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.cannon, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.cannon.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.cannon.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.cannonBall, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.cannonBall.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.cannonBall.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.blunderShot, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.blunderShot.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.blunderShot.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.blunderbuss, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.blunderbuss.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.blunderbuss.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.blunderIronPart, 0,
-                new ModelResourceLocation("weaponmod:" + BalkonsWeaponMod.blunderIronPart.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(MOD_ID + ":" + BalkonsWeaponMod.blunderIronPart.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dummy, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.dummy.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.dummy.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.boomerangWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.boomerangWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.boomerangWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.boomerangStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.boomerangStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.boomerangStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.boomerangSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.boomerangSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.boomerangSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.boomerangDiamond, 0,
-                new ModelResourceLocation("weaponmod:" + BalkonsWeaponMod.boomerangDiamond.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(MOD_ID + ":" + BalkonsWeaponMod.boomerangDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.boomerangGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.boomerangGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.boomerangGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.katanaWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.katanaWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.katanaWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.katanaStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.katanaStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.katanaStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.katanaSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.katanaSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.katanaSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.katanaDiamond, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.katanaDiamond.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.katanaDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.katanaGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.katanaGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.katanaGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.flintlockPistol, 0,
-                new ModelResourceLocation("weaponmod:" + BalkonsWeaponMod.flintlockPistol.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(MOD_ID + ":" + BalkonsWeaponMod.flintlockPistol.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.warhammerWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.warhammerWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.warhammerWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.warhammerStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.warhammerStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.warhammerStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.warhammerSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.warhammerSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.warhammerSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.warhammerDiamond, 0,
-                new ModelResourceLocation("weaponmod:" + BalkonsWeaponMod.warhammerDiamond.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(MOD_ID + ":" + BalkonsWeaponMod.warhammerDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.warhammerGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.warhammerGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.warhammerGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.battleaxeWood, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.battleaxeWood.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.battleaxeWood.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.battleaxeStone, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.battleaxeStone.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.battleaxeStone.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.battleaxeSteel, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.battleaxeSteel.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.battleaxeSteel.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.battleaxeDiamond, 0,
-                new ModelResourceLocation("weaponmod:" + BalkonsWeaponMod.battleaxeDiamond.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(MOD_ID + ":" + BalkonsWeaponMod.battleaxeDiamond.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.battleaxeGold, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.battleaxeGold.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.battleaxeGold.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.mortarShell, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.mortarShell.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.mortarShell.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.mortar, 0, new ModelResourceLocation(
-                "weaponmod:" + BalkonsWeaponMod.mortar.getUnlocalizedName().substring(5), "inventory"));
+                MOD_ID + ":" + BalkonsWeaponMod.mortar.getUnlocalizedName().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.mortarIronPart, 0,
-                new ModelResourceLocation("weaponmod:" + BalkonsWeaponMod.mortarIronPart.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(MOD_ID + ":" + BalkonsWeaponMod.mortarIronPart.getUnlocalizedName().substring(5), "inventory"));
     }
 
     @Override
