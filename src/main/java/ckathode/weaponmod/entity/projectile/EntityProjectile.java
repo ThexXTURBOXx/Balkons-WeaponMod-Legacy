@@ -3,7 +3,6 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import java.util.List;
 import java.util.function.Predicate;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -36,6 +35,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
         implements IProjectile, IEntityAdditionalSpawnData {
@@ -378,6 +378,12 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         return null;
     }
 
+    @NotNull
+    @Override
+    public ItemStack getPickedResult(@NotNull RayTraceResult target) {
+        return getPickupItem();
+    }
+
     public float getAirResistance() {
         return 0.99f;
     }
@@ -390,7 +396,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
         return 7;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected ItemStack getArrowStack() {
         return ItemStack.EMPTY;
@@ -443,7 +449,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends En
     }
 
     @Override
-    public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
+    public void onCollideWithPlayer(@NotNull EntityPlayer entityplayer) {
         if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote) {
             ItemStack item = getPickupItem();
             if (item == null) {
