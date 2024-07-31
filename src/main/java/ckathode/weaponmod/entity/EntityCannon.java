@@ -3,7 +3,8 @@ package ckathode.weaponmod.entity;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import java.util.List;
-import javax.annotation.Nonnull;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -26,9 +27,12 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCannon extends EntityBoat {
     public static final String NAME = "cannon";
@@ -96,7 +100,7 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
+    public boolean attackEntityFrom(@NotNull DamageSource damagesource, float damage) {
         if (world.isRemote || isDead) {
             return true;
         }
@@ -214,6 +218,34 @@ public class EntityCannon extends EntityBoat {
         attackEntityFrom(DamageSource.FALL, (float) i);
     }
 
+    @Override
+    protected void updateFallState(double y, boolean isOnGround, @NotNull IBlockState state, @NotNull BlockPos pos) {
+        if (isRiding()) return;
+        if (isOnGround) {
+            if (fallDistance > 3.0f) {
+                fall(fallDistance, 1.0f);
+                if (!world.isRemote && !isDead) {
+                    setDead();
+                    if (world.getGameRules().getBoolean("doEntityDrops")) {
+                        for (int j = 0; j < 5; ++j) {
+                            // Yes, one iron ingot should vanish as penalty...
+                            dropItemWithOffset(Items.IRON_INGOT, 1, 0.0F);
+                        }
+                        dropItemWithOffset(Items.FLINT, 1, 0.0F);
+                        dropItemWithOffset(Item.getItemFromBlock(Blocks.LOG), 1, 0.0F);
+                        if (isLoaded() || isLoading()) {
+                            dropItemWithOffset(BalkonsWeaponMod.cannonBall, 1, 0.0F);
+                            dropItemWithOffset(Items.GUNPOWDER, 1, 0.0F);
+                        }
+                    }
+                }
+            }
+            fallDistance = 0.0f;
+        } else if (world.getBlockState(new BlockPos(this).down()).getMaterial() != Material.WATER && y < 0.0) {
+            fallDistance = (float) ((double) fallDistance - y);
+        }
+    }
+
     public void handleReloadTime() {
         int l = getLoadTimer();
         if (l > 0) {
@@ -274,7 +306,7 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public void updatePassenger(@Nonnull Entity passenger) {
+    public void updatePassenger(@NotNull Entity passenger) {
         if (isPassenger(passenger)) {
             float f = -0.85f;
             float f2 = (float) ((isDead ? 0.01 : getMountedYOffset()) + passenger.getYOffset());
@@ -300,7 +332,7 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer entityplayer, @Nonnull EnumHand hand) {
+    public boolean processInitialInteract(EntityPlayer entityplayer, @NotNull EnumHand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading()
             && (entityplayer.isCreative() || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
@@ -357,9 +389,15 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
-    public void onStruckByLightning(@Nonnull EntityLightningBolt entitylightningbolt) {
+    public void onStruckByLightning(@NotNull EntityLightningBolt entitylightningbolt) {
         attackEntityFrom(DamageSource.LIGHTNING_BOLT, 100.0f);
         setSuperPowered(true);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getPickedResult(@NotNull RayTraceResult target) {
+        return new ItemStack(BalkonsWeaponMod.cannon);
     }
 
     public void setLoaded(boolean flag) {
