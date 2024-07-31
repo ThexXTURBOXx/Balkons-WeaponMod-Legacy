@@ -4,6 +4,7 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WarhammerExplosion;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -14,6 +15,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MeleeCompWarhammer extends MeleeComponent {
     public static final int CHARGE_DELAY = 400;
@@ -62,7 +65,15 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     public boolean isCharged(EntityPlayer entityplayer) {
-        return entityplayer.ticksExisted > PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY;
+        return getCooldown(entityplayer) <= 0;
+    }
+
+    public float getScaledCooldown(EntityPlayer entityplayer) {
+        return (float) getCooldown(entityplayer) / CHARGE_DELAY;
+    }
+
+    public int getCooldown(EntityPlayer entityplayer) {
+        return PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY - entityplayer.ticksExisted;
     }
 
     @Override
@@ -87,5 +98,17 @@ public class MeleeCompWarhammer extends MeleeComponent {
             return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
         }
         return new ActionResult<>(EnumActionResult.FAIL, itemstack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return !isCharged(Minecraft.getMinecraft().player);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getCooldown() {
+        return getScaledCooldown(Minecraft.getMinecraft().player);
     }
 }
