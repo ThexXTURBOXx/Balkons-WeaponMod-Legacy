@@ -4,7 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import java.util.List;
-import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -23,7 +22,9 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EntityDummy extends Entity {
@@ -80,7 +81,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
+    public boolean attackEntityFrom(@NotNull DamageSource damagesource, float damage) {
         if (world.isRemote || isDead || damage <= 0.0f) {
             return false;
         }
@@ -200,8 +201,8 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean processInitialInteract(@Nonnull EntityPlayer entityplayer, @Nullable ItemStack stack,
-                                          @Nonnull EnumHand hand) {
+    public boolean processInitialInteract(@NotNull EntityPlayer entityplayer, @Nullable ItemStack stack,
+                                          @NotNull EnumHand hand) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
         if (itemstack != null) {
             if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof ItemSword || itemstack.getItem() instanceof ItemBow || itemstack.getItem() instanceof ItemShield) {
@@ -216,12 +217,18 @@ public class EntityDummy extends Entity {
         return true;
     }
 
+    @NotNull
     @Override
-    protected void writeEntityToNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    public ItemStack getPickedResult(@NotNull RayTraceResult target) {
+        return new ItemStack(BalkonsWeaponMod.dummy);
     }
 
     @Override
-    protected void readEntityFromNBT(@Nonnull NBTTagCompound nbttagcompound) {
+    protected void writeEntityToNBT(@NotNull NBTTagCompound nbttagcompound) {
+    }
+
+    @Override
+    protected void readEntityFromNBT(@NotNull NBTTagCompound nbttagcompound) {
         setPosition(posX, posY, posZ);
         setRotation(rotationYaw, rotationPitch);
     }

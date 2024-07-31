@@ -4,8 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -33,6 +31,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class EntityProjectile extends EntityArrow implements IThrowableEntity {
     @SuppressWarnings("unchecked")
@@ -359,6 +359,12 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         return null;
     }
 
+    @NotNull
+    @Override
+    public ItemStack getPickedResult(@NotNull RayTraceResult target) {
+        return getPickupItem();
+    }
+
     public float getAirResistance() {
         return 0.99f;
     }
@@ -418,7 +424,7 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
     }
 
     @Override
-    public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
+    public void onCollideWithPlayer(@NotNull EntityPlayer entityplayer) {
         if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote) {
             ItemStack item = getPickupItem();
             if (item == null) {

@@ -225,9 +225,9 @@ public class EntityCannon extends EntityBoat {
         if (isOnGround) {
             if (fallDistance > 3.0f) {
                 fall(fallDistance, 1.0f);
-                if (!worldObj.isRemote && !isDead) {
+                if (!world.isRemote && !isDead) {
                     setDead();
-                    if (worldObj.getGameRules().getBoolean("doEntityDrops")) {
+                    if (world.getGameRules().getBoolean("doEntityDrops")) {
                         for (int j = 0; j < 5; ++j) {
                             // Yes, one iron ingot should vanish as penalty...
                             dropItemWithOffset(Items.IRON_INGOT, 1, 0.0F);
@@ -242,7 +242,7 @@ public class EntityCannon extends EntityBoat {
                 }
             }
             fallDistance = 0.0f;
-        } else if (worldObj.getBlockState(new BlockPos(this).down()).getMaterial() != Material.WATER && y < 0.0) {
+        } else if (world.getBlockState(new BlockPos(this).down()).getMaterial() != Material.WATER && y < 0.0) {
             fallDistance = (float) ((double) fallDistance - y);
         }
     }
