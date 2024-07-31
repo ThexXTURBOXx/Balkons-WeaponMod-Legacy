@@ -181,7 +181,7 @@ public class BalkonsWeaponMod {
 
     @Mod.EventHandler
     public void initMod(final FMLInitializationEvent event) {
-        messagePipeline.initalize();
+        messagePipeline.initialize();
         proxy.registerPackets(messagePipeline);
         proxy.registerEventHandlers();
         registerWeapons();
@@ -199,33 +199,33 @@ public class BalkonsWeaponMod {
     }
 
     private void registerWeapons() {
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:spear"), EntitySpear.class, "spear",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "spear"), EntitySpear.class, "spear",
                 1, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:knife"), EntityKnife.class, "knife",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "knife"), EntityKnife.class, "knife",
                 2, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:javelin"), EntityJavelin.class, "javelin",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "javelin"), EntityJavelin.class, "javelin",
                 3, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bullet"), EntityMusketBullet.class, "bullet",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "bullet"), EntityMusketBullet.class, "bullet",
                 4, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:bolt"), EntityCrossbowBolt.class, "bolt",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "bolt"), EntityCrossbowBolt.class, "bolt",
                 5, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dart"), EntityBlowgunDart.class, "dart",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "dart"), EntityBlowgunDart.class, "dart",
                 6, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dynamite"), EntityDynamite.class, "dynamite",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "dynamite"), EntityDynamite.class, "dynamite",
                 7, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:flail"), EntityFlail.class, "flail",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "flail"), EntityFlail.class, "flail",
                 8, this, 32, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannon"), EntityCannon.class, "cannon",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "cannon"), EntityCannon.class, "cannon",
                 9, this, 64, 128, false);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:cannonball"), EntityCannonBall.class,
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "cannonball"), EntityCannonBall.class,
                 "cannonball", 10, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shot"), EntityBlunderShot.class, "shot",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "shot"), EntityBlunderShot.class, "shot",
                 11, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:dummy"), EntityDummy.class, "dummy",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "dummy"), EntityDummy.class, "dummy",
                 12, this, 64, 20, false);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:boomerang"), EntityBoomerang.class,
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "boomerang"), EntityBoomerang.class,
                 "boomerang", 13, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation("weaponmod:shell"), EntityMortarShell.class, "shell",
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "shell"), EntityMortarShell.class, "shell",
                 14, this, 64, 20, true);
 
         if (modConfig.isEnabled("spear")) {
