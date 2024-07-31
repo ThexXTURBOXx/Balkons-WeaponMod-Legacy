@@ -30,13 +30,21 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
-        this(id, meleecomponent, new Properties());
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent);
+    }
+
+    public ItemMelee(String modId, String id, MeleeComponent meleecomponent) {
+        this(modId, id, meleecomponent, new Properties());
     }
 
     public ItemMelee(String id, MeleeComponent meleecomponent, Properties properties) {
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent, properties);
+    }
+
+    public ItemMelee(String modId, String id, MeleeComponent meleecomponent, Properties properties) {
         super((meleecomponent.weaponMaterial == null) ? ItemTier.WOOD : meleecomponent.weaponMaterial, 3,
                 -2.4F, meleecomponent.setProperties(properties).group(ItemGroup.COMBAT));
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setRegistryName(new ResourceLocation(modId, id));
         (meleeComponent = meleecomponent).setItem(this);
         addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"),
                 new IItemPropertyGetter() {

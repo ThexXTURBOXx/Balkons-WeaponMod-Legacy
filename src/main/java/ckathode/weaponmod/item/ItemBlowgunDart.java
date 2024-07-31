@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,7 +21,11 @@ public class ItemBlowgunDart extends WMItem {
     private final DartType dartType;
 
     public ItemBlowgunDart(String id, @Nonnull DartType dartType) {
-        super(id);
+        this(BalkonsWeaponMod.MOD_ID, id, dartType);
+    }
+
+    public ItemBlowgunDart(String modId, String id, @Nonnull DartType dartType) {
+        super(modId, id);
         this.dartType = dartType;
     }
 

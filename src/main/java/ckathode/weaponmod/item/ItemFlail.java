@@ -24,7 +24,11 @@ public class ItemFlail extends ItemMelee {
     private final float flailDamage;
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
-        super(id, meleecomponent);
+        this(BalkonsWeaponMod.MOD_ID, id, meleecomponent);
+    }
+
+    public ItemFlail(String modId, String id, MeleeComponent meleecomponent) {
+        super(modId, id, meleecomponent);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamage();
         addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), new IItemPropertyGetter() {
             @Override

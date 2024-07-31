@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.EntityCannon;
 import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
@@ -19,7 +20,11 @@ import net.minecraft.world.World;
 
 public class ItemCannon extends WMItem {
     public ItemCannon(String id) {
-        super(id, new Properties().maxStackSize(1));
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemCannon(String modId, String id) {
+        super(modId, id, new Properties().maxStackSize(1));
     }
 
     @Override

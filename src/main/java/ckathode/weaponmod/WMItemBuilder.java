@@ -126,6 +126,97 @@ public class WMItemBuilder {
 
     // ==================================================================== //
     // ==================================================================== //
+    // ========================= Mod Item builders ======================== //
+    // ==================================================================== //
+    // ==================================================================== //
+
+    public static ItemMelee createStandardBattleaxe(String modId, String id, @NotNull IItemTier tier) {
+        return createItemMelee(modId, id, new MeleeCompBattleaxe(tier));
+    }
+
+    public static ItemShooter createStandardBlowgun(String modId, String id) {
+        return createItemShooter(modId, id, new RangedCompBlowgun(), new MeleeCompNone(null));
+    }
+
+    public static ItemBlowgunDart createStandardBlowgunDart(String modId, String id, @NotNull DartType dartType) {
+        return createItemBlowgunDart(modId, id, dartType);
+    }
+
+    public static ItemShooter createStandardBlunderbuss(String modId, String id) {
+        return createItemShooter(modId, id, new RangedCompBlunderbuss(), new MeleeCompNone(null));
+    }
+
+    public static ItemMelee createStandardBoomerang(String modId, String id, @NotNull IItemTier tier) {
+        return createItemMelee(modId, id, new MeleeCompBoomerang(tier));
+    }
+
+    public static ItemCannon createStandardCannon(String modId, String id) {
+        return createItemCannon(modId, id);
+    }
+
+    public static ItemShooter createStandardCrossbow(String modId, String id) {
+        return createItemShooter(modId, id, new RangedCompCrossbow(), new MeleeCompNone(null));
+    }
+
+    public static ItemDummy createStandardDummy(String modId, String id) {
+        return createItemDummy(modId, id);
+    }
+
+    public static ItemDynamite createStandardDynamite(String modId, String id) {
+        return createItemDynamite(modId, id);
+    }
+
+    public static ItemMelee createStandardFirerod(String modId, String id) {
+        return createItemMelee(modId, id, new MeleeCompFirerod());
+    }
+
+    public static ItemFlail createStandardFlail(String modId, String id, @NotNull IItemTier tier) {
+        return createItemFlail(modId, id, new MeleeCompNone(tier));
+    }
+
+    public static ItemShooter createStandardFlintlock(String modId, String id) {
+        return createItemShooter(modId, id, new RangedCompFlintlock(), new MeleeCompNone(null));
+    }
+
+    public static ItemMelee createStandardHalberd(String modId, String id, @NotNull IItemTier tier) {
+        return createItemMelee(modId, id, new MeleeCompHalberd(tier));
+    }
+
+    public static ItemJavelin createStandardJavelin(String modId, String id) {
+        return createItemJavelin(modId, id);
+    }
+
+    public static ItemMelee createStandardKatana(String modId, String id, @NotNull IItemTier tier) {
+        return createItemMelee(modId, id, new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, tier));
+    }
+
+    public static ItemMelee createStandardKnife(String modId, String id, @NotNull IItemTier tier) {
+        return createItemMelee(modId, id, new MeleeCompKnife(tier));
+    }
+
+    public static ItemShooter createStandardMortar(String modId, String id) {
+        return createItemShooter(modId, id, new RangedCompMortar(), new MeleeCompNone(null));
+    }
+
+    public static ItemMusket createStandardMusket(String modId, String id) {
+        return createItemMusket(modId, id);
+    }
+
+    public static ItemMusket createStandardMusketWithBayonet(String modId, String id, @NotNull IItemTier tier,
+                                                             @NotNull Item bayonetItem) {
+        return createItemMusket(modId, id, new MeleeCompKnife(tier), bayonetItem);
+    }
+
+    public static ItemMelee createStandardSpear(String modId, String id, @NotNull IItemTier tier) {
+        return createItemMelee(modId, id, new MeleeCompSpear(tier));
+    }
+
+    public static ItemMelee createStandardWarhammer(String modId, String id, @NotNull IItemTier tier) {
+        return createItemMelee(modId, id, new MeleeCompWarhammer(tier));
+    }
+
+    // ==================================================================== //
+    // ==================================================================== //
     // ======================== ItemClass builders ======================== //
     // ==================================================================== //
     // ==================================================================== //
@@ -186,6 +277,72 @@ public class WMItemBuilder {
 
     public static WMItem createWMItem(String id, Item.Properties properties) {
         return new WMItem(id, properties);
+    }
+
+    // ==================================================================== //
+    // ==================================================================== //
+    // ====================== Mod ItemClass builders ====================== //
+    // ==================================================================== //
+    // ==================================================================== //
+
+    public static ItemBlowgunDart createItemBlowgunDart(String modId, String id, @NotNull DartType dartType) {
+        return new ItemBlowgunDart(modId, id, dartType);
+    }
+
+    public static ItemCannon createItemCannon(String modId, String id) {
+        return new ItemCannon(modId, id);
+    }
+
+    public static ItemDummy createItemDummy(String modId, String id) {
+        return new ItemDummy(modId, id);
+    }
+
+    public static ItemDynamite createItemDynamite(String modId, String id) {
+        return new ItemDynamite(modId, id);
+    }
+
+    public static ItemFlail createItemFlail(String modId, String id, MeleeComponent meleeComponent) {
+        return new ItemFlail(modId, id, meleeComponent);
+    }
+
+    public static ItemJavelin createItemJavelin(String modId, String id) {
+        return new ItemJavelin(modId, id);
+    }
+
+    public static ItemMelee createItemMelee(String modId, String id, MeleeComponent meleeComponent) {
+        return new ItemMelee(modId, id, meleeComponent);
+    }
+
+    public static ItemMelee createItemMelee(String modId, String id, MeleeComponent meleeComponent,
+                                            Item.Properties properties) {
+        return new ItemMelee(modId, id, meleeComponent, properties);
+    }
+
+    public static ItemMusket createItemMusket(String modId, String id) {
+        return createItemMusket(modId, id, new MeleeCompNone(null), null);
+    }
+
+    public static ItemMusket createItemMusket(String modId, String id, MeleeComponent meleeComponent,
+                                              @Nullable Item bayonetItem) {
+        return new ItemMusket(modId, id, meleeComponent, bayonetItem);
+    }
+
+    public static ItemShooter createItemShooter(String modId, String id, RangedComponent rangedComponent,
+                                                MeleeComponent meleeComponent) {
+        return new ItemShooter(modId, id, rangedComponent, meleeComponent);
+    }
+
+    public static ItemShooter createItemShooter(String modId, String id, RangedComponent rangedComponent,
+                                                MeleeComponent meleeComponent, Item.Properties properties) {
+        return new ItemShooter(modId, id, rangedComponent, meleeComponent, properties);
+    }
+
+    public static WMItem createWMItem(String modId, String id) {
+        return new WMItem(modId, id);
+    }
+
+    public static WMItem createWMItem(String modId, String id, Item.Properties properties) {
+        return new WMItem(modId, id, properties);
     }
 
 }
