@@ -4,6 +4,9 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WarhammerExplosion;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -79,8 +82,16 @@ public class MeleeCompWarhammer extends MeleeComponent {
         PlayerWeaponData.setLastWarhammerSmashTicks(entityplayer, entityplayer.tickCount);
     }
 
-    public boolean isCharged(Player entityplayer) {
-        return entityplayer.tickCount > PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY;
+    public boolean isCharged(Player player) {
+        return getCooldown(player) <= 0;
+    }
+
+    public float getScaledCooldown(Player player) {
+        return (float) getCooldown(player) / CHARGE_DELAY;
+    }
+
+    public int getCooldown(Player player) {
+        return PlayerWeaponData.getLastWarhammerSmashTicks(player) + CHARGE_DELAY - player.tickCount;
     }
 
     @Override
@@ -105,6 +116,18 @@ public class MeleeCompWarhammer extends MeleeComponent {
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
         }
         return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return Minecraft.getInstance().player != null && !isCharged(Minecraft.getInstance().player);
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public float getCooldown() {
+        return Minecraft.getInstance().player == null ? 0 : getScaledCooldown(Minecraft.getInstance().player);
     }
 
 }
