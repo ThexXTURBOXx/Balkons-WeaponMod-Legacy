@@ -4,6 +4,7 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WarhammerExplosion;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
@@ -15,6 +16,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MeleeCompWarhammer extends MeleeComponent {
     public static final int CHARGE_DELAY = 400;
@@ -60,7 +63,15 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     public boolean isCharged(PlayerEntity entityplayer) {
-        return entityplayer.ticksExisted > PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY;
+        return getCooldown(entityplayer) <= 0;
+    }
+
+    public float getScaledCooldown(PlayerEntity entityplayer) {
+        return (float) getCooldown(entityplayer) / CHARGE_DELAY;
+    }
+
+    public int getCooldown(PlayerEntity entityplayer) {
+        return PlayerWeaponData.getLastWarhammerSmashTicks(entityplayer) + CHARGE_DELAY - entityplayer.ticksExisted;
     }
 
     @Override
@@ -85,5 +96,17 @@ public class MeleeCompWarhammer extends MeleeComponent {
             return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
         }
         return new ActionResult<>(ActionResultType.FAIL, itemstack);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return !isCharged(Minecraft.getInstance().player);
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public float getCooldown() {
+        return getScaledCooldown(Minecraft.getInstance().player);
     }
 }

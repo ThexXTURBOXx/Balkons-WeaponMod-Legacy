@@ -22,6 +22,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class MeleeComponent extends AbstractWeaponComponent {
     public final MeleeSpecs meleeSpecs;
@@ -186,6 +188,16 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public void inventoryTick(ItemStack itemstack, World world, Entity entity, int i,
                               boolean flag) {
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return false;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public float getCooldown() {
+        return 0;
     }
 
     public enum MeleeSpecs {
