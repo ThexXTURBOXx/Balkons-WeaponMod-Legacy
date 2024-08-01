@@ -51,13 +51,15 @@ public class MeleeCompFirerod extends MeleeComponent {
         float particleY = -Mth.sin((player.getXRot() / 180F) * 3.141593F) + player.getEyeHeight();
         float particleZ =
                 Mth.cos(((player.getYRot() + f1) / 180F) * 3.141593F) * Mth.cos((player.getXRot() / 180F) * 3.141593F) * f;
-        if (player.getRandom().nextInt(5) == 0) {
-            world.addParticle(ParticleTypes.FLAME, player.getX() + particleX, player.getY() + particleY,
-                    player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
-        }
-        if (player.getRandom().nextInt(5) == 0) {
-            world.addParticle(ParticleTypes.SMOKE, player.getX() + particleX, player.getY() + particleY,
-                    player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
+        if (world.isClientSide()) {
+            if (player.getRandom().nextInt(5) == 0) {
+                world.addParticle(ParticleTypes.FLAME, player.getX() + particleX, player.getY() + particleY,
+                        player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
+            }
+            if (player.getRandom().nextInt(5) == 0) {
+                world.addParticle(ParticleTypes.SMOKE, player.getX() + particleX, player.getY() + particleY,
+                        player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
+            }
         }
     }
 
