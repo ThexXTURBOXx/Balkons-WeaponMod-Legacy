@@ -73,11 +73,14 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     public byte getDartEffectId() {
-        return dataManager.get(DART_EFFECT_TYPE);
+        byte effectId = dataManager.get(DART_EFFECT_TYPE);
+        if (effectId < 0) effectId = 0;
+        return effectId;
     }
 
     public float[] getDartColor() {
-        return DART_COLORS[getDartEffectId()];
+        int effectId = getDartEffectId();
+        return DART_COLORS[effectId >= DART_COLORS.length ? 0 : effectId];
     }
 
     @Override
@@ -85,7 +88,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f + extraDamage)) {
             if (entity instanceof LivingEntity) {
-                ((LivingEntity) entity).addPotionEffect(new EffectInstance(DartType.dartTypes[getDartEffectId()].potionEffect));
+                ((LivingEntity) entity).addPotionEffect(new EffectInstance(getDartEffectType().potionEffect));
             }
             applyEntityHitEffects(entity);
             playHitSound();
