@@ -3,6 +3,7 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.MeleeComponent;
 import ckathode.weaponmod.item.RangedComponent;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,10 +11,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 @Environment(EnvType.CLIENT)
@@ -25,32 +26,48 @@ public class GuiOverlayReloaded {
         Minecraft mc = Minecraft.getInstance();
         Player p = mc.player;
         if (p == null) return;
+
+        d(InteractionHand.MAIN_HAND, p, matrixStack);
+        d(InteractionHand.OFF_HAND, p, matrixStack);
+    }
+
+    private static void d(InteractionHand hand, Player p, PoseStack matrixStack) {
+        Minecraft mc = Minecraft.getInstance();
         int currentItem = p.inventory.selected;
-        ItemStack is = p.getUseItem();
-        ItemStack current = p.inventory.getItem(currentItem);
-        ItemStack offHandItem = p.getOffhandItem();
-        if (is.isEmpty()) return;
-        Item item = is.getItem();
-        if (!(item instanceof IItemWeapon)) return;
-        RangedComponent rc = ((IItemWeapon) item).getRangedComponent();
-        if (rc == null) return;
 
-        HumanoidArm offHandSide = p.getMainArm().getOpposite();
-        InteractionHand hand = p.getUsedItemHand();
-        if (hand == InteractionHand.MAIN_HAND && is != current ||
-            hand == InteractionHand.OFF_HAND && is != offHandItem) return;
+        IItemWeapon item = null;
+        ItemStack is = hand == InteractionHand.OFF_HAND
+                ? p.getOffhandItem()
+                : p.inventory.getItem(currentItem);
 
-        float f;
-        int offset;
-        if (RangedComponent.isReloaded(is)) {
-            f = 1.0f;
-            offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
-        } else {
-            f = Math.min(p.getTicksUsingItem() / (float) rc.getReloadDuration(is), 1.0f);
-            offset = 0;
+        if (!is.isEmpty() && is.getItem() instanceof IItemWeapon) item = (IItemWeapon) is.getItem();
+        if (item == null) return;
+
+        RangedComponent rc = item.getRangedComponent();
+        MeleeComponent mec = item.getMeleeComponent();
+
+        boolean set = false;
+        float f = 0;
+        int offset = 0;
+        if (rc != null) {
+            if (RangedComponent.isReloaded(is)) {
+                f = 1.0f;
+                offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
+            } else {
+                f = Mth.clamp(p.getTicksUsingItem() / (float) rc.getReloadDuration(is), 0, 1);
+            }
+            set = true;
+        } else if (mec != null) {
+            if (mec.shouldRenderCooldown()) {
+                f = Mth.clamp(mec.getCooldown(), 0, 1);
+                set = true;
+            }
         }
 
-        Window window = Minecraft.getInstance().getWindow();
+        if (!set) return;
+
+        HumanoidArm offHandSide = p.getMainArm().getOpposite();
+        Window window = mc.getWindow();
         int x0 = window.getGuiScaledWidth() / 2 + (hand == InteractionHand.OFF_HAND ?
                 (offHandSide == HumanoidArm.LEFT ? -120 : 91)
                 : -91 - 1 + currentItem * 20);
