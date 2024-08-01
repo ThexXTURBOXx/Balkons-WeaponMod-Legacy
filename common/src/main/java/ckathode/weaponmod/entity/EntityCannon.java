@@ -4,6 +4,7 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import dev.architectury.networking.NetworkManager;
 import java.util.List;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -13,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,8 +32,10 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -97,6 +101,11 @@ public class EntityCannon extends Boat {
     @Override
     public ItemStack getPickResult() {
         return new ItemStack(WMRegistries.ITEM_CANNON.get());
+    }
+
+    @Override
+    public Item getDropItem() {
+        return WMRegistries.ITEM_CANNON.get();
     }
 
     @Override
@@ -225,6 +234,37 @@ public class EntityCannon extends Boat {
         i *= 2;
         hurt(damageSources().fall(), (float) i);
         return false;
+    }
+
+    @Override
+    protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
+        if (!isPassenger()) {
+            if (onGround) {
+                if (fallDistance > 3.0F) {
+                    causeFallDamage(fallDistance, 1.0F, damageSources().fall());
+                    if (!level.isClientSide && !isRemoved()) {
+                        kill();
+                        if (level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                            for (int j = 0; j < 5; ++j) {
+                                // Yes, one iron ingot should vanish as penalty...
+                                spawnAtLocation(Items.IRON_INGOT);
+                            }
+                            spawnAtLocation(Items.FLINT);
+                            spawnAtLocation(Blocks.OAK_LOG);
+                            if (isLoaded() || isLoading()) {
+                                spawnAtLocation(WMRegistries.ITEM_CANNON_BALL.get());
+                                spawnAtLocation(Items.GUNPOWDER);
+                            }
+                        }
+                    }
+                }
+
+                fallDistance = 0.0F;
+            } else if (!level.getFluidState(blockPosition().below()).is(FluidTags.WATER) && y < 0.0) {
+                fallDistance = (float) ((double) fallDistance - y);
+            }
+
+        }
     }
 
     public void handleReloadTime() {
