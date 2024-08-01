@@ -100,7 +100,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
             bounceBack();
             return;
         }
-        float damage = iweapon.getMeleeComponent().getEntityDamage() + 1.0f;
+        float damage = iweapon.getMeleeComponent().getEntityDamage();
         damage = getMeleeHitDamage(entity, damage);
         if (entity.hurt(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
