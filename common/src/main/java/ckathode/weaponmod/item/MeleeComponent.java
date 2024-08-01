@@ -3,6 +3,8 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMRegistries;
 import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
@@ -196,6 +198,16 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int i,
                               boolean flag) {
+    }
+
+    @Environment(EnvType.CLIENT)
+    public boolean shouldRenderCooldown() {
+        return false;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public float getCooldown() {
+        return 0;
     }
 
     public enum MeleeSpecs {
