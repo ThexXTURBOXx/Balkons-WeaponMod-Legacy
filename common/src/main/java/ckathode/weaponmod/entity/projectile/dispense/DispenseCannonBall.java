@@ -79,8 +79,10 @@ public class DispenseCannonBall extends DefaultDispenseItemBehavior {
         super.playAnimation(blocksource, face);
         if (!normalDispense) {
             Position pos = DispenserBlock.getDispensePosition(blocksource);
-            blocksource.getLevel().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
-                    pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
+            if (blocksource.getLevel().isClientSide()) {
+                blocksource.getLevel().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
+                        pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
+            }
         }
     }
 

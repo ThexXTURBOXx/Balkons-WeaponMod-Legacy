@@ -258,8 +258,10 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             Vec3 motion2 = getDeltaMovement();
             for (int i1 = 0; i1 < 2; ++i1) {
                 Vec3 pos = position().add(motion2.scale(i1 / 4.0));
-                level.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, -motion2.x,
-                        -motion2.y + 0.2, -motion2.z);
+                if (level.isClientSide()) {
+                    level.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, -motion2.x,
+                            -motion2.y + 0.2, -motion2.z);
+                }
             }
         }
         Vec3 newPos = position().add(getDeltaMovement());
@@ -282,8 +284,10 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
             for (int i2 = 0; i2 < 4; ++i2) {
                 float f3 = 0.25f;
                 Vec3 pos = position().subtract(motion2.scale(f3));
-                level.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, motion2.x,
-                        motion2.y + 0.2, motion2.z);
+                if (level.isClientSide()) {
+                    level.addParticle(ParticleTypes.CRIT, pos.x, pos.y, pos.z, motion2.x,
+                            motion2.y + 0.2, motion2.z);
+                }
             }
             res *= 0.6f;
         }
