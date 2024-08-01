@@ -3,7 +3,7 @@ package ckathode.weaponmod.entity;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import java.util.List;
-import javax.annotation.Nonnull;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -21,6 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityPredicates;
@@ -28,10 +29,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityCannon extends BoatEntity {
     public static final String NAME = "cannon";
@@ -65,7 +70,7 @@ public class EntityCannon extends BoatEntity {
         prevPosZ = d2;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public EntityType<?> getType() {
         return BalkonsWeaponMod.entityCannon;
@@ -81,7 +86,7 @@ public class EntityCannon extends BoatEntity {
         dataManager.register(SUPER_POWERED, (byte) 0);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -108,7 +113,7 @@ public class EntityCannon extends BoatEntity {
     }
 
     @Override
-    public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
+    public boolean attackEntityFrom(@NotNull DamageSource damagesource, float damage) {
         if (world.isRemote || !isAlive()) {
             return true;
         }
@@ -225,6 +230,36 @@ public class EntityCannon extends BoatEntity {
         return false;
     }
 
+    @Override
+    protected void updateFallState(double y, boolean isOnGround, @NotNull BlockState state, @NotNull BlockPos pos) {
+        if (!isPassenger()) {
+            if (isOnGround) {
+                if (fallDistance > 3.0F) {
+                    onLivingFall(fallDistance, 1.0F);
+                    if (!world.isRemote && isAlive()) {
+                        remove();
+                        if (world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+                            for (int j = 0; j < 5; ++j) {
+                                // Yes, one iron ingot should vanish as penalty...
+                                entityDropItem(Items.IRON_INGOT);
+                            }
+                            entityDropItem(Items.FLINT);
+                            entityDropItem(Blocks.OAK_LOG);
+                            if (isLoaded() || isLoading()) {
+                                entityDropItem(BalkonsWeaponMod.cannonBall);
+                                entityDropItem(Items.GUNPOWDER);
+                            }
+                        }
+                    }
+                }
+
+                fallDistance = 0.0F;
+            } else if (!world.getFluidState((new BlockPos(this)).down()).isTagged(FluidTags.WATER) && y < 0.0) {
+                fallDistance = (float) ((double) fallDistance - y);
+            }
+        }
+    }
+
     public void handleReloadTime() {
         int l = getLoadTimer();
         if (l > 0) {
@@ -285,7 +320,7 @@ public class EntityCannon extends BoatEntity {
     }
 
     @Override
-    public void updatePassenger(@Nonnull Entity passenger) {
+    public void updatePassenger(@NotNull Entity passenger) {
         if (isPassenger(passenger)) {
             float f = -0.85f;
             float f2 = (float) ((isAlive() ? getMountedYOffset() : 0.01) + passenger.getYOffset());
@@ -311,7 +346,7 @@ public class EntityCannon extends BoatEntity {
     }
 
     @Override
-    public boolean processInitialInteract(PlayerEntity entityplayer, @Nonnull Hand hand) {
+    public boolean processInitialInteract(PlayerEntity entityplayer, @NotNull Hand hand) {
         ItemStack itemstack = entityplayer.getHeldItem(hand);
         if (itemstack.getItem() == BalkonsWeaponMod.cannonBall && !isLoaded() && !isLoading()
             && (entityplayer.isCreative() || consumeAmmo(entityplayer, Items.GUNPOWDER))) {
@@ -368,9 +403,15 @@ public class EntityCannon extends BoatEntity {
     }
 
     @Override
-    public void onStruckByLightning(@Nonnull LightningBoltEntity entitylightningbolt) {
+    public void onStruckByLightning(@NotNull LightningBoltEntity entitylightningbolt) {
         attackEntityFrom(DamageSource.LIGHTNING_BOLT, 100.0f);
         setSuperPowered(true);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getPickedResult(@NotNull RayTraceResult target) {
+        return new ItemStack(BalkonsWeaponMod.cannon);
     }
 
     public void setLoaded(boolean flag) {

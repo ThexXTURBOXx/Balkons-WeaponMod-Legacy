@@ -34,6 +34,7 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
         ms.push();
         float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
         rot = Math.min(rot, 20.0f);
+        f = interpolateRotation(entitycannon.prevRotationYaw, entitycannon.rotationYaw, f1);
         ms.translate(0, 2.375f, 0);
         ms.rotate(Vector3f.YP.rotationDegrees(180.0f - f));
         float f2 = entitycannon.getTimeSinceHit() - f1;
@@ -56,15 +57,19 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
                 entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4,
                 entitycannon.getBrightness() * f4, 1);
         ms.pop();
-        float yaw = -(float) Math.toRadians(f);
-        modelStandard.base1.rotateAngleY = yaw;
-        modelStandard.base2.rotateAngleY = yaw;
-        modelStandard.baseStand.rotateAngleY = yaw;
+        float yawRadians = -(float) Math.toRadians(f);
+        modelStandard.base1.rotateAngleY = yawRadians;
+        modelStandard.base2.rotateAngleY = yawRadians;
+        modelStandard.baseStand.rotateAngleY = yawRadians;
         modelStandard.render(ms, builder, lm, OverlayTexture.NO_OVERLAY,
                 entitycannon.getBrightness() * f4, entitycannon.getBrightness() * f4,
                 entitycannon.getBrightness() * f4, 1);
         ms.pop();
         super.render(entitycannon, f, f1, ms, bufs, lm);
+    }
+
+    private float interpolateRotation(float from, float to, float by) {
+        return (from + MathHelper.wrapDegrees(to - from) * by) % 360.0f;
     }
 
     @Override
