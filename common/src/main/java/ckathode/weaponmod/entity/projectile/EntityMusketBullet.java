@@ -60,7 +60,9 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         super.tick();
         if (inGround) {
             if (random.nextInt(4) == 0) {
-                level.addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                if (level.isClientSide()) {
+                    level.addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                }
             }
             return;
         }
@@ -69,7 +71,9 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
         if (speed > 2.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
                 Vec3 pos = position().add(getDeltaMovement().scale(i1 / amount));
-                level.addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+                if (level.isClientSide()) {
+                    level.addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+                }
             }
         }
     }
