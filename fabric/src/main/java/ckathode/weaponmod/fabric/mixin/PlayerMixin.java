@@ -1,5 +1,6 @@
 package ckathode.weaponmod.fabric.mixin;
 
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.ItemMelee;
 import ckathode.weaponmod.item.ItemShooter;
 import ckathode.weaponmod.item.WMItem;
@@ -42,7 +43,7 @@ public class PlayerMixin {
                         player.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                     }
 
-                    player.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + player.level().random.nextFloat() * 0.4F);
+                    player.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + WMUtil.RANDOM.nextFloat() * 0.4F);
                 }
             }
         }

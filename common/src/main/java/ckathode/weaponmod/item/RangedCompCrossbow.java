@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WMItemBuilder;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -66,7 +67,7 @@ public class RangedCompCrossbow extends RangedComponent {
     @Override
     public void effectShoot(Level world, double x, double y, double z, float yaw, float pitch) {
         world.playSound(null, x, y, z, SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0f,
-                1.0f / (world.getRandom().nextFloat() * 0.4f + 0.8f));
+                1.0f / (WMUtil.RANDOM.nextFloat() * 0.4f + 0.8f));
     }
 
 }

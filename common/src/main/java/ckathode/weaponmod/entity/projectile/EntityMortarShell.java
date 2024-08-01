@@ -76,7 +76,9 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         if (speed > 1.0) {
             for (int i1 = 1; i1 < amount; ++i1) {
                 Vec3 pos = position().add(getDeltaMovement().scale(i1 / amount));
-                level().addParticle(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+                if (level().isClientSide()) {
+                    level().addParticle(ParticleTypes.SMOKE, pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
+                }
             }
         }
     }

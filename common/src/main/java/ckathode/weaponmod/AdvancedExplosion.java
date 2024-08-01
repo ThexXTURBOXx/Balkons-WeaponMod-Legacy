@@ -97,7 +97,7 @@ public class AdvancedExplosion extends Explosion {
 
         ObjectArrayList<BlockPos> positions = new ObjectArrayList<>(getToBlow());
         List<Pair<ItemStack, BlockPos>> list = new ArrayList<>();
-        Util.shuffle(positions, worldObj.random);
+        Util.shuffle(positions, WMUtil.RANDOM);
         for (BlockPos blockPos2 : positions) {
             worldObj.getBlockState(blockPos2).onExplosionHit(worldObj, blockPos2, this,
                     (itemStack, blockPos) -> Explosion.addOrAppendStack(list, itemStack, blockPos));
@@ -121,8 +121,8 @@ public class AdvancedExplosion extends Explosion {
     public void doParticleExplosion(boolean smallparticles, boolean bigparticles) {
         worldObj.playSound(null, explosionX, explosionY, explosionZ,
                 SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 4.0f,
-                (1.0f + (worldObj.random.nextFloat() - worldObj.random.nextFloat()) * 0.2f) * 0.7f);
-        if (bigparticles) {
+                (1.0f + (WMUtil.RANDOM.nextFloat() - WMUtil.RANDOM.nextFloat()) * 0.2f) * 0.7f);
+        if (bigparticles && worldObj.isClientSide()) {
             worldObj.addParticle(ParticleTypes.EXPLOSION, explosionX, explosionY,
                     explosionZ, 0.0, 0.0, 0.0);
         }
@@ -133,9 +133,9 @@ public class AdvancedExplosion extends Explosion {
             calculateBlockExplosion();
         }
         for (BlockPos blockpos : getToBlow()) {
-            double px = blockpos.getX() + worldObj.random.nextFloat();
-            double py = blockpos.getY() + worldObj.random.nextFloat();
-            double pz = blockpos.getZ() + worldObj.random.nextFloat();
+            double px = blockpos.getX() + WMUtil.RANDOM.nextFloat();
+            double py = blockpos.getY() + WMUtil.RANDOM.nextFloat();
+            double pz = blockpos.getZ() + WMUtil.RANDOM.nextFloat();
             double dx = px - explosionX;
             double dy = py - explosionY;
             double dz = pz - explosionZ;
@@ -144,13 +144,15 @@ public class AdvancedExplosion extends Explosion {
             dy /= distance;
             dz /= distance;
             double d7 = 0.5 / (distance / explosionSize + 0.1);
-            d7 *= worldObj.random.nextFloat() * worldObj.random.nextFloat() + 0.3f;
+            d7 *= WMUtil.RANDOM.nextFloat() * WMUtil.RANDOM.nextFloat() + 0.3f;
             dx *= d7;
             dy *= d7;
             dz *= d7;
-            worldObj.addParticle(ParticleTypes.POOF, (px + explosionX) / 2.0,
-                    (py + explosionY) / 2.0, (pz + explosionZ) / 2.0, dx, dy, dz);
-            worldObj.addParticle(ParticleTypes.SMOKE, px, py, pz, dx, dy, dz);
+            if (worldObj.isClientSide()) {
+                worldObj.addParticle(ParticleTypes.POOF, (px + explosionX) / 2.0,
+                        (py + explosionY) / 2.0, (pz + explosionZ) / 2.0, dx, dy, dz);
+                worldObj.addParticle(ParticleTypes.SMOKE, px, py, pz, dx, dy, dz);
+            }
         }
     }
 
@@ -168,7 +170,7 @@ public class AdvancedExplosion extends Explosion {
                         rx /= rd;
                         ry /= rd;
                         rz /= rd;
-                        float strength = explosionSize * (0.7f + worldObj.random.nextFloat() * 0.6f);
+                        float strength = explosionSize * (0.7f + WMUtil.RANDOM.nextFloat() * 0.6f);
                         double dx = explosionX;
                         double dy = explosionY;
                         double dz = explosionZ;

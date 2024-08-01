@@ -39,8 +39,10 @@ public class DispenseBlunderShot extends DefaultDispenseItemBehavior {
     protected void playAnimation(@NotNull BlockSource blocksource, @NotNull Direction face) {
         super.playAnimation(blocksource, face);
         Position pos = DispenserBlock.getDispensePosition(blocksource);
-        blocksource.level().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
-                pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
+        if (blocksource.level().isClientSide()) {
+            blocksource.level().addParticle(ParticleTypes.FLAME, pos.x() + face.getStepX(),
+                    pos.y() + face.getStepY(), pos.z() + face.getStepZ(), 0.0, 0.0, 0.0);
+        }
     }
 
 }
