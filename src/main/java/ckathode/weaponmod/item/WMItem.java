@@ -12,12 +12,20 @@ import org.jetbrains.annotations.Nullable;
 public class WMItem extends Item {
 
     public WMItem(String id) {
-        this(id, new Properties());
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public WMItem(String modId, String id) {
+        this(modId, id, new Properties());
     }
 
     public WMItem(String id, Properties properties) {
+        this(BalkonsWeaponMod.MOD_ID, id, properties);
+    }
+
+    public WMItem(String modId, String id, Properties properties) {
         super(properties.group(ItemGroup.COMBAT));
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setRegistryName(new ResourceLocation(modId, id));
     }
 
     public static UUID getAttackDamageModifierUUID() {

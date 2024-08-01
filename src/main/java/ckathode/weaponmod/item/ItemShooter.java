@@ -31,13 +31,22 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     public final MeleeComponent meleeComponent;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
-        this(id, rangedcomponent, meleecomponent, new Properties());
+        this(BalkonsWeaponMod.MOD_ID, id, rangedcomponent, meleecomponent);
+    }
+
+    public ItemShooter(String modId, String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
+        this(modId, id, rangedcomponent, meleecomponent, new Properties());
     }
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent,
                        Properties properties) {
+        this(BalkonsWeaponMod.MOD_ID, id, rangedcomponent, meleecomponent, properties);
+    }
+
+    public ItemShooter(String modId, String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent,
+                       Properties properties) {
         super(rangedcomponent.setProperties(properties).group(ItemGroup.COMBAT));
-        setRegistryName(new ResourceLocation(BalkonsWeaponMod.MOD_ID, id));
+        setRegistryName(new ResourceLocation(modId, id));
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);

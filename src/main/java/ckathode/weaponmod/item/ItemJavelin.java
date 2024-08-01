@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.LivingEntity;
@@ -15,7 +16,11 @@ import net.minecraft.world.World;
 
 public class ItemJavelin extends WMItem {
     public ItemJavelin(String id) {
-        super(id, new Properties().maxStackSize(16));
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemJavelin(String modId, String id) {
+        super(modId, id, new Properties().maxStackSize(16));
     }
 
     @Override

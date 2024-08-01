@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.EntityCannon;
 import java.util.List;
 import java.util.function.Predicate;
@@ -26,7 +27,11 @@ public class ItemCannon extends WMItem {
     private static final Predicate<Entity> PREDICATE = EntityPredicates.NOT_SPECTATING.and(Entity::canBeCollidedWith);
 
     public ItemCannon(String id) {
-        super(id, new Properties().maxStackSize(1));
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemCannon(String modId, String id) {
+        super(modId, id, new Properties().maxStackSize(1));
     }
 
     @Override
