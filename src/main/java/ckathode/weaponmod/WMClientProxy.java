@@ -32,6 +32,8 @@ import ckathode.weaponmod.render.RenderSpear;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
+import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
+
 public class WMClientProxy extends WMCommonProxy {
     @Override
     public void registerEventHandlers() {

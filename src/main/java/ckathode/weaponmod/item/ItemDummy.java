@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.EntityDummy;
 import java.util.List;
 import java.util.function.Predicate;
@@ -26,7 +27,11 @@ public class ItemDummy extends WMItem {
     private static final Predicate<Entity> PREDICATE = EntityPredicates.NOT_SPECTATING.and(Entity::canBeCollidedWith);
 
     public ItemDummy(String id) {
-        super(id, new Properties().maxStackSize(1));
+        this(BalkonsWeaponMod.MOD_ID, id);
+    }
+
+    public ItemDummy(String modId, String id) {
+        super(modId, id, new Properties().maxStackSize(1));
     }
 
     @Override

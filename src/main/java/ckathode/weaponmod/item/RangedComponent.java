@@ -31,6 +31,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
+
 public abstract class RangedComponent extends AbstractWeaponComponent {
     protected static final int MAX_DELAY = 72000;
     public final RangedSpecs rangedSpecs;
@@ -301,12 +303,14 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     public enum RangedSpecs {
         BLOWGUN("blowgun", 250, Arrays.stream(DartType.dartTypes)
-                .filter(Objects::nonNull).map(t -> t.typeName).toArray(String[]::new)),
-        CROSSBOW("crossbow", 250, "bolt"),
-        MUSKET("musket", 80, "bullet"),
-        BLUNDERBUSS("blunderbuss", 80, "shot"),
-        FLINTLOCK("flintlock", 8, "bullet"),
-        MORTAR("mortar", 40, "shell");
+                .filter(Objects::nonNull)
+                .map(t -> new ResourceLocation(MOD_ID, t.typeName).toString())
+                .toArray(String[]::new)),
+        CROSSBOW("crossbow", 250, new ResourceLocation(MOD_ID, "bolt").toString()),
+        MUSKET("musket", 80, new ResourceLocation(MOD_ID, "bullet").toString()),
+        BLUNDERBUSS("blunderbuss", 80, new ResourceLocation(MOD_ID, "shot").toString()),
+        FLINTLOCK("flintlock", 8, new ResourceLocation(MOD_ID, "bullet").toString()),
+        MORTAR("mortar", 40, new ResourceLocation(MOD_ID, "shell").toString());
 
         private int reloadTime;
         private List<Item> ammoItems;
@@ -334,7 +338,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public List<Item> getAmmoItems() {
             if (ammoItems == null) {
                 ammoItems = Arrays.stream(ammoItemTags)
-                        .map(t -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(BalkonsWeaponMod.MOD_ID, t)))
+                        .map(t -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(t)))
                         .collect(Collectors.toList());
                 BalkonsWeaponMod.modLog.debug("Found items {} for {} @{}",
                         ammoItems, Arrays.toString(ammoItemTags), this);
