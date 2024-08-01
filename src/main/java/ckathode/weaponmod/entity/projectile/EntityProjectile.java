@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import java.util.function.Predicate;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -39,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrowEntity
         implements IProjectile, IEntityAdditionalSpawnData {
@@ -80,7 +80,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         dataManager.register(WEAPON_CRITICAL, (byte) 0);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -368,6 +368,12 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         return null;
     }
 
+    @NotNull
+    @Override
+    public ItemStack getPickedResult(@NotNull RayTraceResult target) {
+        return getPickupItem();
+    }
+
     public float getAirResistance() {
         return 0.99f;
     }
@@ -380,7 +386,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
         return 7;
     }
 
-    @Nonnull
+    @NotNull
     @Override
     protected ItemStack getArrowStack() {
         return ItemStack.EMPTY;
@@ -433,7 +439,7 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     }
 
     @Override
-    public void onCollideWithPlayer(@Nonnull PlayerEntity entityplayer) {
+    public void onCollideWithPlayer(@NotNull PlayerEntity entityplayer) {
         if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote) {
             ItemStack item = getPickupItem();
             if (item == null) {

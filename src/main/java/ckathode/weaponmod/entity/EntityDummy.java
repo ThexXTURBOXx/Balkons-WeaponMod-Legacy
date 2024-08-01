@@ -4,7 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import java.util.List;
-import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
@@ -26,10 +25,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityDummy extends Entity {
     public static final String NAME = "dummy";
@@ -66,7 +67,7 @@ public class EntityDummy extends Entity {
         dataManager.register(CURRENT_DAMAGE, 0);
     }
 
-    @Nonnull
+    @NotNull
     @Override
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -88,7 +89,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
+    public boolean attackEntityFrom(@NotNull DamageSource damagesource, float damage) {
         if (world.isRemote || !isAlive() || damage <= 0.0f) {
             return false;
         }
@@ -205,7 +206,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean processInitialInteract(PlayerEntity entityplayer, @Nonnull Hand hand) {
+    public boolean processInitialInteract(PlayerEntity entityplayer, @NotNull Hand hand) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
         if (!itemstack.isEmpty()) {
             if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof SwordItem || itemstack.getItem() instanceof BowItem || itemstack.getItem() instanceof ShieldItem) {
@@ -220,12 +221,18 @@ public class EntityDummy extends Entity {
         return true;
     }
 
+    @NotNull
     @Override
-    protected void writeAdditional(@Nonnull CompoundNBT nbttagcompound) {
+    public ItemStack getPickedResult(@NotNull RayTraceResult target) {
+        return new ItemStack(BalkonsWeaponMod.dummy);
     }
 
     @Override
-    protected void readAdditional(@Nonnull CompoundNBT nbttagcompound) {
+    protected void writeAdditional(@NotNull CompoundNBT nbttagcompound) {
+    }
+
+    @Override
+    protected void readAdditional(@NotNull CompoundNBT nbttagcompound) {
         setPosition(posX, posY, posZ);
         setRotation(rotationYaw, rotationPitch);
     }
