@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.ReloadHelper.ReloadState;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -83,16 +84,18 @@ public class RangedCompMusket extends RangedComponent {
     @Override
     public void effectShoot(Level world, double x, double y, double z, float yaw, float pitch) {
         world.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 3.0f,
-                1.0f / (world.getRandom().nextFloat() * 0.4f + 0.7f));
+                1.0f / (WMUtil.RANDOM.nextFloat() * 0.4f + 0.7f));
         world.playSound(null, x, y, z, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 3.0f,
-                1.0f / (world.getRandom().nextFloat() * 0.4f + 0.4f));
+                1.0f / (WMUtil.RANDOM.nextFloat() * 0.4f + 0.4f));
         float particleX = -Mth.sin((yaw + 23.0f) * 0.017453292f) * Mth.cos(pitch * 0.017453292f);
         float particleY = -Mth.sin(pitch * 0.017453292f) + 1.6f;
         float particleZ = Mth.cos((yaw + 23.0f) * 0.017453292f) * Mth.cos(pitch * 0.017453292f);
-        for (int i = 0; i < 3; ++i) {
-            world.addParticle(ParticleTypes.SMOKE, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+        if (world.isClientSide()) {
+            for (int i = 0; i < 3; ++i) {
+                world.addParticle(ParticleTypes.SMOKE, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
+            }
+            world.addParticle(ParticleTypes.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
         }
-        world.addParticle(ParticleTypes.FLAME, x + particleX, y + particleY, z + particleZ, 0.0, 0.0, 0.0);
     }
 
     @Override

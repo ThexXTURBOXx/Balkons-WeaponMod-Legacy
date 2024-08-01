@@ -91,7 +91,9 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                 float f6 = 0.25f;
                 Vec3 motion = getDeltaMovement();
                 Vec3 pos = position().subtract(motion.scale(f6));
-                level().addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, motion.x, motion.y, motion.z);
+                if (level().isClientSide()) {
+                    level().addParticle(ParticleTypes.POOF, pos.x, pos.y, pos.z, motion.x, motion.y, motion.z);
+                }
             }
         }
         --explodefuse;
@@ -99,7 +101,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
             if (explodefuse <= 0) {
                 detonate();
                 remove(RemovalReason.DISCARDED);
-            } else {
+            } else if (level().isClientSide()) {
                 level().addParticle(ParticleTypes.SMOKE, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
             }
         }

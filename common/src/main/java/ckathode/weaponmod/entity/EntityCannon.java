@@ -295,11 +295,13 @@ public class EntityCannon extends Boat {
         float yaw = (float) Math.toRadians(getYRot());
         double d = -Mth.sin(yaw) * -1.0f;
         double d2 = Mth.cos(yaw) * -1.0f;
-        for (int i = 0; i < 20; ++i) {
-            level().addParticle(ParticleTypes.SMOKE,
-                    getX() + d + random.nextDouble() * 0.5 - 0.25, getY() + random.nextDouble() * 0.5,
-                    getZ() + d2 + random.nextDouble() * 0.5 - 0.25, random.nextDouble() * 0.1 - 0.05,
-                    random.nextDouble() * 0.1 - 0.05, random.nextDouble() * 0.1 - 0.05);
+        if (level().isClientSide()) {
+            for (int i = 0; i < 20; ++i) {
+                level().addParticle(ParticleTypes.SMOKE,
+                        getX() + d + random.nextDouble() * 0.5 - 0.25, getY() + random.nextDouble() * 0.5,
+                        getZ() + d2 + random.nextDouble() * 0.5 - 0.25, random.nextDouble() * 0.1 - 0.05,
+                        random.nextDouble() * 0.1 - 0.05, random.nextDouble() * 0.1 - 0.05);
+            }
         }
         if (isVehicle()) {
             for (Entity entity2 : getPassengers()) {
