@@ -157,15 +157,17 @@ for that.
 As an example, I have fully implemented Bronze Boomerangs in the Bronze Fabric mod, as
 seen [here](https://github.com/ThexXTURBOXx/bronze/commit/e2d792b15da0b6c5a27bc71f5301eb795ce8e133).
 
-## Resource pack patches
+## Resource packs and patches
 
-Below is a list of all the resource pack patches for this mod I know of.  
+Below is a list of all the resource packs and patches for this mod I know of.  
 If you know of one that I forgot, feel free
 to [open an issue](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/issues/new) and let me know!
 
-| Resource Pack | Patch link                                        |
-|:--------------|:--------------------------------------------------|
-| Sphax BDCraft | https://bdcraft.net/community/viewtopic.php?t=222 |
+| Resource Pack          | Patch link                                                           |
+|:-----------------------|:---------------------------------------------------------------------|
+| Balkon's Gets Reforged | <https://modrinth.com/resourcepack/balkons-gets-reforged>            |
+| Balkon's Revised       | <https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/issues/52> |
+| Sphax BDCraft          | <https://bdcraft.net/community/viewtopic.php?t=222>                  |
 
 ---
 
