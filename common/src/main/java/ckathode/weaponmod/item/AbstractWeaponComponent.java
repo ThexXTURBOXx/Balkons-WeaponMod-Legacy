@@ -17,7 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class AbstractWeaponComponent {
-
     public Item item;
     IItemWeapon weapon;
 
@@ -40,34 +39,34 @@ public abstract class AbstractWeaponComponent {
 
     public abstract float getEntityDamage();
 
-    public abstract float getDestroySpeed(ItemStack p0, BlockState p1);
+    public abstract float getDestroySpeed(ItemStack stack, BlockState state);
 
     public abstract boolean canHarvestBlock(BlockState state);
 
-    public abstract boolean mineBlock(ItemStack p0, Level p1, BlockState p2, BlockPos p3, LivingEntity p4);
+    public abstract boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos,
+                                      LivingEntity entity);
 
-    public abstract boolean hurtEnemy(ItemStack p0, LivingEntity p1, LivingEntity p2);
+    public abstract boolean hurtEnemy(ItemStack stack, LivingEntity victim, LivingEntity attacker);
 
-    public abstract float getAttackDelay(ItemStack p0, LivingEntity p1, LivingEntity p2);
+    public abstract float getAttackDelay(ItemStack stack, LivingEntity victim, LivingEntity attacker);
 
-    public abstract float getKnockBack(ItemStack p0, LivingEntity p1, LivingEntity p2);
+    public abstract float getKnockBack(ItemStack stack, LivingEntity victim, LivingEntity attacker);
 
     public abstract int getEnchantmentValue();
 
-    public abstract void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> p0);
+    public abstract void addItemAttributeModifiers(Multimap<Attribute, AttributeModifier> attributes);
 
-    public abstract UseAnim getUseAnimation(ItemStack p0);
+    public abstract UseAnim getUseAnimation(ItemStack stack);
 
-    public abstract int getUseDuration(ItemStack p0);
+    public abstract int getUseDuration(ItemStack stack);
 
-    public abstract boolean onLeftClickEntity(ItemStack p0, Player p1, Entity p2);
+    public abstract boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity);
 
-    public abstract InteractionResultHolder<ItemStack> use(Level p0, Player p1, InteractionHand p2);
+    public abstract InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand);
 
     public abstract void onUsingTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration);
 
-    public abstract void releaseUsing(ItemStack p0, Level p1, LivingEntity p2, int p3);
+    public abstract void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int i);
 
-    public abstract void inventoryTick(ItemStack p0, Level p1, Entity p2, int p3, boolean p4);
-
+    public abstract void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean flag);
 }
