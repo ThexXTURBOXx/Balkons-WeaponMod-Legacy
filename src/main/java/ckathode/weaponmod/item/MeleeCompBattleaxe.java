@@ -13,13 +13,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
-    public static final float[] DEFAULT_IGNORES = new float[]{1, 1, 1, 1, 1};
-    public final float ignoreArmourAmount;
 
     public MeleeCompBattleaxe(Item.ToolMaterial toolmaterial) {
         super(MeleeSpecs.BATTLEAXE, toolmaterial);
-        int ordinal = toolmaterial.ordinal();
-        ignoreArmourAmount = ordinal < DEFAULT_IGNORES.length ? DEFAULT_IGNORES[ordinal] : 0;
     }
 
     @Override
@@ -31,7 +27,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
             double mz = entity.motionZ;
             int prevhurtres = living.hurtResistantTime;
             int prevhurt = living.hurtTime;
-            living.attackEntityFrom(new DamageSourceAxe(), ignoreArmourAmount);
+            living.attackEntityFrom(new DamageSourceAxe(), getIgnoreArmorAmount(weaponMaterial));
             entity.motionX = mx;
             entity.motionY = my;
             entity.motionZ = mz;
@@ -55,9 +51,15 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     @Override
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
         super.addItemAttributeModifiers(multimap);
-        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getAttributeUnlocalizedName(),
-                new AttributeModifier(IItemWeapon.IGNORE_ARMOUR_MODIFIER,
-                        "Weapon ignore armour modifier", ignoreArmourAmount, 0));
+        if (getIgnoreArmorAmount(weaponMaterial) != 0.0f) {
+            multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getAttributeUnlocalizedName(),
+                    new AttributeModifier(IItemWeapon.IGNORE_ARMOUR_MODIFIER,
+                            "Weapon ignore armour modifier", getIgnoreArmorAmount(weaponMaterial), 0));
+        }
+    }
+
+    public float getIgnoreArmorAmount(Item.ToolMaterial material) {
+        return 1.0f;
     }
 
 }
