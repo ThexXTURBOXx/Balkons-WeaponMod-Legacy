@@ -37,7 +37,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
+public class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
         implements IProjectile, IEntityAdditionalSpawnData {
     private static final Predicate<Entity> WEAPON_TARGETS = EntitySelectors.NOT_SPECTATING.and(
             EntitySelectors.IS_ALIVE).and(Entity::canBeCollidedWith);
