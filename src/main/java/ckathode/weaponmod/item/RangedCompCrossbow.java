@@ -4,10 +4,10 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class RangedCompCrossbow extends RangedComponent {
