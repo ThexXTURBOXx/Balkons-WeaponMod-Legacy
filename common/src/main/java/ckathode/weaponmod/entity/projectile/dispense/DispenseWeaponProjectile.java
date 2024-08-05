@@ -14,16 +14,16 @@ public abstract class DispenseWeaponProjectile extends AbstractProjectileDispens
 
     @NotNull
     @Override
-    public ItemStack execute(BlockSource blocksource, @NotNull ItemStack itemstack) {
-        Level world = blocksource.getLevel();
-        Position pos = DispenserBlock.getDispensePosition(blocksource);
-        Direction face = blocksource.getBlockState().getValue(DispenserBlock.FACING);
-        Projectile projectile = getProjectile(world, pos, itemstack);
+    public ItemStack execute(BlockSource blockSource, @NotNull ItemStack stack) {
+        Level world = blockSource.getLevel();
+        Position pos = DispenserBlock.getDispensePosition(blockSource);
+        Direction face = blockSource.getBlockState().getValue(DispenserBlock.FACING);
+        Projectile projectile = getProjectile(world, pos, stack);
         projectile.shoot(face.getStepX(), face.getStepY() + getYVel(), face.getStepZ(), getPower(),
                 getUncertainty());
         world.addFreshEntity(projectile);
-        itemstack.shrink(1);
-        return itemstack;
+        stack.shrink(1);
+        return stack;
     }
 
     public double getYVel() {
