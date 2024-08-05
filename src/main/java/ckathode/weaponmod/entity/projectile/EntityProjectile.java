@@ -1,7 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
-import java.util.function.Predicate;
 import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -24,7 +23,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -40,10 +38,8 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrowEntity
+public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrowEntity
         implements IProjectile, IEntityAdditionalSpawnData {
-    private static final Predicate<Entity> WEAPON_TARGETS = EntityPredicates.NOT_SPECTATING.and(
-            EntityPredicates.IS_ALIVE).and(Entity::canBeCollidedWith);
     private static final DataParameter<Byte> WEAPON_CRITICAL = EntityDataManager.createKey(EntityProjectile.class,
             DataSerializers.BYTE);
     protected int xTile;

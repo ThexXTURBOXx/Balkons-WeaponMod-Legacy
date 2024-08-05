@@ -2,8 +2,8 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityDummy;
-import javax.annotation.Nonnull;
 import com.mojang.blaze3d.platform.GlStateManager;
+import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
+public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
     private static final DataParameter<Integer> WEAPON_MATERIAL =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.VARINT);
     private static final DataParameter<ItemStack> WEAPON_ITEM =
