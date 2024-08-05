@@ -3,7 +3,6 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.entity.projectile.MaterialRegistry;
 import java.util.List;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
@@ -20,8 +19,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
-
-    public static final float[] DEFAULT_IGNORES = new float[]{1, 1, 1, 1, 1, 1};
 
     public static final String WOOD_ID = "battleaxe.wood";
     public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.WOOD);
@@ -41,13 +38,8 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     public static final String NETHERITE_ID = "battleaxe.netherite";
     public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardBattleaxe(Tiers.NETHERITE);
 
-    public final float ignoreArmourAmount;
-
     public MeleeCompBattleaxe(Tier itemTier) {
         super(MeleeSpecs.BATTLEAXE, itemTier);
-        int ordinal = MaterialRegistry.getOrdinal(itemTier);
-        ignoreArmourAmount = ordinal >= 0 && ordinal < DEFAULT_IGNORES.length
-                ? DEFAULT_IGNORES[ordinal] : 0;
     }
 
     @Override
@@ -56,7 +48,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
             Vec3 motion = entity.getDeltaMovement();
             int prevhurtres = living.invulnerableTime;
             int prevhurt = living.hurtTime;
-            living.hurt(player.damageSources().source(WMDamageSources.BATTLEAXE), ignoreArmourAmount);
+            living.hurt(player.damageSources().source(WMDamageSources.BATTLEAXE), getIgnoreArmorAmount(weaponMaterial));
             entity.setDeltaMovement(motion);
             living.invulnerableTime = prevhurtres;
             living.hurtTime = prevhurt;
@@ -75,12 +67,19 @@ public class MeleeCompBattleaxe extends MeleeComponent {
 
     @Override
     public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
-        attributeBuilder = super.setAttributes(attributeBuilder)
-                .add(WMRegistries.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(ItemMelee.IGNORE_ARMOUR_MODIFIER,
-                                "Weapon ignore armour modifier", ignoreArmourAmount,
-                                AttributeModifier.Operation.ADD_VALUE),
-                        EquipmentSlotGroup.MAINHAND);
+        attributeBuilder = super.setAttributes(attributeBuilder);
+        if (getIgnoreArmorAmount(weaponMaterial) != 0.0f) {
+            attributeBuilder = attributeBuilder
+                    .add(WMRegistries.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(ItemMelee.IGNORE_ARMOUR_MODIFIER,
+                                    "Weapon ignore armour modifier", getIgnoreArmorAmount(weaponMaterial),
+                                    AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.MAINHAND);
+        }
         return attributeBuilder;
+    }
+
+    public float getIgnoreArmorAmount(Tier tier) {
+        return 1.0f;
     }
 
 }
