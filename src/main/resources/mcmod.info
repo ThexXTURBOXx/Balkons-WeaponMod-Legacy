@@ -8,7 +8,9 @@
     "logoFile": "bwm_logo.png",
     "url": "${mod_home_url}",
     "updateUrl": "${mod_home_url}",
-    "authorList": ["${mod_authors_list}"],
+    "authorList": [
+      "${mod_authors_list}"
+    ],
     "credits": "${mod_authors}",
     "parent": "",
     "screenshots": [],

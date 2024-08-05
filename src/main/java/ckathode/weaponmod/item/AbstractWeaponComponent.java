@@ -35,36 +35,34 @@ public abstract class AbstractWeaponComponent {
 
     public abstract float getEntityDamage();
 
-    public abstract float getBlockDamage(ItemStack p0, Block p1);
+    public abstract float getBlockDamage(ItemStack stack, Block block);
 
-    public abstract boolean canHarvestBlock(Block p0);
+    public abstract boolean canHarvestBlock(Block block);
 
-    public abstract boolean onBlockDestroyed(ItemStack p0, World p1, Block p2,
-                                             BlockPos p3, EntityLivingBase p4);
+    public abstract boolean onBlockDestroyed(ItemStack stack, World world, Block block, BlockPos pos,
+                                             EntityLivingBase entity);
 
-    public abstract boolean hitEntity(ItemStack p0, EntityLivingBase p1, EntityLivingBase p2);
+    public abstract boolean hitEntity(ItemStack stack, EntityLivingBase victim, EntityLivingBase attacker);
 
-    public abstract float getAttackDelay(ItemStack p0, EntityLivingBase p1, EntityLivingBase p2);
+    public abstract float getAttackDelay(ItemStack stack, EntityLivingBase victim, EntityLivingBase attacker);
 
-    public abstract float getKnockBack(ItemStack p0, EntityLivingBase p1, EntityLivingBase p2);
+    public abstract float getKnockBack(ItemStack stack, EntityLivingBase victim, EntityLivingBase attacker);
 
     public abstract int getItemEnchantability();
 
-    public abstract void addItemAttributeModifiers(Multimap<String, AttributeModifier> p0);
+    public abstract void addItemAttributeModifiers(Multimap<String, AttributeModifier> attributes);
 
-    public abstract EnumAction getItemUseAction(ItemStack p0);
+    public abstract EnumAction getItemUseAction(ItemStack stack);
 
-    public abstract int getMaxItemUseDuration(ItemStack p0);
+    public abstract int getMaxItemUseDuration(ItemStack stack);
 
-    public abstract boolean onLeftClickEntity(ItemStack p0, EntityPlayer p1, Entity p2);
+    public abstract boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity);
 
-    public abstract ItemStack onItemRightClick(World p0, EntityPlayer p1, ItemStack p2);
+    public abstract ItemStack onItemRightClick(World world, EntityPlayer player, ItemStack stack);
 
-    public abstract void onUsingTick(ItemStack p0, EntityLivingBase p1, int p2);
+    public abstract void onUsingTick(ItemStack stack, EntityLivingBase entity, int count);
 
-    public abstract void onPlayerStoppedUsing(ItemStack p0, World p1, EntityLivingBase p2,
-                                              int p3);
+    public abstract void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int i);
 
-    public abstract void onUpdate(ItemStack p0, World p1, Entity p2, int p3,
-                                  boolean p4);
+    public abstract void onUpdate(ItemStack stack, World world, Entity entity, int i, boolean flag);
 }

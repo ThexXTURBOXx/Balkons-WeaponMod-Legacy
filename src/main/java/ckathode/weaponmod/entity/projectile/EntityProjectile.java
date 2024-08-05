@@ -30,7 +30,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 
-public abstract class EntityProjectile extends EntityArrow implements IThrowableEntity {
+public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     @SuppressWarnings("unchecked")
     private static final Predicate<Entity> WEAPON_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING,
             EntitySelectors.selectAnything, Entity::canBeCollidedWith);
