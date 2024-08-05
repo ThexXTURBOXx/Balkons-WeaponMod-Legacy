@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WeaponModConfig;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import java.util.function.Predicate;
 import me.shedaniel.architectury.extensions.network.EntitySpawnExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -18,7 +17,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
@@ -39,10 +37,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrow
+public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrow
         implements EntitySpawnExtension {
-    private static final Predicate<Entity> WEAPON_TARGETS = EntitySelector.NO_SPECTATORS.and(
-            EntitySelector.ENTITY_STILL_ALIVE).and(Entity::isPickable);
     private static final EntityDataAccessor<Byte> WEAPON_CRITICAL = SynchedEntityData.defineId(EntityProjectile.class,
             EntityDataSerializers.BYTE);
     protected int xTile;
