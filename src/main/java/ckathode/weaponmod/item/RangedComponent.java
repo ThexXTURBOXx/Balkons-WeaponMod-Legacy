@@ -205,14 +205,13 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
                 entityplayer.rotationPitch);
     }
 
-    public abstract void effectReloadDone(ItemStack p0, World p1, EntityPlayer p2);
+    public abstract void effectReloadDone(ItemStack stack, World world, EntityPlayer player);
 
-    public abstract void fire(ItemStack p0, World p1, EntityLivingBase p2, int p3);
+    public abstract void fire(ItemStack stack, World world, EntityLivingBase entity, int i);
 
-    public abstract void effectPlayer(ItemStack p0, EntityPlayer p1, World p2);
+    public abstract void effectPlayer(ItemStack stack, EntityPlayer player, World world);
 
-    public abstract void effectShoot(World p0, double p1, double p2, double p3,
-                                     float p4, float p5);
+    public abstract void effectShoot(World world, double x, double y, double z, float yaw, float pitch);
 
     public void applyProjectileEnchantments(EntityProjectile entity, ItemStack itemstack) {
         if (EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) > 0) {

@@ -4,6 +4,7 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import java.util.List;
+import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +15,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +36,7 @@ import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class EntityProjectile extends EntityArrow implements IThrowableEntity {
+public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     @SuppressWarnings("unchecked")
     private static final Predicate<Entity> WEAPON_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING,
             EntitySelectors.IS_ALIVE, Entity::canBeCollidedWith);
@@ -356,8 +358,14 @@ public abstract class EntityProjectile extends EntityArrow implements IThrowable
         return 1200;
     }
 
+    @Nonnull
+    @Override
+    protected ItemStack getArrowStack() {
+        return new ItemStack(Items.ARROW);
+    }
+
     public ItemStack getPickupItem() {
-        return null;
+        return getArrowStack();
     }
 
     @NotNull
