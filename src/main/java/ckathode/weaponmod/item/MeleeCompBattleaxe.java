@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.DamageSourceAxe;
 import ckathode.weaponmod.WeaponModAttributes;
-import ckathode.weaponmod.entity.projectile.MaterialRegistry;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -15,14 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
-    public static final float[] DEFAULT_IGNORES = new float[]{1, 1, 1, 1, 1};
-    public final float ignoreArmourAmount;
 
     public MeleeCompBattleaxe(IItemTier itemTier) {
         super(MeleeSpecs.BATTLEAXE, itemTier);
-        int ordinal = MaterialRegistry.getOrdinal(itemTier);
-        ignoreArmourAmount = ordinal >= 0 && ordinal < DEFAULT_IGNORES.length
-                ? DEFAULT_IGNORES[ordinal] : 0;
     }
 
     @Override
@@ -32,7 +26,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
             Vec3d motion = entity.getMotion();
             int prevhurtres = living.hurtResistantTime;
             int prevhurt = living.hurtTime;
-            living.attackEntityFrom(new DamageSourceAxe(), ignoreArmourAmount);
+            living.attackEntityFrom(new DamageSourceAxe(), getIgnoreArmorAmount(weaponMaterial));
             entity.setMotion(motion);
             living.hurtResistantTime = prevhurtres;
             living.hurtTime = prevhurt;
@@ -54,10 +48,16 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     @Override
     public void addItemAttributeModifiers(Multimap<String, AttributeModifier> multimap) {
         super.addItemAttributeModifiers(multimap);
-        multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getName(),
-                new AttributeModifier(IItemWeapon.IGNORE_ARMOUR_MODIFIER,
-                        "Weapon ignore armour modifier", ignoreArmourAmount,
-                        AttributeModifier.Operation.ADDITION));
+        if (getIgnoreArmorAmount(weaponMaterial) != 0.0f) {
+            multimap.put(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getName(),
+                    new AttributeModifier(IItemWeapon.IGNORE_ARMOUR_MODIFIER,
+                            "Weapon ignore armour modifier", getIgnoreArmorAmount(weaponMaterial),
+                            AttributeModifier.Operation.ADDITION));
+        }
+    }
+
+    public float getIgnoreArmorAmount(IItemTier itemTier) {
+        return 1.0f;
     }
 
 }
