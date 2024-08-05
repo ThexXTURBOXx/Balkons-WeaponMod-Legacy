@@ -3,7 +3,6 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.WeaponModConfig;
 import dev.architectury.extensions.network.EntitySpawnExtension;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -20,7 +19,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -28,6 +26,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -40,10 +39,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrow
+public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArrow
         implements EntitySpawnExtension {
-    private static final Predicate<Entity> WEAPON_TARGETS = EntitySelector.NO_SPECTATORS.and(
-            EntitySelector.ENTITY_STILL_ALIVE).and(Entity::isPickable);
     private static final EntityDataAccessor<Byte> WEAPON_CRITICAL = SynchedEntityData.defineId(EntityProjectile.class,
             EntityDataSerializers.BYTE);
     protected int xTile;
@@ -315,7 +312,9 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
     }
 
     @NotNull
-    public abstract DamageSource getDamageSource();
+    public DamageSource getDamageSource() {
+        return damageSources().arrow(this, shooter);
+    }
 
     public void applyEntityHitEffects(Entity entity) {
         if (isOnFire() && !(entity instanceof EnderMan)) {
@@ -383,6 +382,12 @@ public abstract class EntityProjectile<T extends EntityProjectile<T>> extends Ab
 
     public int getMaxArrowShake() {
         return 7;
+    }
+
+    @NotNull
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(Items.ARROW);
     }
 
     @NotNull

@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IItemWeapon {
 
-    boolean onLeftClickEntity(ItemStack p0, Player p1, Entity p2);
+    boolean onLeftClickEntity(ItemStack itemstack, Player player, Entity entity);
 
     MeleeComponent getMeleeComponent();
 
