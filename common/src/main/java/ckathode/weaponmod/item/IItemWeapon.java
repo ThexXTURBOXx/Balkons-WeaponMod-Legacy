@@ -12,7 +12,7 @@ public interface IItemWeapon {
     UUID RELOAD_TIME_MODIFIER = UUID.fromString("E9BA7518-6CA4-493F-BB2C-06A8DD08CB2A");
     UUID IGNORE_ARMOUR_MODIFIER = UUID.fromString("7A5DECCB-DC97-4B80-BA8D-815E8FFE58CE");
 
-    boolean onLeftClickEntity(ItemStack p0, Player p1, Entity p2);
+    boolean onLeftClickEntity(ItemStack itemstack, Player player, Entity entity);
 
     MeleeComponent getMeleeComponent();
 

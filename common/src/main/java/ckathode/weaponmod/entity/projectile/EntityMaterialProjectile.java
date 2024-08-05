@@ -16,7 +16,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
+public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
 
     private static final EntityDataAccessor<Integer> WEAPON_MATERIAL =
             SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.INT);
