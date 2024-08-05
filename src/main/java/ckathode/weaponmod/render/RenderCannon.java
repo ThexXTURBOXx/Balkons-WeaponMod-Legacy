@@ -25,7 +25,8 @@ public class RenderCannon extends Render {
 
     public void renderCannon(EntityCannon entitycannon, double x, double y, double z, float yaw, float partialTicks) {
         GL11.glPushMatrix();
-        float rot = entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * partialTicks;
+        float rot =
+                entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * partialTicks;
         rot = Math.min(rot, 20.0f);
         yaw = interpolateRotation(entitycannon.prevRotationYaw, entitycannon.rotationYaw, partialTicks);
         GL11.glTranslated(x, y + 2.1, z);

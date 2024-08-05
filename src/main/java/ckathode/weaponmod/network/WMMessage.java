@@ -7,12 +7,12 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class WMMessage {
-    public abstract void encodeInto(final ChannelHandlerContext p0, final ByteBuf p1);
+    public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
 
-    public abstract void decodeInto(final ChannelHandlerContext p0, final ByteBuf p1);
+    public abstract void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
 
     @SideOnly(Side.CLIENT)
-    public abstract void handleClientSide(final EntityPlayer p0);
+    public abstract void handleClientSide(EntityPlayer player);
 
-    public abstract void handleServerSide(final EntityPlayer p0);
+    public abstract void handleServerSide(EntityPlayer player);
 }

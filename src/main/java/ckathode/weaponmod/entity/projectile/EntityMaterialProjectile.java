@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public abstract class EntityMaterialProjectile extends EntityProjectile {
+public class EntityMaterialProjectile extends EntityProjectile {
     private static final int WEAPON_MATERIAL = 18;
     private static final int WEAPON_ITEM = 19;
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},

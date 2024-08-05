@@ -22,7 +22,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public abstract class EntityProjectile extends EntityArrow implements IThrowableEntity {
+public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     private static final int WEAPON_CRITICAL = 17;
     protected int xTile;
     protected int yTile;
