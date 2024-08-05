@@ -67,7 +67,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity.getBoundingBox();
+        return EntityProjectile.getBoundingBox(entity);
     }
 
     @Override

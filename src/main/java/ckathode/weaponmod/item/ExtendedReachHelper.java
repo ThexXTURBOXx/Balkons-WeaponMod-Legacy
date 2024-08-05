@@ -41,8 +41,9 @@ public final class ExtendedReachHelper {
 
             Vec3 hitVec = null;
             for (Entity entity1 : list) {
-                float bordersize = entity1.getCollisionBorderSize();
-                AxisAlignedBB aabb = entity1.getBoundingBox().expand(bordersize, bordersize, bordersize);
+                float borderSize = entity1.getCollisionBorderSize();
+                AxisAlignedBB aabb = EntityProjectile.getBoundingBox(entity1)
+                        .expand(borderSize, borderSize, borderSize);
                 MovingObjectPosition intercept = aabb.calculateIntercept(pos, traced);
                 if (aabb.isVecInside(pos)) {
                     if (d >= 0.0D) {

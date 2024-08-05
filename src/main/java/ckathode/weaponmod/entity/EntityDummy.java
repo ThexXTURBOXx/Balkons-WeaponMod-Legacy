@@ -57,7 +57,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity.getBoundingBox();
+        return EntityProjectile.getBoundingBox(entity);
     }
 
     @Override

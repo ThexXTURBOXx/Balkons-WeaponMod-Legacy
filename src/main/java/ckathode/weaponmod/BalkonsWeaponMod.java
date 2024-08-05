@@ -303,7 +303,7 @@ public class BalkonsWeaponMod {
         }
         if (modConfig.isEnabled("musket") || modConfig.isEnabled("flintlock")) {
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(musketBullet, 8), "X", "#", "O",
-                    'X', "ingotIron", '#', "gunpowder", 'O', "paper"));
+                    'X', "ingotIron", '#', Items.gunpowder, 'O', Items.paper));
         }
         if (modConfig.isEnabled("battleaxe")) {
             GameRegistry.addRecipe(new ShapedOreRecipe(battleaxeWood, "###", "#X#", " X ",
@@ -335,38 +335,37 @@ public class BalkonsWeaponMod {
             GameRegistry.addRecipe(new ShapedOreRecipe(crossbow, "O##", "#X ", "# X",
                     'X', "plankWood", '#', "ingotIron", 'O', Items.bow));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(bolt, 4), "#", "X",
-                    'X', "feather", '#', "ingotIron"));
+                    'X', Items.feather, '#', "ingotIron"));
         }
         if (modConfig.isEnabled("blowgun")) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blowgun), "X  ", " X ", "  X",
-                    'X', "sugarcane"));
+            GameRegistry.addRecipe(new ItemStack(blowgun), "X  ", " X ", "  X", 'X', Items.reeds);
             for (DartType type : DartType.dartTypes) {
                 if (type != null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(dart, 4, type.typeID), "#", "X", "O",
-                            'X', type.craftItem, '#', "stickWood", 'O', "feather"));
+                            'X', type.craftItem, '#', "stickWood", 'O', Items.feather));
                 }
             }
         }
         if (modConfig.isEnabled("dynamite")) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(dynamite, 2), "#", "X", "X",
-                    'X', "gunpowder", '#', "string"));
+            GameRegistry.addRecipe(new ItemStack(dynamite, 2), "#", "X", "X",
+                    'X', Items.gunpowder, '#', Items.string);
         }
         if (modConfig.isEnabled("flail")) {
             GameRegistry.addRecipe(new ShapedOreRecipe(flailWood, "  O", " XO", "X #",
-                    'X', "stickWood", 'O', "string", '#', "plankWood"));
+                    'X', "stickWood", 'O', Items.string, '#', "plankWood"));
             GameRegistry.addRecipe(new ShapedOreRecipe(flailStone, "  O", " XO", "X #",
-                    'X', "stickWood", 'O', "string", '#', "cobblestone"));
+                    'X', "stickWood", 'O', Items.string, '#', "cobblestone"));
             GameRegistry.addRecipe(new ShapedOreRecipe(flailSteel, "  O", " XO", "X #",
-                    'X', "stickWood", 'O', "string", '#', "ingotIron"));
+                    'X', "stickWood", 'O', Items.string, '#', "ingotIron"));
             GameRegistry.addRecipe(new ShapedOreRecipe(flailDiamond, "  O", " XO", "X #",
-                    'X', "stickWood", 'O', "string", '#', "gemDiamond"));
+                    'X', "stickWood", 'O', Items.string, '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(flailGold, "  O", " XO", "X #",
-                    'X', "stickWood", 'O', "string", '#', "ingotGold"));
+                    'X', "stickWood", 'O', Items.string, '#', "ingotGold"));
             GameRegistry.addSmelting(flailGold, new ItemStack(Items.gold_nugget), 0.1f);
         }
         if (modConfig.isEnabled("firerod")) {
             GameRegistry.addRecipe(new ShapedOreRecipe(fireRod, "#  ", " X ", "  X",
-                    'X', "stickWood", '#', "torch"));
+                    'X', "stickWood", '#', Blocks.torch));
         }
         if (modConfig.isEnabled("cannon")) {
             GameRegistry.addRecipe(new ShapedOreRecipe(cannon, "XX#", "  X", "XXO",
@@ -375,8 +374,8 @@ public class BalkonsWeaponMod {
                     'X', "stone"));
         }
         if (modConfig.isEnabled("blunderbuss")) {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blunderShot, 8), "X", "#", "O",
-                    'X', "gravel", '#', "gunpowder", 'O', "paper"));
+            GameRegistry.addRecipe(new ItemStack(blunderShot, 8), "X", "#", "O",
+                    'X', Blocks.gravel, '#', Items.gunpowder, 'O', Items.paper);
             GameRegistry.addRecipe(new ItemStack(blunderbuss), "#", "X",
                     'X', gunStock, '#', blunderIronPart);
             GameRegistry.addRecipe(new ShapedOreRecipe(blunderIronPart, "X  ", " X#", "X X",
@@ -424,7 +423,7 @@ public class BalkonsWeaponMod {
             GameRegistry.addRecipe(new ShapedOreRecipe(mortarIronPart, "## ", "##X", "  #",
                     'X', Items.flint_and_steel, '#', "ingotIron"));
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(mortarShell, 2), "#", "X", "X",
-                    'X', "gunpowder", '#', "ingotIron"));
+                    'X', Items.gunpowder, '#', "ingotIron"));
             GameRegistry.addRecipe(new ItemStack(mortar), "X", "#",
                     'X', mortarIronPart, '#', gunStock);
             if (modConfig.isEnabled("dynamite")) {

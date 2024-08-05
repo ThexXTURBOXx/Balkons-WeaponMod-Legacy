@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -9,7 +10,7 @@ import net.minecraft.util.IIcon;
 public class DartType {
     public static final DartType[] dartTypes = new DartType[128];
     public static final DartType damage = new DartType((byte) 0, "dart",
-            new PotionEffect(Potion.poison.id, 120, 0), "blockCactus");
+            new PotionEffect(Potion.poison.id, 120, 0), Blocks.cactus);
     public static final DartType hunger = new DartType((byte) 1, "dart.hunger",
             new PotionEffect(Potion.hunger.id, 360, 0), Items.rotten_flesh);
     public static final DartType slow = new DartType((byte) 2, "dart.slow",
