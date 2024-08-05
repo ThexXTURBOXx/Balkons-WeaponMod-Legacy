@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -18,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityMaterialProjectile extends EntityProjectile {
+public class EntityMaterialProjectile extends EntityProjectile {
     private static final DataParameter<Integer> WEAPON_MATERIAL =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.VARINT);
     private static final DataParameter<Optional<ItemStack>> WEAPON_ITEM =
@@ -78,7 +77,7 @@ public abstract class EntityMaterialProjectile extends EntityProjectile {
     @Nonnull
     @Override
     protected ItemStack getArrowStack() {
-        return thrownItem == null ? new ItemStack(Items.ARROW) : thrownItem;
+        return thrownItem == null ? super.getArrowStack() : thrownItem;
     }
 
     public int getWeaponMaterialId() {

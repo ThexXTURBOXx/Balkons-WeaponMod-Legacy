@@ -35,12 +35,12 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
         isPostInitialized = false;
     }
 
-    public boolean registerPacket(final Class<? extends WMMessage> class0) {
+    public boolean registerPacket(final Class<? extends WMMessage> clazz) {
         if (packets.size() > 256) {
             BalkonsWeaponMod.modLog.error("More than 256 packets registered");
             return false;
         }
-        if (packets.contains(class0)) {
+        if (packets.contains(clazz)) {
             BalkonsWeaponMod.modLog.warn("Packet already registered");
             return false;
         }
@@ -48,7 +48,7 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
             BalkonsWeaponMod.modLog.error("Already post-initialized");
             return false;
         }
-        packets.add(class0);
+        packets.add(clazz);
         return true;
     }
 
