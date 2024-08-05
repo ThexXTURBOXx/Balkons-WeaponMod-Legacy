@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityMaterialProjectile extends EntityProjectile {
+public class EntityMaterialProjectile extends EntityProjectile {
     private static final DataParameter<Integer> WEAPON_MATERIAL =
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.VARINT);
     private static final DataParameter<ItemStack> WEAPON_ITEM =

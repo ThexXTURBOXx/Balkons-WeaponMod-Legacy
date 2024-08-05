@@ -34,7 +34,7 @@ import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class EntityProjectile extends EntityArrow implements IThrowableEntity {
+public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     @SuppressWarnings("unchecked")
     private static final Predicate<Entity> WEAPON_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING,
             EntitySelectors.IS_ALIVE, Entity::canBeCollidedWith);
