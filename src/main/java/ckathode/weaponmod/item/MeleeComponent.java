@@ -201,7 +201,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         KATANA(0, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1, 2, 0.2f),
         FIREROD(1, 0.0f, 1.0f, 0.0f, 1.0f, 0.4f, 2, 0, 0.0f),
         BOOMERANG(0, 0.5f, 2.0f, 1.0f, 1.0f, 0.4f, 1, 1, 2.0f),
-        NONE(0, 0.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 0.0f);
+        NONE(0, 1.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 0.0f);
 
         public final int durabilityBase;
         public final float durabilityMult;
