@@ -70,7 +70,9 @@ jobs:
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: neoforge
-          game-versions: 1.21
+          game-versions: |
+            1.21
+            1.21.1
           java: 21
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)
@@ -90,7 +92,9 @@ jobs:
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: fabric
-          game-versions: 1.21
+          game-versions: |
+            1.21
+            1.21.1
           java: 21
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)
