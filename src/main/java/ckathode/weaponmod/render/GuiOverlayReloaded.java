@@ -28,7 +28,6 @@ public class GuiOverlayReloaded extends Gui {
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer p = mc.thePlayer;
         if (p == null) return;
-        if (!p.isUsingItem()) return;
         int currentItem = p.inventory.currentItem;
         ItemStack is = p.getCurrentEquippedItem();
         if (is == null) return;
