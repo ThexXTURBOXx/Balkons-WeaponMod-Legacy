@@ -4,6 +4,8 @@ import ckathode.weaponmod.item.IItemWeapon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -34,6 +36,20 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         super.defineSynchedData(builder);
         builder.define(WEAPON_MATERIAL, 0);
         builder.define(WEAPON_ITEM, ItemStack.EMPTY);
+    }
+
+    @Override
+    public void saveAdditionalSpawnData(FriendlyByteBuf buf) {
+        super.saveAdditionalSpawnData(buf);
+        buf.writeInt(getWeaponMaterialId());
+        ItemStack.STREAM_CODEC.encode(new RegistryFriendlyByteBuf(buf, registryAccess()), getWeapon());
+    }
+
+    @Override
+    public void loadAdditionalSpawnData(FriendlyByteBuf buf) {
+        super.loadAdditionalSpawnData(buf);
+        entityData.set(WEAPON_MATERIAL, buf.readInt());
+        entityData.set(WEAPON_ITEM, ItemStack.STREAM_CODEC.decode(new RegistryFriendlyByteBuf(buf, registryAccess())));
     }
 
     public float getMeleeHitDamage(Entity entity) {
