@@ -1,7 +1,9 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.common.registry.IThrowableEntity;
+import io.netty.buffer.ByteBuf;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,7 +24,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityProjectile extends EntityArrow implements IThrowableEntity {
+public class EntityProjectile extends EntityArrow implements IThrowableEntity, IEntityAdditionalSpawnData {
     private static final int WEAPON_CRITICAL = 17;
     protected int xTile;
     protected int yTile;
@@ -57,6 +59,18 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     protected void entityInit() {
         super.entityInit();
         dataWatcher.addObject(WEAPON_CRITICAL, (byte) 0);
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buf) {
+        Entity shooter = getThrower();
+        buf.writeInt(shooter != null ? shooter.getEntityId() : -1);
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buf) {
+        int shooterId = buf.readInt();
+        if (shooterId >= 0) setThrower(worldObj.getEntityByID(shooterId));
     }
 
     @Override
