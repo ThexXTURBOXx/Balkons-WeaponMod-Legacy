@@ -29,15 +29,12 @@ public class GuiOverlayReloaded extends Gui {
         Minecraft mc = Minecraft.getInstance();
         EntityPlayer p = mc.player;
         if (p == null) return;
-        if (!p.isHandActive()) return;
 
         renderForHand(EnumHand.MAIN_HAND, p);
         renderForHand(EnumHand.OFF_HAND, p);
     }
 
     private void renderForHand(EnumHand hand, EntityPlayer p) {
-        if (p.getActiveHand() != hand) return;
-
         Minecraft mc = Minecraft.getInstance();
         int currentItem = p.inventory.currentItem;
 
@@ -56,13 +53,15 @@ public class GuiOverlayReloaded extends Gui {
         float f = 0;
         int offset = 0;
         if (rc != null) {
-            if (RangedComponent.isReloaded(is)) {
-                f = 1.0f;
-                offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
-            } else {
-                f = MathHelper.clamp(p.getItemInUseMaxCount() / (float) rc.getReloadDuration(is), 0, 1);
+            if (p.getActiveHand() == hand) {
+                if (RangedComponent.isReloaded(is)) {
+                    f = 1.0f;
+                    offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
+                } else {
+                    f = MathHelper.clamp(p.getItemInUseMaxCount() / (float) rc.getReloadDuration(is), 0, 1);
+                }
+                set = true;
             }
-            set = true;
         } else if (mec != null) {
             if (mec.shouldRenderCooldown()) {
                 f = MathHelper.clamp(mec.getCooldown(), 0, 1);
