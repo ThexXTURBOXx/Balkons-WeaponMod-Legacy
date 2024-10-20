@@ -29,12 +29,15 @@ public class GuiOverlayReloaded extends AbstractGui {
         Minecraft mc = Minecraft.getInstance();
         PlayerEntity p = mc.player;
         if (p == null) return;
+        if (!p.isHandActive()) return;
 
-        d(Hand.MAIN_HAND, p);
-        d(Hand.OFF_HAND, p);
+        renderForHand(Hand.MAIN_HAND, p);
+        renderForHand(Hand.OFF_HAND, p);
     }
 
-    private void d(Hand hand, PlayerEntity p) {
+    private void renderForHand(Hand hand, PlayerEntity p) {
+        if (p.getActiveHand() != hand) return;
+
         Minecraft mc = Minecraft.getInstance();
         int currentItem = p.inventory.currentItem;
 
