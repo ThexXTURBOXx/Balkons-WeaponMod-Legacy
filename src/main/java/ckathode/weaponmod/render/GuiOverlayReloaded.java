@@ -30,12 +30,15 @@ public class GuiOverlayReloaded extends Gui {
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer p = mc.thePlayer;
         if (p == null) return;
+        if (!p.isHandActive()) return;
 
-        d(EnumHand.MAIN_HAND, p, e.getResolution());
-        d(EnumHand.OFF_HAND, p, e.getResolution());
+        renderForHand(EnumHand.MAIN_HAND, p, e.getResolution());
+        renderForHand(EnumHand.OFF_HAND, p, e.getResolution());
     }
 
-    private void d(EnumHand hand, EntityPlayer p, ScaledResolution res) {
+    private void renderForHand(EnumHand hand, EntityPlayer p, ScaledResolution res) {
+        if (p.getActiveHand() != hand) return;
+
         Minecraft mc = Minecraft.getMinecraft();
         int currentItem = p.inventory.currentItem;
 
