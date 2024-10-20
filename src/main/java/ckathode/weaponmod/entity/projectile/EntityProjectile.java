@@ -3,6 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import io.netty.buffer.ByteBuf;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,9 +29,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 
-public class EntityProjectile extends EntityArrow implements IThrowableEntity {
+public class EntityProjectile extends EntityArrow implements IThrowableEntity, IEntityAdditionalSpawnData {
     @SuppressWarnings("unchecked")
     private static final Predicate<Entity> WEAPON_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING,
             EntitySelectors.selectAnything, Entity::canBeCollidedWith);
@@ -68,6 +70,18 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity {
     protected void entityInit() {
         super.entityInit();
         dataWatcher.addObject(WEAPON_CRITICAL, (byte) 0);
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buf) {
+        Entity shooter = getThrower();
+        buf.writeInt(shooter != null ? shooter.getEntityId() : -1);
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buf) {
+        int shooterId = buf.readInt();
+        if (shooterId >= 0) setThrower(worldObj.getEntityByID(shooterId));
     }
 
     @Override
