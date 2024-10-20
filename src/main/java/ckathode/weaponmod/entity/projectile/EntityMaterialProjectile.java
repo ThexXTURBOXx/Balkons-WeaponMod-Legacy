@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -34,6 +35,20 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         super.registerData();
         dataManager.register(WEAPON_MATERIAL, 0);
         dataManager.register(WEAPON_ITEM, ItemStack.EMPTY);
+    }
+
+    @Override
+    public void writeSpawnData(PacketBuffer buf) {
+        super.writeSpawnData(buf);
+        buf.writeInt(getWeaponMaterialId());
+        buf.writeItemStack(getWeapon());
+    }
+
+    @Override
+    public void readSpawnData(PacketBuffer buf) {
+        super.readSpawnData(buf);
+        dataManager.set(WEAPON_MATERIAL, buf.readInt());
+        dataManager.set(WEAPON_ITEM, buf.readItemStack());
     }
 
     public float getMeleeHitDamage(Entity entity) {
