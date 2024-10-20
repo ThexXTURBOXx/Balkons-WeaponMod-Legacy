@@ -1,6 +1,7 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import io.netty.buffer.ByteBuf;
 import javax.annotation.Nonnull;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -12,6 +13,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,6 +35,20 @@ public class EntityMaterialProjectile extends EntityProjectile {
         super.entityInit();
         dataManager.register(WEAPON_MATERIAL, 0);
         dataManager.register(WEAPON_ITEM, ItemStack.EMPTY);
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buf) {
+        super.writeSpawnData(buf);
+        buf.writeInt(getWeaponMaterialId());
+        ByteBufUtils.writeItemStack(buf, getWeapon());
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buf) {
+        super.readSpawnData(buf);
+        dataManager.set(WEAPON_MATERIAL, buf.readInt());
+        dataManager.set(WEAPON_ITEM, ByteBufUtils.readItemStack(buf));
     }
 
     public float getMeleeHitDamage(Entity entity) {
