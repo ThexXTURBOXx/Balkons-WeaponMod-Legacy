@@ -25,15 +25,12 @@ public class GuiOverlayReloaded {
         Minecraft mc = Minecraft.getInstance();
         Player p = mc.player;
         if (p == null) return;
-        if (!p.isUsingItem()) return;
 
         renderForHand(InteractionHand.MAIN_HAND, p, guiGraphics);
         renderForHand(InteractionHand.OFF_HAND, p, guiGraphics);
     }
 
     private static void renderForHand(InteractionHand hand, Player p, GuiGraphics guiGraphics) {
-        if (p.getUsedItemHand() != hand) return;
-
         Minecraft mc = Minecraft.getInstance();
         int currentItem = p.getInventory().selected;
 
@@ -52,13 +49,15 @@ public class GuiOverlayReloaded {
         float f = 0;
         int offset = 0;
         if (rc != null) {
-            if (RangedComponent.isReloaded(is)) {
-                f = 1.0f;
-                offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
-            } else {
-                f = Mth.clamp(p.getTicksUsingItem() / (float) rc.getReloadDuration(is), 0, 1);
+            if (p.getUsedItemHand() == hand) {
+                if (RangedComponent.isReloaded(is)) {
+                    f = 1.0f;
+                    offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
+                } else {
+                    f = Mth.clamp(p.getTicksUsingItem() / (float) rc.getReloadDuration(is), 0, 1);
+                }
+                set = true;
             }
-            set = true;
         } else if (mec != null) {
             if (mec.shouldRenderCooldown()) {
                 f = Mth.clamp(mec.getCooldown(), 0, 1);
