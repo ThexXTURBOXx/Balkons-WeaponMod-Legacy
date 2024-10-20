@@ -25,12 +25,15 @@ public class GuiOverlayReloaded {
         Minecraft mc = Minecraft.getInstance();
         Player p = mc.player;
         if (p == null) return;
+        if (!p.isUsingItem()) return;
 
-        d(InteractionHand.MAIN_HAND, p, guiGraphics);
-        d(InteractionHand.OFF_HAND, p, guiGraphics);
+        renderForHand(InteractionHand.MAIN_HAND, p, guiGraphics);
+        renderForHand(InteractionHand.OFF_HAND, p, guiGraphics);
     }
 
-    private static void d(InteractionHand hand, Player p, GuiGraphics guiGraphics) {
+    private static void renderForHand(InteractionHand hand, Player p, GuiGraphics guiGraphics) {
+        if (p.getUsedItemHand() != hand) return;
+
         Minecraft mc = Minecraft.getInstance();
         int currentItem = p.getInventory().selected;
 
