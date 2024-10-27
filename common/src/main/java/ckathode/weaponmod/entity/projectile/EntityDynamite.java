@@ -75,7 +75,8 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         if (!inGround && !beenInGround) {
             setXRot(getXRot() - 50.0f);
         } else {
-            setXRot(180.0f);
+            xRotO = 180.0f;
+            setXRot(xRotO);
         }
         if (isInWater() && !extinguished) {
             extinguished = true;
