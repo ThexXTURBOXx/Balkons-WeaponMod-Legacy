@@ -64,6 +64,7 @@ public class EntityDynamite extends EntityProjectile {
         super.onUpdate();
         if (!inGround && !beenInGround) {
             rotationPitch -= 50.0f;
+            if (rotationPitch <= -360) rotationPitch += 360;
         } else {
             prevRotationPitch = 180.0f;
             rotationPitch = prevRotationPitch;
