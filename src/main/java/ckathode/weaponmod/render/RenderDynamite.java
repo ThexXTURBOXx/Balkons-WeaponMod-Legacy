@@ -22,7 +22,7 @@ public class RenderDynamite extends Render {
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glTranslated(d, d1, d2);
-        GL11.glRotatef(entitydynamite.rotationYaw + 90.0f, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(entitydynamite.prevRotationYaw + (entitydynamite.rotationYaw - entitydynamite.prevRotationYaw) * f1 + 90.0f, 0.0f, 1.0f, 0.0f);
         GL11.glRotatef(entitydynamite.prevRotationPitch + (entitydynamite.rotationPitch - entitydynamite.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tess = Tessellator.instance;
         GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
