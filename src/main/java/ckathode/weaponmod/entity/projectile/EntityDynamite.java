@@ -65,7 +65,8 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         if (!inGround && !beenInGround) {
             rotationPitch -= 50.0f;
         } else {
-            rotationPitch = 180.0f;
+            prevRotationPitch = 180.0f;
+            rotationPitch = prevRotationPitch;
         }
         if (isInWater() && !extinguished) {
             extinguished = true;
