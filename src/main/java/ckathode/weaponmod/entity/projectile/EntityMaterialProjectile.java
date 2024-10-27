@@ -129,7 +129,9 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Override
     public void readAdditional(NBTTagCompound nbttagcompound) {
         super.readAdditional(nbttagcompound);
-        setThrownItemStack(ItemStack.read(nbttagcompound.getCompound("thrI")));
+        if (nbttagcompound.contains("thrI")) {
+            setThrownItemStack(ItemStack.read(nbttagcompound.getCompound("thrI")));
+        }
     }
 
 }
