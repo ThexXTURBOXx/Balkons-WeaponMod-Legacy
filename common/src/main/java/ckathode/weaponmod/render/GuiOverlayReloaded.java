@@ -5,7 +5,6 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.MeleeComponent;
 import ckathode.weaponmod.item.RangedComponent;
-import com.mojang.blaze3d.platform.Window;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -31,7 +30,6 @@ public class GuiOverlayReloaded {
     }
 
     private static void renderForHand(InteractionHand hand, Player p, GuiGraphics guiGraphics) {
-        Minecraft mc = Minecraft.getInstance();
         int currentItem = p.getInventory().selected;
 
         IItemWeapon item = null;
@@ -68,11 +66,10 @@ public class GuiOverlayReloaded {
         if (!set) return;
 
         HumanoidArm offHandSide = p.getMainArm().getOpposite();
-        Window window = mc.getWindow();
-        int x0 = window.getGuiScaledWidth() / 2 + (hand == InteractionHand.OFF_HAND ?
+        int x0 = guiGraphics.guiWidth() / 2 + (hand == InteractionHand.OFF_HAND ?
                 (offHandSide == HumanoidArm.LEFT ? -120 : 91)
                 : -91 - 1 + currentItem * 20);
-        int y0 = window.getGuiScaledHeight() + 1;
+        int y0 = guiGraphics.guiHeight() + 1;
         int tx = hand == InteractionHand.OFF_HAND ? (offHandSide == HumanoidArm.LEFT ? 24 : 53) : 0;
         int width = hand == InteractionHand.OFF_HAND ? 29 : 24;
         int height = (int) (f * 24);
