@@ -53,6 +53,7 @@ public class EntityKnife extends EntityMaterialProjectile {
             return;
         }
         rotationPitch -= 70.0f;
+        if (rotationPitch <= -360) rotationPitch += 360;
         if (soundTimer >= 3) {
             if (!isInsideOfMaterial(Material.water)) {
                 worldObj.playSoundAtEntity(this, "random.bow", 0.6F,
