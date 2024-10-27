@@ -73,6 +73,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         super.tick();
         if (!inGround && !beenInGround) {
             xRot -= 50.0f;
+            if (xRot <= -360) xRot += 360;
         } else {
             xRotO = 180.0f;
             xRot = xRotO;

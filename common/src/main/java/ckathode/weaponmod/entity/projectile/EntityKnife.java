@@ -67,6 +67,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
             return;
         }
         xRot -= 70.0f;
+        if (xRot <= -360) xRot += 360;
         if (soundTimer >= 3) {
             if (!isInWater()) {
                 playSound(SoundEvents.ARROW_SHOOT, 0.6f,
