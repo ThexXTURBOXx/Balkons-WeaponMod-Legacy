@@ -23,7 +23,7 @@ public class RenderDynamite extends WMRenderer<EntityDynamite> {
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitydynamite)));
         ms.pushPose();
-        ms.mulPose(Vector3f.YP.rotationDegrees(entitydynamite.yRot + 90.0f));
+        ms.mulPose(Vector3f.YP.rotationDegrees(entitydynamite.yRotO + (entitydynamite.yRot - entitydynamite.yRotO) * f1 + 90.0f));
         ms.mulPose(Vector3f.ZP.rotationDegrees(entitydynamite.xRotO + (entitydynamite.xRot - entitydynamite.xRotO) * f1));
         float f11 = -f1;
         if (f11 > 0.0f) {
