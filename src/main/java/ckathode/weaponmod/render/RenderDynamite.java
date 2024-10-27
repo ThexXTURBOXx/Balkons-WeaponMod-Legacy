@@ -26,7 +26,7 @@ public class RenderDynamite extends EntityRenderer<EntityDynamite> {
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         GlStateManager.translated(d, d1, d2);
-        GlStateManager.rotatef(entitydynamite.rotationYaw + 90.0f, 0.0f, 1.0f, 0.0f);
+        GlStateManager.rotatef(entitydynamite.prevRotationYaw + (entitydynamite.rotationYaw - entitydynamite.prevRotationYaw) * f1 + 90.0f, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotatef(entitydynamite.prevRotationPitch + (entitydynamite.rotationPitch - entitydynamite.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();
