@@ -25,7 +25,7 @@ public class RenderDynamite extends WMRenderer<EntityDynamite> {
                        MatrixStack ms, IRenderTypeBuffer bufs, int lm) {
         IVertexBuilder builder = bufs.getBuffer(RenderType.getEntityCutout(getEntityTexture(entitydynamite)));
         ms.push();
-        ms.rotate(Vector3f.YP.rotationDegrees(entitydynamite.rotationYaw + 90.0f));
+        ms.rotate(Vector3f.YP.rotationDegrees(entitydynamite.prevRotationYaw + (entitydynamite.rotationYaw - entitydynamite.prevRotationYaw) * f1 + 90.0f));
         ms.rotate(Vector3f.ZP.rotationDegrees(entitydynamite.prevRotationPitch + (entitydynamite.rotationPitch - entitydynamite.prevRotationPitch) * f1));
         float f11 = -f1;
         if (f11 > 0.0f) {
