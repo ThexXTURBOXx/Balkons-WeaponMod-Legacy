@@ -130,7 +130,9 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
         super.readAdditionalSaveData(nbttagcompound);
-        setThrownItemStack(ItemStack.of(nbttagcompound.getCompound("thrI")));
+        if (nbttagcompound.contains("thrI")) {
+            setThrownItemStack(ItemStack.of(nbttagcompound.getCompound("thrI")));
+        }
     }
 
 }
