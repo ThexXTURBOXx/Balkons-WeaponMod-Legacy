@@ -138,14 +138,16 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         super.addAdditionalSaveData(nbttagcompound);
         ItemStack thrownItem = getWeapon();
         if (thrownItem != null) {
-            nbttagcompound.put("thrI", thrownItem.save(registryAccess()));
+            nbttagcompound.put("thrI", thrownItem.saveOptional(registryAccess()));
         }
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
         super.readAdditionalSaveData(nbttagcompound);
-        setThrownItemStack(ItemStack.parseOptional(registryAccess(), nbttagcompound.getCompound("thrI")));
+        if (nbttagcompound.contains("thrI")) {
+            setThrownItemStack(ItemStack.parseOptional(registryAccess(), nbttagcompound.getCompound("thrI")));
+        }
     }
 
 }
