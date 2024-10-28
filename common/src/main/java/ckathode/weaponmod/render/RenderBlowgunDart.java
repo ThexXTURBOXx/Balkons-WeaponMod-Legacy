@@ -8,26 +8,24 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
+public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart, RenderBlowgunDart.BlowgunDartRenderState> {
 
     public RenderBlowgunDart(Context context) {
         super(context);
     }
 
     @Override
-    public void render(@NotNull EntityBlowgunDart entityblowgundart, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
+    public void render(BlowgunDartRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         ms.pushPose();
-        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityblowgundart)));
-        ms.mulPose(Axis.YP.rotationDegrees(entityblowgundart.yRotO + (entityblowgundart.getYRot() - entityblowgundart.yRotO) * f1 - 90.0f));
-        ms.mulPose(Axis.ZP.rotationDegrees(entityblowgundart.xRotO + (entityblowgundart.getXRot() - entityblowgundart.xRotO) * f1));
-        byte type = entityblowgundart.getDartEffectId();
-        float[] color = entityblowgundart.getDartColor();
-        float f11 = entityblowgundart.shakeTime - f1;
+        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.DART));
+        ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+        ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+        byte type = entityRenderState.dartEffectId;
+        float[] color = entityRenderState.dartColor;
+        float f11 = entityRenderState.shakeTime;
         if (f11 > 0.0f) {
             float f12 = -Mth.sin(f11 * 3.0f) * f11;
             ms.mulPose(Axis.ZP.rotationDegrees(f12));
@@ -83,13 +81,27 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
             }
         }
         ms.popPose();
-        super.render(entityblowgundart, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
+    }
+
+    @NotNull
+    @Override
+    public BlowgunDartRenderState createRenderState() {
+        return new BlowgunDartRenderState();
     }
 
     @Override
-    @NotNull
-    public ResourceLocation getTextureLocation(@NotNull EntityBlowgunDart entityblowgundart) {
-        return WeaponModResources.Entity.DART;
+    public void extractRenderState(EntityBlowgunDart entity, BlowgunDartRenderState entityRenderState, float f) {
+        super.extractRenderState(entity, entityRenderState, f);
+        entityRenderState.shakeTime = entity.shakeTime - f;
+        entityRenderState.dartEffectId = entity.getDartEffectId();
+        entityRenderState.dartColor = entity.getDartColor();
+    }
+
+    public static class BlowgunDartRenderState extends WMRendererState {
+        public float shakeTime;
+        public byte dartEffectId;
+        public float[] dartColor;
     }
 
 }

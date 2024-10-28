@@ -278,7 +278,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             setYRot(n3);
             yRotO = n3;
             float n4 = (float) (Mth.atan2(motion2.y, f2) * 180.0 / Math.PI);
-            setXRot(n4);
+            xRot = n4;
             xRotO = n4;
         }
         float res = getAirResistance();
@@ -298,7 +298,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         }
         setDeltaMovement(getDeltaMovement().scale(res).subtract(0, isNoGravity() ? 0 : grav, 0));
         setPos(getX(), getY(), getZ());
-        checkInsideBlocks();
+        applyEffectsFromBlocks();
     }
 
     @ExpectPlatform

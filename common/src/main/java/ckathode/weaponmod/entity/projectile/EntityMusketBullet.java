@@ -91,7 +91,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     @Override
     public void onEntityHit(Entity entity) {
         float damage = 20.0f + extraDamage;
-        if (entity.hurt(getDamageSource(), damage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             remove(RemovalReason.DISCARDED);

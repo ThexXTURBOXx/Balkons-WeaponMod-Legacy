@@ -1,18 +1,12 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "weaponmod:halberd.diamond"
-  },
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "weaponmod:halberd.diamond",
   "result": {
     "count": 1,
     "id": "weaponmod:halberd.netherite"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  },
+  "template": "minecraft:netherite_upgrade_smithing_template",
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",

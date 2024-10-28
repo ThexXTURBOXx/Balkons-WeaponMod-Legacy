@@ -7,34 +7,8 @@
     "#  "
   ],
   "key": {
-    "X": [
-      {
-        "item": "minecraft:gold_ingot"
-      },
-      {
-        "tag": "c:ingots/gold"
-      },
-      {
-        "tag": "c:gold_ingots"
-      },
-      {
-        "tag": "forge:ingots/gold"
-      }
-    ],
-    "#": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "X": "#minecraft:gold_tool_materials",
+    "#": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:spear.gold"

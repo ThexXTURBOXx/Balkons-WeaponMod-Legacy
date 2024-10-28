@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -79,11 +80,11 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     public void tick() {
         super.tick();
         if (!inGround && !beenInGround) {
-            setXRot(getXRot() - 50.0f);
-            if (getXRot() <= -360) setXRot(getXRot() + 360.0f);
+            xRot -= 50.0f;
+            if (xRot <= -360) xRot += 360;
         } else {
             xRotO = 180.0f;
-            setXRot(xRotO);
+            xRot = xRotO;
         }
         if (isInWater() && !extinguished) {
             extinguished = true;
@@ -117,7 +118,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (entity.hurt(getDamageSource(), 1.0f)) {
+        if (entity.hurtOrSimulate(getDamageSource(), 1.0f)) {
             applyEntityHitEffects(entity);
             playHitSound();
             lerpMotion(0.0, 0.0, 0.0);
@@ -151,14 +152,14 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     private void detonate() {
-        if (level().isClientSide) {
+        if (!(level() instanceof ServerLevel serverLevel)) {
             return;
         }
         if (extinguished && (ticksInGround >= 200 || ticksInAir >= 200)) {
             remove(RemovalReason.DISCARDED);
         }
         float f = 2.0f;
-        PhysHelper.createAdvancedExplosion(level(), this, getX(), getY(), getZ(), f,
+        PhysHelper.createAdvancedExplosion(serverLevel, this, position(), f,
                 WeaponModConfig.get().dynamiteDoesBlockDamage, true, false, Explosion.BlockInteraction.DESTROY);
     }
 

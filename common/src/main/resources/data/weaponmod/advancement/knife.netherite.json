@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_netherite_ingot": {
+    "has_netherite_tool_materials": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "minecraft:netherite_ingot"
+            "items": "#minecraft:netherite_tool_materials"
           }
         ]
       }
@@ -45,7 +45,7 @@
   },
   "requirements": [
     [
-      "has_netherite_ingot",
+      "has_netherite_tool_materials",
       "has_the_recipe"
     ],
     [

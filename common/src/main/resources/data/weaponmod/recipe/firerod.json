@@ -7,23 +7,8 @@
     "  X"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:torch"
-    },
-    "X": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "#": "minecraft:torch",
+    "X": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:firerod"

@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -33,8 +34,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class WMItemBuilderImpl {
 
-    public static ItemBlowgunDart createItemBlowgunDart(@NotNull DartType dartType) {
-        return new ItemBlowgunDart(dartType) {
+    public static ItemBlowgunDart createItemBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
+        return new ItemBlowgunDart(dartType, id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -45,8 +46,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemCannon createItemCannon() {
-        return new ItemCannon() {
+    public static ItemCannon createItemCannon(@NotNull ResourceLocation id) {
+        return new ItemCannon(id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -57,8 +58,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemDummy createItemDummy() {
-        return new ItemDummy() {
+    public static ItemDummy createItemDummy(@NotNull ResourceLocation id) {
+        return new ItemDummy(id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -69,8 +70,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemDynamite createItemDynamite() {
-        return new ItemDynamite() {
+    public static ItemDynamite createItemDynamite(@NotNull ResourceLocation id) {
+        return new ItemDynamite(id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -81,8 +82,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemFlail createItemFlail(MeleeComponent meleeComponent) {
-        return new ItemFlail(meleeComponent) {
+    public static ItemFlail createItemFlail(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
+        return new ItemFlail(meleeComponent, id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -93,8 +94,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemJavelin createItemJavelin() {
-        return new ItemJavelin() {
+    public static ItemJavelin createItemJavelin(@NotNull ResourceLocation id) {
+        return new ItemJavelin(id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -105,8 +106,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemMelee createItemMelee(MeleeComponent meleeComponent) {
-        return new ItemMelee(meleeComponent) {
+    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
+        return new ItemMelee(meleeComponent, id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -117,7 +118,7 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, Item.Properties properties) {
+    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull Item.Properties properties) {
         return new ItemMelee(meleeComponent, properties) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
@@ -129,8 +130,9 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
-        return new ItemMusket(meleeComponent, bayonetItem) {
+    public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem,
+                                              @NotNull ResourceLocation id) {
+        return new ItemMusket(meleeComponent, bayonetItem, id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -141,8 +143,9 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent) {
-        return new ItemShooter(rangedComponent, meleeComponent) {
+    public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
+                                                @NotNull ResourceLocation id) {
+        return new ItemShooter(rangedComponent, meleeComponent, id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -166,8 +169,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static WMItem createWMItem() {
-        return new WMItem() {
+    public static WMItem createWMItem(@NotNull ResourceLocation id) {
+        return new WMItem(id) {
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -190,8 +193,9 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension) {
-        return new WMItemProjectile() {
+    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension,
+                                                          @NotNull ResourceLocation id) {
+        return new WMItemProjectile(id) {
 
             @NotNull
             @Override
@@ -236,7 +240,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension, Item.Properties properties) {
+    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension,
+                                                          @NotNull Item.Properties properties) {
         return new WMItemProjectile(properties) {
 
             @NotNull

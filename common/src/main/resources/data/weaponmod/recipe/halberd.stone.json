@@ -7,23 +7,8 @@
     "#  "
   ],
   "key": {
-    "X": {
-      "tag": "minecraft:stone_tool_materials"
-    },
-    "#": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "X": "#minecraft:stone_tool_materials",
+    "#": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:halberd.stone"

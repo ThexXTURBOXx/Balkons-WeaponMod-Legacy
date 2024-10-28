@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_minecraft_sugar_cane": {
+    "has_c_crops/sugar_cane": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "minecraft:sugar_cane"
+            "items": "#c:crops/sugar_cane"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_minecraft_sugar_cane",
+      "has_c_crops/sugar_cane",
       "has_the_recipe"
     ]
   ],

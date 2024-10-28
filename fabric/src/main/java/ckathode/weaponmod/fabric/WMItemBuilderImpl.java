@@ -1,5 +1,6 @@
 package ckathode.weaponmod.fabric;
 
+import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
 import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
@@ -21,6 +22,7 @@ import java.util.function.Consumer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,63 +31,66 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class WMItemBuilderImpl {
+public class WMItemBuilderImpl extends WMItemBuilder {
 
-    public static ItemBlowgunDart createItemBlowgunDart(@NotNull DartType dartType) {
-        return new ItemBlowgunDart(dartType);
+    public static ItemBlowgunDart createItemBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
+        return new ItemBlowgunDart(dartType, id);
     }
 
-    public static ItemCannon createItemCannon() {
-        return new ItemCannon();
+    public static ItemCannon createItemCannon(@NotNull ResourceLocation id) {
+        return new ItemCannon(id);
     }
 
-    public static ItemDummy createItemDummy() {
-        return new ItemDummy();
+    public static ItemDummy createItemDummy(@NotNull ResourceLocation id) {
+        return new ItemDummy(id);
     }
 
-    public static ItemDynamite createItemDynamite() {
-        return new ItemDynamite();
+    public static ItemDynamite createItemDynamite(@NotNull ResourceLocation id) {
+        return new ItemDynamite(id);
     }
 
-    public static ItemFlail createItemFlail(MeleeComponent meleeComponent) {
-        return new ItemFlail(meleeComponent);
+    public static ItemFlail createItemFlail(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
+        return new ItemFlail(meleeComponent, id);
     }
 
-    public static ItemJavelin createItemJavelin() {
-        return new ItemJavelin();
+    public static ItemJavelin createItemJavelin(@NotNull ResourceLocation id) {
+        return new ItemJavelin(id);
     }
 
-    public static ItemMelee createItemMelee(MeleeComponent meleeComponent) {
-        return new ItemMelee(meleeComponent);
+    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
+        return new ItemMelee(meleeComponent, id);
     }
 
-    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, Item.Properties properties) {
+    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull Item.Properties properties) {
         return new ItemMelee(meleeComponent, properties);
     }
 
-    public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
-        return new ItemMusket(meleeComponent, bayonetItem);
-    }
-
-    public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent) {
-        return new ItemShooter(rangedComponent, meleeComponent);
+    public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem,
+                                              @NotNull ResourceLocation id) {
+        return new ItemMusket(meleeComponent, bayonetItem, id);
     }
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
-                                                Item.Properties properties) {
+                                                @NotNull ResourceLocation id) {
+        return new ItemShooter(rangedComponent, meleeComponent, id);
+    }
+
+    public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
+                                                @NotNull Item.Properties properties) {
         return new ItemShooter(rangedComponent, meleeComponent, properties);
     }
 
-    public static WMItem createWMItem() {
-        return new WMItem();
+    public static WMItem createWMItem(@NotNull ResourceLocation id) {
+        return new WMItem(id);
     }
 
-    public static WMItem createWMItem(Item.Properties properties) {
+    public static WMItem createWMItem(@NotNull Item.Properties properties) {
         return new WMItem(properties);
     }
 
-    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension) {
-        return new WMItemProjectile() {
+    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension,
+                                                          @NotNull ResourceLocation id) {
+        return new WMItemProjectile(id) {
 
             @NotNull
             @Override
@@ -121,7 +126,8 @@ public class WMItemBuilderImpl {
         };
     }
 
-    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension, Item.Properties properties) {
+    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension,
+                                                          @NotNull Item.Properties properties) {
         return new WMItemProjectile(properties) {
 
             @NotNull

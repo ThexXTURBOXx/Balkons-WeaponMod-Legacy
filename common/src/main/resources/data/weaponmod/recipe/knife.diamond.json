@@ -6,34 +6,8 @@
     "X"
   ],
   "key": {
-    "#": [
-      {
-        "item": "minecraft:diamond"
-      },
-      {
-        "tag": "c:diamonds"
-      },
-      {
-        "tag": "c:gems/diamonds"
-      },
-      {
-        "tag": "forge:gems/diamond"
-      }
-    ],
-    "X": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "#": "#minecraft:diamond_tool_materials",
+    "X": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:knife.diamond"

@@ -8,24 +8,22 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt> {
+public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt, RenderCrossbowBolt.CrossbowBoltRenderState> {
 
     public RenderCrossbowBolt(Context context) {
         super(context);
     }
 
     @Override
-    public void render(@NotNull EntityCrossbowBolt entitybolt, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
-        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitybolt)));
+    public void render(CrossbowBoltRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
+        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.BOLT));
         ms.pushPose();
-        ms.mulPose(Axis.YP.rotationDegrees(entitybolt.yRotO + (entitybolt.getYRot() - entitybolt.yRotO) * f1 - 90.0f));
-        ms.mulPose(Axis.ZP.rotationDegrees(entitybolt.xRotO + (entitybolt.getXRot() - entitybolt.xRotO) * f1));
-        float f11 = entitybolt.shakeTime - f1;
+        ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+        ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+        float f11 = entityRenderState.shakeTime;
         if (f11 > 0.0f) {
             float f12 = -Mth.sin(f11 * 3.0f) * f11;
             ms.mulPose(Axis.ZP.rotationDegrees(f12));
@@ -51,13 +49,23 @@ public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt> {
             drawVertex(last, builder, -6.0f, 2.0f, 0.0f, 0.0f, 0.15625f, 0.0f, 0.0f, 0.05625f, lm);
         }
         ms.popPose();
-        super.render(entitybolt, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
+    }
+
+    @NotNull
+    @Override
+    public CrossbowBoltRenderState createRenderState() {
+        return new CrossbowBoltRenderState();
     }
 
     @Override
-    @NotNull
-    public ResourceLocation getTextureLocation(@NotNull EntityCrossbowBolt entity) {
-        return WeaponModResources.Entity.BOLT;
+    public void extractRenderState(EntityCrossbowBolt entity, CrossbowBoltRenderState entityRenderState, float f) {
+        super.extractRenderState(entity, entityRenderState, f);
+        entityRenderState.shakeTime = entity.shakeTime - f;
+    }
+
+    public static class CrossbowBoltRenderState extends WMRendererState {
+        public float shakeTime;
     }
 
 }

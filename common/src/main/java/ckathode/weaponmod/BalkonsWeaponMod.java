@@ -39,6 +39,7 @@ import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,6 +56,10 @@ public class BalkonsWeaponMod {
         WMMessagePipeline.init();
         PlayerWeaponData.init();
         EnvExecutor.runInEnv(Env.CLIENT, () -> Client::initializeClient);
+    }
+
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
     @Environment(EnvType.CLIENT)

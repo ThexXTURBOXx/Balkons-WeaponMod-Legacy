@@ -6,42 +6,12 @@
     ]
   },
   "criteria": {
-    "has_minecraft_iron_ingot": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:iron_ingot"
-          }
-        ]
-      }
-    },
     "has_c_ingots/iron": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": "#c:ingots/iron"
-          }
-        ]
-      }
-    },
-    "has_c_iron_ingots": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:iron_ingots"
-          }
-        ]
-      }
-    },
-    "has_forge_ingots/iron": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:ingots/iron"
           }
         ]
       }
@@ -65,10 +35,7 @@
   },
   "requirements": [
     [
-      "has_minecraft_iron_ingot",
       "has_c_ingots/iron",
-      "has_c_iron_ingots",
-      "has_forge_ingots/iron",
       "has_the_recipe"
     ],
     [

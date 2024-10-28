@@ -7,39 +7,9 @@
     "X"
   ],
   "key": {
-    "#": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ],
-    "X": [
-      {
-        "item": "minecraft:feather"
-      },
-      {
-        "tag": "c:feathers"
-      },
-      {
-        "tag": "forge:feathers"
-      }
-    ],
-    "O": [
-      {
-        "item": "minecraft:slime_ball"
-      },
-      {
-        "tag": "forge:slimeballs"
-      }
-    ]
+    "#": "#c:rods/wooden",
+    "X": "minecraft:feather",
+    "O": "#c:slime_balls"
   },
   "result": {
     "id": "weaponmod:dart.slow",

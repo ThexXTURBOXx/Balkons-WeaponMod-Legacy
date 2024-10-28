@@ -6,22 +6,12 @@
     ]
   },
   "criteria": {
-    "has_minecraft_flint_and_steel": {
+    "has_c_tools/igniter": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "minecraft:flint_and_steel"
-          }
-        ]
-      }
-    },
-    "has_minecraft_iron_ingot": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:iron_ingot"
+            "items": "#c:tools/igniter"
           }
         ]
       }
@@ -36,26 +26,6 @@
         ]
       }
     },
-    "has_c_iron_ingots": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:iron_ingots"
-          }
-        ]
-      }
-    },
-    "has_forge_ingots/iron": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:ingots/iron"
-          }
-        ]
-      }
-    },
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
@@ -65,14 +35,11 @@
   },
   "requirements": [
     [
-      "has_minecraft_flint_and_steel",
+      "has_c_tools/igniter",
       "has_the_recipe"
     ],
     [
-      "has_minecraft_iron_ingot",
       "has_c_ingots/iron",
-      "has_c_iron_ingots",
-      "has_forge_ingots/iron",
       "has_the_recipe"
     ]
   ],

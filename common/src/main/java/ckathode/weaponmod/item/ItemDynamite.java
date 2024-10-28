@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
@@ -7,11 +8,11 @@ import java.util.function.Consumer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -21,21 +22,15 @@ import org.jetbrains.annotations.NotNull;
 public class ItemDynamite extends WMItem implements WMDispenserExtension {
 
     public static final String ID = "dynamite";
-    public static final ItemDynamite ITEM = WMItemBuilder.createStandardDynamite();
+    public static final ItemDynamite ITEM = WMItemBuilder.createStandardDynamite(BalkonsWeaponMod.id(ID));
 
-    public ItemDynamite() {
-        super(WMItem.getBaseProperties(null).stacksTo(64));
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return 0;
+    public ItemDynamite(@NotNull ResourceLocation id) {
+        super(WMItem.getBaseProperties(id).stacksTo(64));
     }
 
     @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(@NotNull Level world, Player entityplayer,
-                                                  @NotNull InteractionHand hand) {
+    public InteractionResult use(@NotNull Level world, Player entityplayer, @NotNull InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
         ItemStack copy = itemstack.copy();
         if (!entityplayer.isCreative()) {
@@ -50,7 +45,7 @@ public class ItemDynamite extends WMItem implements WMDispenserExtension {
                     0.0f, 0.7f, 4.0f);
             world.addFreshEntity(entitydynamite);
         }
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+        return InteractionResult.SUCCESS;
     }
 
     @NotNull

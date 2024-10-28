@@ -7,11 +7,13 @@ import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -22,12 +24,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -35,16 +37,16 @@ import org.jetbrains.annotations.NotNull;
 public class MeleeComponent extends AbstractWeaponComponent {
 
     public final MeleeSpecs meleeSpecs;
-    public final Tier weaponMaterial;
+    public final ToolMaterial weaponMaterial;
 
-    public MeleeComponent(MeleeSpecs meleespecs, Tier itemTier) {
+    public MeleeComponent(MeleeSpecs meleespecs, ToolMaterial itemTier) {
         meleeSpecs = meleespecs;
         weaponMaterial = itemTier;
     }
 
     @NotNull
-    public Tier getWeaponMaterial() {
-        return weaponMaterial == null ? Tiers.WOOD : weaponMaterial;
+    public ToolMaterial getWeaponMaterial() {
+        return weaponMaterial == null ? ToolMaterial.WOOD : weaponMaterial;
     }
 
     @Override
@@ -53,9 +55,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @NotNull
     public Tool getToolComponent() {
+        HolderGetter<Block> holderGetter =
+                BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         return new Tool(List.of(
-                Tool.Rule.minesAndDrops(List.of(Blocks.COBWEB), meleeSpecs.blockDamage * 10),
-                Tool.Rule.overrideSpeed(BlockTags.SWORD_EFFICIENT, meleeSpecs.blockDamage)),
+                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()),
+                        meleeSpecs.blockDamage * 10),
+                Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
                 1.0F, 2);
     }
 
@@ -98,7 +103,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 .durability(weaponMaterial == null
                         ? meleeSpecs.durabilityBase
                         : (int) (meleeSpecs.durabilityBase
-                                 + weaponMaterial.getUses() * meleeSpecs.durabilityMult));
+                                 + weaponMaterial.durability() * meleeSpecs.durabilityMult));
     }
 
     @Override
@@ -106,7 +111,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         if (weaponMaterial == null) {
             return 0.0f;
         }
-        return weaponMaterial.getAttackDamageBonus() * meleeSpecs.damageMult;
+        return weaponMaterial.attackDamageBonus() * meleeSpecs.damageMult;
     }
 
     @Override
@@ -154,7 +159,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public int getEnchantmentValue() {
-        return (weaponMaterial == null) ? 1 : weaponMaterial.getEnchantmentValue();
+        return (weaponMaterial == null) ? 1 : weaponMaterial.enchantmentValue();
     }
 
     @Override
@@ -166,8 +171,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack itemstack) {
-        return UseAnim.BLOCK;
+    public @NotNull ItemUseAnimation getUseAnimation(ItemStack itemstack) {
+        return ItemUseAnimation.BLOCK;
     }
 
     @Override
@@ -175,13 +180,13 @@ public class MeleeComponent extends AbstractWeaponComponent {
         return 72000;
     }
 
+    @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
+    public InteractionResult use(Level world, Player entityplayer, InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
-        if (getUseAnimation(itemstack) != UseAnim.NONE)
+        if (getUseAnimation(itemstack) != ItemUseAnimation.NONE)
             entityplayer.startUsingItem(hand);
-        return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -189,8 +194,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void releaseUsing(ItemStack itemstack, Level world,
-                             LivingEntity entityliving, int i) {
+    public boolean releaseUsing(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
+        return false;
     }
 
     @Override
@@ -243,8 +248,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
             attackDelay = attackdelay;
         }
 
-        public float getKnockBack(Tier material) {
-            return (material == Tiers.GOLD) ? (knockback * 1.5f) : knockback;
+        public float getKnockBack(ToolMaterial material) {
+            return (material == ToolMaterial.GOLD) ? (knockback * 1.5f) : knockback;
         }
     }
 

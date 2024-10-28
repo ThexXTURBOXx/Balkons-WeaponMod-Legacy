@@ -5,25 +5,8 @@
     "#X"
   ],
   "key": {
-    "#": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ],
-    "X": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "#": "#minecraft:wooden_tool_materials",
+    "X": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:knife.wood"

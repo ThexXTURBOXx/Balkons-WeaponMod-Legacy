@@ -4,10 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.Entity;
 
-public abstract class WMRenderer<T extends Entity> extends EntityRenderer<T> {
+public abstract class WMRenderer<T extends Entity, S extends WMRenderer.WMRendererState> extends EntityRenderer<T, S> {
 
     protected static final float SQRT2 = (float) Math.sqrt(2.0);
 
@@ -29,6 +30,20 @@ public abstract class WMRenderer<T extends Entity> extends EntityRenderer<T> {
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(lm)
                 .setNormal(entry, nmX, nmY, nmZ);
+    }
+
+    @Override
+    public void extractRenderState(T entity, S entityRenderState, float f) {
+        super.extractRenderState(entity, entityRenderState, f);
+        entityRenderState.partialTicks = f;
+        entityRenderState.xRot = entity.getXRot(f);
+        entityRenderState.yRot = entity.getYRot(f);
+    }
+
+    public static class WMRendererState extends EntityRenderState {
+        public float partialTicks;
+        public float xRot;
+        public float yRot;
     }
 
 }

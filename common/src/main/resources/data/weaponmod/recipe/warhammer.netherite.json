@@ -1,18 +1,12 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "weaponmod:warhammer.diamond"
-  },
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "weaponmod:warhammer.diamond",
   "result": {
     "count": 1,
     "id": "weaponmod:warhammer.netherite"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  },
+  "template": "minecraft:netherite_upgrade_smithing_template",
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",

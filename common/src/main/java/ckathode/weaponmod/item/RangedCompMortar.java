@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMUtil;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.Level;
 public class RangedCompMortar extends RangedComponent {
 
     public static final String ID = "mortar";
-    public static final ItemShooter ITEM = WMItemBuilder.createStandardMortar();
+    public static final ItemShooter ITEM = WMItemBuilder.createStandardMortar(BalkonsWeaponMod.id(ID));
 
     public RangedCompMortar() {
         super(RangedSpecs.MORTAR);

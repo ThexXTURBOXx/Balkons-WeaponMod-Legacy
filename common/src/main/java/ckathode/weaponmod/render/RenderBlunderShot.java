@@ -8,20 +8,18 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
+public class RenderBlunderShot extends WMRenderer<EntityBlunderShot, RenderBlunderShot.BlunderShotRenderState> {
 
     public RenderBlunderShot(Context context) {
         super(context);
     }
 
     @Override
-    public void render(@NotNull EntityBlunderShot entityblundershot, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
+    public void render(BlunderShotRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         ms.pushPose();
-        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityblundershot)));
+        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.BULLET));
         ms.scale(0.04f, 0.04f, 0.04f);
         PoseStack.Pose last = ms.last();
         drawVertex(last, builder, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.05625f, 0.0f, 0.0f, lm);
@@ -56,13 +54,16 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
                 .setNormal(0.0f, 0.0f, 0.05625f);
         GlStateManager._enableCull();
         ms.popPose();*/
-        super.render(entityblundershot, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
     }
 
     @NotNull
     @Override
-    public ResourceLocation getTextureLocation(@NotNull EntityBlunderShot entity) {
-        return WeaponModResources.Entity.BULLET;
+    public BlunderShotRenderState createRenderState() {
+        return new BlunderShotRenderState();
+    }
+
+    public static class BlunderShotRenderState extends WMRendererState {
     }
 
 }

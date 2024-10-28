@@ -35,14 +35,12 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     public EntityFlail(EntityType<EntityFlail> entityType, Level world) {
         super(entityType, world);
-        noCulling = true;
         flailDamage = 1.0f;
         distance = Vec3.ZERO;
     }
 
     public EntityFlail(Level world, double d, double d1, double d2, @Nullable ItemStack firedFromWeapon) {
         super(TYPE, world, firedFromWeapon);
-        noCulling = true;
         flailDamage = 1.0f;
         distance = Vec3.ZERO;
         setPos(d, d1, d2);
@@ -161,7 +159,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         if (entity.equals(getOwner())) {
             return;
         }
-        if (entity.hurt(getDamageSource(), flailDamage + extraDamage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), flailDamage + extraDamage)) {
             playHitSound();
             returnToOwner(true);
         } else {

@@ -13,30 +13,26 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderJavelin extends WMRenderer<EntityJavelin> {
+public class RenderJavelin extends WMRenderer<EntityJavelin, RenderJavelin.JavelinRenderState> {
 
     public RenderJavelin(Context context) {
         super(context);
     }
 
     @Override
-    public void render(@NotNull EntityJavelin entityjavelin, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
+    public void render(JavelinRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         if (!WeaponModConfig.get().itemModelForEntity) {
-            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityjavelin)));
+            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.JAVELIN));
             ms.pushPose();
-            ms.mulPose(Axis.YP.rotationDegrees(entityjavelin.yRotO + (entityjavelin.getYRot() - entityjavelin.yRotO) *
-                                                                     f1 - 90.0f));
-            ms.mulPose(Axis.ZP.rotationDegrees(entityjavelin.xRotO + (entityjavelin.getXRot() - entityjavelin.xRotO) *
-                                                                     f1));
+            ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
             float length = 20.0f;
-            float f11 = entityjavelin.shakeTime - f1;
+            float f11 = entityRenderState.shakeTime;
             if (f11 > 0.0f) {
                 float f12 = -Mth.sin(f11 * 3.0f) * f11;
                 ms.mulPose(Axis.ZP.rotationDegrees(f12));
@@ -66,30 +62,36 @@ public class RenderJavelin extends WMRenderer<EntityJavelin> {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             ms.pushPose();
             ms.scale(1.7f, 1.7f, 1.7f);
-            ms.mulPose(Axis.YP.rotationDegrees(entityjavelin.yRotO + (entityjavelin.getYRot() - entityjavelin.yRotO) * f1 - 90.0f));
-            ms.mulPose(Axis.ZP.rotationDegrees(entityjavelin.xRotO + (entityjavelin.getXRot() - entityjavelin.xRotO) * f1 - 45.0f));
-            float f13 = entityjavelin.shakeTime - f1;
+            ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot - 45.0f));
+            float f13 = entityRenderState.shakeTime;
             if (f13 > 0.0f) {
                 float f14 = -Mth.sin(f13 * 3.0f) * f13;
                 ms.mulPose(Axis.ZP.rotationDegrees(f14));
             }
             ms.translate(-0.25f, -0.25f, 0.0f);
             ms.mulPose(Axis.YP.rotationDegrees(180.0f));
-            itemRender.renderStatic(getStackToRender(entityjavelin), ItemDisplayContext.NONE, lm,
-                    OverlayTexture.NO_OVERLAY, ms, bufs, entityjavelin.level(), entityjavelin.getId());
+            itemRender.renderStatic(new ItemStack(WMRegistries.ITEM_JAVELIN.get()), ItemDisplayContext.NONE, lm,
+                    OverlayTexture.NO_OVERLAY, ms, bufs, Minecraft.getInstance().level, 0);
             ms.popPose();
         }
-        super.render(entityjavelin, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
     }
 
-    public ItemStack getStackToRender(EntityJavelin entity) {
-        return new ItemStack(WMRegistries.ITEM_JAVELIN.get());
+    @NotNull
+    @Override
+    public JavelinRenderState createRenderState() {
+        return new JavelinRenderState();
     }
 
     @Override
-    @NotNull
-    public ResourceLocation getTextureLocation(@NotNull EntityJavelin entity) {
-        return WeaponModResources.Entity.JAVELIN;
+    public void extractRenderState(EntityJavelin entity, JavelinRenderState entityRenderState, float f) {
+        super.extractRenderState(entity, entityRenderState, f);
+        entityRenderState.shakeTime = entity.shakeTime - f;
+    }
+
+    public static class JavelinRenderState extends WMRendererState {
+        public float shakeTime;
     }
 
 }

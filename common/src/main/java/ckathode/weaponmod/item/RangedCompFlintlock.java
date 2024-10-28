@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMUtil;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.Level;
 public class RangedCompFlintlock extends RangedComponent {
 
     public static final String ID = "flintlock";
-    public static final ItemShooter ITEM = WMItemBuilder.createStandardFlintlock();
+    public static final ItemShooter ITEM = WMItemBuilder.createStandardFlintlock(BalkonsWeaponMod.id(ID));
 
     public RangedCompFlintlock() {
         super(RangedSpecs.FLINTLOCK);

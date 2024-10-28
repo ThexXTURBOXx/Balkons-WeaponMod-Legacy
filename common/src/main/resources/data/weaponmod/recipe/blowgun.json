@@ -7,9 +7,7 @@
     "  X"
   ],
   "key": {
-    "X": {
-      "item": "minecraft:sugar_cane"
-    }
+    "X": "#c:crops/sugar_cane"
   },
   "result": {
     "id": "weaponmod:blowgun"

@@ -50,9 +50,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           files: LICENSE
-          name: 1.21-${{ env.MOD_VERSION }}
-          version: 1.21-${{ env.MOD_VERSION }}
-          github-tag: 1.21-${{ env.MOD_VERSION }}
+          name: 1.21.3-${{ env.MOD_VERSION }}
+          version: 1.21.3-${{ env.MOD_VERSION }}
+          github-tag: 1.21.3-${{ env.MOD_VERSION }}
           github-commitish: ${{ github.sha }}
           github-generate-changelog: true
 
@@ -65,14 +65,14 @@ jobs:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
             neoforge/build/libs/*-${{ env.MOD_VERSION }}.jar
-          name: NeoForge-1.21-${{ env.MOD_VERSION }}
-          version: NeoForge-1.21-${{ env.MOD_VERSION }}
+          name: NeoForge-1.21.3-${{ env.MOD_VERSION }}
+          version: NeoForge-1.21.3-${{ env.MOD_VERSION }}
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: neoforge
           game-versions: |
-            1.21
-            1.21.1
+            1.21.2
+            1.21.3
           java: 21
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)
@@ -87,14 +87,14 @@ jobs:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           files: |
             fabric/build/libs/*-${{ env.MOD_VERSION }}.jar
-          name: Fabric-1.21-${{ env.MOD_VERSION }}
-          version: Fabric-1.21-${{ env.MOD_VERSION }}
+          name: Fabric-1.21.3-${{ env.MOD_VERSION }}
+          version: Fabric-1.21.3-${{ env.MOD_VERSION }}
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: fabric
           game-versions: |
-            1.21
-            1.21.1
+            1.21.2
+            1.21.3
           java: 21
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)

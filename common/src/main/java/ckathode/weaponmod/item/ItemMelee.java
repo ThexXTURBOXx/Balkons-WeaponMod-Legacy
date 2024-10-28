@@ -1,53 +1,73 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemMelee extends SwordItem implements IItemWeapon {
+public class ItemMelee extends Item implements IItemWeapon {
 
     public static final String KATANA_WOOD_ID = "katana.wood";
-    public static final ItemMelee KATANA_WOOD_ITEM = WMItemBuilder.createStandardKatana(Tiers.WOOD);
+    public static final ItemMelee KATANA_WOOD_ITEM =
+            WMItemBuilder.createStandardKatana(ToolMaterial.WOOD, BalkonsWeaponMod.id(KATANA_WOOD_ID));
 
     public static final String KATANA_STONE_ID = "katana.stone";
-    public static final ItemMelee KATANA_STONE_ITEM = WMItemBuilder.createStandardKatana(Tiers.STONE);
+    public static final ItemMelee KATANA_STONE_ITEM =
+            WMItemBuilder.createStandardKatana(ToolMaterial.STONE, BalkonsWeaponMod.id(KATANA_STONE_ID));
 
     public static final String KATANA_IRON_ID = "katana.iron";
-    public static final ItemMelee KATANA_IRON_ITEM = WMItemBuilder.createStandardKatana(Tiers.IRON);
+    public static final ItemMelee KATANA_IRON_ITEM =
+            WMItemBuilder.createStandardKatana(ToolMaterial.IRON, BalkonsWeaponMod.id(KATANA_IRON_ID));
 
     public static final String KATANA_GOLD_ID = "katana.gold";
-    public static final ItemMelee KATANA_GOLD_ITEM = WMItemBuilder.createStandardKatana(Tiers.GOLD);
+    public static final ItemMelee KATANA_GOLD_ITEM =
+            WMItemBuilder.createStandardKatana(ToolMaterial.GOLD, BalkonsWeaponMod.id(KATANA_GOLD_ID));
 
     public static final String KATANA_DIAMOND_ID = "katana.diamond";
-    public static final ItemMelee KATANA_DIAMOND_ITEM = WMItemBuilder.createStandardKatana(Tiers.DIAMOND);
+    public static final ItemMelee KATANA_DIAMOND_ITEM =
+            WMItemBuilder.createStandardKatana(ToolMaterial.DIAMOND, BalkonsWeaponMod.id(KATANA_DIAMOND_ID));
 
     public static final String KATANA_NETHERITE_ID = "katana.netherite";
-    public static final ItemMelee KATANA_NETHERITE_ITEM = WMItemBuilder.createStandardKatana(Tiers.NETHERITE);
+    public static final ItemMelee KATANA_NETHERITE_ITEM =
+            WMItemBuilder.createStandardKatana(ToolMaterial.NETHERITE, BalkonsWeaponMod.id(KATANA_NETHERITE_ID));
 
     public final MeleeComponent meleeComponent;
 
-    public ItemMelee(@NotNull MeleeComponent meleecomponent) {
-        this(meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial));
+    public ItemMelee(@NotNull MeleeComponent meleecomponent, @NotNull ResourceLocation id) {
+        this(meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial, id));
     }
 
     public ItemMelee(@NotNull MeleeComponent meleecomponent, Properties properties) {
-        super(meleecomponent.getWeaponMaterial(), meleecomponent.setProperties(properties
+        super(meleecomponent.setProperties(properties
                 .attributes(meleecomponent.setAttributes(ItemAttributeModifiers.builder()).build())
+                .enchantable(meleecomponent.getEnchantmentValue())
                 .arch$tab(CreativeModeTabs.COMBAT)));
         (meleeComponent = meleecomponent).setItem(this);
+    }
+
+    @Override
+    public boolean canAttackBlock(BlockState blockState, Level level, BlockPos blockPos, Player player) {
+        return !player.isCreative();
+    }
+
+    @Override
+    public void postHurtEnemy(ItemStack itemStack, LivingEntity livingEntity, LivingEntity livingEntity2) {
+        itemStack.hurtAndBreak(1, livingEntity2, EquipmentSlot.MAINHAND);
     }
 
     @Override
@@ -63,14 +83,9 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
         return meleeComponent.mineBlock(itemstack, world, block, pos, entityliving);
     }
 
-    @Override
-    public int getEnchantmentValue() {
-        return meleeComponent.getEnchantmentValue();
-    }
-
     @NotNull
     @Override
-    public UseAnim getUseAnimation(@NotNull ItemStack itemstack) {
+    public ItemUseAnimation getUseAnimation(@NotNull ItemStack itemstack) {
         return meleeComponent.getUseAnimation(itemstack);
     }
 
@@ -87,9 +102,7 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
 
     @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(@NotNull Level world,
-                                                  @NotNull Player entityplayer,
-                                                  @NotNull InteractionHand hand) {
+    public InteractionResult use(@NotNull Level world, @NotNull Player entityplayer, @NotNull InteractionHand hand) {
         return meleeComponent.use(world, entityplayer, hand);
     }
 
@@ -99,9 +112,9 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     }
 
     @Override
-    public void releaseUsing(@NotNull ItemStack itemstack, @NotNull Level world,
-                             @NotNull LivingEntity entityplayer, int i) {
-        meleeComponent.releaseUsing(itemstack, world, entityplayer, i);
+    public boolean releaseUsing(@NotNull ItemStack itemstack, @NotNull Level world,
+                                @NotNull LivingEntity entityplayer, int i) {
+        return meleeComponent.releaseUsing(itemstack, world, entityplayer, i);
     }
 
     @Override

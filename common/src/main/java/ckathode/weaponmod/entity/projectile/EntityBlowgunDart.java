@@ -108,7 +108,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (entity.hurt(getDamageSource(), 1.0f + extraDamage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), 1.0f + extraDamage)) {
             if (entity instanceof LivingEntity) {
                 ((LivingEntity) entity).addEffect(new MobEffectInstance(getDartEffectType().potionEffect));
             }

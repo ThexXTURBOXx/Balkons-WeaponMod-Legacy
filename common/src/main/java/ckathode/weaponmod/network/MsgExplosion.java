@@ -11,8 +11,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
@@ -44,17 +44,17 @@ public class MsgExplosion implements CustomPacketPayload {
 
         @Override
         public void encode(RegistryFriendlyByteBuf buf, MsgExplosion msg) {
-            buf.writeDouble(msg.x);
-            buf.writeDouble(msg.y);
-            buf.writeDouble(msg.z);
+            buf.writeDouble(msg.center.x);
+            buf.writeDouble(msg.center.y);
+            buf.writeDouble(msg.center.z);
             buf.writeFloat(msg.size);
             buf.writeBoolean(msg.smallParticles);
             buf.writeBoolean(msg.bigParticles);
             buf.writeInt(msg.blocks.size());
             for (BlockPos pos : msg.blocks) {
-                int dx = pos.getX() - (int) msg.x;
-                int dy = pos.getY() - (int) msg.y;
-                int dz = pos.getZ() - (int) msg.z;
+                int dx = pos.getX() - (int) msg.center.x;
+                int dy = pos.getY() - (int) msg.center.y;
+                int dz = pos.getZ() - (int) msg.center.z;
                 buf.writeByte(dx);
                 buf.writeByte(dy);
                 buf.writeByte(dz);
@@ -62,29 +62,28 @@ public class MsgExplosion implements CustomPacketPayload {
         }
     };
 
-    private final double x;
-    private final double y;
-    private final double z;
+    private final Vec3 center;
     private final float size;
     private final List<BlockPos> blocks;
     private final boolean smallParticles;
     private final boolean bigParticles;
 
     public MsgExplosion(AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
-        x = explosion.explosionX;
-        y = explosion.explosionY;
-        z = explosion.explosionZ;
+        center = explosion.center;
         size = explosion.explosionSize;
-        blocks = explosion.getToBlow();
+        blocks = explosion.toBlow;
         smallParticles = smallparts;
         bigParticles = bigparts;
     }
 
     public MsgExplosion(double x, double y, double z, float size, List<BlockPos> blocks,
                         boolean smallparts, boolean bigparts) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this(new Vec3(x, y, z), size, blocks, smallparts, bigparts);
+    }
+
+    public MsgExplosion(Vec3 center, float size, List<BlockPos> blocks,
+                        boolean smallparts, boolean bigparts) {
+        this.center = center;
         this.size = size;
         this.blocks = blocks;
         smallParticles = smallparts;
@@ -100,10 +99,8 @@ public class MsgExplosion implements CustomPacketPayload {
     @Environment(EnvType.CLIENT)
     public static void handleClientSide(MsgExplosion msg, NetworkManager.PacketContext ctx) {
         Level level = ctx.getPlayer().level();
-        AdvancedExplosion expl = new AdvancedExplosion(level, null, msg.x, msg.y, msg.z, msg.size,
-                false, Explosion.BlockInteraction.DESTROY);
-        expl.setAffectedBlockPositions(msg.blocks);
-        expl.doParticleExplosion(msg.smallParticles, msg.bigParticles);
+        AdvancedExplosion.doParticleExplosion(level, msg.center, msg.blocks, msg.size, msg.smallParticles,
+                msg.bigParticles);
     }
 
 }

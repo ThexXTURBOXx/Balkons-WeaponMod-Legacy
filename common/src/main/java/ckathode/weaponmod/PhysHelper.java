@@ -18,15 +18,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public final class PhysHelper {
+
     private static Vec3 kbMotion = Vec3.ZERO;
     private static int knockBackModifier = 0;
 
-    public static AdvancedExplosion createStandardExplosion(Level world, Entity entity, double d,
-                                                            double d1, double d2, float size,
-                                                            boolean flame,
-                                                            Explosion.BlockInteraction mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity,
-                d, d1, d2, size, flame, mode);
+    public static AdvancedExplosion createStandardExplosion(ServerLevel world, Entity entity, Vec3 center, float size,
+                                                            boolean flame, Explosion.BlockInteraction mode) {
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, center, size, flame, mode);
         explosion.doEntityExplosion();
         explosion.doBlockExplosion();
         explosion.doParticleExplosion(true, true);
@@ -34,15 +32,13 @@ public final class PhysHelper {
         return explosion;
     }
 
-    public static AdvancedExplosion createAdvancedExplosion(Level world, Entity entity, double d,
-                                                            double d1, double d2, float size,
+    public static AdvancedExplosion createAdvancedExplosion(ServerLevel world, Entity entity, Vec3 center, float size,
                                                             boolean destroyBlocks,
                                                             boolean spawnSmallParticles,
                                                             boolean spawnBigParticles,
                                                             boolean flame,
                                                             Explosion.BlockInteraction mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity,
-                d, d1, d2, size, flame, mode);
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, center, size, flame, mode);
         explosion.doEntityExplosion();
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -55,16 +51,14 @@ public final class PhysHelper {
         return explosion;
     }
 
-    public static AdvancedExplosion createAdvancedExplosion(Level world, Entity entity,
-                                                            DamageSource damagesource, double d,
-                                                            double d1, double d2, float size,
+    public static AdvancedExplosion createAdvancedExplosion(ServerLevel world, Entity entity,
+                                                            DamageSource damagesource, Vec3 center, float size,
                                                             boolean destroyBlocks,
                                                             boolean spawnSmallParticles,
                                                             boolean spawnBigParticles,
                                                             boolean flame,
                                                             Explosion.BlockInteraction mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity,
-                d, d1, d2, size, flame, mode);
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, center, size, flame, mode);
         explosion.doEntityExplosion(damagesource);
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -77,14 +71,12 @@ public final class PhysHelper {
         return explosion;
     }
 
-    public static AdvancedExplosion createAdvancedExplosion(Level world, Entity entity, double d,
-                                                            double d1, double d2, float size,
+    public static AdvancedExplosion createAdvancedExplosion(ServerLevel world, Entity entity, Vec3 center, float size,
                                                             boolean destroyBlocks,
                                                             boolean spawnParticles,
                                                             boolean flame,
                                                             Explosion.BlockInteraction mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity,
-                d, d1, d2, size, flame, mode);
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, center, size, flame, mode);
         explosion.doEntityExplosion();
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -99,10 +91,10 @@ public final class PhysHelper {
 
     public static void sendExplosion(Level world, AdvancedExplosion explosion,
                                      boolean smallparts, boolean bigparts) {
-        if (world instanceof ServerLevel && !world.isClientSide) {
+        if (world instanceof ServerLevel serverLevel && !world.isClientSide) {
             MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
-            WMMessagePipeline.sendToAround(msg, (ServerLevel) world, explosion.explosionX, explosion.explosionY,
-                    explosion.explosionZ, 64.0, world.dimension());
+            WMMessagePipeline.sendToAround(msg, serverLevel, explosion.center.x, explosion.center.y,
+                    explosion.center.z, 64.0, world.dimension());
         }
     }
 
@@ -134,8 +126,8 @@ public final class PhysHelper {
     }
 
     public static void prepareKnockbackOnEntity(LivingEntity attacker, LivingEntity entity) {
-        Holder<Enchantment> knockBack = attacker.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                .getHolderOrThrow(Enchantments.KNOCKBACK);
+        Holder<Enchantment> knockBack = attacker.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(Enchantments.KNOCKBACK);
         knockBackModifier = EnchantmentHelper.getEnchantmentLevel(knockBack, attacker);
         if (attacker.isSprinting()) {
             ++knockBackModifier;

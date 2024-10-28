@@ -16,52 +16,12 @@
         ]
       }
     },
-    "has_c_gravel": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:gravel"
-          }
-        ]
-      }
-    },
-    "has_c_gravels": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:gravels"
-          }
-        ]
-      }
-    },
-    "has_forge_gravel": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:gravel"
-          }
-        ]
-      }
-    },
     "has_minecraft_gunpowder": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": "minecraft:gunpowder"
-          }
-        ]
-      }
-    },
-    "has_forge_gunpowder": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:gunpowder"
           }
         ]
       }
@@ -86,14 +46,10 @@
   "requirements": [
     [
       "has_minecraft_gravel",
-      "has_c_gravel",
-      "has_c_gravels",
-      "has_forge_gravel",
       "has_the_recipe"
     ],
     [
       "has_minecraft_gunpowder",
-      "has_forge_gunpowder",
       "has_the_recipe"
     ],
     [

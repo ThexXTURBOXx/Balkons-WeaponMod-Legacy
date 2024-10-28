@@ -1,53 +1,55 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemFlail extends ItemMelee {
 
     public static final String WOOD_ID = "flail.wood";
-    public static final ItemFlail WOOD_ITEM = WMItemBuilder.createStandardFlail(Tiers.WOOD);
+    public static final ItemFlail WOOD_ITEM =
+            WMItemBuilder.createStandardFlail(ToolMaterial.WOOD, BalkonsWeaponMod.id(WOOD_ID));
 
     public static final String STONE_ID = "flail.stone";
-    public static final ItemFlail STONE_ITEM = WMItemBuilder.createStandardFlail(Tiers.STONE);
+    public static final ItemFlail STONE_ITEM =
+            WMItemBuilder.createStandardFlail(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
     public static final String IRON_ID = "flail.iron";
-    public static final ItemFlail IRON_ITEM = WMItemBuilder.createStandardFlail(Tiers.IRON);
+    public static final ItemFlail IRON_ITEM =
+            WMItemBuilder.createStandardFlail(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));
 
     public static final String GOLD_ID = "flail.gold";
-    public static final ItemFlail GOLD_ITEM = WMItemBuilder.createStandardFlail(Tiers.GOLD);
+    public static final ItemFlail GOLD_ITEM =
+            WMItemBuilder.createStandardFlail(ToolMaterial.GOLD, BalkonsWeaponMod.id(GOLD_ID));
 
     public static final String DIAMOND_ID = "flail.diamond";
-    public static final ItemFlail DIAMOND_ITEM = WMItemBuilder.createStandardFlail(Tiers.DIAMOND);
+    public static final ItemFlail DIAMOND_ITEM =
+            WMItemBuilder.createStandardFlail(ToolMaterial.DIAMOND, BalkonsWeaponMod.id(DIAMOND_ID));
 
     public static final String NETHERITE_ID = "flail.netherite";
-    public static final ItemFlail NETHERITE_ITEM = WMItemBuilder.createStandardFlail(Tiers.NETHERITE);
+    public static final ItemFlail NETHERITE_ITEM =
+            WMItemBuilder.createStandardFlail(ToolMaterial.NETHERITE, BalkonsWeaponMod.id(NETHERITE_ID));
 
     private final float flailDamage;
 
-    public ItemFlail(MeleeComponent meleecomponent) {
-        super(meleecomponent);
-        flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamageBonus();
-    }
-
-    @Override
-    public int getEnchantmentValue() {
-        return 0;
+    public ItemFlail(MeleeComponent meleecomponent, @NotNull ResourceLocation id) {
+        super(meleecomponent, id);
+        flailDamage = 4.0f + meleecomponent.weaponMaterial.attackDamageBonus();
     }
 
     @Override
@@ -74,14 +76,13 @@ public class ItemFlail extends ItemMelee {
         }
     }
 
-    @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(@NotNull Level world,
-                                                  @NotNull Player entityplayer,
-                                                  @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult use(@NotNull Level world,
+                                          @NotNull Player entityplayer,
+                                          @NotNull InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) {
-            return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
+            return InteractionResult.FAIL;
         }
         removePreviousFlail(world, entityplayer);
         if (!itemstack.isEmpty()) {
@@ -97,7 +98,7 @@ public class ItemFlail extends ItemMelee {
                 throwFlail(itemstack, world, entityplayer);
             }
         }
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

@@ -153,7 +153,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         if (isCritArrow()) {
             damage += 2.0f;
         }
-        if (entity.hurt(getDamageSource(), damage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {

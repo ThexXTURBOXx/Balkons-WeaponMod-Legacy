@@ -16,6 +16,16 @@
         ]
       }
     },
+    "has_minecraft_wooden_tool_materials": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#minecraft:wooden_tool_materials"
+          }
+        ]
+      }
+    },
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
@@ -26,6 +36,10 @@
   "requirements": [
     [
       "has_minecraft_planks",
+      "has_the_recipe"
+    ],
+    [
+      "has_minecraft_wooden_tool_materials",
       "has_the_recipe"
     ]
   ],

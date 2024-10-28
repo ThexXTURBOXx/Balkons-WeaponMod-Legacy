@@ -7,34 +7,8 @@
     " # "
   ],
   "key": {
-    "X": [
-      {
-        "item": "minecraft:diamond"
-      },
-      {
-        "tag": "c:diamonds"
-      },
-      {
-        "tag": "c:gems/diamonds"
-      },
-      {
-        "tag": "forge:gems/diamond"
-      }
-    ],
-    "#": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "X": "#minecraft:diamond_tool_materials",
+    "#": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:battleaxe.diamond"

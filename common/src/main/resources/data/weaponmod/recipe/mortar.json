@@ -6,12 +6,8 @@
     "#"
   ],
   "key": {
-    "X": {
-      "item": "weaponmod:mortar-ironpart"
-    },
-    "#": {
-      "item": "weaponmod:gun-stock"
-    }
+    "X": "weaponmod:mortar-ironpart",
+    "#": "weaponmod:gun-stock"
   },
   "result": {
     "id": "weaponmod:mortar"

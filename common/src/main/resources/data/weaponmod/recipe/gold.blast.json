@@ -1,35 +1,19 @@
 {
   "type": "minecraft:blasting",
   "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.1,
   "ingredient": [
-    {
-      "item": "weaponmod:spear.gold"
-    },
-    {
-      "item": "weaponmod:halberd.gold"
-    },
-    {
-      "item": "weaponmod:knife.gold"
-    },
-    {
-      "item": "weaponmod:battleaxe.gold"
-    },
-    {
-      "item": "weaponmod:warhammer.gold"
-    },
-    {
-      "item": "weaponmod:flail.gold"
-    },
-    {
-      "item": "weaponmod:boomerang.gold"
-    },
-    {
-      "item": "weaponmod:katana.gold"
-    }
+    "weaponmod:spear.gold",
+    "weaponmod:halberd.gold",
+    "weaponmod:knife.gold",
+    "weaponmod:battleaxe.gold",
+    "weaponmod:warhammer.gold",
+    "weaponmod:flail.gold",
+    "weaponmod:boomerang.gold",
+    "weaponmod:katana.gold"
   ],
   "result": {
     "id": "minecraft:gold_nugget"
-  },
-  "experience": 0.1,
-  "cookingtime": 100
+  }
 }

@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -94,8 +95,8 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean hurt(@NotNull DamageSource damagesource, float damage) {
-        if (level().isClientSide || !isAlive() || damage <= 0.0f) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource damageSource, float damage) {
+        if (!isAlive() || damage <= 0.0f) {
             return false;
         }
         setRockDirection(-getRockDirection());
@@ -107,10 +108,10 @@ public class EntityDummy extends Entity {
         }
         setCurrentDamage(i);
         markHurt();
-        Entity entity = damagesource.getEntity();
+        Entity entity = damageSource.getEntity();
         if (entity == null) {
             durability -= (int) damage;
-        } else if (damagesource.is(WMDamageSources.WEAPON)) {
+        } else if (damageSource.is(WMDamageSources.WEAPON)) {
             if (entity.getDeltaMovement().length() > 0.5) {
                 entity.setDeltaMovement(entity.getDeltaMovement().scale(0.10000000149011612));
                 playRandomHitSound();
@@ -121,8 +122,8 @@ public class EntityDummy extends Entity {
         } else {
             playRandomHitSound();
         }
-        if (durability <= 0 && level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-            dropAsItem(true, true);
+        if (durability <= 0 && serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+            dropAsItem(serverLevel, true, true);
         }
         markHurt();
         return false;
@@ -197,16 +198,15 @@ public class EntityDummy extends Entity {
         return false;
     }
 
-    public void dropAsItem(boolean destroyed, boolean noCreative) {
-        if (level().isClientSide) {
-            return;
-        }
-        if (destroyed) {
-            for (int i = 0; i < random.nextInt(8); ++i) {
-                spawnAtLocation(Items.LEATHER, 1);
+    public void dropAsItem(Level level, boolean destroyed, boolean noCreative) {
+        if (level instanceof ServerLevel serverLevel) {
+            if (destroyed) {
+                for (int i = 0; i < random.nextInt(8); ++i) {
+                    spawnAtLocation(serverLevel, Items.LEATHER, 1);
+                }
+            } else if (noCreative) {
+                spawnAtLocation(serverLevel, WMRegistries.ITEM_DUMMY.get(), 1);
             }
-        } else if (noCreative) {
-            spawnAtLocation(WMRegistries.ITEM_DUMMY.get(), 1);
         }
         remove(RemovalReason.DISCARDED);
     }
@@ -221,10 +221,10 @@ public class EntityDummy extends Entity {
             }
         }
         if (entityplayer.isCreative()) {
-            dropAsItem(false, false);
+            dropAsItem(level(), false, false);
             return InteractionResult.SUCCESS;
         }
-        dropAsItem(false, true);
+        dropAsItem(level(), false, true);
         return InteractionResult.SUCCESS;
     }
 

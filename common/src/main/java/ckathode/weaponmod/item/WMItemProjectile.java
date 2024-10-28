@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
@@ -12,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -62,7 +64,7 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
                     blockSource.level().addParticle(ParticleTypes.FLAME, pos.x() + direction.getStepX(),
                             pos.y() + direction.getStepY(), pos.z() + direction.getStepZ(), 0.0, 0.2, 0.0);
                 }
-            });
+            }, BalkonsWeaponMod.id(BULLET_MUSKET_ID));
 
     public static final String CROSSBOW_BOLT_ID = "bolt";
     public static final WMItemProjectile CROSSBOW_BOLT_ITEM =
@@ -84,7 +86,7 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
                     blockSource.level().playSound(null, blockSource.pos(), SoundEvents.ARROW_SHOOT,
                             SoundSource.NEUTRAL, 1.0f, 1.2f);
                 }
-            });
+            }, BalkonsWeaponMod.id(CROSSBOW_BOLT_ID));
 
     public static final String MORTAR_SHELL_ID = "shell";
     public static final WMItemProjectile MORTAR_SHELL_ITEM =
@@ -110,13 +112,13 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
                     blockSource.level().addParticle(ParticleTypes.FLAME, pos.x() + direction.getStepX(),
                             pos.y() + direction.getStepY(), pos.z() + direction.getStepZ(), 0.0, 0.0, 0.0);
                 }
-            });
+            }, BalkonsWeaponMod.id(MORTAR_SHELL_ID));
 
-    public WMItemProjectile() {
-        this(WMItemProjectile.getBaseProperties(null));
+    public WMItemProjectile(@NotNull ResourceLocation id) {
+        this(WMItemProjectile.getBaseProperties(id));
     }
 
-    public WMItemProjectile(Properties properties) {
+    public WMItemProjectile(@NotNull Properties properties) {
         super(properties);
     }
 

@@ -6,32 +6,12 @@
     ]
   },
   "criteria": {
-    "has_minecraft_string": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:string"
-          }
-        ]
-      }
-    },
     "has_c_strings": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": "#c:strings"
-          }
-        ]
-      }
-    },
-    "has_forge_string": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:string"
           }
         ]
       }
@@ -46,16 +26,6 @@
         ]
       }
     },
-    "has_forge_gunpowder": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:gunpowder"
-          }
-        ]
-      }
-    },
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
@@ -65,14 +35,11 @@
   },
   "requirements": [
     [
-      "has_minecraft_string",
       "has_c_strings",
-      "has_forge_string",
       "has_the_recipe"
     ],
     [
       "has_minecraft_gunpowder",
-      "has_forge_gunpowder",
       "has_the_recipe"
     ]
   ],

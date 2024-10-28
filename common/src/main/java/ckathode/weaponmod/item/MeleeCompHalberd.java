@@ -1,38 +1,44 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachItem {
 
     public static final String WOOD_ID = "halberd.wood";
-    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardHalberd(Tiers.WOOD);
+    public static final ItemMelee WOOD_ITEM =
+            WMItemBuilder.createStandardHalberd(ToolMaterial.WOOD, BalkonsWeaponMod.id(WOOD_ID));
 
     public static final String STONE_ID = "halberd.stone";
-    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardHalberd(Tiers.STONE);
+    public static final ItemMelee STONE_ITEM =
+            WMItemBuilder.createStandardHalberd(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
     public static final String IRON_ID = "halberd.iron";
-    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardHalberd(Tiers.IRON);
+    public static final ItemMelee IRON_ITEM =
+            WMItemBuilder.createStandardHalberd(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));
 
     public static final String GOLD_ID = "halberd.gold";
-    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardHalberd(Tiers.GOLD);
+    public static final ItemMelee GOLD_ITEM =
+            WMItemBuilder.createStandardHalberd(ToolMaterial.GOLD, BalkonsWeaponMod.id(GOLD_ID));
 
     public static final String DIAMOND_ID = "halberd.diamond";
-    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardHalberd(Tiers.DIAMOND);
+    public static final ItemMelee DIAMOND_ITEM =
+            WMItemBuilder.createStandardHalberd(ToolMaterial.DIAMOND, BalkonsWeaponMod.id(DIAMOND_ID));
 
     public static final String NETHERITE_ID = "halberd.netherite";
-    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardHalberd(Tiers.NETHERITE);
+    public static final ItemMelee NETHERITE_ITEM =
+            WMItemBuilder.createStandardHalberd(ToolMaterial.NETHERITE, BalkonsWeaponMod.id(NETHERITE_ID));
 
     public static final String HALBERD_STATE_TYPE_ID = "halb";
     public static final DataComponentType<Boolean> HALBERD_STATE_TYPE =
@@ -46,7 +52,7 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
         itemstack.set(HALBERD_STATE_TYPE, flag);
     }
 
-    public MeleeCompHalberd(Tier itemTier) {
+    public MeleeCompHalberd(ToolMaterial itemTier) {
         super(MeleeSpecs.HALBERD, itemTier);
     }
 
@@ -65,11 +71,10 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
+    public @NotNull InteractionResult use(Level world, Player entityplayer, InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
         setHalberdState(itemstack, !getHalberdState(itemstack));
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

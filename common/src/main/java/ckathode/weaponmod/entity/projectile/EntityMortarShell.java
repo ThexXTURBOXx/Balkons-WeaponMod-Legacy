@@ -13,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -91,22 +92,22 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
     }
 
     public void createCrater() {
-        if (level().isClientSide || !inGround || isInWater()) {
+        if (!(level() instanceof ServerLevel serverLevel) || !inGround || isInWater()) {
             return;
         }
         remove(RemovalReason.DISCARDED);
         Entity shooter = getOwner();
         if (!(shooter instanceof LivingEntity)) return;
-        Registry<Enchantment> enchRegistry = registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-        Holder<Enchantment> power = enchRegistry.getHolderOrThrow(Enchantments.POWER);
-        Holder<Enchantment> flame = enchRegistry.getHolderOrThrow(Enchantments.FLAME);
+        Registry<Enchantment> enchRegistry = registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> power = enchRegistry.getOrThrow(Enchantments.POWER);
+        Holder<Enchantment> flame = enchRegistry.getOrThrow(Enchantments.FLAME);
         if (EnchantmentHelper.getEnchantmentLevel(power, (LivingEntity) shooter) > 0) {
             float f1 = (float) EnchantmentHelper.getEnchantmentLevel(power, (LivingEntity) shooter);
             explosiveSize += f1 / 4.0f;
         }
         boolean flag =
                 EnchantmentHelper.getEnchantmentLevel(flame, (LivingEntity) shooter) > 0;
-        PhysHelper.createAdvancedExplosion(level(), this, getX(), getY(), getZ(), explosiveSize,
+        PhysHelper.createAdvancedExplosion(serverLevel, this, position(), explosiveSize,
                 WeaponModConfig.get().mortarDoesBlockDamage, true, flag,
                 Explosion.BlockInteraction.DESTROY);
     }
@@ -120,7 +121,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
     @Override
     public void onEntityHit(Entity entity) {
         setDeltaMovement(getDeltaMovement().scale(0.5));
-        if (entity.hurt(getDamageSource(), 5.0f)) {
+        if (entity.hurtOrSimulate(getDamageSource(), 5.0f)) {
             playSound(SoundEvents.PLAYER_HURT, 1.0f, 1.2f / (random.nextFloat() * 0.4f + 0.7f));
         }
     }

@@ -5,25 +5,8 @@
     "##X"
   ],
   "key": {
-    "X": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ],
-    "#": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "X": "#minecraft:planks",
+    "#": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:gun-stock"

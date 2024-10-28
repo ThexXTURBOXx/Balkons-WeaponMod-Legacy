@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import net.minecraft.core.Holder;
@@ -8,52 +9,57 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompBoomerang extends MeleeComponent {
 
     public static final String WOOD_ID = "boomerang.wood";
-    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.WOOD);
+    public static final ItemMelee WOOD_ITEM =
+            WMItemBuilder.createStandardBoomerang(ToolMaterial.WOOD, BalkonsWeaponMod.id(WOOD_ID));
 
     public static final String STONE_ID = "boomerang.stone";
-    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.STONE);
+    public static final ItemMelee STONE_ITEM =
+            WMItemBuilder.createStandardBoomerang(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
     public static final String IRON_ID = "boomerang.iron";
-    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.IRON);
+    public static final ItemMelee IRON_ITEM =
+            WMItemBuilder.createStandardBoomerang(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));
 
     public static final String GOLD_ID = "boomerang.gold";
-    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.GOLD);
+    public static final ItemMelee GOLD_ITEM =
+            WMItemBuilder.createStandardBoomerang(ToolMaterial.GOLD, BalkonsWeaponMod.id(GOLD_ID));
 
     public static final String DIAMOND_ID = "boomerang.diamond";
-    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.DIAMOND);
+    public static final ItemMelee DIAMOND_ITEM =
+            WMItemBuilder.createStandardBoomerang(ToolMaterial.DIAMOND, BalkonsWeaponMod.id(DIAMOND_ID));
 
     public static final String NETHERITE_ID = "boomerang.netherite";
-    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardBoomerang(Tiers.NETHERITE);
+    public static final ItemMelee NETHERITE_ITEM =
+            WMItemBuilder.createStandardBoomerang(ToolMaterial.NETHERITE, BalkonsWeaponMod.id(NETHERITE_ID));
 
-    public MeleeCompBoomerang(Tier itemTier) {
+    public MeleeCompBoomerang(ToolMaterial itemTier) {
         super(MeleeSpecs.BOOMERANG, itemTier);
     }
 
     @Override
-    public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
+    public boolean releaseUsing(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
         if (entityliving instanceof Player entityplayer) {
             if (itemstack.isEmpty()) {
-                return;
+                return false;
             }
             int j = getUseDuration(itemstack) - i;
             float f = j / 20.0f;
             f = (f * f + f * 2.0f) / 3.0f;
             if (f < 0.1f) {
-                return;
+                return false;
             }
             boolean crit = false;
             if (f > 1.5f) {
@@ -67,7 +73,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                         0.0f, f, 5.0f);
                 entityboomerang.setCritArrow(crit);
                 Holder<Enchantment> fireAspect = entityplayer.registryAccess()
-                        .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.FIRE_ASPECT);
+                        .lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FIRE_ASPECT);
                 if (EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
                     entityboomerang.igniteForSeconds(100);
                 }
@@ -80,6 +86,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                 itemstack.shrink(1);
             }
         }
+        return true;
     }
 
     @Override
@@ -88,17 +95,17 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
+    public @NotNull InteractionResult use(Level world, Player entityplayer,
+                                          InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
         if (hand != InteractionHand.MAIN_HAND) {
-            return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
+            return InteractionResult.FAIL;
         }
         if (!entityplayer.isCreative() && itemstack.isEmpty()) {
-            return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
+            return InteractionResult.FAIL;
         }
         entityplayer.startUsingItem(hand);
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+        return InteractionResult.SUCCESS;
     }
 
 }

@@ -60,7 +60,7 @@ public class EntityCannon extends Boat {
             EntityDataSerializers.BYTE);
 
     public EntityCannon(EntityType<EntityCannon> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, WMRegistries.ITEM_CANNON::get);
         blocksBuilding = true;
         setXRot(-20.0f);
         setYRot(-180.0f);
@@ -100,23 +100,13 @@ public class EntityCannon extends Boat {
     }
 
     @Override
-    public ItemStack getPickResult() {
-        return new ItemStack(WMRegistries.ITEM_CANNON.get());
-    }
-
-    @Override
-    public Item getDropItem() {
-        return WMRegistries.ITEM_CANNON.get();
-    }
-
-    @Override
     public boolean isPushable() {
         return false;
     }
 
     @Override
-    public boolean hurt(@NotNull DamageSource damagesource, float damage) {
-        if (level().isClientSide || !isAlive()) {
+    public boolean hurtServer(ServerLevel serverLevel, @NotNull DamageSource damagesource, float damage) {
+        if (!isAlive()) {
             return true;
         }
         if (!damagesource.isDirect() && damagesource.getEntity() != null) {
@@ -127,10 +117,10 @@ public class EntityCannon extends Boat {
             Player player = (Player) damagesource.getEntity();
             if (player != null && player.getInventory().getSelected().isEmpty()) {
                 if (!player.isCreative()) {
-                    spawnAtLocation(WMRegistries.ITEM_CANNON.get(), 1);
+                    spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON.get(), 1);
                     if (isLoaded() || isLoading()) {
-                        spawnAtLocation(WMRegistries.ITEM_CANNON_BALL.get(), 1);
-                        spawnAtLocation(Items.GUNPOWDER, 1);
+                        spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON_BALL.get(), 1);
+                        spawnAtLocation(serverLevel, Items.GUNPOWDER, 1);
                     }
                 }
                 remove(RemovalReason.DISCARDED);
@@ -143,22 +133,22 @@ public class EntityCannon extends Boat {
         markHurt();
         if (getCurrentDamage() > 100) {
             for (int j = 0; j < 6; ++j) {
-                dropItemWithChance(Items.IRON_INGOT, (int) damage, 1);
+                dropItemWithChance(serverLevel, Items.IRON_INGOT, (int) damage, 1);
             }
-            dropItemWithChance(Items.FLINT, (int) damage, 1);
-            dropItemWithChance(Blocks.OAK_LOG.asItem(), (int) damage, 1);
+            dropItemWithChance(serverLevel, Items.FLINT, (int) damage, 1);
+            dropItemWithChance(serverLevel, Blocks.OAK_LOG.asItem(), (int) damage, 1);
             if (isLoaded() || isLoading()) {
-                spawnAtLocation(WMRegistries.ITEM_CANNON_BALL.get(), 1);
-                spawnAtLocation(Items.GUNPOWDER, 1);
+                spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON_BALL.get(), 1);
+                spawnAtLocation(serverLevel, Items.GUNPOWDER, 1);
             }
             remove(RemovalReason.DISCARDED);
         }
         return true;
     }
 
-    public void dropItemWithChance(Item item, int chance, int amount) {
-        if (random.nextInt(chance) < 10) {
-            spawnAtLocation(item, amount);
+    public void dropItemWithChance(Level level, Item item, int chance, int amount) {
+        if (level instanceof ServerLevel serverLevel && random.nextInt(chance) < 10) {
+            spawnAtLocation(serverLevel, item, amount);
         }
     }
 
@@ -240,18 +230,18 @@ public class EntityCannon extends Boat {
         if (onGround) {
             if (fallDistance > 3.0f) {
                 causeFallDamage(fallDistance, 1.0f, damageSources().fall());
-                if (!level().isClientSide && !isRemoved()) {
-                    kill();
-                    if (level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+                if (level() instanceof ServerLevel serverLevel && !isRemoved()) {
+                    kill(serverLevel);
+                    if (serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                         for (int j = 0; j < 5; ++j) {
                             // Yes, one iron ingot should vanish as penalty...
-                            spawnAtLocation(Items.IRON_INGOT);
+                            spawnAtLocation(serverLevel, Items.IRON_INGOT);
                         }
-                        spawnAtLocation(Items.FLINT);
-                        spawnAtLocation(Blocks.OAK_LOG);
+                        spawnAtLocation(serverLevel, Items.FLINT);
+                        spawnAtLocation(serverLevel, Blocks.OAK_LOG);
                         if (isLoaded() || isLoading()) {
-                            spawnAtLocation(WMRegistries.ITEM_CANNON_BALL.get());
-                            spawnAtLocation(Items.GUNPOWDER);
+                            spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON_BALL.get());
+                            spawnAtLocation(serverLevel, Items.GUNPOWDER);
                         }
                     }
                 }
@@ -357,7 +347,8 @@ public class EntityCannon extends Boat {
                 startLoadingCannon();
                 return InteractionResult.PASS;
             }
-            spawnAtLocation(Items.GUNPOWDER, 1);
+            if (level() instanceof ServerLevel serverLevel)
+                spawnAtLocation(serverLevel, Items.GUNPOWDER, 1);
         } else {
             if (isVehicle() && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return InteractionResult.PASS;

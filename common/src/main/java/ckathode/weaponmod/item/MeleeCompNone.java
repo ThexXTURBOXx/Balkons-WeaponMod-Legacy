@@ -4,13 +4,12 @@ import java.util.Collections;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Level;
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompNone extends MeleeComponent {
 
-    public MeleeCompNone(Tier itemTier) {
+    public MeleeCompNone(ToolMaterial itemTier) {
         super(MeleeSpecs.NONE, itemTier);
     }
 
@@ -73,15 +72,14 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack itemstack) {
-        return UseAnim.NONE;
+    public @NotNull ItemUseAnimation getUseAnimation(ItemStack itemstack) {
+        return ItemUseAnimation.NONE;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
-        return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
+    public @NotNull InteractionResult use(Level world, Player entityplayer,
+                                          InteractionHand hand) {
+        return InteractionResult.PASS;
     }
 
 }

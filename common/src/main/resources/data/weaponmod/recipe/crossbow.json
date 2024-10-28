@@ -7,28 +7,9 @@
     "# X"
   ],
   "key": {
-    "X": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ],
-    "#": [
-      {
-        "item": "minecraft:iron_ingot"
-      },
-      {
-        "tag": "c:ingots/iron"
-      },
-      {
-        "tag": "c:iron_ingots"
-      },
-      {
-        "tag": "forge:ingots/iron"
-      }
-    ],
-    "O": {
-      "item": "minecraft:bow"
-    }
+    "X": "#minecraft:planks",
+    "#": "#c:ingots/iron",
+    "O": "minecraft:bow"
   },
   "result": {
     "id": "weaponmod:crossbow"

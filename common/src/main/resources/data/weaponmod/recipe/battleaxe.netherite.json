@@ -1,18 +1,12 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
-  "base": {
-    "item": "weaponmod:battleaxe.diamond"
-  },
+  "addition": "#minecraft:netherite_tool_materials",
+  "base": "weaponmod:battleaxe.diamond",
   "result": {
     "count": 1,
     "id": "weaponmod:battleaxe.netherite"
   },
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  },
+  "template": "minecraft:netherite_upgrade_smithing_template",
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",

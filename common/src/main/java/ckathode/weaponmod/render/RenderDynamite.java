@@ -8,24 +8,22 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderDynamite extends WMRenderer<EntityDynamite> {
+public class RenderDynamite extends WMRenderer<EntityDynamite, RenderDynamite.DynamiteRenderState> {
 
     public RenderDynamite(Context context) {
         super(context);
     }
 
     @Override
-    public void render(@NotNull EntityDynamite entitydynamite, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
-        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitydynamite)));
+    public void render(DynamiteRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
+        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.DYNAMITE));
         ms.pushPose();
-        ms.mulPose(Axis.YP.rotationDegrees(entitydynamite.yRotO + (entitydynamite.getYRot() - entitydynamite.yRotO) * f1 + 90.0f));
-        ms.mulPose(Axis.ZP.rotationDegrees(entitydynamite.xRotO + (entitydynamite.getXRot() - entitydynamite.xRotO) * f1));
-        float f11 = -f1;
+        ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot + 90.0f));
+        ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+        float f11 = -entityRenderState.partialTicks;
         if (f11 > 0.0f) {
             float f12 = -Mth.sin(f11 * 3.0f) * f11;
             ms.mulPose(Axis.ZP.rotationDegrees(f12));
@@ -51,13 +49,16 @@ public class RenderDynamite extends WMRenderer<EntityDynamite> {
             drawVertex(last, builder, -8.0f, 2.0f, 0.0f, 0.0f, 0.15625f, 0.0f, 0.0f, 0.05625f, lm);
         }
         ms.popPose();
-        super.render(entitydynamite, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
     }
 
-    @Override
     @NotNull
-    public ResourceLocation getTextureLocation(@NotNull EntityDynamite entity) {
-        return WeaponModResources.Entity.DYNAMITE;
+    @Override
+    public DynamiteRenderState createRenderState() {
+        return new DynamiteRenderState();
+    }
+
+    public static class DynamiteRenderState extends WMRendererState {
     }
 
 }

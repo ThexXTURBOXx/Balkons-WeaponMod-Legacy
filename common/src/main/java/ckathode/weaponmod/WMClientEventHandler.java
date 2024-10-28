@@ -65,7 +65,7 @@ public class WMClientEventHandler {
             return;
         }
         if (player instanceof LocalPlayer entity) {
-            if (entity.input.jumping && entity.getVehicle() instanceof EntityCannon && ((EntityCannon) entity.getVehicle()).isLoaded()) {
+            if (entity.input.keyPresses.jump() && entity.getVehicle() instanceof EntityCannon && ((EntityCannon) entity.getVehicle()).isLoaded()) {
                 MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getVehicle());
                 WMMessagePipeline.sendToServer(msg);
             }

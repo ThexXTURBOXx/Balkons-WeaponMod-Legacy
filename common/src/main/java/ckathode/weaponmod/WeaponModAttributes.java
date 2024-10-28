@@ -10,14 +10,10 @@ public class WeaponModAttributes {
 
     private static final String PREFIX = "attribute." + MOD_ID;
 
-    public static final ResourceLocation IGNORE_ARMOUR_DAMAGE_ID = ResourceLocation.fromNamespaceAndPath(MOD_ID,
-            PREFIX + ".ignore-armour");
-    public static final ResourceLocation WEAPON_KNOCKBACK_ID = ResourceLocation.fromNamespaceAndPath(MOD_ID,
-            PREFIX + ".knockback");
-    public static final ResourceLocation RELOAD_TIME_ID = ResourceLocation.fromNamespaceAndPath(MOD_ID,
-            PREFIX + ".reload-time");
-    public static final ResourceLocation WEAPON_REACH_ID = ResourceLocation.fromNamespaceAndPath(MOD_ID,
-            PREFIX + ".reach");
+    public static final ResourceLocation IGNORE_ARMOUR_DAMAGE_ID = BalkonsWeaponMod.id(PREFIX + ".ignore-armour");
+    public static final ResourceLocation WEAPON_KNOCKBACK_ID = BalkonsWeaponMod.id(PREFIX + ".knockback");
+    public static final ResourceLocation RELOAD_TIME_ID = BalkonsWeaponMod.id(PREFIX + ".reload-time");
+    public static final ResourceLocation WEAPON_REACH_ID = BalkonsWeaponMod.id(PREFIX + ".reach");
 
     public static final Attribute IGNORE_ARMOUR_DAMAGE =
             new RangedAttribute(IGNORE_ARMOUR_DAMAGE_ID.getPath(), 0.0, 0.0, 2048.0).setSyncable(true);

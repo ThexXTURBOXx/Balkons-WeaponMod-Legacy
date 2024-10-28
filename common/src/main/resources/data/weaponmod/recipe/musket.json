@@ -6,12 +6,8 @@
     "#"
   ],
   "key": {
-    "X": {
-      "item": "weaponmod:musket-ironpart"
-    },
-    "#": {
-      "item": "weaponmod:gun-stock"
-    }
+    "X": "weaponmod:musket-ironpart",
+    "#": "weaponmod:gun-stock"
   },
   "result": {
     "id": "weaponmod:musket"

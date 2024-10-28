@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
@@ -9,45 +10,49 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem {
 
     public static final String WOOD_ID = "spear.wood";
-    public static final ItemMelee WOOD_ITEM = WMItemBuilder.createStandardSpear(Tiers.WOOD);
+    public static final ItemMelee WOOD_ITEM =
+            WMItemBuilder.createStandardSpear(ToolMaterial.WOOD, BalkonsWeaponMod.id(WOOD_ID));
 
     public static final String STONE_ID = "spear.stone";
-    public static final ItemMelee STONE_ITEM = WMItemBuilder.createStandardSpear(Tiers.STONE);
+    public static final ItemMelee STONE_ITEM =
+            WMItemBuilder.createStandardSpear(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
     public static final String IRON_ID = "spear.iron";
-    public static final ItemMelee IRON_ITEM = WMItemBuilder.createStandardSpear(Tiers.IRON);
+    public static final ItemMelee IRON_ITEM =
+            WMItemBuilder.createStandardSpear(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));
 
     public static final String GOLD_ID = "spear.gold";
-    public static final ItemMelee GOLD_ITEM = WMItemBuilder.createStandardSpear(Tiers.GOLD);
+    public static final ItemMelee GOLD_ITEM =
+            WMItemBuilder.createStandardSpear(ToolMaterial.GOLD, BalkonsWeaponMod.id(GOLD_ID));
 
     public static final String DIAMOND_ID = "spear.diamond";
-    public static final ItemMelee DIAMOND_ITEM = WMItemBuilder.createStandardSpear(Tiers.DIAMOND);
+    public static final ItemMelee DIAMOND_ITEM =
+            WMItemBuilder.createStandardSpear(ToolMaterial.DIAMOND, BalkonsWeaponMod.id(DIAMOND_ID));
 
     public static final String NETHERITE_ID = "spear.netherite";
-    public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardSpear(Tiers.NETHERITE);
+    public static final ItemMelee NETHERITE_ITEM =
+            WMItemBuilder.createStandardSpear(ToolMaterial.NETHERITE, BalkonsWeaponMod.id(NETHERITE_ID));
 
-    public MeleeCompSpear(Tier itemTier) {
+    public MeleeCompSpear(ToolMaterial itemTier) {
         super(MeleeSpecs.SPEAR, itemTier);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
+    public @NotNull InteractionResult use(Level world, Player entityplayer, InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
         if (!WeaponModConfig.get().canThrowSpear) {
             return super.use(world, entityplayer, hand);
@@ -56,8 +61,8 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
             entityspear.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 0.8f, 3.0f);
-            Holder<Enchantment> fireAspect = entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                    .getHolderOrThrow(Enchantments.FIRE_ASPECT);
+            Holder<Enchantment> fireAspect = entityplayer.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+                    .getOrThrow(Enchantments.FIRE_ASPECT);
             if (EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
                 entityspear.igniteForSeconds(100);
             }
@@ -69,12 +74,12 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             itemstack = itemstack.copy();
             itemstack.shrink(1);
         }
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack itemstack) {
-        return WeaponModConfig.get().canThrowSpear ? UseAnim.NONE : super.getUseAnimation(itemstack);
+    public @NotNull ItemUseAnimation getUseAnimation(ItemStack itemstack) {
+        return WeaponModConfig.get().canThrowSpear ? ItemUseAnimation.NONE : super.getUseAnimation(itemstack);
     }
 
     @Override

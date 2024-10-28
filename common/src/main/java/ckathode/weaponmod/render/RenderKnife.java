@@ -12,28 +12,26 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderKnife extends WMRenderer<EntityKnife> {
+public class RenderKnife extends WMRenderer<EntityKnife, RenderKnife.KnifeRenderState> {
 
     public RenderKnife(Context context) {
         super(context);
     }
 
     @Override
-    public void render(@NotNull EntityKnife entityknife, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
+    public void render(KnifeRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         if (!WeaponModConfig.get().itemModelForEntity) {
-            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityknife)));
+            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.KNIFE));
             ms.pushPose();
-            ms.mulPose(Axis.YP.rotationDegrees(entityknife.yRotO + (entityknife.getYRot() - entityknife.yRotO) * f1 - 90.0f));
-            ms.mulPose(Axis.ZP.rotationDegrees(entityknife.xRotO + (entityknife.getXRot() - entityknife.xRotO) * f1));
-            float[] color = entityknife.getMaterialColor();
-            float f13 = entityknife.shakeTime - f1;
+            ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+            float[] color = entityRenderState.materialColor;
+            float f13 = entityRenderState.shakeTime;
             if (f13 > 0.0f) {
                 float f14 = -Mth.sin(f13 * 3.0f) * f13;
                 ms.mulPose(Axis.ZP.rotationDegrees(f14));
@@ -71,29 +69,41 @@ public class RenderKnife extends WMRenderer<EntityKnife> {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             ms.pushPose();
             ms.scale(0.85f, 0.85f, 0.85f);
-            ms.mulPose(Axis.YP.rotationDegrees(entityknife.yRotO + (entityknife.getYRot() - entityknife.yRotO) * f1 - 90.0f));
-            ms.mulPose(Axis.ZP.rotationDegrees(entityknife.xRotO + (entityknife.getXRot() - entityknife.xRotO) * f1 - 45.0f));
-            float f15 = entityknife.shakeTime - f1;
+            ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot - 45.0f));
+            float f15 = entityRenderState.shakeTime;
             if (f15 > 0.0f) {
                 float f16 = -Mth.sin(f15 * 3.0f) * f15;
                 ms.mulPose(Axis.ZP.rotationDegrees(f16));
             }
             ms.translate(-0.15f, -0.15f, 0.0f);
-            itemRender.renderStatic(getStackToRender(entityknife), ItemDisplayContext.NONE, lm,
-                    OverlayTexture.NO_OVERLAY, ms, bufs, entityknife.level(), entityknife.getId());
+            itemRender.renderStatic(entityRenderState.weapon, ItemDisplayContext.NONE, lm,
+                    OverlayTexture.NO_OVERLAY, ms, bufs, Minecraft.getInstance().level, 0);
             ms.popPose();
         }
-        super.render(entityknife, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
     }
 
-    public ItemStack getStackToRender(EntityKnife entity) {
-        return entity.getWeapon();
+    @NotNull
+    @Override
+    public KnifeRenderState createRenderState() {
+        return new KnifeRenderState();
     }
 
     @Override
-    @NotNull
-    public ResourceLocation getTextureLocation(@NotNull EntityKnife entity) {
-        return WeaponModResources.Entity.KNIFE;
+    public void extractRenderState(EntityKnife entity, KnifeRenderState entityRenderState, float f) {
+        super.extractRenderState(entity, entityRenderState, f);
+        entityRenderState.shakeTime = entity.shakeTime - f;
+        entityRenderState.weaponMaterialId = entity.getWeaponMaterialId();
+        entityRenderState.materialColor = entity.getMaterialColor();
+        entityRenderState.weapon = entity.getWeapon();
+    }
+
+    public static class KnifeRenderState extends WMRendererState {
+        public float shakeTime;
+        public int weaponMaterialId;
+        public float[] materialColor;
+        public ItemStack weapon;
     }
 
 }

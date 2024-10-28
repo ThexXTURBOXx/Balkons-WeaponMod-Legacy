@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
@@ -7,45 +8,40 @@ import java.util.function.Consumer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemJavelin extends WMItem implements WMDispenserExtension {
 
     public static final String ID = "javelin";
-    public static final ItemJavelin ITEM = WMItemBuilder.createStandardJavelin();
+    public static final ItemJavelin ITEM = WMItemBuilder.createStandardJavelin(BalkonsWeaponMod.id(ID));
 
-    public ItemJavelin() {
-        super(WMItem.getBaseProperties(null).stacksTo(16));
+    public ItemJavelin(@NotNull ResourceLocation id) {
+        super(WMItem.getBaseProperties(id).stacksTo(16));
     }
 
     @Override
-    public int getEnchantmentValue() {
-        return 0;
-    }
-
-    @Override
-    public void releaseUsing(ItemStack itemstack, @NotNull Level world,
-                             @NotNull LivingEntity entityLiving, int i) {
+    public boolean releaseUsing(ItemStack itemstack, @NotNull Level world,
+                                @NotNull LivingEntity entityLiving, int i) {
         Player entityplayer = (Player) entityLiving;
         if (itemstack.isEmpty()) {
-            return;
+            return false;
         }
         int j = getUseDuration(itemstack, entityLiving) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
         if (f < 0.1f) {
-            return;
+            return false;
         }
         if (f > 1.0f) {
             f = 1.0f;
@@ -66,6 +62,7 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
                 entityplayer.getInventory().removeItem(itemstack);
             }
         }
+        return true;
     }
 
     @Override
@@ -75,20 +72,19 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
 
     @NotNull
     @Override
-    public UseAnim getUseAnimation(@NotNull ItemStack itemstack) {
-        return UseAnim.BOW;
+    public ItemUseAnimation getUseAnimation(@NotNull ItemStack itemstack) {
+        return ItemUseAnimation.BOW;
     }
 
     @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(@NotNull Level world, Player entityplayer,
-                                                  @NotNull InteractionHand hand) {
+    public InteractionResult use(@NotNull Level world, Player entityplayer, @NotNull InteractionHand hand) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
         if (!entityplayer.isCreative() && itemstack.isEmpty()) {
-            return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
+            return InteractionResult.FAIL;
         }
         entityplayer.startUsingItem(hand);
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+        return InteractionResult.SUCCESS;
     }
 
     @NotNull

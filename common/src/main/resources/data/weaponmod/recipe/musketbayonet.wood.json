@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "equipment",
   "ingredients": [
-    {
-      "item": "weaponmod:musket"
-    },
-    {
-      "item": "weaponmod:knife.wood"
-    }
+    "weaponmod:musket",
+    "weaponmod:knife.wood"
   ],
   "result": {
     "id": "weaponmod:musketbayonet.wood"

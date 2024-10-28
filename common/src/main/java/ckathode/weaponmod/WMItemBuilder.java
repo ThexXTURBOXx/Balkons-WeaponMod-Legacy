@@ -29,8 +29,11 @@ import ckathode.weaponmod.item.RangedComponent;
 import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.item.WMItemProjectile;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,88 +45,89 @@ public class WMItemBuilder {
     // ==================================================================== //
     // ==================================================================== //
 
-    public static ItemMelee createStandardBattleaxe(@NotNull Tier tier) {
-        return createItemMelee(new MeleeCompBattleaxe(tier));
+    public static ItemMelee createStandardBattleaxe(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeCompBattleaxe(tier), id);
     }
 
-    public static ItemShooter createStandardBlowgun() {
-        return createItemShooter(new RangedCompBlowgun(), new MeleeCompNone(null));
+    public static ItemShooter createStandardBlowgun(@NotNull ResourceLocation id) {
+        return createItemShooter(new RangedCompBlowgun(), new MeleeCompNone(null), id);
     }
 
-    public static ItemBlowgunDart createStandardBlowgunDart(@NotNull DartType dartType) {
-        return createItemBlowgunDart(dartType);
+    public static ItemBlowgunDart createStandardBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
+        return createItemBlowgunDart(dartType, id);
     }
 
-    public static ItemShooter createStandardBlunderbuss() {
-        return createItemShooter(new RangedCompBlunderbuss(), new MeleeCompNone(null));
+    public static ItemShooter createStandardBlunderbuss(@NotNull ResourceLocation id) {
+        return createItemShooter(new RangedCompBlunderbuss(), new MeleeCompNone(null), id);
     }
 
-    public static ItemMelee createStandardBoomerang(@NotNull Tier tier) {
-        return createItemMelee(new MeleeCompBoomerang(tier));
+    public static ItemMelee createStandardBoomerang(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeCompBoomerang(tier), id);
     }
 
-    public static ItemCannon createStandardCannon() {
-        return createItemCannon();
+    public static ItemCannon createStandardCannon(@NotNull ResourceLocation id) {
+        return createItemCannon(id);
     }
 
-    public static ItemShooter createStandardCrossbow() {
-        return createItemShooter(new RangedCompCrossbow(), new MeleeCompNone(null));
+    public static ItemShooter createStandardCrossbow(@NotNull ResourceLocation id) {
+        return createItemShooter(new RangedCompCrossbow(), new MeleeCompNone(null), id);
     }
 
-    public static ItemDummy createStandardDummy() {
-        return createItemDummy();
+    public static ItemDummy createStandardDummy(@NotNull ResourceLocation id) {
+        return createItemDummy(id);
     }
 
-    public static ItemDynamite createStandardDynamite() {
-        return createItemDynamite();
+    public static ItemDynamite createStandardDynamite(@NotNull ResourceLocation id) {
+        return createItemDynamite(id);
     }
 
-    public static ItemMelee createStandardFirerod() {
-        return createItemMelee(new MeleeCompFirerod());
+    public static ItemMelee createStandardFirerod(@NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeCompFirerod(), id);
     }
 
-    public static ItemFlail createStandardFlail(@NotNull Tier tier) {
-        return createItemFlail(new MeleeCompNone(tier));
+    public static ItemFlail createStandardFlail(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemFlail(new MeleeCompNone(tier), id);
     }
 
-    public static ItemShooter createStandardFlintlock() {
-        return createItemShooter(new RangedCompFlintlock(), new MeleeCompNone(null));
+    public static ItemShooter createStandardFlintlock(@NotNull ResourceLocation id) {
+        return createItemShooter(new RangedCompFlintlock(), new MeleeCompNone(null), id);
     }
 
-    public static ItemMelee createStandardHalberd(@NotNull Tier tier) {
-        return createItemMelee(new MeleeCompHalberd(tier));
+    public static ItemMelee createStandardHalberd(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeCompHalberd(tier), id);
     }
 
-    public static ItemJavelin createStandardJavelin() {
-        return createItemJavelin();
+    public static ItemJavelin createStandardJavelin(@NotNull ResourceLocation id) {
+        return createItemJavelin(id);
     }
 
-    public static ItemMelee createStandardKatana(@NotNull Tier tier) {
-        return createItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, tier));
+    public static ItemMelee createStandardKatana(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeComponent(MeleeComponent.MeleeSpecs.KATANA, tier), id);
     }
 
-    public static ItemMelee createStandardKnife(@NotNull Tier tier) {
-        return createItemMelee(new MeleeCompKnife(tier));
+    public static ItemMelee createStandardKnife(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeCompKnife(tier), id);
     }
 
-    public static ItemShooter createStandardMortar() {
-        return createItemShooter(new RangedCompMortar(), new MeleeCompNone(null));
+    public static ItemShooter createStandardMortar(@NotNull ResourceLocation id) {
+        return createItemShooter(new RangedCompMortar(), new MeleeCompNone(null), id);
     }
 
-    public static ItemMusket createStandardMusket() {
-        return createItemMusket();
+    public static ItemMusket createStandardMusket(@NotNull ResourceLocation id) {
+        return createItemMusket(id);
     }
 
-    public static ItemMusket createStandardMusketWithBayonet(@NotNull Tier tier, @NotNull Item bayonetItem) {
-        return createItemMusket(new MeleeCompKnife(tier), bayonetItem);
+    public static ItemMusket createStandardMusketWithBayonet(@NotNull ToolMaterial tier, @NotNull Item bayonetItem,
+                                                             @NotNull ResourceLocation id) {
+        return createItemMusket(new MeleeCompKnife(tier), bayonetItem, id);
     }
 
-    public static ItemMelee createStandardSpear(@NotNull Tier tier) {
-        return createItemMelee(new MeleeCompSpear(tier));
+    public static ItemMelee createStandardSpear(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeCompSpear(tier), id);
     }
 
-    public static ItemMelee createStandardWarhammer(@NotNull Tier tier) {
-        return createItemMelee(new MeleeCompWarhammer(tier));
+    public static ItemMelee createStandardWarhammer(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
+        return createItemMelee(new MeleeCompWarhammer(tier), id);
     }
 
     // ==================================================================== //
@@ -133,83 +137,97 @@ public class WMItemBuilder {
     // ==================================================================== //
 
     @ExpectPlatform
-    public static ItemBlowgunDart createItemBlowgunDart(@NotNull DartType dartType) {
+    public static ItemBlowgunDart createItemBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static ItemCannon createItemCannon() {
+    public static ItemCannon createItemCannon(@NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static ItemDummy createItemDummy() {
+    public static ItemDummy createItemDummy(@NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static ItemDynamite createItemDynamite() {
+    public static ItemDynamite createItemDynamite(@NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static ItemFlail createItemFlail(MeleeComponent meleeComponent) {
+    public static ItemFlail createItemFlail(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static ItemJavelin createItemJavelin() {
+    public static ItemJavelin createItemJavelin(@NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static ItemMelee createItemMelee(MeleeComponent meleeComponent) {
+    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, Item.Properties properties) {
+    public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull Item.Properties properties) {
         throw new AssertionError();
     }
 
-    public static ItemMusket createItemMusket() {
-        return createItemMusket(new MeleeCompNone(null), null);
+    public static ItemMusket createItemMusket(@NotNull ResourceLocation id) {
+        return createItemMusket(new MeleeCompNone(null), null, id);
     }
 
     @ExpectPlatform
-    public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
-    public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent) {
+    public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem,
+                                              @NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
-                                                Item.Properties properties) {
+                                                @NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static WMItem createWMItem() {
+    public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
+                                                @NotNull Item.Properties properties) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static WMItem createWMItem(Item.Properties properties) {
+    public static WMItem createWMItem(@NotNull ResourceLocation id) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension) {
+    public static WMItem createWMItem(@NotNull Item.Properties properties) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension, Item.Properties properties) {
+    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension,
+                                                          @NotNull ResourceLocation id) {
         throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension,
+                                                          @NotNull Item.Properties properties) {
+        throw new AssertionError();
+    }
+
+    // ==================================================================== //
+    // ==================================================================== //
+    // ========================== Helper methods ========================== //
+    // ==================================================================== //
+    // ==================================================================== //
+
+    public static ResourceKey<Item> id(ResourceLocation id) {
+        return ResourceKey.create(Registries.ITEM, id);
     }
 
 }

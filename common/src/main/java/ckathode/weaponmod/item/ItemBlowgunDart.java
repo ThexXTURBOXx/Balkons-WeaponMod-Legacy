@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
@@ -15,6 +16,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -30,14 +32,15 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     public static final String ID_PREFIX = "dart";
     public static final Map<DartType, ItemBlowgunDart> ITEMS =
             Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
-                    .map(t -> new Pair<>(t, WMItemBuilder.createStandardBlowgunDart(t)))
+                    .map(t -> new Pair<>(
+                            t, WMItemBuilder.createStandardBlowgunDart(t, BalkonsWeaponMod.id(t.typeName))))
                     .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 
     @NotNull
     private final DartType dartType;
 
-    public ItemBlowgunDart(@NotNull DartType dartType) {
-        super();
+    public ItemBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
+        super(id);
         this.dartType = dartType;
     }
 

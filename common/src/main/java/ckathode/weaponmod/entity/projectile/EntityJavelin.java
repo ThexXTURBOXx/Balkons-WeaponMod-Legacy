@@ -72,7 +72,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
         if (isCritArrow()) {
             damage += random.nextInt(damage / 2 + 2);
         }
-        if (entity.hurt(getDamageSource(), (float) damage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), (float) damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             remove(RemovalReason.DISCARDED);

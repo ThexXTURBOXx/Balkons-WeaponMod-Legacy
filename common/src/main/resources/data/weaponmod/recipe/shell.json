@@ -7,28 +7,8 @@
     "X"
   ],
   "key": {
-    "#": [
-      {
-        "item": "minecraft:iron_ingot"
-      },
-      {
-        "tag": "c:ingots/iron"
-      },
-      {
-        "tag": "c:iron_ingots"
-      },
-      {
-        "tag": "forge:ingots/iron"
-      }
-    ],
-    "X": [
-      {
-        "item": "minecraft:gunpowder"
-      },
-      {
-        "tag": "forge:gunpowder"
-      }
-    ]
+    "#": "#c:ingots/iron",
+    "X": "minecraft:gunpowder"
   },
   "result": {
     "id": "weaponmod:shell",

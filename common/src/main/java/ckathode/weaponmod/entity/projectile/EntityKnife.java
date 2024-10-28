@@ -72,8 +72,8 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         if (inGround || beenInGround) {
             return;
         }
-        setXRot(getXRot() - 70.0f);
-        if (getXRot() <= -360) setXRot(getXRot() + 360.0f);
+        xRot -= 70.0f;
+        if (xRot <= -360) xRot += 360;
         if (soundTimer >= 3) {
             if (!isInWater()) {
                 playSound(SoundEvents.ARROW_SHOOT, 0.6f,
@@ -103,7 +103,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         }
         float damage = iweapon.getMeleeComponent().getEntityDamage();
         damage = getMeleeHitDamage(entity, damage);
-        if (entity.hurt(getDamageSource(), damage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             if (thrownItem.getDamageValue() + 2 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);

@@ -16,16 +16,6 @@
         ]
       }
     },
-    "has_minecraft_stick": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:stick"
-          }
-        ]
-      }
-    },
     "has_c_rods/wooden": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -36,52 +26,12 @@
         ]
       }
     },
-    "has_c_wooden_rods": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:wooden_rods"
-          }
-        ]
-      }
-    },
-    "has_forge_rods/wooden": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:rods/wooden"
-          }
-        ]
-      }
-    },
-    "has_minecraft_string": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:string"
-          }
-        ]
-      }
-    },
     "has_c_strings": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": "#c:strings"
-          }
-        ]
-      }
-    },
-    "has_forge_string": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:string"
           }
         ]
       }
@@ -99,16 +49,11 @@
       "has_the_recipe"
     ],
     [
-      "has_minecraft_stick",
       "has_c_rods/wooden",
-      "has_c_wooden_rods",
-      "has_forge_rods/wooden",
       "has_the_recipe"
     ],
     [
-      "has_minecraft_string",
       "has_c_strings",
-      "has_forge_string",
       "has_the_recipe"
     ]
   ],

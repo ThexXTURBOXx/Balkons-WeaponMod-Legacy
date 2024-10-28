@@ -6,12 +6,8 @@
     "#"
   ],
   "key": {
-    "X": {
-      "item": "weaponmod:blunder-ironpart"
-    },
-    "#": {
-      "item": "weaponmod:gun-stock"
-    }
+    "X": "weaponmod:blunder-ironpart",
+    "#": "weaponmod:gun-stock"
   },
   "result": {
     "id": "weaponmod:blunderbuss"

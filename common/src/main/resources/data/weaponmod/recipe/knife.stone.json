@@ -6,23 +6,8 @@
     "X"
   ],
   "key": {
-    "#": {
-      "tag": "minecraft:stone_tool_materials"
-    },
-    "X": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "#": "#minecraft:stone_tool_materials",
+    "X": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:knife.stone"

@@ -8,14 +8,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditionType;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public record WMConfigConditionFabric(String weapon) implements ResourceCondition {
 
-    public static final ResourceLocation CONFIG_CONDITION_ID =
-            ResourceLocation.fromNamespaceAndPath(BalkonsWeaponMod.MOD_ID, "config_conditional");
+    public static final ResourceLocation CONFIG_CONDITION_ID = BalkonsWeaponMod.id("config_conditional");
     public static final MapCodec<WMConfigConditionFabric> CODEC =
             RecordCodecBuilder.mapCodec(instance -> instance.group(
                             Codec.STRING.fieldOf("weapon").forGetter(condition -> condition.weapon))
@@ -29,7 +28,7 @@ public record WMConfigConditionFabric(String weapon) implements ResourceConditio
     }
 
     @Override
-    public boolean test(@Nullable HolderLookup.Provider registryLookup) {
+    public boolean test(@Nullable RegistryOps.RegistryInfoLookup registryInfo) {
         return WeaponModConfig.get().isEnabled(weapon);
     }
 

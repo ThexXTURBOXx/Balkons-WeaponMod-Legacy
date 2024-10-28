@@ -78,9 +78,9 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         super.applyEntityHitEffects(entity);
         Entity shooter = getOwner();
         if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
-            Registry<Enchantment> enchRegistry = registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-            Holder<Enchantment> knockBack = enchRegistry.getHolderOrThrow(Enchantments.KNOCKBACK);
-            Holder<Enchantment> fireAspect = enchRegistry.getHolderOrThrow(Enchantments.FIRE_ASPECT);
+            Registry<Enchantment> enchRegistry = registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            Holder<Enchantment> knockBack = enchRegistry.getOrThrow(Enchantments.KNOCKBACK);
+            Holder<Enchantment> fireAspect = enchRegistry.getOrThrow(Enchantments.FIRE_ASPECT);
             int i = EnchantmentHelper.getEnchantmentLevel(knockBack, livingShooter);
             if (i != 0) {
                 livingEntity.knockback(i * 0.4f,

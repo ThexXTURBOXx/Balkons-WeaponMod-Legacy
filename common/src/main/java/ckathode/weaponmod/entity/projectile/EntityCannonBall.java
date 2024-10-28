@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -84,12 +85,12 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     public void createCrater() {
-        if (level().isClientSide || !inGround || isInWater()) {
+        if (!(level() instanceof ServerLevel serverLevel) || !inGround || isInWater()) {
             return;
         }
         remove(RemovalReason.DISCARDED);
         float f = isCritArrow() ? 5.0f : 2.5f;
-        PhysHelper.createAdvancedExplosion(level(), this, getX(), getY(), getZ(), f,
+        PhysHelper.createAdvancedExplosion(serverLevel, this, position(), f,
                 WeaponModConfig.get().cannonDoesBlockDamage, true, false,
                 Explosion.BlockInteraction.DESTROY);
     }
@@ -102,7 +103,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
 
     @Override
     public void onEntityHit(Entity entity) {
-        if (entity.hurt(getDamageSource(), 30.0f)) {
+        if (entity.hurtOrSimulate(getDamageSource(), 30.0f)) {
             playSound(SoundEvents.PLAYER_HURT, 1.0f, 1.2f / (random.nextFloat() * 0.4f + 0.7f));
         }
     }

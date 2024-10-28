@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMUtil;
@@ -23,7 +24,7 @@ import net.minecraft.world.level.Level;
 public class RangedCompBlowgun extends RangedComponent {
 
     public static final String ID = "blowgun";
-    public static final ItemShooter ITEM = WMItemBuilder.createStandardBlowgun();
+    public static final ItemShooter ITEM = WMItemBuilder.createStandardBlowgun(BalkonsWeaponMod.id(ID));
 
     public RangedCompBlowgun() {
         super(RangedSpecs.BLOWGUN);
@@ -55,8 +56,8 @@ public class RangedCompBlowgun extends RangedComponent {
         }
         ItemStack dartStackCopy = dartstack.copy();
         Holder<Enchantment> infinity =
-                entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                        .getHolderOrThrow(Enchantments.INFINITY);
+                entityplayer.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+                        .getOrThrow(Enchantments.INFINITY);
         if (!entityplayer.isCreative()
             && EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) == 0) {
             dartstack.shrink(1);

@@ -26,16 +26,6 @@
         ]
       }
     },
-    "has_minecraft_stick": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:stick"
-          }
-        ]
-      }
-    },
     "has_c_rods/wooden": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -46,52 +36,12 @@
         ]
       }
     },
-    "has_c_wooden_rods": {
+    "has_c_crops/wheat": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#c:wooden_rods"
-          }
-        ]
-      }
-    },
-    "has_forge_rods/wooden": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:rods/wooden"
-          }
-        ]
-      }
-    },
-    "has_minecraft_wheat": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "minecraft:wheat"
-          }
-        ]
-      }
-    },
-    "has_c_grain": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#c:grain"
-          }
-        ]
-      }
-    },
-    "has_forge_crops/wheat": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "#forge:crops/wheat"
+            "items": "#c:crops/wheat"
           }
         ]
       }
@@ -113,16 +63,11 @@
       "has_the_recipe"
     ],
     [
-      "has_minecraft_stick",
       "has_c_rods/wooden",
-      "has_c_wooden_rods",
-      "has_forge_rods/wooden",
       "has_the_recipe"
     ],
     [
-      "has_minecraft_wheat",
-      "has_c_grain",
-      "has_forge_crops/wheat",
+      "has_c_crops/wheat",
       "has_the_recipe"
     ]
   ],

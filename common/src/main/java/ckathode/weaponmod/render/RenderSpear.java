@@ -12,29 +12,27 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderSpear extends WMRenderer<EntitySpear> {
+public class RenderSpear extends WMRenderer<EntitySpear, RenderSpear.SpearRenderState> {
 
     public RenderSpear(Context context) {
         super(context);
     }
 
     @Override
-    public void render(@NotNull EntitySpear entityspear, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
+    public void render(SpearRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         if (!WeaponModConfig.get().itemModelForEntity) {
-            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entityspear)));
+            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.SPEAR));
             ms.pushPose();
-            ms.mulPose(Axis.YP.rotationDegrees(entityspear.yRotO + (entityspear.getYRot() - entityspear.yRotO) * f1 - 90.0f));
-            ms.mulPose(Axis.ZP.rotationDegrees(entityspear.xRotO + (entityspear.getXRot() - entityspear.xRotO) * f1));
-            float[] color = entityspear.getMaterialColor();
+            ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+            float[] color = entityRenderState.materialColor;
             float length = 20.0f;
-            float f13 = entityspear.shakeTime - f1;
+            float f13 = entityRenderState.shakeTime;
             if (f13 > 0.0f) {
                 float f14 = -Mth.sin(f13 * 3.0f) * f13;
                 ms.mulPose(Axis.ZP.rotationDegrees(f14));
@@ -72,29 +70,41 @@ public class RenderSpear extends WMRenderer<EntitySpear> {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             ms.pushPose();
             ms.scale(1.7f, 1.7f, 1.7f);
-            ms.mulPose(Axis.YP.rotationDegrees(entityspear.yRotO + (entityspear.getYRot() - entityspear.yRotO) * f1 - 90.0f));
-            ms.mulPose(Axis.ZP.rotationDegrees(entityspear.xRotO + (entityspear.getXRot() - entityspear.xRotO) * f1 - 45.0f));
-            float f15 = entityspear.shakeTime - f1;
+            ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+            ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot - 45.0f));
+            float f15 = entityRenderState.shakeTime;
             if (f15 > 0.0f) {
                 float f16 = -Mth.sin(f15 * 3.0f) * f15;
                 ms.mulPose(Axis.ZP.rotationDegrees(f16));
             }
             ms.translate(-0.35f, -0.35f, 0.0f);
-            itemRender.renderStatic(getStackToRender(entityspear), ItemDisplayContext.NONE, lm,
-                    OverlayTexture.NO_OVERLAY, ms, bufs, entityspear.level(), entityspear.getId());
+            itemRender.renderStatic(entityRenderState.weapon, ItemDisplayContext.NONE, lm,
+                    OverlayTexture.NO_OVERLAY, ms, bufs, Minecraft.getInstance().level, 0);
             ms.popPose();
         }
-        super.render(entityspear, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
     }
 
-    public ItemStack getStackToRender(EntitySpear entity) {
-        return entity.getWeapon();
+    @NotNull
+    @Override
+    public SpearRenderState createRenderState() {
+        return new SpearRenderState();
     }
 
     @Override
-    @NotNull
-    public ResourceLocation getTextureLocation(@NotNull EntitySpear entity) {
-        return WeaponModResources.Entity.SPEAR;
+    public void extractRenderState(EntitySpear entity, SpearRenderState entityRenderState, float f) {
+        super.extractRenderState(entity, entityRenderState, f);
+        entityRenderState.shakeTime = entity.shakeTime - f;
+        entityRenderState.weaponMaterialId = entity.getWeaponMaterialId();
+        entityRenderState.materialColor = entity.getMaterialColor();
+        entityRenderState.weapon = entity.getWeapon();
+    }
+
+    public static class SpearRenderState extends WMRendererState {
+        public float shakeTime;
+        public int weaponMaterialId;
+        public float[] materialColor;
+        public ItemStack weapon;
     }
 
 }

@@ -7,9 +7,7 @@
     " X "
   ],
   "key": {
-    "X": {
-      "item": "minecraft:stone"
-    }
+    "X": "minecraft:stone"
   },
   "result": {
     "id": "weaponmod:cannonball",

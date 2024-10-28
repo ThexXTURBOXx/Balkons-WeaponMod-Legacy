@@ -52,6 +52,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -323,7 +324,8 @@ public class WMRegistries {
             builder.clientTrackingRange(range);
         if (updateFrequency >= 0)
             builder.updateInterval(updateFrequency);
-        return builder.sized(size.width(), size.height()).build(name);
+        return builder.sized(size.width(), size.height())
+                .build(ResourceKey.create(Registries.ENTITY_TYPE, BalkonsWeaponMod.id(name)));
     }
 
 }

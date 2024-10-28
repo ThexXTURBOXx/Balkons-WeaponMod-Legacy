@@ -6,34 +6,8 @@
     "X"
   ],
   "key": {
-    "#": [
-      {
-        "item": "minecraft:gold_ingot"
-      },
-      {
-        "tag": "c:ingots/gold"
-      },
-      {
-        "tag": "c:gold_ingots"
-      },
-      {
-        "tag": "forge:ingots/gold"
-      }
-    ],
-    "X": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ]
+    "#": "#minecraft:gold_tool_materials",
+    "X": "#c:rods/wooden"
   },
   "result": {
     "id": "weaponmod:knife.gold"

@@ -1,6 +1,8 @@
 package ckathode.weaponmod.render;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.EntityCannon;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -8,14 +10,11 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
 
-import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
-
-public class ModelCannonBarrel extends WMModel<EntityCannon> {
+public class ModelCannonBarrel extends EntityModel<RenderCannon.CannonRenderState> {
 
     public static final ModelLayerLocation CANNON_BARREL_LAYER =
-            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, EntityCannon.ID), "barrel");
+            new ModelLayerLocation(BalkonsWeaponMod.id(EntityCannon.ID), "barrel");
 
     private static final String SWIVEL_FRONT_ID = "swivelFront";
     private static final String SWIVEL_BACK_ID = "swivelBack";

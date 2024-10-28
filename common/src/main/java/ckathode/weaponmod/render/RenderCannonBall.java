@@ -8,10 +8,9 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderCannonBall extends WMRenderer<EntityCannonBall> {
+public class RenderCannonBall extends WMRenderer<EntityCannonBall, RenderCannonBall.CannonBallRenderState> {
 
     public RenderCannonBall(Context context) {
         super(context);
@@ -19,11 +18,10 @@ public class RenderCannonBall extends WMRenderer<EntityCannonBall> {
     }
 
     @Override
-    public void render(@NotNull EntityCannonBall entitycannonball, float f, float f1,
-                       @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
+    public void render(CannonBallRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         ms.pushPose();
-        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitycannonball)));
-        ms.mulPose(Axis.YP.rotationDegrees(180.0f - f));
+        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.CANNONBALL));
+        ms.mulPose(Axis.YP.rotationDegrees(180.0f - entityRenderState.yRot));
         ms.scale(-1.0f, -1.0f, 1.0f);
         ms.scale(0.7f, 0.7f, 0.7f);
         ms.mulPose(Axis.XP.rotationDegrees(180.0f));
@@ -53,13 +51,16 @@ public class RenderCannonBall extends WMRenderer<EntityCannonBall> {
         drawVertex(last, builder, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
         drawVertex(last, builder, 0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
         ms.popPose();
-        super.render(entitycannonball, f, f1, ms, bufs, lm);
+        super.render(entityRenderState, ms, bufs, lm);
     }
 
-    @Override
     @NotNull
-    public ResourceLocation getTextureLocation(@NotNull EntityCannonBall entity) {
-        return WeaponModResources.Entity.CANNONBALL;
+    @Override
+    public CannonBallRenderState createRenderState() {
+        return new CannonBallRenderState();
+    }
+
+    public static class CannonBallRenderState extends WMRendererState {
     }
 
 }

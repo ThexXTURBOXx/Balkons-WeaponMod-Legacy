@@ -7,25 +7,8 @@
     "  X"
   ],
   "key": {
-    "X": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ],
-    "#": [
-      {
-        "item": "minecraft:gold_ingot"
-      },
-      {
-        "tag": "c:ingots/gold"
-      },
-      {
-        "tag": "c:gold_ingots"
-      },
-      {
-        "tag": "forge:ingots/gold"
-      }
-    ]
+    "X": "#minecraft:planks",
+    "#": "#minecraft:gold_tool_materials"
   },
   "result": {
     "id": "weaponmod:boomerang.gold"

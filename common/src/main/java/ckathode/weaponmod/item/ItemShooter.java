@@ -1,15 +1,16 @@
 package ckathode.weaponmod.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,14 +22,15 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
 
-    public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
-        this(rangedcomponent, meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial));
+    public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent, @NotNull ResourceLocation id) {
+        this(rangedcomponent, meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial, id));
     }
 
     public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent,
                        Properties properties) {
         super(rangedcomponent.setProperties(meleecomponent.setProperties(properties))
                 .attributes(rangedcomponent.setAttributes(meleecomponent.setAttributes(ItemAttributeModifiers.builder())).build())
+                .enchantable(meleecomponent.getEnchantmentValue())
                 .arch$tab(CreativeModeTabs.COMBAT));
         rangedComponent = rangedcomponent;
         meleeComponent = meleecomponent;
@@ -50,11 +52,6 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
-    public int getEnchantmentValue() {
-        return meleeComponent.getEnchantmentValue();
-    }
-
-    @Override
     public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
                                      @NotNull Entity entity) {
         return meleeComponent.onLeftClickEntity(itemstack, player, entity) && rangedComponent.onLeftClickEntity(itemstack, player, entity);
@@ -62,7 +59,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
 
     @NotNull
     @Override
-    public UseAnim getUseAnimation(@NotNull ItemStack itemstack) {
+    public ItemUseAnimation getUseAnimation(@NotNull ItemStack itemstack) {
         return rangedComponent.getUseAnimation(itemstack);
     }
 
@@ -73,9 +70,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
 
     @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(@NotNull Level world,
-                                                  @NotNull Player entityplayer,
-                                                  @NotNull InteractionHand hand) {
+    public InteractionResult use(@NotNull Level world, @NotNull Player entityplayer, @NotNull InteractionHand hand) {
         return rangedComponent.use(world, entityplayer, hand);
     }
 
@@ -85,9 +80,9 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
-    public void releaseUsing(@NotNull ItemStack itemstack, @NotNull Level world,
-                             @NotNull LivingEntity entityplayer, int i) {
-        rangedComponent.releaseUsing(itemstack, world, entityplayer, i);
+    public boolean releaseUsing(@NotNull ItemStack itemstack, @NotNull Level world,
+                                @NotNull LivingEntity entityplayer, int i) {
+        return rangedComponent.releaseUsing(itemstack, world, entityplayer, i);
     }
 
     @Override

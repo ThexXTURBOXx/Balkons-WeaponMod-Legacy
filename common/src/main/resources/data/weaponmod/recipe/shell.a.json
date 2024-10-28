@@ -6,23 +6,8 @@
     "X"
   ],
   "key": {
-    "#": [
-      {
-        "item": "minecraft:iron_ingot"
-      },
-      {
-        "tag": "c:ingots/iron"
-      },
-      {
-        "tag": "c:iron_ingots"
-      },
-      {
-        "tag": "forge:ingots/iron"
-      }
-    ],
-    "X": {
-      "item": "weaponmod:dynamite"
-    }
+    "#": "#c:ingots/iron",
+    "X": "weaponmod:dynamite"
   },
   "result": {
     "id": "weaponmod:shell",

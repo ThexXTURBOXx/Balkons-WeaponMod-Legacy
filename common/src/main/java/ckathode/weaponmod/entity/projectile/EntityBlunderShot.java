@@ -77,7 +77,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     public void onEntityHit(Entity entity) {
         float damage = 4.0f + extraDamage;
         int prevhurtrestime = entity.invulnerableTime;
-        if (entity.hurt(getDamageSource(), damage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
             entity.invulnerableTime = prevhurtrestime;
             applyEntityHitEffects(entity);
             playHitSound();

@@ -7,36 +7,9 @@
     "X #"
   ],
   "key": {
-    "#": [
-      {
-        "tag": "minecraft:planks"
-      }
-    ],
-    "X": [
-      {
-        "item": "minecraft:stick"
-      },
-      {
-        "tag": "c:rods/wooden"
-      },
-      {
-        "tag": "c:wooden_rods"
-      },
-      {
-        "tag": "forge:rods/wooden"
-      }
-    ],
-    "O": [
-      {
-        "item": "minecraft:string"
-      },
-      {
-        "tag": "c:strings"
-      },
-      {
-        "tag": "forge:string"
-      }
-    ]
+    "#": "#minecraft:wooden_tool_materials",
+    "X": "#c:rods/wooden",
+    "O": "#c:strings"
   },
   "result": {
     "id": "weaponmod:flail.wood"

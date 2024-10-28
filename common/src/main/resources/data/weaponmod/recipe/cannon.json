@@ -7,28 +7,9 @@
     "##O"
   ],
   "key": {
-    "#": [
-      {
-        "item": "minecraft:iron_ingot"
-      },
-      {
-        "tag": "c:ingots/iron"
-      },
-      {
-        "tag": "c:iron_ingots"
-      },
-      {
-        "tag": "forge:ingots/iron"
-      }
-    ],
-    "X": {
-      "item": "minecraft:flint_and_steel"
-    },
-    "O": [
-      {
-        "tag": "minecraft:logs"
-      }
-    ]
+    "#": "#c:ingots/iron",
+    "X": "#c:tools/igniter",
+    "O": "#minecraft:logs"
   },
   "result": {
     "id": "weaponmod:cannon"
