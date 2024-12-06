@@ -38,19 +38,5 @@
         0.85
       ]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "weaponmod:reloaded": 1
-      },
-      "model": "weaponmod:item/crossbow-loaded"
-    },
-    {
-      "predicate": {
-        "weaponmod:reload": 1
-      },
-      "model": "weaponmod:item/crossbow_reload"
-    }
-  ]
+  }
 }

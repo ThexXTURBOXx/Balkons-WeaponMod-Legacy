@@ -38,13 +38,5 @@
         0.85
       ]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "weaponmod:reload": 1
-      },
-      "model": "weaponmod:item/musketbayonet.iron_reload"
-    }
-  ]
+  }
 }

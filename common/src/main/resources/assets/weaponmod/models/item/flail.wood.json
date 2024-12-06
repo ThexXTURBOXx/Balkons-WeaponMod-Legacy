@@ -2,13 +2,5 @@
   "parent": "weaponmod:item/handheld_rod",
   "textures": {
     "layer0": "weaponmod:item/flail.wood"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "weaponmod:flail-thrown": 1
-      },
-      "model": "weaponmod:item/flail.wood-thrown"
-    }
-  ]
+  }
 }

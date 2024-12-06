@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "weaponmod:reload",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "weaponmod:item/musketbayonet.stone"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "weaponmod:item/musketbayonet.stone_reload"
+    }
+  }
+}

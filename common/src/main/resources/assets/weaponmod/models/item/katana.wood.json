@@ -2,13 +2,5 @@
   "parent": "item/handheld",
   "textures": {
     "layer0": "weaponmod:item/katana.wood"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "weaponmod:block": 1
-      },
-      "model": "weaponmod:item/katana.wood.block"
-    }
-  ]
+  }
 }

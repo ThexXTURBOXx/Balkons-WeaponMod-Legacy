@@ -38,13 +38,5 @@
         1.7
       ]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "weaponmod:halberd-state": 1
-      },
-      "model": "weaponmod:item/halberd.diamond_state"
-    }
-  ]
+  }
 }

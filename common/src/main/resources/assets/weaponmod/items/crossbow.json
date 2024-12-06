@@ -1,0 +1,22 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "weaponmod:reloaded",
+    "on_false": {
+      "type": "minecraft:condition",
+      "property": "weaponmod:reload",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "weaponmod:item/crossbow"
+      },
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "weaponmod:item/crossbow_reload"
+      }
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "weaponmod:item/crossbow-loaded"
+    }
+  }
+}

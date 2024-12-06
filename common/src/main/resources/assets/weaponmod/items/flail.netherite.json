@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "weaponmod:flail-thrown",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "weaponmod:item/flail.netherite"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "weaponmod:item/flail.netherite-thrown"
+    }
+  }
+}

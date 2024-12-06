@@ -11,3 +11,4 @@ accessible field net/minecraft/core/dispenser/ProjectileDispenseBehavior project
 accessible field net/minecraft/core/dispenser/ProjectileDispenseBehavior dispenseConfig Lnet/minecraft/world/item/ProjectileItem$DispenseConfig;
 accessible field net/minecraft/world/level/ServerExplosion$StackCollector pos Lnet/minecraft/core/BlockPos;
 accessible field net/minecraft/world/level/ServerExplosion$StackCollector stack Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/client/renderer/item/properties/conditional/ConditionalItemModelProperties ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;

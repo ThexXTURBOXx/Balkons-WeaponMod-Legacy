@@ -2,13 +2,5 @@
   "parent": "item/handheld",
   "textures": {
     "layer0": "weaponmod:item/boomerang.iron"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "weaponmod:boomerang-ready": 1
-      },
-      "model": "weaponmod:item/boomerang.iron_ready"
-    }
-  ]
+  }
 }

@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "weaponmod:reload",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "weaponmod:item/mortar"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "weaponmod:item/mortar_reload"
+    }
+  }
+}

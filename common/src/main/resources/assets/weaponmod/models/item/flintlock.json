@@ -38,13 +38,5 @@
         0.85
       ]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "reload": 1
-      },
-      "model": "weaponmod:item/flintlock_reload"
-    }
-  ]
+  }
 }
