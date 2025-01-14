@@ -19,7 +19,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
     private static final int WEAPON_ITEM = 19;
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
-    protected ItemStack thrownItem;
 
     public EntityMaterialProjectile(World world) {
         super(world);
@@ -72,7 +71,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
     }
 
     public void setThrownItemStack(@Nullable ItemStack itemstack) {
-        thrownItem = itemstack;
         dataWatcher.updateObject(WEAPON_ITEM, itemstack);
         updateWeaponMaterial();
     }
@@ -80,7 +78,7 @@ public class EntityMaterialProjectile extends EntityProjectile {
     @Nullable
     @Override
     public ItemStack getPickupItem() {
-        return thrownItem;
+        return getWeapon();
     }
 
     public int getWeaponMaterialId() {
@@ -92,6 +90,7 @@ public class EntityMaterialProjectile extends EntityProjectile {
     }
 
     protected void updateWeaponMaterial() {
+        ItemStack thrownItem = getWeapon();
         if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
@@ -113,6 +112,7 @@ public class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
         super.writeEntityToNBT(nbttagcompound);
+        ItemStack thrownItem = getWeapon();
         if (thrownItem != null) {
             nbttagcompound.setTag("thrI", thrownItem.writeToNBT(new NBTTagCompound()));
         }

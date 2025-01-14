@@ -71,6 +71,7 @@ public class EntityFlail extends EntityMaterialProjectile {
             }
             if (shooter instanceof EntityPlayer) {
                 ItemStack itemstack = ((EntityPlayer) shootingEntity).getCurrentEquippedItem();
+                ItemStack thrownItem = getWeapon();
                 if (itemstack == null || (thrownItem != null && itemstack.getItem() != thrownItem.getItem()) || !shooter.isEntityAlive()) {
                     pickUpByOwner();
                 }
@@ -126,7 +127,7 @@ public class EntityFlail extends EntityMaterialProjectile {
     public void pickUpByOwner() {
         setDead();
         Entity shooter = getThrower();
-        if (shooter instanceof EntityPlayer && thrownItem != null) {
+        if (shooter instanceof EntityPlayer && getWeapon() != null) {
             PlayerWeaponData.setFlailThrown((EntityPlayer) shooter, false);
         }
     }
