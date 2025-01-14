@@ -1,6 +1,7 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.ItemHitEffect;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -12,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityMaterialProjectile extends EntityProjectile {
@@ -51,6 +53,24 @@ public class EntityMaterialProjectile extends EntityProjectile {
                     (EntityLivingBase) entity);
         }
         return 0.0f;
+    }
+
+    @Override
+    public void onEntityHit(Entity entity) {
+        super.onEntityHit(entity);
+        ItemStack thrownItem = getWeapon();
+        if (thrownItem != null && thrownItem.getItem() instanceof ItemHitEffect) {
+            ((ItemHitEffect) thrownItem.getItem()).onEntityHit(this, entity);
+        }
+    }
+
+    @Override
+    public void onGroundHit(MovingObjectPosition raytraceResult) {
+        super.onGroundHit(raytraceResult);
+        ItemStack thrownItem = getWeapon();
+        if (thrownItem != null && thrownItem.getItem() instanceof ItemHitEffect) {
+            ((ItemHitEffect) thrownItem.getItem()).onGroundHit(this, raytraceResult);
+        }
     }
 
     @Override
