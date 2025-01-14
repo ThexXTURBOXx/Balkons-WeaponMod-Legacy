@@ -48,6 +48,8 @@ public class EntitySpear extends EntityMaterialProjectile {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        ItemStack thrownItem = getWeapon();
+        if (thrownItem == null) return;
         Item item = thrownItem.getItem();
         if (item instanceof IItemWeapon && entity.attackEntityFrom(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + getMeleeHitDamage(entity))) {
