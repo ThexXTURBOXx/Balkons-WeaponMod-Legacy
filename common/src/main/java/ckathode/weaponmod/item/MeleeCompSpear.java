@@ -71,7 +71,6 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
                 SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
-            itemstack = itemstack.copy();
             itemstack.shrink(1);
         }
         return InteractionResult.SUCCESS;
