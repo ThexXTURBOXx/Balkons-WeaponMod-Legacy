@@ -6,10 +6,10 @@ import net.minecraft.util.math.EntityRayTraceResult;
 
 public interface ItemHitEffect {
 
-    void onEntityHit(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity,
+    void onHitEntity(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity,
                      EntityRayTraceResult rayTraceResult);
 
-    void onGroundHit(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity,
-                     BlockRayTraceResult rayTraceResult);
+    void onHitBlock(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity,
+                    BlockRayTraceResult rayTraceResult);
 
 }

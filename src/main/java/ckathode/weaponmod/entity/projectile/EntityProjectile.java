@@ -234,11 +234,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
                 }
             }
             if (raytraceresult != null && raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
-                if (raytraceresult instanceof EntityRayTraceResult) {
-                    onEntityHit((EntityRayTraceResult) raytraceresult);
-                } else {
-                    onGroundHit((BlockRayTraceResult) raytraceresult);
-                }
+                onHit(raytraceresult);
                 isAirBorne = true;
             }
             if (entityraytraceresult == null) {
@@ -288,6 +284,16 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         setMotion(getMotion().scale(res).subtract(0, hasNoGravity() ? 0 : grav, 0));
         setPosition(posX, posY, posZ);
         doBlockCollisions();
+    }
+
+    @Override
+    public void onHit(@NotNull RayTraceResult raytraceResult) {
+        RayTraceResult.Type type = raytraceResult.getType();
+        if (type == RayTraceResult.Type.ENTITY) {
+            onEntityHit((EntityRayTraceResult) raytraceResult);
+        } else if (type == RayTraceResult.Type.BLOCK) {
+            onGroundHit((BlockRayTraceResult) raytraceResult);
+        }
     }
 
     @Override
