@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntitySpear extends EntityMaterialProjectile {
@@ -44,7 +45,7 @@ public class EntitySpear extends EntityMaterialProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(RayTraceResult raytraceResult) {
         if (world.isRemote) {
             return;
         }
@@ -52,6 +53,7 @@ public class EntitySpear extends EntityMaterialProjectile {
         ItemStack thrownItem = getWeapon().orNull();
         if (thrownItem == null) return;
         Item item = thrownItem.getItem();
+        Entity entity = raytraceResult.entityHit;
         if (item instanceof IItemWeapon && entity.attackEntityFrom(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);

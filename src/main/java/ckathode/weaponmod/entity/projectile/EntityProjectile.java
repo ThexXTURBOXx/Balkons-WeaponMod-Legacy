@@ -228,11 +228,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
             raytraceresult = new RayTraceResult(entity);
         }
         if (raytraceresult != null) {
-            if (raytraceresult.entityHit != null) {
-                onEntityHit(raytraceresult.entityHit);
-            } else {
-                onGroundHit(raytraceresult);
-            }
+            onHit(raytraceresult);
         }
         if (getIsCritical()) {
             for (int i1 = 0; i1 < 2; ++i1) {
@@ -275,9 +271,18 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         doBlockCollisions();
     }
 
-    public void onEntityHit(Entity entity) {
+    @Override
+    public void onHit(@NotNull RayTraceResult raytraceResult) {
+        if (raytraceResult.entityHit != null) {
+            onHitEntity(raytraceResult);
+        } else {
+            onHitBlock(raytraceResult);
+        }
+    }
+
+    public void onHitEntity(RayTraceResult raytraceResult) {
         bounceBack();
-        applyEntityHitEffects(entity);
+        applyEntityHitEffects(raytraceResult.entityHit);
     }
 
     public void applyEntityHitEffects(Entity entity) {
@@ -303,7 +308,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         }
     }
 
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onHitBlock(RayTraceResult raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
