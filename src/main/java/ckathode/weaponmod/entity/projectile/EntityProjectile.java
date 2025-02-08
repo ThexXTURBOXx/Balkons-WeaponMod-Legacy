@@ -214,22 +214,18 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         ++ticksInAir;
         Vec3 vec3d = new Vec3(posX, posY, posZ);
         Vec3 vec3d2 = new Vec3(posX + motionX, posY + motionY, posZ + motionZ);
-        MovingObjectPosition raytraceresult = worldObj.rayTraceBlocks(vec3d, vec3d2, false, true, false);
+        MovingObjectPosition mop = worldObj.rayTraceBlocks(vec3d, vec3d2, false, true, false);
         vec3d = new Vec3(posX, posY, posZ);
         vec3d2 = new Vec3(posX + motionX, posY + motionY, posZ + motionZ);
-        if (raytraceresult != null) {
-            vec3d2 = new Vec3(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord, raytraceresult.hitVec.zCoord);
+        if (mop != null) {
+            vec3d2 = new Vec3(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord);
         }
         Entity entity = findEntity(vec3d, vec3d2);
         if (entity != null) {
-            raytraceresult = new MovingObjectPosition(entity);
+            mop = new MovingObjectPosition(entity);
         }
-        if (raytraceresult != null) {
-            if (raytraceresult.entityHit != null) {
-                onEntityHit(raytraceresult.entityHit);
-            } else {
-                onGroundHit(raytraceresult);
-            }
+        if (mop != null) {
+            onHit(mop);
         }
         if (getIsCritical()) {
             for (int i1 = 0; i1 < 2; ++i1) {
@@ -270,9 +266,17 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         doBlockCollisions();
     }
 
-    public void onEntityHit(Entity entity) {
+    public void onHit(MovingObjectPosition mop) {
+        if (mop.entityHit != null) {
+            onHitEntity(mop);
+        } else {
+            onHitBlock(mop);
+        }
+    }
+
+    public void onHitEntity(MovingObjectPosition mop) {
         bounceBack();
-        applyEntityHitEffects(entity);
+        applyEntityHitEffects(mop.entityHit);
     }
 
     public void applyEntityHitEffects(Entity entity) {
@@ -299,7 +303,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         }
     }
 
-    public void onGroundHit(MovingObjectPosition raytraceResult) {
+    public void onHitBlock(MovingObjectPosition raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();

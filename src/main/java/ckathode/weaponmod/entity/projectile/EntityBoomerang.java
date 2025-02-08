@@ -104,10 +104,11 @@ public class EntityBoomerang extends EntityMaterialProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(MovingObjectPosition mop) {
         if (worldObj.isRemote || floatStrength < MIN_FLOAT_STRENGTH) {
             return;
         }
+        Entity entity = mop.entityHit;
         Entity shooter = getThrower();
         if (entity == shooter) {
             if (entity instanceof EntityPlayer) {
@@ -156,7 +157,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
     }
 
     @Override
-    public void onGroundHit(MovingObjectPosition raytraceResult) {
+    public void onHitBlock(MovingObjectPosition raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
