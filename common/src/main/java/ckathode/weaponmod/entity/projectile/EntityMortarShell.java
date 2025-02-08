@@ -113,7 +113,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
     }
 
     @Override
-    public void onGroundHit(BlockHitResult result) {
+    public void onHitBlock(BlockHitResult result) {
         BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
