@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityBlunderShot extends EntityProjectile {
@@ -50,7 +51,8 @@ public class EntityBlunderShot extends EntityProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(MovingObjectPosition mop) {
+        Entity entity = mop.entityHit;
         float damage = 4.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         int prevhurtrestime = entity.hurtResistantTime;

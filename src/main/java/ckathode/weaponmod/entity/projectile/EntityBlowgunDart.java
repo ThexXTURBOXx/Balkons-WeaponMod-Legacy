@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityBlowgunDart extends EntityProjectile {
@@ -79,7 +80,8 @@ public class EntityBlowgunDart extends EntityProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(MovingObjectPosition mop) {
+        Entity entity = mop.entityHit;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f + extraDamage)) {
             if (entity instanceof EntityLivingBase) {

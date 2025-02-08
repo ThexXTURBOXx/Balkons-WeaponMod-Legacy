@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityMusketBullet extends EntityProjectile {
@@ -58,7 +59,8 @@ public class EntityMusketBullet extends EntityProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(MovingObjectPosition mop) {
+        Entity entity = mop.entityHit;
         float damage = 20.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, damage)) {

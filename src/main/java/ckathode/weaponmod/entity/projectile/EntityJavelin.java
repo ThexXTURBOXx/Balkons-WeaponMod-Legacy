@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityJavelin extends EntityProjectile {
@@ -43,12 +44,13 @@ public class EntityJavelin extends EntityProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(MovingObjectPosition mop) {
         double vel = getTotalVelocity();
         int damage = MathHelper.ceiling_double_int(vel * (3.0 + extraDamage));
         if (getIsCritical()) {
             damage += rand.nextInt(damage / 2 + 2);
         }
+        Entity entity = mop.entityHit;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, (float) damage)) {
             applyEntityHitEffects(entity);

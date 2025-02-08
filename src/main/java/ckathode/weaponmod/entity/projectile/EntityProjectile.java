@@ -201,23 +201,19 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         ++ticksInAir;
         Vec3 vec3d = Vec3.createVectorHelper(posX, posY, posZ);
         Vec3 vec3d2 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
-        MovingObjectPosition raytraceresult = worldObj.func_147447_a(vec3d, vec3d2, false, true, false);
+        MovingObjectPosition mop = worldObj.func_147447_a(vec3d, vec3d2, false, true, false);
         vec3d = Vec3.createVectorHelper(posX, posY, posZ);
         vec3d2 = Vec3.createVectorHelper(posX + motionX, posY + motionY, posZ + motionZ);
-        if (raytraceresult != null) {
-            vec3d2 = Vec3.createVectorHelper(raytraceresult.hitVec.xCoord, raytraceresult.hitVec.yCoord,
-                    raytraceresult.hitVec.zCoord);
+        if (mop != null) {
+            vec3d2 = Vec3.createVectorHelper(mop.hitVec.xCoord, mop.hitVec.yCoord,
+                    mop.hitVec.zCoord);
         }
         Entity entity = findEntity(vec3d, vec3d2);
         if (entity != null) {
-            raytraceresult = new MovingObjectPosition(entity);
+            mop = new MovingObjectPosition(entity);
         }
-        if (raytraceresult != null) {
-            if (raytraceresult.entityHit != null) {
-                onEntityHit(raytraceresult.entityHit);
-            } else {
-                onGroundHit(raytraceresult);
-            }
+        if (mop != null) {
+            onHit(mop);
         }
         if (getIsCritical()) {
             for (int i1 = 0; i1 < 2; ++i1) {
@@ -258,9 +254,17 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         func_145775_I();
     }
 
-    public void onEntityHit(Entity entity) {
+    protected void onHit(MovingObjectPosition mop) {
+        if (mop.entityHit != null) {
+            onHitEntity(mop);
+        } else {
+            onHitBlock(mop);
+        }
+    }
+
+    public void onHitEntity(MovingObjectPosition mop) {
         bounceBack();
-        applyEntityHitEffects(entity);
+        applyEntityHitEffects(mop.entityHit);
     }
 
     public void applyEntityHitEffects(Entity entity) {
@@ -287,7 +291,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         }
     }
 
-    public void onGroundHit(MovingObjectPosition raytraceResult) {
+    public void onHitBlock(MovingObjectPosition raytraceResult) {
         xTile = raytraceResult.blockX;
         yTile = raytraceResult.blockY;
         zTile = raytraceResult.blockZ;
@@ -329,9 +333,9 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         for (Entity entity2 : list) {
             if (entity2 != shootingEntity || ticksInAir >= 5) {
                 AxisAlignedBB axisalignedbb = EntityProjectile.getBoundingBox(entity2).expand(0.3, 0.3, 0.3);
-                MovingObjectPosition raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d1);
-                if (raytraceresult != null) {
-                    double d2 = vec3d.squareDistanceTo(raytraceresult.hitVec);
+                MovingObjectPosition mop = axisalignedbb.calculateIntercept(vec3d, vec3d1);
+                if (mop != null) {
+                    double d2 = vec3d.squareDistanceTo(mop.hitVec);
                     if (d2 < d || d == 0.0) {
                         entity = entity2;
                         d = d2;
