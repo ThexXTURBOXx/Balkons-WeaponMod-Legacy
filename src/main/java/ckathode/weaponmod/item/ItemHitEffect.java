@@ -1,13 +1,12 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityMaterialProjectile;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.RayTraceResult;
 
 public interface ItemHitEffect {
 
-    void onEntityHit(EntityMaterialProjectile entity, Entity hitEntity);
+    void onHitEntity(EntityMaterialProjectile entity, RayTraceResult rayTraceResult);
 
-    void onGroundHit(EntityMaterialProjectile entity, RayTraceResult rayTraceResult);
+    void onHitBlock(EntityMaterialProjectile entity, RayTraceResult rayTraceResult);
 
 }

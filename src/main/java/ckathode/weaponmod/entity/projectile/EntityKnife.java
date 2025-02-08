@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityKnife extends EntityMaterialProjectile {
@@ -68,7 +69,7 @@ public class EntityKnife extends EntityMaterialProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(RayTraceResult raytraceResult) {
         if (world.isRemote) {
             return;
         }
@@ -76,6 +77,7 @@ public class EntityKnife extends EntityMaterialProjectile {
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty()) return;
         Item item = thrownItem.getItem();
+        Entity entity = raytraceResult.entityHit;
         if (item instanceof IItemWeapon && entity.attackEntityFrom(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
