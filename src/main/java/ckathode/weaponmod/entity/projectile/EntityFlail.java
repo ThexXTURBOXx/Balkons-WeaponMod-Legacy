@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
@@ -148,7 +149,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(RayTraceResult raytraceResult) {
+        Entity entity = raytraceResult.entity;
         if (entity.getUniqueID().equals(shootingEntity)) {
             return;
         }

@@ -9,6 +9,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityJavelin extends EntityProjectile<EntityJavelin> {
@@ -45,12 +46,13 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(RayTraceResult raytraceResult) {
         double vel = getTotalVelocity();
         int damage = MathHelper.ceil(vel * (3.0 + extraDamage));
         if (getIsCritical()) {
             damage += rand.nextInt(damage / 2 + 2);
         }
+        Entity entity = raytraceResult.entity;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, (float) damage)) {
             applyEntityHitEffects(entity);

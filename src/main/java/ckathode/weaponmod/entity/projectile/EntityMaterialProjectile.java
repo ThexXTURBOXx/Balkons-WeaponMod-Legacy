@@ -63,20 +63,20 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
-        super.onEntityHit(entity);
+    public void onHitEntity(RayTraceResult raytraceResult) {
+        super.onHitEntity(raytraceResult);
         ItemStack thrownItem = getWeapon();
         if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
-            ((ItemHitEffect) thrownItem.getItem()).onEntityHit(this, entity);
+            ((ItemHitEffect) thrownItem.getItem()).onHitEntity(this, raytraceResult);
         }
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
-        super.onGroundHit(raytraceResult);
+    public void onHitBlock(RayTraceResult raytraceResult) {
+        super.onHitBlock(raytraceResult);
         ItemStack thrownItem = getWeapon();
         if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
-            ((ItemHitEffect) thrownItem.getItem()).onGroundHit(this, raytraceResult);
+            ((ItemHitEffect) thrownItem.getItem()).onHitBlock(this, raytraceResult);
         }
     }
 

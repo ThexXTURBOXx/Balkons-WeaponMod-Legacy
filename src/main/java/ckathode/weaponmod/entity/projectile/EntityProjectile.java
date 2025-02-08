@@ -230,11 +230,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
             raytraceresult = new RayTraceResult(entity);
         }
         if (raytraceresult != null) {
-            if (raytraceresult.entity != null) {
-                onEntityHit(raytraceresult.entity);
-            } else {
-                onGroundHit(raytraceresult);
-            }
+            onHit(raytraceresult);
         }
         if (getIsCritical()) {
             for (int i1 = 0; i1 < 2; ++i1) {
@@ -277,9 +273,19 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
         doBlockCollisions();
     }
 
-    public void onEntityHit(Entity entity) {
+    @Override
+    public void onHit(@NotNull RayTraceResult raytraceResult) {
+        if (raytraceResult.entity != null) {
+            onHitEntity(raytraceResult);
+        } else {
+            onHitBlock(raytraceResult);
+        }
+    }
+
+    @Override
+    public void onHitEntity(RayTraceResult raytraceResult) {
         bounceBack();
-        applyEntityHitEffects(entity);
+        applyEntityHitEffects(raytraceResult.entity);
     }
 
     public void applyEntityHitEffects(Entity entity) {
@@ -306,7 +312,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
         }
     }
 
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onHitBlock(RayTraceResult raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();

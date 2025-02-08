@@ -93,7 +93,8 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(RayTraceResult raytraceResult) {
+        Entity entity = raytraceResult.entity;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f)) {
             applyEntityHitEffects(entity);
@@ -104,7 +105,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onHitBlock(RayTraceResult raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
