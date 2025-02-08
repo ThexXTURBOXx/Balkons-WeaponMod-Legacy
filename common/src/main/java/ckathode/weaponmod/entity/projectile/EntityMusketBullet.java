@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +76,8 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(EntityHitResult result) {
+        Entity entity = result.getEntity();
         float damage = 20.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.hurt(damagesource, damage)) {
