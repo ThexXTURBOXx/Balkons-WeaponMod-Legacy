@@ -6,8 +6,8 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public interface ItemHitEffect {
 
-    void onEntityHit(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity, EntityHitResult result);
+    void onHitEntity(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity, EntityHitResult result);
 
-    void onGroundHit(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity, BlockHitResult result);
+    void onHitBlock(EntityMaterialProjectile<? extends EntityMaterialProjectile<?>> entity, BlockHitResult result);
 
 }
