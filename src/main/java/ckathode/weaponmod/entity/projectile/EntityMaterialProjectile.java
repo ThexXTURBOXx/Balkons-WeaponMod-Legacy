@@ -16,6 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
     private static final DataParameter<Integer> WEAPON_MATERIAL =
@@ -24,7 +25,6 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.ITEMSTACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
-    protected ItemStack thrownItem;
 
     public EntityMaterialProjectile(EntityType<T> type, World world) {
         super(type, world);
@@ -79,7 +79,6 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     }
 
     public void setThrownItemStack(@Nonnull ItemStack itemstack) {
-        thrownItem = itemstack;
         dataManager.set(WEAPON_ITEM, itemstack);
         updateWeaponMaterial();
     }
@@ -87,19 +86,21 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Nonnull
     @Override
     public ItemStack getPickupItem() {
-        return thrownItem;
+        return getWeapon();
     }
 
     public int getWeaponMaterialId() {
         return dataManager.get(WEAPON_MATERIAL);
     }
 
+    @NotNull
     public ItemStack getWeapon() {
         return dataManager.get(WEAPON_ITEM);
     }
 
     protected void updateWeaponMaterial() {
-        if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
+        ItemStack thrownItem = getWeapon();
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
                 material =
@@ -121,9 +122,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Override
     public void writeAdditional(CompoundNBT nbttagcompound) {
         super.writeAdditional(nbttagcompound);
-        if (thrownItem != null) {
-            nbttagcompound.put("thrI", thrownItem.write(new CompoundNBT()));
-        }
+        ItemStack thrownItem = getWeapon();
+        nbttagcompound.put("thrI", thrownItem.write(new CompoundNBT()));
     }
 
     @Override
