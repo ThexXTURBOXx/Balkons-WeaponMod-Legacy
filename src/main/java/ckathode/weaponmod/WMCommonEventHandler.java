@@ -45,7 +45,7 @@ public class WMCommonEventHandler {
         if (!(entity instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) entity;
         ItemStack stack = player.getActiveItemStack();
-        Item item = stack == null ? null : stack.getItem();
+        Item item = stack.isEmpty() ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return;
 
         player.resetActiveHand();
