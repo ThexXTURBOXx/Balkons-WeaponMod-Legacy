@@ -131,6 +131,8 @@ public class EntityBoomerang extends EntityMaterialProjectile {
             return;
         }
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
+        ItemStack thrownItem = getWeapon();
+        if (thrownItem.isEmpty()) return;
         float damage =
                 ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 2.0f + extraDamage;
         damage += getMeleeHitDamage(entity);
