@@ -108,3 +108,4 @@ entity.weaponmod.shot.name=Blunderbuss Shot
 entity.weaponmod.dummy.name=Dummy
 entity.weaponmod.boomerang.name=Boomerang
 entity.weaponmod.shell.name=Mortar Shell
+tooltip.bayonetdurability=Bayonet durability: %1$d/%2$d

@@ -3,6 +3,7 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
@@ -13,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemMusket extends ItemShooter {
@@ -36,6 +38,19 @@ public class ItemMusket extends ItemShooter {
 
     public boolean hasBayonet() {
         return bayonetItem != null;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean b) {
+        super.addInformation(stack, player, tooltip, b);
+        // 2 is ID for short
+        if (hasBayonet() && stack.hasTagCompound() && stack.getTagCompound().hasKey("bayonetDamage", 2)) {
+            short dmg = stack.getTagCompound().getShort("bayonetDamage");
+            if (dmg != 0) {
+                tooltip.add(StatCollector.translateToLocalFormatted("tooltip.bayonetdurability",
+                        bayonetDurability - dmg, bayonetDurability));
+            }
+        }
     }
 
     @Override
