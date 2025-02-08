@@ -96,6 +96,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
             return;
         }
         ItemStack thrownItem = getWeapon();
+        if (thrownItem.isEmpty()) return;
         Item item = thrownItem.getItem();
         if (!(item instanceof IItemWeapon iweapon)) {
             bounceBack();
