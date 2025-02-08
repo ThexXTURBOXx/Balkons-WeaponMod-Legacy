@@ -7,13 +7,12 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderCannon extends EntityRenderer<EntityCannon, RenderCannon.CannonRenderState> {
+public class RenderCannon extends WMRenderer<EntityCannon, RenderCannon.CannonRenderState> {
 
     private final ModelCannonBarrel modelBarrel;
     private final ModelCannonStandard modelStandard;
