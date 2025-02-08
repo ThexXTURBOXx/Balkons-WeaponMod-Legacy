@@ -3,10 +3,12 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemMusket extends ItemShooter {
     @Nullable
@@ -38,6 +41,20 @@ public class ItemMusket extends ItemShooter {
 
     public boolean hasBayonet() {
         return bayonetItem != null;
+    }
+
+    @Override
+    public void addInformation(@NotNull ItemStack stack, @NotNull EntityPlayer player, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        // 2 is ID for short
+        if (hasBayonet() && stack.hasTagCompound() && stack.getTagCompound().hasKey("bayonetDamage", 2)) {
+            short dmg = stack.getTagCompound().getShort("bayonetDamage");
+            if (dmg != 0) {
+                tooltip.add(I18n.format("tooltip.bayonetdurability",
+                        bayonetDurability - dmg, bayonetDurability));
+            }
+        }
     }
 
     @Override
