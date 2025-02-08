@@ -216,17 +216,17 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     public void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
         Registry<Enchantment> enchRegistry = entity.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-        Holder<Enchantment> infinity = enchRegistry.getOrThrow(Enchantments.INFINITY);
-        Holder<Enchantment> power = enchRegistry.getOrThrow(Enchantments.POWER);
-        Holder<Enchantment> flame = enchRegistry.getOrThrow(Enchantments.FLAME);
-        if (EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) > 0) {
+        Holder<Enchantment> infinity = enchRegistry.get(Enchantments.INFINITY).orElse(null);
+        Holder<Enchantment> power = enchRegistry.get(Enchantments.POWER).orElse(null);
+        Holder<Enchantment> flame = enchRegistry.get(Enchantments.FLAME).orElse(null);
+        if (infinity != null && EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) > 0) {
             entity.setPickupStatus(EntityProjectile.PickupStatus.DISALLOWED);
         }
-        int damage = EnchantmentHelper.getItemEnchantmentLevel(power, itemstack);
+        int damage = power == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(power, itemstack);
         if (damage > 0) {
             entity.setExtraDamage((float) damage);
         }
-        if (EnchantmentHelper.getItemEnchantmentLevel(flame, itemstack) > 0) {
+        if (flame != null && EnchantmentHelper.getItemEnchantmentLevel(flame, itemstack) > 0) {
             entity.igniteForSeconds(100);
         }
     }
@@ -273,17 +273,19 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, Player entityplayer) {
         Holder<Enchantment> infinity = entityplayer.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
-                .getOrThrow(Enchantments.INFINITY);
-        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(infinity,
-                itemstack) > 0 || consumeAmmo(entityplayer);
+                .get(Enchantments.INFINITY).orElse(null);
+        return entityplayer.isCreative() ||
+               (infinity != null && EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) > 0) ||
+               consumeAmmo(entityplayer);
     }
 
     public boolean hasAmmo(ItemStack itemstack, Level world, Player entityplayer) {
         Holder<Enchantment> infinity = entityplayer.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
-                .getOrThrow(Enchantments.INFINITY);
+                .get(Enchantments.INFINITY).orElse(null);
         boolean flag = !findAmmo(entityplayer).isEmpty();
-        return entityplayer.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(infinity,
-                itemstack) > 0 || flag;
+        return entityplayer.isCreative() ||
+               (infinity != null && EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) > 0) ||
+               flag;
     }
 
     public float getFOVMultiplier(int ticksInUse) {
