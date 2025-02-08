@@ -1,6 +1,7 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.ItemHitEffect;
 import io.netty.buffer.ByteBuf;
 import javax.annotation.Nonnull;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -12,6 +13,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,6 +59,24 @@ public class EntityMaterialProjectile extends EntityProjectile {
                     ((EntityLivingBase) entity).getCreatureAttribute());
         }
         return 0.0f;
+    }
+
+    @Override
+    public void onEntityHit(Entity entity) {
+        super.onEntityHit(entity);
+        ItemStack thrownItem = getWeapon();
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
+            ((ItemHitEffect) thrownItem.getItem()).onEntityHit(this, entity);
+        }
+    }
+
+    @Override
+    public void onGroundHit(RayTraceResult raytraceResult) {
+        super.onGroundHit(raytraceResult);
+        ItemStack thrownItem = getWeapon();
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
+            ((ItemHitEffect) thrownItem.getItem()).onGroundHit(this, raytraceResult);
+        }
     }
 
     @Override
