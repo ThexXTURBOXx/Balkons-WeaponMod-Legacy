@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -101,7 +102,8 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(EntityHitResult result) {
+        Entity entity = result.getEntity();
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.hurt(damagesource, 1.0f)) {
             applyEntityHitEffects(entity);
@@ -112,18 +114,18 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void onGroundHit(BlockHitResult raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
+    public void onGroundHit(BlockHitResult result) {
+        BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = level.getBlockState(blockpos);
-        Vec3 motion = raytraceResult.getLocation().subtract(position());
+        Vec3 motion = result.getLocation().subtract(position());
         setDeltaMovement(motion);
         Vec3 newPos = position().subtract(motion.normalize().scale(0.05));
         setPos(newPos.x, newPos.y, newPos.z);
         setDeltaMovement(-0.2 * motion.x, motion.y, -0.2 * motion.z);
-        if (raytraceResult.getDirection() == Direction.UP) {
+        if (result.getDirection() == Direction.UP) {
             inGround = true;
             beenInGround = true;
         } else {

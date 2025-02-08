@@ -234,7 +234,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             if (raytraceresult != null && raytraceresult.getType() != HitResult.Type.MISS
                 && !onProjectileImpact(this, raytraceresult)) {
                 if (raytraceresult instanceof EntityHitResult) {
-                    onEntityHit(((EntityHitResult) raytraceresult).getEntity());
+                    onHitEntity((EntityHitResult) raytraceresult);
                 } else {
                     onGroundHit((BlockHitResult) raytraceresult);
                 }
@@ -292,9 +292,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         return false; // Will get replaced at run time
     }
 
-    public void onEntityHit(Entity entity) {
+    @Override
+    protected void onHitEntity(EntityHitResult result) {
         bounceBack();
-        applyEntityHitEffects(entity);
+        applyEntityHitEffects(result.getEntity());
     }
 
     public void applyEntityHitEffects(Entity entity) {
@@ -321,13 +322,13 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         }
     }
 
-    public void onGroundHit(BlockHitResult raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
+    public void onGroundHit(BlockHitResult result) {
+        BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = level.getBlockState(blockpos);
-        setDeltaMovement(raytraceResult.getLocation().subtract(position()));
+        setDeltaMovement(result.getLocation().subtract(position()));
         double f1 = getDeltaMovement().length();
         Vec3 pos = position().subtract(getDeltaMovement().scale(0.05 / f1));
         setPos(pos.x, pos.y, pos.z);

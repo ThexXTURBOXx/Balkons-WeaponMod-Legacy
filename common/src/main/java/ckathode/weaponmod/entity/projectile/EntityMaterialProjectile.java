@@ -1,6 +1,7 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.ItemHitEffect;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +16,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
@@ -58,6 +61,24 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
                     ((LivingEntity) entity).getMobType());
         }
         return 0.0f;
+    }
+
+    @Override
+    public void onHitEntity(EntityHitResult result) {
+        super.onHitEntity(result);
+        ItemStack thrownItem = getWeapon();
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
+            ((ItemHitEffect) thrownItem.getItem()).onEntityHit(this, result);
+        }
+    }
+
+    @Override
+    public void onGroundHit(BlockHitResult result) {
+        super.onGroundHit(result);
+        ItemStack thrownItem = getWeapon();
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
+            ((ItemHitEffect) thrownItem.getItem()).onGroundHit(this, result);
+        }
     }
 
     @Override

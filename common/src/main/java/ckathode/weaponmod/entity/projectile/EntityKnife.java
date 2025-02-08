@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
@@ -79,7 +80,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(EntityHitResult result) {
         if (level.isClientSide) {
             return;
         }
@@ -87,6 +88,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty()) return;
         Item item = thrownItem.getItem();
+        Entity entity = result.getEntity();
         if (item instanceof IItemWeapon && entity.hurt(damagesource,
                 ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
