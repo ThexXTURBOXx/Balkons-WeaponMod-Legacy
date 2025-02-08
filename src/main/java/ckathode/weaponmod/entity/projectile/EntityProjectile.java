@@ -235,7 +235,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             }
             if (raytraceresult != null && raytraceresult.getType() != RayTraceResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 if (raytraceresult instanceof EntityRayTraceResult) {
-                    onEntityHit(((EntityRayTraceResult) raytraceresult).getEntity());
+                    onEntityHit((EntityRayTraceResult) raytraceresult);
                 } else {
                     onGroundHit((BlockRayTraceResult) raytraceresult);
                 }
@@ -290,9 +290,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         doBlockCollisions();
     }
 
-    public void onEntityHit(Entity entity) {
+    @Override
+    public void onEntityHit(EntityRayTraceResult raytraceResult) {
         bounceBack();
-        applyEntityHitEffects(entity);
+        applyEntityHitEffects(raytraceResult.getEntity());
     }
 
     public void applyEntityHitEffects(Entity entity) {
