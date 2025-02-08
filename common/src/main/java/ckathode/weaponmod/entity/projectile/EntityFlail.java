@@ -19,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -155,7 +156,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(EntityHitResult result) {
+        Entity entity = result.getEntity();
         if (entity.equals(getOwner())) {
             return;
         }
