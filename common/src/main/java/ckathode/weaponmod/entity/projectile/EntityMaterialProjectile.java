@@ -81,16 +81,16 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         super.onHitEntity(result);
         ItemStack thrownItem = getWeapon();
         if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
-            ((ItemHitEffect) thrownItem.getItem()).onEntityHit(this, result);
+            ((ItemHitEffect) thrownItem.getItem()).onHitEntity(this, result);
         }
     }
 
     @Override
-    public void onGroundHit(BlockHitResult result) {
-        super.onGroundHit(result);
+    public void onHitBlock(BlockHitResult result) {
+        super.onHitBlock(result);
         ItemStack thrownItem = getWeapon();
         if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
-            ((ItemHitEffect) thrownItem.getItem()).onGroundHit(this, result);
+            ((ItemHitEffect) thrownItem.getItem()).onHitBlock(this, result);
         }
     }
 

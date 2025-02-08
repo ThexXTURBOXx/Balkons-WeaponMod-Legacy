@@ -177,7 +177,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     }
 
     @Override
-    public void onGroundHit(BlockHitResult result) {
+    public void onHitBlock(BlockHitResult result) {
         BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
