@@ -109,13 +109,14 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         return entityData.get(WEAPON_MATERIAL);
     }
 
+    @NotNull
     public ItemStack getWeapon() {
         return entityData.get(WEAPON_ITEM);
     }
 
     protected void updateWeaponMaterial() {
         ItemStack thrownItem = getWeapon();
-        if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon weapon && weapon.getMeleeComponent() != null) {
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof IItemWeapon weapon && weapon.getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
                 material = MaterialRegistry.getOrdinal(weapon.getMeleeComponent().weaponMaterial);
@@ -137,9 +138,7 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     public void addAdditionalSaveData(CompoundTag nbttagcompound) {
         super.addAdditionalSaveData(nbttagcompound);
         ItemStack thrownItem = getWeapon();
-        if (thrownItem != null) {
-            nbttagcompound.put("thrI", thrownItem.saveOptional(registryAccess()));
-        }
+        nbttagcompound.put("thrI", thrownItem.saveOptional(registryAccess()));
     }
 
     @Override

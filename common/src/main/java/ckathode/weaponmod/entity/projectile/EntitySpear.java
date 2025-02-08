@@ -75,6 +75,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
             return;
         }
         ItemStack thrownItem = getWeapon();
+        if (thrownItem.isEmpty()) return;
         Item item = thrownItem.getItem();
         if (!(item instanceof IItemWeapon iweapon)) {
             bounceBack();
