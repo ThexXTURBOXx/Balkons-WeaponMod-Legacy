@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -117,10 +118,11 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(EntityHitResult result) {
         if (level().isClientSide || floatStrength < MIN_FLOAT_STRENGTH) {
             return;
         }
+        Entity entity = result.getEntity();
         Entity shooter = getOwner();
         if (entity == shooter) {
             if (entity instanceof Player player) {
@@ -163,19 +165,19 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     }
 
     @Override
-    public void onGroundHit(BlockHitResult raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
+    public void onGroundHit(BlockHitResult result) {
+        BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = level().getBlockState(blockpos);
-        Vec3 motion = raytraceResult.getLocation().subtract(position());
+        Vec3 motion = result.getLocation().subtract(position());
         setDeltaMovement(motion);
         Vec3 newPos = position().subtract(motion.normalize().scale(RETURN_STRENGTH));
         setPos(newPos.x, newPos.y, newPos.z);
         setDeltaMovement(-random.nextFloat() * 0.5f * motion.x, random.nextFloat() * 0.1f,
                 -random.nextFloat() * 0.5f * motion.z);
-        inGround = raytraceResult.getDirection() == Direction.UP;
+        inGround = result.getDirection() == Direction.UP;
         setCritArrow(false);
         beenInGround = true;
         floatStrength = 0.0f;
