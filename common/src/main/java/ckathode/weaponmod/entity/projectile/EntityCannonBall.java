@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,21 +94,21 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(EntityHitResult result) {
         DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
-        if (entity.hurt(damagesource, 30.0f)) {
+        if (result.getEntity().hurt(damagesource, 30.0f)) {
             playSound(SoundEvents.PLAYER_HURT, 1.0f, 1.2f / (random.nextFloat() * 0.4f + 0.7f));
         }
     }
 
     @Override
-    public void onGroundHit(BlockHitResult raytraceResult) {
-        BlockPos blockpos = raytraceResult.getBlockPos();
+    public void onGroundHit(BlockHitResult result) {
+        BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
         zTile = blockpos.getZ();
         inBlockState = level.getBlockState(blockpos);
-        setDeltaMovement(raytraceResult.getLocation().subtract(position()));
+        setDeltaMovement(result.getLocation().subtract(position()));
         double f1 = getDeltaMovement().length();
         Vec3 pos = position().subtract(getDeltaMovement().scale(0.05 / f1));
         setPos(pos.x, pos.y, pos.z);
