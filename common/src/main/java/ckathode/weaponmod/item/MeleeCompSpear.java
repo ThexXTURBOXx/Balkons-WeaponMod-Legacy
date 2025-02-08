@@ -62,8 +62,8 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             entityspear.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 0.8f, 3.0f);
             Holder<Enchantment> fireAspect = entityplayer.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
-                    .getOrThrow(Enchantments.FIRE_ASPECT);
-            if (EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
+                    .get(Enchantments.FIRE_ASPECT).orElse(null);
+            if (fireAspect != null && EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
                 entityspear.igniteForSeconds(100);
             }
             world.addFreshEntity(entityspear);
