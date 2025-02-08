@@ -135,8 +135,8 @@ public final class PhysHelper {
 
     public static void prepareKnockbackOnEntity(LivingEntity attacker, LivingEntity entity) {
         Holder<Enchantment> knockBack = attacker.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                .getHolderOrThrow(Enchantments.KNOCKBACK);
-        knockBackModifier = EnchantmentHelper.getEnchantmentLevel(knockBack, attacker);
+                .getHolder(Enchantments.KNOCKBACK).orElse(null);
+        knockBackModifier = knockBack == null ? 0 : EnchantmentHelper.getEnchantmentLevel(knockBack, attacker);
         if (attacker.isSprinting()) {
             ++knockBackModifier;
         }

@@ -67,8 +67,8 @@ public class MeleeCompBoomerang extends MeleeComponent {
                         0.0f, f, 5.0f);
                 entityboomerang.setCritArrow(crit);
                 Holder<Enchantment> fireAspect = entityplayer.registryAccess()
-                        .registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.FIRE_ASPECT);
-                if (EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
+                        .registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.FIRE_ASPECT).orElse(null);
+                if (fireAspect != null && EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
                     entityboomerang.igniteForSeconds(100);
                 }
                 world.addFreshEntity(entityboomerang);

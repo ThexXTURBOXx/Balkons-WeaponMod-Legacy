@@ -100,15 +100,15 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         Entity shooter = getOwner();
         if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
             Registry<Enchantment> enchRegistry = registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-            Holder<Enchantment> knockBack = enchRegistry.getHolderOrThrow(Enchantments.KNOCKBACK);
-            Holder<Enchantment> fireAspect = enchRegistry.getHolderOrThrow(Enchantments.FIRE_ASPECT);
-            int i = EnchantmentHelper.getEnchantmentLevel(knockBack, livingShooter);
+            Holder<Enchantment> knockBack = enchRegistry.getHolder(Enchantments.KNOCKBACK).orElse(null);
+            Holder<Enchantment> fireAspect = enchRegistry.getHolder(Enchantments.FIRE_ASPECT).orElse(null);
+            int i = knockBack == null ? 0 : EnchantmentHelper.getEnchantmentLevel(knockBack, livingShooter);
             if (i != 0) {
                 livingEntity.knockback(i * 0.4f,
                         -Mth.sin(getYRot() * 0.017453292f),
                         -Mth.cos(getYRot() * 0.017453292f));
             }
-            i = EnchantmentHelper.getEnchantmentLevel(fireAspect, livingShooter);
+            i = fireAspect == null ? 0 : EnchantmentHelper.getEnchantmentLevel(fireAspect, livingShooter);
             if (i > 0 && !livingEntity.isOnFire()) {
                 livingEntity.igniteForSeconds(1);
             }

@@ -56,9 +56,9 @@ public class RangedCompBlowgun extends RangedComponent {
         ItemStack dartStackCopy = dartstack.copy();
         Holder<Enchantment> infinity =
                 entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-                        .getHolderOrThrow(Enchantments.INFINITY);
-        if (!entityplayer.isCreative()
-            && EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) == 0) {
+                        .getHolder(Enchantments.INFINITY).orElse(null);
+        if (!entityplayer.isCreative() &&
+            (infinity == null || EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) == 0)) {
             dartstack.shrink(1);
             if (dartstack.isEmpty()) {
                 entityplayer.getInventory().removeItem(dartstack);
