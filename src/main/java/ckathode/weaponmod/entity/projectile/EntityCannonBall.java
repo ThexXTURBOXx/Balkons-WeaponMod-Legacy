@@ -75,7 +75,8 @@ public class EntityCannonBall extends EntityProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(RayTraceResult raytraceResult) {
+        Entity entity = raytraceResult.entityHit;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 30.0f)) {
             playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
@@ -83,7 +84,7 @@ public class EntityCannonBall extends EntityProjectile {
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onHitBlock(RayTraceResult raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();

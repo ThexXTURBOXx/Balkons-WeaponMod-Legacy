@@ -86,18 +86,18 @@ public class EntityMortarShell extends EntityProjectile {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(RayTraceResult raytraceResult) {
         motionX -= motionX / 2.0;
         motionZ -= motionZ / 2.0;
         motionY -= motionY / 2.0;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
-        if (entity.attackEntityFrom(damagesource, 5.0f)) {
+        if (raytraceResult.entityHit.attackEntityFrom(damagesource, 5.0f)) {
             playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
         }
     }
 
     @Override
-    public void onGroundHit(RayTraceResult raytraceResult) {
+    public void onHitBlock(RayTraceResult raytraceResult) {
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
