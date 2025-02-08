@@ -3,10 +3,11 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
-import javax.annotation.Nonnull;
+import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -15,7 +16,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemMusket extends ItemShooter {
     @Nullable
@@ -41,8 +45,22 @@ public class ItemMusket extends ItemShooter {
     }
 
     @Override
-    public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull LivingEntity entityliving,
-                             @Nonnull LivingEntity attacker) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip,
+                               ITooltipFlag flag) {
+        super.addInformation(stack, world, tooltip, flag);
+        // 2 is ID for short
+        if (hasBayonet() && stack.hasTag() && stack.getTag().contains("bayonetDamage", 2)) {
+            short dmg = stack.getTag().getShort("bayonetDamage");
+            if (dmg != 0) {
+                tooltip.add(new TranslationTextComponent("tooltip.bayonetdurability",
+                        bayonetDurability - dmg, bayonetDurability));
+            }
+        }
+    }
+
+    @Override
+    public boolean hitEntity(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                             @NotNull LivingEntity attacker) {
         if (hasBayonet()) {
             if (entityliving.hurtResistantTime == entityliving.maxHurtResistantTime) {
                 float kb = meleeComponent.getKnockBack(itemstack, entityliving, attacker);
@@ -57,9 +75,9 @@ public class ItemMusket extends ItemShooter {
     }
 
     @Override
-    public boolean onBlockDestroyed(@Nonnull ItemStack itemstack, @Nonnull World world,
-                                    @Nonnull BlockState block, @Nonnull BlockPos pos,
-                                    @Nonnull LivingEntity entityliving) {
+    public boolean onBlockDestroyed(@NotNull ItemStack itemstack, @NotNull World world,
+                                    @NotNull BlockState block, @NotNull BlockPos pos,
+                                    @NotNull LivingEntity entityliving) {
         if (hasBayonet()) {
             Material material = block.getMaterial();
             boolean flag =
