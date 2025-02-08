@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -63,7 +64,8 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onEntityHit(EntityRayTraceResult rayTraceResult) {
+        Entity entity = rayTraceResult.getEntity();
         float damage = 20.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, damage)) {

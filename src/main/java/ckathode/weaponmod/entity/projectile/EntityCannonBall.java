@@ -14,6 +14,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
@@ -76,9 +77,9 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onEntityHit(EntityRayTraceResult rayTraceResult) {
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
-        if (entity.attackEntityFrom(damagesource, 30.0f)) {
+        if (rayTraceResult.getEntity().attackEntityFrom(damagesource, 30.0f)) {
             playSound(SoundEvents.ENTITY_PLAYER_HURT, 1.0f, 1.2f / (rand.nextFloat() * 0.4f + 0.7f));
         }
     }

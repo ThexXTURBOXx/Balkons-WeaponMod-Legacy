@@ -15,6 +15,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -84,7 +85,8 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onEntityHit(EntityRayTraceResult rayTraceResult) {
+        Entity entity = rayTraceResult.getEntity();
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f + extraDamage)) {
             if (entity instanceof LivingEntity) {

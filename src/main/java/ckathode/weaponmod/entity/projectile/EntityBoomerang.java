@@ -18,6 +18,7 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -103,10 +104,11 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onEntityHit(EntityRayTraceResult rayTraceResult) {
         if (world.isRemote || floatStrength < MIN_FLOAT_STRENGTH) {
             return;
         }
+        Entity entity = rayTraceResult.getEntity();
         Entity shooter = getShooter();
         if (entity == shooter) {
             if (entity instanceof PlayerEntity) {
