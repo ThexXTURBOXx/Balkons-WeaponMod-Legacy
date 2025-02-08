@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityMaterialProjectile extends EntityProjectile {
     private static final DataParameter<Integer> WEAPON_MATERIAL =
@@ -24,7 +25,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
-    protected ItemStack thrownItem;
 
     public EntityMaterialProjectile(World world) {
         super(world);
@@ -77,7 +77,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
     }
 
     public void setThrownItemStack(@Nonnull ItemStack itemstack) {
-        thrownItem = itemstack;
         dataManager.set(WEAPON_ITEM, itemstack);
         updateWeaponMaterial();
     }
@@ -85,19 +84,21 @@ public class EntityMaterialProjectile extends EntityProjectile {
     @Nonnull
     @Override
     public ItemStack getPickupItem() {
-        return thrownItem;
+        return getWeapon();
     }
 
     public int getWeaponMaterialId() {
         return dataManager.get(WEAPON_MATERIAL);
     }
 
+    @NotNull
     public ItemStack getWeapon() {
         return dataManager.get(WEAPON_ITEM);
     }
 
     protected void updateWeaponMaterial() {
-        if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
+        ItemStack thrownItem = getWeapon();
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
                 material = ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().weaponMaterial.ordinal();
@@ -118,9 +119,8 @@ public class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
         super.writeEntityToNBT(nbttagcompound);
-        if (thrownItem != null) {
-            nbttagcompound.setTag("thrI", thrownItem.writeToNBT(new NBTTagCompound()));
-        }
+        ItemStack thrownItem = getWeapon();
+        nbttagcompound.setTag("thrI", thrownItem.writeToNBT(new NBTTagCompound()));
     }
 
     @Override
