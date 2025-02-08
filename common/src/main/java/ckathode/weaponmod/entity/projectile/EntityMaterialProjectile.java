@@ -25,7 +25,6 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
             SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}, {0.3f, 0.3f, 0.3f}};
-    protected ItemStack thrownItem;
 
     public EntityMaterialProjectile(EntityType<T> type, Level world) {
         super(type, world);
@@ -80,7 +79,6 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     }
 
     public void setThrownItemStack(@NotNull ItemStack itemstack) {
-        thrownItem = itemstack;
         entityData.set(WEAPON_ITEM, itemstack);
         updateWeaponMaterial();
     }
@@ -88,19 +86,21 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @NotNull
     @Override
     public ItemStack getPickupItem() {
-        return thrownItem;
+        return getWeapon();
     }
 
     public int getWeaponMaterialId() {
         return entityData.get(WEAPON_MATERIAL);
     }
 
+    @NotNull
     public ItemStack getWeapon() {
         return entityData.get(WEAPON_ITEM);
     }
 
     protected void updateWeaponMaterial() {
-        if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
+        ItemStack thrownItem = getWeapon();
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
                 material =
@@ -122,9 +122,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Override
     public void addAdditionalSaveData(CompoundTag nbttagcompound) {
         super.addAdditionalSaveData(nbttagcompound);
-        if (thrownItem != null) {
-            nbttagcompound.put("thrI", thrownItem.save(new CompoundTag()));
-        }
+        ItemStack thrownItem = getWeapon();
+        nbttagcompound.put("thrI", thrownItem.save(new CompoundTag()));
     }
 
     @Override
