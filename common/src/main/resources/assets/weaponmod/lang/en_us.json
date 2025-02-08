@@ -145,5 +145,6 @@
   "text.autoconfig.weaponmod.option.reloadTimeSettings.crossbow": "Crossbow",
   "text.autoconfig.weaponmod.option.reloadTimeSettings.flintlock": "Flintlock",
   "text.autoconfig.weaponmod.option.reloadTimeSettings.mortar": "Mortar",
-  "text.autoconfig.weaponmod.option.reloadTimeSettings.musket": "Musket"
+  "text.autoconfig.weaponmod.option.reloadTimeSettings.musket": "Musket",
+  "tooltip.bayonetdurability": "Bayonet durability: %1$d/%2$d"
 }
