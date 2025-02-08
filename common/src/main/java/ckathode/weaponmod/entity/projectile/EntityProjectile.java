@@ -329,13 +329,13 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         }
         if (entity instanceof LivingEntity livingEntity) {
             doKnockback(livingEntity, getDamageSource());
-            Entity shooter = getOwner();
-            if (shooter != null && level() instanceof ServerLevel serverLevel) {
-                EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, shooter,
+            if (level() instanceof ServerLevel serverLevel) {
+                EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, livingEntity,
                         getDamageSource(), getWeaponItem());
             }
-            if (shooter instanceof ServerPlayer && !entity.equals(getOwner()) && entity instanceof Player) {
-                ((ServerPlayer) shooter).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0f));
+            Entity shooter = getOwner();
+            if (shooter instanceof ServerPlayer sp && !entity.equals(getOwner()) && entity instanceof Player) {
+                sp.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0f));
             }
         }
     }
