@@ -11,6 +11,9 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderLongItem extends RenderWeaponItem {
+
+    public static final RenderLongItem INSTANCE = new RenderLongItem();
+
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         Tessellator tess = Tessellator.instance;
@@ -26,4 +29,5 @@ public class RenderLongItem extends RenderWeaponItem {
                 icon.getIconWidth() * 16, icon.getIconHeight() * 16, t);
         renderEnchantEffect(tess, item, 256, 256, t);
     }
+
 }

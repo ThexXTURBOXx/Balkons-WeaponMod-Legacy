@@ -70,18 +70,17 @@ public class WMClientProxy extends WMCommonProxy {
             }
         }
 
-        RenderLongItem longRender = new RenderLongItem();
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdWood, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdStone, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdSteel, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdDiamond, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdGold, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearWood, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearStone, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearSteel, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearDiamond, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearGold, longRender);
-        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.javelin, longRender);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdWood, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdStone, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdSteel, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdDiamond, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.halberdGold, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearWood, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearStone, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearSteel, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearDiamond, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.spearGold, RenderLongItem.INSTANCE);
+        MinecraftForgeClient.registerItemRenderer(BalkonsWeaponMod.javelin, RenderLongItem.INSTANCE);
     }
 
     @Override

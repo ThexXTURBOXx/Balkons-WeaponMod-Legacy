@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,8 +16,11 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class RenderWeaponItem implements IItemRenderer {
+
+    public static final RenderWeaponItem INSTANCE = new RenderWeaponItem();
+
     public static final ResourceLocation ENCHANTMENT_GLINT = new ResourceLocation(
-            "minecraft", "%blur%/misc/enchanted_item_glint.png");
+            "textures/misc/enchanted_item_glint.png");
 
     protected Minecraft mc;
 
@@ -26,7 +30,7 @@ public class RenderWeaponItem implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        return type == ItemRenderType.EQUIPPED;
+        return type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON;
     }
 
     @Override
@@ -54,7 +58,7 @@ public class RenderWeaponItem implements IItemRenderer {
             GL11.glDisable(GL11.GL_LIGHTING);
             mc.renderEngine.bindTexture(ENCHANTMENT_GLINT);
             GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+            OpenGlHelper.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
             float var14 = 0.76F;
             GL11.glColor4f(0.5F * var14, 0.25F * var14, 0.8F * var14, 1.0F);
             GL11.glMatrixMode(GL11.GL_TEXTURE);
