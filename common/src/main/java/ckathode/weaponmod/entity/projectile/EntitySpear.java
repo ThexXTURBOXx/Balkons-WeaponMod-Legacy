@@ -19,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +71,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
     }
 
     @Override
-    public void onEntityHit(Entity entity) {
+    public void onHitEntity(EntityHitResult result) {
         if (level().isClientSide) {
             return;
         }
@@ -81,6 +82,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
             bounceBack();
             return;
         }
+        Entity entity = result.getEntity();
         float damage = iweapon.getMeleeComponent().getEntityDamage();
         damage = getMeleeHitDamage(entity, damage);
         if (entity.hurtOrSimulate(getDamageSource(), damage)) {
