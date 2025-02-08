@@ -9,7 +9,7 @@ plugins {
     java
     id("gg.essential.loom") version "1.6.9999-fg1"
     id("dev.architectury.architectury-pack200") version "0.1.3"
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "8.3.6"
 }
 
 val minecraft_version: String by project
@@ -86,7 +86,7 @@ dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     mappings("net.minecraftforge:forge:$forge_version:userdev")
     forgeLegacy("net.minecraftforge:forge:$forge_version")
-    shadowImpl("com.github.makamys:MCLib:0.3.7.6") {
+    shadowImpl("com.github.makamys:MCLib:0.3.7.7") {
         exclude(group = "codechicken")
     }
 }
