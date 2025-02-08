@@ -26,7 +26,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
             EntityDataManager.createKey(EntityMaterialProjectile.class, DataSerializers.OPTIONAL_ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
             {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}};
-    protected ItemStack thrownItem;
 
     public EntityMaterialProjectile(World world) {
         super(world);
@@ -79,7 +78,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
     }
 
     public void setThrownItemStack(@Nullable ItemStack itemstack) {
-        thrownItem = itemstack;
         dataManager.set(WEAPON_ITEM, Optional.fromNullable(itemstack));
         updateWeaponMaterial();
     }
@@ -87,13 +85,13 @@ public class EntityMaterialProjectile extends EntityProjectile {
     @Nullable
     @Override
     public ItemStack getPickupItem() {
-        return thrownItem;
+        return getWeapon().orNull();
     }
 
     @Nonnull
     @Override
     protected ItemStack getArrowStack() {
-        return thrownItem == null ? super.getArrowStack() : thrownItem;
+        return getWeapon().or(super.getArrowStack());
     }
 
     public int getWeaponMaterialId() {
@@ -105,6 +103,7 @@ public class EntityMaterialProjectile extends EntityProjectile {
     }
 
     protected void updateWeaponMaterial() {
+        ItemStack thrownItem = getWeapon().orNull();
         if (thrownItem != null && thrownItem.getItem() instanceof IItemWeapon && ((IItemWeapon) thrownItem.getItem()).getMeleeComponent() != null) {
             int material = MaterialRegistry.getMaterialID(thrownItem);
             if (material < 0) {
@@ -126,6 +125,7 @@ public class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
         super.writeEntityToNBT(nbttagcompound);
+        ItemStack thrownItem = getWeapon().orNull();
         if (thrownItem != null) {
             nbttagcompound.setTag("thrI", thrownItem.writeToNBT(new NBTTagCompound()));
         }
