@@ -18,10 +18,8 @@ public class WMCommonEventHandler {
         }
     }
 
-    public static EventResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source,
-                                                            float amount) {
-        if (!(entity instanceof Player)) return EventResult.pass();
-        Player player = (Player) entity;
+    public static EventResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source, float amount) {
+        if (!(entity instanceof Player player)) return EventResult.pass();
         ItemStack stack = player.getUseItem();
         Item item = stack.isEmpty() ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return EventResult.pass();
