@@ -243,11 +243,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             }
             if (raytraceresult != null && raytraceresult.getType() != HitResult.Type.MISS
                 && !onProjectileImpact(this, raytraceresult)) {
-                if (raytraceresult instanceof EntityHitResult) {
-                    onHitEntity((EntityHitResult) raytraceresult);
-                } else {
-                    onGroundHit((BlockHitResult) raytraceresult);
-                }
+                onHit(raytraceresult);
                 hasImpulse = true;
             }
             if (entityraytraceresult == null) {
@@ -307,7 +303,17 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     }
 
     @Override
-    protected void onHitEntity(EntityHitResult result) {
+    public void onHit(@NotNull HitResult result) {
+        HitResult.Type type = result.getType();
+        if (type == HitResult.Type.ENTITY) {
+            onHitEntity((EntityHitResult) result);
+        } else if (type == HitResult.Type.BLOCK) {
+            onHitBlock((BlockHitResult) result);
+        }
+    }
+
+    @Override
+    public void onHitEntity(EntityHitResult result) {
         bounceBack();
         applyEntityHitEffects(result.getEntity());
     }
@@ -334,7 +340,8 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         }
     }
 
-    public void onGroundHit(BlockHitResult result) {
+    @Override
+    public void onHitBlock(BlockHitResult result) {
         BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
