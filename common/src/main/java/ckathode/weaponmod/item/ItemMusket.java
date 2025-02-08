@@ -4,8 +4,11 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMRegistries;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -65,6 +69,20 @@ public class ItemMusket extends ItemShooter {
 
     public boolean hasBayonet() {
         return bayonetItem != null;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
+                                TooltipFlag isAdvanced) {
+        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+        // 2 is ID for short
+        if (hasBayonet() && stack.hasTag() && stack.getTag().contains("bayonetDamage", 2)) {
+            short dmg = stack.getTag().getShort("bayonetDamage");
+            if (dmg != 0) {
+                tooltipComponents.add(new TranslatableComponent("tooltip.bayonetdurability",
+                        bayonetDurability - dmg, bayonetDurability));
+            }
+        }
     }
 
     @Override
