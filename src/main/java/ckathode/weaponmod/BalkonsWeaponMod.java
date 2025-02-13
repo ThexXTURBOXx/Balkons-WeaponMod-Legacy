@@ -58,7 +58,8 @@ import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 @Mod(modid = BalkonsWeaponMod.MOD_ID, name = BalkonsWeaponMod.MOD_NAME, version = BalkonsWeaponMod.MOD_VERSION,
-        updateJSON = BalkonsWeaponMod.UPDATE_JSON, acceptedMinecraftVersions = "@MC_RANGE@")
+        updateJSON = BalkonsWeaponMod.UPDATE_JSON, acceptedMinecraftVersions = "@MC_RANGE@",
+        guiFactory = "ckathode.weaponmod.WeaponModConfig$GuiFactory")
 public class BalkonsWeaponMod {
     public static final String MOD_ID = "@MOD_ID@";
     public static final String MOD_NAME = "@MOD_NAME@";
@@ -178,7 +179,8 @@ public class BalkonsWeaponMod {
         modConfig.addReloadTimeSetting("blunderbuss", 20);
         modConfig.addReloadTimeSetting("flintlock", 15);
         modConfig.addReloadTimeSetting("mortar", 50);
-        modConfig.loadConfig();
+        modConfig.init();
+
         proxy.registerRenderersEntity(modConfig);
     }
 
