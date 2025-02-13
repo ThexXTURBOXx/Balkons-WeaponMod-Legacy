@@ -54,7 +54,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = BalkonsWeaponMod.MOD_ID, name = BalkonsWeaponMod.MOD_NAME, version = BalkonsWeaponMod.MOD_VERSION,
-        acceptedMinecraftVersions = "@MC_RANGE@")
+        acceptedMinecraftVersions = "@MC_RANGE@", guiFactory = "ckathode.weaponmod.WeaponModConfig$GuiFactory")
 public class BalkonsWeaponMod {
     public static final String MOD_ID = "@MOD_ID@";
     public static final String MOD_NAME = "@MOD_NAME@";
@@ -180,7 +180,7 @@ public class BalkonsWeaponMod {
         modConfig.addDataWatcherIdSetting("warhammer_last_smash_ticks", 26);
         modConfig.addDataWatcherIdSetting("flail_thrown", 27);
         modConfig.addDataWatcherIdSetting("flail_entity_id", 28);
-        modConfig.loadConfig();
+        modConfig.init();
 
         proxy.registerEventHandlers();
         registerItems();
