@@ -32,7 +32,7 @@ public class WeaponModConfig {
     public boolean canThrowSpear;
     public boolean allCanPickup;
     public boolean guiOverlayReloaded;
-    // TODO: public boolean itemModelForEntity;
+    public boolean itemModelForEntity;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
     private final Map<String, DataWatcherIdSetting> dataWatcherIds;
@@ -107,8 +107,8 @@ public class WeaponModConfig {
                                                                          + "everyone can pick the item up.").getBoolean(true);
         guiOverlayReloaded = config.get(CATEGORY_SETTINGS, "reload-progress", true, "Show reload progress in "
                                                                                     + "hotbar.").getBoolean(true);
-        /*itemModelForEntity = config.get(CATEGORY_SETTINGS, "render-entity-model", true, "Item model for entity "
-                                                                                        + "(knife, spear, etc).").getBoolean(true);*/
+        itemModelForEntity = config.get(CATEGORY_SETTINGS, "render-entity-model", true, "Item model for entity "
+                                                                                        + "(knife, spear, etc).").getBoolean(true);
 
         for (final EnableSetting es : enableSettings.values()) {
             es.enabled = config.get(CATEGORY_ENABLE, es.settingName, es.enabled).getBoolean(es.enabled);
