@@ -41,6 +41,7 @@ public final class ExtendedReachHelper {
 
             Vec3 hitVec = null;
             for (Entity entity1 : list) {
+                if (!entity1.canBeCollidedWith()) continue;
                 float borderSize = entity1.getCollisionBorderSize();
                 AxisAlignedBB aabb = EntityProjectile.getBoundingBox(entity1)
                         .expand(borderSize, borderSize, borderSize);
