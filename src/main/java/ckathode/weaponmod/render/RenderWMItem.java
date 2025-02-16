@@ -1,15 +1,13 @@
 package ckathode.weaponmod.render;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class RenderWMItem {
@@ -28,11 +26,7 @@ public class RenderWMItem {
 
         if (item.shouldRotateAroundWhenRendering()) GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
         GL11.glTranslatef(-0.5F, -0.5F, 0.0f);
-        IIcon icon = stack.getItem().getIcon(stack, 0);
-        if (icon != null) {
-            ItemRenderer.renderItemIn2D(Tessellator.instance, icon.getMaxU(), icon.getMinV(), icon.getMinU(),
-                    icon.getMaxV(), icon.getIconWidth() * 16, icon.getIconHeight() * 16, 0.0625F);
-        }
+        RenderWeaponItem.INSTANCE.renderItem(IItemRenderer.ItemRenderType.ENTITY, stack);
     }
 
 }

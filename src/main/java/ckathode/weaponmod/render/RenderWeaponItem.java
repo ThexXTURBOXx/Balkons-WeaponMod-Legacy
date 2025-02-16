@@ -1,6 +1,5 @@
 package ckathode.weaponmod.render;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -8,6 +7,7 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -22,41 +22,47 @@ public class RenderWeaponItem implements IItemRenderer {
     public static final ResourceLocation ENCHANTMENT_GLINT = new ResourceLocation(
             "textures/misc/enchanted_item_glint.png");
 
-    protected Minecraft mc;
-
-    public RenderWeaponItem() {
-        mc = FMLClientHandler.instance().getClient();
-    }
+    private static final Minecraft MC = Minecraft.getMinecraft();
 
     @Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+    public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
         return type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper helper) {
         return false;
     }
 
     @Override
-    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+    public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         Tessellator tess = Tessellator.instance;
 
-        EntityLivingBase entityliving = (EntityLivingBase) data[1];
-        IIcon icon = entityliving.getItemIcon(item, 0);
+        IIcon icon = null;
+        if (data.length < 2 || data[1] == null) {
+            Item item = stack.getItem();
+            if (item != null) {
+                icon = item.getIcon(stack, 0);
+            }
+        } else {
+            EntityLivingBase entityLiving = (EntityLivingBase) data[1];
+            icon = entityLiving.getItemIcon(stack, 0);
+        }
 
         float t = 0.0625F;
-        ItemRenderer.renderItemIn2D(tess, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(),
-                icon.getIconWidth(), icon.getIconHeight(), t);
-        renderEnchantEffect(tess, item, 256, 256, t);
+        if (icon != null) {
+            ItemRenderer.renderItemIn2D(tess, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(),
+                    icon.getIconWidth(), icon.getIconHeight(), t);
+            renderEnchantEffect(tess, stack, 256, 256, t);
+        }
     }
 
-    protected void renderEnchantEffect(Tessellator tess, ItemStack item, int iconwidth, int iconheight,
-                                       float thickness) {
-        if (item != null && item.hasEffect(0)) {
+    public static void renderEnchantEffect(Tessellator tess, ItemStack stack, int iconwidth, int iconheight,
+                                           float thickness) {
+        if (stack != null && stack.hasEffect(0)) {
             GL11.glDepthFunc(GL11.GL_EQUAL);
             GL11.glDisable(GL11.GL_LIGHTING);
-            mc.renderEngine.bindTexture(ENCHANTMENT_GLINT);
+            MC.renderEngine.bindTexture(ENCHANTMENT_GLINT);
             GL11.glEnable(GL11.GL_BLEND);
             OpenGlHelper.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE, GL11.GL_ONE, GL11.GL_ZERO);
             float var14 = 0.76F;
