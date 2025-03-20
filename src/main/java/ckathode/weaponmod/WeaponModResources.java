@@ -15,6 +15,8 @@ public final class WeaponModResources {
                 MOD_ID, "textures/entity/boomerang.png");
         public static final ResourceLocation CANNON = new ResourceLocation(
                 MOD_ID, "textures/entity/cannon.png");
+        public static final ResourceLocation CANNON_LEGACY = new ResourceLocation(
+                MOD_ID, "textures/entity/cannon_legacy.png");
         public static final ResourceLocation CANNONBALL = new ResourceLocation(
                 MOD_ID, "textures/entity/cannon_ball.png");
         public static final ResourceLocation BOLT = new ResourceLocation(
