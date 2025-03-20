@@ -509,7 +509,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
         }
         arrowShake = (nbttagcompound.getByte("shake") & 0xFF);
         inGround = nbttagcompound.getBoolean("inGround");
-        beenInGround = nbttagcompound.getBoolean("beenInGrond");
+        beenInGround = nbttagcompound.getBoolean("beenInGround");
         pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
     }
 
