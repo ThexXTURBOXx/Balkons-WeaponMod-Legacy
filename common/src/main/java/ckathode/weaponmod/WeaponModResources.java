@@ -15,6 +15,8 @@ public final class WeaponModResources {
                 MOD_ID, "textures/entity/boomerang.png");
         public static final ResourceLocation CANNON = ResourceLocation.fromNamespaceAndPath(
                 MOD_ID, "textures/entity/cannon.png");
+        public static final ResourceLocation CANNON_LEGACY = ResourceLocation.fromNamespaceAndPath(
+                MOD_ID, "textures/entity/cannon_legacy.png");
         public static final ResourceLocation CANNONBALL = ResourceLocation.fromNamespaceAndPath(
                 MOD_ID, "textures/entity/cannon_ball.png");
         public static final ResourceLocation BOLT = ResourceLocation.fromNamespaceAndPath(
