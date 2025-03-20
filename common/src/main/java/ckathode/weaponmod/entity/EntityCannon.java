@@ -329,10 +329,12 @@ public class EntityCannon extends Boat {
 
     @Override
     public void positionRider(@NotNull Entity passenger, MoveFunction callback) {
-        float f = -0.85f;
-        float f2 = isAlive() ? 0.35f : 0.01f;
-        Vec3 vec3d = new Vec3(f, 0.0, 0.0).yRot(-getYRot() * 0.017453292f - 1.5707964f);
-        callback.accept(passenger, getX() + vec3d.x, getY() + f2, getZ() + vec3d.z);
+        if (hasPassenger(passenger)) {
+            float f = -0.85f;
+            float f2 = (float) ((isAlive() ? getPassengersRidingOffset() : 0.01) + passenger.getMyRidingOffset());
+            Vec3 vec3d = new Vec3(f, 0.0, 0.0).yRot(-getYRot() * 0.017453292f - 1.5707964f);
+            callback.accept(passenger, getX() + vec3d.x, getY() + f2, getZ() + vec3d.z);
+        }
     }
 
     @Override
