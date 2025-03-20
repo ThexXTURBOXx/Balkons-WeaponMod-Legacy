@@ -523,7 +523,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         }
         shakeTime = (nbttagcompound.getByte("shake") & 0xFF);
         inGround = nbttagcompound.getBoolean("inGround");
-        beenInGround = nbttagcompound.getBoolean("beenInGrond");
+        beenInGround = nbttagcompound.getBoolean("beenInGround");
         pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
         firedFromWeapon = nbttagcompound.contains("weapon", 10) ?
                 ItemStack.parse(registryAccess(), nbttagcompound.getCompound("weapon")).orElse(null) : null;
