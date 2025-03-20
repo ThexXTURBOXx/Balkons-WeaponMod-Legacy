@@ -33,6 +33,7 @@ public class WeaponModConfig {
     public boolean allCanPickup;
     public boolean guiOverlayReloaded;
     public boolean itemModelForEntity;
+    public boolean legacyCannonModel;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
     private final Map<String, DataWatcherIdSetting> dataWatcherIds;
@@ -109,6 +110,9 @@ public class WeaponModConfig {
                                                                                     + "hotbar.").getBoolean(true);
         itemModelForEntity = config.get(CATEGORY_SETTINGS, "render-entity-model", true, "Item model for entity "
                                                                                         + "(knife, spear, etc).").getBoolean(true);
+        legacyCannonModel = config.get(CATEGORY_SETTINGS, "legacy-cannon-model", false, "Changes the cannon to the "
+                                                                                        + "legacy model from older "
+                                                                                        + "versions of BWM!").getBoolean(true);
 
         for (final EnableSetting es : enableSettings.values()) {
             es.enabled = config.get(CATEGORY_ENABLE, es.settingName, es.enabled).getBoolean(es.enabled);
