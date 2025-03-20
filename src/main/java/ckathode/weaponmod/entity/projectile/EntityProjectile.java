@@ -496,7 +496,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         inData = nbttagcompound.getByte("inData") & 0xFF;
         arrowShake = (nbttagcompound.getByte("shake") & 0xFF);
         inGround = nbttagcompound.getBoolean("inGround");
-        beenInGround = nbttagcompound.getBoolean("beenInGrond");
+        beenInGround = nbttagcompound.getBoolean("beenInGround");
         pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
     }
 
