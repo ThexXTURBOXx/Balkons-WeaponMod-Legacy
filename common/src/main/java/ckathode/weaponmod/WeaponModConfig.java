@@ -44,6 +44,9 @@ public class WeaponModConfig implements ConfigData {
     @Category("settings")
     @Comment("Item model for entity (knife, spear, etc).")
     public volatile boolean itemModelForEntity = true;
+    @Category("settings")
+    @Comment("Changes the cannon to the legacy model from older versions of BWM!")
+    public volatile boolean legacyCannonModel = false;
 
     @Category("enable")
     @StringBooleanMap
