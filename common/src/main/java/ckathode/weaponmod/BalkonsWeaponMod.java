@@ -17,6 +17,7 @@ import ckathode.weaponmod.entity.projectile.EntitySpear;
 import ckathode.weaponmod.item.WMItemProperties;
 import ckathode.weaponmod.network.WMMessagePipeline;
 import ckathode.weaponmod.render.ModelCannonBarrel;
+import ckathode.weaponmod.render.ModelCannonLegacy;
 import ckathode.weaponmod.render.ModelCannonStandard;
 import ckathode.weaponmod.render.ModelDummy;
 import ckathode.weaponmod.render.RenderBlowgunDart;
@@ -65,6 +66,8 @@ public class BalkonsWeaponMod {
                     ModelCannonBarrel.CANNON_BARREL_LAYER, ModelCannonBarrel::createLayer);
             EntityModelLayerRegistry.register(
                     ModelCannonStandard.CANNON_STANDARD_LAYER, ModelCannonStandard::createLayer);
+            EntityModelLayerRegistry.register(
+                    ModelCannonLegacy.CANNON_LEGACY_LAYER, ModelCannonLegacy::createLayer);
             EntityModelLayerRegistry.register(
                     ModelDummy.MAIN_LAYER, ModelDummy::createLayer);
 
