@@ -16,6 +16,7 @@ public class WeaponModConfig {
     public ForgeConfigSpec.BooleanValue allCanPickup;
     public ForgeConfigSpec.BooleanValue guiOverlayReloaded;
     public ForgeConfigSpec.BooleanValue itemModelForEntity;
+    public ForgeConfigSpec.BooleanValue legacyCannonModel;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
 
@@ -61,6 +62,9 @@ public class WeaponModConfig {
         itemModelForEntity = builder
                 .comment("Item model for entity (knife, spear, etc).")
                 .define("render-entity-model", true);
+        legacyCannonModel = builder
+                .comment("Changes the cannon to the legacy model from older versions of BWM!")
+                .define("legacy-cannon-model", false);
         builder.pop();
 
         context.registerConfig(ModConfig.Type.COMMON, builder.build());
