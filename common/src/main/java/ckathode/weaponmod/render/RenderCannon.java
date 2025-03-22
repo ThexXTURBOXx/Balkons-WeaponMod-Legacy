@@ -32,42 +32,34 @@ public class RenderCannon extends WMRenderer<EntityCannon> {
     public void render(@NotNull EntityCannon entitycannon, float f, float f1,
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         ms.pushPose();
+        f = interpolateRotation(entitycannon.yRotO, entitycannon.getYRot(), f1);
+
         if (WeaponModConfig.get().legacyCannonModel) {
-            modelLegacy.barrel.xRot = Math.max(-entitycannon.getXRot() / 120.0f, -0.25f);
             ms.translate(0, 0.1, 0);
             ms.mulPose(Vector3f.YP.rotationDegrees(-f));
-            final float f3 = entitycannon.getHurtTime() - f1;
-            float f4 = entitycannon.getCurrentDamage() - f1;
-            if (f4 < 0.0f) {
-                f4 = 0.0f;
-            }
-            if (f3 > 0.0f) {
-                ms.mulPose(Vector3f.ZP.rotationDegrees(Mth.sin(f3) * f3 * f4 / 10.0f * entitycannon.getRockDirection() / 5.0f));
-            }
-            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitycannon)));
+        } else {
+            ms.translate(0, 2.375f, 0);
+            ms.mulPose(Vector3f.YP.rotationDegrees(180.0f - f));
+        }
+
+        float f2 = entitycannon.getHurtTime() - f1;
+        float f3 = entitycannon.getCurrentDamage() - f1;
+        if (f3 < 0.0f) f3 = 0.0f;
+        if (f2 > 0.0f)
+            ms.mulPose(Vector3f.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f));
+        VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitycannon)));
+        float f4 = 1f;
+        if (entitycannon.isSuperPowered() && entitycannon.tickCount % 5 < 2) f4 = 1.5f;
+
+        if (WeaponModConfig.get().legacyCannonModel) {
             ms.scale(-1.0f, -1.0f, 1.0f);
             ms.mulPose(Vector3f.XP.rotationDegrees(180.0f));
-            float f5 = 1f;
-            if (entitycannon.isSuperPowered() && entitycannon.tickCount % 5 < 2) f5 = 1.5f;
-            modelLegacy.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, f5, f5, f5, 1);
+            modelLegacy.barrel.xRot = Math.max(-entitycannon.getXRot() / 120.0f, -0.25f);
+            modelLegacy.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, f4, f4, f4, 1);
         } else {
             float rot = entitycannon.xRotO + (entitycannon.getXRot() - entitycannon.xRotO) * f1;
             rot = Math.min(rot, 20.0f);
-            f = interpolateRotation(entitycannon.yRotO, entitycannon.getYRot(), f1);
-            ms.translate(0, 2.375f, 0);
-            ms.mulPose(Vector3f.YP.rotationDegrees(180.0f - f));
-            float f2 = entitycannon.getHurtTime() - f1;
-            float f3 = entitycannon.getCurrentDamage() - f1;
-            if (f3 < 0.0f) {
-                f3 = 0.0f;
-            }
-            if (f2 > 0.0f) {
-                ms.mulPose(Vector3f.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f));
-            }
-            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(getTextureLocation(entitycannon)));
             ms.scale(-1.6f, -1.6f, 1.6f);
-            float f4 = 1f;
-            if (entitycannon.isSuperPowered() && entitycannon.tickCount % 5 < 2) f4 = 1.5f;
             ms.pushPose();
             ms.translate(0.0f, 1.0f, 0.0f);
             ms.mulPose(Vector3f.XP.rotationDegrees(rot));
@@ -80,6 +72,7 @@ public class RenderCannon extends WMRenderer<EntityCannon> {
             modelStandard.baseStand.yRot = yawRadians;
             modelStandard.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, f4, f4, f4, 1);
         }
+
         ms.popPose();
         super.render(entitycannon, f, f1, ms, bufs, lm);
     }
