@@ -101,6 +101,11 @@ public class EntityCannon extends EntityBoat {
     }
 
     @Override
+    protected boolean canFitPassenger(@Nonnull Entity passenger) {
+        return !isBeingRidden();
+    }
+
+    @Override
     public boolean attackEntityFrom(@Nonnull DamageSource damagesource, float damage) {
         if (worldObj.isRemote || isDead) {
             return true;
@@ -265,7 +270,7 @@ public class EntityCannon extends EntityBoat {
             return;
         }
         Entity entityPassenger = getPassengers().isEmpty() ? null : getPassengers().get(0);
-        if (!worldObj.isRemote) {
+        if (entityPassenger != null && !worldObj.isRemote) {
             EntityCannonBall entitycannonball = new EntityCannonBall(worldObj, this,
                     entityPassenger.rotationPitch, entityPassenger.rotationYaw, isSuperPowered());
             worldObj.spawnEntityInWorld(entitycannonball);
