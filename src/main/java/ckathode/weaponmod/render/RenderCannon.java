@@ -21,60 +21,46 @@ public class RenderCannon extends Render<EntityCannon> {
     }
 
     @Override
-    public void doRender(EntityCannon entitycannon, double d, double d1, double d2,
-                         float f, float f1) {
+    public void doRender(EntityCannon entitycannon, double d, double d1, double d2, float f, float f1) {
+        f = interpolateRotation(entitycannon.prevRotationYaw, entitycannon.rotationYaw, f1);
         GlStateManager.pushMatrix();
+
         if (BalkonsWeaponMod.instance.modConfig.legacyCannonModel.get()) {
-            modelLegacy.barrel.rotateAngleX = Math.max(-entitycannon.rotationPitch / 120.0f, -0.25f);
             GlStateManager.translated(d, d1 + 0.1, d2);
             GlStateManager.rotatef(-f, 0.0f, 1.0f, 0.0f);
-            final float f3 = entitycannon.getTimeSinceHit() - f1;
-            float f4 = entitycannon.getCurrentDamage() - f1;
-            if (f4 < 0.0f) {
-                f4 = 0.0f;
-            }
-            if (f3 > 0.0f) {
-                GlStateManager.rotatef(MathHelper.sin(f3) * f3 * f4 / 10.0f * entitycannon.getRockDirection() / 5.0f,
-                        0.0f, 0.0f, 1.0f);
-            }
-            bindEntityTexture(entitycannon);
-            GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
-            GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
-            if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
-                float f5 = 1.5f;
-                GlStateManager.color3f(entitycannon.getBrightness() * f5,
-                        entitycannon.getBrightness() * f5,
-                        entitycannon.getBrightness() * f5);
-            }
-            modelLegacy.render(entitycannon, 0.0f, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
         } else {
-            float rot =
-                    entitycannon.prevRotationPitch + (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
-            rot = Math.min(rot, 20.0f);
-            f = interpolateRotation(entitycannon.prevRotationYaw, entitycannon.rotationYaw, f1);
             GlStateManager.translated(d, d1 + 2.375f, d2);
             GlStateManager.rotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
-            float f2 = entitycannon.getTimeSinceHit() - f1;
-            float f3 = entitycannon.getCurrentDamage() - f1;
-            if (f3 < 0.0f) {
-                f3 = 0.0f;
-            }
-            if (f2 > 0.0f) {
-                GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f,
-                        0.0f, 0.0f, 1.0f);
-            }
-            bindEntityTexture(entitycannon);
+        }
+
+        float f2 = entitycannon.getTimeSinceHit() - f1;
+        float f3 = entitycannon.getCurrentDamage() - f1;
+        if (f3 < 0.0f) f3 = 0.0f;
+        if (f2 > 0.0f)
+            GlStateManager.rotatef(MathHelper.sin(f2) * f2 * f3 / 10.0f * entitycannon.getRockDirection() / 5.0f,
+                    0.0f, 0.0f, 1.0f);
+        bindEntityTexture(entitycannon);
+        if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
+            float f4 = 1.5f;
+            GlStateManager.color3f(entitycannon.getBrightness() * f4,
+                    entitycannon.getBrightness() * f4,
+                    entitycannon.getBrightness() * f4);
+        }
+        if (renderOutlines) {
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
+        }
+
+        if (BalkonsWeaponMod.instance.modConfig.legacyCannonModel.get()) {
+            GlStateManager.scalef(-1.0f, -1.0f, 1.0f);
+            GlStateManager.rotatef(180.0f, 1.0f, 0.0f, 0.0f);
+            modelLegacy.barrel.rotateAngleX = Math.max(-entitycannon.rotationPitch / 120.0f, -0.25f);
+            modelLegacy.render(entitycannon, 0.0f, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
+        } else {
+            float rot = entitycannon.prevRotationPitch +
+                        (entitycannon.rotationPitch - entitycannon.prevRotationPitch) * f1;
+            rot = Math.min(rot, 20.0f);
             GlStateManager.scalef(-1.6f, -1.6f, 1.6f);
-            if (entitycannon.isSuperPowered() && entitycannon.ticksExisted % 5 < 2) {
-                float f4 = 1.5f;
-                GlStateManager.color3f(entitycannon.getBrightness() * f4,
-                        entitycannon.getBrightness() * f4,
-                        entitycannon.getBrightness() * f4);
-            }
-            if (renderOutlines) {
-                GlStateManager.disableOutlineMode();
-                GlStateManager.disableColorMaterial();
-            }
             GlStateManager.pushMatrix();
             GlStateManager.translatef(0.0f, 1.0f, 0.0f);
             GlStateManager.rotatef(rot, 1.0f, 0.0f, 0.0f);
@@ -86,10 +72,11 @@ public class RenderCannon extends Render<EntityCannon> {
             modelStandard.base2.rotateAngleY = yawRadians;
             modelStandard.baseStand.rotateAngleY = yawRadians;
             modelStandard.render(entitycannon, f1, 0.0f, -0.1f, 0.0f, 0.0f, 0.0625f);
-            if (renderOutlines) {
-                GlStateManager.enableColorMaterial();
-                GlStateManager.enableOutlineMode(getTeamColor(entitycannon));
-            }
+        }
+
+        if (renderOutlines) {
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(getTeamColor(entitycannon));
         }
         GlStateManager.popMatrix();
         super.doRender(entitycannon, d, d1, d2, f, f1);
