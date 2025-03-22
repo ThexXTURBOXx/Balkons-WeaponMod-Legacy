@@ -8,14 +8,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderCannon extends EntityRenderer<EntityCannon> {
+public class RenderCannon extends WMRenderer<EntityCannon> {
 
     private final ModelCannonBarrel modelBarrel;
     private final ModelCannonStandard modelStandard;
@@ -26,7 +25,7 @@ public class RenderCannon extends EntityRenderer<EntityCannon> {
         modelBarrel = new ModelCannonBarrel(context.bakeLayer(ModelCannonBarrel.CANNON_BARREL_LAYER));
         modelStandard = new ModelCannonStandard(context.bakeLayer(ModelCannonStandard.CANNON_STANDARD_LAYER));
         modelLegacy = new ModelCannonLegacy(context.bakeLayer(ModelCannonLegacy.CANNON_LEGACY_LAYER));
-        shadowRadius = 1.0f;
+        shadowRadius = 0.7f;
     }
 
     @Override
