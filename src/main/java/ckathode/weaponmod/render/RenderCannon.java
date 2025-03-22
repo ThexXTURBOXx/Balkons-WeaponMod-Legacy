@@ -10,15 +10,12 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderCannon extends Render {
-    private final ModelCannonBarrel modelBarrel;
-    private final ModelCannonStandard modelStandard;
-    private final ModelCannonLegacy modelLegacy;
+    private final ModelCannonBarrel modelBarrel = new ModelCannonBarrel();
+    private final ModelCannonStandard modelStandard = new ModelCannonStandard();
+    private final ModelCannonLegacy modelLegacy = new ModelCannonLegacy();
 
     public RenderCannon() {
-        modelBarrel = new ModelCannonBarrel();
-        modelStandard = new ModelCannonStandard();
-        modelLegacy = new ModelCannonLegacy();
-        shadowSize = 1.0f;
+        shadowSize = 0.7f;
     }
 
     @Override

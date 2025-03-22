@@ -9,11 +9,10 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class RenderDummy extends Render {
-    private final ModelDummy modelDummy;
+    private final ModelDummy modelDummy = new ModelDummy();
 
     public RenderDummy() {
-        modelDummy = new ModelDummy();
-        shadowSize = 1.0f;
+        shadowSize = 0.7f;
     }
 
     @Override
