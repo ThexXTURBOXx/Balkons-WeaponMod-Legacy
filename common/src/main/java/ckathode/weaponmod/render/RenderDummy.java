@@ -19,7 +19,7 @@ public class RenderDummy extends WMRenderer<EntityDummy, RenderDummy.DummyRender
     public RenderDummy(Context context) {
         super(context);
         modelDummy = new ModelDummy(context.bakeLayer(ModelDummy.MAIN_LAYER));
-        shadowRadius = 1.0f;
+        shadowRadius = 0.7f;
     }
 
     @Override
