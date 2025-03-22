@@ -48,8 +48,8 @@ public class RenderCannon extends Render<EntityCannon> {
                     entitycannon.getBrightness(f1) * f4);
         }
         if (renderOutlines) {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
+            GlStateManager.enableColorMaterial();
+            GlStateManager.enableOutlineMode(getTeamColor(entitycannon));
         }
 
         if (BalkonsWeaponMod.instance.modConfig.legacyCannonModel) {
@@ -76,8 +76,8 @@ public class RenderCannon extends Render<EntityCannon> {
         }
 
         if (renderOutlines) {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(getTeamColor(entitycannon));
+            GlStateManager.disableOutlineMode();
+            GlStateManager.disableColorMaterial();
         }
         GlStateManager.popMatrix();
         super.doRender(entitycannon, d, d1, d2, f, f1);
