@@ -119,6 +119,11 @@ public class EntityCannon extends Boat {
     }
 
     @Override
+    protected boolean canAddPassenger(Entity passenger) {
+        return !isVehicle() && !isEyeInFluid(FluidTags.WATER);
+    }
+
+    @Override
     public boolean hurt(@NotNull DamageSource damagesource, float damage) {
         if (level.isClientSide || !isAlive()) {
             return true;
@@ -284,8 +289,8 @@ public class EntityCannon extends Boat {
         if (!isLoaded()) {
             return;
         }
-        Entity entityPassenger = getPassengers().isEmpty() ? null : getPassengers().get(0);
-        if (!level.isClientSide) {
+        Entity entityPassenger = getControllingPassenger();
+        if (entityPassenger != null && !level.isClientSide) {
             EntityCannonBall entitycannonball = new EntityCannonBall(level, this,
                     entityPassenger.getXRot(), entityPassenger.getYRot(), isSuperPowered());
             level.addFreshEntity(entitycannonball);
