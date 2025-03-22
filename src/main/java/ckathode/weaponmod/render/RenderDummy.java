@@ -10,12 +10,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class RenderDummy extends EntityRenderer<EntityDummy> {
-    private final ModelDummy modelDummy;
+    private final ModelDummy modelDummy = new ModelDummy();
 
     public RenderDummy(EntityRendererManager renderManager) {
         super(renderManager);
-        modelDummy = new ModelDummy();
-        shadowSize = 1.0f;
+        shadowSize = 0.7f;
     }
 
     @Override
