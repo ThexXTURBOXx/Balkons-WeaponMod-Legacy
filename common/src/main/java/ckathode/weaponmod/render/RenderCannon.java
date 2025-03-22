@@ -30,40 +30,33 @@ public class RenderCannon extends WMRenderer<EntityCannon, RenderCannon.CannonRe
     @Override
     public void render(CannonRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         ms.pushPose();
+
         if (WeaponModConfig.get().legacyCannonModel) {
-            modelLegacy.barrel.xRot = Math.max(-entityRenderState.xRot / 120.0f, -0.25f);
             ms.translate(0, 0.1, 0);
             ms.mulPose(Axis.YP.rotationDegrees(-entityRenderState.yRot));
-            float f3 = entityRenderState.hurtTime;
-            float f4 = entityRenderState.currentDamage;
-            if (f4 < 0.0f) {
-                f4 = 0.0f;
-            }
-            if (f3 > 0.0f) {
-                ms.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f3) * f3 * f4 / 10.0f * entityRenderState.rockDirection / 5.0f));
-            }
+        } else {
+            ms.translate(0, 2.375f, 0);
+            ms.mulPose(Axis.YP.rotationDegrees(180.0f - entityRenderState.yRot));
+        }
+
+        float f2 = entityRenderState.hurtTime;
+        float f3 = entityRenderState.currentDamage;
+        if (f3 < 0.0f) f3 = 0.0f;
+        if (f2 > 0.0f)
+            ms.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entityRenderState.rockDirection / 5.0f));
+        int color = 0xFFCCCCCC;
+        if (entityRenderState.superPowered && entityRenderState.tickCount % 5 < 2) color = 0xFFFFFFFF;
+
+        if (WeaponModConfig.get().legacyCannonModel) {
             VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.CANNON_LEGACY));
             ms.scale(-1.0f, -1.0f, 1.0f);
             ms.mulPose(Axis.XP.rotationDegrees(180.0f));
-            int color = 0xFFCCCCCC;
-            if (entityRenderState.superPowered && entityRenderState.tickCount % 5 < 2) color = 0xFFFFFFFF;
+            modelLegacy.barrel.xRot = Math.max(-entityRenderState.xRot / 120.0f, -0.25f);
             modelLegacy.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, color);
         } else {
             float rot = Math.min(entityRenderState.xRot, 20.0f);
-            ms.translate(0, 2.375f, 0);
-            ms.mulPose(Axis.YP.rotationDegrees(180.0f - entityRenderState.yRot));
-            float f2 = entityRenderState.hurtTime;
-            float f3 = entityRenderState.currentDamage;
-            if (f3 < 0.0f) {
-                f3 = 0.0f;
-            }
-            if (f2 > 0.0f) {
-                ms.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entityRenderState.rockDirection / 5.0f));
-            }
             VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.CANNON));
             ms.scale(-1.6f, -1.6f, 1.6f);
-            int color = 0xFFCCCCCC;
-            if (entityRenderState.superPowered && entityRenderState.tickCount % 5 < 2) color = 0xFFFFFFFF;
             ms.pushPose();
             ms.translate(0.0f, 1.0f, 0.0f);
             ms.mulPose(Axis.XP.rotationDegrees(rot));
@@ -76,6 +69,7 @@ public class RenderCannon extends WMRenderer<EntityCannon, RenderCannon.CannonRe
             modelStandard.baseStand.yRot = yawRadians;
             modelStandard.renderToBuffer(ms, builder, lm, OverlayTexture.NO_OVERLAY, color);
         }
+
         ms.popPose();
         super.render(entityRenderState, ms, bufs, lm);
     }
