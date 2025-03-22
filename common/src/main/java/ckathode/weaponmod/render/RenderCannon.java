@@ -24,7 +24,7 @@ public class RenderCannon extends WMRenderer<EntityCannon, RenderCannon.CannonRe
         modelBarrel = new ModelCannonBarrel(context.bakeLayer(ModelCannonBarrel.CANNON_BARREL_LAYER));
         modelStandard = new ModelCannonStandard(context.bakeLayer(ModelCannonStandard.CANNON_STANDARD_LAYER));
         modelLegacy = new ModelCannonLegacy(context.bakeLayer(ModelCannonLegacy.CANNON_LEGACY_LAYER));
-        shadowRadius = 1.0f;
+        shadowRadius = 0.7f;
     }
 
     @Override
