@@ -9,24 +9,20 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-public class RenderCannon extends EntityRenderer<EntityCannon> {
+public class RenderCannon extends WMRenderer<EntityCannon> {
 
-    private final ModelCannonBarrel modelBarrel;
-    private final ModelCannonStandard modelStandard;
-    private final ModelCannonLegacy modelLegacy;
+    private final ModelCannonBarrel modelBarrel = new ModelCannonBarrel();
+    private final ModelCannonStandard modelStandard = new ModelCannonStandard();
+    private final ModelCannonLegacy modelLegacy = new ModelCannonLegacy();
 
     public RenderCannon(EntityRenderDispatcher renderManager) {
         super(renderManager);
-        modelBarrel = new ModelCannonBarrel();
-        modelStandard = new ModelCannonStandard();
-        modelLegacy = new ModelCannonLegacy();
-        shadowRadius = 1.0f;
+        shadowRadius = 0.7f;
     }
 
     @Override

@@ -15,12 +15,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class RenderDummy extends WMRenderer<EntityDummy> {
 
-    private final ModelDummy modelDummy;
+    private final ModelDummy modelDummy = new ModelDummy();
 
     public RenderDummy(EntityRenderDispatcher renderManager) {
         super(renderManager);
-        modelDummy = new ModelDummy();
-        shadowRadius = 1.0f;
+        shadowRadius = 0.7f;
     }
 
     @Override
