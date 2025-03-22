@@ -11,16 +11,13 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCannon extends Render<EntityCannon> {
-    private final ModelCannonBarrel modelBarrel;
-    private final ModelCannonStandard modelStandard;
-    private final ModelCannonLegacy modelLegacy;
+    private final ModelCannonBarrel modelBarrel = new ModelCannonBarrel();
+    private final ModelCannonStandard modelStandard = new ModelCannonStandard();
+    private final ModelCannonLegacy modelLegacy = new ModelCannonLegacy();
 
     public RenderCannon(RenderManager renderManager) {
         super(renderManager);
-        modelBarrel = new ModelCannonBarrel();
-        modelStandard = new ModelCannonStandard();
-        modelLegacy = new ModelCannonLegacy();
-        shadowSize = 1.0f;
+        shadowSize = 0.7f;
     }
 
     @Override
