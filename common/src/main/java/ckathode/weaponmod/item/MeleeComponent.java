@@ -11,6 +11,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -33,6 +34,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeComponent extends AbstractWeaponComponent {
 
@@ -61,7 +63,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()),
                         meleeSpecs.blockDamage * 10),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
-                1.0F, 2);
+                1.0F, 2, false);
     }
 
     @Override
@@ -129,8 +131,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving,
-                             LivingEntity attacker) {
+    public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                          @NotNull LivingEntity attacker) {
         if (entityliving.invulnerableTime == entityliving.invulnerableDuration) {
             float kb = getKnockBack(itemstack, entityliving, attacker);
             PhysHelper.knockBack(entityliving, attacker, kb);
@@ -142,7 +144,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
             }
         }
         itemstack.hurtAndBreak(meleeSpecs.dmgFromEntity, attacker, EquipmentSlot.MAINHAND);
-        return true;
     }
 
     @Override
@@ -199,8 +200,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int i,
-                              boolean flag) {
+    public void inventoryTick(@NotNull ItemStack itemStack, @NotNull ServerLevel serverLevel,
+                              @NotNull Entity entity, @Nullable EquipmentSlot equipmentSlot) {
     }
 
     @Environment(EnvType.CLIENT)

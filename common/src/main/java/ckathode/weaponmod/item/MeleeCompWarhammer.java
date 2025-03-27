@@ -57,7 +57,8 @@ public class MeleeCompWarhammer extends MeleeComponent {
     @Override
     public @NotNull Tool getToolComponent() {
         Tool orig = super.getToolComponent();
-        return new Tool(orig.rules(), orig.defaultMiningSpeed() * (weaponMaterial.attackDamageBonus() + 2.0f), 1);
+        return new Tool(orig.rules(), orig.defaultMiningSpeed() * (weaponMaterial.attackDamageBonus() + 2.0f),
+                1, false);
     }
 
     @Override

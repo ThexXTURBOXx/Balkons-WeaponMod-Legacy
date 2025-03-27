@@ -13,7 +13,7 @@ public class DartType {
     public static final DartType hunger = new DartType((byte) 1, ID_PREFIX + ".hunger",
             new MobEffectInstance(MobEffects.HUNGER, 360, 0));
     public static final DartType slow = new DartType((byte) 2, ID_PREFIX + ".slow",
-            new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 360, 1));
+            new MobEffectInstance(MobEffects.SLOWNESS, 360, 1));
     public static final DartType damage2 = new DartType((byte) 3, ID_PREFIX + ".damage",
             new MobEffectInstance(MobEffects.POISON, 120, 1));
 

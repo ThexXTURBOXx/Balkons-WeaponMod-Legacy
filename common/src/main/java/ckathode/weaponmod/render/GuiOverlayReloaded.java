@@ -31,7 +31,7 @@ public class GuiOverlayReloaded {
     }
 
     private static void renderForHand(InteractionHand hand, Player p, GuiGraphics guiGraphics) {
-        int currentItem = p.getInventory().selected;
+        int currentItem = p.getInventory().getSelectedSlot();
 
         IItemWeapon item = null;
         ItemStack is = hand == InteractionHand.OFF_HAND

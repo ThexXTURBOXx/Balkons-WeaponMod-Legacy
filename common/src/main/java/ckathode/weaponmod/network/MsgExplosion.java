@@ -2,12 +2,12 @@ package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.AdvancedExplosion;
 import dev.architectury.networking.NetworkManager;
-import java.util.ArrayList;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -17,77 +17,26 @@ import org.jetbrains.annotations.NotNull;
 
 import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
-public class MsgExplosion implements CustomPacketPayload {
+public record MsgExplosion(Vec3 center, float size, List<BlockPos> blocks, boolean smallParticles,
+                           boolean bigParticles) implements CustomPacketPayload {
 
     public static final Type<MsgExplosion> EXPLOSION_PACKET_TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, "explosion"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, MsgExplosion> STREAM_CODEC = new StreamCodec<>() {
-        @NotNull
-        @Override
-        public MsgExplosion decode(RegistryFriendlyByteBuf buf) {
-            double x = buf.readDouble();
-            double y = buf.readDouble();
-            double z = buf.readDouble();
-            float size = buf.readFloat();
-            boolean smallParticles = buf.readBoolean();
-            boolean bigParticles = buf.readBoolean();
-            int len = buf.readInt();
-            List<BlockPos> blocks = new ArrayList<>(len);
-            for (int i = 0; i < len; ++i) {
-                int ix = buf.readByte() + (int) x;
-                int iy = buf.readByte() + (int) y;
-                int iz = buf.readByte() + (int) z;
-                blocks.add(new BlockPos(ix, iy, iz));
-            }
-            return new MsgExplosion(x, y, z, size, blocks, smallParticles, bigParticles);
-        }
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, MsgExplosion msg) {
-            buf.writeDouble(msg.center.x);
-            buf.writeDouble(msg.center.y);
-            buf.writeDouble(msg.center.z);
-            buf.writeFloat(msg.size);
-            buf.writeBoolean(msg.smallParticles);
-            buf.writeBoolean(msg.bigParticles);
-            buf.writeInt(msg.blocks.size());
-            for (BlockPos pos : msg.blocks) {
-                int dx = pos.getX() - (int) msg.center.x;
-                int dy = pos.getY() - (int) msg.center.y;
-                int dz = pos.getZ() - (int) msg.center.z;
-                buf.writeByte(dx);
-                buf.writeByte(dy);
-                buf.writeByte(dz);
-            }
-        }
-    };
-
-    private final Vec3 center;
-    private final float size;
-    private final List<BlockPos> blocks;
-    private final boolean smallParticles;
-    private final boolean bigParticles;
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgExplosion> STREAM_CODEC = StreamCodec.composite(
+            Vec3.STREAM_CODEC, MsgExplosion::center,
+            ByteBufCodecs.FLOAT, MsgExplosion::size,
+            BlockPos.STREAM_CODEC.apply(ByteBufCodecs.list()), MsgExplosion::blocks,
+            ByteBufCodecs.BOOL, MsgExplosion::smallParticles,
+            ByteBufCodecs.BOOL, MsgExplosion::bigParticles,
+            MsgExplosion::new);
 
     public MsgExplosion(AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
-        center = explosion.center;
-        size = explosion.explosionSize;
-        blocks = explosion.toBlow;
-        smallParticles = smallparts;
-        bigParticles = bigparts;
+        this(explosion.center, explosion.explosionSize, explosion.toBlow, smallparts, bigparts);
     }
 
     public MsgExplosion(double x, double y, double z, float size, List<BlockPos> blocks,
                         boolean smallparts, boolean bigparts) {
         this(new Vec3(x, y, z), size, blocks, smallparts, bigparts);
-    }
-
-    public MsgExplosion(Vec3 center, float size, List<BlockPos> blocks,
-                        boolean smallparts, boolean bigparts) {
-        this.center = center;
-        this.size = size;
-        this.blocks = blocks;
-        smallParticles = smallparts;
-        bigParticles = bigparts;
     }
 
     @NotNull

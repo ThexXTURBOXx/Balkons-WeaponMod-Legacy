@@ -19,6 +19,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
@@ -149,7 +150,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                     1.2f / (random.nextFloat() * 0.2f + 0.9f));
         }
         if (inBlockState != null) {
-            inBlockState.entityInside(level(), blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP);
         }
     }
 
@@ -202,7 +203,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
         super.readAdditionalSaveData(nbttagcompound);
-        explodefuse = nbttagcompound.getByte("fuse");
-        extinguished = nbttagcompound.getBoolean("off");
+        explodefuse = nbttagcompound.getByteOr("fuse", (byte) 50);
+        extinguished = nbttagcompound.getBooleanOr("off", false);
     }
 }

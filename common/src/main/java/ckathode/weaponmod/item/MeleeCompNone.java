@@ -35,7 +35,7 @@ public class MeleeCompNone extends MeleeComponent {
     @NotNull
     @Override
     public Tool getToolComponent() {
-        return new Tool(Collections.emptyList(), 1, 1);
+        return new Tool(Collections.emptyList(), 1, 1, false);
     }
 
     @Override
@@ -45,9 +45,8 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving,
-                             LivingEntity attacker) {
-        return true;
+    public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                          @NotNull LivingEntity attacker) {
     }
 
     @Override

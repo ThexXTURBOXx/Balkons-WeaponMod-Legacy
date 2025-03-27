@@ -2,9 +2,11 @@ package ckathode.weaponmod.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
@@ -15,6 +17,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemShooter extends BowItem implements IItemWeapon {
 
@@ -39,9 +42,9 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
-    public boolean hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
-                             @NotNull LivingEntity attacker) {
-        return meleeComponent.hurtEnemy(itemstack, entityliving, attacker);
+    public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                          @NotNull LivingEntity attacker) {
+        meleeComponent.hurtEnemy(itemstack, entityliving, attacker);
     }
 
     @Override
@@ -86,10 +89,10 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack itemstack, @NotNull Level world,
-                              @NotNull Entity entity, int i, boolean flag) {
-        meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
-        rangedComponent.inventoryTick(itemstack, world, entity, i, flag);
+    public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity,
+                              @Nullable EquipmentSlot equipmentSlot) {
+        meleeComponent.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
+        rangedComponent.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
     }
 
     @Override

@@ -8,11 +8,14 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -159,15 +162,14 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     public void addAdditionalSaveData(CompoundTag nbttagcompound) {
         super.addAdditionalSaveData(nbttagcompound);
         ItemStack thrownItem = getWeapon();
-        nbttagcompound.put("thrI", thrownItem.saveOptional(registryAccess()));
+        nbttagcompound.put("thrI", thrownItem.save(registryAccess()));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
         super.readAdditionalSaveData(nbttagcompound);
-        if (nbttagcompound.contains("thrI")) {
-            setThrownItemStack(ItemStack.parseOptional(registryAccess(), nbttagcompound.getCompound("thrI")));
-        }
+        RegistryOps<Tag> registryops = registryAccess().createSerializationContext(NbtOps.INSTANCE);
+        setThrownItemStack(nbttagcompound.read("thrI", ItemStack.CODEC, registryops).orElse(ItemStack.EMPTY));
     }
 
 }

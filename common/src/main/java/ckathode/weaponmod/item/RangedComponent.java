@@ -17,11 +17,13 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -37,6 +39,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class RangedComponent extends AbstractWeaponComponent {
 
@@ -94,9 +97,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving,
-                             LivingEntity attacker) {
-        return false;
+    public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                          @NotNull LivingEntity attacker) {
     }
 
     @Override
@@ -184,8 +186,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int i,
-                              boolean flag) {
+    public void inventoryTick(@NotNull ItemStack itemStack, @NotNull ServerLevel serverLevel,
+                              @NotNull Entity entity, @Nullable EquipmentSlot equipmentSlot) {
     }
 
     public void soundEmpty(ItemStack itemstack, Level world, Player entityplayer) {

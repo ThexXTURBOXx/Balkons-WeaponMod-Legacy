@@ -1,9 +1,11 @@
 package ckathode.weaponmod.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -14,6 +16,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractWeaponComponent {
 
@@ -44,7 +47,8 @@ public abstract class AbstractWeaponComponent {
     public abstract boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos,
                                       LivingEntity entity);
 
-    public abstract boolean hurtEnemy(ItemStack stack, LivingEntity victim, LivingEntity attacker);
+    public abstract void hurtEnemy(@NotNull ItemStack stack, @NotNull LivingEntity victim,
+                                   @NotNull LivingEntity attacker);
 
     public abstract float getAttackDelay(ItemStack stack, LivingEntity victim, LivingEntity attacker);
 
@@ -66,6 +70,7 @@ public abstract class AbstractWeaponComponent {
 
     public abstract boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int i);
 
-    public abstract void inventoryTick(ItemStack stack, Level level, Entity entity, int i, boolean flag);
+    public abstract void inventoryTick(@NotNull ItemStack itemstack, @NotNull ServerLevel world,
+                                       @NotNull Entity entity, @Nullable EquipmentSlot slot);
 
 }

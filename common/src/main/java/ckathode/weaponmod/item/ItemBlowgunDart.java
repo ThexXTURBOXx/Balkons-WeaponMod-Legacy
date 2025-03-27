@@ -7,7 +7,6 @@ import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
 import com.mojang.datafixers.util.Pair;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -24,6 +23,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,10 +45,10 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
-                                TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
+                                Consumer<Component> consumer, TooltipFlag tooltipFlag) {
         PotionContents.addPotionTooltip(Collections.singleton(dartType.potionEffect),
-                tooltipComponents::add, 1.0f, context.tickRate());
+                consumer, 1.0f, context.tickRate());
     }
 
     @NotNull

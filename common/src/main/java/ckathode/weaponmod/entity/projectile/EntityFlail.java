@@ -203,7 +203,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
         super.readAdditionalSaveData(nbttagcompound);
-        flailDamage = nbttagcompound.getFloat("fDmg");
+        flailDamage = nbttagcompound.getFloatOr("fDmg", 1);
     }
 
     @Override

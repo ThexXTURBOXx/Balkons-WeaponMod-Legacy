@@ -4,6 +4,7 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemMelee extends Item implements IItemWeapon {
 
@@ -61,19 +63,14 @@ public class ItemMelee extends Item implements IItemWeapon {
     }
 
     @Override
-    public boolean canAttackBlock(BlockState blockState, Level level, BlockPos blockPos, Player player) {
-        return !player.isCreative();
-    }
-
-    @Override
     public void postHurtEnemy(ItemStack itemStack, LivingEntity livingEntity, LivingEntity livingEntity2) {
         itemStack.hurtAndBreak(1, livingEntity2, EquipmentSlot.MAINHAND);
     }
 
     @Override
-    public boolean hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
-                             @NotNull LivingEntity attacker) {
-        return meleeComponent.hurtEnemy(itemstack, entityliving, attacker);
+    public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                          @NotNull LivingEntity attacker) {
+        meleeComponent.hurtEnemy(itemstack, entityliving, attacker);
     }
 
     @Override
@@ -118,9 +115,9 @@ public class ItemMelee extends Item implements IItemWeapon {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack itemstack, @NotNull Level world,
-                              @NotNull Entity entity, int i, boolean flag) {
-        meleeComponent.inventoryTick(itemstack, world, entity, i, flag);
+    public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity,
+                              @Nullable EquipmentSlot equipmentSlot) {
+        meleeComponent.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
     }
 
     @Override

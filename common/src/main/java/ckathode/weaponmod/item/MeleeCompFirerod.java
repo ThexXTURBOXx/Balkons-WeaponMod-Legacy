@@ -3,16 +3,18 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeCompFirerod extends MeleeComponent {
 
@@ -24,12 +26,10 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
-        boolean flag = super.hurtEnemy(itemstack, entityliving, entityliving1);
-        if (flag) {
-            entityliving.igniteForSeconds(12 + entityliving.getRandom().nextInt(3));
-        }
-        return flag;
+    public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                          @NotNull LivingEntity entityliving1) {
+        super.hurtEnemy(itemstack, entityliving, entityliving1);
+        entityliving.igniteForSeconds(12 + entityliving.getRandom().nextInt(3));
     }
 
     @Override
@@ -38,12 +38,13 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
-    public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int i, boolean flag) {
-        super.inventoryTick(itemstack, world, entity, i, flag);
+    public void inventoryTick(@NotNull ItemStack itemStack, @NotNull ServerLevel serverLevel,
+                              @NotNull Entity entity, @Nullable EquipmentSlot equipmentSlot) {
+        super.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
         if (!(entity instanceof Player player)) return;
         if (player.isInWater()) return;
-        boolean mainHand = player.getMainHandItem() == itemstack;
-        boolean offHand = player.getOffhandItem() == itemstack;
+        boolean mainHand = player.getMainHandItem() == itemStack;
+        boolean offHand = player.getOffhandItem() == itemStack;
         if (!mainHand && !offHand) return;
 
         float f = 1.0f;
@@ -53,13 +54,13 @@ public class MeleeCompFirerod extends MeleeComponent {
         float particleY = -Mth.sin((player.getXRot() / 180F) * 3.141593F) + player.getEyeHeight();
         float particleZ =
                 Mth.cos(((player.getYRot() + f1) / 180F) * 3.141593F) * Mth.cos((player.getXRot() / 180F) * 3.141593F) * f;
-        if (world.isClientSide()) {
+        if (serverLevel.isClientSide()) {
             if (player.getRandom().nextInt(5) == 0) {
-                world.addParticle(ParticleTypes.FLAME, player.getX() + particleX, player.getY() + particleY,
+                serverLevel.addParticle(ParticleTypes.FLAME, player.getX() + particleX, player.getY() + particleY,
                         player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
             }
             if (player.getRandom().nextInt(5) == 0) {
-                world.addParticle(ParticleTypes.SMOKE, player.getX() + particleX, player.getY() + particleY,
+                serverLevel.addParticle(ParticleTypes.SMOKE, player.getX() + particleX, player.getY() + particleY,
                         player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
             }
         }

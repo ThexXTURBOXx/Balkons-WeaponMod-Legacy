@@ -1,18 +1,21 @@
 package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WeaponModConfig;
+import com.mojang.serialization.Codec;
 import dev.architectury.extensions.network.EntitySpawnExtension;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -20,6 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -162,7 +166,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             float n2 = (float) (Mth.atan2(d1, f) * 180.0 / Math.PI);
             setXRot(n2);
             xRotO = n2;
-            moveTo(getX(), getY(), getZ(), getYRot(), getXRot());
+            snapTo(getX(), getY(), getZ(), getYRot(), getXRot());
             ticksInGround = 0;
         }
     }
@@ -335,7 +339,8 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             }
             Entity shooter = getOwner();
             if (shooter instanceof ServerPlayer sp && !entity.equals(getOwner()) && entity instanceof Player) {
-                sp.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0f));
+                sp.connection.send(new ClientboundGameEventPacket(
+                        ClientboundGameEventPacket.PLAY_ARROW_HIT_SOUND, 0.0f));
             }
         }
     }
@@ -357,7 +362,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         shakeTime = getMaxArrowShake();
         playHitSound();
         if (inBlockState != null) {
-            inBlockState.entityInside(level(), blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP);
         }
     }
 
@@ -514,19 +519,16 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
-        xTile = nbttagcompound.getInt("xTile");
-        yTile = nbttagcompound.getInt("yTile");
-        zTile = nbttagcompound.getInt("zTile");
-        if (nbttagcompound.contains("inBlockState", 10)) {
-            inBlockState = NbtUtils.readBlockState(level().holderLookup(Registries.BLOCK),
-                    nbttagcompound.getCompound("inBlockState"));
-        }
-        shakeTime = (nbttagcompound.getByte("shake") & 0xFF);
-        inGround = nbttagcompound.getBoolean("inGround");
-        beenInGround = nbttagcompound.getBoolean("beenInGround");
-        pickupStatus = PickupStatus.getByOrdinal(nbttagcompound.getByte("pickup"));
-        firedFromWeapon = nbttagcompound.contains("weapon", 10) ?
-                ItemStack.parse(registryAccess(), nbttagcompound.getCompound("weapon")).orElse(null) : null;
+        RegistryOps<Tag> registryops = registryAccess().createSerializationContext(NbtOps.INSTANCE);
+        xTile = nbttagcompound.getIntOr("xTile", (int) getX());
+        yTile = nbttagcompound.getIntOr("yTile", (int) getY());
+        zTile = nbttagcompound.getIntOr("zTile", (int) getZ());
+        inBlockState = nbttagcompound.read("inBlockState", BlockState.CODEC, registryops).orElse(null);
+        shakeTime = (nbttagcompound.getByteOr("shake", (byte) 0) & 0xFF);
+        inGround = nbttagcompound.getBooleanOr("inGround", false);
+        beenInGround = nbttagcompound.getBooleanOr("beenInGround", false);
+        pickupStatus = nbttagcompound.read("pickup", PickupStatus.CODEC).orElse(PickupStatus.DISALLOWED);
+        firedFromWeapon = nbttagcompound.read("weapon", ItemStack.CODEC, registryops).orElse(null);
     }
 
     public enum PickupStatus {
@@ -534,6 +536,9 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         ALLOWED,
         CREATIVE_ONLY,
         OWNER_ONLY;
+
+        public static final Codec<PickupStatus> CODEC = Codec.BYTE.xmap(PickupStatus::getByOrdinal,
+                status -> (byte) status.ordinal());
 
         public static PickupStatus getByOrdinal(int ordinal) {
             if (ordinal < 0 || ordinal > values().length) {

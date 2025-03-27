@@ -158,7 +158,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     @Override
     public void readAdditionalSaveData(CompoundTag nbttagcompound) {
         super.readAdditionalSaveData(nbttagcompound);
-        setDartEffectType(nbttagcompound.getByte("darttype"));
+        setDartEffectType(nbttagcompound.getByteOr("darttype", (byte) 0));
     }
 
 }

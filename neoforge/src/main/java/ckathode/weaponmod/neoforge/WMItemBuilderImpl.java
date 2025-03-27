@@ -27,170 +27,64 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WMItemBuilderImpl {
 
     public static ItemBlowgunDart createItemBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
-        return new ItemBlowgunDart(dartType, id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemBlowgunDart) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemBlowgunDart(dartType, id);
     }
 
     public static ItemCannon createItemCannon(@NotNull ResourceLocation id) {
-        return new ItemCannon(id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemCannon) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemCannon(id);
     }
 
     public static ItemDummy createItemDummy(@NotNull ResourceLocation id) {
-        return new ItemDummy(id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemDummy) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemDummy(id);
     }
 
     public static ItemDynamite createItemDynamite(@NotNull ResourceLocation id) {
-        return new ItemDynamite(id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemDynamite) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemDynamite(id);
     }
 
     public static ItemFlail createItemFlail(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
-        return new ItemFlail(meleeComponent, id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemFlail) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemFlail(meleeComponent, id);
     }
 
     public static ItemJavelin createItemJavelin(@NotNull ResourceLocation id) {
-        return new ItemJavelin(id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemJavelin) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemJavelin(id);
     }
 
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
-        return new ItemMelee(meleeComponent, id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemMelee) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemMelee(meleeComponent, id);
     }
 
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull Item.Properties properties) {
-        return new ItemMelee(meleeComponent, properties) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemMelee) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemMelee(meleeComponent, properties);
     }
 
     public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem,
                                               @NotNull ResourceLocation id) {
-        return new ItemMusket(meleeComponent, bayonetItem, id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemMusket) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemMusket(meleeComponent, bayonetItem, id);
     }
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
                                                 @NotNull ResourceLocation id) {
-        return new ItemShooter(rangedComponent, meleeComponent, id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemShooter) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemShooter(rangedComponent, meleeComponent, id);
     }
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
                                                 Item.Properties properties) {
-        return new ItemShooter(rangedComponent, meleeComponent, properties) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof ItemShooter) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new ItemShooter(rangedComponent, meleeComponent, properties);
     }
 
     public static WMItem createWMItem(@NotNull ResourceLocation id) {
-        return new WMItem(id) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof WMItem) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new WMItem(id);
     }
 
     public static WMItem createWMItem(Item.Properties properties) {
-        return new WMItem(properties) {
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof WMItem) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
-            }
-        };
+        return new WMItem(properties);
     }
 
     public static WMItemProjectile createWMItemProjectile(WMDispenserExtension extension,
@@ -227,14 +121,6 @@ public class WMItemBuilderImpl {
                                       @NotNull BlockSource blockSource,
                                       @NotNull Direction direction) {
                 extension.playAnimation(origFn, blockSource, direction);
-            }
-
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof WMItemProjectile) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
             }
 
         };
@@ -274,14 +160,6 @@ public class WMItemBuilderImpl {
                                       @NotNull BlockSource blockSource,
                                       @NotNull Direction direction) {
                 extension.playAnimation(origFn, blockSource, direction);
-            }
-
-            @Override
-            public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
-                if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
-                    if (stack.getItem() instanceof WMItemProjectile) return true;
-                }
-                return super.canPerformAction(stack, itemAbility);
             }
 
         };

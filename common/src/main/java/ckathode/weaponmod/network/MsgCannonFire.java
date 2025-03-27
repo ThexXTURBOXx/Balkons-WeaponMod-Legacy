@@ -10,21 +10,15 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-public class MsgCannonFire implements CustomPacketPayload {
+public record MsgCannonFire(int cannonEntityID) implements CustomPacketPayload {
 
     public static final Type<MsgCannonFire> CANNON_FIRE_PACKET_TYPE = new Type<>(BalkonsWeaponMod.id("cannon_fire"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgCannonFire> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, p -> p.cannonEntityID,
+            ByteBufCodecs.INT, MsgCannonFire::cannonEntityID,
             MsgCannonFire::new);
-
-    private final int cannonEntityID;
 
     public MsgCannonFire(EntityCannon entity) {
         this(entity.getId());
-    }
-
-    public MsgCannonFire(int id) {
-        cannonEntityID = id;
     }
 
     @NotNull

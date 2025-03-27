@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,7 +29,6 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -188,7 +188,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         super.causeFallDamage(fallDistance, multiplier, source);
         if (!onGround()) {
             return false;
@@ -214,9 +214,9 @@ public class EntityDummy extends Entity {
     @NotNull
     @Override
     public InteractionResult interact(Player entityplayer, @NotNull InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getInventory().getSelected();
+        ItemStack itemstack = entityplayer.getInventory().getSelectedItem();
         if (!itemstack.isEmpty()) {
-            if (itemstack.getItem() instanceof IItemWeapon || itemstack.getItem() instanceof SwordItem || itemstack.getItem() instanceof BowItem || itemstack.getItem() instanceof ShieldItem) {
+            if (itemstack.getItem() instanceof IItemWeapon || itemstack.is(ItemTags.SWORDS) || itemstack.getItem() instanceof BowItem || itemstack.getItem() instanceof ShieldItem) {
                 return InteractionResult.FAIL;
             }
         }

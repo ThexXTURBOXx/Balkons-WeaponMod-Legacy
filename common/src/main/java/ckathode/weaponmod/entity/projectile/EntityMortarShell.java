@@ -20,6 +20,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -139,7 +140,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         setPos(pos.x, pos.y, pos.z);
         inGround = true;
         if (inBlockState != null) {
-            inBlockState.entityInside(level(), blockpos, this);
+            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP);
         }
         createCrater();
     }

@@ -12,12 +12,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemFlail extends ItemMelee {
 
@@ -53,8 +55,8 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack itemstack, @NotNull Level world,
-                              @NotNull Entity entity, int i, boolean flag) {
+    public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity,
+                              @Nullable EquipmentSlot equipmentSlot) {
         if (!(entity instanceof Player player)) {
             return;
         }
@@ -67,10 +69,10 @@ public class ItemFlail extends ItemMelee {
         } else if (itemstack2.getItem() == this) {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
-                Entity entity2 = world.getEntity(id);
+                Entity entity2 = serverLevel.getEntity(id);
                 if (entity2 instanceof EntityFlail) {
                     ((EntityFlail) entity2).setOwner(player);
-                    ((EntityFlail) entity2).setThrownItemStack(itemstack);
+                    ((EntityFlail) entity2).setThrownItemStack(itemStack);
                 }
             }
         }
@@ -102,10 +104,9 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    public boolean hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
-                             @NotNull LivingEntity attacker) {
+    public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
+                          @NotNull LivingEntity attacker) {
         use(attacker.level(), (Player) attacker, InteractionHand.MAIN_HAND);
-        return true;
     }
 
     public void throwFlail(ItemStack itemstack, Level world, Player entityplayer) {

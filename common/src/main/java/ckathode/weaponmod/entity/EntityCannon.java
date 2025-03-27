@@ -119,7 +119,7 @@ public class EntityCannon extends Boat {
             }
         } else if (damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             Player player = (Player) damagesource.getEntity();
-            if (player != null && player.getInventory().getSelected().isEmpty()) {
+            if (player != null && player.getInventory().getSelectedItem().isEmpty()) {
                 if (!player.isCreative()) {
                     spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON.get(), 1);
                     if (isLoaded() || isLoading()) {
@@ -218,7 +218,7 @@ public class EntityCannon extends Boat {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         super.causeFallDamage(fallDistance, multiplier, source);
         int i = Mth.floor(fallDistance);
         i *= 2;
@@ -332,7 +332,7 @@ public class EntityCannon extends Boat {
 
     @Override
     protected void addAdditionalSaveData(CompoundTag nbttagcompound) {
-        nbttagcompound.putFloat("falld", fallDistance);
+        nbttagcompound.putDouble("falld", fallDistance);
         nbttagcompound.putBoolean("load", isLoaded());
         nbttagcompound.putShort("ldtime", (short) getLoadTimer());
     }
@@ -341,9 +341,9 @@ public class EntityCannon extends Boat {
     protected void readAdditionalSaveData(CompoundTag nbttagcompound) {
         setPos(getX(), getY(), getZ());
         setRot(getYRot(), getXRot());
-        fallDistance = nbttagcompound.getFloat("falld");
-        setLoaded(nbttagcompound.getBoolean("load"));
-        setLoadTimer(nbttagcompound.getShort("ldtime"));
+        fallDistance = nbttagcompound.getDoubleOr("falld", 0);
+        setLoaded(nbttagcompound.getBooleanOr("load", false));
+        setLoadTimer(nbttagcompound.getShortOr("ldtime", (short) 0));
     }
 
     @NotNull
