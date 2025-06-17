@@ -60,10 +60,7 @@ public class RangedCompBlowgun extends RangedComponent {
                         .get(Enchantments.INFINITY).orElse(null);
         if (!entityplayer.isCreative() &&
             (infinity == null || EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) == 0)) {
-            dartstack.shrink(1);
-            if (dartstack.isEmpty()) {
-                entityplayer.getInventory().removeItem(dartstack);
-            }
+            consumeAmmo(entityplayer);
         }
         if (!world.isClientSide) {
             EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer, itemstack);
