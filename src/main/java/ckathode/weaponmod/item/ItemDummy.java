@@ -74,4 +74,5 @@ public class ItemDummy extends WMItem {
         entityplayer.addStat(StatList.getObjectUseStats(this));
         return EnumActionResult.SUCCESS;
     }
+
 }

@@ -53,4 +53,5 @@ public class ItemDynamite extends WMItem {
     public boolean isFull3D() {
         return true;
     }
+
 }
