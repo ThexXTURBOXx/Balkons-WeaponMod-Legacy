@@ -61,10 +61,7 @@ public class ItemDummy extends WMItem {
         }
         world.spawnEntityInWorld(entitydummy);
         if (!entityplayer.capabilities.isCreativeMode) {
-            itemstack.splitStack(1);
-            if (itemstack.stackSize <= 0) {
-                deleteStack(entityplayer.inventory, itemstack);
-            }
+            --itemstack.stackSize;
         }
         entityplayer.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
         return true;

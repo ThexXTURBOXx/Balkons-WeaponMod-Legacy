@@ -24,7 +24,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 public class EntityCannon extends EntityBoat {
     public static final String NAME = "cannon";
@@ -338,30 +337,8 @@ public class EntityCannon extends EntityBoat {
         return true;
     }
 
-    private ItemStack findAmmo(EntityPlayer player, Item itemAmmo) {
-        for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
-            ItemStack itemstack = player.inventory.getStackInSlot(i);
-            if (isAmmo(itemstack, itemAmmo)) {
-                return itemstack;
-            }
-        }
-        return null;
-    }
-
-    protected boolean isAmmo(@Nullable ItemStack stack, Item itemAmmo) {
-        return stack != null && stack.getItem() == itemAmmo;
-    }
-
     protected boolean consumeAmmo(EntityPlayer entityplayer, Item itemAmmo) {
-        ItemStack stackAmmo = findAmmo(entityplayer, itemAmmo);
-        if (stackAmmo == null) {
-            return false;
-        }
-        stackAmmo.splitStack(1);
-        if (stackAmmo.stackSize <= 0) {
-            WMItem.deleteStack(entityplayer.inventory, stackAmmo);
-        }
-        return true;
+        return WMItem.consumeInventoryItem(entityplayer, itemAmmo);
     }
 
     public boolean riddenByPlayer() {

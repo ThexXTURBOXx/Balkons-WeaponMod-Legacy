@@ -26,10 +26,7 @@ public class ItemDynamite extends WMItem {
     @Override
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (!entityplayer.capabilities.isCreativeMode) {
-            itemstack.splitStack(1);
-            if (itemstack.stackSize <= 0) {
-                deleteStack(entityplayer.inventory, itemstack);
-            }
+            --itemstack.stackSize;
         }
         world.playSoundAtEntity(entityplayer, "game.tnt.primed", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
         if (!world.isRemote) {

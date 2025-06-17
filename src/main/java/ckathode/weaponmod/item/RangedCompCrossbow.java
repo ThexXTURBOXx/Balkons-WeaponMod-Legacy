@@ -43,10 +43,7 @@ public class RangedCompCrossbow extends RangedComponent {
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {
             resetReload(world, itemstack);
         }
-        itemstack.damageItem(damage, entityplayer);
-        if (itemstack.stackSize <= 0) {
-            WMItem.deleteStack(entityplayer.inventory, itemstack);
-        }
+        WMItem.damageItem(itemstack, damage, entityplayer);
         postShootingEffects(itemstack, entityplayer, world);
         resetReload(world, itemstack);
     }

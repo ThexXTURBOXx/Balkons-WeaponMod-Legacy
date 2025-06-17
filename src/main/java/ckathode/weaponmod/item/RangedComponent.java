@@ -11,7 +11,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -232,32 +231,13 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     protected ItemStack findAmmo(EntityPlayer entityplayer) {
-        if (isAmmo(entityplayer.getHeldItem())) {
-            return entityplayer.getHeldItem();
-        }
-        for (int i = 0; i < entityplayer.inventory.getSizeInventory(); ++i) {
-            ItemStack itemstack = entityplayer.inventory.getStackInSlot(i);
-            if (isAmmo(itemstack)) {
-                return itemstack;
-            }
-        }
-        return null;
-    }
-
-    protected boolean isAmmo(@Nullable ItemStack stack) {
-        return stack != null && getAmmoItems().contains(stack.getItem());
+        int slot = WMItem.findAnyItemSlot(entityplayer, getAmmoItems());
+        if (slot < 0) return null;
+        return entityplayer.inventory.mainInventory[slot];
     }
 
     protected boolean consumeAmmo(EntityPlayer entityplayer) {
-        ItemStack itemAmmo = findAmmo(entityplayer);
-        if (itemAmmo == null) {
-            return false;
-        }
-        itemAmmo.splitStack(1);
-        if (itemAmmo.stackSize <= 0) {
-            WMItem.deleteStack(entityplayer.inventory, itemAmmo);
-        }
-        return true;
+        return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoItems());
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, World world, EntityPlayer entityplayer) {

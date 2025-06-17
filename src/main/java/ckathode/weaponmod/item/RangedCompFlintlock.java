@@ -42,10 +42,7 @@ public class RangedCompFlintlock extends RangedComponent {
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.damageItem(damage, entityplayer);
-        if (itemstack.stackSize <= 0) {
-            WMItem.deleteStack(entityplayer.inventory, itemstack);
-        }
+        WMItem.damageItem(itemstack, damage, entityplayer);
         postShootingEffects(itemstack, entityplayer, world);
     }
 

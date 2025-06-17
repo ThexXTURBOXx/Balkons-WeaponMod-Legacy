@@ -49,10 +49,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             world.playSoundAtEntity(entityplayer, "random.bow", 0.6F,
                     1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 1.0F));
             if (!entityplayer.capabilities.isCreativeMode) {
-                itemstack.splitStack(1);
-                if (itemstack.stackSize <= 0) {
-                    WMItem.deleteStack(entityplayer.inventory, itemstack);
-                }
+                WMItem.decrStackSize(itemstack, 1, entityliving);
             }
         }
     }

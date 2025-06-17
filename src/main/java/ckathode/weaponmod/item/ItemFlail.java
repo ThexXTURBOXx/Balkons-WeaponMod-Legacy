@@ -73,21 +73,12 @@ public class ItemFlail extends ItemMelee {
     @Override
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         removePreviousFlail(world, entityplayer);
+        entityplayer.swingItem();
+        if (!entityplayer.capabilities.isCreativeMode) {
+            WMItem.damageItem(itemstack, 1, entityplayer);
+        }
         if (itemstack.stackSize > 0) {
-            entityplayer.swingItem();
-            if (!entityplayer.capabilities.isCreativeMode) {
-                itemstack.damageItem(1, entityplayer);
-                if (itemstack.stackSize <= 0) {
-                    WMItem.deleteStack(entityplayer.inventory, itemstack);
-                }
-            }
-            if (itemstack.stackSize > 0) {
-                throwFlail(itemstack, world, entityplayer);
-            } else {
-                WMItem.deleteStack(entityplayer.inventory, itemstack);
-            }
-        } else {
-            WMItem.deleteStack(entityplayer.inventory, itemstack);
+            throwFlail(itemstack, world, entityplayer);
         }
         return itemstack;
     }
