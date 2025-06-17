@@ -44,5 +44,4 @@ public class ItemDynamite extends WMItem {
         }
         return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
     }
-
 }

@@ -32,9 +32,6 @@ public class ItemJavelin extends WMItem {
     public void onPlayerStoppedUsing(ItemStack itemstack, @Nonnull World world,
                                      @Nonnull LivingEntity entityLiving, int i) {
         PlayerEntity entityplayer = (PlayerEntity) entityLiving;
-        if (itemstack.isEmpty()) {
-            return;
-        }
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -55,10 +52,7 @@ public class ItemJavelin extends WMItem {
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
                 , SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
-            itemstack.shrink(1);
-            if (itemstack.isEmpty()) {
-                entityplayer.inventory.deleteStack(itemstack);
-            }
+            WMItem.decrStackSize(itemstack, 1, entityLiving);
         }
     }
 
@@ -77,12 +71,8 @@ public class ItemJavelin extends WMItem {
     @Override
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world, PlayerEntity entityplayer,
                                                     @Nonnull Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
-            return new ActionResult<>(ActionResultType.FAIL, itemstack);
-        }
         entityplayer.setActiveHand(hand);
-        return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+        return new ActionResult<>(ActionResultType.SUCCESS, entityplayer.getHeldItem(hand));
     }
 
 }
