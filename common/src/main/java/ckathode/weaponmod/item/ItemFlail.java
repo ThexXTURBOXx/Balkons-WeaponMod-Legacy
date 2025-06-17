@@ -84,18 +84,16 @@ public class ItemFlail extends ItemMelee {
             return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
         }
         removePreviousFlail(world, entityplayer);
+        entityplayer.swing(hand);
+        if (!entityplayer.isCreative()) {
+            Level level = entityplayer.level();
+            if (level instanceof ServerLevel serverLevel) {
+                itemstack.hurtAndBreak(1, serverLevel, entityplayer instanceof ServerPlayer player ? player : null,
+                        i -> setThrown(entityplayer, false));
+            }
+        }
         if (!itemstack.isEmpty()) {
-            entityplayer.swing(hand);
-            if (!entityplayer.isCreative()) {
-                Level level = entityplayer.level();
-                if (level instanceof ServerLevel serverLevel) {
-                    itemstack.hurtAndBreak(1, serverLevel, entityplayer instanceof ServerPlayer player ? player : null,
-                            i -> setThrown(entityplayer, false));
-                }
-            }
-            if (!itemstack.isEmpty()) {
-                throwFlail(itemstack, world, entityplayer);
-            }
+            throwFlail(itemstack, world, entityplayer);
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
     }

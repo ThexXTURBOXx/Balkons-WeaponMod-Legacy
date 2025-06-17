@@ -77,7 +77,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
                     SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 0.6f,
                     1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 1.0f));
             if (!entityplayer.isCreative()) {
-                itemstack.shrink(1);
+                WMItem.decrStackSize(itemstack, 1, entityliving);
             }
         }
     }
