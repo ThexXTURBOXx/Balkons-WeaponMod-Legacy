@@ -85,21 +85,12 @@ public class ItemFlail extends ItemMelee {
             return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
         removePreviousFlail(world, entityplayer);
+        entityplayer.swingArm(hand);
+        if (!entityplayer.isCreative()) {
+            itemstack.damageItem(1, entityplayer);
+        }
         if (itemstack.stackSize > 0) {
-            entityplayer.swingArm(hand);
-            if (!entityplayer.isCreative()) {
-                itemstack.damageItem(1, entityplayer);
-                if (itemstack.stackSize <= 0) {
-                    entityplayer.inventory.deleteStack(itemstack);
-                }
-            }
-            if (itemstack.stackSize > 0) {
-                throwFlail(itemstack, world, entityplayer);
-            } else {
-                entityplayer.inventory.deleteStack(itemstack);
-            }
-        } else {
-            entityplayer.inventory.deleteStack(itemstack);
+            throwFlail(itemstack, world, entityplayer);
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }

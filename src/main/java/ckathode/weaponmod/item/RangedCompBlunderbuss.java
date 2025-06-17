@@ -36,9 +36,6 @@ public class RangedCompBlunderbuss extends RangedComponent {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         itemstack.damageItem(damage, entityplayer);
-        if (itemstack.stackSize <= 0) {
-            entityplayer.inventory.deleteStack(itemstack);
-        }
         postShootingEffects(itemstack, entityplayer, world);
     }
 
