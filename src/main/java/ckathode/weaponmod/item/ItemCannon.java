@@ -77,4 +77,5 @@ public class ItemCannon extends WMItem {
         entityplayer.addStat(StatList.ITEM_USED.get(this));
         return EnumActionResult.SUCCESS;
     }
+
 }
