@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
+import ckathode.weaponmod.item.WMItem;
 import dev.architectury.networking.NetworkManager;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -380,31 +381,8 @@ public class EntityCannon extends Boat {
         }
         return InteractionResult.PASS;
     }
-
-    private ItemStack findAmmo(Player player, Item itemAmmo) {
-        for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
-            ItemStack itemstack = player.getInventory().getItem(i);
-            if (isAmmo(itemstack, itemAmmo)) {
-                return itemstack;
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    protected boolean isAmmo(ItemStack stack, Item itemAmmo) {
-        return stack.getItem() == itemAmmo;
-    }
-
     protected boolean consumeAmmo(Player entityplayer, Item itemAmmo) {
-        ItemStack stackAmmo = findAmmo(entityplayer, itemAmmo);
-        if (stackAmmo.isEmpty()) {
-            return false;
-        }
-        stackAmmo.shrink(1);
-        if (stackAmmo.isEmpty()) {
-            entityplayer.getInventory().removeItem(stackAmmo);
-        }
-        return true;
+        return WMItem.consumeInventoryItem(entityplayer, itemAmmo);
     }
 
     public boolean riddenByPlayer() {
