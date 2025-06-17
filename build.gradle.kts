@@ -6,7 +6,6 @@ plugins {
     idea
     java
     id("gg.essential.loom") version "1.6.9999-fg3"
-    // TODO: Migrate back when PR is merged: id("gg.essential.loom") version "1.6.+"
 }
 
 val minecraft_version: String by project

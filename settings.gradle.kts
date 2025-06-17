@@ -9,7 +9,7 @@ pluginManagement {
         maven("https://repo.spongepowered.org/maven/")
         maven("https://repo.sk1er.club/repository/maven-releases/")
         maven("https://repo.legacyfabric.net/repository/legacyfabric/")
-        maven("https://femtopedia.de/maven/") // TODO: Remove when PR is merged
+        maven("https://femtopedia.de/maven/")
     }
     resolutionStrategy {
         eachPlugin {
