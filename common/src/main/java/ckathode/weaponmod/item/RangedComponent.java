@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -244,35 +246,15 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     protected ItemStack findAmmo(Player entityplayer) {
-        if (isAmmo(entityplayer.getItemInHand(InteractionHand.OFF_HAND))) {
-            return entityplayer.getItemInHand(InteractionHand.OFF_HAND);
-        }
-        if (isAmmo(entityplayer.getItemInHand(InteractionHand.MAIN_HAND))) {
-            return entityplayer.getItemInHand(InteractionHand.MAIN_HAND);
-        }
-        for (int i = 0; i < entityplayer.inventory.getContainerSize(); ++i) {
-            ItemStack itemstack = entityplayer.inventory.getItem(i);
-            if (isAmmo(itemstack)) {
-                return itemstack;
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    protected boolean isAmmo(ItemStack stack) {
-        return getAmmoItems().contains(stack.getItem());
+        Tuple<InteractionHand, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoItems());
+        if (slot == null) return ItemStack.EMPTY;
+        NonNullList<ItemStack> inv = slot.getA() == InteractionHand.OFF_HAND ? entityplayer.inventory.offhand :
+                entityplayer.inventory.items;
+        return inv.get(slot.getB());
     }
 
     protected boolean consumeAmmo(Player entityplayer) {
-        ItemStack itemAmmo = findAmmo(entityplayer);
-        if (itemAmmo.isEmpty()) {
-            return false;
-        }
-        itemAmmo.shrink(1);
-        if (itemAmmo.isEmpty()) {
-            entityplayer.inventory.removeItem(itemAmmo);
-        }
-        return true;
+        return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoItems());
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, Player entityplayer) {
