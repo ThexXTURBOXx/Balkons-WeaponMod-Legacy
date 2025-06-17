@@ -1,9 +1,18 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WMItemBuilder;
+import dev.architectury.injectables.annotations.ExpectPlatform;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
+import net.minecraft.core.NonNullList;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +68,50 @@ public class WMItem extends Item {
 
     public static UUID getAttackSpeedModifierUUID() {
         return Item.BASE_ATTACK_SPEED_UUID;
+    }
+
+    @ExpectPlatform
+    public static void onPlayerDestroyItem(Player player, ItemStack stack, InteractionHand hand) {
+        // Will get replaced at run time
+    }
+
+    public static void decrStackSize(ItemStack stack, int amount, LivingEntity entity) {
+        stack.shrink(amount);
+        if (stack.isEmpty() && entity instanceof Player) {
+            Player player = (Player) entity;
+            onPlayerDestroyItem(player, stack, player.swingingArm);
+        }
+    }
+
+    public static boolean isItemInList(ItemStack stack, Collection<Item> items) {
+        return stack != null && items.contains(stack.getItem());
+    }
+
+    @Nullable
+    public static Tuple<InteractionHand, Integer> findAnyItemSlot(Player player, Collection<Item> item) {
+        if (isItemInList(player.getMainHandItem(), item))
+            return new Tuple<>(InteractionHand.MAIN_HAND, player.getInventory().selected);
+        if (isItemInList(player.getOffhandItem(), item))
+            return new Tuple<>(InteractionHand.OFF_HAND, 0);
+        for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
+            ItemStack itemstack = player.getInventory().getItem(i);
+            if (isItemInList(itemstack, item))
+                return new Tuple<>(InteractionHand.MAIN_HAND, i);
+        }
+        return null;
+    }
+
+    public static boolean consumeInventoryItem(Player player, Item item) {
+        return consumeAnyInventoryItem(player, Collections.singletonList(item));
+    }
+
+    public static boolean consumeAnyInventoryItem(Player player, Collection<Item> item) {
+        Tuple<InteractionHand, Integer> slot = findAnyItemSlot(player, item);
+        if (slot == null) return false;
+        NonNullList<ItemStack> inv = slot.getA() == InteractionHand.OFF_HAND ? player.getInventory().offhand :
+                player.getInventory().items;
+        inv.get(slot.getB()).shrink(1);
+        return true;
     }
 
 }
