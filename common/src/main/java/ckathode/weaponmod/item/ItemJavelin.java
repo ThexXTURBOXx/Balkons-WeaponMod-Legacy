@@ -34,9 +34,6 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
     public boolean releaseUsing(ItemStack itemstack, @NotNull Level world,
                                 @NotNull LivingEntity entityLiving, int i) {
         Player entityplayer = (Player) entityLiving;
-        if (itemstack.isEmpty()) {
-            return false;
-        }
         int j = getUseDuration(itemstack, entityLiving) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -57,10 +54,7 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
                 SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!entityplayer.isCreative()) {
-            itemstack.shrink(1);
-            if (itemstack.isEmpty()) {
-                entityplayer.getInventory().removeItem(itemstack);
-            }
+            WMItem.decrStackSize(itemstack, 1, entityLiving);
         }
         return true;
     }
@@ -79,10 +73,6 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
     @NotNull
     @Override
     public InteractionResult use(@NotNull Level world, Player entityplayer, @NotNull InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
-        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
-            return InteractionResult.FAIL;
-        }
         entityplayer.startUsingItem(hand);
         return InteractionResult.SUCCESS;
     }

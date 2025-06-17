@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -239,35 +240,14 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     protected ItemStack findAmmo(Player entityplayer) {
-        if (isAmmo(entityplayer.getItemInHand(InteractionHand.OFF_HAND))) {
-            return entityplayer.getItemInHand(InteractionHand.OFF_HAND);
-        }
-        if (isAmmo(entityplayer.getItemInHand(InteractionHand.MAIN_HAND))) {
-            return entityplayer.getItemInHand(InteractionHand.MAIN_HAND);
-        }
-        for (int i = 0; i < entityplayer.getInventory().getContainerSize(); ++i) {
-            ItemStack itemstack = entityplayer.getInventory().getItem(i);
-            if (isAmmo(itemstack)) {
-                return itemstack;
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    protected boolean isAmmo(ItemStack stack) {
-        return getAmmoItems().contains(stack.getItem());
+        Tuple<EquipmentSlot, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoItems());
+        if (slot == null) return ItemStack.EMPTY;
+        return slot.getA() == EquipmentSlot.MAINHAND ? entityplayer.getInventory().getItem(slot.getB()) :
+                entityplayer.getItemBySlot(slot.getA());
     }
 
     protected boolean consumeAmmo(Player entityplayer) {
-        ItemStack itemAmmo = findAmmo(entityplayer);
-        if (itemAmmo.isEmpty()) {
-            return false;
-        }
-        itemAmmo.shrink(1);
-        if (itemAmmo.isEmpty()) {
-            entityplayer.getInventory().removeItem(itemAmmo);
-        }
-        return true;
+        return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoItems());
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, Player entityplayer) {
