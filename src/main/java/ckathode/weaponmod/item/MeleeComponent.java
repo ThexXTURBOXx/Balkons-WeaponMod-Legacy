@@ -71,10 +71,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block,
                                     BlockPos pos, EntityLivingBase entityliving) {
         if (block.getBlockHardness(world, pos) != 0.0f) {
-            itemstack.damageItem(meleeSpecs.dmgFromBlock, entityliving);
-            if (itemstack.stackSize <= 0 && entityliving instanceof EntityPlayer) {
-                WMItem.deleteStack(((EntityPlayer) entityliving).inventory, itemstack);
-            }
+            WMItem.damageItem(itemstack, meleeSpecs.dmgFromBlock, entityliving);
         }
         return true;
     }
@@ -92,10 +89,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 entityliving.hurtResistantTime -= (int) (f / getAttackDelay(itemstack, entityliving, attacker));
             }
         }
-        itemstack.damageItem(meleeSpecs.dmgFromEntity, attacker);
-        if (itemstack.stackSize <= 0 && attacker instanceof EntityPlayer) {
-            WMItem.deleteStack(((EntityPlayer) attacker).inventory, itemstack);
-        }
+        WMItem.damageItem(itemstack, meleeSpecs.dmgFromEntity, attacker);
         return true;
     }
 

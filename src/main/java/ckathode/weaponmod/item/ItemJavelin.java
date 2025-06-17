@@ -27,10 +27,6 @@ public class ItemJavelin extends WMItem {
 
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityLiving, int i) {
-        if (itemstack.stackSize <= 0) {
-            deleteStack(entityLiving.inventory, itemstack);
-            return;
-        }
         int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -50,10 +46,7 @@ public class ItemJavelin extends WMItem {
         }
         world.playSoundAtEntity(entityLiving, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 0.8F));
         if (!entityLiving.capabilities.isCreativeMode) {
-            itemstack.splitStack(1);
-            if (itemstack.stackSize <= 0) {
-                deleteStack(entityLiving.inventory, itemstack);
-            }
+            WMItem.decrStackSize(itemstack, 1, entityLiving);
         }
     }
 
@@ -70,10 +63,6 @@ public class ItemJavelin extends WMItem {
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        if (!entityplayer.capabilities.isCreativeMode && itemstack.stackSize <= 0) {
-            deleteStack(entityplayer.inventory, itemstack);
-            return itemstack;
-        }
         entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
         return itemstack;
     }
