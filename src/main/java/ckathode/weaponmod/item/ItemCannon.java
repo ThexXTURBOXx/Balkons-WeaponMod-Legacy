@@ -71,12 +71,10 @@ public class ItemCannon extends WMItem {
             world.spawnEntity(entitycannon);
         }
         if (!entityplayer.isCreative()) {
-            itemstack.splitStack(1);
-            if (itemstack.stackSize <= 0) {
-                entityplayer.inventory.deleteStack(itemstack);
-            }
+            --itemstack.stackSize;
         }
         entityplayer.addStat(StatList.getObjectUseStats(this));
         return EnumActionResult.SUCCESS;
     }
+
 }

@@ -77,9 +77,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
                                     BlockPos pos, EntityLivingBase entityliving) {
         if (block.getBlockHardness(world, pos) != 0.0f) {
             itemstack.damageItem(meleeSpecs.dmgFromBlock, entityliving);
-            if (itemstack.stackSize <= 0 && entityliving instanceof EntityPlayer) {
-                ((EntityPlayer) entityliving).inventory.deleteStack(itemstack);
-            }
         }
         return true;
     }
@@ -98,9 +95,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
             }
         }
         itemstack.damageItem(meleeSpecs.dmgFromEntity, attacker);
-        if (itemstack.stackSize <= 0 && attacker instanceof EntityPlayer) {
-            ((EntityPlayer) attacker).inventory.deleteStack(itemstack);
-        }
         return true;
     }
 

@@ -34,10 +34,7 @@ public class ItemDynamite extends WMItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemstack, @Nonnull World world,
                                                     EntityPlayer entityplayer, @Nonnull EnumHand hand) {
         if (!entityplayer.isCreative()) {
-            itemstack.splitStack(1);
-            if (itemstack.stackSize <= 0) {
-                entityplayer.inventory.deleteStack(itemstack);
-            }
+            --itemstack.stackSize;
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED,
                 SoundCategory.PLAYERS, 1.0f, 1.0f / (itemRand.nextFloat() * 0.4f + 0.8f));
@@ -55,4 +52,5 @@ public class ItemDynamite extends WMItem {
     public boolean isFull3D() {
         return true;
     }
+
 }
