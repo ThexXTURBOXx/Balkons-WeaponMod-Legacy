@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 plugins {
     idea
     java
-    id("gg.essential.loom") version "1.6.9999-fg1"
+    id("gg.essential.loom") version "1.9.9999-fg1"
     id("dev.architectury.architectury-pack200") version "0.1.3"
     id("com.gradleup.shadow") version "8.3.6"
 }
@@ -62,6 +62,7 @@ repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
     maven("https://jitpack.io/")
+    maven("https://maven.minecraftforge.net/")
 }
 
 val shadowImpl: Configuration by configurations.creating {
