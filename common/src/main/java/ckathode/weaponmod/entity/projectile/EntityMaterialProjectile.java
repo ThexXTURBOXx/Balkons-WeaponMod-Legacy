@@ -7,15 +7,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -26,6 +22,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -159,17 +157,16 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.addAdditionalSaveData(nbttagcompound);
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
         ItemStack thrownItem = getWeapon();
-        nbttagcompound.put("thrI", thrownItem.save(registryAccess()));
+        valueOutput.store("thrI", ItemStack.CODEC, thrownItem);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.readAdditionalSaveData(nbttagcompound);
-        RegistryOps<Tag> registryops = registryAccess().createSerializationContext(NbtOps.INSTANCE);
-        setThrownItemStack(nbttagcompound.read("thrI", ItemStack.CODEC, registryops).orElse(ItemStack.EMPTY));
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        setThrownItemStack(valueInput.read("thrI", ItemStack.CODEC).orElse(ItemStack.EMPTY));
     }
 
 }

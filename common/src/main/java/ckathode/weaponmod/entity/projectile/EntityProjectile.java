@@ -6,16 +6,11 @@ import dev.architectury.extensions.network.EntitySpawnExtension;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -35,6 +30,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -501,34 +498,35 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbttagcompound) {
-        nbttagcompound.putInt("xTile", xTile);
-        nbttagcompound.putInt("yTile", yTile);
-        nbttagcompound.putInt("zTile", zTile);
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
+        valueOutput.putInt("xTile", xTile);
+        valueOutput.putInt("yTile", yTile);
+        valueOutput.putInt("zTile", zTile);
         if (inBlockState != null) {
-            nbttagcompound.put("inBlockState", NbtUtils.writeBlockState(inBlockState));
+            valueOutput.store("inBlockState", BlockState.CODEC, inBlockState);
         }
-        nbttagcompound.putByte("shake", (byte) shakeTime);
-        nbttagcompound.putBoolean("inGround", inGround);
-        nbttagcompound.putBoolean("beenInGround", beenInGround);
-        nbttagcompound.putByte("pickup", (byte) pickupStatus.ordinal());
+        valueOutput.putByte("shake", (byte) shakeTime);
+        valueOutput.putBoolean("inGround", inGround);
+        valueOutput.putBoolean("beenInGround", beenInGround);
+        valueOutput.putByte("pickup", (byte) pickupStatus.ordinal());
         if (firedFromWeapon != null) {
-            nbttagcompound.put("weapon", firedFromWeapon.save(registryAccess(), new CompoundTag()));
+            valueOutput.store("weapon", ItemStack.CODEC, firedFromWeapon);
         }
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag nbttagcompound) {
-        RegistryOps<Tag> registryops = registryAccess().createSerializationContext(NbtOps.INSTANCE);
-        xTile = nbttagcompound.getIntOr("xTile", (int) getX());
-        yTile = nbttagcompound.getIntOr("yTile", (int) getY());
-        zTile = nbttagcompound.getIntOr("zTile", (int) getZ());
-        inBlockState = nbttagcompound.read("inBlockState", BlockState.CODEC, registryops).orElse(null);
-        shakeTime = (nbttagcompound.getByteOr("shake", (byte) 0) & 0xFF);
-        inGround = nbttagcompound.getBooleanOr("inGround", false);
-        beenInGround = nbttagcompound.getBooleanOr("beenInGround", false);
-        pickupStatus = nbttagcompound.read("pickup", PickupStatus.CODEC).orElse(PickupStatus.DISALLOWED);
-        firedFromWeapon = nbttagcompound.read("weapon", ItemStack.CODEC, registryops).orElse(null);
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        xTile = valueInput.getIntOr("xTile", (int) getX());
+        yTile = valueInput.getIntOr("yTile", (int) getY());
+        zTile = valueInput.getIntOr("zTile", (int) getZ());
+        inBlockState = valueInput.read("inBlockState", BlockState.CODEC).orElse(null);
+        shakeTime = (valueInput.getByteOr("shake", (byte) 0) & 0xFF);
+        inGround = valueInput.getBooleanOr("inGround", false);
+        beenInGround = valueInput.getBooleanOr("beenInGround", false);
+        pickupStatus = valueInput.read("pickup", PickupStatus.CODEC).orElse(PickupStatus.DISALLOWED);
+        firedFromWeapon = valueInput.read("weapon", ItemStack.CODEC).orElse(null);
     }
 
     public enum PickupStatus {

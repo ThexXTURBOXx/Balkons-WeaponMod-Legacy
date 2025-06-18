@@ -7,7 +7,6 @@ import dev.architectury.networking.NetworkManager;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -38,6 +37,8 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -332,19 +333,21 @@ public class EntityCannon extends Boat {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag nbttagcompound) {
-        nbttagcompound.putDouble("falld", fallDistance);
-        nbttagcompound.putBoolean("load", isLoaded());
-        nbttagcompound.putShort("ldtime", (short) getLoadTimer());
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
+        valueOutput.putDouble("falld", fallDistance);
+        valueOutput.putBoolean("load", isLoaded());
+        valueOutput.putShort("ldtime", (short) getLoadTimer());
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag nbttagcompound) {
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
         setPos(getX(), getY(), getZ());
         setRot(getYRot(), getXRot());
-        fallDistance = nbttagcompound.getDoubleOr("falld", 0);
-        setLoaded(nbttagcompound.getBooleanOr("load", false));
-        setLoadTimer(nbttagcompound.getShortOr("ldtime", (short) 0));
+        fallDistance = valueInput.getDoubleOr("falld", 0);
+        setLoaded(valueInput.getBooleanOr("load", false));
+        setLoadTimer(valueInput.getShortOr("ldtime", (short) 0));
     }
 
     @NotNull

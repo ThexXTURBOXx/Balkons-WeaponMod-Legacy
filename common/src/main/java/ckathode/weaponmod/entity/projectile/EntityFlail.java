@@ -5,7 +5,6 @@ import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.item.ItemFlail;
 import dev.architectury.networking.NetworkManager;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
@@ -19,6 +18,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -195,15 +196,15 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.addAdditionalSaveData(nbttagcompound);
-        nbttagcompound.putFloat("fDmg", flailDamage);
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
+        valueOutput.putFloat("fDmg", flailDamage);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.readAdditionalSaveData(nbttagcompound);
-        flailDamage = nbttagcompound.getFloatOr("fDmg", 1);
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        flailDamage = valueInput.getFloatOr("fDmg", 1);
     }
 
     @Override

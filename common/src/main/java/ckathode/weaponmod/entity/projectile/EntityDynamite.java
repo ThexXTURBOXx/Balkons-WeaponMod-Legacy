@@ -8,7 +8,6 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
@@ -24,6 +23,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -194,16 +195,17 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.addAdditionalSaveData(nbttagcompound);
-        nbttagcompound.putByte("fuse", (byte) explodefuse);
-        nbttagcompound.putBoolean("off", extinguished);
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
+        valueOutput.putByte("fuse", (byte) explodefuse);
+        valueOutput.putBoolean("off", extinguished);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.readAdditionalSaveData(nbttagcompound);
-        explodefuse = nbttagcompound.getByteOr("fuse", (byte) 50);
-        extinguished = nbttagcompound.getBooleanOr("off", false);
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        explodefuse = valueInput.getByteOr("fuse", (byte) 50);
+        extinguished = valueInput.getBooleanOr("off", false);
     }
+
 }

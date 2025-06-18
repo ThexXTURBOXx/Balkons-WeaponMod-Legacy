@@ -9,7 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -75,12 +75,10 @@ public class GuiOverlayReloaded {
         int width = hand == InteractionHand.OFF_HAND ? 29 : 24;
         int height = (int) (f * 24);
 
-        guiGraphics.pose().pushPose();
-        // -90 = at the same level as the hotbar itself
-        guiGraphics.pose().translate(0, 0, -90);
-        guiGraphics.blit(RenderType::guiTextured, WeaponModResources.Gui.OVERLAY, x0, y0 - height,
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, WeaponModResources.Gui.OVERLAY, x0, y0 - height,
                 tx, offset + 24 - height, width, height, 256, 256);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
 }

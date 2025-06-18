@@ -5,7 +5,6 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import dev.architectury.networking.NetworkManager;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -22,6 +21,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -150,15 +151,15 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.addAdditionalSaveData(nbttagcompound);
-        nbttagcompound.putByte("darttype", getDartEffectId());
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
+        super.addAdditionalSaveData(valueOutput);
+        valueOutput.putByte("darttype", getDartEffectId());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag nbttagcompound) {
-        super.readAdditionalSaveData(nbttagcompound);
-        setDartEffectType(nbttagcompound.getByteOr("darttype", (byte) 0));
+    protected void readAdditionalSaveData(ValueInput valueInput) {
+        super.readAdditionalSaveData(valueInput);
+        setDartEffectType(valueInput.getByteOr("darttype", (byte) 0));
     }
 
 }

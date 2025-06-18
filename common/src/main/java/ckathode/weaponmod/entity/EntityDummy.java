@@ -5,7 +5,6 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import java.util.List;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -31,6 +30,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -229,11 +230,11 @@ public class EntityDummy extends Entity {
     }
 
     @Override
-    protected void addAdditionalSaveData(@NotNull CompoundTag nbttagcompound) {
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {
     }
 
     @Override
-    protected void readAdditionalSaveData(@NotNull CompoundTag nbttagcompound) {
+    protected void readAdditionalSaveData(ValueInput valueInput) {
         setPos(getX(), getY(), getZ());
         setRot(getYRot(), getXRot());
     }
