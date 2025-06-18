@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter
 plugins {
     idea
     java
-    id("gg.essential.loom") version "1.6.9999-fg3"
+    id("gg.essential.loom") version "1.9.9999-fg3"
 }
 
 val minecraft_version: String by project
@@ -55,6 +55,7 @@ sourceSets.main {
 repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
+    maven("https://maven.minecraftforge.net/")
 }
 
 dependencies {
