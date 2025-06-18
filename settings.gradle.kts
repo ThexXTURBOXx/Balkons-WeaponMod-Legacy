@@ -7,19 +7,7 @@ pluginManagement {
         maven("https://maven.fabricmc.net")
         maven("https://maven.minecraftforge.net/")
         maven("https://repo.spongepowered.org/maven/")
-        maven("https://repo.sk1er.club/repository/maven-releases/")
-        maven("https://repo.legacyfabric.net/repository/legacyfabric/")
+        maven("https://repo.essential.gg/public/")
         maven("https://femtopedia.de/maven/")
     }
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "gg.essential.loom" -> useModule("gg.essential:architectury-loom:${requested.version}")
-            }
-        }
-    }
-}
-
-plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version("0.9.0")
 }
