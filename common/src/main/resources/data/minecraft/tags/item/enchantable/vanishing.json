@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "#weaponmod:battleaxes",
+    "#weaponmod:boomerangs",
+    "#weaponmod:flails",
+    "#weaponmod:halberds",
+    "#weaponmod:katanas",
+    "#weaponmod:knives",
+    "#weaponmod:muskets",
+    "#weaponmod:spears",
+    "#weaponmod:warhammers",
+    "weaponmod:blowgun",
+    "weaponmod:blunderbuss",
+    "weaponmod:crossbow",
+    "weaponmod:flintlock",
+    "weaponmod:mortar"
+  ]
+}
