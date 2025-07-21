@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:flail.netherite",
+    "weaponmod:flail.diamond",
+    "weaponmod:flail.iron",
+    "weaponmod:flail.gold",
+    "weaponmod:flail.stone",
+    "weaponmod:flail.wood"
+  ]
+}
