@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#weaponmod:muskets",
+    "weaponmod:blowgun",
+    "weaponmod:blunderbuss",
+    "weaponmod:crossbow",
+    "weaponmod:flintlock",
+    "weaponmod:mortar"
+  ]
+}
