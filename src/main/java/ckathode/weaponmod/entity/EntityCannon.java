@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -195,9 +194,9 @@ public class EntityCannon extends EntityBoat {
             fallDistance += (float) (-motionY);
         }
         if (isBeingRidden()) {
-            EntityLivingBase entitylivingbase = (EntityLivingBase) getControllingPassenger();
-            float yaw = entitylivingbase.rotationYaw;
-            float pitch = entitylivingbase.rotationPitch;
+            Entity riddenByEntity = getControllingPassenger();
+            float yaw = riddenByEntity.rotationYaw;
+            float pitch = riddenByEntity.rotationPitch;
             rotationYaw = yaw % 360.0f;
             rotationPitch = pitch;
         }
