@@ -331,8 +331,9 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
                 EntityProjectile.getBoundingBox(this).addCoord(motionX, motionY, motionZ).expand(1.0, 1.0, 1.0));
         double d = 0.0;
         for (Entity entity2 : list) {
-            if (entity2 != shootingEntity || ticksInAir >= 5) {
-                AxisAlignedBB axisalignedbb = EntityProjectile.getBoundingBox(entity2).expand(0.3, 0.3, 0.3);
+            if (entity2.canBeCollidedWith() && (entity2 != shootingEntity || ticksInAir >= 5)) {
+                double exp = 0.3;
+                AxisAlignedBB axisalignedbb = EntityProjectile.getBoundingBox(entity2).expand(exp, exp, exp);
                 MovingObjectPosition mop = axisalignedbb.calculateIntercept(vec3d, vec3d1);
                 if (mop != null) {
                     double d2 = vec3d.squareDistanceTo(mop.hitVec);
