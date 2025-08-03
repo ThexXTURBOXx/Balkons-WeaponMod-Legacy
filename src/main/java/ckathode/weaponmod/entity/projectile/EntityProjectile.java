@@ -280,8 +280,8 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
                             motionZ * knockBack * 0.6 / f);
                 }
             }
+            EnchantmentHelper.func_151384_a(entityliving, shootingEntity);
             if (shootingEntity instanceof EntityLivingBase) {
-                EnchantmentHelper.func_151384_a(entityliving, shootingEntity);
                 EnchantmentHelper.func_151385_b((EntityLivingBase) shootingEntity, entityliving);
             }
             if (shootingEntity instanceof EntityPlayerMP && shootingEntity != entity && entity instanceof EntityPlayer) {

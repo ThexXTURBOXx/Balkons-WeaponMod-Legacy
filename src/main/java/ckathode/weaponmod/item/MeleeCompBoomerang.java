@@ -17,40 +17,37 @@ public class MeleeCompBoomerang extends MeleeComponent {
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world,
                                      EntityLivingBase entityliving, int i) {
-        if (entityliving instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer) entityliving;
-            if (itemstack == null) {
-                return;
+        if (itemstack == null) {
+            return;
+        }
+        int j = getMaxItemUseDuration(itemstack) - i;
+        float f = j / 20.0f;
+        f = (f * f + f * 2.0f) / 3.0f;
+        if (f < 0.1f) {
+            return;
+        }
+        boolean crit = false;
+        if (f > 1.5f) {
+            f = 1.5f;
+            crit = true;
+        }
+        f *= 1.5f;
+        if (!world.isRemote) {
+            EntityBoomerang entityboomerang = new EntityBoomerang(world, entityliving, itemstack.copy());
+            entityboomerang.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, f,
+                    5.0f);
+            entityboomerang.setIsCritical(crit);
+            entityboomerang.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId,
+                    itemstack));
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, itemstack) > 0) {
+                entityboomerang.setFire(100);
             }
-            int j = getMaxItemUseDuration(itemstack) - i;
-            float f = j / 20.0f;
-            f = (f * f + f * 2.0f) / 3.0f;
-            if (f < 0.1f) {
-                return;
-            }
-            boolean crit = false;
-            if (f > 1.5f) {
-                f = 1.5f;
-                crit = true;
-            }
-            f *= 1.5f;
-            if (!world.isRemote) {
-                EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack.copy());
-                entityboomerang.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, f,
-                        5.0f);
-                entityboomerang.setIsCritical(crit);
-                entityboomerang.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId,
-                        itemstack));
-                if (EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, itemstack) > 0) {
-                    entityboomerang.setFire(100);
-                }
-                world.spawnEntityInWorld(entityboomerang);
-            }
-            world.playSoundAtEntity(entityplayer, "random.bow", 0.6F,
-                    1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 1.0F));
-            if (!entityplayer.capabilities.isCreativeMode) {
-                WMItem.decrStackSize(itemstack, 1, entityliving);
-            }
+            world.spawnEntityInWorld(entityboomerang);
+        }
+        world.playSoundAtEntity(entityliving, "random.bow", 0.6F,
+                1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 1.0F));
+        if (!(entityliving instanceof EntityPlayer) || !((EntityPlayer) entityliving).capabilities.isCreativeMode) {
+            WMItem.decrStackSize(itemstack, 1, entityliving);
         }
     }
 

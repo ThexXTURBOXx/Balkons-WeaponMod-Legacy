@@ -3,22 +3,17 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderCannonBall extends Render {
+public class RenderCannonBall extends WMRenderer<EntityCannonBall> {
     public RenderCannonBall() {
         shadowSize = 0.5f;
     }
 
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderCannonBall((EntityCannonBall) entity, d, d1, d2, f, f1);
-    }
-
-    public void renderCannonBall(EntityCannonBall entitycannonball, double d, double d1, double d2, float f, float f1) {
+    public void renderEntity(EntityCannonBall entitycannonball, double d, double d1, double d2, float f, float f1) {
         Tessellator tess = Tessellator.instance;
         GL11.glPushMatrix();
         bindEntityTexture(entitycannonball);

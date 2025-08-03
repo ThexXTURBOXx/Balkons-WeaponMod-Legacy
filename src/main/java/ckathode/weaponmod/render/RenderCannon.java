@@ -3,13 +3,12 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityCannon;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderCannon extends Render {
+public class RenderCannon extends WMRenderer<EntityCannon> {
     private final ModelCannonBarrel modelBarrel = new ModelCannonBarrel();
     private final ModelCannonStandard modelStandard = new ModelCannonStandard();
     private final ModelCannonLegacy modelLegacy = new ModelCannonLegacy();
@@ -19,11 +18,7 @@ public class RenderCannon extends Render {
     }
 
     @Override
-    public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
-        renderCannon((EntityCannon) entity, x, y, z, yaw, partialTicks);
-    }
-
-    public void renderCannon(EntityCannon entitycannon, double x, double y, double z, float yaw, float partialTicks) {
+    public void renderEntity(EntityCannon entitycannon, double x, double y, double z, float yaw, float partialTicks) {
         yaw = interpolateRotation(entitycannon.prevRotationYaw, entitycannon.rotationYaw, partialTicks);
         GL11.glPushMatrix();
 

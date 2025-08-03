@@ -4,7 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -13,13 +12,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSpear extends Render {
+public class RenderSpear extends WMRenderer<EntitySpear> {
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderSpear((EntitySpear) entity, d, d1, d2, f, f1);
-    }
-
-    public void renderSpear(EntitySpear entityspear, double d, double d1, double d2, float f, float f1) {
+    public void renderEntity(EntitySpear entityspear, double d, double d1, double d2, float f, float f1) {
         if (!BalkonsWeaponMod.instance.modConfig.itemModelForEntity) {
             bindEntityTexture(entityspear);
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

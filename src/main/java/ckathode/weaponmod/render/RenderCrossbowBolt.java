@@ -3,20 +3,15 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
 
-public class RenderCrossbowBolt extends Render {
+public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt> {
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderBolt((EntityCrossbowBolt) entity, d, d1, d2, f, f1);
-    }
-
-    public void renderBolt(EntityCrossbowBolt entitybolt, double d, double d1, double d2, float f, float f1) {
+    public void renderEntity(EntityCrossbowBolt entitybolt, double d, double d1, double d2, float f, float f1) {
         bindEntityTexture(entitybolt);
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         GL11.glPushMatrix();

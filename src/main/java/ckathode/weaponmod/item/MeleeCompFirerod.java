@@ -32,7 +32,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     @Override
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int i, boolean flag) {
         super.onUpdate(itemstack, world, entity, i, flag);
-        if (!(entity instanceof EntityPlayer)) return;
+        if (!(entity instanceof EntityPlayer)) return; // render particles only for players
         EntityPlayer player = (EntityPlayer) entity;
         if (player.isInsideOfMaterial(Material.water)) return;
         if (player.inventory.getCurrentItem() != itemstack) return;

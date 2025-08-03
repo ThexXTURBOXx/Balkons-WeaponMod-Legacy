@@ -3,19 +3,14 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
 
-public class RenderMusketBullet extends Render {
+public class RenderMusketBullet extends WMRenderer<EntityMusketBullet> {
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderBullet((EntityMusketBullet) entity, d, d1, d2, f, f1);
-    }
-
-    public void renderBullet(EntityMusketBullet entitymusketbullet, double d, double d1, double d2, float f, float f1) {
+    public void renderEntity(EntityMusketBullet entitymusketbullet, double d, double d1, double d2, float f, float f1) {
         bindEntityTexture(entitymusketbullet);
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         GL11.glPushMatrix();

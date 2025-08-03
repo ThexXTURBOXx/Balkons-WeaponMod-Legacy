@@ -3,22 +3,17 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderMortarShell extends Render {
+public class RenderMortarShell extends WMRenderer<EntityMortarShell> {
     public RenderMortarShell() {
         shadowSize = 0.3f;
     }
 
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderShell((EntityMortarShell) entity, d, d1, d2, f, f1);
-    }
-
-    public void renderShell(EntityMortarShell entitymortarshell, double d, double d1, double d2, float f, float f1) {
+    public void renderEntity(EntityMortarShell entitymortarshell, double d, double d1, double d2, float f, float f1) {
         Tessellator tess = Tessellator.instance;
         GL11.glPushMatrix();
         bindEntityTexture(entitymortarshell);

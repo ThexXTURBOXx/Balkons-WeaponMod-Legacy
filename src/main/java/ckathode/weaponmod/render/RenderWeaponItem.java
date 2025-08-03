@@ -44,7 +44,7 @@ public class RenderWeaponItem implements IItemRenderer {
             if (item != null) {
                 icon = item.getIcon(stack, 0);
             }
-        } else {
+        } else if (data[1] instanceof EntityLivingBase) {
             EntityLivingBase entityLiving = (EntityLivingBase) data[1];
             icon = entityLiving.getItemIcon(stack, 0);
         }

@@ -23,7 +23,8 @@ public abstract class AbstractWeaponComponent {
     }
 
     void setItem(IItemWeapon itemweapon) {
-        item = (Item) itemweapon;
+        if (itemweapon instanceof Item)
+            item = (Item) itemweapon;
         weapon = itemweapon;
         onSetItem();
     }

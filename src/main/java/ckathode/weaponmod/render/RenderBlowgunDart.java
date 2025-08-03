@@ -3,20 +3,15 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.EXTRescaleNormal;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBlowgunDart extends Render {
+public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderDart((EntityBlowgunDart) entity, d, d1, d2, f, f1);
-    }
-
-    public void renderDart(EntityBlowgunDart entityblowgundart, double d, double d1, double d2, float f, float f1) {
+    public void renderEntity(EntityBlowgunDart entityblowgundart, double d, double d1, double d2, float f, float f1) {
         bindEntityTexture(entityblowgundart);
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         GL11.glPushMatrix();

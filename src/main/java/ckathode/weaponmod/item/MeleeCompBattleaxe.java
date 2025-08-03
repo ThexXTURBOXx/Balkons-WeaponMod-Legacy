@@ -20,20 +20,18 @@ public class MeleeCompBattleaxe extends MeleeComponent {
 
     @Override
     public boolean onLeftClickEntity(ItemStack itemstack, EntityPlayer player, Entity entity) {
-        if (entity instanceof EntityLivingBase) {
-            EntityLivingBase living = (EntityLivingBase) entity;
-            double mx = entity.motionX;
-            double my = entity.motionY;
-            double mz = entity.motionZ;
-            int prevhurtres = living.hurtResistantTime;
-            int prevhurt = living.hurtTime;
-            living.attackEntityFrom(new DamageSourceAxe(), getIgnoreArmorAmount(weaponMaterial));
-            entity.motionX = mx;
-            entity.motionY = my;
-            entity.motionZ = mz;
-            living.hurtResistantTime = prevhurtres;
-            living.hurtTime = prevhurt;
-        }
+        double mx = entity.motionX;
+        double my = entity.motionY;
+        double mz = entity.motionZ;
+        int prevhurtres = entity.hurtResistantTime;
+        int prevhurt = entity instanceof EntityLivingBase ? ((EntityLivingBase) entity).hurtTime : 0;
+        entity.attackEntityFrom(new DamageSourceAxe(), getIgnoreArmorAmount(weaponMaterial));
+        entity.motionX = mx;
+        entity.motionY = my;
+        entity.motionZ = mz;
+        entity.hurtResistantTime = prevhurtres;
+        if (entity instanceof EntityLivingBase)
+            ((EntityLivingBase) entity).hurtTime = prevhurt;
         return super.onLeftClickEntity(itemstack, player, entity);
     }
 

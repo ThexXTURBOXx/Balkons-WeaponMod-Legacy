@@ -2,13 +2,12 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityDummy;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderDummy extends Render {
+public class RenderDummy extends WMRenderer<EntityDummy> {
     private final ModelDummy modelDummy = new ModelDummy();
 
     public RenderDummy() {
@@ -16,11 +15,7 @@ public class RenderDummy extends Render {
     }
 
     @Override
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        renderDummy((EntityDummy) entity, d, d1, d2, f, f1);
-    }
-
-    public void renderDummy(EntityDummy entitydummy, double d, double d1, double d2, float f, float f1) {
+    public void renderEntity(EntityDummy entitydummy, double d, double d1, double d2, float f, float f1) {
         GL11.glPushMatrix();
         GL11.glTranslated(d, d1 - 0.025f, d2);
         GL11.glRotatef(180.0f - f, 0.0f, 1.0f, 0.0f);
