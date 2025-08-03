@@ -89,8 +89,10 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
         }
         case SERVER: {
             final INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-            final EntityPlayer player = ((NetHandlerPlayServer) netHandler).player;
-            pkt.handleServerSide(player);
+            if (netHandler instanceof NetHandlerPlayServer) {
+                final EntityPlayer player = ((NetHandlerPlayServer) netHandler).player;
+                pkt.handleServerSide(player);
+            }
             break;
         }
         }

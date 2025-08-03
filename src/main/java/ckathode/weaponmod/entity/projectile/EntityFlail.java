@@ -71,8 +71,8 @@ public class EntityFlail extends EntityMaterialProjectile {
             if (distanceTotal > 3.0) {
                 returnToOwner(true);
             }
-            if (shooter instanceof EntityPlayer) {
-                ItemStack itemstack = ((EntityPlayer) shooter).getHeldItemMainhand();
+            if (shooter instanceof EntityLivingBase) {
+                ItemStack itemstack = ((EntityLivingBase) shooter).getHeldItemMainhand();
                 ItemStack thrownItem = getWeapon();
                 if (itemstack.isEmpty() || (!thrownItem.isEmpty() && itemstack.getItem() != thrownItem.getItem()) || !shooter.isEntityAlive()) {
                     pickUpByOwner();
@@ -154,12 +154,9 @@ public class EntityFlail extends EntityMaterialProjectile {
             return;
         }
         Entity shooter = getDamagingEntity();
-        DamageSource damagesource;
-        if (shooter instanceof EntityLivingBase) {
-            damagesource = DamageSource.causeMobDamage((EntityLivingBase) shooter);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
-        }
+        DamageSource damagesource = shooter instanceof EntityLivingBase
+                ? DamageSource.causeMobDamage((EntityLivingBase) shooter)
+                : WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
         if (entity.attackEntityFrom(damagesource, flailDamage + extraDamage)) {
             playHitSound();
             returnToOwner(true);
@@ -188,11 +185,11 @@ public class EntityFlail extends EntityMaterialProjectile {
 
     @Override
     public void setThrownItemStack(@Nonnull ItemStack itemstack) {
-        if (!(itemstack.getItem() instanceof ItemFlail)) {
+        if (!itemstack.isEmpty() && !(itemstack.getItem() instanceof ItemFlail)) {
             return;
         }
         super.setThrownItemStack(itemstack);
-        flailDamage = ((ItemFlail) itemstack.getItem()).getFlailDamage();
+        flailDamage = itemstack.isEmpty() ? 0 : ((ItemFlail) itemstack.getItem()).getFlailDamage();
     }
 
     @Override
