@@ -21,11 +21,10 @@ public class MeleeCompKnife extends MeleeComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world,
+                                                    EntityPlayer entityplayer, EnumHand hand) {
         if (!BalkonsWeaponMod.instance.modConfig.canThrowKnife) {
-            return super.onItemRightClick(world, entityplayer, hand);
+            return super.onItemRightClick(itemstack, world, entityplayer, hand);
         }
         if (!world.isRemote) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());

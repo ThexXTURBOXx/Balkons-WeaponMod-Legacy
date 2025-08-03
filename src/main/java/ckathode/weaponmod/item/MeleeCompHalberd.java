@@ -47,9 +47,8 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world,
+                                                    EntityPlayer entityplayer, EnumHand hand) {
         setHalberdState(itemstack, !getHalberdState(itemstack));
         return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }
