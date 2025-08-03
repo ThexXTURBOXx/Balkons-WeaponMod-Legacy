@@ -13,9 +13,9 @@ public class RangedCompCrossbow extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingItem();
-        world.playSoundAtEntity(entityplayer, "random.click", 0.8F,
+    public void effectReloadDone(ItemStack itemstack, World world, EntityLivingBase entityliving) {
+        entityliving.swingItem();
+        world.playSoundAtEntity(entityliving, "random.click", 0.8F,
                 1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.4F));
     }
 
@@ -25,7 +25,6 @@ public class RangedCompCrossbow extends RangedComponent {
 
     @Override
     public void fire(ItemStack itemstack, World world, EntityLivingBase entityliving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
         int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -34,8 +33,8 @@ public class RangedCompCrossbow extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isRemote) {
-            EntityCrossbowBolt entitybolt = new EntityCrossbowBolt(world, entityplayer);
-            entitybolt.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 1.5f / f);
+            EntityCrossbowBolt entitybolt = new EntityCrossbowBolt(world, entityliving);
+            entitybolt.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f, 1.5f / f);
             applyProjectileEnchantments(entitybolt, itemstack);
             world.spawnEntityInWorld(entitybolt);
         }
@@ -43,8 +42,8 @@ public class RangedCompCrossbow extends RangedComponent {
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {
             resetReload(world, itemstack);
         }
-        WMItem.damageItem(itemstack, damage, entityplayer);
-        postShootingEffects(itemstack, entityplayer, world);
+        WMItem.damageItem(itemstack, damage, entityliving);
+        postShootingEffects(itemstack, entityliving, world);
         resetReload(world, itemstack);
     }
 

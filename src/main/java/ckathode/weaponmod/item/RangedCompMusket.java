@@ -25,15 +25,14 @@ public class RangedCompMusket extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingItem();
-        world.playSoundAtEntity(entityplayer, "random.click", 1.0F,
+    public void effectReloadDone(ItemStack itemstack, World world, EntityLivingBase entityliving) {
+        entityliving.swingItem();
+        world.playSoundAtEntity(entityliving, "random.click", 1.0F,
                 1.0F / (weapon.getItemRand().nextFloat() * 0.4F + 0.8F));
     }
 
     @Override
     public void fire(ItemStack itemstack, World world, EntityLivingBase entityliving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
         int j = getMaxItemUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -42,8 +41,8 @@ public class RangedCompMusket extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isRemote) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityplayer);
-            entitymusketbullet.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f,
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving);
+            entitymusketbullet.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f,
                     1.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             world.spawnEntityInWorld(entitymusketbullet);
@@ -53,13 +52,14 @@ public class RangedCompMusket extends RangedComponent {
         if (flag && musket != null && musket.hasBayonet()) {
             int bayonetDamage = itemstack.hasTagCompound() ? itemstack.getTagCompound().getShort("bayonetDamage") : 0;
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1, bayonetDamage);
-            WMItem.damageItem(itemstack, deltaDamage, entityplayer);
-            entityplayer.inventory.addItemStackToInventory(newStack);
+            WMItem.damageItem(itemstack, deltaDamage, entityliving);
+            if (entityliving instanceof EntityPlayer)
+                ((EntityPlayer) entityliving).inventory.addItemStackToInventory(newStack);
         } else {
-            WMItem.damageItem(itemstack, deltaDamage, entityplayer);
+            WMItem.damageItem(itemstack, deltaDamage, entityliving);
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        postShootingEffects(itemstack, entityplayer, world);
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

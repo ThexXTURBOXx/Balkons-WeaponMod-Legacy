@@ -95,7 +95,8 @@ public class EntityCannon extends EntityBoat {
             if (damagesource.getSourceOfDamage() == riddenByEntity) {
                 return true;
             }
-        } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
+        } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player") &&
+                   damagesource.getSourceOfDamage() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) damagesource.getSourceOfDamage();
             if (player != null && player.inventory.getCurrentItem() == null) {
                 if (!player.capabilities.isCreativeMode) {

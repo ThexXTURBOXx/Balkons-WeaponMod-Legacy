@@ -15,24 +15,23 @@ public class RangedCompBlunderbuss extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingItem();
-        world.playSoundAtEntity(entityplayer, "random.door_close", 0.8F,
+    public void effectReloadDone(ItemStack itemstack, World world, EntityLivingBase entityliving) {
+        entityliving.swingItem();
+        world.playSoundAtEntity(entityliving, "random.door_close", 0.8F,
                 1.0F / (weapon.getItemRand().nextFloat() * 0.2F + 0.0F));
     }
 
     @Override
     public void fire(ItemStack itemstack, World world, EntityLivingBase entityliving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
         if (!world.isRemote) {
-            EntityBlunderShot.fireSpreadShot(world, entityplayer, this, itemstack);
+            EntityBlunderShot.fireSpreadShot(world, entityliving, this, itemstack);
         }
         int damage = 1;
         if (itemstack.getItemDamage() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        WMItem.damageItem(itemstack, damage, entityplayer);
-        postShootingEffects(itemstack, entityplayer, world);
+        WMItem.damageItem(itemstack, damage, entityliving);
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

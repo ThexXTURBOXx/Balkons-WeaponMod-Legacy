@@ -71,7 +71,7 @@ public class EntityFlail extends EntityMaterialProjectile {
                 returnToOwner(true);
             }
             if (shooter instanceof EntityPlayer) {
-                ItemStack itemstack = ((EntityPlayer) shootingEntity).getCurrentEquippedItem();
+                ItemStack itemstack = ((EntityPlayer) shooter).getCurrentEquippedItem();
                 ItemStack thrownItem = getWeapon();
                 if (itemstack == null || (thrownItem != null && itemstack.getItem() != thrownItem.getItem()) || !shooter.isEntityAlive()) {
                     pickUpByOwner();
@@ -153,12 +153,9 @@ public class EntityFlail extends EntityMaterialProjectile {
             return;
         }
         Entity shooter = getDamagingEntity();
-        DamageSource damagesource;
-        if (shooter instanceof EntityLivingBase) {
-            damagesource = DamageSource.causeMobDamage((EntityLivingBase) shooter);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
-        }
+        DamageSource damagesource = shooter instanceof EntityLivingBase
+                ? DamageSource.causeMobDamage((EntityLivingBase) shooter)
+                : WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
         if (entity.attackEntityFrom(damagesource, flailDamage + extraDamage)) {
             playHitSound();
             returnToOwner(true);
@@ -186,12 +183,12 @@ public class EntityFlail extends EntityMaterialProjectile {
     }
 
     @Override
-    public void setThrownItemStack(@Nonnull ItemStack itemstack) {
-        if (!(itemstack.getItem() instanceof ItemFlail)) {
+    public void setThrownItemStack(ItemStack itemstack) {
+        if (itemstack != null && !(itemstack.getItem() instanceof ItemFlail)) {
             return;
         }
         super.setThrownItemStack(itemstack);
-        flailDamage = ((ItemFlail) itemstack.getItem()).getFlailDamage();
+        flailDamage = itemstack == null ? 0 : ((ItemFlail) itemstack.getItem()).getFlailDamage();
     }
 
     @Override

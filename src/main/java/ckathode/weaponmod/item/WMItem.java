@@ -40,7 +40,7 @@ public class WMItem extends Item {
 
     public static void damageItem(ItemStack stack, int dmg, EntityLivingBase entity) {
         stack.damageItem(dmg, entity);
-        if (stack.stackSize == 0 && entity instanceof EntityPlayer) {
+        if (stack.stackSize <= 0 && entity instanceof EntityPlayer) {
             ((EntityPlayer) entity).destroyCurrentEquippedItem();
         }
     }

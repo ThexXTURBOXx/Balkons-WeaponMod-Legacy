@@ -4,7 +4,6 @@ import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.RangedComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -86,20 +85,13 @@ public class EntityBlunderShot extends EntityProjectile {
 
     public static void fireSpreadShot(World world, EntityLivingBase entityliving,
                                       RangedComponent item, ItemStack itemstack) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
         for (int i = 0; i < 10; ++i) {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
-            entity.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 15.0f);
+            entity.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f, 15.0f);
             if (item != null && itemstack != null) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }
             world.spawnEntityInWorld(entity);
-        }
-    }
-
-    public static void fireSpreadShot(World world, double x, double y, double z) {
-        for (int i = 0; i < 10; ++i) {
-            world.spawnEntityInWorld(new EntityBlunderShot(world, x, y, z));
         }
     }
 
