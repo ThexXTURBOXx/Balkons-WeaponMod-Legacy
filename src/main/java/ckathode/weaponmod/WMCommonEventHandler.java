@@ -27,30 +27,26 @@ public class WMCommonEventHandler {
     public void damageBlockingWeapons(LivingAttackEvent event) {
         if (event.getAmount() < 3.0f) return;
         EntityLivingBase entity = event.getEntityLiving();
-        if (!(entity instanceof EntityPlayer)) return;
-        EntityPlayer player = (EntityPlayer) entity;
-        ItemStack stack = player.getActiveItemStack();
+        ItemStack stack = entity.getActiveItemStack();
         if (stack == null) return;
-        if (!player.isActiveItemStackBlocking()) return;
+        if (!entity.isActiveItemStackBlocking()) return;
         if (!(stack.getItem() instanceof ItemMelee) && !(stack.getItem() instanceof ItemShooter) &&
             !(stack.getItem() instanceof WMItem)) return;
 
         int i = 1 + MathHelper.floor(event.getAmount());
-        stack.damageItem(i, player);
-        if (stack.stackSize <= 0) {
-            player.inventory.deleteStack(stack);
+        stack.damageItem(i, entity);
+        if (stack.stackSize <= 0 && entity instanceof EntityPlayer) {
+            ((EntityPlayer) entity).inventory.deleteStack(stack);
         }
     }
 
     @SubscribeEvent
     public void cancelBlockingOfRangedWeapons(LivingAttackEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (!(entity instanceof EntityPlayer)) return;
-        EntityPlayer player = (EntityPlayer) entity;
-        ItemStack stack = player.getActiveItemStack();
+        ItemStack stack = entity.getActiveItemStack();
         Item item = stack == null ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return;
 
-        player.resetActiveHand();
+        entity.resetActiveHand();
     }
 }

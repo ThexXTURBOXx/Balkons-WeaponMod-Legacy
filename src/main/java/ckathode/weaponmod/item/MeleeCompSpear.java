@@ -22,14 +22,10 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer entityplayer,
-                                                    EnumHand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
-        if (itemstack == null) {
-            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
-        }
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world,
+                                                    EntityPlayer entityplayer, EnumHand hand) {
         if (!BalkonsWeaponMod.instance.modConfig.canThrowSpear) {
-            return super.onItemRightClick(world, entityplayer, hand);
+            return super.onItemRightClick(itemstack, world, entityplayer, hand);
         }
         if (!world.isRemote) {
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
