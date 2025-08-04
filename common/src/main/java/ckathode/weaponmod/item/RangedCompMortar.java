@@ -23,16 +23,15 @@ public class RangedCompMortar extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, Level world, Player entityplayer) {
-        entityplayer.swing(InteractionHand.MAIN_HAND);
-        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
+    public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        entityliving.swing(InteractionHand.MAIN_HAND);
+        world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.WOODEN_DOOR_CLOSE, SoundSource.PLAYERS, 0.8f,
-                1.0f / (entityplayer.getRandom().nextFloat() * 0.2f + 0.4f));
+                1.0f / (entityliving.getRandom().nextFloat() * 0.2f + 0.4f));
     }
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        Player entityplayer = (Player) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -41,8 +40,8 @@ public class RangedCompMortar extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isClientSide) {
-            EntityMortarShell entitymortarshell = new EntityMortarShell(world, entityplayer);
-            entitymortarshell.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+            EntityMortarShell entitymortarshell = new EntityMortarShell(world, entityliving);
+            entitymortarshell.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 1.4f, 1.0f / f);
             applyProjectileEnchantments(entitymortarshell, itemstack);
             world.addFreshEntity(entitymortarshell);
@@ -51,8 +50,8 @@ public class RangedCompMortar extends RangedComponent {
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
-        postShootingEffects(itemstack, entityplayer, world);
+        itemstack.hurtAndBreak(damage, entityliving, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

@@ -33,7 +33,7 @@ public final class WMItemProperties {
     public static final ResourceLocation FLAIL_THROWN_GETTER_ID = new ResourceLocation(MOD_ID, "flail-thrown");
     public static final ClampedItemPropertyFunction FLAIL_THROWN_GETTER =
             (@NotNull ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int i) ->
-                    entity instanceof Player && entity.getMainHandItem() == stack && PlayerWeaponData.isFlailThrown((Player) entity) ? 1.0f : 0.0f;
+                    entity instanceof Player player && entity.getMainHandItem() == stack && PlayerWeaponData.isFlailThrown(player) ? 1.0f : 0.0f;
 
     public static final ResourceLocation HALBERD_STATE_GETTER_ID = new ResourceLocation(MOD_ID, "halberd-state");
     public static final ClampedItemPropertyFunction HALBERD_STATE_GETTER =

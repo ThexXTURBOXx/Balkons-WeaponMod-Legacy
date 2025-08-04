@@ -184,7 +184,7 @@ public class WMRegistries {
     public static final Map<DartType, RegistrySupplier<ItemBlowgunDart>> ITEM_DARTS =
             Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
                     .map(t -> new Pair<>(t, ItemBlowgunDart.ITEMS.get(t))).collect(Collectors.toMap(Pair::getFirst,
-                            p -> ITEMS.register(p.getFirst().typeName, p::getSecond)));
+                            p -> ITEMS.register(p.getFirst().typeName(), p::getSecond)));
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_WOOD =
             ITEMS.register(ItemMusket.WOOD_ID, () -> ItemMusket.WOOD_ITEM);
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_STONE =
