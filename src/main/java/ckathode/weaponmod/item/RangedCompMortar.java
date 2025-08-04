@@ -18,16 +18,15 @@ public class RangedCompMortar extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, World world, PlayerEntity entityplayer) {
-        entityplayer.swingArm(Hand.MAIN_HAND);
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
+    public void effectReloadDone(ItemStack itemstack, World world, LivingEntity entityliving) {
+        entityliving.swingArm(Hand.MAIN_HAND);
+        world.playSound(null, entityliving.posX, entityliving.posY, entityliving.posZ,
                 SoundEvents.BLOCK_WOODEN_DOOR_CLOSE, SoundCategory.PLAYERS, 0.8f,
                 1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.4f));
     }
 
     @Override
     public void fire(ItemStack itemstack, World world, LivingEntity entityliving, int i) {
-        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -36,8 +35,8 @@ public class RangedCompMortar extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isRemote) {
-            EntityMortarShell entitymortarshell = new EntityMortarShell(world, entityplayer);
-            entitymortarshell.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 1.4f,
+            EntityMortarShell entitymortarshell = new EntityMortarShell(world, entityliving);
+            entitymortarshell.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 1.4f,
                     1.0f / f);
             applyProjectileEnchantments(entitymortarshell, itemstack);
             world.addEntity(entitymortarshell);
@@ -46,8 +45,8 @@ public class RangedCompMortar extends RangedComponent {
         if (itemstack.getDamage() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.damageItem(damage, entityplayer, s -> s.sendBreakAnimation(s.getActiveHand()));
-        postShootingEffects(itemstack, entityplayer, world);
+        itemstack.damageItem(damage, entityliving, s -> s.sendBreakAnimation(s.getActiveHand()));
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

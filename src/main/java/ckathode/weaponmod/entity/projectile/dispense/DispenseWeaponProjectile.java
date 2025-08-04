@@ -22,7 +22,8 @@ public abstract class DispenseWeaponProjectile extends ProjectileDispenseBehavio
         IProjectile projectile = getProjectileEntity(world, pos, stack);
         projectile.shoot(face.getXOffset(), face.getYOffset() + getYVel(), face.getZOffset(), getProjectileVelocity(),
                 getProjectileInaccuracy());
-        world.addEntity((Entity) projectile);
+        if (projectile instanceof Entity)
+            world.addEntity((Entity) projectile);
         stack.shrink(1);
         return stack;
     }

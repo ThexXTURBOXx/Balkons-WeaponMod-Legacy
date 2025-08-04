@@ -95,7 +95,7 @@ public class AdvancedExplosion extends Explosion {
         for (BlockPos blockpos : getAffectedBlockPositions()) {
             BlockState iblockstate = worldObj.getBlockState(blockpos);
             if (!iblockstate.isAir(worldObj, blockpos)) {
-                if (iblockstate.canDropFromExplosion(worldObj, blockpos, this)) {
+                if (worldObj instanceof ServerWorld && iblockstate.canDropFromExplosion(worldObj, blockpos, this)) {
                     TileEntity tileentity = iblockstate.hasTileEntity() ? worldObj.getTileEntity(blockpos) : null;
                     LootContext.Builder lcBuilder =
                             new LootContext.Builder((ServerWorld) worldObj)

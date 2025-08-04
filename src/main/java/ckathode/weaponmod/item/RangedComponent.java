@@ -142,9 +142,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
-                                                    Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world,
+                                                    PlayerEntity entityplayer, Hand hand) {
         if (itemstack.isEmpty() || entityplayer.isHandActive()) {
             return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }
@@ -164,9 +163,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     @Override
     public void onUsingTick(ItemStack itemstack, LivingEntity entityliving, int count) {
-        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         if (ReloadHelper.getReloadState(itemstack) == ReloadState.STATE_NONE && getUseDuration(itemstack) - count >= getReloadDuration(itemstack)) {
-            effectReloadDone(itemstack, entityplayer.world, entityplayer);
+            effectReloadDone(itemstack, entityliving.world, entityliving);
             setReloadState(itemstack, ReloadState.STATE_RELOADED);
         }
     }
@@ -174,13 +172,12 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world,
                                      LivingEntity entityliving, int i) {
-        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         if (!isReloaded(itemstack)) {
             return;
         }
         if (isReadyToFire(itemstack)) {
-            if (hasAmmoAndConsume(itemstack, world, entityplayer)) {
-                fire(itemstack, world, entityplayer, i);
+            if (hasAmmoAndConsume(itemstack, world, entityliving)) {
+                fire(itemstack, world, entityliving, i);
             }
             setReloadState(itemstack, ReloadState.STATE_NONE);
         } else {
@@ -201,14 +198,15 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     public void soundCharge(ItemStack itemstack, World world, PlayerEntity entityplayer) {
     }
 
-    public void postShootingEffects(ItemStack itemstack, PlayerEntity entityplayer,
+    public void postShootingEffects(ItemStack itemstack, LivingEntity entityLiving,
                                     World world) {
-        effectPlayer(itemstack, entityplayer, world);
-        effectShoot(world, entityplayer.posX, entityplayer.posY, entityplayer.posZ, entityplayer.rotationYaw,
-                entityplayer.rotationPitch);
+        if (entityLiving instanceof PlayerEntity)
+            effectPlayer(itemstack, (PlayerEntity) entityLiving, world);
+        effectShoot(world, entityLiving.posX, entityLiving.posY, entityLiving.posZ, entityLiving.rotationYaw,
+                entityLiving.rotationPitch);
     }
 
-    public abstract void effectReloadDone(ItemStack stack, World world, PlayerEntity player);
+    public abstract void effectReloadDone(ItemStack stack, World world, LivingEntity entityliving);
 
     public abstract void fire(ItemStack stack, World world, LivingEntity entity, int i);
 
@@ -253,7 +251,9 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoItems());
     }
 
-    public boolean hasAmmoAndConsume(ItemStack itemstack, World world, PlayerEntity entityplayer) {
+    public boolean hasAmmoAndConsume(ItemStack itemstack, World world, LivingEntity entityliving) {
+        if (!(entityliving instanceof PlayerEntity)) return true;
+        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         return entityplayer.isCreative() || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY,
                 itemstack) > 0 || consumeAmmo(entityplayer);
     }
@@ -320,6 +320,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             if (ammoItems == null) {
                 ammoItems = Arrays.stream(ammoItemTags)
                         .map(t -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(t)))
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList());
                 BalkonsWeaponMod.modLog.debug("Found items {} for {} @{}",
                         ammoItems, Arrays.toString(ammoItemTags), this);

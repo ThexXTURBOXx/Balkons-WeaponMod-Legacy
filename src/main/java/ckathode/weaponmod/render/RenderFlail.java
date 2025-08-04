@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -80,11 +79,10 @@ public class RenderFlail extends EntityRenderer<EntityFlail> {
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
-        PlayerEntity shooter = entityflail.shootingEntity != null
-                ? entityflail.getEntityWorld().getPlayerByUuid(entityflail.shootingEntity) : null;
+        LivingEntity shooter = entityflail.getShooter() instanceof LivingEntity
+                ? (LivingEntity) entityflail.getShooter() : null;
         if (shooter != null && !renderOutlines) {
-            int k = (((LivingEntity) shooter).getPrimaryHand() == HandSide.RIGHT) ?
-                    1 : -1;
+            int k = shooter.getPrimaryHand() == HandSide.RIGHT ? 1 : -1;
             float f13 = shooter.getSwingProgress(f1);
             float f14 = MathHelper.sin(MathHelper.sqrt(f13) * 3.1415927f);
             float f15 =

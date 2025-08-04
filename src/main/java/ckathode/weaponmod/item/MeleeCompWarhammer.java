@@ -36,26 +36,30 @@ public class MeleeCompWarhammer extends MeleeComponent {
     @Override
     public void onPlayerStoppedUsing(ItemStack itemstack, World world,
                                      LivingEntity entityliving, int i) {
-        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 4.0f;
         if (f > 1.0f) {
-            superSmash(itemstack, world, entityplayer);
+            superSmash(itemstack, world, entityliving);
         }
     }
 
-    protected void superSmash(ItemStack itemstack, World world, PlayerEntity entityplayer) {
-        entityplayer.swingArm(Hand.MAIN_HAND);
+    protected void superSmash(ItemStack itemstack, World world, LivingEntity entityLiving) {
+        entityLiving.swingArm(Hand.MAIN_HAND);
         float f = getEntityDamage() / 2.0f;
-        WarhammerExplosion expl = new WarhammerExplosion(world, entityplayer, entityplayer.posX,
-                entityplayer.posY, entityplayer.posZ, f, false, Explosion.Mode.DESTROY);
-        expl.doEntityExplosion(DamageSource.causePlayerDamage(entityplayer));
+        WarhammerExplosion expl = new WarhammerExplosion(world, entityLiving, entityLiving.posX,
+                entityLiving.posY, entityLiving.posZ, f, false, Explosion.Mode.DESTROY);
+        DamageSource source = entityLiving instanceof PlayerEntity
+                ? DamageSource.causePlayerDamage((PlayerEntity) entityLiving)
+                : DamageSource.causeMobDamage(entityLiving);
+        expl.doEntityExplosion(source);
         expl.doParticleExplosion(true, false);
         PhysHelper.sendExplosion(world, expl, true, false);
-        itemstack.damageItem(16, entityplayer, s -> s.sendBreakAnimation(Hand.MAIN_HAND));
-        entityplayer.addExhaustion(6.0f);
-        setSmashed(entityplayer);
+        itemstack.damageItem(16, entityLiving, s -> s.sendBreakAnimation(Hand.MAIN_HAND));
+        if (entityLiving instanceof PlayerEntity) {
+            ((PlayerEntity) entityLiving).addExhaustion(6.0f);
+            setSmashed((PlayerEntity) entityLiving);
+        }
     }
 
     public void setSmashed(PlayerEntity entityplayer) {
@@ -85,9 +89,8 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
-                                                    Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world,
+                                                    PlayerEntity entityplayer, Hand hand) {
         if (itemstack.isEmpty()) {
             return new ActionResult<>(ActionResultType.FAIL, itemstack);
         }

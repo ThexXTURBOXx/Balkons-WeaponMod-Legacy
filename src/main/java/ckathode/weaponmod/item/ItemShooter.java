@@ -131,7 +131,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world,
                                                     @Nonnull PlayerEntity entityplayer,
                                                     @Nonnull Hand hand) {
-        return rangedComponent.onItemRightClick(world, entityplayer, hand);
+        return rangedComponent.onItemRightClick(entityplayer.getHeldItem(hand), world, entityplayer, hand);
     }
 
     @Override

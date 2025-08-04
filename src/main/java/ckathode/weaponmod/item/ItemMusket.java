@@ -90,18 +90,18 @@ public class ItemMusket extends ItemShooter {
     }
 
     public void bayonetDamage(ItemStack itemstack, LivingEntity entityliving, int damage) {
-        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         if (itemstack.getTag() == null) {
             itemstack.setTag(new CompoundNBT());
         }
         int bayonetdamage = itemstack.getTag().getShort("bayonetDamage") + damage;
         if (bayonetdamage > bayonetDurability) {
-            entityplayer.renderBrokenItemStack(itemstack);
-            entityplayer.addStat(Stats.ITEM_BROKEN.get(this));
+            entityliving.renderBrokenItemStack(itemstack);
+            if (entityliving instanceof PlayerEntity)
+                ((PlayerEntity) entityliving).addStat(Stats.ITEM_BROKEN.get(this));
             bayonetdamage = 0;
             ItemStack itemstack2 = new ItemStack(BalkonsWeaponMod.musket, 1);
             itemstack2.setDamage(itemstack.getDamage());
-            entityplayer.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack2);
+            entityliving.setItemStackToSlot(EquipmentSlotType.MAINHAND, itemstack2);
             if (itemstack.getTag().contains("rld")) {
                 ReloadHelper.setReloadState(itemstack2, ReloadHelper.getReloadState(itemstack));
             }

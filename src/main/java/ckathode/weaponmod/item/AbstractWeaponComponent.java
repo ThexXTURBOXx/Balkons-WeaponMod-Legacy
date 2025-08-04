@@ -25,7 +25,8 @@ public abstract class AbstractWeaponComponent {
     }
 
     void setItem(IItemWeapon itemweapon) {
-        item = (Item) itemweapon;
+        if (itemweapon instanceof Item)
+            item = (Item) itemweapon;
         weapon = itemweapon;
         onSetItem();
     }
@@ -61,7 +62,8 @@ public abstract class AbstractWeaponComponent {
 
     public abstract boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity);
 
-    public abstract ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand);
+    public abstract ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, PlayerEntity player,
+                                                             Hand hand);
 
     public abstract void onUsingTick(ItemStack stack, LivingEntity entity, int count);
 
