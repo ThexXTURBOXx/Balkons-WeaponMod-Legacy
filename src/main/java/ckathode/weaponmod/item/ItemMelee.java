@@ -129,7 +129,7 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World world,
                                                     @Nonnull PlayerEntity entityplayer,
                                                     @Nonnull Hand hand) {
-        return meleeComponent.onItemRightClick(world, entityplayer, hand);
+        return meleeComponent.onItemRightClick(entityplayer.getHeldItem(hand), world, entityplayer, hand);
     }
 
     @Override
@@ -152,8 +152,8 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
 
     @Nonnull
     @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EquipmentSlotType equipmentSlot
-            , @Nonnull ItemStack itemstack) {
+    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EquipmentSlotType equipmentSlot,
+                                                                     @Nonnull ItemStack itemstack) {
         Multimap<String, AttributeModifier> multimap = HashMultimap.create();
         if (equipmentSlot == EquipmentSlotType.MAINHAND) {
             meleeComponent.addItemAttributeModifiers(multimap);

@@ -8,7 +8,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.BoatEntity;
@@ -127,7 +126,8 @@ public class EntityCannon extends BoatEntity {
             if (isPassenger(damagesource.getTrueSource())) {
                 return true;
             }
-        } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
+        } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player") &&
+                   damagesource.getTrueSource() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) damagesource.getTrueSource();
             if (player != null && player.inventory.getCurrentItem().isEmpty()) {
                 if (!player.isCreative()) {
@@ -204,9 +204,9 @@ public class EntityCannon extends BoatEntity {
         }
         setMotion(motion);
         if (isBeingRidden()) {
-            LivingEntity entitylivingbase = (LivingEntity) getControllingPassenger();
-            float yaw = entitylivingbase.rotationYaw;
-            float pitch = entitylivingbase.rotationPitch;
+            Entity riddenByEntity = getControllingPassenger();
+            float yaw = riddenByEntity.rotationYaw;
+            float pitch = riddenByEntity.rotationPitch;
             rotationYaw = yaw % 360.0f;
             rotationPitch = pitch;
         }

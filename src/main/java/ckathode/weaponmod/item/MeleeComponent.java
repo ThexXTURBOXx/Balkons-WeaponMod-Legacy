@@ -168,9 +168,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity entityplayer,
-                                                    Hand hand) {
-        ItemStack itemstack = entityplayer.getHeldItem(hand);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemstack, World world,
+                                                    PlayerEntity entityplayer, Hand hand) {
         if (getUseAction(itemstack) != UseAction.NONE)
             entityplayer.setActiveHand(hand);
         return new ActionResult<>(ActionResultType.PASS, itemstack);

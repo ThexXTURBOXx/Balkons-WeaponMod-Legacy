@@ -101,11 +101,10 @@ public class AdvancedExplosion extends Explosion {
         Collections.shuffle(positions, worldObj.rand);
         for (BlockPos blockpos : positions) {
             BlockState blockstate = worldObj.getBlockState(blockpos);
-            Block block = blockstate.getBlock();
             if (!blockstate.isAir(worldObj, blockpos)) {
                 BlockPos blockpos1 = blockpos.toImmutable();
                 worldObj.getProfiler().startSection("explosion_blocks");
-                if (blockstate.canDropFromExplosion(worldObj, blockpos, this) && worldObj instanceof ServerWorld) {
+                if (worldObj instanceof ServerWorld && blockstate.canDropFromExplosion(worldObj, blockpos, this) && worldObj instanceof ServerWorld) {
                     TileEntity tileentity = blockstate.hasTileEntity() ? worldObj.getTileEntity(blockpos) : null;
                     LootContext.Builder lcBuilder =
                             new LootContext.Builder((ServerWorld) worldObj)
@@ -121,6 +120,7 @@ public class AdvancedExplosion extends Explosion {
                 }
 
                 blockstate.onBlockExploded(worldObj, blockpos, this);
+                worldObj.getProfiler().endSection();
             }
         }
 

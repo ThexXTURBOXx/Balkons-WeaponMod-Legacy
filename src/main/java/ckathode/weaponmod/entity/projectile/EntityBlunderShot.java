@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -94,20 +93,13 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
     public static void fireSpreadShot(World world, LivingEntity entityliving,
                                       RangedComponent item, ItemStack itemstack) {
-        PlayerEntity entityplayer = (PlayerEntity) entityliving;
         for (int i = 0; i < 10; ++i) {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
-            entity.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f, 15.0f);
+            entity.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }
             world.addEntity(entity);
-        }
-    }
-
-    public static void fireSpreadShot(World world, double x, double y, double z) {
-        for (int i = 0; i < 10; ++i) {
-            world.addEntity(new EntityBlunderShot(world, x, y, z));
         }
     }
 

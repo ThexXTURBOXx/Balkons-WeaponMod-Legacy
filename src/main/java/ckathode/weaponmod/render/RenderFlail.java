@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -30,8 +30,8 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
     @ParametersAreNonnullByDefault
     public void render(EntityFlail entityflail, float p, float partialTicks,
                        MatrixStack ms, IRenderTypeBuffer bufs, int lm) {
-        PlayerEntity shooter = entityflail.shootingEntity != null
-                ? entityflail.getEntityWorld().getPlayerByUuid(entityflail.shootingEntity) : null;
+        LivingEntity shooter = entityflail.getShooter() instanceof LivingEntity
+                ? (LivingEntity) entityflail.getShooter() : null;
         if (shooter != null) {
             ms.push();
             ms.push();
