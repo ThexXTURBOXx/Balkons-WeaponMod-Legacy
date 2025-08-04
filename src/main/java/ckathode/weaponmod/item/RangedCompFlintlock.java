@@ -18,16 +18,15 @@ public class RangedCompFlintlock extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        entityplayer.swingArm(EnumHand.MAIN_HAND);
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ,
+    public void effectReloadDone(ItemStack itemstack, World world, EntityLivingBase entityliving) {
+        entityliving.swingArm(EnumHand.MAIN_HAND);
+        world.playSound(null, entityliving.posX, entityliving.posY, entityliving.posZ,
                 SoundEvents.BLOCK_COMPARATOR_CLICK, SoundCategory.PLAYERS, 1.0f,
                 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
     }
 
     @Override
     public void fire(ItemStack itemstack, World world, EntityLivingBase entityliving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -36,8 +35,8 @@ public class RangedCompFlintlock extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isRemote) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityplayer);
-            entitymusketbullet.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 5.0f,
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving);
+            entitymusketbullet.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f,
                     4.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             entitymusketbullet.setExtraDamage(entitymusketbullet.extraDamage - 10.0f);
@@ -47,8 +46,8 @@ public class RangedCompFlintlock extends RangedComponent {
         if (itemstack.getDamage() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.damageItem(damage, entityplayer);
-        postShootingEffects(itemstack, entityplayer, world);
+        itemstack.damageItem(damage, entityliving);
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

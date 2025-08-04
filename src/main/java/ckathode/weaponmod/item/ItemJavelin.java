@@ -29,9 +29,8 @@ public class ItemJavelin extends WMItem {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack itemstack, @Nonnull World world,
+    public void onPlayerStoppedUsing(@Nonnull ItemStack itemstack, @Nonnull World world,
                                      @Nonnull EntityLivingBase entityLiving, int i) {
-        EntityPlayer entityplayer = (EntityPlayer) entityLiving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -41,17 +40,17 @@ public class ItemJavelin extends WMItem {
         if (f > 1.0f) {
             f = 1.0f;
         }
-        boolean crit = !entityplayer.onGround && !entityplayer.isInWater();
+        boolean crit = !entityLiving.onGround && !entityLiving.isInWater();
         if (!world.isRemote) {
-            EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
-            entityjavelin.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
+            EntityJavelin entityjavelin = new EntityJavelin(world, entityLiving);
+            entityjavelin.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, 0.0f,
                     f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
             entityjavelin.setIsCritical(crit);
             world.spawnEntity(entityjavelin);
         }
-        world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT
-                , SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.isCreative()) {
+        world.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, SoundEvents.ENTITY_ARROW_SHOOT,
+                SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
+        if (entityLiving instanceof EntityPlayer && !((EntityPlayer) entityLiving).isCreative()) {
             WMItem.decrStackSize(itemstack, 1, entityLiving);
         }
     }

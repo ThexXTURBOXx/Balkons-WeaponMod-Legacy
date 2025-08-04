@@ -22,12 +22,10 @@ public class WMCommonEventHandler {
     @SubscribeEvent
     public void cancelBlockingOfRangedWeapons(LivingAttackEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
-        if (!(entity instanceof EntityPlayer)) return;
-        EntityPlayer player = (EntityPlayer) entity;
-        ItemStack stack = player.getActiveItemStack();
+        ItemStack stack = entity.getActiveItemStack();
         Item item = stack.isEmpty() ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return;
 
-        player.resetActiveHand();
+        entity.resetActiveHand();
     }
 }

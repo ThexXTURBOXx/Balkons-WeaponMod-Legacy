@@ -94,7 +94,8 @@ public class ItemFlail extends ItemMelee {
     @Override
     public boolean hitEntity(@Nonnull ItemStack itemstack, @Nonnull EntityLivingBase entityliving,
                              @Nonnull EntityLivingBase attacker) {
-        onItemRightClick(attacker.world, (EntityPlayer) attacker, EnumHand.MAIN_HAND);
+        if (attacker instanceof EntityPlayer)
+            onItemRightClick(attacker.world, (EntityPlayer) attacker, EnumHand.MAIN_HAND);
         return true;
     }
 

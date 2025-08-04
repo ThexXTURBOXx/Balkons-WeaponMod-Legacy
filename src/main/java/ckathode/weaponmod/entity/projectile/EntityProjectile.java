@@ -302,8 +302,8 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends EntityArrow
                 }
             }
             Entity shooter = getShooter();
+            EnchantmentHelper.applyThornEnchantments(entityliving, shooter);
             if (shooter instanceof EntityLivingBase) {
-                EnchantmentHelper.applyThornEnchantments(entityliving, shooter);
                 EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shooter, entityliving);
             }
             if (shooter instanceof EntityPlayerMP && !shootingEntity.equals(entity.getUniqueID()) && entity instanceof EntityPlayer) {

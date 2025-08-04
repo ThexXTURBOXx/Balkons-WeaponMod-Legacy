@@ -6,7 +6,6 @@ import ckathode.weaponmod.item.WMItem;
 import java.util.List;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -121,7 +120,8 @@ public class EntityCannon extends EntityBoat {
             if (isPassenger(damagesource.getTrueSource())) {
                 return true;
             }
-        } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player")) {
+        } else if (damagesource instanceof EntityDamageSource && damagesource.damageType.equals("player") &&
+                   damagesource.getTrueSource() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) damagesource.getTrueSource();
             if (player != null && player.inventory.getCurrentItem().isEmpty()) {
                 if (!player.isCreative()) {
@@ -200,9 +200,9 @@ public class EntityCannon extends EntityBoat {
             fallDistance += (float) (-motionY);
         }
         if (isBeingRidden()) {
-            EntityLivingBase entitylivingbase = (EntityLivingBase) getControllingPassenger();
-            float yaw = entitylivingbase.rotationYaw;
-            float pitch = entitylivingbase.rotationPitch;
+            Entity riddenByEntity = getControllingPassenger();
+            float yaw = riddenByEntity.rotationYaw;
+            float pitch = riddenByEntity.rotationPitch;
             rotationYaw = yaw % 360.0f;
             rotationPitch = pitch;
         }
@@ -366,6 +366,7 @@ public class EntityCannon extends EntityBoat {
         }
         return true;
     }
+
     protected boolean consumeAmmo(EntityPlayer entityplayer, Item itemAmmo) {
         return WMItem.consumeInventoryItem(entityplayer, itemAmmo);
     }
