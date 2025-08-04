@@ -29,16 +29,15 @@ public class RangedCompMusket extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, Level world, Player entityplayer) {
-        entityplayer.swing(InteractionHand.MAIN_HAND);
-        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
+    public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        entityliving.swing(InteractionHand.MAIN_HAND);
+        world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 1.0f,
                 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.8f));
     }
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        Player entityplayer = (Player) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -47,8 +46,8 @@ public class RangedCompMusket extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isClientSide) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityplayer);
-            entitymusketbullet.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 5.0f,
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving);
+            entitymusketbullet.shootFromRotation(entityliving, entityliving.xRot, entityliving.yRot, 0.0f, 5.0f,
                     1.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             world.addFreshEntity(entitymusketbullet);
@@ -59,13 +58,14 @@ public class RangedCompMusket extends RangedComponent {
             int bayonetDamage = itemstack.hasTag() ? itemstack.getTag().getShort("bayonetDamage") : 0;
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1);
             newStack.setDamageValue(bayonetDamage);
-            itemstack.hurtAndBreak(deltaDamage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
-            entityplayer.inventory.add(newStack);
+            itemstack.hurtAndBreak(deltaDamage, entityliving, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+            if (entityliving instanceof Player)
+                ((Player) entityliving).inventory.add(newStack);
         } else {
-            itemstack.hurtAndBreak(deltaDamage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+            itemstack.hurtAndBreak(deltaDamage, entityliving, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        postShootingEffects(itemstack, entityplayer, world);
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

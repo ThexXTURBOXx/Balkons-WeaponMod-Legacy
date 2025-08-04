@@ -72,8 +72,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
             if (distance.lengthSqr() > 9.0) {
                 returnToOwner(true);
             }
-            if (shooter instanceof Player) {
-                ItemStack itemstack = ((Player) shooter).getMainHandItem();
+            if (shooter instanceof LivingEntity) {
+                ItemStack itemstack = ((LivingEntity) shooter).getMainHandItem();
                 ItemStack thrownItem = getWeapon();
                 if (itemstack.isEmpty() || (!thrownItem.isEmpty() && itemstack.getItem() != thrownItem.getItem()) || !shooter.isAlive()) {
                     pickUpByOwner();
@@ -146,12 +146,9 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
             return;
         }
         Entity shooter = getDamagingEntity();
-        DamageSource damagesource;
-        if (shooter instanceof LivingEntity) {
-            damagesource = DamageSource.mobAttack((LivingEntity) shooter);
-        } else {
-            damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
-        }
+        DamageSource damagesource = shooter instanceof LivingEntity
+                ? DamageSource.mobAttack((LivingEntity) shooter)
+                : WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
         if (entity.hurt(damagesource, flailDamage + extraDamage)) {
             playHitSound();
             returnToOwner(true);
@@ -178,11 +175,11 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     @Override
     public void setThrownItemStack(@NotNull ItemStack itemstack) {
-        if (!(itemstack.getItem() instanceof ItemFlail)) {
+        if (!itemstack.isEmpty() && !(itemstack.getItem() instanceof ItemFlail)) {
             return;
         }
         super.setThrownItemStack(itemstack);
-        flailDamage = ((ItemFlail) itemstack.getItem()).getFlailDamage();
+        flailDamage = itemstack.isEmpty() ? 0 : ((ItemFlail) itemstack.getItem()).getFlailDamage();
     }
 
     @Override

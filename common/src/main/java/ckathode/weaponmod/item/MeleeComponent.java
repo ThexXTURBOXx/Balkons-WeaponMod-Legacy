@@ -171,9 +171,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level world,
+                                                  Player entityplayer, InteractionHand hand) {
         if (getUseAnimation(itemstack) != UseAnim.NONE)
             entityplayer.startUsingItem(hand);
         return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);

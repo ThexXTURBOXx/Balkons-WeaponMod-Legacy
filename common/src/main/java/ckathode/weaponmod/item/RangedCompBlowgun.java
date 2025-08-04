@@ -26,15 +26,16 @@ public class RangedCompBlowgun extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, Level world, Player entityplayer) {
-        entityplayer.swing(InteractionHand.MAIN_HAND);
-        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
+    public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        entityliving.swing(InteractionHand.MAIN_HAND);
+        world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 0.8f,
                 1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 0.4f));
     }
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
+        if (!(entityliving instanceof Player)) return;
         Player entityplayer = (Player) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
@@ -74,8 +75,9 @@ public class RangedCompBlowgun extends RangedComponent {
     }
 
     @Override
-    public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, Player entityplayer) {
-        return hasAmmo(itemstack, world, entityplayer);
+    public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        if (!(entityliving instanceof Player)) return false;
+        return hasAmmo(itemstack, world, (Player) entityliving);
     }
 
     @Override

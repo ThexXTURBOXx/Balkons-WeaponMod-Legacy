@@ -318,8 +318,8 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
                 }
             }
             Entity shooter = getOwner();
+            EnchantmentHelper.doPostHurtEffects(entityliving, shooter);
             if (shooter instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects(entityliving, shooter);
                 EnchantmentHelper.doPostDamageEffects((LivingEntity) shooter, entityliving);
             }
             if (shooter instanceof ServerPlayer && !entity.equals(getOwner()) && entity instanceof Player) {

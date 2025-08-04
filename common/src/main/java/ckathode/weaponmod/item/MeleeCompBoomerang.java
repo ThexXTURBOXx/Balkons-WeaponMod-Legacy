@@ -42,41 +42,38 @@ public class MeleeCompBoomerang extends MeleeComponent {
 
     @Override
     public void releaseUsing(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        if (entityliving instanceof Player) {
-            Player entityplayer = (Player) entityliving;
-            if (itemstack.isEmpty()) {
-                return;
+        if (itemstack.isEmpty()) {
+            return;
+        }
+        int j = getUseDuration(itemstack) - i;
+        float f = j / 20.0f;
+        f = (f * f + f * 2.0f) / 3.0f;
+        if (f < 0.1f) {
+            return;
+        }
+        boolean crit = false;
+        if (f > 1.5f) {
+            f = 1.5f;
+            crit = true;
+        }
+        f *= 1.5f;
+        if (!world.isClientSide) {
+            EntityBoomerang entityboomerang = new EntityBoomerang(world, entityliving, itemstack.copy());
+            entityboomerang.shootFromRotation(entityliving, entityliving.xRot, entityliving.yRot, 0.0f, f,
+                    5.0f);
+            entityboomerang.setCritArrow(crit);
+            entityboomerang.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK,
+                    itemstack));
+            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+                entityboomerang.setSecondsOnFire(100);
             }
-            int j = getUseDuration(itemstack) - i;
-            float f = j / 20.0f;
-            f = (f * f + f * 2.0f) / 3.0f;
-            if (f < 0.1f) {
-                return;
-            }
-            boolean crit = false;
-            if (f > 1.5f) {
-                f = 1.5f;
-                crit = true;
-            }
-            f *= 1.5f;
-            if (!world.isClientSide) {
-                EntityBoomerang entityboomerang = new EntityBoomerang(world, entityplayer, itemstack.copy());
-                entityboomerang.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, f,
-                        5.0f);
-                entityboomerang.setCritArrow(crit);
-                entityboomerang.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK,
-                        itemstack));
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                    entityboomerang.setSecondsOnFire(100);
-                }
-                world.addFreshEntity(entityboomerang);
-            }
-            world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
-                    SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 0.6f,
-                    1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
-            if (!entityplayer.isCreative()) {
-                WMItem.decrStackSize(itemstack, 1, entityliving);
-            }
+            world.addFreshEntity(entityboomerang);
+        }
+        world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
+                SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 0.6f,
+                1.0f / (weapon.getItemRand().nextFloat() * 0.4f + 1.0f));
+        if (!(entityliving instanceof Player) || !((Player) entityliving).isCreative()) {
+            WMItem.decrStackSize(itemstack, 1, entityliving);
         }
     }
 
@@ -86,13 +83,9 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level world,
+                                                  Player entityplayer, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND) {
-            return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
-        }
-        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
         }
         entityplayer.startUsingItem(hand);

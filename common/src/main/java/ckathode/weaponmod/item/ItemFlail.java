@@ -99,7 +99,8 @@ public class ItemFlail extends ItemMelee {
     @Override
     public boolean hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                              @NotNull LivingEntity attacker) {
-        use(attacker.level, (Player) attacker, InteractionHand.MAIN_HAND);
+        if (attacker instanceof Player)
+            use(attacker.level, (Player) attacker, InteractionHand.MAIN_HAND);
         return true;
     }
 

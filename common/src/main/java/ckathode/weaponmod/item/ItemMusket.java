@@ -95,7 +95,7 @@ public class ItemMusket extends ItemShooter {
                 entityliving.invulnerableTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);
             }
             if (attacker instanceof Player && !((Player) attacker).isCreative()) {
-                bayonetDamage(itemstack, (Player) attacker, 1);
+                bayonetDamage(itemstack, attacker, 1);
             }
         }
         return true;
@@ -110,24 +110,25 @@ public class ItemMusket extends ItemShooter {
             boolean flag =
                     material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && material != Material.LEAVES && material != Material.VEGETABLE;
             if (entityliving instanceof Player && !((Player) entityliving).isCreative() && flag) {
-                bayonetDamage(itemstack, (Player) entityliving, 2);
+                bayonetDamage(itemstack, entityliving, 2);
             }
         }
         return true;
     }
 
-    public void bayonetDamage(ItemStack itemstack, Player entityplayer, int damage) {
+    public void bayonetDamage(ItemStack itemstack, LivingEntity entityliving, int damage) {
         if (itemstack.getTag() == null) {
             itemstack.setTag(new CompoundTag());
         }
         int bayonetdamage = itemstack.getTag().getShort("bayonetDamage") + damage;
         if (bayonetdamage > bayonetDurability) {
-            entityplayer.broadcastBreakEvent(InteractionHand.MAIN_HAND);
-            entityplayer.awardStat(Stats.ITEM_BROKEN.get(this));
+            entityliving.broadcastBreakEvent(InteractionHand.MAIN_HAND);
+            if (entityliving instanceof Player)
+                ((Player) entityliving).awardStat(Stats.ITEM_BROKEN.get(this));
             bayonetdamage = 0;
             ItemStack itemstack2 = new ItemStack(WMRegistries.ITEM_MUSKET.get(), 1);
             itemstack2.setDamageValue(itemstack.getDamageValue());
-            entityplayer.setItemSlot(EquipmentSlot.MAINHAND, itemstack2);
+            entityliving.setItemSlot(EquipmentSlot.MAINHAND, itemstack2);
             if (itemstack.getTag().contains("rld")) {
                 ReloadHelper.setReloadState(itemstack2, ReloadHelper.getReloadState(itemstack));
             }

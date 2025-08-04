@@ -23,25 +23,24 @@ public class RangedCompBlunderbuss extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, Level world, Player entityplayer) {
-        entityplayer.swing(InteractionHand.MAIN_HAND);
-        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
+    public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        entityliving.swing(InteractionHand.MAIN_HAND);
+        world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.WOODEN_DOOR_CLOSE, SoundSource.PLAYERS, 0.8f,
                 1.0f / (weapon.getItemRand().nextFloat() * 0.2f + 0.0f));
     }
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        Player entityplayer = (Player) entityliving;
         if (!world.isClientSide) {
-            EntityBlunderShot.fireSpreadShot(world, entityplayer, this, itemstack);
+            EntityBlunderShot.fireSpreadShot(world, entityliving, this, itemstack);
         }
         int damage = 1;
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityplayer, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
-        postShootingEffects(itemstack, entityplayer, world);
+        itemstack.hurtAndBreak(damage, entityliving, s -> s.broadcastBreakEvent(s.getUsedItemHand()));
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

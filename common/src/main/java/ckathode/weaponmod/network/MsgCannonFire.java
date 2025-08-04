@@ -7,6 +7,7 @@ import me.shedaniel.architectury.networking.NetworkManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 public class MsgCannonFire implements WMMessage<MsgCannonFire> {
 
@@ -37,7 +38,10 @@ public class MsgCannonFire implements WMMessage<MsgCannonFire> {
 
     @Override
     public void handleServerSide(MsgCannonFire msg, Supplier<NetworkManager.PacketContext> ctx) {
-        Entity entity = ctx.get().getPlayer().level.getEntity(cannonEntityID);
+        Player player = ctx.get().getPlayer();
+        if (player == null) return;
+
+        Entity entity = player.level.getEntity(cannonEntityID);
         if (entity instanceof EntityCannon) {
             ((EntityCannon) entity).fireCannon();
         }
