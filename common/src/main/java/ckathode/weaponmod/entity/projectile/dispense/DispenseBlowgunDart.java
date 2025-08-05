@@ -20,8 +20,8 @@ public class DispenseBlowgunDart extends DispenseWeaponProjectile {
                                        @NotNull ItemStack itemstack) {
         EntityBlowgunDart dart = new EntityBlowgunDart(world, pos.x(), pos.y(), pos.z());
         Item item = itemstack.getItem();
-        if (item instanceof ItemBlowgunDart)
-            dart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
+        if (item instanceof ItemBlowgunDart dartItem)
+            dart.setDartEffectType(dartItem.getDartType());
         return dart;
     }
 

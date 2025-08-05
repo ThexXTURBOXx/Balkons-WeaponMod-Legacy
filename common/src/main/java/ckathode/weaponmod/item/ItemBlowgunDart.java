@@ -35,7 +35,7 @@ public class ItemBlowgunDart extends WMItem {
     @Override
     public void appendHoverText(@NotNull ItemStack itemstack, @Nullable Level worldIn,
                                 @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        PotionUtils.addPotionTooltip(Collections.singletonList(dartType.potionEffect), list, 1.0f);
+        PotionUtils.addPotionTooltip(Collections.singletonList(dartType.potionEffect()), list, 1.0f);
     }
 
     @NotNull

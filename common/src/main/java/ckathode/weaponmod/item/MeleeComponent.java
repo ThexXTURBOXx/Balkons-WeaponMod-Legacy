@@ -140,12 +140,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
                             "Weapon knockback modifier", meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
                             AttributeModifier.Operation.ADDITION));
         }
-        if (this instanceof IExtendedReachItem) {
+        if (this instanceof IExtendedReachItem ieri) {
             try {
                 multimap.put(WeaponModAttributes.WEAPON_REACH,
                         new AttributeModifier(IItemWeapon.REACH_MODIFIER,
                                 "Weapon reach modifier",
-                                ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
+                                ieri.getExtendedReach(null, null, null) - 3.0f,
                                 AttributeModifier.Operation.ADDITION));
             } catch (NullPointerException ignored) {
             }
@@ -154,8 +154,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public boolean onLeftClickEntity(ItemStack itemstack, Player player, Entity entity) {
-        if (entity instanceof LivingEntity) {
-            PhysHelper.prepareKnockbackOnEntity(player, (LivingEntity) entity);
+        if (entity instanceof LivingEntity livingEntity) {
+            PhysHelper.prepareKnockbackOnEntity(player, livingEntity);
         }
         return false;
     }
@@ -171,9 +171,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level world,
+                                                  Player entityplayer, InteractionHand hand) {
         if (getUseAnimation(itemstack) != UseAnim.NONE)
             entityplayer.startUsingItem(hand);
         return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);

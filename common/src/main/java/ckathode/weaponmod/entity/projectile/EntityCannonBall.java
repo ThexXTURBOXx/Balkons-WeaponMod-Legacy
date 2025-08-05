@@ -46,8 +46,8 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
         Entity entityPassenger = entitycannon.getPassengers().isEmpty() ? null :
                 entitycannon.getPassengers().get(0);
         setOwner(entitycannon);
-        if (entityPassenger instanceof LivingEntity) {
-            setPickupStatusFromEntity((LivingEntity) entityPassenger);
+        if (entityPassenger instanceof LivingEntity livingEntity) {
+            setPickupStatusFromEntity(livingEntity);
         } else {
             setPickupStatus(PickupStatus.ALLOWED);
         }

@@ -107,8 +107,8 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     }
 
     protected void setPickupStatusFromEntity(LivingEntity entityliving) {
-        if (entityliving instanceof Player) {
-            if (((Player) entityliving).isCreative()) {
+        if (entityliving instanceof Player player) {
+            if (player.isCreative()) {
                 setPickupStatus(PickupStatus.CREATIVE_ONLY);
             } else {
                 setPickupStatus(WeaponModConfig.get().allCanPickup ? PickupStatus.ALLOWED : PickupStatus.OWNER_ONLY);
@@ -224,10 +224,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             if (entityraytraceresult != null) {
                 raytraceresult = entityraytraceresult;
             }
-            if (raytraceresult instanceof EntityHitResult) {
-                final Entity entity = ((EntityHitResult) raytraceresult).getEntity();
+            if (raytraceresult instanceof EntityHitResult ehr) {
+                final Entity entity = ehr.getEntity();
                 final Entity entity2 = getOwner();
-                if (entity instanceof Player && entity2 instanceof Player && !((Player) entity2).canHarmPlayer((Player) entity)) {
+                if (entity instanceof Player player && entity2 instanceof Player player2 && !player2.canHarmPlayer(player)) {
                     raytraceresult = null;
                     entityraytraceresult = null;
                 }
@@ -295,11 +295,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void onHit(@NotNull HitResult result) {
-        HitResult.Type type = result.getType();
-        if (type == HitResult.Type.ENTITY) {
-            onHitEntity((EntityHitResult) result);
-        } else if (type == HitResult.Type.BLOCK) {
-            onHitBlock((BlockHitResult) result);
+        if (result instanceof EntityHitResult ehr) {
+            onHitEntity(ehr);
+        } else if (result instanceof BlockHitResult bhr) {
+            onHitBlock(bhr);
         }
     }
 
@@ -322,12 +321,12 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
                 }
             }
             Entity shooter = getOwner();
-            if (shooter instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects(entityliving, shooter);
-                EnchantmentHelper.doPostDamageEffects((LivingEntity) shooter, entityliving);
+            EnchantmentHelper.doPostHurtEffects(entityliving, shooter);
+            if (shooter instanceof LivingEntity livingShooter) {
+                EnchantmentHelper.doPostDamageEffects(livingShooter, entityliving);
             }
-            if (shooter instanceof ServerPlayer && !entity.equals(getOwner()) && entity instanceof Player) {
-                ((ServerPlayer) shooter).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0f));
+            if (shooter instanceof ServerPlayer sp && !entity.equals(getOwner()) && entity instanceof Player) {
+                sp.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0f));
             }
         }
     }

@@ -71,8 +71,8 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         if (thrownItem.isEmpty()) return;
         Item item = thrownItem.getItem();
         Entity entity = result.getEntity();
-        if (item instanceof IItemWeapon && entity.hurt(damagesource,
-                ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + getMeleeHitDamage(entity))) {
+        if (item instanceof IItemWeapon iiw && entity.hurt(damagesource,
+                iiw.getMeleeComponent().getEntityDamage() + getMeleeHitDamage(entity))) {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {
@@ -80,8 +80,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
                 remove(RemovalReason.DISCARDED);
             } else {
                 Entity shooter = getOwner();
-                thrownItem.hurt(1, random,
-                        shooter instanceof ServerPlayer ? (ServerPlayer) shooter : null);
+                thrownItem.hurt(1, random, shooter instanceof ServerPlayer sp ? sp : null);
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {

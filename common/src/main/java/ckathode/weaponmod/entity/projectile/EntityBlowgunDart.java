@@ -77,7 +77,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     public void setDartEffectType(DartType type) {
-        setDartEffectType(type.typeID);
+        setDartEffectType(type.typeID());
     }
 
     public void setDartEffectType(byte i) {
@@ -104,8 +104,8 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
         Entity entity = result.getEntity();
         DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         if (entity.hurt(damagesource, 1.0f + extraDamage)) {
-            if (entity instanceof LivingEntity) {
-                ((LivingEntity) entity).addEffect(new MobEffectInstance(getDartEffectType().potionEffect));
+            if (entity instanceof LivingEntity livingEntity) {
+                livingEntity.addEffect(new MobEffectInstance(getDartEffectType().potionEffect()));
             }
             applyEntityHitEffects(entity);
             playHitSound();
