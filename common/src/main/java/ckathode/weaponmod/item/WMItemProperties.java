@@ -62,8 +62,8 @@ public final class WMItemProperties {
 
         public boolean get(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity,
                            int i, ItemDisplayContext itemDisplayContext) {
-            return livingEntity instanceof Player && livingEntity.getMainHandItem() == itemStack &&
-                   PlayerWeaponData.isFlailThrown((Player) livingEntity);
+            return livingEntity instanceof Player player && livingEntity.getMainHandItem() == itemStack &&
+                   PlayerWeaponData.isFlailThrown(player);
         }
 
         @NotNull

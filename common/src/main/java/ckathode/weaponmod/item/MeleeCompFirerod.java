@@ -41,7 +41,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     public void inventoryTick(@NotNull ItemStack itemStack, @NotNull ServerLevel serverLevel,
                               @NotNull Entity entity, @Nullable EquipmentSlot equipmentSlot) {
         super.inventoryTick(itemStack, serverLevel, entity, equipmentSlot);
-        if (!(entity instanceof Player player)) return;
+        if (!(entity instanceof Player player)) return; // render particles only for players
         if (player.isInWater()) return;
         boolean mainHand = player.getMainHandItem() == itemStack;
         boolean offHand = player.getOffhandItem() == itemStack;

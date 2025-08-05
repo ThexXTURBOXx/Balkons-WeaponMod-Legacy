@@ -85,11 +85,11 @@ public class MeleeComponent extends AbstractWeaponComponent {
                                     AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND);
         }
-        if (this instanceof IExtendedReachItem) {
+        if (this instanceof IExtendedReachItem ieri) {
             try {
                 attributeBuilder = attributeBuilder
                         .add(WMRegistries.WEAPON_REACH, new AttributeModifier(WeaponModAttributes.WEAPON_REACH_ID,
-                                        ((IExtendedReachItem) this).getExtendedReach(null, null, null) - 3.0f,
+                                        ieri.getExtendedReach(null, null, null) - 3.0f,
                                         AttributeModifier.Operation.ADD_VALUE),
                                 EquipmentSlotGroup.MAINHAND);
             } catch (NullPointerException ignored) {
@@ -165,8 +165,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public boolean onLeftClickEntity(ItemStack itemstack, Player player, Entity entity) {
-        if (entity instanceof LivingEntity) {
-            PhysHelper.prepareKnockbackOnEntity(player, (LivingEntity) entity);
+        if (entity instanceof LivingEntity livingEntity) {
+            PhysHelper.prepareKnockbackOnEntity(player, livingEntity);
         }
         return false;
     }
@@ -183,8 +183,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @NotNull
     @Override
-    public InteractionResult use(Level world, Player entityplayer, InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResult use(ItemStack itemstack, Level world,
+                                 Player entityplayer, InteractionHand hand) {
         if (getUseAnimation(itemstack) != ItemUseAnimation.NONE)
             entityplayer.startUsingItem(hand);
         return InteractionResult.PASS;

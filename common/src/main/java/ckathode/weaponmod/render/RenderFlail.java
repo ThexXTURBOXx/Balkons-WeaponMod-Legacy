@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
     @Override
     public void render(FlailRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
         Entity shooterEntity = entityRenderState.owner;
-        if (shooterEntity instanceof Player shooter) {
+        if (shooterEntity instanceof LivingEntity shooter) {
             ms.pushPose();
             ms.pushPose();
             ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));

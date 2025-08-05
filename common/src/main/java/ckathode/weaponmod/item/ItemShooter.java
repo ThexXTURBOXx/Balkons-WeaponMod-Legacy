@@ -74,7 +74,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     @NotNull
     @Override
     public InteractionResult use(@NotNull Level world, @NotNull Player entityplayer, @NotNull InteractionHand hand) {
-        return rangedComponent.use(world, entityplayer, hand);
+        return rangedComponent.use(entityplayer.getItemInHand(hand), world, entityplayer, hand);
     }
 
     @Override

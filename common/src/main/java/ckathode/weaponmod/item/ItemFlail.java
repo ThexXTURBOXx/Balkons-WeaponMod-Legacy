@@ -64,15 +64,15 @@ public class ItemFlail extends ItemMelee {
             return;
         }
         ItemStack itemstack2 = player.getMainHandItem();
-        if (itemstack2.isEmpty() || !((itemstack2.getItem()) instanceof ItemFlail)) {
+        if (itemstack2.isEmpty() || !(itemstack2.getItem() instanceof ItemFlail)) {
             setThrown(player, false);
         } else if (itemstack2.getItem() == this) {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
                 Entity entity2 = serverLevel.getEntity(id);
-                if (entity2 instanceof EntityFlail) {
-                    ((EntityFlail) entity2).setOwner(player);
-                    ((EntityFlail) entity2).setThrownItemStack(itemStack);
+                if (entity2 instanceof EntityFlail flail) {
+                    flail.setOwner(player);
+                    flail.setThrownItemStack(itemStack);
                 }
             }
         }
@@ -104,7 +104,8 @@ public class ItemFlail extends ItemMelee {
     @Override
     public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                           @NotNull LivingEntity attacker) {
-        use(attacker.level(), (Player) attacker, InteractionHand.MAIN_HAND);
+        if (attacker instanceof Player player)
+            use(attacker.level(), player, InteractionHand.MAIN_HAND);
     }
 
     public void throwFlail(ItemStack itemstack, Level world, Player entityplayer) {
