@@ -77,8 +77,8 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public @NotNull InteractionResult use(Level world, Player entityplayer,
-                                          InteractionHand hand) {
+    public @NotNull InteractionResult use(ItemStack itemstack, Level world,
+                                          Player entityplayer, InteractionHand hand) {
         return InteractionResult.PASS;
     }
 

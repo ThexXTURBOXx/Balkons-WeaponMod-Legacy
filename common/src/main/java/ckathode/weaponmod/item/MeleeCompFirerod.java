@@ -40,7 +40,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     @Override
     public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int i, boolean flag) {
         super.inventoryTick(itemstack, world, entity, i, flag);
-        if (!(entity instanceof Player player)) return;
+        if (!(entity instanceof Player player)) return; // render particles only for players
         if (player.isInWater()) return;
         boolean mainHand = player.getMainHandItem() == itemstack;
         boolean offHand = player.getOffhandItem() == itemstack;

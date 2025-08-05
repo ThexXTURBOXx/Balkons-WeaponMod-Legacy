@@ -72,8 +72,8 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
         float vel = (float) getTotalVelocity();
         float damage = vel * 4.0f + extraDamage;
         if (entity.hurtOrSimulate(getDamageSource(), damage)) {
-            if (entity instanceof LivingEntity && level().isClientSide) {
-                ((LivingEntity) entity).setArrowCount(((LivingEntity) entity).getArrowCount() + 1);
+            if (entity instanceof LivingEntity livingEntity && level().isClientSide) {
+                livingEntity.setArrowCount(livingEntity.getArrowCount() + 1);
             }
             applyEntityHitEffects(entity);
             playHitSound();

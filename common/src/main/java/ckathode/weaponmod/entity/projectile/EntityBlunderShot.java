@@ -13,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -115,25 +114,14 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
     public static void fireSpreadShot(Level world, LivingEntity entityliving,
                                       RangedComponent item, ItemStack itemstack) {
-        Player entityplayer = (Player) entityliving;
         for (int i = 0; i < 10; ++i) {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving, itemstack);
-            entity.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+            entity.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
                 item.applyProjectileEnchantments(entity, itemstack);
             }
             world.addFreshEntity(entity);
-        }
-    }
-
-    public static void fireSpreadShot(Level world, double x, double y, double z) {
-        fireSpreadShot(world, x, y, z, null);
-    }
-
-    public static void fireSpreadShot(Level world, double x, double y, double z, @Nullable ItemStack firedFromWeapon) {
-        for (int i = 0; i < 10; ++i) {
-            world.addFreshEntity(new EntityBlunderShot(world, x, y, z, firedFromWeapon));
         }
     }
 
