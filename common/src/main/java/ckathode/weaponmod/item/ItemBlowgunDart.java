@@ -44,7 +44,7 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
                                 TooltipFlag tooltipFlag) {
-        PotionContents.addPotionTooltip(Collections.singleton(dartType.potionEffect),
+        PotionContents.addPotionTooltip(Collections.singleton(dartType.potionEffect()),
                 tooltipComponents::add, 1.0f, context.tickRate());
     }
 
@@ -58,8 +58,8 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
         EntityBlowgunDart dart = new EntityBlowgunDart(level, pos.x(), pos.y(), pos.z(), null);
         Item item = stack.getItem();
-        if (item instanceof ItemBlowgunDart)
-            dart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
+        if (item instanceof ItemBlowgunDart dartItem)
+            dart.setDartEffectType(dartItem.getDartType());
         return dart;
     }
 

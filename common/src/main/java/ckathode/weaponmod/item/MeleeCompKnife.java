@@ -45,11 +45,10 @@ public class MeleeCompKnife extends MeleeComponent {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level world,
+                                                  Player entityplayer, InteractionHand hand) {
         if (!WeaponModConfig.get().canThrowKnife) {
-            return super.use(world, entityplayer, hand);
+            return super.use(itemstack, world, entityplayer, hand);
         }
         if (!world.isClientSide) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());

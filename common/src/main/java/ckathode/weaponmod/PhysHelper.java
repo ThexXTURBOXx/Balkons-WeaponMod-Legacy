@@ -99,9 +99,9 @@ public final class PhysHelper {
 
     public static void sendExplosion(Level world, AdvancedExplosion explosion,
                                      boolean smallparts, boolean bigparts) {
-        if (world instanceof ServerLevel && !world.isClientSide) {
+        if (world instanceof ServerLevel serverLevel && !world.isClientSide) {
             MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
-            WMMessagePipeline.sendToAround(msg, (ServerLevel) world, explosion.explosionX, explosion.explosionY,
+            WMMessagePipeline.sendToAround(msg, serverLevel, explosion.explosionX, explosion.explosionY,
                     explosion.explosionZ, 64.0, world.dimension());
         }
     }
@@ -126,8 +126,8 @@ public final class PhysHelper {
             dz = Math.cos(Math.toRadians(attacker.getYRot())) * knockBackModifier * 0.5;
             entityliving.push(dx, 0.1, dz);
         }
-        if (entityliving instanceof ServerPlayer) {
-            ((ServerPlayer) entityliving).connection.send(new ClientboundSetEntityMotionPacket(entityliving));
+        if (entityliving instanceof ServerPlayer serverPlayer) {
+            serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(entityliving));
         }
         knockBackModifier = 0;
         kbMotion = Vec3.ZERO;

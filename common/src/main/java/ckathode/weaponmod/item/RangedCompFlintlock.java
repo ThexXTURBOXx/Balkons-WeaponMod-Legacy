@@ -24,16 +24,15 @@ public class RangedCompFlintlock extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, Level world, Player entityplayer) {
-        entityplayer.swing(InteractionHand.MAIN_HAND);
-        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
+    public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        entityliving.swing(InteractionHand.MAIN_HAND);
+        world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 1.0f,
-                1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
+                1.0f / (entityliving.getRandom().nextFloat() * 0.4f + 0.8f));
     }
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        Player entityplayer = (Player) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -42,8 +41,8 @@ public class RangedCompFlintlock extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isClientSide) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityplayer, itemstack);
-            entitymusketbullet.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving, itemstack);
+            entitymusketbullet.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 4.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             entitymusketbullet.setExtraDamage(entitymusketbullet.extraDamage - 10.0f);
@@ -53,8 +52,8 @@ public class RangedCompFlintlock extends RangedComponent {
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityplayer, LivingEntity.getSlotForHand(entityplayer.getUsedItemHand()));
-        postShootingEffects(itemstack, entityplayer, world);
+        itemstack.hurtAndBreak(damage, entityliving, LivingEntity.getSlotForHand(entityliving.getUsedItemHand()));
+        postShootingEffects(itemstack, entityliving, world);
     }
 
     @Override

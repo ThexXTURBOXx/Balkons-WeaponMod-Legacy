@@ -25,7 +25,8 @@ public abstract class AbstractWeaponComponent {
     }
 
     void setItem(IItemWeapon itemweapon) {
-        item = (Item) itemweapon;
+        if (itemweapon instanceof Item i)
+            item = i;
         weapon = itemweapon;
         onSetItem();
     }
@@ -57,7 +58,8 @@ public abstract class AbstractWeaponComponent {
 
     public abstract boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity);
 
-    public abstract InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand);
+    public abstract InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level level, Player player,
+                                                           InteractionHand hand);
 
     public abstract void onUsingTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration);
 
