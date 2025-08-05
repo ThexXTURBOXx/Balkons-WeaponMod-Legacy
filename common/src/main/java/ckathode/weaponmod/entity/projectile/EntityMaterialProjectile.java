@@ -56,9 +56,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
 
     public float getMeleeHitDamage(Entity entity) {
         Entity shooter = getOwner();
-        if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
-            return EnchantmentHelper.getDamageBonus(((LivingEntity) shooter).getMainHandItem(),
-                    ((LivingEntity) entity).getMobType());
+        if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
+            return EnchantmentHelper.getDamageBonus(livingShooter.getMainHandItem(), livingEntity.getMobType());
         }
         return 0.0f;
     }
@@ -67,8 +66,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     public void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         ItemStack thrownItem = getWeapon();
-        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
-            ((ItemHitEffect) thrownItem.getItem()).onHitEntity(this, result);
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect ihe) {
+            ihe.onHitEntity(this, result);
         }
     }
 
@@ -76,8 +75,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     public void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
         ItemStack thrownItem = getWeapon();
-        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect) {
-            ((ItemHitEffect) thrownItem.getItem()).onHitBlock(this, result);
+        if (!thrownItem.isEmpty() && thrownItem.getItem() instanceof ItemHitEffect ihe) {
+            ihe.onHitBlock(this, result);
         }
     }
 
@@ -85,14 +84,14 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
         Entity shooter = getOwner();
-        if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
-            int i = EnchantmentHelper.getKnockbackBonus((LivingEntity) shooter);
+        if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
+            int i = EnchantmentHelper.getKnockbackBonus(livingShooter);
             if (i != 0) {
-                ((LivingEntity) entity).knockback(i * 0.4f,
+                livingEntity.knockback(i * 0.4f,
                         -Mth.sin(getYRot() * 0.017453292f),
                         -Mth.cos(getYRot() * 0.017453292f));
             }
-            i = EnchantmentHelper.getFireAspect((LivingEntity) shooter);
+            i = EnchantmentHelper.getFireAspect(livingShooter);
             if (i > 0 && !entity.isOnFire()) {
                 entity.setSecondsOnFire(1);
             }

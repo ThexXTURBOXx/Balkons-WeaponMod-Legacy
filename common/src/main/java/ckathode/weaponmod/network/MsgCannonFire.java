@@ -1,12 +1,13 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.entity.EntityCannon;
+import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.ByteBuf;
 import java.util.function.Supplier;
-import dev.architectury.networking.NetworkManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 public class MsgCannonFire implements WMMessage<MsgCannonFire> {
 
@@ -37,9 +38,12 @@ public class MsgCannonFire implements WMMessage<MsgCannonFire> {
 
     @Override
     public void handleServerSide(MsgCannonFire msg, Supplier<NetworkManager.PacketContext> ctx) {
-        Entity entity = ctx.get().getPlayer().level.getEntity(cannonEntityID);
-        if (entity instanceof EntityCannon) {
-            ((EntityCannon) entity).fireCannon();
+        Player player = ctx.get().getPlayer();
+        if (player == null) return;
+
+        Entity entity = player.level.getEntity(cannonEntityID);
+        if (entity instanceof EntityCannon cannon) {
+            cannon.fireCannon();
         }
     }
 

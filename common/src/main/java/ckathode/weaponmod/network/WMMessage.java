@@ -1,8 +1,8 @@
 package ckathode.weaponmod.network;
 
+import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.ByteBuf;
 import java.util.function.Supplier;
-import dev.architectury.networking.NetworkManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 

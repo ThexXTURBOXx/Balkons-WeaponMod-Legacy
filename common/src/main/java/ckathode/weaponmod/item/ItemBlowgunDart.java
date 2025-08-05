@@ -38,7 +38,7 @@ public class ItemBlowgunDart extends WMItem {
     @Override
     public void appendHoverText(@NotNull ItemStack itemstack, @Nullable Level worldIn,
                                 @NotNull List<Component> list, @NotNull TooltipFlag flag) {
-        MobEffectInstance potioneffect = dartType.potionEffect;
+        MobEffectInstance potioneffect = dartType.potionEffect();
         MobEffect potion = potioneffect.getEffect();
         MutableComponent s = new TranslatableComponent(potioneffect.getDescriptionId());
         if (potioneffect.getAmplifier() > 0) {
