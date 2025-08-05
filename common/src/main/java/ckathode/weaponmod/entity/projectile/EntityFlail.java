@@ -74,8 +74,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
             if (distance.lengthSqr() > 9.0) {
                 returnToOwner(true);
             }
-            if (shooter instanceof Player) {
-                ItemStack itemstack = ((Player) shooter).getMainHandItem();
+            if (shooter instanceof LivingEntity livingEntity) {
+                ItemStack itemstack = livingEntity.getMainHandItem();
                 ItemStack thrownItem = getWeapon();
                 if (itemstack.isEmpty() || (!thrownItem.isEmpty() && itemstack.getItem() != thrownItem.getItem()) || !shooter.isAlive()) {
                     pickUpByOwner();
@@ -123,8 +123,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     public void pickUpByOwner() {
         remove(RemovalReason.DISCARDED);
         Entity shooter = getOwner();
-        if (shooter instanceof Player && !getWeapon().isEmpty()) {
-            PlayerWeaponData.setFlailThrown((Player) shooter, false);
+        if (shooter instanceof Player player && !getWeapon().isEmpty()) {
+            PlayerWeaponData.setFlailThrown(player, false);
         }
     }
 
@@ -148,12 +148,9 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
             return;
         }
         Entity shooter = getDamagingEntity();
-        DamageSource damagesource;
-        if (shooter instanceof LivingEntity) {
-            damagesource = damageSources().mobAttack((LivingEntity) shooter);
-        } else {
-            damagesource = damageSources().source(WMDamageSources.WEAPON, this, shooter);
-        }
+        DamageSource damagesource = shooter instanceof LivingEntity livingEntity
+                ? damageSources().mobAttack(livingEntity)
+                : damageSources().source(WMDamageSources.WEAPON, this, shooter);
         if (entity.hurt(damagesource, flailDamage + extraDamage)) {
             playHitSound();
             returnToOwner(true);
@@ -180,11 +177,12 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     @Override
     public void setThrownItemStack(@NotNull ItemStack itemstack) {
-        if (!(itemstack.getItem() instanceof ItemFlail)) {
-            return;
+        if (itemstack.isEmpty() || itemstack.getItem() instanceof ItemFlail) {
+            super.setThrownItemStack(itemstack);
+            if (itemstack.getItem() instanceof ItemFlail flail) {
+                flailDamage = flail.getFlailDamage();
+            }
         }
-        super.setThrownItemStack(itemstack);
-        flailDamage = ((ItemFlail) itemstack.getItem()).getFlailDamage();
     }
 
     @Override

@@ -62,9 +62,8 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level world,
+                                                  Player entityplayer, InteractionHand hand) {
         setHalberdState(itemstack, !getHalberdState(itemstack));
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
     }

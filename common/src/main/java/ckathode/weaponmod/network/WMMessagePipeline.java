@@ -2,11 +2,11 @@ package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMUtil.EffectiveSide;
+import dev.architectury.networking.NetworkChannel;
+import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.ByteBuf;
 import java.util.LinkedList;
 import java.util.function.Supplier;
-import dev.architectury.networking.NetworkChannel;
-import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

@@ -141,9 +141,8 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         }
         DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         ItemStack thrownItem = getWeapon();
-        if (thrownItem.isEmpty()) return;
-        float damage =
-                ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 2.0f + extraDamage;
+        if (thrownItem.isEmpty() || !(thrownItem.getItem() instanceof IItemWeapon iiw)) return;
+        float damage = iiw.getMeleeComponent().getEntityDamage() + 2.0f + extraDamage;
         damage += getMeleeHitDamage(entity);
         if (isCritArrow()) {
             damage += 2.0f;
@@ -155,8 +154,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                 thrownItem.shrink(1);
                 remove(RemovalReason.DISCARDED);
             } else {
-                thrownItem.hurt(1, random,
-                        shooter instanceof ServerPlayer ? (ServerPlayer) shooter : null);
+                thrownItem.hurt(1, random, shooter instanceof ServerPlayer sp ? sp : null);
                 lerpMotion(0.0, 0.0, 0.0);
             }
         } else {
