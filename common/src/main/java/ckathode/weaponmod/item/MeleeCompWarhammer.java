@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -57,26 +58,30 @@ public class MeleeCompWarhammer extends MeleeComponent {
     @Override
     public void releaseUsing(ItemStack itemstack, Level world,
                              LivingEntity entityliving, int i) {
-        Player entityplayer = (Player) entityliving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 4.0f;
         if (f > 1.0f) {
-            superSmash(itemstack, world, entityplayer);
+            superSmash(itemstack, world, entityliving);
         }
     }
 
-    protected void superSmash(ItemStack itemstack, Level world, Player entityplayer) {
-        entityplayer.swing(InteractionHand.MAIN_HAND);
+    protected void superSmash(ItemStack itemstack, Level world, LivingEntity entityLiving) {
+        entityLiving.swing(InteractionHand.MAIN_HAND);
         float f = getEntityDamage() / 2.0f;
-        WarhammerExplosion expl = new WarhammerExplosion(world, entityplayer, entityplayer.getX(),
-                entityplayer.getY(), entityplayer.getZ(), f, false, Explosion.BlockInteraction.DESTROY);
-        expl.doEntityExplosion(world.damageSources().playerAttack(entityplayer));
+        WarhammerExplosion expl = new WarhammerExplosion(world, entityLiving, entityLiving.getX(),
+                entityLiving.getY(), entityLiving.getZ(), f, false, Explosion.BlockInteraction.DESTROY);
+        DamageSource source = entityLiving instanceof Player player
+                ? world.damageSources().playerAttack(player)
+                : world.damageSources().mobAttack(entityLiving);
+        expl.doEntityExplosion(source);
         expl.doParticleExplosion(true, false);
         PhysHelper.sendExplosion(world, expl, true, false);
-        itemstack.hurtAndBreak(16, entityplayer, EquipmentSlot.MAINHAND);
-        entityplayer.causeFoodExhaustion(6.0f);
-        setSmashed(entityplayer);
+        itemstack.hurtAndBreak(16, entityLiving, EquipmentSlot.MAINHAND);
+        if (entityLiving instanceof Player player) {
+            player.causeFoodExhaustion(6.0f);
+            setSmashed(player);
+        }
     }
 
     public void setSmashed(Player entityplayer) {
@@ -106,9 +111,8 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level world,
+                                                  Player entityplayer, InteractionHand hand) {
         if (itemstack.isEmpty()) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, itemstack);
         }

@@ -35,9 +35,8 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
     }
 
     @Override
-    public void releaseUsing(ItemStack itemstack, @NotNull Level world,
+    public void releaseUsing(@NotNull ItemStack itemstack, @NotNull Level world,
                              @NotNull LivingEntity entityLiving, int i) {
-        Player entityplayer = (Player) entityLiving;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -47,17 +46,17 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
         if (f > 1.0f) {
             f = 1.0f;
         }
-        boolean crit = !entityplayer.onGround() && !entityplayer.isInWater();
+        boolean crit = !entityLiving.onGround() && !entityLiving.isInWater();
         if (!world.isClientSide) {
-            EntityJavelin entityjavelin = new EntityJavelin(world, entityplayer);
-            entityjavelin.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
+            EntityJavelin entityjavelin = new EntityJavelin(world, entityLiving);
+            entityjavelin.shootFromRotation(entityLiving, entityLiving.getXRot(), entityLiving.getYRot(),
                     0.0f, f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
             entityjavelin.setCritArrow(crit);
             world.addFreshEntity(entityjavelin);
         }
-        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
-                SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
-        if (!entityplayer.isCreative()) {
+        world.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.ARROW_SHOOT,
+                SoundSource.PLAYERS, 1.0f, 1.0f / (entityLiving.getRandom().nextFloat() * 0.4f + 0.8f));
+        if (entityLiving instanceof Player player && !player.isCreative()) {
             WMItem.decrStackSize(itemstack, 1, entityLiving);
         }
     }

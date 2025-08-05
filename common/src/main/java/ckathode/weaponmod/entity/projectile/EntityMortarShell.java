@@ -90,14 +90,13 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         }
         remove(RemovalReason.DISCARDED);
         Entity shooter = getOwner();
-        if (!(shooter instanceof LivingEntity)) return;
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, (LivingEntity) shooter) > 0) {
-            float f1 = (float) EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER,
-                    (LivingEntity) shooter);
+        if (!(shooter instanceof LivingEntity livingEntity)) return;
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, livingEntity) > 0) {
+            float f1 = (float) EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, livingEntity);
             explosiveSize += f1 / 4.0f;
         }
         boolean flag =
-                EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, (LivingEntity) shooter) > 0;
+                EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, livingEntity) > 0;
         PhysHelper.createAdvancedExplosion(level(), this, getX(), getY(), getZ(), explosiveSize,
                 WeaponModConfig.get().mortarDoesBlockDamage, true, flag,
                 Explosion.BlockInteraction.DESTROY);

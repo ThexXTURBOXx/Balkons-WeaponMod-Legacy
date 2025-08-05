@@ -99,8 +99,8 @@ public class ItemMusket extends ItemShooter {
                 PhysHelper.knockBack(entityliving, attacker, kb);
                 entityliving.invulnerableTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);
             }
-            if (attacker instanceof Player && !((Player) attacker).isCreative()) {
-                bayonetDamage(itemstack, (Player) attacker, 1);
+            if (attacker instanceof Player player && !player.isCreative()) {
+                bayonetDamage(itemstack, attacker, 1);
             }
         }
         return true;
@@ -112,25 +112,26 @@ public class ItemMusket extends ItemShooter {
                              @NotNull LivingEntity entityliving) {
         if (hasBayonet()) {
             boolean flag = block.is(BlockTags.SWORD_EFFICIENT) || block.is(Blocks.COBWEB);
-            if (entityliving instanceof Player && !((Player) entityliving).isCreative() && !flag) {
-                bayonetDamage(itemstack, (Player) entityliving, 2);
+            if (entityliving instanceof Player player && !player.isCreative() && !flag) {
+                bayonetDamage(itemstack, player, 2);
             }
         }
         return true;
     }
 
-    public void bayonetDamage(ItemStack itemstack, Player entityplayer, int damage) {
+    public void bayonetDamage(ItemStack itemstack, LivingEntity entityliving, int damage) {
         if (!itemstack.has(BAYONET_DAMAGE_TYPE)) {
             itemstack.set(BAYONET_DAMAGE_TYPE, (short) 0);
         }
         int bayonetdamage = Objects.requireNonNull(itemstack.get(BAYONET_DAMAGE_TYPE)) + damage;
         if (bayonetdamage > bayonetDurability) {
-            entityplayer.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-            entityplayer.awardStat(Stats.ITEM_BROKEN.get(this));
+            entityliving.broadcastBreakEvent(EquipmentSlot.MAINHAND);
+            if (entityliving instanceof Player player)
+                player.awardStat(Stats.ITEM_BROKEN.get(this));
             bayonetdamage = 0;
             ItemStack itemstack2 = new ItemStack(WMRegistries.ITEM_MUSKET.get(), 1);
             itemstack2.setDamageValue(itemstack.getDamageValue());
-            entityplayer.setItemSlot(EquipmentSlot.MAINHAND, itemstack2);
+            entityliving.setItemSlot(EquipmentSlot.MAINHAND, itemstack2);
             if (itemstack.has(ReloadHelper.ReloadState.TYPE)) {
                 ReloadHelper.setReloadState(itemstack2, ReloadHelper.getReloadState(itemstack));
             }

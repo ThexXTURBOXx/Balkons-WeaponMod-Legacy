@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ public class RenderFlail extends WMRenderer<EntityFlail> {
     public void render(@NotNull EntityFlail entityflail, float p, float partialTicks,
                        @NotNull PoseStack ms, @NotNull MultiBufferSource bufs, int lm) {
         Entity shooterEntity = entityflail.getOwner();
-        if (shooterEntity instanceof Player shooter) {
+        if (shooterEntity instanceof LivingEntity shooter) {
             ms.pushPose();
             ms.pushPose();
             ms.mulPose(Axis.YP.rotationDegrees(entityflail.yRotO + (entityflail.getYRot() - entityflail.yRotO) * partialTicks - 90.0f));

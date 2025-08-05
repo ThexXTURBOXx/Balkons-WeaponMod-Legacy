@@ -27,11 +27,11 @@ public class WMClientEventHandler {
 
     @Nullable
     private static IExtendedReachItem getExtendedReachItem(ItemStack itemstack) {
-        if (itemstack.getItem() instanceof IExtendedReachItem) {
-            return (IExtendedReachItem) itemstack.getItem();
-        } else if (itemstack.getItem() instanceof IItemWeapon &&
-                   ((IItemWeapon) itemstack.getItem()).getMeleeComponent() instanceof IExtendedReachItem) {
-            return (IExtendedReachItem) ((IItemWeapon) itemstack.getItem()).getMeleeComponent();
+        if (itemstack.getItem() instanceof IExtendedReachItem ieri) {
+            return ieri;
+        } else if (itemstack.getItem() instanceof IItemWeapon iiw &&
+                   iiw.getMeleeComponent() instanceof IExtendedReachItem ieri) {
+            return ieri;
         }
         return null;
     }
@@ -50,7 +50,7 @@ public class WMClientEventHandler {
                     HitResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
                     if (!(raytraceResult instanceof EntityHitResult ertr)) return EventResult.pass();
                     Entity entity = ertr.getEntity();
-                    if (entity != null && entity != player && entity.invulnerableTime == 0) {
+                    if (entity != player && entity.invulnerableTime == 0) {
                         Minecraft.getInstance().gameMode.attack(player, entity);
                         return EventResult.interruptTrue();
                     }
@@ -65,16 +65,16 @@ public class WMClientEventHandler {
             return;
         }
         if (player instanceof LocalPlayer entity) {
-            if (entity.input.jumping && entity.getVehicle() instanceof EntityCannon && ((EntityCannon) entity.getVehicle()).isLoaded()) {
-                MsgCannonFire msg = new MsgCannonFire((EntityCannon) entity.getVehicle());
+            if (entity.input.jumping && entity.getVehicle() instanceof EntityCannon cannon && cannon.isLoaded()) {
+                MsgCannonFire msg = new MsgCannonFire(cannon);
                 WMMessagePipeline.sendToServer(msg);
             }
         }
     }
 
     public static float getNewFOV(LivingEntity entity, float fov, float newFov) {
-        if (entity.isUsingItem() && entity.getUseItem().getItem() instanceof IItemWeapon) {
-            RangedComponent rc = ((IItemWeapon) entity.getUseItem().getItem()).getRangedComponent();
+        if (entity.isUsingItem() && entity.getUseItem().getItem() instanceof IItemWeapon iiw) {
+            RangedComponent rc = iiw.getRangedComponent();
             if (rc != null && RangedComponent.isReadyToFire(entity.getUseItem())) {
                 return fov * rc.getFOVMultiplier(entity.getTicksUsingItem());
             }

@@ -78,9 +78,8 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player entityplayer,
-                                                  InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public InteractionResultHolder<ItemStack> use(ItemStack itemstack, Level world,
+                                                  Player entityplayer, InteractionHand hand) {
         return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
     }
 
