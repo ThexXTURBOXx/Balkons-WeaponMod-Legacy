@@ -105,10 +105,10 @@ public class AdvancedExplosion extends Explosion {
             if (blockstate.isAir()) continue;
             BlockPos blockpos1 = blockpos.immutable();
             worldObj.getProfiler().push("explosion_blocks");
-            if (block.dropFromExplosion(this) && worldObj instanceof ServerLevel) {
+            if (block.dropFromExplosion(this) && worldObj instanceof ServerLevel serverLevel) {
                 BlockEntity tileentity = blockstate.hasBlockEntity() ? worldObj.getBlockEntity(blockpos) : null;
                 LootContext.Builder lcBuilder =
-                        new LootContext.Builder((ServerLevel) worldObj)
+                        new LootContext.Builder(serverLevel)
                                 .withRandom(WMUtil.RANDOM)
                                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockpos))
                                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
@@ -123,6 +123,7 @@ public class AdvancedExplosion extends Explosion {
 
             worldObj.setBlockAndUpdate(blockpos, Blocks.AIR.defaultBlockState());
             block.wasExploded(worldObj, blockpos, this);
+            worldObj.getProfiler().pop();
         }
 
         for (Pair<ItemStack, BlockPos> pair : objectarraylist) {

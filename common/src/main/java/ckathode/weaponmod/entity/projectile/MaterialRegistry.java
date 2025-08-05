@@ -38,8 +38,8 @@ public class MaterialRegistry {
     }
 
     public static int getOrdinal(Tier tier) {
-        if (tier instanceof Tiers) {
-            return ((Tiers) tier).ordinal();
+        if (tier instanceof Tiers t) {
+            return t.ordinal();
         }
         return -1;
     }

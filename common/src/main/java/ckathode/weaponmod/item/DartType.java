@@ -5,7 +5,7 @@ import net.minecraft.world.effect.MobEffects;
 
 import static ckathode.weaponmod.item.ItemBlowgunDart.ID_PREFIX;
 
-public class DartType {
+public record DartType(byte typeID, String typeName, MobEffectInstance potionEffect) {
 
     public static final DartType[] dartTypes = new DartType[128];
     public static final DartType damage = new DartType((byte) 0, ID_PREFIX,
@@ -17,15 +17,8 @@ public class DartType {
     public static final DartType damage2 = new DartType((byte) 3, ID_PREFIX + ".damage",
             new MobEffectInstance(MobEffects.POISON, 120, 1));
 
-    public final byte typeID;
-    public final String typeName;
-    public final MobEffectInstance potionEffect;
-
-    public DartType(byte id, String typename, MobEffectInstance potioneffect) {
-        dartTypes[id] = this;
-        typeID = id;
-        typeName = typename;
-        potionEffect = potioneffect;
+    public DartType {
+        dartTypes[typeID] = this;
     }
 
 }
