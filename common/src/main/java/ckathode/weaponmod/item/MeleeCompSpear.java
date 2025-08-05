@@ -52,10 +52,10 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     }
 
     @Override
-    public @NotNull InteractionResult use(Level world, Player entityplayer, InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public @NotNull InteractionResult use(ItemStack itemstack, Level world,
+                                          Player entityplayer, InteractionHand hand) {
         if (!WeaponModConfig.get().canThrowSpear) {
-            return super.use(world, entityplayer, hand);
+            return super.use(itemstack, world, entityplayer, hand);
         }
         if (!world.isClientSide) {
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());

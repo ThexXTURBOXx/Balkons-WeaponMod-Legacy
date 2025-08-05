@@ -8,6 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class MsgCannonFire implements CustomPacketPayload {
@@ -34,9 +35,12 @@ public class MsgCannonFire implements CustomPacketPayload {
     }
 
     public static void handleServerSide(MsgCannonFire msg, NetworkManager.PacketContext ctx) {
-        Entity entity = ctx.getPlayer().level().getEntity(msg.cannonEntityID);
-        if (entity instanceof EntityCannon) {
-            ((EntityCannon) entity).fireCannon();
+        Player player = ctx.getPlayer();
+        if (player == null) return;
+
+        Entity entity = player.level().getEntity(msg.cannonEntityID);
+        if (entity instanceof EntityCannon cannon) {
+            cannon.fireCannon();
         }
     }
 

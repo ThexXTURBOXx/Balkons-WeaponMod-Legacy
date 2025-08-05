@@ -31,16 +31,16 @@ public class RangedCompBlowgun extends RangedComponent {
     }
 
     @Override
-    public void effectReloadDone(ItemStack itemstack, Level world, Player entityplayer) {
-        entityplayer.swing(InteractionHand.MAIN_HAND);
-        world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(),
+    public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        entityliving.swing(InteractionHand.MAIN_HAND);
+        world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 0.8f,
-                1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.4f));
+                1.0f / (entityliving.getRandom().nextFloat() * 0.4f + 0.4f));
     }
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        Player entityplayer = (Player) entityliving;
+        if (!(entityliving instanceof Player entityplayer)) return;
         int j = getUseDuration(itemstack) - i;
         float f = j / 20.0f;
         f = (f * f + f * 2.0f) / 3.0f;
@@ -67,8 +67,8 @@ public class RangedCompBlowgun extends RangedComponent {
             entityblowgundart.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, f * 1.5f, 1.0f);
             Item item = dartStackCopy.getItem();
-            if (item instanceof ItemBlowgunDart)
-                entityblowgundart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
+            if (item instanceof ItemBlowgunDart dart)
+                entityblowgundart.setDartEffectType(dart.getDartType());
             applyProjectileEnchantments(entityblowgundart, itemstack);
             world.addFreshEntity(entityblowgundart);
         }
@@ -82,8 +82,9 @@ public class RangedCompBlowgun extends RangedComponent {
     }
 
     @Override
-    public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, Player entityplayer) {
-        return hasAmmo(itemstack, world, entityplayer);
+    public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, LivingEntity entityliving) {
+        if (!(entityliving instanceof Player player)) return false;
+        return hasAmmo(itemstack, world, player);
     }
 
     @Override
