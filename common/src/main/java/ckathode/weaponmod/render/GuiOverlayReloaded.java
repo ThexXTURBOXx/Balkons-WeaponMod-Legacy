@@ -38,7 +38,7 @@ public class GuiOverlayReloaded {
                 ? p.getOffhandItem()
                 : p.getInventory().getItem(currentItem);
 
-        if (!is.isEmpty() && is.getItem() instanceof IItemWeapon) item = (IItemWeapon) is.getItem();
+        if (!is.isEmpty() && is.getItem() instanceof IItemWeapon iiw) item = iiw;
         if (item == null) return;
 
         RangedComponent rc = item.getRangedComponent();

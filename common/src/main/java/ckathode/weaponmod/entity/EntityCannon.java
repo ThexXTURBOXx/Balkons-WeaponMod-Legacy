@@ -27,7 +27,6 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -118,9 +117,9 @@ public class EntityCannon extends Boat {
             if (hasPassenger(damagesource.getEntity())) {
                 return true;
             }
-        } else if (damagesource.is(DamageTypes.PLAYER_ATTACK)) {
-            Player player = (Player) damagesource.getEntity();
-            if (player != null && player.getInventory().getSelectedItem().isEmpty()) {
+        } else if (damagesource.is(DamageTypes.PLAYER_ATTACK) &&
+                   damagesource.getEntity() instanceof Player player) {
+            if (player.getInventory().getSelectedItem().isEmpty()) {
                 if (!player.isCreative()) {
                     spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON.get(), 1);
                     if (isLoaded() || isLoading()) {
@@ -195,9 +194,9 @@ public class EntityCannon extends Boat {
         }
         setDeltaMovement(motion);
         if (isVehicle()) {
-            LivingEntity entitylivingbase = getControllingPassenger();
-            float yaw = entitylivingbase.getYRot();
-            float pitch = entitylivingbase.getXRot();
+            Entity riddenByEntity = getControllingPassenger();
+            float yaw = riddenByEntity.getYRot();
+            float pitch = riddenByEntity.getXRot();
             setYRot(yaw % 360.0f);
             setXRot(pitch);
         }

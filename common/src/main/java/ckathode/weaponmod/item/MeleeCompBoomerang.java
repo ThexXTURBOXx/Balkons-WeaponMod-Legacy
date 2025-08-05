@@ -95,13 +95,9 @@ public class MeleeCompBoomerang extends MeleeComponent {
     }
 
     @Override
-    public @NotNull InteractionResult use(Level world, Player entityplayer,
-                                          InteractionHand hand) {
-        ItemStack itemstack = entityplayer.getItemInHand(hand);
+    public @NotNull InteractionResult use(ItemStack itemstack, Level world,
+                                          Player entityplayer, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.FAIL;
-        }
-        if (!entityplayer.isCreative() && itemstack.isEmpty()) {
             return InteractionResult.FAIL;
         }
         entityplayer.startUsingItem(hand);

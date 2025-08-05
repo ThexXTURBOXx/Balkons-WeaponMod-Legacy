@@ -14,18 +14,17 @@ import net.minecraft.world.item.ItemStack;
 public class WMCommonEventHandler {
 
     public static void constructEntity(Entity entity, SynchedEntityData.Builder builder) {
-        if (entity instanceof Player) {
-            PlayerWeaponData.initPlayerWeaponData((Player) entity, builder);
+        if (entity instanceof Player player) {
+            PlayerWeaponData.initPlayerWeaponData(player, builder);
         }
     }
 
     public static EventResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source, float amount) {
-        if (!(entity instanceof Player player)) return EventResult.pass();
-        ItemStack stack = player.getUseItem();
+        ItemStack stack = entity.getUseItem();
         Item item = stack.isEmpty() ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return EventResult.pass();
 
-        player.stopUsingItem();
+        entity.stopUsingItem();
         return EventResult.pass();
     }
 

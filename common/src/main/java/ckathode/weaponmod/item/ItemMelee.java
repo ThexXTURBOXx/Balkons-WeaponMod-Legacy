@@ -100,7 +100,7 @@ public class ItemMelee extends Item implements IItemWeapon {
     @NotNull
     @Override
     public InteractionResult use(@NotNull Level world, @NotNull Player entityplayer, @NotNull InteractionHand hand) {
-        return meleeComponent.use(world, entityplayer, hand);
+        return meleeComponent.use(entityplayer.getItemInHand(hand), world, entityplayer, hand);
     }
 
     @Override

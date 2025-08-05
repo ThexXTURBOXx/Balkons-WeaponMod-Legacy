@@ -118,8 +118,8 @@ public final class PhysHelper {
             dz = Math.cos(Math.toRadians(attacker.getYRot())) * knockBackModifier * 0.5;
             entityliving.push(dx, 0.1, dz);
         }
-        if (entityliving instanceof ServerPlayer) {
-            ((ServerPlayer) entityliving).connection.send(new ClientboundSetEntityMotionPacket(entityliving));
+        if (entityliving instanceof ServerPlayer serverPlayer) {
+            serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(entityliving));
         }
         knockBackModifier = 0;
         kbMotion = Vec3.ZERO;
