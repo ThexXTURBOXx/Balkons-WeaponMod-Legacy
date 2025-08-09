@@ -8,6 +8,8 @@
     "GuiMixin"
   ],
   "mixins": [
+    "EnchantmentHelperMixin",
+    "EnchantmentMixin",
     "EntityMixin",
     "PlayerMixin"
   ],
