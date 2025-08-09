@@ -15,6 +15,7 @@ import ckathode.weaponmod.item.RangedComponent;
 import ckathode.weaponmod.item.WMItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.NotNull;
@@ -73,6 +74,11 @@ public class WMItemBuilderImpl {
     public static ItemFlail createItemFlail(MeleeComponent meleeComponent) {
         return new ItemFlail(meleeComponent) {
             @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
+            @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
                 if (toolAction == ToolActions.SHIELD_BLOCK) {
                     if (stack.getItem() instanceof ItemFlail) return true;
@@ -97,6 +103,11 @@ public class WMItemBuilderImpl {
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent) {
         return new ItemMelee(meleeComponent) {
             @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
+            @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
                 if (toolAction == ToolActions.SHIELD_BLOCK) {
                     if (stack.getItem() instanceof ItemMelee) return true;
@@ -108,6 +119,11 @@ public class WMItemBuilderImpl {
 
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, Item.Properties properties) {
         return new ItemMelee(meleeComponent, properties) {
+            @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
                 if (toolAction == ToolActions.SHIELD_BLOCK) {
@@ -121,6 +137,11 @@ public class WMItemBuilderImpl {
     public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
         return new ItemMusket(meleeComponent, bayonetItem) {
             @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return rangedComponent.canApplyEnchantment(stack, enchantment); // do not allow melee enchantments
+            }
+
+            @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
                 if (toolAction == ToolActions.SHIELD_BLOCK) {
                     if (stack.getItem() instanceof ItemMusket) return true;
@@ -132,6 +153,12 @@ public class WMItemBuilderImpl {
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent) {
         return new ItemShooter(rangedComponent, meleeComponent) {
+            @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return rangedComponent.canApplyEnchantment(stack, enchantment) ||
+                       meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
                 if (toolAction == ToolActions.SHIELD_BLOCK) {
@@ -145,6 +172,12 @@ public class WMItemBuilderImpl {
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
                                                 Item.Properties properties) {
         return new ItemShooter(rangedComponent, meleeComponent, properties) {
+            @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return rangedComponent.canApplyEnchantment(stack, enchantment) ||
+                       meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ToolAction toolAction) {
                 if (toolAction == ToolActions.SHIELD_BLOCK) {
