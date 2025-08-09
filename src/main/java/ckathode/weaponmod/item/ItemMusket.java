@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -41,6 +42,11 @@ public class ItemMusket extends ItemShooter {
 
     public boolean hasBayonet() {
         return bayonetItem != null;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(@NotNull ItemStack stack, @NotNull Enchantment enchantment) {
+        return rangedComponent.canApplyEnchantment(stack, enchantment); // do not allow melee enchantments
     }
 
     @Override
