@@ -10,8 +10,10 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
@@ -62,6 +64,12 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     @Override
     public boolean canHarvestBlock(BlockState block) {
         return block.getMaterial() == Material.WOOD;
+    }
+
+    @Override
+    public boolean canApplyEnchantment(ItemStack stack, Enchantment enchantment) {
+        return super.canApplyEnchantment(stack, enchantment) ||
+               super.canApplyEnchantment(new ItemStack(Items.DIAMOND_AXE), enchantment);
     }
 
     @Override
