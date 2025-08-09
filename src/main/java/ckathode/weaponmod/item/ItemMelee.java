@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -92,6 +93,11 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
                                     @Nonnull IBlockState block, @Nonnull BlockPos pos,
                                     @Nonnull EntityLivingBase entityliving) {
         return meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(@Nonnull ItemStack stack, @Nonnull Enchantment enchantment) {
+        return meleeComponent.canApplyEnchantment(stack, enchantment);
     }
 
     @Override
