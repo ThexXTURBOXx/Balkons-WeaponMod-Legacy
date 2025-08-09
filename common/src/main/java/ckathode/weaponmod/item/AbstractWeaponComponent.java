@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -52,6 +53,10 @@ public abstract class AbstractWeaponComponent {
     public abstract float getAttackDelay(ItemStack stack, LivingEntity victim, LivingEntity attacker);
 
     public abstract float getKnockBack(ItemStack stack, LivingEntity victim, LivingEntity attacker);
+
+    public boolean canApplyEnchantment(ItemStack stack, Enchantment enchantment) {
+        return enchantment.category.canEnchant(stack.getItem());
+    }
 
     public abstract int getEnchantmentValue();
 

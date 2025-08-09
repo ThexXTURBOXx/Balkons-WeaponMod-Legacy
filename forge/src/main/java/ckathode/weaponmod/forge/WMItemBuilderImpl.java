@@ -16,6 +16,7 @@ import ckathode.weaponmod.item.WMItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,6 +73,11 @@ public class WMItemBuilderImpl {
     public static ItemFlail createItemFlail(MeleeComponent meleeComponent) {
         return new ItemFlail(meleeComponent) {
             @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
+            @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
                 if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemFlail &&
                     entity.isBlocking())
@@ -96,6 +102,11 @@ public class WMItemBuilderImpl {
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent) {
         return new ItemMelee(meleeComponent) {
             @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
+            @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
                 if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
                     entity.isBlocking())
@@ -107,6 +118,11 @@ public class WMItemBuilderImpl {
 
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, Item.Properties properties) {
         return new ItemMelee(meleeComponent, properties) {
+            @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
                 if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMelee &&
@@ -120,6 +136,11 @@ public class WMItemBuilderImpl {
     public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
         return new ItemMusket(meleeComponent, bayonetItem) {
             @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return rangedComponent.canApplyEnchantment(stack, enchantment); // do not allow melee enchantments
+            }
+
+            @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
                 if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemMusket &&
                     entity.isBlocking())
@@ -131,6 +152,12 @@ public class WMItemBuilderImpl {
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent) {
         return new ItemShooter(rangedComponent, meleeComponent) {
+            @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return rangedComponent.canApplyEnchantment(stack, enchantment) ||
+                       meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
                 if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemShooter &&
@@ -144,6 +171,12 @@ public class WMItemBuilderImpl {
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
                                                 Item.Properties properties) {
         return new ItemShooter(rangedComponent, meleeComponent, properties) {
+            @Override
+            public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+                return rangedComponent.canApplyEnchantment(stack, enchantment) ||
+                       meleeComponent.canApplyEnchantment(stack, enchantment);
+            }
+
             @Override
             public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
                 if (entity != null && entity.getUseItem() == stack && stack.getItem() instanceof ItemShooter &&
