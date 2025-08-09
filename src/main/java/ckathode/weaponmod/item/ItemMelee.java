@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -100,6 +101,11 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
                                     @Nonnull BlockState block, @Nonnull BlockPos pos,
                                     @Nonnull LivingEntity entityliving) {
         return meleeComponent.onBlockDestroyed(itemstack, world, block, pos, entityliving);
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(@Nonnull ItemStack stack, @Nonnull Enchantment enchantment) {
+        return meleeComponent.canApplyEnchantment(stack, enchantment);
     }
 
     @Override

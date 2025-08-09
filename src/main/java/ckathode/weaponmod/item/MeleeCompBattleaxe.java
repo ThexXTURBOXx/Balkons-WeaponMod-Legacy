@@ -5,12 +5,14 @@ import ckathode.weaponmod.WeaponModAttributes;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.Vec3d;
 
 public class MeleeCompBattleaxe extends MeleeComponent {
@@ -41,6 +43,12 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     @Override
     public boolean canHarvestBlock(BlockState block) {
         return block.getMaterial() == Material.WOOD;
+    }
+
+    @Override
+    public boolean canApplyEnchantment(ItemStack stack, Enchantment enchantment) {
+        return super.canApplyEnchantment(stack, enchantment) ||
+               super.canApplyEnchantment(new ItemStack(Items.DIAMOND_AXE), enchantment);
     }
 
     @Override

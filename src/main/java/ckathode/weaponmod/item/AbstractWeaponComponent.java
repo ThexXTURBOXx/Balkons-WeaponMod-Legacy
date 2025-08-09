@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -51,6 +52,10 @@ public abstract class AbstractWeaponComponent {
     public abstract float getAttackDelay(ItemStack stack, LivingEntity victim, LivingEntity attacker);
 
     public abstract float getKnockBack(ItemStack stack, LivingEntity victim, LivingEntity attacker);
+
+    public boolean canApplyEnchantment(ItemStack stack, Enchantment enchantment) {
+        return enchantment.type.canEnchantItem(stack.getItem());
+    }
 
     public abstract int getItemEnchantability();
 
