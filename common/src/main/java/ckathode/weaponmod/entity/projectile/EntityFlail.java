@@ -3,6 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.ItemFlail;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.nbt.CompoundTag;
@@ -160,7 +161,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         if (entity.equals(getOwner())) {
             return;
         }
-        if (entity.hurtOrSimulate(getDamageSource(), applyEnchantmentBonus(entity, flailDamage))) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), applyEnchantmentBonus(entity, flailDamage))) {
             applyEntityHitEffects(entity);
             playHitSound();
             returnToOwner(true);

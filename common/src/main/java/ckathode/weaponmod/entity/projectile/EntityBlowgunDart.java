@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import dev.architectury.networking.NetworkManager;
@@ -110,7 +111,7 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     @Override
     public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
-        if (entity.hurtOrSimulate(getDamageSource(), 1.0f + extraDamage)) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), 1.0f + extraDamage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 livingEntity.addEffect(new MobEffectInstance(getDartEffectType().potionEffect()));
             }

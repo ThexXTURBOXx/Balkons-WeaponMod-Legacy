@@ -1,6 +1,7 @@
 package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import ckathode.weaponmod.item.WMItem;
 import dev.architectury.networking.NetworkManager;
@@ -222,7 +223,7 @@ public class EntityCannon extends Boat {
         super.causeFallDamage(fallDistance, multiplier, source);
         int i = Mth.floor(fallDistance);
         i *= 2;
-        hurt(damageSources().fall(), (float) i);
+        WMUtil.hurt(this, damageSources().fall(), (float) i);
         return false;
     }
 
@@ -302,7 +303,7 @@ public class EntityCannon extends Boat {
                 entity2.setXRot(entity2.getXRot() + 10.0f);
             }
         }
-        hurt(damageSources().generic(), 2.0f);
+        WMUtil.hurt(this, damageSources().generic(), 2.0f);
     }
 
     public void setReloadInfo(boolean loaded, int reloadtime) {
@@ -385,7 +386,7 @@ public class EntityCannon extends Boat {
 
     @Override
     public void thunderHit(@NotNull ServerLevel world, @NotNull LightningBolt entitylightningbolt) {
-        hurt(damageSources().lightningBolt(), 100.0f);
+        WMUtil.hurt(this, damageSources().lightningBolt(), 100.0f);
         setSuperPowered(true);
     }
 
