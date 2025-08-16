@@ -97,7 +97,7 @@ public class EntityBlunderShot extends EntityProjectile {
             EntityBlunderShot entity = new EntityBlunderShot(world, entityliving);
             entity.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f, 15.0f);
             if (item != null && itemstack != null) {
-                item.applyProjectileEnchantments(entity, itemstack);
+                RangedComponent.applyProjectileEnchantments(entity, itemstack);
             }
             world.spawnEntity(entity);
         }
