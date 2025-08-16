@@ -4,8 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -15,9 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,11 +56,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
             entityspear.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 0.8f, 3.0f);
-            Holder<Enchantment> fireAspect = entityplayer.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
-                    .get(Enchantments.FIRE_ASPECT).orElse(null);
-            if (fireAspect != null && EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
-                entityspear.igniteForSeconds(100);
-            }
+            applyProjectileEnchantments(entityspear, itemstack);
             world.addFreshEntity(entityspear);
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,

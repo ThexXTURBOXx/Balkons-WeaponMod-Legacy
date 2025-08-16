@@ -161,7 +161,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         if (entity.equals(getOwner())) {
             return;
         }
-        if (entity.hurtOrSimulate(getDamageSource(), flailDamage + extraDamage)) {
+        if (entity.hurtOrSimulate(getDamageSource(), applyEnchantmentBonus(entity, flailDamage))) {
             applyEntityHitEffects(entity);
             playHitSound();
             returnToOwner(true);
