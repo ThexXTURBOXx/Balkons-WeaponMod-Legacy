@@ -4,20 +4,16 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderSpear extends Render<EntitySpear> {
+public class RenderSpear extends WMRenderer<EntitySpear> {
     public RenderSpear(RenderManager renderManager) {
         super(renderManager);
     }
@@ -86,7 +82,6 @@ public class RenderSpear extends Render<EntitySpear> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityspear);
             GlStateManager.translated(d, d1, d2);
@@ -104,7 +99,7 @@ public class RenderSpear extends Render<EntitySpear> {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.enableOutlineMode(getTeamColor(entityspear));
             }
-            itemRender.renderItem(getStackToRender(entityspear), TransformType.NONE);
+            renderItem(getStackToRender(entityspear));
             if (renderOutlines) {
                 GlStateManager.disableOutlineMode();
                 GlStateManager.disableColorMaterial();

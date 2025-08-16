@@ -197,7 +197,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         return 0;
     }
 
-    public static void applyProjectileEnchantments(EntityProjectile entity, ItemStack itemstack) {
+    public static void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
         int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, itemstack);
         if (knockback > 0) {
             entity.setKnockbackStrength(knockback);

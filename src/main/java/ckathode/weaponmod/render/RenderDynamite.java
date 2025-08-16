@@ -6,13 +6,12 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderDynamite extends Render<EntityDynamite> {
+public class RenderDynamite extends WMRenderer<EntityDynamite> {
 
     public RenderDynamite(RenderManager renderManager) {
         super(renderManager);

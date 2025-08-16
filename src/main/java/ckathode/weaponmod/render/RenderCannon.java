@@ -5,12 +5,11 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityCannon;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderCannon extends Render<EntityCannon> {
+public class RenderCannon extends WMRenderer<EntityCannon> {
     private final ModelCannonBarrel modelBarrel = new ModelCannonBarrel();
     private final ModelCannonStandard modelStandard = new ModelCannonStandard();
     private final ModelCannonLegacy modelLegacy = new ModelCannonLegacy();

@@ -6,12 +6,11 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderBlunderShot extends Render<EntityBlunderShot> {
+public class RenderBlunderShot extends WMRenderer<EntityBlunderShot> {
     public RenderBlunderShot(RenderManager renderManager) {
         super(renderManager);
     }

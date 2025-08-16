@@ -4,20 +4,16 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderKnife extends Render<EntityKnife> {
+public class RenderKnife extends WMRenderer<EntityKnife> {
     public RenderKnife(RenderManager renderManager) {
         super(renderManager);
     }
@@ -85,7 +81,6 @@ public class RenderKnife extends Render<EntityKnife> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityknife);
             GlStateManager.translated(d, d1, d2);
@@ -103,7 +98,7 @@ public class RenderKnife extends Render<EntityKnife> {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.enableOutlineMode(getTeamColor(entityknife));
             }
-            itemRender.renderItem(getStackToRender(entityknife), TransformType.NONE);
+            renderItem(getStackToRender(entityknife));
             if (renderOutlines) {
                 GlStateManager.disableOutlineMode();
                 GlStateManager.disableColorMaterial();

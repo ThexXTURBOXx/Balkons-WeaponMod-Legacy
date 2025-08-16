@@ -4,12 +4,11 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityDummy;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderDummy extends Render<EntityDummy> {
+public class RenderDummy extends WMRenderer<EntityDummy> {
     private final ModelDummy modelDummy = new ModelDummy();
 
     public RenderDummy(RenderManager renderManager) {
