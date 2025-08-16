@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -83,17 +84,16 @@ public class EntityMaterialProjectile extends EntityProjectile {
     @Override
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
-        if (shootingEntity instanceof EntityLivingBase && entity instanceof EntityLivingBase) {
-            int i = EnchantmentHelper.getKnockbackModifier((EntityLivingBase) shootingEntity);
-            if (i != 0) {
-                ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
-                        -MathHelper.sin(rotationYaw * 0.017453292f),
-                        -MathHelper.cos(rotationYaw * 0.017453292f));
-            }
-            i = EnchantmentHelper.getFireAspectModifier((EntityLivingBase) shootingEntity);
-            if (i > 0 && !entity.isBurning()) {
-                entity.setFire(1);
-            }
+        ItemStack stack = getWeapon().orNull();
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, stack);
+        if (i != 0) {
+            ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
+                    -MathHelper.sin(rotationYaw * 0.017453292f),
+                    -MathHelper.cos(rotationYaw * 0.017453292f));
+        }
+        i = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack);
+        if (i > 0 && !entity.isBurning()) {
+            entity.setFire(1);
         }
     }
 

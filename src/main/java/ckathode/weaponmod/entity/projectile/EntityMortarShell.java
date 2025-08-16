@@ -6,10 +6,8 @@ import ckathode.weaponmod.WeaponDamageSource;
 import javax.annotation.Nonnull;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -72,17 +70,11 @@ public class EntityMortarShell extends EntityProjectile {
             return;
         }
         setDead();
-        Entity shooter = getThrower();
-        if (!(shooter instanceof EntityLivingBase)) return;
-        if (EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER, (EntityLivingBase) shooter) > 0) {
-            float f1 = (float) EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.POWER,
-                    (EntityLivingBase) shooter);
-            explosiveSize += f1 / 4.0f;
+        if (extraDamage > 0) {
+            explosiveSize += extraDamage / 4.0f;
         }
-        boolean flag =
-                EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FLAME, (EntityLivingBase) shooter) > 0;
         PhysHelper.createAdvancedExplosion(worldObj, this, posX, posY, posZ, explosiveSize,
-                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage, true, flag, false);
+                BalkonsWeaponMod.instance.modConfig.mortarDoesBlockDamage, true, isBurning(), false);
     }
 
     @Override
