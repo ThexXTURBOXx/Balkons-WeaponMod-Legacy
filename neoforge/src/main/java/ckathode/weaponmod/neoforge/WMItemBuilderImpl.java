@@ -22,6 +22,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -49,7 +51,13 @@ public class WMItemBuilderImpl {
     }
 
     public static ItemFlail createItemFlail(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
-        return new ItemFlail(meleeComponent, id);
+        return new ItemFlail(meleeComponent, id) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+        };
     }
 
     public static ItemJavelin createItemJavelin(@NotNull ResourceLocation id) {
@@ -57,26 +65,56 @@ public class WMItemBuilderImpl {
     }
 
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull ResourceLocation id) {
-        return new ItemMelee(meleeComponent, id);
+        return new ItemMelee(meleeComponent, id) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+        };
     }
 
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, @NotNull Item.Properties properties) {
-        return new ItemMelee(meleeComponent, properties);
+        return new ItemMelee(meleeComponent, properties) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+        };
     }
 
     public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem,
                                               @NotNull ResourceLocation id) {
-        return new ItemMusket(meleeComponent, bayonetItem, id);
+        return new ItemMusket(meleeComponent, bayonetItem, id) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+        };
     }
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
                                                 @NotNull ResourceLocation id) {
-        return new ItemShooter(rangedComponent, meleeComponent, id);
+        return new ItemShooter(rangedComponent, meleeComponent, id) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+        };
     }
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
                                                 Item.Properties properties) {
-        return new ItemShooter(rangedComponent, meleeComponent, properties);
+        return new ItemShooter(rangedComponent, meleeComponent, properties) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+        };
     }
 
     public static WMItem createWMItem(@NotNull ResourceLocation id) {

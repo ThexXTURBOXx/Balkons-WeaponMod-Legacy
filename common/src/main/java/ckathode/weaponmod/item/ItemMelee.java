@@ -92,8 +92,7 @@ public class ItemMelee extends Item implements IItemWeapon {
     }
 
     @Override
-    public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
-                                     @NotNull Entity entity) {
+    public boolean leftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player, @NotNull Entity entity) {
         return meleeComponent.onLeftClickEntity(itemstack, player, entity);
     }
 
