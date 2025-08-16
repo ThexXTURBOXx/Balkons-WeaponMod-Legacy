@@ -17,8 +17,6 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -89,16 +87,11 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
             return;
         }
         remove(RemovalReason.DISCARDED);
-        Entity shooter = getOwner();
-        if (!(shooter instanceof LivingEntity livingEntity)) return;
-        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER_ARROWS, livingEntity) > 0) {
-            float f1 = (float) EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER_ARROWS, livingEntity);
-            explosiveSize += f1 / 4.0f;
+        if (extraDamage > 0) {
+            explosiveSize += extraDamage / 4.0f;
         }
-        boolean flag =
-                EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAMING_ARROWS, livingEntity) > 0;
         PhysHelper.createAdvancedExplosion(level, this, getX(), getY(), getZ(), explosiveSize,
-                WeaponModConfig.get().mortarDoesBlockDamage, true, flag,
+                WeaponModConfig.get().mortarDoesBlockDamage, true, isOnFire(),
                 Explosion.BlockInteraction.DESTROY);
     }
 
