@@ -204,7 +204,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     public abstract void effectShoot(World world, double x, double y, double z, float yaw, float pitch);
 
-    public void applyProjectileEnchantments(EntityProjectile entity, ItemStack itemstack) {
+    public static void applyProjectileEnchantments(EntityProjectile entity, ItemStack itemstack) {
         if (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemstack) > 0) {
             entity.setPickupStatus(EntityProjectile.PickupStatus.DISALLOWED);
         }

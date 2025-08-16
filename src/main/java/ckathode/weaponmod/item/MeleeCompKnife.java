@@ -4,8 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -28,11 +26,7 @@ public class MeleeCompKnife extends MeleeComponent {
         if (!world.isRemote) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());
             entityknife.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.8f, 3.0f);
-            entityknife.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId,
-                    itemstack));
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, itemstack) > 0) {
-                entityknife.setFire(100);
-            }
+            applyProjectileEnchantments(entityknife, itemstack);
             world.spawnEntityInWorld(entityknife);
         }
         world.playSoundAtEntity(entityplayer, "random.bow", 1.0F,

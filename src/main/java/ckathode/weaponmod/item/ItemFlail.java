@@ -94,11 +94,7 @@ public class ItemFlail extends ItemMelee {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
             entityflail.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
             PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getEntityId());
-            entityflail.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId,
-                    itemstack));
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, itemstack) > 0) {
-                entityflail.setFire(2);
-            }
+            MeleeComponent.applyProjectileEnchantments(entityflail, itemstack);
             world.spawnEntityInWorld(entityflail);
             setThrown(entityplayer, true);
         }
