@@ -10,6 +10,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 public class MeleeCompFirerod extends MeleeComponent {
@@ -22,10 +24,13 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
-        boolean flag = super.hurtEnemy(itemstack, entityliving, entityliving1);
+    public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving, LivingEntity attacker) {
+        boolean flag = super.hurtEnemy(itemstack, entityliving, attacker);
         if (flag) {
-            entityliving.setSecondsOnFire(12 + weapon.getItemRand().nextInt(3));
+            entityliving.setSecondsOnFire(12 +
+                                          2 * EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT,
+                                                  itemstack) +
+                                          weapon.getItemRand().nextInt(3));
         }
         return flag;
     }
