@@ -1,6 +1,7 @@
 package ckathode.weaponmod.fabric.mixin;
 
 import ckathode.weaponmod.WMUtil;
+import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.ItemMelee;
 import ckathode.weaponmod.item.ItemShooter;
 import ckathode.weaponmod.item.WMItem;
@@ -8,6 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -46,6 +48,16 @@ public class PlayerMixin {
                 }
             }
         }
+    }
+
+    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
+    public void leftClickEntity(Entity target, CallbackInfo ci) {
+        Player player = (Player) (Object) this;
+        ItemStack stack = player.getMainHandItem();
+        boolean cont = stack.isEmpty() ||
+                       (stack.getItem() instanceof IItemWeapon weapon &&
+                        !weapon.leftClickEntity(stack, player, target));
+        if (!cont) ci.cancel();
     }
 
 }
