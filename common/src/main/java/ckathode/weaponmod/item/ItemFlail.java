@@ -14,6 +14,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,29 +47,24 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    public int getEnchantmentValue() {
-        return 0;
-    }
-
-    @Override
     public void inventoryTick(@NotNull ItemStack itemstack, @NotNull Level world,
-                              @NotNull Entity entity, int i, boolean flag) {
-        if (!(entity instanceof Player player)) {
+                              @NotNull Entity entity, int i, boolean isSelected) {
+        if (!(entity instanceof Player player) || !isSelected) {
             return;
         }
         if (!isThrown(player)) {
             return;
         }
-        ItemStack itemstack2 = player.getMainHandItem();
-        if (itemstack2.isEmpty() || !(itemstack2.getItem() instanceof ItemFlail)) {
+        if (!ItemStack.matches(player.getMainHandItem(), itemstack)) {
             setThrown(player, false);
-        } else if (itemstack2.getItem() == this) {
+        } else {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
                 Entity entity2 = world.getEntity(id);
                 if (entity2 instanceof EntityFlail flail) {
-                    flail.setOwner(player);
-                    flail.setThrownItemStack(itemstack);
+                    if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+                        flail.igniteForSeconds(2);
+                    }
                 }
             }
         }
