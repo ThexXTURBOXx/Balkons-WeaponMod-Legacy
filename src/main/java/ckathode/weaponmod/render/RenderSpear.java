@@ -5,19 +5,15 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderSpear extends EntityRenderer<EntitySpear> {
+public class RenderSpear extends WMRenderer<EntitySpear> {
     public RenderSpear(EntityRendererManager renderManager) {
         super(renderManager);
     }
@@ -86,7 +82,6 @@ public class RenderSpear extends EntityRenderer<EntitySpear> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityspear);
             GlStateManager.translated(d, d1, d2);
@@ -104,7 +99,7 @@ public class RenderSpear extends EntityRenderer<EntitySpear> {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityspear));
             }
-            itemRender.renderItem(getStackToRender(entityspear), TransformType.NONE);
+            renderItem(getStackToRender(entityspear));
             if (renderOutlines) {
                 GlStateManager.tearDownSolidRenderingTextureCombine();
                 GlStateManager.disableColorMaterial();

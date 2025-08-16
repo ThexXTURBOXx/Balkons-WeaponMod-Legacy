@@ -5,19 +5,15 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderJavelin extends EntityRenderer<EntityJavelin> {
+public class RenderJavelin extends WMRenderer<EntityJavelin> {
     public RenderJavelin(EntityRendererManager renderManager) {
         super(renderManager);
     }
@@ -80,7 +76,6 @@ public class RenderJavelin extends EntityRenderer<EntityJavelin> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityjavelin);
             GlStateManager.translated(d, d1, d2);
@@ -99,7 +94,7 @@ public class RenderJavelin extends EntityRenderer<EntityJavelin> {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityjavelin));
             }
-            itemRender.renderItem(getStackToRender(entityjavelin), TransformType.NONE);
+            renderItem(getStackToRender(entityjavelin));
             if (renderOutlines) {
                 GlStateManager.tearDownSolidRenderingTextureCombine();
                 GlStateManager.disableColorMaterial();

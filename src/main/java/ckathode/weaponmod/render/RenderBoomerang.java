@@ -5,18 +5,14 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderBoomerang extends EntityRenderer<EntityBoomerang> {
+public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
     public RenderBoomerang(EntityRendererManager renderManager) {
         super(renderManager);
     }
@@ -100,7 +96,6 @@ public class RenderBoomerang extends EntityRenderer<EntityBoomerang> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityboomerang);
             GlStateManager.translated(d, d1, d2);
@@ -113,7 +108,7 @@ public class RenderBoomerang extends EntityRenderer<EntityBoomerang> {
                 GlStateManager.enableColorMaterial();
                 GlStateManager.setupSolidRenderingTextureCombine(getTeamColor(entityboomerang));
             }
-            itemRender.renderItem(getStackToRender(entityboomerang), TransformType.NONE);
+            renderItem(getStackToRender(entityboomerang));
             if (renderOutlines) {
                 GlStateManager.tearDownSolidRenderingTextureCombine();
                 GlStateManager.disableColorMaterial();

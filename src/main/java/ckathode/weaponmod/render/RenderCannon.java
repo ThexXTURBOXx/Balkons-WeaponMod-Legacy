@@ -5,12 +5,11 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityCannon;
 import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderCannon extends EntityRenderer<EntityCannon> {
+public class RenderCannon extends WMRenderer<EntityCannon> {
     private final ModelCannonBarrel modelBarrel = new ModelCannonBarrel();
     private final ModelCannonStandard modelStandard = new ModelCannonStandard();
     private final ModelCannonLegacy modelLegacy = new ModelCannonLegacy();

@@ -6,13 +6,12 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class RenderBlowgunDart extends EntityRenderer<EntityBlowgunDart> {
+public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
     public RenderBlowgunDart(EntityRendererManager renderManager) {
         super(renderManager);
     }
