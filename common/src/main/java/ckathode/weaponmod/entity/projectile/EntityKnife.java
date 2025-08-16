@@ -105,7 +105,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         }
         Entity entity = result.getEntity();
         float damage = iweapon.getMeleeComponent().getEntityDamage();
-        damage = getMeleeHitDamage(entity, damage);
+        damage = applyEnchantmentBonus(entity, damage);
         if (entity.hurtOrSimulate(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             if (thrownItem.getDamageValue() + 2 >= thrownItem.getMaxDamage()) {
