@@ -7,9 +7,9 @@ import java.time.format.DateTimeFormatter
 plugins {
     idea
     java
-    id("gg.essential.loom") version "1.9.9999-fg1"
+    id("gg.essential.loom") version "1.10.9999-fg1"
     id("dev.architectury.architectury-pack200") version "0.1.3"
-    id("com.gradleup.shadow") version "8.3.6"
+    id("com.gradleup.shadow") version "9.0.2"
 }
 
 val minecraft_version: String by project
@@ -73,7 +73,7 @@ tasks.shadowJar {
     archiveClassifier.set("dev")
     configurations = listOf(shadowImpl)
     doLast {
-        configurations.forEach {
+        configurations.get().forEach {
             println("Copying jars into mod: ${it.files}")
         }
     }
