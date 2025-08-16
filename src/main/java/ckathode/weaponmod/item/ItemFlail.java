@@ -5,6 +5,8 @@ import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -42,30 +44,25 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    public int getItemEnchantability() {
-        return 0;
-    }
-
-    @Override
     public void inventoryTick(@Nonnull ItemStack itemstack, @Nonnull World world,
-                              @Nonnull Entity entity, int i, boolean flag) {
-        if (!(entity instanceof PlayerEntity)) {
+                              @Nonnull Entity entity, int i, boolean isCurrentItem) {
+        if (!(entity instanceof PlayerEntity) || !isCurrentItem) {
             return;
         }
         PlayerEntity player = (PlayerEntity) entity;
         if (!isThrown(player)) {
             return;
         }
-        ItemStack itemstack2 = player.getHeldItemMainhand();
-        if (itemstack2.isEmpty() || !((itemstack2.getItem()) instanceof ItemFlail)) {
+        if (!ItemStack.areItemStacksEqual(player.getHeldItemMainhand(), itemstack)) {
             setThrown(player, false);
-        } else if (itemstack2.getItem() == this) {
+        } else {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
                 Entity entity2 = world.getEntityByID(id);
                 if (entity2 instanceof EntityFlail) {
-                    ((EntityFlail) entity2).setShooter(player);
-                    ((EntityFlail) entity2).setThrownItemStack(itemstack);
+                    if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+                        entity2.setFire(2);
+                    }
                 }
             }
         }
