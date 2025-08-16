@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
@@ -93,7 +94,7 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
         float damage = 20.0f + extraDamage;
-        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             remove(RemovalReason.DISCARDED);

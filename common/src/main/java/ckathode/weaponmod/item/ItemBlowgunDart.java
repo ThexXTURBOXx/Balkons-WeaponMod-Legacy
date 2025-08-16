@@ -45,6 +45,7 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
                                 Consumer<Component> consumer, TooltipFlag tooltipFlag) {
         PotionContents.addPotionTooltip(Collections.singleton(dartType.potionEffect()),

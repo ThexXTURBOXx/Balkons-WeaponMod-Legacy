@@ -37,7 +37,7 @@ public class WarhammerExplosion extends AdvancedExplosion {
                 dz /= d;
                 double var36 = 1.0 - dr;
                 int damage = (int) ((var36 * var36 + var36) / 2.0 * 8.0 * size + 1.0);
-                entity.hurt(damagesource, (float) damage);
+                WMUtil.hurt(entity, damagesource, (float) damage);
                 entity.setDeltaMovement(entity.getDeltaMovement().add(
                         new Vec3(dx * var36, dy * var36, dz * var36)));
             }

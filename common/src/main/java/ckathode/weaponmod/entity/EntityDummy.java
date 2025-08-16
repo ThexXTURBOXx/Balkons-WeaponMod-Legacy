@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import java.util.List;
@@ -195,7 +196,7 @@ public class EntityDummy extends Entity {
             return false;
         }
         int i = Mth.floor(fallDistance);
-        hurt(damageSources().fall(), (float) i);
+        WMUtil.hurt(this, damageSources().fall(), (float) i);
         return false;
     }
 

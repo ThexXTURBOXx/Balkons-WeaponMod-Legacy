@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -74,7 +75,7 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
             damage += random.nextInt(damage / 2 + 2);
         }
         Entity entity = result.getEntity();
-        if (entity.hurtOrSimulate(getDamageSource(), (float) damage)) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), (float) damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             remove(RemovalReason.DISCARDED);

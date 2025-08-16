@@ -3,6 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
@@ -122,7 +123,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
     @Override
     public void onHitEntity(EntityHitResult result) {
         setDeltaMovement(getDeltaMovement().scale(0.5));
-        if (result.getEntity().hurtOrSimulate(getDamageSource(), 5.0f)) {
+        if (WMUtil.hurtOrSimulate(result.getEntity(), getDamageSource(), 5.0f)) {
             playSound(SoundEvents.PLAYER_HURT, 1.0f, 1.2f / (random.nextFloat() * 0.4f + 0.7f));
         }
     }
