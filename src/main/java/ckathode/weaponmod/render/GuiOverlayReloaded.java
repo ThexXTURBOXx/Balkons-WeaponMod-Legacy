@@ -29,7 +29,7 @@ public class GuiOverlayReloaded extends Gui {
         EntityPlayer p = mc.thePlayer;
         if (p == null) return;
         int currentItem = p.inventory.currentItem;
-        ItemStack is = p.getCurrentEquippedItem();
+        ItemStack is = p.getHeldItem();
         if (is == null) return;
         Item item = is.getItem();
         if (!(item instanceof IItemWeapon)) return;

@@ -70,8 +70,8 @@ public class EntityFlail extends EntityMaterialProjectile {
             if (distanceTotal > 3.0) {
                 returnToOwner(true);
             }
-            if (shooter instanceof EntityPlayer) {
-                ItemStack itemstack = ((EntityPlayer) shooter).getCurrentEquippedItem();
+            if (shooter instanceof EntityLivingBase) {
+                ItemStack itemstack = ((EntityLivingBase) shooter).getHeldItem();
                 ItemStack thrownItem = getWeapon();
                 if (itemstack == null || (thrownItem != null && !ItemStack.areItemStacksEqual(itemstack, thrownItem)) ||
                     !shooter.isEntityAlive()) {
