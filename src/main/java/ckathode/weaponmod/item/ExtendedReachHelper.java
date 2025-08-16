@@ -15,6 +15,7 @@ import net.minecraft.util.Vec3;
 public final class ExtendedReachHelper {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
+    @SuppressWarnings("unchecked")
     public static MovingObjectPosition getMouseOver(float frame, float dist) {
         MovingObjectPosition result = null;
         EntityLivingBase entity = mc.renderViewEntity;

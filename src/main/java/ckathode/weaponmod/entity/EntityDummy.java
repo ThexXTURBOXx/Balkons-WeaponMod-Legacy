@@ -125,6 +125,7 @@ public class EntityDummy extends Entity {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onUpdate() {
         super.onUpdate();
         int i = getTimeSinceHit();

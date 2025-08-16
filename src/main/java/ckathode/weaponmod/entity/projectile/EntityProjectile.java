@@ -325,6 +325,7 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
     }
 
     @Nullable
+    @SuppressWarnings("unchecked")
     protected Entity findEntity(Vec3 vec3d, Vec3 vec3d1) {
         Entity entity = null;
         List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this,

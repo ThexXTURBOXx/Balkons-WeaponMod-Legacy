@@ -14,6 +14,7 @@ public class WarhammerExplosion extends AdvancedExplosion {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void doEntityExplosion(DamageSource damagesource) {
         float size = explosionSize * 2.0f;
         int k1 = MathHelper.floor_double(explosionX - size - 1.0);

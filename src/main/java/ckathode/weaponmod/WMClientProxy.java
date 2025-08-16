@@ -112,6 +112,7 @@ public class WMClientProxy extends WMCommonProxy {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void applySoundFix() {
         // Add random.breath sound to game (can also be accessed via /playsound then!)
         SoundList list = new SoundList();

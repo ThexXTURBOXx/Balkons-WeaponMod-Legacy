@@ -25,6 +25,7 @@ public class ItemBlowgunDart extends WMItem {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void getSubItems(Item itemIn, CreativeTabs tab, List subItems) {
         for (int j = 0; j < DartType.dartTypes.length; ++j) {
             if (DartType.dartTypes[j] != null) {
@@ -51,6 +52,7 @@ public class ItemBlowgunDart extends WMItem {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List tooltip, boolean advanced) {
         DartType type = DartType.getDartTypeFromStack(stack);
         if (type == null) {

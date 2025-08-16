@@ -50,6 +50,7 @@ public class AdvancedExplosion extends Explosion {
         doEntityExplosion(DamageSource.setExplosionSource(this));
     }
 
+    @SuppressWarnings("unchecked")
     public void doEntityExplosion(DamageSource damagesource) {
         float size = explosionSize * 2.0f;
         int k1 = MathHelper.floor_double(explosionX - size - 1.0);
@@ -84,6 +85,7 @@ public class AdvancedExplosion extends Explosion {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void doBlockExplosion() {
         if (!blocksCalculated) {
             calculateBlockExplosion();
@@ -104,6 +106,7 @@ public class AdvancedExplosion extends Explosion {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void doFlaming() {
         if (!blocksCalculated) {
             calculateBlockExplosion();
@@ -119,6 +122,7 @@ public class AdvancedExplosion extends Explosion {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void doParticleExplosion(boolean smallparticles, boolean bigparticles) {
         this.worldObj.playSoundEffect(explosionX, explosionY, explosionZ, "random.explode", 4.0f,
                 (1.0f + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2f) * 0.7f);
@@ -154,6 +158,7 @@ public class AdvancedExplosion extends Explosion {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected void calculateBlockExplosion() {
         byte maxsize = 16;
         Set<ChunkPosition> set = Sets.newHashSet();

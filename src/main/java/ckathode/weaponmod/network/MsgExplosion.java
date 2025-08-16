@@ -25,6 +25,7 @@ public class MsgExplosion extends WMMessage {
         // Needed for WMMessagePipeline instantiation
     }
 
+    @SuppressWarnings("unchecked")
     public MsgExplosion(AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
         x = explosion.explosionX;
         y = explosion.explosionY;
