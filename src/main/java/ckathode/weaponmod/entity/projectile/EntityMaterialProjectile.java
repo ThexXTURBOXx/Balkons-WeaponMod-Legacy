@@ -4,6 +4,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.ItemHitEffect;
 import javax.annotation.Nonnull;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -83,18 +84,16 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Override
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
-        Entity shooter = getShooter();
-        if (shooter instanceof LivingEntity && entity instanceof LivingEntity) {
-            int i = EnchantmentHelper.getKnockbackModifier((LivingEntity) shooter);
-            if (i != 0) {
-                ((LivingEntity) entity).knockBack(this, i * 0.4f,
-                        -MathHelper.sin(rotationYaw * 0.017453292f),
-                        -MathHelper.cos(rotationYaw * 0.017453292f));
-            }
-            i = EnchantmentHelper.getFireAspectModifier((LivingEntity) shooter);
-            if (i > 0 && !entity.isBurning()) {
-                entity.setFire(1);
-            }
+        ItemStack stack = getWeapon();
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, stack);
+        if (i != 0) {
+            ((LivingEntity) entity).knockBack(this, i * 0.4f,
+                    -MathHelper.sin(rotationYaw * 0.017453292f),
+                    -MathHelper.cos(rotationYaw * 0.017453292f));
+        }
+        i = EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack);
+        if (i > 0 && !entity.isBurning()) {
+            entity.setFire(1);
         }
     }
 
