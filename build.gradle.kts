@@ -66,6 +66,7 @@ dependencies {
 
 tasks.withType(JavaCompile::class) {
     options.encoding = "UTF-8"
+    options.compilerArgs.addAll(arrayOf("-Xlint:unchecked", "-Xlint:deprecation"))
 }
 
 tasks.withType(Jar::class) {

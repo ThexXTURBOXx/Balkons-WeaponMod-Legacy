@@ -69,6 +69,7 @@ public class BalkonsWeaponMod {
     public static final String MOD_ID = "weaponmod";
     public static BalkonsWeaponMod instance;
     public static final Logger modLog = LogManager.getLogger(MOD_ID);
+    @SuppressWarnings("deprecation")
     public static final WMCommonProxy proxy = DistExecutor.runForDist(() -> WMClientProxy::new,
             () -> WMCommonProxy::new);
     public static ItemJavelin javelin;
@@ -155,6 +156,7 @@ public class BalkonsWeaponMod {
     public final IConditionSerializer<?> configConditional;
     public WMMessagePipeline messagePipeline;
 
+    @SuppressWarnings("deprecation")
     public BalkonsWeaponMod() {
         instance = this;
 
