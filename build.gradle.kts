@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 plugins {
     idea
     java
-    id("gg.essential.loom") version "1.9.+"
+    id("gg.essential.loom") version "1.10.+"
     id("dev.architectury.architectury-pack200") version "0.1.3"
 }
 
