@@ -130,8 +130,7 @@ public class EntityBoomerang extends EntityMaterialProjectile {
         ItemStack thrownItem = getWeapon();
         if (thrownItem == null || !(thrownItem.getItem() instanceof IItemWeapon)) return;
         float damage =
-                ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 2.0f + extraDamage;
-        damage += getMeleeHitDamage(entity);
+                ((IItemWeapon) thrownItem.getItem()).getMeleeComponent().getEntityDamage() + 2.0f + getEnchantmentDamage(entity);
         if (getIsCritical()) {
             damage += 2.0f;
         }

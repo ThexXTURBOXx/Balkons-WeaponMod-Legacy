@@ -2,9 +2,12 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponModAttributes;
+import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -184,6 +187,16 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @SideOnly(Side.CLIENT)
     public float getCooldown() {
         return 0;
+    }
+
+    public static void applyProjectileEnchantments(EntityProjectile entity, ItemStack itemstack) {
+        int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId, itemstack);
+        if (knockback > 0) {
+            entity.setKnockbackStrength(knockback);
+        }
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, itemstack) > 0) {
+            entity.setFire(100);
+        }
     }
 
     public enum MeleeSpecs {

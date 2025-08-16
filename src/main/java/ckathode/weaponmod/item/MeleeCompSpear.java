@@ -27,11 +27,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
         if (!world.isRemote) {
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
             entityspear.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.8f, 3.0f);
-            entityspear.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId,
-                    itemstack));
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, itemstack) > 0) {
-                entityspear.setFire(100);
-            }
+            applyProjectileEnchantments(entityspear, itemstack);
             world.spawnEntityInWorld(entityspear);
         }
         world.playSoundAtEntity(entityplayer, "random.bow", 1.0F,
