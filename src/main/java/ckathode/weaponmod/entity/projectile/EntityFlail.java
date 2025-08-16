@@ -155,7 +155,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         DamageSource damagesource = shooter instanceof LivingEntity
                 ? DamageSource.causeMobDamage((LivingEntity) shooter)
                 : WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
-        if (entity.attackEntityFrom(damagesource, flailDamage + extraDamage)) {
+        if (entity.attackEntityFrom(damagesource, flailDamage + getEnchantmentDamage(entity))) {
             applyEntityHitEffects(entity);
             playHitSound();
             returnToOwner(true);
