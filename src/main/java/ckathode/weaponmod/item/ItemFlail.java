@@ -5,9 +5,11 @@ import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
@@ -42,11 +44,6 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    public int getItemEnchantability() {
-        return 0;
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
@@ -54,24 +51,24 @@ public class ItemFlail extends ItemMelee {
 
     @Override
     public void onUpdate(@Nonnull ItemStack itemstack, @Nonnull World world,
-                         @Nonnull Entity entity, int i, boolean flag) {
-        if (!(entity instanceof EntityPlayer)) {
+                         @Nonnull Entity entity, int i, boolean isCurrentItem) {
+        if (!(entity instanceof EntityPlayer) || !isCurrentItem) {
             return;
         }
         EntityPlayer player = (EntityPlayer) entity;
         if (!isThrown(player)) {
             return;
         }
-        ItemStack itemstack2 = player.getHeldItemMainhand();
-        if (itemstack2 == null || !((itemstack2.getItem()) instanceof ItemFlail)) {
+        if (!ItemStack.areItemStacksEqual(player.getHeldItemMainhand(), itemstack)) {
             setThrown(player, false);
-        } else if (itemstack2.getItem() == this) {
+        } else {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
                 Entity entity2 = world.getEntityByID(id);
                 if (entity2 instanceof EntityFlail) {
-                    ((EntityFlail) entity2).setThrower(player);
-                    ((EntityFlail) entity2).setThrownItemStack(itemstack);
+                    if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+                        entity2.setFire(2);
+                    }
                 }
             }
         }
@@ -110,6 +107,10 @@ public class ItemFlail extends ItemMelee {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
             entityflail.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.75f, 3.0f);
             PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getEntityId());
+            entityflail.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
+            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+                entityflail.setFire(2);
+            }
             world.spawnEntityInWorld(entityflail);
             setThrown(entityplayer, true);
         }
