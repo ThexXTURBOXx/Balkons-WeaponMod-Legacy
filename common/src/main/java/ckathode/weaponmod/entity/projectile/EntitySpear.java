@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
@@ -85,7 +86,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         Entity entity = result.getEntity();
         float damage = iweapon.getMeleeComponent().getEntityDamage();
         damage = applyEnchantmentBonus(entity, damage);
-        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {

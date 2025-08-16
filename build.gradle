@@ -53,6 +53,10 @@ subprojects {
         toolchain.languageVersion.set(JavaLanguageVersion.of(21))
     }
 
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
     // Configure Maven publishing.
     publishing {
         publications {

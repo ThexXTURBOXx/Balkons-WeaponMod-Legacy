@@ -63,6 +63,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @NotNull
+    @SuppressWarnings("deprecation")
     public Tool getToolComponent() {
         HolderGetter<Block> holderGetter =
                 BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);

@@ -3,6 +3,7 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
@@ -121,7 +122,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     @Override
     public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
-        if (entity.hurtOrSimulate(getDamageSource(), 1.0f)) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), 1.0f)) {
             applyEntityHitEffects(entity);
             playHitSound();
             lerpMotion(0.0, 0.0, 0.0);
