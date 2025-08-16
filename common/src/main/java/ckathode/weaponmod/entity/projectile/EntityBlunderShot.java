@@ -119,7 +119,7 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
             entity.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 15.0f);
             if (item != null && !itemstack.isEmpty()) {
-                item.applyProjectileEnchantments(entity, itemstack);
+                RangedComponent.applyProjectileEnchantments(entity, itemstack);
             }
             world.addFreshEntity(entity);
         }
