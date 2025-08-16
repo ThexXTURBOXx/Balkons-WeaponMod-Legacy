@@ -4,6 +4,7 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModAttributes;
 import java.util.List;
 import net.minecraft.core.HolderGetter;
@@ -57,7 +58,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
         Vec3 motion = entity.getDeltaMovement();
         int prevhurtres = entity.invulnerableTime;
         int prevhurt = entity instanceof LivingEntity living ? living.hurtTime : 0;
-        entity.hurtOrSimulate(player.damageSources().source(WMDamageSources.BATTLEAXE),
+        WMUtil.hurtOrSimulate(entity, player.damageSources().source(WMDamageSources.BATTLEAXE),
                 getIgnoreArmorAmount(weaponMaterial));
         entity.setDeltaMovement(motion);
         entity.invulnerableTime = prevhurtres;

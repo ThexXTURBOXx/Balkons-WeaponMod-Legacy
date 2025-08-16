@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -71,7 +72,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
         Entity entity = result.getEntity();
         float vel = (float) getTotalVelocity();
         float damage = vel * 4.0f + extraDamage;
-        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
             if (entity instanceof LivingEntity livingEntity && level().isClientSide) {
                 livingEntity.setArrowCount(livingEntity.getArrowCount() + 1);
             }

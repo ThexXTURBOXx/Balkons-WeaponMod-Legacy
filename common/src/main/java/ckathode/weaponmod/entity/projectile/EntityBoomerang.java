@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
@@ -155,7 +156,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         if (isCritArrow()) {
             damage += 2.0f;
         }
-        if (entity.hurtOrSimulate(getDamageSource(), damage)) {
+        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {
