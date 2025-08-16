@@ -108,6 +108,7 @@ public class ItemFlail extends ItemMelee {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
             entityflail.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.75f, 3.0f);
             PlayerWeaponData.setFlailEntityId(entityplayer, entityflail.getId());
+            MeleeComponent.applyProjectileEnchantments(entityflail, itemstack);
             world.addFreshEntity(entityflail);
             setThrown(entityplayer, true);
         }

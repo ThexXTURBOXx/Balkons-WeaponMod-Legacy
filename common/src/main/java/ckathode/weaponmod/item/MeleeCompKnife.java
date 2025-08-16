@@ -13,8 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 public class MeleeCompKnife extends MeleeComponent {
@@ -50,10 +48,7 @@ public class MeleeCompKnife extends MeleeComponent {
         if (!world.isClientSide) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());
             entityknife.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.8f, 3.0f);
-            entityknife.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
-            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                entityknife.setSecondsOnFire(100);
-            }
+            applyProjectileEnchantments(entityknife, itemstack);
             world.addFreshEntity(entityknife);
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,

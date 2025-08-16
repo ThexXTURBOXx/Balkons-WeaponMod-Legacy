@@ -12,8 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 public class MeleeCompBoomerang extends MeleeComponent {
@@ -59,14 +57,9 @@ public class MeleeCompBoomerang extends MeleeComponent {
         f *= 1.5f;
         if (!world.isClientSide) {
             EntityBoomerang entityboomerang = new EntityBoomerang(world, entityliving, itemstack.copy());
-            entityboomerang.shootFromRotation(entityliving, entityliving.xRot, entityliving.yRot, 0.0f, f,
-                    5.0f);
+            entityboomerang.shootFromRotation(entityliving, entityliving.xRot, entityliving.yRot, 0.0f, f, 5.0f);
+            applyProjectileEnchantments(entityboomerang, itemstack);
             entityboomerang.setCritArrow(crit);
-            entityboomerang.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK,
-                    itemstack));
-            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                entityboomerang.setSecondsOnFire(100);
-            }
             world.addFreshEntity(entityboomerang);
         }
         world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
