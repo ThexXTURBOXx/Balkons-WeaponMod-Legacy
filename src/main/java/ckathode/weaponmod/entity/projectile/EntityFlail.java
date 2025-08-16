@@ -74,7 +74,9 @@ public class EntityFlail extends EntityMaterialProjectile {
             if (shooter instanceof EntityLivingBase) {
                 ItemStack itemstack = ((EntityLivingBase) shooter).getHeldItemMainhand();
                 ItemStack thrownItem = getWeapon();
-                if (itemstack.isEmpty() || (!thrownItem.isEmpty() && itemstack.getItem() != thrownItem.getItem()) || !shooter.isEntityAlive()) {
+                if (itemstack.isEmpty() ||
+                    (!thrownItem.isEmpty() && !ItemStack.areItemStacksEqual(itemstack, thrownItem)) ||
+                    !shooter.isEntityAlive()) {
                     pickUpByOwner();
                 }
             }
@@ -158,6 +160,7 @@ public class EntityFlail extends EntityMaterialProjectile {
                 ? DamageSource.causeMobDamage((EntityLivingBase) shooter)
                 : WeaponDamageSource.causeProjectileWeaponDamage(this, shooter);
         if (entity.attackEntityFrom(damagesource, flailDamage + extraDamage)) {
+            applyEntityHitEffects(entity);
             playHitSound();
             returnToOwner(true);
         } else {
