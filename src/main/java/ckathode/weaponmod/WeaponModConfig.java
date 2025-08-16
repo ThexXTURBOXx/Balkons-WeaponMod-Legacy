@@ -141,6 +141,7 @@ public class WeaponModConfig {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static class GuiFactory implements IModGuiFactory {
 
         @Override
