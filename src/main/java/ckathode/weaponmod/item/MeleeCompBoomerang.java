@@ -1,8 +1,6 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.IItemTier;
@@ -39,14 +37,9 @@ public class MeleeCompBoomerang extends MeleeComponent {
         f *= 1.5f;
         if (!world.isRemote) {
             EntityBoomerang entityboomerang = new EntityBoomerang(world, entityliving, itemstack.copy());
-            entityboomerang.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, f,
-                    5.0f);
+            entityboomerang.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, f, 5.0f);
+            applyProjectileEnchantments(entityboomerang, itemstack);
             entityboomerang.setIsCritical(crit);
-            entityboomerang.setKnockbackStrength(EnchantmentHelper.getEnchantmentLevel(Enchantments.KNOCKBACK,
-                    itemstack));
-            if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                entityboomerang.setFire(100);
-            }
             world.addEntity(entityboomerang);
         }
         world.playSound(null, entityliving.posX, entityliving.posY, entityliving.posZ,

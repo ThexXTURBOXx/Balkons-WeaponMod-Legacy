@@ -57,7 +57,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         Item item = thrownItem.getItem();
         Entity entity = rayTraceResult.getEntity();
         if (item instanceof IItemWeapon && entity.attackEntityFrom(damagesource,
-                ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + getMeleeHitDamage(entity))) {
+                ((IItemWeapon) item).getMeleeComponent().getEntityDamage() + getEnchantmentDamage(entity))) {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getDamage() + 1 >= thrownItem.getMaxDamage()) {
