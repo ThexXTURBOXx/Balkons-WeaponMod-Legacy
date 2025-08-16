@@ -65,8 +65,6 @@ public class EntityMortarShell extends EntityProjectile {
             return;
         }
         setDead();
-        Entity shooter = getThrower();
-        if (!(shooter instanceof EntityLivingBase)) return;
         if (extraDamage > 0) {
             explosiveSize += extraDamage / 4.0f;
         }
