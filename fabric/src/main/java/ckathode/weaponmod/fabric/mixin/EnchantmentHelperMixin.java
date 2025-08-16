@@ -1,6 +1,6 @@
 package ckathode.weaponmod.fabric.mixin;
 
-import ckathode.weaponmod.fabric.WMFabricHooks;
+import ckathode.weaponmod.item.IItemWeapon;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +19,10 @@ public abstract class EnchantmentHelperMixin {
                                                 "(Lnet/minecraft/world/item/Item;)Z"))
     private static boolean canEnchant(EnchantmentCategory instance, Item item,
                                       @Local(argsOnly = true) ItemStack stack, @Local Enchantment enchantment) {
-        return WMFabricHooks.canDefinitelyEnchant(stack, enchantment) || instance.canEnchant(item);
+        if (stack.getItem() instanceof IItemWeapon weapon) {
+            return weapon.canApplyEnchantment(stack, enchantment);
+        }
+        return instance.canEnchant(item);
     }
 
 }
