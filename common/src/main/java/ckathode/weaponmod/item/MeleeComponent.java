@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponModAttributes;
+import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,6 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -200,6 +203,16 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Environment(EnvType.CLIENT)
     public float getCooldown() {
         return 0;
+    }
+
+    public static void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
+        int knockback = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack);
+        if (knockback > 0) {
+            entity.setKnockback(knockback);
+        }
+        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
+            entity.setSecondsOnFire(100);
+        }
     }
 
     public enum MeleeSpecs {
