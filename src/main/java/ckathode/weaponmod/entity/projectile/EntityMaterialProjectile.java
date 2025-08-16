@@ -78,13 +78,15 @@ public class EntityMaterialProjectile extends EntityProjectile {
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
         ItemStack stack = getWeapon();
-        int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId, stack);
-        if (i != 0) {
-            ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
-                    -MathHelper.sin(rotationYaw * 0.017453292f),
-                    -MathHelper.cos(rotationYaw * 0.017453292f));
+        if (entity instanceof EntityLivingBase) {
+            int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.knockback.effectId, stack);
+            if (i != 0) {
+                ((EntityLivingBase) entity).knockBack(this, i * 0.4f,
+                        -MathHelper.sin(rotationYaw * 0.017453292f),
+                        -MathHelper.cos(rotationYaw * 0.017453292f));
+            }
         }
-        i = EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack);
+        int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack);
         if (i > 0 && !entity.isBurning()) {
             entity.setFire(1);
         }
