@@ -54,10 +54,9 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         entityData.set(WEAPON_ITEM, buf.readItem());
     }
 
-    public float getMeleeHitDamage(Entity entity) {
-        Entity shooter = getOwner();
-        if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
-            return EnchantmentHelper.getDamageBonus(livingShooter.getMainHandItem(), livingEntity.getMobType());
+    public float getEnchantmentDamage(Entity entity) {
+        if (entity instanceof LivingEntity living) {
+            return EnchantmentHelper.getDamageBonus(getWeapon(), living.getMobType());
         }
         return 0.0f;
     }
