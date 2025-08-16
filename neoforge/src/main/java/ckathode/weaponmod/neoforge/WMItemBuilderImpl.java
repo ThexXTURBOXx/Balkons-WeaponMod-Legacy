@@ -21,6 +21,8 @@ import java.util.function.Consumer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -84,6 +86,12 @@ public class WMItemBuilderImpl {
     public static ItemFlail createItemFlail(MeleeComponent meleeComponent) {
         return new ItemFlail(meleeComponent) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
                     if (stack.getItem() instanceof ItemFlail) return true;
@@ -108,6 +116,12 @@ public class WMItemBuilderImpl {
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent) {
         return new ItemMelee(meleeComponent) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
                     if (stack.getItem() instanceof ItemMelee) return true;
@@ -119,6 +133,12 @@ public class WMItemBuilderImpl {
 
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, Item.Properties properties) {
         return new ItemMelee(meleeComponent, properties) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -132,6 +152,12 @@ public class WMItemBuilderImpl {
     public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
         return new ItemMusket(meleeComponent, bayonetItem) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
                     if (stack.getItem() instanceof ItemMusket) return true;
@@ -143,6 +169,12 @@ public class WMItemBuilderImpl {
 
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent) {
         return new ItemShooter(rangedComponent, meleeComponent) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {
@@ -156,6 +188,12 @@ public class WMItemBuilderImpl {
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent,
                                                 Item.Properties properties) {
         return new ItemShooter(rangedComponent, meleeComponent, properties) {
+            @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
             @Override
             public boolean canPerformAction(@NotNull ItemStack stack, @NotNull ItemAbility itemAbility) {
                 if (itemAbility == ItemAbilities.SHIELD_BLOCK) {

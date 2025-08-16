@@ -55,8 +55,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
-    public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
-                                     @NotNull Entity entity) {
+    public boolean leftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player, @NotNull Entity entity) {
         return meleeComponent.onLeftClickEntity(itemstack, player, entity) && rangedComponent.onLeftClickEntity(itemstack, player, entity);
     }
 
