@@ -84,7 +84,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         }
         Entity entity = result.getEntity();
         float damage = iweapon.getMeleeComponent().getEntityDamage();
-        damage = getMeleeHitDamage(entity, damage);
+        damage = applyEnchantmentBonus(entity, damage);
         if (entity.hurt(getDamageSource(), damage)) {
             applyEntityHitEffects(entity);
             playHitSound();

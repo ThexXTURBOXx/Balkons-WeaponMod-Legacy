@@ -3,11 +3,15 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponModAttributes;
+import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,6 +31,9 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -205,6 +212,14 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Environment(EnvType.CLIENT)
     public float getCooldown() {
         return 0;
+    }
+
+    public static void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
+        Registry<Enchantment> enchRegistry = entity.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> fireAspect = enchRegistry.getHolder(Enchantments.FIRE_ASPECT).orElse(null);
+        if (fireAspect != null && EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
+            entity.igniteForSeconds(100);
+        }
     }
 
     public enum MeleeSpecs {

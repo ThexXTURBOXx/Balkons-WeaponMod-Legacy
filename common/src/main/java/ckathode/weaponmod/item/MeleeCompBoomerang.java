@@ -2,8 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -14,9 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 public class MeleeCompBoomerang extends MeleeComponent {
@@ -61,12 +56,8 @@ public class MeleeCompBoomerang extends MeleeComponent {
             EntityBoomerang entityboomerang = new EntityBoomerang(world, entityliving, itemstack.copy());
             entityboomerang.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, f, 5.0f);
+            applyProjectileEnchantments(entityboomerang, itemstack);
             entityboomerang.setCritArrow(crit);
-            Holder<Enchantment> fireAspect = entityliving.registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.FIRE_ASPECT).orElse(null);
-            if (fireAspect != null && EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) > 0) {
-                entityboomerang.igniteForSeconds(100);
-            }
             world.addFreshEntity(entityboomerang);
         }
         world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),

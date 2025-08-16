@@ -216,7 +216,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
 
     public abstract void effectShoot(Level level, double x, double y, double z, float yaw, float pitch);
 
-    public void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
+    public static void applyProjectileEnchantments(EntityProjectile<?> entity, ItemStack itemstack) {
         Registry<Enchantment> enchRegistry = entity.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
         Holder<Enchantment> infinity = enchRegistry.getHolder(Enchantments.INFINITY).orElse(null);
         Holder<Enchantment> power = enchRegistry.getHolder(Enchantments.POWER).orElse(null);
