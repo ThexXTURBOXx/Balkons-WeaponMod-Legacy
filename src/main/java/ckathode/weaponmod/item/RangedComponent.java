@@ -210,7 +210,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         }
         int damage = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, itemstack);
         if (damage > 0) {
-            entity.setExtraDamage((float) damage);
+            entity.setExtraDamage(damage);
         }
         int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, itemstack);
         if (knockback > 0) {
