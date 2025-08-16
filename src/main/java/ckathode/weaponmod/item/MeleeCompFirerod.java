@@ -1,5 +1,7 @@
 package ckathode.weaponmod.item;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,10 +20,12 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     @Override
-    public boolean hitEntity(ItemStack itemstack, LivingEntity entityliving, LivingEntity entityliving1) {
-        boolean flag = super.hitEntity(itemstack, entityliving, entityliving1);
+    public boolean hitEntity(ItemStack itemstack, LivingEntity entityliving, LivingEntity attacker) {
+        boolean flag = super.hitEntity(itemstack, entityliving, attacker);
         if (flag) {
-            entityliving.setFire(12 + weapon.getItemRand().nextInt(3));
+            entityliving.setFire(12 +
+                                 2 * EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) +
+                                 weapon.getItemRand().nextInt(3));
         }
         return flag;
     }
