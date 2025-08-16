@@ -158,6 +158,7 @@ public class WeaponModConfig {
         }
 
         @Override
+        @SuppressWarnings("deprecation")
         public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement runtimeOptionCategoryElement) {
             return null;
         }
