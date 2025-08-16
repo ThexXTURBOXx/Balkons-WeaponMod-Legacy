@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -68,6 +69,11 @@ public class ItemMusket extends ItemShooter {
 
     public boolean hasBayonet() {
         return bayonetItem != null;
+    }
+
+    @Override
+    public boolean canApplyEnchantment(@NotNull ItemStack stack, @NotNull Enchantment enchantment) {
+        return rangedComponent.canApplyEnchantment(stack, enchantment); // do not allow melee enchantments
     }
 
     @Override
