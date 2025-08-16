@@ -49,7 +49,7 @@ public class ItemFlail extends ItemMelee {
         if (!isThrown(player)) {
             return;
         }
-        if (!ItemStack.areItemStacksEqual(player.getCurrentEquippedItem(), itemstack)) {
+        if (!ItemStack.areItemStacksEqual(player.getHeldItem(), itemstack)) {
             setThrown(player, false);
         } else {
             int id = PlayerWeaponData.getFlailEntityId(player);

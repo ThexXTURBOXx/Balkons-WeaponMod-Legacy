@@ -27,7 +27,7 @@ public class WMClientEventHandler {
             return;
         }
         if (e.button == 0 && e.buttonstate) {
-            ItemStack itemstack = player.getCurrentEquippedItem();
+            ItemStack itemstack = player.getHeldItem();
             if (itemstack != null) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
                 if (ieri != null) {
