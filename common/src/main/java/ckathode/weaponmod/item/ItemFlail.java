@@ -4,6 +4,8 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +19,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,22 +62,24 @@ public class ItemFlail extends ItemMelee {
     @Override
     public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity,
                               @Nullable EquipmentSlot equipmentSlot) {
-        if (!(entity instanceof Player player)) {
+        if (!(entity instanceof Player player) || equipmentSlot == null || equipmentSlot.getType() != EquipmentSlot.Type.HAND) {
             return;
         }
         if (!isThrown(player)) {
             return;
         }
-        ItemStack itemstack2 = player.getMainHandItem();
-        if (itemstack2.isEmpty() || !(itemstack2.getItem() instanceof ItemFlail)) {
+        if (!ItemStack.matches(player.getMainHandItem(), itemStack)) {
             setThrown(player, false);
-        } else if (itemstack2.getItem() == this) {
+        } else {
             int id = PlayerWeaponData.getFlailEntityId(player);
             if (id != 0) {
                 Entity entity2 = serverLevel.getEntity(id);
                 if (entity2 instanceof EntityFlail flail) {
-                    flail.setOwner(player);
-                    flail.setThrownItemStack(itemStack);
+                    Holder<Enchantment> fireAspect = player.registryAccess()
+                            .lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.FIRE_ASPECT).orElse(null);
+                    if (fireAspect != null && EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemStack) > 0) {
+                        flail.igniteForSeconds(2);
+                    }
                 }
             }
         }
