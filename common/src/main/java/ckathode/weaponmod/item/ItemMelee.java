@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -83,6 +84,11 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     }
 
     @Override
+    public boolean canApplyEnchantment(@NotNull ItemStack stack, @NotNull Enchantment enchantment) {
+        return meleeComponent.canApplyEnchantment(stack, enchantment);
+    }
+
+    @Override
     public int getEnchantmentValue() {
         return meleeComponent.getEnchantmentValue();
     }
@@ -99,8 +105,7 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     }
 
     @Override
-    public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
-                                     @NotNull Entity entity) {
+    public boolean leftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player, @NotNull Entity entity) {
         return meleeComponent.onLeftClickEntity(itemstack, player, entity);
     }
 
