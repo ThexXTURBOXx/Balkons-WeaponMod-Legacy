@@ -4,13 +4,9 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
@@ -18,7 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderJavelin extends Render<EntityJavelin> {
+public class RenderJavelin extends WMRenderer<EntityJavelin> {
     public RenderJavelin(RenderManager renderManager) {
         super(renderManager);
     }
@@ -73,7 +69,6 @@ public class RenderJavelin extends Render<EntityJavelin> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityjavelin);
             GlStateManager.translate(d, d1, d2);
@@ -88,7 +83,7 @@ public class RenderJavelin extends Render<EntityJavelin> {
             }
             GlStateManager.translate(-0.25f, -0.25f, 0.0f);
             GlStateManager.rotate(180.0f, 0.0f, 1.0f, 0.0f);
-            itemRender.renderItem(getStackToRender(entityjavelin), TransformType.NONE);
+            renderItem(getStackToRender(entityjavelin));
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }

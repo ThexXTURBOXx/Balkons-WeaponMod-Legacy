@@ -4,13 +4,9 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
@@ -18,7 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderSpear extends Render<EntitySpear> {
+public class RenderSpear extends WMRenderer<EntitySpear> {
     public RenderSpear(RenderManager renderManager) {
         super(renderManager);
     }
@@ -79,7 +75,6 @@ public class RenderSpear extends Render<EntitySpear> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityspear);
             GlStateManager.translate(d, d1, d2);
@@ -93,7 +88,7 @@ public class RenderSpear extends Render<EntitySpear> {
                 GlStateManager.rotate(f16, 0.0f, 0.0f, 1.0f);
             }
             GlStateManager.translate(-0.35f, -0.35f, 0.0f);
-            itemRender.renderItem(getStackToRender(entityspear), TransformType.NONE);
+            renderItem(getStackToRender(entityspear));
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }

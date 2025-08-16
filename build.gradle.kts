@@ -87,6 +87,7 @@ val processSource = tasks.register<Sync>("processSource") {
 tasks.withType(JavaCompile::class) {
     source = processSource.get().outputs.files.asFileTree
     options.encoding = "UTF-8"
+    options.compilerArgs.addAll(arrayOf("-Xlint:unchecked", "-Xlint:deprecation"))
 }
 
 tasks.withType(Jar::class) {

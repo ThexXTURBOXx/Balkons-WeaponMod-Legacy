@@ -4,20 +4,16 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import javax.annotation.Nonnull;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public class RenderBoomerang extends Render<EntityBoomerang> {
+public class RenderBoomerang extends WMRenderer<EntityBoomerang> {
     public RenderBoomerang(RenderManager renderManager) {
         super(renderManager);
     }
@@ -93,7 +89,6 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             GlStateManager.enableLighting();
             GlStateManager.popMatrix();
         } else {
-            RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
             GlStateManager.pushMatrix();
             bindEntityTexture(entityboomerang);
             GlStateManager.translate(d, d1, d2);
@@ -102,7 +97,7 @@ public class RenderBoomerang extends Render<EntityBoomerang> {
             GlStateManager.rotate(entityboomerang.prevRotationPitch + (entityboomerang.rotationPitch - entityboomerang.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
             GlStateManager.rotate(entityboomerang.prevRotationYaw + (entityboomerang.rotationYaw - entityboomerang.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
             GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
-            itemRender.renderItem(getStackToRender(entityboomerang), TransformType.NONE);
+            renderItem(getStackToRender(entityboomerang));
             GlStateManager.disableRescaleNormal();
             GlStateManager.popMatrix();
         }

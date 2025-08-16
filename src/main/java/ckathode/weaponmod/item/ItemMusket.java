@@ -42,6 +42,7 @@ public class ItemMusket extends ItemShooter {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void addInformation(ItemStack stack, EntityPlayer player, List tooltip, boolean b) {
         super.addInformation(stack, player, tooltip, b);
         // 2 is ID for short
