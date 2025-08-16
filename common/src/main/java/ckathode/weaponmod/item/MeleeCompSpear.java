@@ -14,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 
 public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem {
@@ -52,10 +50,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
             entityspear.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 0.8f, 3.0f);
-            entityspear.setKnockback(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, itemstack));
-            if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) > 0) {
-                entityspear.setSecondsOnFire(100);
-            }
+            applyProjectileEnchantments(entityspear, itemstack);
             world.addFreshEntity(entityspear);
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
