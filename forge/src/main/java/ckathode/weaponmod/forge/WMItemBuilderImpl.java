@@ -13,6 +13,9 @@ import ckathode.weaponmod.item.ItemShooter;
 import ckathode.weaponmod.item.MeleeComponent;
 import ckathode.weaponmod.item.RangedComponent;
 import ckathode.weaponmod.item.WMItem;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -74,8 +77,14 @@ public class WMItemBuilderImpl {
     public static ItemFlail createItemFlail(MeleeComponent meleeComponent) {
         return new ItemFlail(meleeComponent) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-                return meleeComponent.canApplyEnchantment(stack, enchantment);
+                return canApplyEnchantment(stack, enchantment);
             }
 
             @Override
@@ -103,8 +112,14 @@ public class WMItemBuilderImpl {
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent) {
         return new ItemMelee(meleeComponent) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-                return meleeComponent.canApplyEnchantment(stack, enchantment);
+                return canApplyEnchantment(stack, enchantment);
             }
 
             @Override
@@ -120,8 +135,14 @@ public class WMItemBuilderImpl {
     public static ItemMelee createItemMelee(MeleeComponent meleeComponent, Item.Properties properties) {
         return new ItemMelee(meleeComponent, properties) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-                return meleeComponent.canApplyEnchantment(stack, enchantment);
+                return canApplyEnchantment(stack, enchantment);
             }
 
             @Override
@@ -137,8 +158,14 @@ public class WMItemBuilderImpl {
     public static ItemMusket createItemMusket(MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
         return new ItemMusket(meleeComponent, bayonetItem) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-                return rangedComponent.canApplyEnchantment(stack, enchantment); // do not allow melee enchantments
+                return canApplyEnchantment(stack, enchantment);
             }
 
             @Override
@@ -154,9 +181,14 @@ public class WMItemBuilderImpl {
     public static ItemShooter createItemShooter(RangedComponent rangedComponent, MeleeComponent meleeComponent) {
         return new ItemShooter(rangedComponent, meleeComponent) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-                return rangedComponent.canApplyEnchantment(stack, enchantment) ||
-                       meleeComponent.canApplyEnchantment(stack, enchantment);
+                return canApplyEnchantment(stack, enchantment);
             }
 
             @Override
@@ -173,9 +205,14 @@ public class WMItemBuilderImpl {
                                                 Item.Properties properties) {
         return new ItemShooter(rangedComponent, meleeComponent, properties) {
             @Override
+            public boolean onLeftClickEntity(@NotNull ItemStack itemstack, @NotNull Player player,
+                                             @NotNull Entity entity) {
+                return leftClickEntity(itemstack, player, entity);
+            }
+
+            @Override
             public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-                return rangedComponent.canApplyEnchantment(stack, enchantment) ||
-                       meleeComponent.canApplyEnchantment(stack, enchantment);
+                return canApplyEnchantment(stack, enchantment);
             }
 
             @Override
