@@ -48,9 +48,7 @@ import ckathode.weaponmod.item.WMItem;
 import com.mojang.datafixers.util.Pair;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
@@ -182,7 +180,7 @@ public class WMRegistries {
     public static final RegistrySupplier<ItemShooter> ITEM_BLOWGUN =
             ITEMS.register(RangedCompBlowgun.ID, () -> RangedCompBlowgun.ITEM);
     public static final Map<DartType, RegistrySupplier<ItemBlowgunDart>> ITEM_DARTS =
-            Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
+            DartType.DART_TYPES.stream()
                     .map(t -> new Pair<>(t, ItemBlowgunDart.ITEMS.get(t))).collect(Collectors.toMap(Pair::getFirst,
                             p -> ITEMS.register(p.getFirst().typeName(), p::getSecond)));
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_WOOD =
@@ -275,7 +273,7 @@ public class WMRegistries {
     private static void registerDispenserBehaviors() {
         DispenserBlock.registerBehavior(ItemJavelin.ITEM, new DispenseJavelin());
         DispenserBlock.registerBehavior(WMItem.CROSSBOW_BOLT_ITEM, new DispenseCrossbowBolt());
-        Arrays.stream(DartType.dartTypes).filter(Objects::nonNull).map(ItemBlowgunDart.ITEMS::get)
+        DartType.DART_TYPES.stream().map(ItemBlowgunDart.ITEMS::get)
                 .forEach(item -> DispenserBlock.registerBehavior(item, new DispenseBlowgunDart()));
         DispenserBlock.registerBehavior(WMItem.BLUNDER_SHOT_ITEM, new DispenseBlunderShot());
         DispenserBlock.registerBehavior(ItemDynamite.ITEM, new DispenseDynamite());
