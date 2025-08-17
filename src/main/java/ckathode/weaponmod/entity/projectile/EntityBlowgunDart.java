@@ -2,29 +2,20 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
-import ckathode.weaponmod.item.DartType;
-import javax.annotation.Nonnull;
+import ckathode.weaponmod.item.ItemBlowgunDart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
+public class EntityBlowgunDart extends EntityMaterialProjectile<EntityBlowgunDart> {
     public static final String NAME = "dart";
-
-    private static final DataParameter<Byte> DART_EFFECT_TYPE = EntityDataManager.createKey(EntityBlowgunDart.class,
-            DataSerializers.BYTE);
-    private static final float[][] DART_COLORS = new float[][]{{0.2f, 0.8f, 0.3f}, {0.9f, 0.7f, 1.0f},
-            {0.6f, 1.0f, 0.9f}, {0.8f, 0.5f, 0.2f}};
 
     public EntityBlowgunDart(World world) {
         super(BalkonsWeaponMod.entityBlowgunDart, world);
@@ -36,10 +27,11 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
         setPosition(d, d1, d2);
     }
 
-    public EntityBlowgunDart(World world, EntityLivingBase shooter) {
+    public EntityBlowgunDart(World world, EntityLivingBase shooter, ItemStack itemstack) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setShooter(shooter);
         setPickupStatusFromEntity(shooter);
+        setThrownItemStack(itemstack);
     }
 
     @Override
@@ -57,41 +49,22 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     }
 
     @Override
-    public void registerData() {
-        super.registerData();
-        dataManager.register(DART_EFFECT_TYPE, (byte) 0);
-    }
-
-    public void setDartEffectType(DartType type) {
-        setDartEffectType(type.typeID);
-    }
-
-    public void setDartEffectType(byte i) {
-        dataManager.set(DART_EFFECT_TYPE, i);
-    }
-
-    public DartType getDartEffectType() {
-        return DartType.dartTypes[getDartEffectId()];
-    }
-
-    public byte getDartEffectId() {
-        byte effectId = dataManager.get(DART_EFFECT_TYPE);
-        if (effectId < 0) effectId = 0;
-        return effectId;
-    }
-
-    public float[] getDartColor() {
-        int effectId = getDartEffectId();
-        return DART_COLORS[effectId >= DART_COLORS.length ? 0 : effectId];
-    }
-
-    @Override
     public void onHitEntity(RayTraceResult raytraceResult) {
         Entity entity = raytraceResult.entity;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f + extraDamage)) {
             if (entity instanceof EntityLivingBase) {
-                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(getDartEffectType().potionEffect));
+                EntityLivingBase living = (EntityLivingBase) entity;
+                if (living.canBeHitWithPotion()) {
+                    for (PotionEffect pe : ItemBlowgunDart.getEffects(getWeapon())) {
+                        Potion potion = pe.getPotion();
+                        if (potion.isInstant()) {
+                            potion.affectEntity(this, getShooter(), living, pe.getAmplifier(), 1);
+                        } else {
+                            living.addPotionEffect(new PotionEffect(pe));
+                        }
+                    }
+                }
             }
             applyEntityHitEffects(entity);
             playHitSound();
@@ -114,30 +87,6 @@ public class EntityBlowgunDart extends EntityProjectile<EntityBlowgunDart> {
     @Override
     public int getMaxArrowShake() {
         return 4;
-    }
-
-    @Nonnull
-    @Override
-    public ItemStack getPickupItem() {
-        return getArrowStack();
-    }
-
-    @Nonnull
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(BalkonsWeaponMod.darts.get(getDartEffectType()));
-    }
-
-    @Override
-    public void writeAdditional(NBTTagCompound nbttagcompound) {
-        super.writeAdditional(nbttagcompound);
-        nbttagcompound.putByte("darttype", getDartEffectId());
-    }
-
-    @Override
-    public void readAdditional(NBTTagCompound nbttagcompound) {
-        super.readAdditional(nbttagcompound);
-        setDartEffectType(nbttagcompound.getByte("darttype"));
     }
 
 }

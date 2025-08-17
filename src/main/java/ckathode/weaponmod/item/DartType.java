@@ -1,27 +1,43 @@
 package ckathode.weaponmod.item;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 
-public class DartType {
-    public static final DartType[] dartTypes = new DartType[128];
-    public static final DartType damage = new DartType((byte) 0, "dart",
-            new PotionEffect(MobEffects.POISON, 120, 0));
-    public static final DartType hunger = new DartType((byte) 1, "dart.hunger",
-            new PotionEffect(MobEffects.HUNGER, 360, 0));
-    public static final DartType slow = new DartType((byte) 2, "dart.slow",
-            new PotionEffect(MobEffects.SLOWNESS, 360, 1));
-    public static final DartType damage2 = new DartType((byte) 3, "dart.damage",
-            new PotionEffect(MobEffects.POISON, 120, 1));
-    public final byte typeID;
-    public final String typeName;
-    public final PotionEffect potionEffect;
+public final class DartType {
 
-    public DartType(byte id, String typename, PotionEffect potioneffect) {
-        dartTypes[id] = this;
-        typeID = id;
-        typeName = typename;
-        potionEffect = potioneffect;
+    public static final List<DartType> DART_TYPES = new ArrayList<>();
+
+    public static final DartType DAMAGE = new DartType("dart",
+            new float[]{0.2f, 0.8f, 0.3f}, new PotionEffect(MobEffects.POISON, 120, 0));
+    public static final DartType HUNGER = new DartType("dart.hunger",
+            new float[]{0.9f, 0.7f, 1.0f}, new PotionEffect(MobEffects.HUNGER, 360, 0));
+    public static final DartType SLOW = new DartType("dart.slow",
+            new float[]{0.6f, 1.0f, 0.9f}, new PotionEffect(MobEffects.SLOWNESS, 360, 1));
+    public static final DartType DAMAGE_2 = new DartType("dart.damage",
+            new float[]{0.8f, 0.5f, 0.2f}, new PotionEffect(MobEffects.POISON, 120, 1));
+
+    public final String typeName;
+    public final float[] color;
+    public final List<PotionEffect> potionEffects;
+
+    /**
+     * By calling this function, you also automatically register your dart type, item etc.
+     * (you need to register some stuff like crafting recipes on your own, though).
+     * Just be sure to call this function <b>before</b> BWM:L pre-inits.
+     * Otherwise, you need to register some stuff on your own.
+     *
+     * @param typeName      The registry name for the dart. Convention: "dart" or "dart.something".
+     * @param color         The colour of the dart when rendering the corresponding entity.
+     * @param potionEffects When the dart hits an entity, apply these effects (can also be empty).
+     */
+    public DartType(String typeName, float[] color, PotionEffect... potionEffects) {
+        DART_TYPES.add(this);
+        this.typeName = typeName;
+        this.color = color;
+        this.potionEffects = Arrays.asList(potionEffects);
     }
 
 }
