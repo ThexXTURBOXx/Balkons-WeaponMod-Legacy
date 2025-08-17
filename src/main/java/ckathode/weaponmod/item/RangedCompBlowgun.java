@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -43,8 +42,12 @@ public class RangedCompBlowgun extends RangedComponent {
             f = 1.0f;
         }
         ItemStack dartstack = findAmmo(entityplayer);
-        if (dartstack.isEmpty() && entityplayer.isCreative()) {
-            dartstack = new ItemStack(BalkonsWeaponMod.dart, 1);
+        if (dartstack.isEmpty() || !(dartstack.getItem() instanceof ItemBlowgunDart)) {
+            if (entityplayer.isCreative()) {
+                dartstack = new ItemStack(BalkonsWeaponMod.dart);
+            } else {
+                return;
+            }
         }
         ItemStack dartStackCopy = dartstack.copy();
         if (!entityplayer.isCreative()
@@ -52,12 +55,9 @@ public class RangedCompBlowgun extends RangedComponent {
             consumeAmmo(entityplayer);
         }
         if (!world.isRemote) {
-            EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer);
+            EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer, dartStackCopy);
             entityblowgundart.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
                     f * 1.5f, 1.0f);
-            Item item = dartStackCopy.getItem();
-            if (item instanceof ItemBlowgunDart)
-                entityblowgundart.setDartEffectType((byte) dartStackCopy.getMetadata());
             applyProjectileEnchantments(entityblowgundart, itemstack);
             world.spawnEntity(entityblowgundart);
         }

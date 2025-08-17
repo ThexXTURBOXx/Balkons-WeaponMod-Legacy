@@ -14,6 +14,7 @@ import ckathode.weaponmod.entity.projectile.EntityKnife;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
+import ckathode.weaponmod.item.DartType;
 import ckathode.weaponmod.network.WMMessagePipeline;
 import ckathode.weaponmod.render.GuiOverlayReloaded;
 import ckathode.weaponmod.render.RenderBlowgunDart;
@@ -110,14 +111,12 @@ public class WMClientProxy extends WMCommonProxy {
                 MOD_ID + ":" + BalkonsWeaponMod.bolt.getTranslationKey().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.blowgun, 0, new ModelResourceLocation(
                 MOD_ID + ":" + BalkonsWeaponMod.blowgun.getTranslationKey().substring(5), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 0, new ModelResourceLocation(
-                MOD_ID + ":" + BalkonsWeaponMod.dart.getTranslationKey().substring(5), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 1, new ModelResourceLocation(
-                MOD_ID + ":" + BalkonsWeaponMod.dart.getTranslationKey().substring(5) + ".hunger", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 2, new ModelResourceLocation(
-                MOD_ID + ":" + BalkonsWeaponMod.dart.getTranslationKey().substring(5) + ".slow", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, 3, new ModelResourceLocation(
-                MOD_ID + ":" + BalkonsWeaponMod.dart.getTranslationKey().substring(5) + ".damage", "inventory"));
+        for (DartType type : DartType.DART_TYPES.valueCollection()) {
+            if (type != null) {
+                ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dart, type.typeID,
+                        new ModelResourceLocation(MOD_ID + ":" + type.typeName, "inventory"));
+            }
+        }
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.dynamite, 0, new ModelResourceLocation(
                 MOD_ID + ":" + BalkonsWeaponMod.dynamite.getTranslationKey().substring(5), "inventory"));
         ModelLoader.setCustomModelResourceLocation(BalkonsWeaponMod.flailWood, 0, new ModelResourceLocation(
