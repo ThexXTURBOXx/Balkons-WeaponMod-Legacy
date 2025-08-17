@@ -7,10 +7,7 @@ import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
@@ -24,9 +21,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -99,18 +93,11 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
             return;
         }
         remove(RemovalReason.DISCARDED);
-        Entity shooter = getOwner();
-        if (!(shooter instanceof LivingEntity livingEntity)) return;
-        Registry<Enchantment> enchRegistry = registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-        Holder<Enchantment> power = enchRegistry.get(Enchantments.POWER).orElse(null);
-        Holder<Enchantment> flame = enchRegistry.get(Enchantments.FLAME).orElse(null);
-        if (power != null && EnchantmentHelper.getEnchantmentLevel(power, livingEntity) > 0) {
-            float f1 = (float) EnchantmentHelper.getEnchantmentLevel(power, livingEntity);
-            explosiveSize += f1 / 4.0f;
+        if (extraDamage > 0) {
+            explosiveSize += extraDamage / 4.0f;
         }
-        boolean flag = flame != null && EnchantmentHelper.getEnchantmentLevel(flame, livingEntity) > 0;
         PhysHelper.createAdvancedExplosion(serverLevel, this, position(), explosiveSize,
-                WeaponModConfig.get().mortarDoesBlockDamage, true, flag,
+                WeaponModConfig.get().mortarDoesBlockDamage, true, isOnFire(),
                 Explosion.BlockInteraction.DESTROY);
     }
 
