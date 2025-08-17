@@ -1,6 +1,8 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -9,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.EffectUtils;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.Style;
@@ -31,25 +34,44 @@ public class ItemBlowgunDart extends WMItem {
     @Override
     public void addInformation(@Nonnull ItemStack itemstack, @Nullable World worldIn,
                                @Nonnull List<ITextComponent> list, @Nonnull ITooltipFlag flag) {
-        EffectInstance potioneffect = dartType.potionEffect;
-        Effect potion = potioneffect.getPotion();
-        ITextComponent s = new TranslationTextComponent(potioneffect.getEffectName());
-        if (potioneffect.getAmplifier() > 0) {
-            s = s.appendSibling(new StringTextComponent(" "))
-                    .appendSibling(new TranslationTextComponent("potion.potency." + potioneffect.getAmplifier()));
+        for (EffectInstance ei : getEffects(itemstack)) {
+            Effect potion = ei.getPotion();
+            ITextComponent s = new TranslationTextComponent(ei.getEffectName());
+            if (ei.getAmplifier() > 0)
+                s = s.appendSibling(new StringTextComponent(" "))
+                        .appendSibling(new TranslationTextComponent("potion.potency." + ei.getAmplifier()));
+            if (ei.getDuration() > 20)
+                s = s.appendSibling(new StringTextComponent(" ("))
+                        .appendSibling(new StringTextComponent(EffectUtils.getPotionDurationString(ei, 1.0f)))
+                        .appendSibling(new StringTextComponent(")"));
+            s = s.setStyle(new Style().setColor(potion.getEffectType().getColor()));
+            list.add(s);
         }
-        if (potioneffect.getDuration() > 20) {
-            s = s.appendSibling(new StringTextComponent(" ("))
-                    .appendSibling(new StringTextComponent(EffectUtils.getPotionDurationString(potioneffect, 1.0f)))
-                    .appendSibling(new StringTextComponent(")"));
-        }
-        s = s.setStyle(new Style().setColor(potion.getEffectType().getColor()));
-        list.add(s);
     }
 
     @Nonnull
     public DartType getDartType() {
         return dartType;
+    }
+
+    @Nonnull
+    private static DartType getDartType(@Nonnull ItemStack stack) {
+        return stack.getItem() instanceof ItemBlowgunDart
+                ? ((ItemBlowgunDart) stack.getItem()).getDartType()
+                : DartType.DAMAGE;
+    }
+
+    public static List<EffectInstance> getEffects(@Nonnull ItemStack stack) {
+        if (stack.isEmpty()) return Collections.emptyList();
+
+        List<EffectInstance> effects = new ArrayList<>(getDartType(stack).potionEffects);
+        PotionUtils.addCustomPotionEffectToList(stack.getTag(), effects);
+        return effects;
+    }
+
+    public static float[] getColor(ItemStack stack) {
+        if (stack.isEmpty()) return DartType.DAMAGE.color;
+        return getDartType(stack).color;
     }
 
 }
