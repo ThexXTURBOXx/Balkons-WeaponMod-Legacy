@@ -97,21 +97,21 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Override
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
-        Entity shooter = getOwner();
-        if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
-            Registry<Enchantment> enchRegistry = registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        ItemStack stack = getWeapon();
+        Registry<Enchantment> enchRegistry = registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        if (entity instanceof LivingEntity livingEntity) {
             Holder<Enchantment> knockBack = enchRegistry.get(Enchantments.KNOCKBACK).orElse(null);
-            Holder<Enchantment> fireAspect = enchRegistry.get(Enchantments.FIRE_ASPECT).orElse(null);
-            int i = knockBack == null ? 0 : EnchantmentHelper.getEnchantmentLevel(knockBack, livingShooter);
+            int i = knockBack == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(knockBack, stack);
             if (i != 0) {
                 livingEntity.knockback(i * 0.4f,
                         -Mth.sin(getYRot() * 0.017453292f),
                         -Mth.cos(getYRot() * 0.017453292f));
             }
-            i = fireAspect == null ? 0 : EnchantmentHelper.getEnchantmentLevel(fireAspect, livingShooter);
-            if (i > 0 && !livingEntity.isOnFire()) {
-                livingEntity.igniteForSeconds(1);
-            }
+        }
+        Holder<Enchantment> fireAspect = enchRegistry.get(Enchantments.FIRE_ASPECT).orElse(null);
+        int i = fireAspect == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(fireAspect, stack);
+        if (i > 0 && !entity.isOnFire()) {
+            entity.igniteForSeconds(1);
         }
     }
 
