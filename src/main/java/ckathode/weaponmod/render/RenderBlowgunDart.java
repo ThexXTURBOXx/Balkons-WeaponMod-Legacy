@@ -2,6 +2,7 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
+import ckathode.weaponmod.item.ItemBlowgunDart;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
@@ -20,8 +21,7 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
         GL11.glRotatef(entityblowgundart.prevRotationYaw + (entityblowgundart.rotationYaw - entityblowgundart.prevRotationYaw) * f1 - 90.0f, 0.0f, 1.0f, 0.0f);
         GL11.glRotatef(entityblowgundart.prevRotationPitch + (entityblowgundart.rotationPitch - entityblowgundart.prevRotationPitch) * f1, 0.0f, 0.0f, 1.0f);
         Tessellator tess = Tessellator.instance;
-        byte type = entityblowgundart.getDartEffectId();
-        float[] color = entityblowgundart.getDartColor();
+        float[] color = ItemBlowgunDart.getColor(entityblowgundart.getWeapon());
         GL11.glEnable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);
         float f11 = entityblowgundart.arrowShake - f1;
         if (f11 > 0.0f) {
@@ -38,13 +38,13 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
         tess.addVertexWithUV(-5.0, -2.0, 2.0, 0.15625, 0.15625);
         tess.addVertexWithUV(-5.0, 2.0, 2.0, 0.15625, 0.3125);
         tess.addVertexWithUV(-5.0, 2.0, -2.0, 0.0, 0.3125);
-        if (type != 0) {
-            tess.setColorOpaque_F(color[0], color[1], color[2]);
-            tess.addVertexWithUV(-5.0, -2.0, -2.0, 0.0, 0.46875);
-            tess.addVertexWithUV(-5.0, -2.0, 2.0, 0.15625, 0.46875);
-            tess.addVertexWithUV(-5.0, 2.0, 2.0, 0.15625, 0.625);
-            tess.addVertexWithUV(-5.0, 2.0, -2.0, 0.0, 0.625);
-        }
+
+        tess.setColorOpaque_F(color[0], color[1], color[2]);
+        tess.addVertexWithUV(-5.0, -2.0, -2.0, 0.0, 0.46875);
+        tess.addVertexWithUV(-5.0, -2.0, 2.0, 0.15625, 0.46875);
+        tess.addVertexWithUV(-5.0, 2.0, 2.0, 0.15625, 0.625);
+        tess.addVertexWithUV(-5.0, 2.0, -2.0, 0.0, 0.625);
+
         tess.draw();
         GL11.glNormal3f(-0.05625f, 0.0f, 0.0f);
         tess.startDrawingQuads();
@@ -53,13 +53,13 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
         tess.addVertexWithUV(-5.0, 2.0, 2.0, 0.15625, 0.15625);
         tess.addVertexWithUV(-5.0, -2.0, 2.0, 0.15625, 0.3125);
         tess.addVertexWithUV(-5.0, -2.0, -2.0, 0.0, 0.3125);
-        if (type != 0) {
-            tess.setColorOpaque_F(color[0], color[1], color[2]);
-            tess.addVertexWithUV(-5.0, 2.0, -2.0, 0.0, 0.46875);
-            tess.addVertexWithUV(-5.0, 2.0, 2.0, 0.15625, 0.46875);
-            tess.addVertexWithUV(-5.0, -2.0, 2.0, 0.15625, 0.625);
-            tess.addVertexWithUV(-5.0, -2.0, -2.0, 0.0, 0.625);
-        }
+
+        tess.setColorOpaque_F(color[0], color[1], color[2]);
+        tess.addVertexWithUV(-5.0, 2.0, -2.0, 0.0, 0.46875);
+        tess.addVertexWithUV(-5.0, 2.0, 2.0, 0.15625, 0.46875);
+        tess.addVertexWithUV(-5.0, -2.0, 2.0, 0.15625, 0.625);
+        tess.addVertexWithUV(-5.0, -2.0, -2.0, 0.0, 0.625);
+
         tess.draw();
         for (int j = 0; j < 4; ++j) {
             GL11.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
@@ -70,13 +70,13 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
             tess.addVertexWithUV(6.0, -2.0, 0.0, 0.5, 0.0);
             tess.addVertexWithUV(6.0, 2.0, 0.0, 0.5, 0.15625);
             tess.addVertexWithUV(-6.0, 2.0, 0.0, 0.0, 0.15625);
-            if (type != 0) {
-                tess.setColorOpaque_F(color[0], color[1], color[2]);
-                tess.addVertexWithUV(-6.0, -2.0, 0.0, 0.0, 0.3125);
-                tess.addVertexWithUV(6.0, -2.0, 0.0, 0.5, 0.3125);
-                tess.addVertexWithUV(6.0, 2.0, 0.0, 0.5, 0.46875);
-                tess.addVertexWithUV(-6.0, 2.0, 0.0, 0.0, 0.46875);
-            }
+
+            tess.setColorOpaque_F(color[0], color[1], color[2]);
+            tess.addVertexWithUV(-6.0, -2.0, 0.0, 0.0, 0.3125);
+            tess.addVertexWithUV(6.0, -2.0, 0.0, 0.5, 0.3125);
+            tess.addVertexWithUV(6.0, 2.0, 0.0, 0.5, 0.46875);
+            tess.addVertexWithUV(-6.0, 2.0, 0.0, 0.0, 0.46875);
+
             tess.draw();
         }
         GL11.glDisable(EXTRescaleNormal.GL_RESCALE_NORMAL_EXT);

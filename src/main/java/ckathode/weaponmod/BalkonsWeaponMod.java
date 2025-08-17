@@ -339,7 +339,7 @@ public class BalkonsWeaponMod {
         }
         if (modConfig.isEnabled("blowgun")) {
             GameRegistry.addRecipe(new ItemStack(blowgun), "X  ", " X ", "  X", 'X', Items.reeds);
-            for (DartType type : DartType.dartTypes) {
+            for (DartType type : DartType.DART_TYPES.valueCollection()) {
                 if (type != null) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(dart, 4, type.typeID), "#", "X", "O",
                             'X', type.craftItem, '#', "stickWood", 'O', Items.feather));
