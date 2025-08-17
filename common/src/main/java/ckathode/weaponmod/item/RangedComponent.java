@@ -9,7 +9,6 @@ import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -286,8 +285,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public enum RangedSpecs {
-        BLOWGUN("blowgun", 250, Arrays.stream(DartType.dartTypes)
-                .filter(Objects::nonNull)
+        BLOWGUN("blowgun", 250, DartType.DART_TYPES.stream()
                 .map(t -> BalkonsWeaponMod.id(t.typeName()).toString())
                 .toArray(String[]::new)),
         CROSSBOW("crossbow", 250, BalkonsWeaponMod.id("bolt").toString()),

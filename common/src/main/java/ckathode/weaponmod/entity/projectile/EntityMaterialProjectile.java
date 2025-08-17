@@ -110,8 +110,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         }
         Holder<Enchantment> fireAspect = enchRegistry.get(Enchantments.FIRE_ASPECT).orElse(null);
         int i = fireAspect == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(fireAspect, stack);
-        if (i > 0 && !entity.isOnFire()) {
-            entity.igniteForSeconds(1);
+        if (i > 0 || isOnFire()) {
+            entity.igniteForSeconds(i > 0 ? i : 1);
         }
     }
 
