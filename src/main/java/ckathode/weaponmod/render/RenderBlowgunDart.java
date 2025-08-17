@@ -2,6 +2,7 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
+import ckathode.weaponmod.item.ItemBlowgunDart;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import javax.annotation.Nonnull;
@@ -27,8 +28,7 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
         IVertexBuilder builder = bufs.getBuffer(RenderType.getEntityCutout(getEntityTexture(entityblowgundart)));
         ms.rotate(Vector3f.YP.rotationDegrees(entityblowgundart.prevRotationYaw + (entityblowgundart.rotationYaw - entityblowgundart.prevRotationYaw) * f1 - 90.0f));
         ms.rotate(Vector3f.ZP.rotationDegrees(entityblowgundart.prevRotationPitch + (entityblowgundart.rotationPitch - entityblowgundart.prevRotationPitch) * f1));
-        byte type = entityblowgundart.getDartEffectId();
-        float[] color = entityblowgundart.getDartColor();
+        float[] color = ItemBlowgunDart.getColor(entityblowgundart.getWeapon());
         float f11 = entityblowgundart.arrowShake - f1;
         if (f11 > 0.0f) {
             float f12 = -MathHelper.sin(f11 * 3.0f) * f11;
@@ -42,30 +42,30 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
         drawVertex(last, builder, -5.0f, -2.0f, 2.0f, 0.15625f, 0.15625f, 0.05625f, 0.0f, 0.0f, lm);
         drawVertex(last, builder, -5.0f, 2.0f, 2.0f, 0.15625f, 0.3125f, 0.05625f, 0.0f, 0.0f, lm);
         drawVertex(last, builder, -5.0f, 2.0f, -2.0f, 0.0f, 0.3125f, 0.05625f, 0.0f, 0.0f, lm);
-        if (type != 0) {
-            drawVertex(last, builder, -5.0f, -2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.46875f,
-                    0.05625f, 0.0f, 0.0f, lm);
-            drawVertex(last, builder, -5.0f, -2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.46875f,
-                    0.05625f, 0.0f, 0.0f, lm);
-            drawVertex(last, builder, -5.0f, 2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.625f,
-                    0.05625f, 0.0f, 0.0f, lm);
-            drawVertex(last, builder, -5.0f, 2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.625f, 0.05625f,
-                    0.0f, 0.0f, lm);
-        }
+
+        drawVertex(last, builder, -5.0f, -2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.46875f,
+                0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, -5.0f, -2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.46875f,
+                0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, -5.0f, 2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.625f,
+                0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, -5.0f, 2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.625f, 0.05625f,
+                0.0f, 0.0f, lm);
+
         drawVertex(last, builder, -5.0f, 2.0f, -2.0f, 0.0f, 0.15625f, -0.05625f, 0.0f, 0.0f, lm);
         drawVertex(last, builder, -5.0f, 2.0f, 2.0f, 0.15625f, 0.15625f, -0.05625f, 0.0f, 0.0f, lm);
         drawVertex(last, builder, -5.0f, -2.0f, 2.0f, 0.15625f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
         drawVertex(last, builder, -5.0f, -2.0f, -2.0f, 0.0f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
-        if (type != 0) {
-            drawVertex(last, builder, -5.0f, 2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.46875f,
-                    -0.05625f, 0.0f, 0.0f, lm);
-            drawVertex(last, builder, -5.0f, 2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.46875f,
-                    -0.05625f, 0.0f, 0.0f, lm);
-            drawVertex(last, builder, -5.0f, -2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.625f,
-                    -0.05625f, 0.0f, 0.0f, lm);
-            drawVertex(last, builder, -5.0f, -2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.625f,
-                    -0.05625f, 0.0f, 0.0f, lm);
-        }
+
+        drawVertex(last, builder, -5.0f, 2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.46875f,
+                -0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, -5.0f, 2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.46875f,
+                -0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, -5.0f, -2.0f, 2.0f, color[0], color[1], color[2], 1.0f, 0.15625f, 0.625f,
+                -0.05625f, 0.0f, 0.0f, lm);
+        drawVertex(last, builder, -5.0f, -2.0f, -2.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.625f,
+                -0.05625f, 0.0f, 0.0f, lm);
+
         for (int j = 0; j < 4; ++j) {
             ms.rotate(Vector3f.XP.rotationDegrees(90.0f));
             last = ms.getLast();
@@ -73,16 +73,15 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart> {
             drawVertex(last, builder, 6.0f, -2.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
             drawVertex(last, builder, 6.0f, 2.0f, 0.0f, 0.5f, 0.15625f, 0.0f, 0.0f, 0.05625f, lm);
             drawVertex(last, builder, -6.0f, 2.0f, 0.0f, 0.0f, 0.15625f, 0.0f, 0.0f, 0.05625f, lm);
-            if (type != 0) {
-                drawVertex(last, builder, -6.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.3125f, 0.0f,
-                        0.0f, 0.05625f, lm);
-                drawVertex(last, builder, 6.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.5f, 0.3125f, 0.0f,
-                        0.0f, 0.05625f, lm);
-                drawVertex(last, builder, 6.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.5f, 0.46875f, 0.0f,
-                        0.0f, 0.05625f, lm);
-                drawVertex(last, builder, -6.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.46875f, 0.0f,
-                        0.0f, 0.05625f, lm);
-            }
+
+            drawVertex(last, builder, -6.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.3125f, 0.0f,
+                    0.0f, 0.05625f, lm);
+            drawVertex(last, builder, 6.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.5f, 0.3125f, 0.0f,
+                    0.0f, 0.05625f, lm);
+            drawVertex(last, builder, 6.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.5f, 0.46875f, 0.0f,
+                    0.0f, 0.05625f, lm);
+            drawVertex(last, builder, -6.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.0f, 0.46875f, 0.0f,
+                    0.0f, 0.05625f, lm);
         }
         ms.pop();
         super.render(entityblowgundart, f, f1, ms, bufs, lm);

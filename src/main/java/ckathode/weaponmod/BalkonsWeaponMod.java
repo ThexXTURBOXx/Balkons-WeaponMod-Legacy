@@ -344,7 +344,7 @@ public class BalkonsWeaponMod {
         registry.register(bolt = WMItemBuilder.createWMItem("bolt"));
 
         registry.register(blowgun = WMItemBuilder.createStandardBlowgun("blowgun"));
-        for (DartType type : DartType.dartTypes) {
+        for (DartType type : DartType.DART_TYPES) {
             if (type == null) continue;
             ItemBlowgunDart dart = WMItemBuilder.createStandardBlowgunDart(type.typeName, type);
             darts.put(type, dart);

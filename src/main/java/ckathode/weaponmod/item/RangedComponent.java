@@ -283,8 +283,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public enum RangedSpecs {
-        BLOWGUN("blowgun", 250, Arrays.stream(DartType.dartTypes)
-                .filter(Objects::nonNull)
+        BLOWGUN("blowgun", 250, DartType.DART_TYPES.stream()
                 .map(t -> new ResourceLocation(MOD_ID, t.typeName).toString())
                 .toArray(String[]::new)),
         CROSSBOW("crossbow", 250, new ResourceLocation(MOD_ID, "bolt").toString()),

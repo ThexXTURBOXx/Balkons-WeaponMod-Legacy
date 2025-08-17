@@ -1,12 +1,10 @@
 package ckathode.weaponmod.entity.projectile.dispense;
 
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
-import ckathode.weaponmod.item.ItemBlowgunDart;
 import javax.annotation.Nonnull;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -19,9 +17,7 @@ public class DispenseBlowgunDart extends DispenseWeaponProjectile {
     protected IProjectile getProjectileEntity(@Nonnull World world, IPosition pos,
                                               @Nonnull ItemStack itemstack) {
         EntityBlowgunDart dart = new EntityBlowgunDart(world, pos.getX(), pos.getY(), pos.getZ());
-        Item item = itemstack.getItem();
-        if (item instanceof ItemBlowgunDart)
-            dart.setDartEffectType(((ItemBlowgunDart) item).getDartType());
+        dart.setThrownItemStack(itemstack);
         return dart;
     }
 
