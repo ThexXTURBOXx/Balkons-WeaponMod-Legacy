@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -83,18 +84,18 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     @Override
     public void applyEntityHitEffects(Entity entity) {
         super.applyEntityHitEffects(entity);
-        Entity shooter = getOwner();
-        if (shooter instanceof LivingEntity livingShooter && entity instanceof LivingEntity livingEntity) {
-            int i = EnchantmentHelper.getKnockbackBonus(livingShooter);
+        ItemStack stack = getWeapon();
+        if (entity instanceof LivingEntity livingEntity) {
+            int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, stack);
             if (i != 0) {
                 livingEntity.knockback(i * 0.4f,
                         -Mth.sin(getYRot() * 0.017453292f),
                         -Mth.cos(getYRot() * 0.017453292f));
             }
-            i = EnchantmentHelper.getFireAspect(livingShooter);
-            if (i > 0 && !entity.isOnFire()) {
-                entity.igniteForSeconds(1);
-            }
+        }
+        int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, stack);
+        if (i > 0 && !entity.isOnFire()) {
+            entity.igniteForSeconds(1);
         }
     }
 
