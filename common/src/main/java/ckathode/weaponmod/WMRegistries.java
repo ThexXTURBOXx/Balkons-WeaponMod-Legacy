@@ -45,9 +45,7 @@ import ckathode.weaponmod.item.WMItemProjectile;
 import com.mojang.datafixers.util.Pair;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import net.minecraft.core.component.DataComponentType;
@@ -183,7 +181,7 @@ public class WMRegistries {
     public static final RegistrySupplier<ItemShooter> ITEM_BLOWGUN =
             ITEMS.register(RangedCompBlowgun.ID, () -> RangedCompBlowgun.ITEM);
     public static final Map<DartType, RegistrySupplier<ItemBlowgunDart>> ITEM_DARTS =
-            Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
+            DartType.DART_TYPES.stream()
                     .map(t -> new Pair<DartType, Supplier<ItemBlowgunDart>>(t, () -> ItemBlowgunDart.ITEMS.get(t)))
                     .collect(Collectors.toMap(
                             Pair::getFirst, p -> ITEMS.register(p.getFirst().typeName(), p.getSecond())));

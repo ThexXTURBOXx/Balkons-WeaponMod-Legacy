@@ -4,21 +4,20 @@ import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityBlowgunDart;
 import ckathode.weaponmod.entity.projectile.dispense.WMDispenserExtension;
 import com.mojang.datafixers.util.Pair;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -28,24 +27,26 @@ import org.jetbrains.annotations.NotNull;
 public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
 
     public static final String ID_PREFIX = "dart";
-    public static final Map<DartType, ItemBlowgunDart> ITEMS =
-            Arrays.stream(DartType.dartTypes).filter(Objects::nonNull)
-                    .map(t -> new Pair<>(t, WMItemBuilder.createStandardBlowgunDart(t)))
-                    .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
+    public static final Map<DartType, ItemBlowgunDart> ITEMS = DartType.DART_TYPES.stream()
+            .map(t -> new Pair<>(t, WMItemBuilder.createStandardBlowgunDart(t)))
+            .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
 
     @NotNull
     private final DartType dartType;
 
     public ItemBlowgunDart(@NotNull DartType dartType) {
-        super();
+        super(getBaseProperties(null)
+                .component(DataComponents.POTION_CONTENTS, dartType.potionContents())
+        );
         this.dartType = dartType;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
                                 TooltipFlag tooltipFlag) {
-        PotionContents.addPotionTooltip(Collections.singleton(dartType.potionEffect()),
-                tooltipComponents::add, 1.0f, context.tickRate());
+        PotionContents potionContents = stack.get(DataComponents.POTION_CONTENTS);
+        if (potionContents != null)
+            potionContents.addPotionTooltip(tooltipComponents::add, 1.0f, context.tickRate());
     }
 
     @NotNull
@@ -54,12 +55,27 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     }
 
     @NotNull
+    private static DartType getDartType(@NotNull ItemStack stack) {
+        return stack.getItem() instanceof ItemBlowgunDart dart ? dart.getDartType() : DartType.DAMAGE;
+    }
+
+    public static Iterable<MobEffectInstance> getEffects(@NotNull ItemStack stack) {
+        if (stack.isEmpty()) return Collections.emptyList();
+
+        PotionContents effects = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+        return effects.getAllEffects();
+    }
+
+    public static float[] getColor(ItemStack stack) {
+        if (stack.isEmpty()) return DartType.DAMAGE.color();
+        return getDartType(stack).color();
+    }
+
+    @NotNull
     @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
         EntityBlowgunDart dart = new EntityBlowgunDart(level, pos.x(), pos.y(), pos.z());
-        Item item = stack.getItem();
-        if (item instanceof ItemBlowgunDart dartItem)
-            dart.setDartEffectType(dartItem.getDartType());
+        dart.setThrownItemStack(stack);
         return dart;
     }
 
