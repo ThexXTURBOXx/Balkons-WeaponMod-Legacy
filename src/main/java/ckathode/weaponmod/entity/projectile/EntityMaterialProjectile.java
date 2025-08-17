@@ -87,8 +87,8 @@ public class EntityMaterialProjectile extends EntityProjectile {
             }
         }
         int i = EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack);
-        if (i > 0 && !entity.isBurning()) {
-            entity.setFire(1);
+        if (i > 0 || isBurning()) {
+            entity.setFire(i > 0 ? i : 1);
         }
     }
 

@@ -7,7 +7,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.MathHelper;
@@ -39,9 +38,9 @@ public class RangedCompBlowgun extends RangedComponent {
             f = 1.0f;
         }
         ItemStack dartstack = findAmmo(entityplayer);
-        if (dartstack == null) {
+        if (dartstack == null || !(dartstack.getItem() instanceof ItemBlowgunDart)) {
             if (entityplayer.capabilities.isCreativeMode) {
-                dartstack = new ItemStack(BalkonsWeaponMod.dart, 1);
+                dartstack = new ItemStack(BalkonsWeaponMod.dart);
             } else {
                 return;
             }
@@ -52,12 +51,9 @@ public class RangedCompBlowgun extends RangedComponent {
             consumeAmmo(entityplayer);
         }
         if (!world.isRemote) {
-            EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer);
+            EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer, dartStackCopy);
             entityblowgundart.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
                     f * 1.5f, 1.0f);
-            Item item = dartStackCopy.getItem();
-            if (item instanceof ItemBlowgunDart)
-                entityblowgundart.setDartEffectType((byte) dartStackCopy.getMetadata());
             applyProjectileEnchantments(entityblowgundart, itemstack);
             world.spawnEntityInWorld(entityblowgundart);
         }
