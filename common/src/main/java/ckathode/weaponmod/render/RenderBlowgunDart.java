@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart, RenderBlowgunDart.BlowgunDartRenderState> {
@@ -25,7 +24,7 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart, RenderBlowg
         VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.DART));
         ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
         ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
-        float[] color = ItemBlowgunDart.getColor(entityRenderState.weapon);
+        float[] color = entityRenderState.dartColor;
         float f11 = entityRenderState.shakeTime;
         if (f11 > 0.0f) {
             float f12 = -Mth.sin(f11 * 3.0f) * f11;
@@ -94,12 +93,12 @@ public class RenderBlowgunDart extends WMRenderer<EntityBlowgunDart, RenderBlowg
     public void extractRenderState(EntityBlowgunDart entity, BlowgunDartRenderState entityRenderState, float f) {
         super.extractRenderState(entity, entityRenderState, f);
         entityRenderState.shakeTime = entity.shakeTime - f;
-        entityRenderState.weapon = entity.getWeapon();
+        entityRenderState.dartColor = ItemBlowgunDart.getColor(entity.getWeapon());
     }
 
     public static class BlowgunDartRenderState extends WMRendererState {
         public float shakeTime;
-        public ItemStack weapon;
+        public float[] dartColor;
     }
 
 }
