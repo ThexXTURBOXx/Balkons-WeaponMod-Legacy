@@ -53,10 +53,12 @@ public class PlayerMixin {
     public void leftClickEntity(Entity target, CallbackInfo ci) {
         Player player = (Player) (Object) this;
         ItemStack stack = player.getMainHandItem();
-        boolean cont = stack.isEmpty() ||
-                       (stack.getItem() instanceof IItemWeapon &&
-                        !((IItemWeapon) stack.getItem()).leftClickEntity(stack, player, target));
-        if (!cont) ci.cancel();
+
+        if (stack.isEmpty() || !(stack.getItem() instanceof IItemWeapon))
+            return;
+
+        if (((IItemWeapon) stack.getItem()).leftClickEntity(stack, player, target))
+            ci.cancel();
     }
 
 }
