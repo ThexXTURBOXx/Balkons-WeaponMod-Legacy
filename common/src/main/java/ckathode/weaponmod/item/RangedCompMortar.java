@@ -41,7 +41,7 @@ public class RangedCompMortar extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityMortarShell entitymortarshell = new EntityMortarShell(world, entityliving, itemstack);
             entitymortarshell.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 1.4f, 1.0f / f);
@@ -52,7 +52,7 @@ public class RangedCompMortar extends RangedComponent {
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityliving, LivingEntity.getSlotForHand(entityliving.getUsedItemHand()));
+        itemstack.hurtAndBreak(damage, entityliving, entityliving.getUsedItemHand().asEquipmentSlot());
         postShootingEffects(itemstack, entityliving, world);
     }
 

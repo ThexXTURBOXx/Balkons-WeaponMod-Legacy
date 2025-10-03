@@ -34,14 +34,14 @@ public class RangedCompBlunderbuss extends RangedComponent {
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityBlunderShot.fireSpreadShot(world, entityliving, this, itemstack);
         }
         int damage = 1;
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityliving, LivingEntity.getSlotForHand(entityliving.getUsedItemHand()));
+        itemstack.hurtAndBreak(damage, entityliving, entityliving.getUsedItemHand().asEquipmentSlot());
         postShootingEffects(itemstack, entityliving, world);
     }
 

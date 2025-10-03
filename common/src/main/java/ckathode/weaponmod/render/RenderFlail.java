@@ -6,9 +6,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -23,53 +24,60 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
     }
 
     @Override
-    public void render(FlailRenderState entityRenderState, PoseStack ms, MultiBufferSource bufs, int lm) {
+    public void submit(FlailRenderState entityRenderState, PoseStack poseStack,
+                       SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+        int lm = entityRenderState.lightCoords;
         Entity shooterEntity = entityRenderState.owner;
         if (shooterEntity instanceof LivingEntity shooter) {
-            ms.pushPose();
-            ms.pushPose();
-            ms.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
-            ms.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+            poseStack.pushPose();
+            poseStack.pushPose();
+            poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
             float[] color = entityRenderState.materialColor;
             float f11 = -entityRenderState.partialTicks;
             if (f11 > 0.0f) {
                 float f12 = -Mth.sin(f11 * 3.0f) * f11;
-                ms.mulPose(Axis.ZP.rotationDegrees(f12));
+                poseStack.mulPose(Axis.ZP.rotationDegrees(f12));
             }
-            ms.mulPose(Axis.XP.rotationDegrees(45.0f));
-            ms.scale(0.15f, 0.15f, 0.15f);
-            ms.translate(-4.0f, 0.0f, 0.0f);
-            PoseStack.Pose last = ms.last();
-            VertexConsumer builder = bufs.getBuffer(RenderType.entityCutout(WeaponModResources.Entity.FLAIL));
-            drawVertex(last, builder, 1.5f, -2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.15625f, 0.15f, 0.0f,
-                    0.0f, lm);
-            drawVertex(last, builder, 1.5f, -2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f, 0.15625f, 0.15f,
-                    0.0f, 0.0f, lm);
-            drawVertex(last, builder, 1.5f, 2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f, 0.3125f, 0.15f, 0.0f,
-                    0.0f, lm);
-            drawVertex(last, builder, 1.5f, 2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.3125f, 0.15f, 0.0f,
-                    0.0f, lm);
-            drawVertex(last, builder, 1.5f, 2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.15625f, -0.15f, 0.0f,
-                    0.0f, lm);
-            drawVertex(last, builder, 1.5f, 2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f, 0.15625f, -0.15f,
-                    0.0f, 0.0f, lm);
-            drawVertex(last, builder, 1.5f, -2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f, 0.3125f, -0.15f,
-                    0.0f, 0.0f, lm);
-            drawVertex(last, builder, 1.5f, -2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.3125f, -0.15f, 0.0f,
-                    0.0f, lm);
+            poseStack.mulPose(Axis.XP.rotationDegrees(45.0f));
+            poseStack.scale(0.15f, 0.15f, 0.15f);
+            poseStack.translate(-4.0f, 0.0f, 0.0f);
+            submitNodeCollector.submitCustomGeometry(poseStack,
+                    RenderType.entityCutout(WeaponModResources.Entity.FLAIL),
+                    (pose, consumer) -> {
+                        drawVertex(pose, consumer, 1.5f, -2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f,
+                                0.15625f, 0.15f, 0.0f, 0.0f, lm);
+                        drawVertex(pose, consumer, 1.5f, -2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f,
+                                0.15625f, 0.15f, 0.0f, 0.0f, lm);
+                        drawVertex(pose, consumer, 1.5f, 2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f,
+                                0.3125f, 0.15f, 0.0f, 0.0f, lm);
+                        drawVertex(pose, consumer, 1.5f, 2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.3125f,
+                                0.15f, 0.0f, 0.0f, lm);
+                        drawVertex(pose, consumer, 1.5f, 2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.15625f,
+                                -0.15f, 0.0f, 0.0f, lm);
+                        drawVertex(pose, consumer, 1.5f, 2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f,
+                                0.15625f, -0.15f, 0.0f, 0.0f, lm);
+                        drawVertex(pose, consumer, 1.5f, -2.0f, 2.0f, color[0], color[1], color[2], 1, 0.15625f,
+                                0.3125f, -0.15f, 0.0f, 0.0f, lm);
+                        drawVertex(pose, consumer, 1.5f, -2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f, 0.3125f,
+                                -0.15f, 0.0f, 0.0f, lm);
+                    });
             for (int j = 0; j < 4; ++j) {
-                ms.mulPose(Axis.XP.rotationDegrees(90.0f));
-                last = ms.last();
-                drawVertex(last, builder, -8.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1, 0.0f, 0.0f, 0.0f, 0.0f,
-                        0.15f, lm);
-                drawVertex(last, builder, 8.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1, 0.5f, 0.0f, 0.0f, 0.0f,
-                        0.15f, lm);
-                drawVertex(last, builder, 8.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1, 0.5f, 0.15625f, 0.0f, 0.0f,
-                        0.15f, lm);
-                drawVertex(last, builder, -8.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1, 0.0f, 0.15625f, 0.0f,
-                        0.0f, 0.15f, lm);
+                poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
+                submitNodeCollector.submitCustomGeometry(poseStack,
+                        RenderType.entityCutout(WeaponModResources.Entity.FLAIL),
+                        (pose, consumer) -> {
+                            drawVertex(pose, consumer, -8.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1, 0.0f,
+                                    0.0f, 0.0f, 0.0f, 0.15f, lm);
+                            drawVertex(pose, consumer, 8.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1, 0.5f, 0.0f,
+                                    0.0f, 0.0f, 0.15f, lm);
+                            drawVertex(pose, consumer, 8.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1, 0.5f,
+                                    0.15625f, 0.0f, 0.0f, 0.15f, lm);
+                            drawVertex(pose, consumer, -8.0f, 2.0f, 0.0f, color[0], color[1], color[2], 1, 0.0f,
+                                    0.15625f, 0.0f, 0.0f, 0.15f, lm);
+                        });
             }
-            ms.popPose();
+            poseStack.popPose();
             int i = shooter.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
 
             float f = shooter.getAttackAnim(entityRenderState.partialTicks);
@@ -108,16 +116,16 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
             float f4 = (float) (d4 - d9);
             float f5 = (float) (d5 - d10) + f3;
             float f6 = (float) (d6 - d8);
-            builder = bufs.getBuffer(RenderType.lineStrip());
-            last = ms.last();
+            submitNodeCollector.submitCustomGeometry(poseStack, RenderType.lineStrip(),
+                    (pose, consumer) -> {
+                        int v = 16;
+                        for (int k = 0; k <= v; ++k) {
+                            stringVertex(f4, f5, f6, consumer, pose, fraction(k, v), fraction(k + 1, v));
+                        }
+                    });
 
-            int v = 16;
-            for (int k = 0; k <= v; ++k) {
-                stringVertex(f4, f5, f6, builder, last, fraction(k, v), fraction(k + 1, v));
-            }
-
-            ms.popPose();
-            super.render(entityRenderState, ms, bufs, lm);
+            poseStack.popPose();
+            super.submit(entityRenderState, poseStack, submitNodeCollector, cameraRenderState);
         }
     }
 

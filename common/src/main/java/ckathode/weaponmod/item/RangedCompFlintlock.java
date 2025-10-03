@@ -41,7 +41,7 @@ public class RangedCompFlintlock extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving, itemstack);
             entitymusketbullet.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 4.0f / f);
@@ -53,7 +53,7 @@ public class RangedCompFlintlock extends RangedComponent {
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityliving, LivingEntity.getSlotForHand(entityliving.getUsedItemHand()));
+        itemstack.hurtAndBreak(damage, entityliving, entityliving.getUsedItemHand().asEquipmentSlot());
         postShootingEffects(itemstack, entityliving, world);
     }
 

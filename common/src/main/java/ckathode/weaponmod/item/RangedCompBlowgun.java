@@ -65,7 +65,7 @@ public class RangedCompBlowgun extends RangedComponent {
             (infinity == null || EnchantmentHelper.getItemEnchantmentLevel(infinity, itemstack) == 0)) {
             consumeAmmo(entityplayer);
         }
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer, dartStackCopy, itemstack);
             entityblowgundart.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, f * 1.5f, 1.0f);
@@ -76,7 +76,7 @@ public class RangedCompBlowgun extends RangedComponent {
         if (itemstack.getDamageValue() + damage < itemstack.getMaxDamage()) {
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
-        itemstack.hurtAndBreak(damage, entityplayer, LivingEntity.getSlotForHand(entityplayer.getUsedItemHand()));
+        itemstack.hurtAndBreak(damage, entityplayer, entityplayer.getUsedItemHand().asEquipmentSlot());
         postShootingEffects(itemstack, entityplayer, world);
         RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
     }

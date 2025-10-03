@@ -204,10 +204,10 @@ public class EntityDummy extends Entity {
         if (level instanceof ServerLevel serverLevel) {
             if (destroyed) {
                 for (int i = 0; i < random.nextInt(8); ++i) {
-                    spawnAtLocation(serverLevel, Items.LEATHER, 1);
+                    spawnAtLocation(serverLevel, new ItemStack(Items.LEATHER), 1);
                 }
             } else if (noCreative) {
-                spawnAtLocation(serverLevel, WMRegistries.ITEM_DUMMY.get(), 1);
+                spawnAtLocation(serverLevel, new ItemStack(WMRegistries.ITEM_DUMMY.get()), 1);
             }
         }
         remove(RemovalReason.DISCARDED);

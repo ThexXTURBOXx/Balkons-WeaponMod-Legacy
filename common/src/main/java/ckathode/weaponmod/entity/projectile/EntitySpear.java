@@ -73,7 +73,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
     @Override
     public void onHitEntity(EntityHitResult result) {
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         ItemStack thrownItem = getWeapon();
@@ -100,7 +100,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
                             i -> {
                             });
                 }
-                lerpMotion(0.0, 0.0, 0.0);
+                lerpMotion(Vec3.ZERO);
             }
         }
     }

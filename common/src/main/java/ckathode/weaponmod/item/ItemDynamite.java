@@ -38,7 +38,7 @@ public class ItemDynamite extends WMItem implements WMDispenserExtension {
         }
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.TNT_PRIMED,
                 SoundSource.PLAYERS, 1.0f, 1.0f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
                     40 + entityplayer.getRandom().nextInt(10), copy);
             entitydynamite.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),

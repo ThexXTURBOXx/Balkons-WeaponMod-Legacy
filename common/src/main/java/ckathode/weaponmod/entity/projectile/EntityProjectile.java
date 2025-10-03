@@ -152,15 +152,14 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     }
 
     @Override
-    public void lerpMotion(double d, double d1, double d2) {
-        Vec3 v = new Vec3(d, d1, d2);
-        setDeltaMovement(v);
+    public void lerpMotion(Vec3 vec3) {
+        setDeltaMovement(vec3);
         if (aimRotation() && xRotO == 0.0f && yRotO == 0.0f) {
-            double f = v.horizontalDistance();
-            float n = (float) (Mth.atan2(d, d2) * 180.0 / Math.PI);
+            double f = vec3.horizontalDistance();
+            float n = (float) (Mth.atan2(vec3.x, vec3.z) * 180.0 / Math.PI);
             setYRot(n);
             yRotO = n;
-            float n2 = (float) (Mth.atan2(d1, f) * 180.0 / Math.PI);
+            float n2 = (float) (Mth.atan2(vec3.y, f) * 180.0 / Math.PI);
             setXRot(n2);
             xRotO = n2;
             snapTo(getX(), getY(), getZ(), getYRot(), getXRot());
@@ -209,7 +208,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
                         random.nextFloat() * 0.2f));
                 ticksInGround = 0;
                 ticksInAir = 0;
-            } else if (!level().isClientSide) {
+            } else if (!level().isClientSide()) {
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {
@@ -473,7 +472,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void playerTouch(@NotNull Player entityplayer) {
-        if (inGround && shakeTime <= 0 && canPickup(entityplayer) && !level().isClientSide) {
+        if (inGround && shakeTime <= 0 && canPickup(entityplayer) && !level().isClientSide()) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) return;
             if ((pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.isCreative()) ||

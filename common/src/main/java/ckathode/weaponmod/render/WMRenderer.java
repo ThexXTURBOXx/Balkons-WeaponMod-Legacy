@@ -22,6 +22,12 @@ public abstract class WMRenderer<T extends Entity, S extends WMRenderer.WMRender
     }
 
     public void drawVertex(PoseStack.Pose entry, VertexConsumer builder, float x, float y, float z,
+                           float[] color, float a, float uvX, float uvZ,
+                           float nmX, float nmY, float nmZ, int lm) {
+        drawVertex(entry, builder, x, y, z, color[0], color[1], color[2], 1, uvX, uvZ, nmX, nmY, nmZ, lm);
+    }
+
+    public void drawVertex(PoseStack.Pose entry, VertexConsumer builder, float x, float y, float z,
                            float r, float g, float b, float a, float uvX, float uvZ,
                            float nmX, float nmY, float nmZ, int lm) {
         builder.addVertex(entry.pose(), x, y, z)

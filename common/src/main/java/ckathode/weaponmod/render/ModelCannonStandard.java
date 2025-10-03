@@ -43,6 +43,15 @@ public class ModelCannonStandard extends EntityModel<RenderCannon.CannonRenderSt
         axis1 = root.getChild(AXIS_1_ID);
     }
 
+    @Override
+    public void setupAnim(RenderCannon.CannonRenderState entityRenderState) {
+        super.setupAnim(entityRenderState);
+        float yawRadians = -(float) Math.toRadians(entityRenderState.yRot);
+        base1.yRot = yawRadians;
+        base2.yRot = yawRadians;
+        baseStand.yRot = yawRadians;
+    }
+
     public static LayerDefinition createLayer() {
         MeshDefinition meshDefinition = new MeshDefinition();
         PartDefinition partDefinition = meshDefinition.getRoot();

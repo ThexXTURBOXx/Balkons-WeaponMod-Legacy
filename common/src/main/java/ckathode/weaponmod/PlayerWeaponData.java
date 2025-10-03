@@ -55,7 +55,7 @@ public final class PlayerWeaponData {
         // Entity constructor such that the GameProfile is not yet set
         String playername;
         if (player.getGameProfile() != null) {
-            playername = player.getGameProfile().getName();
+            playername = player.getGameProfile().name();
         } else {
             playername = "[unknown]";
         }

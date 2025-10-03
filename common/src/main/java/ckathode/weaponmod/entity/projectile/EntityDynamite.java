@@ -126,7 +126,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         if (WMUtil.hurtOrSimulate(entity, getDamageSource(), 1.0f)) {
             applyEntityHitEffects(entity);
             playHitSound();
-            lerpMotion(0.0, 0.0, 0.0);
+            lerpMotion(Vec3.ZERO);
             ticksInAir = 0;
         }
     }

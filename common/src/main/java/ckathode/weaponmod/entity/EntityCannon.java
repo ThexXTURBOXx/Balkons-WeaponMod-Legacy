@@ -123,10 +123,10 @@ public class EntityCannon extends Boat {
                    damagesource.getEntity() instanceof Player player) {
             if (player.getInventory().getSelectedItem().isEmpty()) {
                 if (!player.isCreative()) {
-                    spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON.get(), 1);
+                    spawnAtLocation(serverLevel, new ItemStack(WMRegistries.ITEM_CANNON.get()), 1);
                     if (isLoaded() || isLoading()) {
-                        spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON_BALL.get(), 1);
-                        spawnAtLocation(serverLevel, Items.GUNPOWDER, 1);
+                        spawnAtLocation(serverLevel, new ItemStack(WMRegistries.ITEM_CANNON_BALL.get()), 1);
+                        spawnAtLocation(serverLevel, new ItemStack(Items.GUNPOWDER), 1);
                     }
                 }
                 remove(RemovalReason.DISCARDED);
@@ -139,20 +139,20 @@ public class EntityCannon extends Boat {
         markHurt();
         if (getCurrentDamage() > 100) {
             for (int j = 0; j < 6; ++j) {
-                dropItemWithChance(serverLevel, Items.IRON_INGOT, (int) damage, 1);
+                dropItemWithChance(serverLevel, new ItemStack(Items.IRON_INGOT), (int) damage, 1);
             }
-            dropItemWithChance(serverLevel, Items.FLINT, (int) damage, 1);
-            dropItemWithChance(serverLevel, Blocks.OAK_LOG.asItem(), (int) damage, 1);
+            dropItemWithChance(serverLevel, new ItemStack(Items.FLINT), (int) damage, 1);
+            dropItemWithChance(serverLevel, new ItemStack(Blocks.OAK_LOG), (int) damage, 1);
             if (isLoaded() || isLoading()) {
-                spawnAtLocation(serverLevel, WMRegistries.ITEM_CANNON_BALL.get(), 1);
-                spawnAtLocation(serverLevel, Items.GUNPOWDER, 1);
+                spawnAtLocation(serverLevel, new ItemStack(WMRegistries.ITEM_CANNON_BALL.get()), 1);
+                spawnAtLocation(serverLevel, new ItemStack(Items.GUNPOWDER), 1);
             }
             remove(RemovalReason.DISCARDED);
         }
         return true;
     }
 
-    public void dropItemWithChance(Level level, Item item, int chance, int amount) {
+    public void dropItemWithChance(Level level, ItemStack item, int chance, int amount) {
         if (level instanceof ServerLevel serverLevel && random.nextInt(chance) < 10) {
             spawnAtLocation(serverLevel, item, amount);
         }
@@ -276,7 +276,7 @@ public class EntityCannon extends Boat {
             return;
         }
         Entity entityPassenger = getControllingPassenger();
-        if (entityPassenger != null && !level().isClientSide) {
+        if (entityPassenger != null && !level().isClientSide()) {
             EntityCannonBall entitycannonball = new EntityCannonBall(level(), this,
                     entityPassenger.getXRot(), entityPassenger.getYRot(), isSuperPowered(), null);
             level().addFreshEntity(entitycannonball);
@@ -361,12 +361,12 @@ public class EntityCannon extends Boat {
                 return InteractionResult.PASS;
             }
             if (level() instanceof ServerLevel serverLevel)
-                spawnAtLocation(serverLevel, Items.GUNPOWDER, 1);
+                spawnAtLocation(serverLevel, new ItemStack(Items.GUNPOWDER), 1);
         } else {
             if (isVehicle() && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return InteractionResult.PASS;
             }
-            if (!level().isClientSide && !entityplayer.isShiftKeyDown()) {
+            if (!level().isClientSide() && !entityplayer.isShiftKeyDown()) {
                 entityplayer.startRiding(this);
             }
         }

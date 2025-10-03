@@ -46,7 +46,7 @@ public class RangedCompMusket extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving, itemstack);
             entitymusketbullet.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 1.0f / f);
@@ -61,12 +61,12 @@ public class RangedCompMusket extends RangedComponent {
             ItemStack newStack = new ItemStack(musket.bayonetItem, 1);
             newStack.setDamageValue(bayonetDamage);
             itemstack.hurtAndBreak(deltaDamage, entityliving,
-                    LivingEntity.getSlotForHand(entityliving.getUsedItemHand()));
+                    entityliving.getUsedItemHand().asEquipmentSlot());
             if (entityliving instanceof Player entityplayer)
                 entityplayer.getInventory().add(newStack);
         } else {
             itemstack.hurtAndBreak(deltaDamage, entityliving,
-                    LivingEntity.getSlotForHand(entityliving.getUsedItemHand()));
+                    entityliving.getUsedItemHand().asEquipmentSlot());
             RangedComponent.setReloadState(itemstack, ReloadState.STATE_NONE);
         }
         postShootingEffects(itemstack, entityliving, world);

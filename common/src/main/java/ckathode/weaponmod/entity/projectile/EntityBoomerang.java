@@ -130,7 +130,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void onHitEntity(EntityHitResult result) {
-        if (level().isClientSide || floatStrength < MIN_FLOAT_STRENGTH) {
+        if (level().isClientSide() || floatStrength < MIN_FLOAT_STRENGTH) {
             return;
         }
         Entity entity = result.getEntity();
@@ -170,7 +170,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
                             i -> {
                             });
                 }
-                lerpMotion(0.0, 0.0, 0.0);
+                lerpMotion(Vec3.ZERO);
             }
         } else {
             bounceBack();
@@ -236,7 +236,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void playerTouch(@NotNull Player entityplayer) {
-        if (!beenInGround && ticksInAir > 5 && !level().isClientSide && floatStrength >= MIN_FLOAT_STRENGTH && entityplayer.equals(getOwner())) {
+        if (!beenInGround && ticksInAir > 5 && !level().isClientSide() && floatStrength >= MIN_FLOAT_STRENGTH && entityplayer.equals(getOwner())) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) {
                 return;

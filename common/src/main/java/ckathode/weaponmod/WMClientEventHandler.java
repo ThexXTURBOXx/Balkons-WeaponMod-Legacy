@@ -13,6 +13,7 @@ import dev.architectury.event.events.common.TickEvent;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,12 +37,12 @@ public class WMClientEventHandler {
         return null;
     }
 
-    public static EventResult onMouseClick(Minecraft client, int button, int action, int mods) {
+    public static EventResult onMouseClick(Minecraft client, MouseButtonInfo mouseButtonInfo, int action) {
         LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null || !player.level().isClientSide || Minecraft.getInstance().screen != null) {
+        if (player == null || !player.level().isClientSide() || Minecraft.getInstance().screen != null) {
             return EventResult.pass();
         }
-        if (button == 0 && action == GLFW.GLFW_PRESS) {
+        if (mouseButtonInfo.button() == 0 && action == GLFW.GLFW_PRESS) {
             ItemStack itemstack = player.getMainHandItem();
             if (!itemstack.isEmpty()) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);
@@ -61,7 +62,7 @@ public class WMClientEventHandler {
     }
 
     public static void onPlayerTick(Player player) {
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             return;
         }
         if (player instanceof LocalPlayer entity) {

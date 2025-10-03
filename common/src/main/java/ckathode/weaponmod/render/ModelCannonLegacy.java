@@ -38,6 +38,12 @@ public class ModelCannonLegacy extends EntityModel<RenderCannon.CannonRenderStat
         seatFrame = root.getChild(SEAT_FRAME_ID);
     }
 
+    @Override
+    public void setupAnim(RenderCannon.CannonRenderState entityRenderState) {
+        super.setupAnim(entityRenderState);
+        barrel.xRot = Math.max(-entityRenderState.xRot / 120.0f, -0.25f);
+    }
+
     public static LayerDefinition createLayer() {
         MeshDefinition meshDefinition = new MeshDefinition();
         PartDefinition partDefinition = meshDefinition.getRoot();

@@ -94,7 +94,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     @Override
     public void onHitEntity(EntityHitResult result) {
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         ItemStack thrownItem = getWeapon();
@@ -120,7 +120,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
                             i -> {
                             });
                 }
-                lerpMotion(0.0, 0.0, 0.0);
+                lerpMotion(Vec3.ZERO);
             }
         }
     }

@@ -64,7 +64,7 @@ public class ItemCannon extends WMItem {
             if (!world.noCollision(entitycannon, entitycannon.getBoundingBox().inflate(-0.1))) {
                 return InteractionResult.FAIL;
             } else {
-                if (!world.isClientSide) {
+                if (!world.isClientSide()) {
                     world.addFreshEntity(entitycannon);
                 }
 
