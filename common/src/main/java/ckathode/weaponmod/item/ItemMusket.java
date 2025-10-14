@@ -44,6 +44,11 @@ public class ItemMusket extends ItemShooter {
             WMItemBuilder.createStandardMusketWithBayonet(ToolMaterial.STONE, MeleeCompKnife.STONE_ITEM,
                     BalkonsWeaponMod.id(STONE_ID));
 
+    public static final String COPPER_ID = "musketbayonet.copper";
+    public static final ItemMusket COPPER_ITEM =
+            WMItemBuilder.createStandardMusketWithBayonet(ToolMaterial.COPPER, MeleeCompKnife.COPPER_ITEM,
+                    BalkonsWeaponMod.id(COPPER_ID));
+
     public static final String IRON_ID = "musketbayonet.iron";
     public static final ItemMusket IRON_ITEM =
             WMItemBuilder.createStandardMusketWithBayonet(ToolMaterial.IRON, MeleeCompKnife.IRON_ITEM,

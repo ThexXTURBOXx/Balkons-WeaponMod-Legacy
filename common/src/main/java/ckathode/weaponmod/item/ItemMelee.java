@@ -32,6 +32,10 @@ public class ItemMelee extends Item implements IItemWeapon {
     public static final ItemMelee KATANA_STONE_ITEM =
             WMItemBuilder.createStandardKatana(ToolMaterial.STONE, BalkonsWeaponMod.id(KATANA_STONE_ID));
 
+    public static final String KATANA_COPPER_ID = "katana.copper";
+    public static final ItemMelee KATANA_COPPER_ITEM =
+            WMItemBuilder.createStandardKatana(ToolMaterial.COPPER, BalkonsWeaponMod.id(KATANA_COPPER_ID));
+
     public static final String KATANA_IRON_ID = "katana.iron";
     public static final ItemMelee KATANA_IRON_ITEM =
             WMItemBuilder.createStandardKatana(ToolMaterial.IRON, BalkonsWeaponMod.id(KATANA_IRON_ID));

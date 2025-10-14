@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " XX",
+    " #X",
+    "#  "
+  ],
+  "key": {
+    "X": "#minecraft:copper_tool_materials",
+    "#": "#c:rods/wooden"
+  },
+  "result": {
+    "id": "weaponmod:halberd.copper"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "halberd"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "halberd"
+    }
+  ]
+}

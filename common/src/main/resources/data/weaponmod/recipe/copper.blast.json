@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "ingredient": [
+    "weaponmod:spear.copper",
+    "weaponmod:halberd.copper",
+    "weaponmod:knife.copper",
+    "weaponmod:battleaxe.copper",
+    "weaponmod:warhammer.copper",
+    "weaponmod:flail.copper",
+    "weaponmod:boomerang.copper",
+    "weaponmod:katana.copper"
+  ],
+  "result": {
+    "id": "minecraft:copper_nugget"
+  }
+}

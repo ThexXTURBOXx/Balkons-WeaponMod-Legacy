@@ -36,7 +36,7 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     private static final EntityDataAccessor<ItemStack> WEAPON_ITEM =
             SynchedEntityData.defineId(EntityMaterialProjectile.class, EntityDataSerializers.ITEM_STACK);
     private static final float[][] MATERIAL_COLORS = new float[][]{{0.6f, 0.4f, 0.1f}, {0.5f, 0.5f, 0.5f},
-            {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}, {0.3f, 0.3f, 0.3f}};
+            {1.0f, 1.0f, 1.0f}, {0.0f, 0.8f, 0.7f}, {1.0f, 0.9f, 0.0f}, {0.3f, 0.3f, 0.3f}, {0.9f, 0.5f, 0.3f}};
 
     public EntityMaterialProjectile(EntityType<T> type, Level world) {
         super(type, world);

@@ -24,6 +24,10 @@ public class MeleeCompBoomerang extends MeleeComponent {
     public static final ItemMelee STONE_ITEM =
             WMItemBuilder.createStandardBoomerang(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
+    public static final String COPPER_ID = "boomerang.copper";
+    public static final ItemMelee COPPER_ITEM =
+            WMItemBuilder.createStandardBoomerang(ToolMaterial.COPPER, BalkonsWeaponMod.id(COPPER_ID));
+
     public static final String IRON_ID = "boomerang.iron";
     public static final ItemMelee IRON_ITEM =
             WMItemBuilder.createStandardBoomerang(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));

@@ -25,6 +25,10 @@ public class MeleeCompKnife extends MeleeComponent {
     public static final ItemMelee STONE_ITEM =
             WMItemBuilder.createStandardKnife(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
+    public static final String COPPER_ID = "knife.copper";
+    public static final ItemMelee COPPER_ITEM =
+            WMItemBuilder.createStandardKnife(ToolMaterial.COPPER, BalkonsWeaponMod.id(COPPER_ID));
+
     public static final String IRON_ID = "knife.iron";
     public static final ItemMelee IRON_ITEM =
             WMItemBuilder.createStandardKnife(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));

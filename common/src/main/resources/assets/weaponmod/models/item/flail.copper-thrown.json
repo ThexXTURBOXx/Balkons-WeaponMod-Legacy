@@ -1,0 +1,6 @@
+{
+  "parent": "weaponmod:item/flail.copper",
+  "textures": {
+    "layer0": "weaponmod:item/flail-thrown"
+  }
+}

@@ -35,6 +35,10 @@ public class MeleeCompWarhammer extends MeleeComponent {
     public static final ItemMelee STONE_ITEM =
             WMItemBuilder.createStandardWarhammer(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
+    public static final String COPPER_ID = "warhammer.copper";
+    public static final ItemMelee COPPER_ITEM =
+            WMItemBuilder.createStandardWarhammer(ToolMaterial.COPPER, BalkonsWeaponMod.id(COPPER_ID));
+
     public static final String IRON_ID = "warhammer.iron";
     public static final ItemMelee IRON_ITEM =
             WMItemBuilder.createStandardWarhammer(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));

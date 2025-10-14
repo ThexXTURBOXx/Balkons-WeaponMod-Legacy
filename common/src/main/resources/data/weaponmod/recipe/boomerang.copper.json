@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "XX#",
+    "  X",
+    "  X"
+  ],
+  "key": {
+    "X": "#minecraft:planks",
+    "#": "#minecraft:copper_tool_materials"
+  },
+  "result": {
+    "id": "weaponmod:boomerang.copper"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "boomerang"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "boomerang"
+    }
+  ]
+}

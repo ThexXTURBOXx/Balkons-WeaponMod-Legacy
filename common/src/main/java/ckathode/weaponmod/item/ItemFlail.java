@@ -36,6 +36,10 @@ public class ItemFlail extends ItemMelee {
     public static final ItemFlail STONE_ITEM =
             WMItemBuilder.createStandardFlail(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
+    public static final String COPPER_ID = "flail.copper";
+    public static final ItemFlail COPPER_ITEM =
+            WMItemBuilder.createStandardFlail(ToolMaterial.COPPER, BalkonsWeaponMod.id(COPPER_ID));
+
     public static final String IRON_ID = "flail.iron";
     public static final ItemFlail IRON_ITEM =
             WMItemBuilder.createStandardFlail(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));

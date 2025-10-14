@@ -24,6 +24,10 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     public static final ItemMelee STONE_ITEM =
             WMItemBuilder.createStandardHalberd(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
+    public static final String COPPER_ID = "halberd.copper";
+    public static final ItemMelee COPPER_ITEM =
+            WMItemBuilder.createStandardHalberd(ToolMaterial.COPPER, BalkonsWeaponMod.id(COPPER_ID));
+
     public static final String IRON_ID = "halberd.iron";
     public static final ItemMelee IRON_ITEM =
             WMItemBuilder.createStandardHalberd(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));

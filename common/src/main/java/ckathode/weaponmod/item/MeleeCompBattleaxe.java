@@ -33,6 +33,10 @@ public class MeleeCompBattleaxe extends MeleeComponent {
     public static final ItemMelee STONE_ITEM =
             WMItemBuilder.createStandardBattleaxe(ToolMaterial.STONE, BalkonsWeaponMod.id(STONE_ID));
 
+    public static final String COPPER_ID = "battleaxe.copper";
+    public static final ItemMelee COPPER_ITEM =
+            WMItemBuilder.createStandardBattleaxe(ToolMaterial.COPPER, BalkonsWeaponMod.id(COPPER_ID));
+
     public static final String IRON_ID = "battleaxe.iron";
     public static final ItemMelee IRON_ITEM =
             WMItemBuilder.createStandardBattleaxe(ToolMaterial.IRON, BalkonsWeaponMod.id(IRON_ID));

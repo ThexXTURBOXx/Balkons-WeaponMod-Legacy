@@ -1,0 +1,58 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:katana.copper"
+    ]
+  },
+  "criteria": {
+    "has_minecraft_copper_tool_materials": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#minecraft:copper_tool_materials"
+          }
+        ]
+      }
+    },
+    "has_c_rods/wooden": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:rods/wooden"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:katana.copper"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_minecraft_copper_tool_materials",
+      "has_the_recipe"
+    ],
+    [
+      "has_c_rods/wooden",
+      "has_the_recipe"
+    ]
+  ],
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "katana"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "katana"
+    }
+  ]
+}

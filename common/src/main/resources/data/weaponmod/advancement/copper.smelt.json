@@ -1,0 +1,109 @@
+{
+  "parent": "weaponmod:root",
+  "rewards": {
+    "recipes": [
+      "weaponmod:copper.smelt"
+    ]
+  },
+  "criteria": {
+    "has_spear.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:spear.copper"
+          }
+        ]
+      }
+    },
+    "has_halberd.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:halberd.copper"
+          }
+        ]
+      }
+    },
+    "has_knife.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:knife.copper"
+          }
+        ]
+      }
+    },
+    "has_battleaxe.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:battleaxe.copper"
+          }
+        ]
+      }
+    },
+    "has_warhammer.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:warhammer.copper"
+          }
+        ]
+      }
+    },
+    "has_flail.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:flail.copper"
+          }
+        ]
+      }
+    },
+    "has_boomerang.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:boomerang.copper"
+          }
+        ]
+      }
+    },
+    "has_katana.copper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "weaponmod:katana.copper"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "weaponmod:copper.smelt"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_spear.copper",
+      "has_halberd.copper",
+      "has_knife.copper",
+      "has_battleaxe.copper",
+      "has_warhammer.copper",
+      "has_flail.copper",
+      "has_boomerang.copper",
+      "has_katana.copper",
+      "has_the_recipe"
+    ]
+  ]
+}

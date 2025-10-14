@@ -79,6 +79,8 @@ public class WMRegistries {
             ITEMS.register(MeleeCompSpear.WOOD_ID, () -> MeleeCompSpear.WOOD_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_STONE =
             ITEMS.register(MeleeCompSpear.STONE_ID, () -> MeleeCompSpear.STONE_ITEM);
+    public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_COPPER =
+            ITEMS.register(MeleeCompSpear.COPPER_ID, () -> MeleeCompSpear.COPPER_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_IRON =
             ITEMS.register(MeleeCompSpear.IRON_ID, () -> MeleeCompSpear.IRON_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_GOLD =
@@ -91,6 +93,8 @@ public class WMRegistries {
             ITEMS.register(MeleeCompHalberd.WOOD_ID, () -> MeleeCompHalberd.WOOD_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_HALBERD_STONE =
             ITEMS.register(MeleeCompHalberd.STONE_ID, () -> MeleeCompHalberd.STONE_ITEM);
+    public static final RegistrySupplier<ItemMelee> ITEM_HALBERD_COPPER =
+            ITEMS.register(MeleeCompHalberd.COPPER_ID, () -> MeleeCompHalberd.COPPER_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_HALBERD_IRON =
             ITEMS.register(MeleeCompHalberd.IRON_ID, () -> MeleeCompHalberd.IRON_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_HALBERD_GOLD =
@@ -103,6 +107,8 @@ public class WMRegistries {
             ITEMS.register(MeleeCompBattleaxe.WOOD_ID, () -> MeleeCompBattleaxe.WOOD_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_BATTLEAXE_STONE =
             ITEMS.register(MeleeCompBattleaxe.STONE_ID, () -> MeleeCompBattleaxe.STONE_ITEM);
+    public static final RegistrySupplier<ItemMelee> ITEM_BATTLEAXE_COPPER =
+            ITEMS.register(MeleeCompBattleaxe.COPPER_ID, () -> MeleeCompBattleaxe.COPPER_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_BATTLEAXE_IRON =
             ITEMS.register(MeleeCompBattleaxe.IRON_ID, () -> MeleeCompBattleaxe.IRON_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_BATTLEAXE_GOLD =
@@ -115,6 +121,8 @@ public class WMRegistries {
             ITEMS.register(MeleeCompKnife.WOOD_ID, () -> MeleeCompKnife.WOOD_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_KNIFE_STONE =
             ITEMS.register(MeleeCompKnife.STONE_ID, () -> MeleeCompKnife.STONE_ITEM);
+    public static final RegistrySupplier<ItemMelee> ITEM_KNIFE_COPPER =
+            ITEMS.register(MeleeCompKnife.COPPER_ID, () -> MeleeCompKnife.COPPER_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_KNIFE_IRON =
             ITEMS.register(MeleeCompKnife.IRON_ID, () -> MeleeCompKnife.IRON_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_KNIFE_GOLD =
@@ -127,6 +135,8 @@ public class WMRegistries {
             ITEMS.register(MeleeCompWarhammer.WOOD_ID, () -> MeleeCompWarhammer.WOOD_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_WARHAMMER_STONE =
             ITEMS.register(MeleeCompWarhammer.STONE_ID, () -> MeleeCompWarhammer.STONE_ITEM);
+    public static final RegistrySupplier<ItemMelee> ITEM_WARHAMMER_COPPER =
+            ITEMS.register(MeleeCompWarhammer.COPPER_ID, () -> MeleeCompWarhammer.COPPER_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_WARHAMMER_IRON =
             ITEMS.register(MeleeCompWarhammer.IRON_ID, () -> MeleeCompWarhammer.IRON_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_WARHAMMER_GOLD =
@@ -139,6 +149,8 @@ public class WMRegistries {
             ITEMS.register(ItemFlail.WOOD_ID, () -> ItemFlail.WOOD_ITEM);
     public static final RegistrySupplier<ItemFlail> ITEM_FLAIL_STONE =
             ITEMS.register(ItemFlail.STONE_ID, () -> ItemFlail.STONE_ITEM);
+    public static final RegistrySupplier<ItemFlail> ITEM_FLAIL_COPPER =
+            ITEMS.register(ItemFlail.COPPER_ID, () -> ItemFlail.COPPER_ITEM);
     public static final RegistrySupplier<ItemFlail> ITEM_FLAIL_IRON =
             ITEMS.register(ItemFlail.IRON_ID, () -> ItemFlail.IRON_ITEM);
     public static final RegistrySupplier<ItemFlail> ITEM_FLAIL_GOLD =
@@ -151,6 +163,8 @@ public class WMRegistries {
             ITEMS.register(ItemMelee.KATANA_WOOD_ID, () -> ItemMelee.KATANA_WOOD_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_KATANA_STONE =
             ITEMS.register(ItemMelee.KATANA_STONE_ID, () -> ItemMelee.KATANA_STONE_ITEM);
+    public static final RegistrySupplier<ItemMelee> ITEM_KATANA_COPPER =
+            ITEMS.register(ItemMelee.KATANA_COPPER_ID, () -> ItemMelee.KATANA_COPPER_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_KATANA_IRON =
             ITEMS.register(ItemMelee.KATANA_IRON_ID, () -> ItemMelee.KATANA_IRON_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_KATANA_GOLD =
@@ -163,6 +177,8 @@ public class WMRegistries {
             ITEMS.register(MeleeCompBoomerang.WOOD_ID, () -> MeleeCompBoomerang.WOOD_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_BOOMERANG_STONE =
             ITEMS.register(MeleeCompBoomerang.STONE_ID, () -> MeleeCompBoomerang.STONE_ITEM);
+    public static final RegistrySupplier<ItemMelee> ITEM_BOOMERANG_COPPER =
+            ITEMS.register(MeleeCompBoomerang.COPPER_ID, () -> MeleeCompBoomerang.COPPER_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_BOOMERANG_IRON =
             ITEMS.register(MeleeCompBoomerang.IRON_ID, () -> MeleeCompBoomerang.IRON_ITEM);
     public static final RegistrySupplier<ItemMelee> ITEM_BOOMERANG_GOLD =
@@ -190,6 +206,8 @@ public class WMRegistries {
             ITEMS.register(ItemMusket.WOOD_ID, () -> ItemMusket.WOOD_ITEM);
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_STONE =
             ITEMS.register(ItemMusket.STONE_ID, () -> ItemMusket.STONE_ITEM);
+    public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_COPPER =
+            ITEMS.register(ItemMusket.COPPER_ID, () -> ItemMusket.COPPER_ITEM);
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_IRON =
             ITEMS.register(ItemMusket.IRON_ID, () -> ItemMusket.IRON_ITEM);
     public static final RegistrySupplier<ItemMusket> ITEM_MUSKET_GOLD =

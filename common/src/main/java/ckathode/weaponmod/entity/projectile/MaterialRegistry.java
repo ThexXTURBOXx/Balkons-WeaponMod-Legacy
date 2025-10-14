@@ -7,7 +7,7 @@ import net.minecraft.world.item.ToolMaterial;
 
 public class MaterialRegistry {
 
-    private static final int VANILLA_MATERIAL_COUNT = 6;
+    private static final int VANILLA_MATERIAL_COUNT = 7;
     private static final float[] NO_MATERIAL_COLOR = new float[]{1.0f, 1.0f, 1.0f};
     private static final Map<Integer, ICustomProjectileMaterials> CUSTOM_MATERIALS =
             new HashMap<>(VANILLA_MATERIAL_COUNT);
@@ -44,6 +44,7 @@ public class MaterialRegistry {
         if (tier.equals(ToolMaterial.DIAMOND)) return 3;
         if (tier.equals(ToolMaterial.GOLD)) return 4;
         if (tier.equals(ToolMaterial.NETHERITE)) return 5;
+        if (tier.equals(ToolMaterial.COPPER)) return 6;
         return -1;
     }
 

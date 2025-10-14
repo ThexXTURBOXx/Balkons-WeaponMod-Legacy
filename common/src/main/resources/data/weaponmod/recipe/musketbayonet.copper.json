@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "weaponmod:musket",
+    "weaponmod:knife.copper"
+  ],
+  "result": {
+    "id": "weaponmod:musketbayonet.copper"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "musket"
+    },
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "knife"
+    }
+  ]
+}

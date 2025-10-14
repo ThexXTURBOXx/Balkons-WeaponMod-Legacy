@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "  X",
+    " X ",
+    "#  "
+  ],
+  "key": {
+    "X": "#minecraft:copper_tool_materials",
+    "#": "#c:rods/wooden"
+  },
+  "result": {
+    "id": "weaponmod:katana.copper"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "katana"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "katana"
+    }
+  ]
+}

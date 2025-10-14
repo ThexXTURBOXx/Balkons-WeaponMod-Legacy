@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "  O",
+    " XO",
+    "X #"
+  ],
+  "key": {
+    "#": "#minecraft:copper_tool_materials",
+    "X": "#c:rods/wooden",
+    "O": "#c:strings"
+  },
+  "result": {
+    "id": "weaponmod:flail.copper"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "flail"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "flail"
+    }
+  ]
+}
