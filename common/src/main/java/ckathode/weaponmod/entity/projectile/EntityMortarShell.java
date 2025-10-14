@@ -128,7 +128,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
         setPos(pos.x, pos.y, pos.z);
         inGround = true;
         if (inBlockState != null) {
-            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP);
+            WMUtil.entityInside(inBlockState, level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
         }
         createCrater();
     }

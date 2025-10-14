@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
 import com.mojang.serialization.Codec;
 import dev.architectury.extensions.network.EntitySpawnExtension;
@@ -357,7 +358,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         shakeTime = getMaxArrowShake();
         playHitSound();
         if (inBlockState != null) {
-            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP);
+            WMUtil.entityInside(inBlockState, level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
         }
     }
 
