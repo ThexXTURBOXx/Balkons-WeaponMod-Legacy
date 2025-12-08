@@ -13,7 +13,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
@@ -24,8 +23,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemMelee extends SwordItem implements IItemWeapon {
     public final MeleeComponent meleeComponent;
@@ -47,32 +44,12 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
                 -2.4F, meleecomponent.setProperties(properties).group(ItemGroup.COMBAT));
         setRegistryName(new ResourceLocation(modId, id));
         (meleeComponent = meleecomponent).setItem(this);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"),
-                new IItemPropertyGetter() {
-                    @Override
-                    @OnlyIn(Dist.CLIENT)
-                    public float call(@Nonnull ItemStack stack, @Nullable World world,
-                                      @Nullable LivingEntity entity) {
-                        return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ?
-                                1.0f : 0.0f;
-                    }
-                });
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), new IItemPropertyGetter() {
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World world,
-                              @Nullable LivingEntity entity) {
-                return MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
-            }
-        });
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "block"), new IItemPropertyGetter() {
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World world,
-                              @Nullable LivingEntity entity) {
-                return entity != null && entity.getActiveItemStack() == stack ? 1.0f : 0.0f;
-            }
-        });
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"), (stack, world, entity) ->
+                (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ? 1.0f : 0.0f);
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), (stack, world, entity) ->
+                MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f);
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "block"), (stack, world, entity) ->
+                entity != null && entity.getActiveItemStack() == stack ? 1.0f : 0.0f);
     }
 
     @Override

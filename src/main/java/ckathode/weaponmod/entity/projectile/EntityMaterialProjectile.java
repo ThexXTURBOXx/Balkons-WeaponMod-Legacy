@@ -18,8 +18,6 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> extends EntityProjectile<T> {
@@ -131,7 +129,6 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
         if (id >= 0 && id < MATERIAL_COLORS.length) {
