@@ -5,8 +5,6 @@ import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDynamite extends WMItem {
     public ItemDynamite(String id) {
@@ -39,7 +37,6 @@ public class ItemDynamite extends WMItem {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }

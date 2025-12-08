@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFlail extends ItemMelee {
     private final float flailDamage;
-    private final ModelResourceLocation thrownModel;
+    private final String modId;
     private Boolean thrownModelExists;
 
     public ItemFlail(String id, MeleeComponent meleecomponent) {
@@ -28,13 +28,11 @@ public class ItemFlail extends ItemMelee {
 
     public ItemFlail(String modId, String id, MeleeComponent meleecomponent) {
         super(modId, id, meleecomponent);
+        this.modId = modId;
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getDamageVsEntity();
-        thrownModel = new ModelResourceLocation(new ResourceLocation(modId, rawId + "-thrown"), "inventory");
-        thrownModelExists = null;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }
@@ -122,6 +120,9 @@ public class ItemFlail extends ItemMelee {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        ModelResourceLocation thrownModel = new ModelResourceLocation(
+                new ResourceLocation(modId, rawId + "-thrown"), "inventory");
+
         if (thrownModelExists == null)
             thrownModelExists = WMItemVariants.itemVariantExists(thrownModel);
         if (thrownModelExists && isThrown(player))

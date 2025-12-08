@@ -8,10 +8,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public final class ExtendedReachHelper {
     private static final Minecraft mc = Minecraft.getMinecraft();
 

@@ -5,8 +5,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MsgCannonFire extends WMMessage {
     private int cannonEntityID;
@@ -29,7 +27,6 @@ public class MsgCannonFire extends WMMessage {
         buf.writeInt(cannonEntityID);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void handleClientSide(EntityPlayer player) {
     }

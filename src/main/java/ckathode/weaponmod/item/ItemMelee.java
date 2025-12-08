@@ -20,11 +20,13 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
     public final String rawId;
-    private final ModelResourceLocation halberdStateModel;
+    private final String modId;
     private Boolean halberdStateModelExists;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
@@ -34,13 +36,12 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     public ItemMelee(String modId, String id, MeleeComponent meleecomponent) {
         super((meleecomponent.weaponMaterial == null) ? Item.ToolMaterial.WOOD : meleecomponent.weaponMaterial);
         rawId = id;
+        this.modId = modId;
         setRegistryName(new ResourceLocation(modId, id));
         setUnlocalizedName(id);
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.tabCombat);
-        halberdStateModel = new ModelResourceLocation(new ResourceLocation(modId, rawId + "_state"), "inventory");
-        halberdStateModelExists = null;
     }
 
     @Override
@@ -136,7 +137,11 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        ModelResourceLocation halberdStateModel = new ModelResourceLocation(
+                new ResourceLocation(modId, rawId + "_state"), "inventory");
+
         if (halberdStateModelExists == null)
             halberdStateModelExists = WMItemVariants.itemVariantExists(halberdStateModel);
         if (halberdStateModelExists && MeleeCompHalberd.getHalberdState(stack))

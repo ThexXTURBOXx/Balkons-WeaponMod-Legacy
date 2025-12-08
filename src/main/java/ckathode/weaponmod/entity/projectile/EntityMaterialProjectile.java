@@ -14,8 +14,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMaterialProjectile extends EntityProjectile {
     private static final int WEAPON_MATERIAL = 18;
@@ -122,7 +120,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
         if (id >= 0 && id < MATERIAL_COLORS.length) {

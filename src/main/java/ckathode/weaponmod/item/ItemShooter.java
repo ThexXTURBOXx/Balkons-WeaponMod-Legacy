@@ -26,7 +26,7 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
     public final String rawId;
-    private final ModelResourceLocation loadedModel;
+    private final String modId;
     private Boolean loadedModelExists;
 
     public ItemShooter(String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
@@ -35,6 +35,7 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
 
     public ItemShooter(String modId, String id, RangedComponent rangedcomponent, MeleeComponent meleecomponent) {
         rawId = id;
+        this.modId = modId;
         setRegistryName(new ResourceLocation(modId, id));
         setUnlocalizedName(id);
         rangedComponent = rangedcomponent;
@@ -42,8 +43,6 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
         rangedcomponent.setThisItemProperties();
-        loadedModel = new ModelResourceLocation(new ResourceLocation(modId, rawId + "-loaded"), "inventory");
-        loadedModelExists = null;
     }
 
     @Override
@@ -136,13 +135,16 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+        ModelResourceLocation loadedModel = new ModelResourceLocation(
+                new ResourceLocation(modId, rawId + "-loaded"), "inventory");
+
         if (loadedModelExists == null)
             loadedModelExists = WMItemVariants.itemVariantExists(loadedModel);
         if (loadedModelExists && RangedComponent.isReloaded(stack))
