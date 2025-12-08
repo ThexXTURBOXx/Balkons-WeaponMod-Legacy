@@ -20,8 +20,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlowgunDart extends WMItem {
     public ItemBlowgunDart(String id) {
@@ -44,7 +42,6 @@ public class ItemBlowgunDart extends WMItem {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void addInformation(@Nonnull ItemStack itemstack, @Nullable World worldIn,
                                @Nonnull List<String> list, @Nonnull ITooltipFlag flag) {
         for (PotionEffect pe : getEffects(itemstack)) {

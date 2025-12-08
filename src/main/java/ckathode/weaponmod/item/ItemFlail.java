@@ -4,14 +4,12 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -19,8 +17,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemFlail extends ItemMelee {
     private final float flailDamage;
@@ -32,19 +28,11 @@ public class ItemFlail extends ItemMelee {
     public ItemFlail(String modId, String id, MeleeComponent meleecomponent) {
         super(modId, id, meleecomponent);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamage();
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World worldIn,
-                               @Nullable EntityLivingBase entityIn) {
-                return entityIn instanceof EntityPlayer && entityIn.getHeldItemMainhand() == stack
-                       && isThrown((EntityPlayer) entityIn) ? 1.0f : 0.0f;
-            }
-        });
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), (stack, worldIn, entityIn) ->
+                entityIn instanceof EntityPlayer && entityIn.getHeldItemMainhand() == stack && isThrown((EntityPlayer) entityIn) ? 1.0f : 0.0f);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }

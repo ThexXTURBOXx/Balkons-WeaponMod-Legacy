@@ -15,7 +15,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -24,8 +23,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMelee extends ItemSword implements IItemWeapon {
     public final MeleeComponent meleeComponent;
@@ -41,30 +38,12 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.COMBAT);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World world,
-                               @Nullable EntityLivingBase entity) {
-                return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ? 1.0f : 0.0f;
-            }
-        });
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World world,
-                               @Nullable EntityLivingBase entity) {
-                return MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f;
-            }
-        });
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "block"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(@Nonnull ItemStack stack, @Nullable World world,
-                               @Nullable EntityLivingBase entity) {
-                return entity != null && entity.getActiveItemStack() == stack ? 1.0f : 0.0f;
-            }
-        });
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"), (stack, world, entity) ->
+                (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ? 1.0f : 0.0f);
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), (stack, world, entity) ->
+                MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f);
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "block"), (stack, world, entity) ->
+                entity != null && entity.getActiveItemStack() == stack ? 1.0f : 0.0f);
     }
 
     @Override
