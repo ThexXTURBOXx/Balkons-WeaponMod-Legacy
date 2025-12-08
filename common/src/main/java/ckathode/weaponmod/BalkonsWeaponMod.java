@@ -33,8 +33,6 @@ import ckathode.weaponmod.render.RenderSpear;
 import me.shedaniel.architectury.registry.entity.EntityRenderers;
 import me.shedaniel.architectury.utils.Env;
 import me.shedaniel.architectury.utils.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,7 +50,6 @@ public class BalkonsWeaponMod {
         EnvExecutor.runInEnv(Env.CLIENT, () -> Client::initializeClient);
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Client {
 
         public static void registerRenderers() {
@@ -72,7 +69,6 @@ public class BalkonsWeaponMod {
             EntityRenderers.register(EntityMortarShell.TYPE, RenderMortarShell::new);
         }
 
-        @Environment(EnvType.CLIENT)
         public static void initializeClient() {
             registerRenderers();
             WMClientEventHandler.init();

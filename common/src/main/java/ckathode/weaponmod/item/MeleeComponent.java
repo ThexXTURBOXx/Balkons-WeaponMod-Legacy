@@ -4,8 +4,6 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -195,12 +193,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
                               boolean flag) {
     }
 
-    @Environment(EnvType.CLIENT)
     public boolean shouldRenderCooldown() {
         return false;
     }
 
-    @Environment(EnvType.CLIENT)
     public float getCooldown() {
         return 0;
     }
