@@ -14,7 +14,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -23,8 +22,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ItemShooter extends ItemBow implements IItemWeapon {
     protected static final int MAX_DELAY = 72000;
@@ -52,22 +49,10 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         meleeComponent = meleecomponent;
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reload"), new IItemPropertyGetter() {
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World world,
-                              @Nullable EntityLivingBase entity) {
-                return (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f;
-            }
-        });
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reloaded"), new IItemPropertyGetter() {
-            @Override
-            @OnlyIn(Dist.CLIENT)
-            public float call(@Nonnull ItemStack stack, @Nullable World world,
-                              @Nullable EntityLivingBase entity) {
-                return RangedComponent.isReloaded(stack) ? 1.0f : 0.0f;
-            }
-        });
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reload"), (stack, world, entity) ->
+                (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f);
+        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reloaded"), (stack, world, entity) ->
+                RangedComponent.isReloaded(stack) ? 1.0f : 0.0f);
     }
 
     @Override

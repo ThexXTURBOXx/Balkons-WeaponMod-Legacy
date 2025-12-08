@@ -13,12 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@OnlyIn(Dist.CLIENT)
 public class GuiOverlayReloaded extends Gui {
     @SubscribeEvent
     public void renderGUIOverlay(RenderGameOverlayEvent.Pre e) {
