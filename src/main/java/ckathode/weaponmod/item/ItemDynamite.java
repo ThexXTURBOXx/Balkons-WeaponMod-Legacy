@@ -11,8 +11,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDynamite extends WMItem {
     public ItemDynamite(String id) {
@@ -48,7 +46,6 @@ public class ItemDynamite extends WMItem {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }
