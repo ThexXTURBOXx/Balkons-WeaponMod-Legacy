@@ -4,8 +4,6 @@ import ckathode.weaponmod.entity.EntityCannon;
 import io.netty.buffer.ByteBuf;
 import java.util.function.Supplier;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class MsgCannonFire implements WMMessage<MsgCannonFire> {
@@ -29,7 +27,6 @@ public class MsgCannonFire implements WMMessage<MsgCannonFire> {
         buf.writeInt(cannonEntityID);
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void handleClientSide(MsgCannonFire msg, Supplier<NetworkEvent.Context> ctx) {
     }

@@ -1,12 +1,9 @@
 package ckathode.weaponmod;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
-@OnlyIn(Dist.CLIENT)
 public final class WeaponModResources {
     public static final class Entity {
         public static final ResourceLocation DART = new ResourceLocation(

@@ -1,16 +1,14 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.AdvancedExplosion;
+import ckathode.weaponmod.WMUtil;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 public class MsgExplosion implements WMMessage<MsgExplosion> {
@@ -73,10 +71,9 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
     @Override
     public void handleClientSide(MsgExplosion msg, Supplier<NetworkEvent.Context> ctx) {
-        World world = Minecraft.getInstance().world;
+        World world = WMUtil.Client.getLocalWorld();
         AdvancedExplosion expl = new AdvancedExplosion(world, null, x, y, z, size,
                 false, Explosion.Mode.DESTROY);
         expl.setAffectedBlockPositions(blocks);
