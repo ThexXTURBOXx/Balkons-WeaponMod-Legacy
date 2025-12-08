@@ -2,9 +2,9 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WarhammerExplosion;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -15,8 +15,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MeleeCompWarhammer extends MeleeComponent {
     public static final int CHARGE_DELAY = 400;
@@ -98,14 +96,12 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRenderCooldown() {
-        return !isCharged(Minecraft.getMinecraft().thePlayer);
+        return !isCharged(WMUtil.Client.getLocalPlayer());
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public float getCooldown() {
-        return getScaledCooldown(Minecraft.getMinecraft().thePlayer);
+        return getScaledCooldown(WMUtil.Client.getLocalPlayer());
     }
 }
