@@ -1,8 +1,6 @@
 package ckathode.weaponmod.item;
 
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -68,6 +66,5 @@ public abstract class AbstractWeaponComponent {
 
     public abstract void onUpdate(ItemStack stack, World world, Entity entity, int i, boolean flag);
 
-    @SideOnly(Side.CLIENT)
     public abstract boolean shouldRotateAroundWhenRendering();
 }

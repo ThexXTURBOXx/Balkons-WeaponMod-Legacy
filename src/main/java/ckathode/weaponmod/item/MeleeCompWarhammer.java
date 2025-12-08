@@ -2,10 +2,8 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WarhammerExplosion;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,6 +57,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     public void setSmashed(EntityPlayer entityplayer) {
+        // TODO: find alternatives for ticksExisted
         PlayerWeaponData.setLastWarhammerSmashTicks(entityplayer, entityplayer.ticksExisted);
     }
 
@@ -95,14 +94,12 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRenderCooldown() {
-        return !isCharged(FMLClientHandler.instance().getClientPlayerEntity());
+        return !isCharged(WMUtil.Client.getLocalPlayer());
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public float getCooldown() {
-        return getScaledCooldown(FMLClientHandler.instance().getClientPlayerEntity());
+        return getScaledCooldown(WMUtil.Client.getLocalPlayer());
     }
 }

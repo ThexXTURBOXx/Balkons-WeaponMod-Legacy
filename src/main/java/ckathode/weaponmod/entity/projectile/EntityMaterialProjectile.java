@@ -3,8 +3,6 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.ItemHitEffect;
 import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import javax.annotation.Nullable;
 import net.minecraft.enchantment.Enchantment;
@@ -121,7 +119,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
         if (id >= 0 && id < MATERIAL_COLORS.length) {

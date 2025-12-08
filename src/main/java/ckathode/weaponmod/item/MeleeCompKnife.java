@@ -2,8 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -44,7 +42,6 @@ public class MeleeCompKnife extends MeleeComponent {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRotateAroundWhenRendering() {
         return true;
     }

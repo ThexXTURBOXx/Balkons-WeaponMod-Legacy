@@ -6,8 +6,6 @@ import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -271,7 +269,6 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRotateAroundWhenRendering() {
         return false;
     }

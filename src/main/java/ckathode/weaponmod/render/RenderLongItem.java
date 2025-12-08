@@ -1,7 +1,5 @@
 package ckathode.weaponmod.render;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
 public class RenderLongItem extends RenderWeaponItem {
 
     public static final RenderLongItem INSTANCE = new RenderLongItem();

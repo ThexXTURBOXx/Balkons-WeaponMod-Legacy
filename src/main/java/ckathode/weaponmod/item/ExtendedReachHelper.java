@@ -1,8 +1,6 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -11,7 +9,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
-@SideOnly(Side.CLIENT)
 public final class ExtendedReachHelper {
     private static final Minecraft mc = Minecraft.getMinecraft();
 

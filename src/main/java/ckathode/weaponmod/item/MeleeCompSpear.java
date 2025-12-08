@@ -2,8 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -50,7 +48,6 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRotateAroundWhenRendering() {
         return true;
     }

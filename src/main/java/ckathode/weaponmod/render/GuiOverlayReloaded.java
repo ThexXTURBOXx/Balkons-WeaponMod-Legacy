@@ -6,8 +6,6 @@ import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.MeleeComponent;
 import ckathode.weaponmod.item.RangedComponent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -17,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
-@SideOnly(Side.CLIENT)
 public class GuiOverlayReloaded extends Gui {
     @SubscribeEvent
     public void renderGUIOverlay(RenderGameOverlayEvent.Pre e) {

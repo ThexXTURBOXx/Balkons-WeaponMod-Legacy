@@ -5,8 +5,6 @@ import ckathode.weaponmod.WMItemVariants;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
 import java.util.Random;
 import javax.annotation.Nonnull;
@@ -142,7 +140,6 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRotateAroundWhenRendering() {
         return meleeComponent.shouldRotateAroundWhenRendering();
     }

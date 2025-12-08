@@ -1,13 +1,11 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.AdvancedExplosion;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import ckathode.weaponmod.WMUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -73,10 +71,9 @@ public class MsgExplosion extends WMMessage {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void handleClientSide(EntityPlayer player) {
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = WMUtil.Client.getLocalWorld();
         AdvancedExplosion expl = new AdvancedExplosion(world, null, x, y, z, size,
                 false, true);
         expl.setAffectedBlockPositions(blocks);

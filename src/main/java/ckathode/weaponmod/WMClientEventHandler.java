@@ -8,8 +8,6 @@ import ckathode.weaponmod.item.RangedComponent;
 import ckathode.weaponmod.network.MsgCannonFire;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -18,7 +16,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.MouseEvent;
 
-@SideOnly(Side.CLIENT)
 public class WMClientEventHandler {
     @SubscribeEvent
     public void onMouseClick(final MouseEvent e) {

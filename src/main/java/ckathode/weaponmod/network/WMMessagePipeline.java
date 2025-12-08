@@ -1,6 +1,7 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
+import ckathode.weaponmod.WMUtil;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
@@ -8,7 +9,6 @@ import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -17,7 +17,6 @@ import io.netty.handler.codec.MessageToMessageCodec;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
@@ -83,7 +82,7 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
         pkt.decodeInto(ctx, payload.slice());
         switch (FMLCommonHandler.instance().getEffectiveSide()) {
         case CLIENT: {
-            final EntityPlayer player = getClientPlayer();
+            final EntityPlayer player = WMUtil.Client.getLocalPlayer();
             pkt.handleClientSide(player);
             break;
         }
@@ -115,11 +114,6 @@ public class WMMessagePipeline extends MessageToMessageCodec<FMLProxyPacket, WMM
             }
             return com;
         });
-    }
-
-    @SideOnly(Side.CLIENT)
-    private EntityPlayer getClientPlayer() {
-        return Minecraft.getMinecraft().thePlayer;
     }
 
     public void sendToAll(final WMMessage message) {

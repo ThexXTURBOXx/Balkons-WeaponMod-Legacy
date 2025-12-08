@@ -4,8 +4,6 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemVariants;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
@@ -37,7 +35,6 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }
@@ -123,7 +120,6 @@ public class ItemFlail extends ItemMelee {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRotateAroundWhenRendering() {
         return true;
     }

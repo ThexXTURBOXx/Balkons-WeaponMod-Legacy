@@ -4,8 +4,6 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
@@ -179,17 +177,14 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRotateAroundWhenRendering() {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
     public boolean shouldRenderCooldown() {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
     public float getCooldown() {
         return 0;
     }

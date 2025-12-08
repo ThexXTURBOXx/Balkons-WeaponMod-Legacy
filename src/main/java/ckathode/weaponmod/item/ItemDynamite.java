@@ -2,8 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -39,13 +37,11 @@ public class ItemDynamite extends WMItem {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean shouldRotateAroundWhenRendering() {
         return true;
     }

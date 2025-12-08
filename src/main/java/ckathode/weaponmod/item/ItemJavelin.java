@@ -2,8 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.projectile.EntityJavelin;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -68,7 +66,6 @@ public class ItemJavelin extends WMItem {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public boolean isFull3D() {
         return true;
     }

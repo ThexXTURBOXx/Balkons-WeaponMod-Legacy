@@ -1,8 +1,6 @@
 package ckathode.weaponmod.network;
 
 import ckathode.weaponmod.entity.EntityCannon;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
@@ -29,7 +27,6 @@ public class MsgCannonFire extends WMMessage {
         buf.writeInt(cannonEntityID);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void handleClientSide(EntityPlayer player) {
     }
