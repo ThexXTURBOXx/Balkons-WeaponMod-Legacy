@@ -17,8 +17,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityMaterialProjectile extends EntityProjectile {
@@ -129,7 +127,6 @@ public class EntityMaterialProjectile extends EntityProjectile {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
         if (id >= 0 && id < MATERIAL_COLORS.length) {
