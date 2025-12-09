@@ -6,8 +6,6 @@ import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -73,7 +71,6 @@ public class MsgExplosion implements WMMessage<MsgExplosion> {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     @Override
     public void handleClientSide(MsgExplosion msg, Supplier<NetworkManager.PacketContext> ctx) {
         Level world = ctx.get().getPlayer().getLevel();
