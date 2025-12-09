@@ -3,8 +3,6 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import com.mojang.serialization.MapCodec;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperty;
@@ -16,12 +14,10 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@Environment(EnvType.CLIENT)
 public final class WMItemProperties {
 
     public static final ResourceLocation RELOAD_GETTER_ID = BalkonsWeaponMod.id("reload");
 
-    @Environment(EnvType.CLIENT)
     public record Reload() implements ConditionalItemModelProperty {
         public static final MapCodec<Reload> MAP_CODEC = MapCodec.unit(new Reload());
 
@@ -39,7 +35,6 @@ public final class WMItemProperties {
 
     public static final ResourceLocation RELOADED_GETTER_ID = BalkonsWeaponMod.id("reloaded");
 
-    @Environment(EnvType.CLIENT)
     public record Reloaded() implements ConditionalItemModelProperty {
         public static final MapCodec<Reloaded> MAP_CODEC = MapCodec.unit(new Reloaded());
 
@@ -56,7 +51,6 @@ public final class WMItemProperties {
 
     public static final ResourceLocation FLAIL_THROWN_GETTER_ID = BalkonsWeaponMod.id("flail-thrown");
 
-    @Environment(EnvType.CLIENT)
     public record FlailThrown() implements ConditionalItemModelProperty {
         public static final MapCodec<FlailThrown> MAP_CODEC = MapCodec.unit(new FlailThrown());
 
@@ -74,7 +68,6 @@ public final class WMItemProperties {
 
     public static final ResourceLocation HALBERD_STATE_GETTER_ID = BalkonsWeaponMod.id("halberd-state");
 
-    @Environment(EnvType.CLIENT)
     public record HalberdState() implements ConditionalItemModelProperty {
         public static final MapCodec<HalberdState> MAP_CODEC = MapCodec.unit(new HalberdState());
 

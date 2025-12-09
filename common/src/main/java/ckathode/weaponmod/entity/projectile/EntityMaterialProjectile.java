@@ -2,8 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.ItemHitEffect;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -149,7 +147,6 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         }
     }
 
-    @Environment(EnvType.CLIENT)
     public float[] getMaterialColor() {
         int id = getWeaponMaterialId();
         if (id >= 0 && id < MATERIAL_COLORS.length) {
