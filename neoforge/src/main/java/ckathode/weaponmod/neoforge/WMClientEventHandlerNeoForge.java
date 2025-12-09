@@ -10,7 +10,7 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
-public class WMClientEventHandlerForge {
+public class WMClientEventHandlerNeoForge {
 
     public static class MainEvents {
 
