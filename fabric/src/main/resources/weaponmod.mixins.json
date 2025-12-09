@@ -8,7 +8,6 @@
     "GuiMixin"
   ],
   "mixins": [
-    "EntityMixin",
     "PlayerMixin"
   ],
   "server": [],

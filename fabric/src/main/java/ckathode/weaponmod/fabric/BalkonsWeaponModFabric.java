@@ -9,6 +9,7 @@ public class BalkonsWeaponModFabric implements ModInitializer {
     public void onInitialize() {
         BalkonsWeaponMod.init();
         WMConfigConditionFabric.init();
+        PlayerWeaponDataImpl.init();
     }
 
 }

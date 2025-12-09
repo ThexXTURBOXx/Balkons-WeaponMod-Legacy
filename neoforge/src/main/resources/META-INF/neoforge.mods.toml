@@ -42,6 +42,3 @@ type = "required"
 versionRange = "[${cloth_config_version},)"
 ordering = "AFTER"
 side = "BOTH"
-
-[[mixins]]
-config = "weaponmod.mixins.json"

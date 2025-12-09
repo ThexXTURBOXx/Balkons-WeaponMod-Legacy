@@ -31,6 +31,7 @@ public class BalkonsWeaponModNeoForge {
                 () -> () -> modEventBus.register(new WMClientEventHandlerNeoForge.ModEvents()));
 
         DATA_COMPONENT_TYPES.register(modEventBus);
+        PlayerWeaponDataImpl.init(modEventBus);
 
         BalkonsWeaponMod.init();
         BalkonsWeaponModConfigIntegration.registerConfigScreen();
