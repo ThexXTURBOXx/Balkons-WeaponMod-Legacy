@@ -1,12 +1,9 @@
 package ckathode.weaponmod;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.resources.ResourceLocation;
 
 import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
-@Environment(EnvType.CLIENT)
 public final class WeaponModResources {
     public static final class Entity {
         public static final ResourceLocation DART = ResourceLocation.fromNamespaceAndPath(

@@ -5,8 +5,6 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.MeleeComponent;
 import ckathode.weaponmod.item.RangedComponent;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -16,7 +14,6 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-@Environment(EnvType.CLIENT)
 public class GuiOverlayReloaded {
 
     public static void renderGUIOverlay(GuiGraphics guiGraphics) {

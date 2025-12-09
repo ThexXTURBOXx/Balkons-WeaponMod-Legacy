@@ -4,10 +4,8 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemBuilder;
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WarhammerExplosion;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -137,15 +135,15 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public boolean shouldRenderCooldown() {
-        return Minecraft.getInstance().player != null && !isCharged(Minecraft.getInstance().player);
+        Player p = WMUtil.Client.getLocalPlayer();
+        return p != null && !isCharged(p);
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
     public float getCooldown() {
-        return Minecraft.getInstance().player == null ? 0 : getScaledCooldown(Minecraft.getInstance().player);
+        Player p = WMUtil.Client.getLocalPlayer();
+        return p == null ? 0 : getScaledCooldown(p);
     }
 
 }
