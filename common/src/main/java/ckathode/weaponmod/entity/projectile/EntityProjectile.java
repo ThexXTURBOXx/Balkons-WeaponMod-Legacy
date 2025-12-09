@@ -1,6 +1,5 @@
 package ckathode.weaponmod.entity.projectile;
 
-import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
 import com.mojang.serialization.Codec;
 import dev.architectury.extensions.network.EntitySpawnExtension;
@@ -24,7 +23,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -245,7 +244,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             if (raytraceresult != null && raytraceresult.getType() != HitResult.Type.MISS
                 && !onProjectileImpact(this, raytraceresult)) {
                 onHit(raytraceresult);
-                hasImpulse = true;
+                needsSync = true;
             }
             if (entityraytraceresult == null) {
                 break;
@@ -358,7 +357,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         shakeTime = getMaxArrowShake();
         playHitSound();
         if (inBlockState != null) {
-            WMUtil.entityInside(inBlockState, level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
+            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
         }
     }
 

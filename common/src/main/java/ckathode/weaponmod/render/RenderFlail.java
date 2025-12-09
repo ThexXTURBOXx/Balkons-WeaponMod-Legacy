@@ -6,9 +6,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -43,7 +43,7 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
             poseStack.scale(0.15f, 0.15f, 0.15f);
             poseStack.translate(-4.0f, 0.0f, 0.0f);
             submitNodeCollector.submitCustomGeometry(poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.FLAIL),
+                    RenderTypes.entityCutout(WeaponModResources.Entity.FLAIL),
                     (pose, consumer) -> {
                         drawVertex(pose, consumer, 1.5f, -2.0f, -2.0f, color[0], color[1], color[2], 1, 0.0f,
                                 0.15625f, 0.15f, 0.0f, 0.0f, lm);
@@ -65,7 +65,7 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
             for (int j = 0; j < 4; ++j) {
                 poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
                 submitNodeCollector.submitCustomGeometry(poseStack,
-                        RenderType.entityCutout(WeaponModResources.Entity.FLAIL),
+                        RenderTypes.entityCutout(WeaponModResources.Entity.FLAIL),
                         (pose, consumer) -> {
                             drawVertex(pose, consumer, -8.0f, -2.0f, 0.0f, color[0], color[1], color[2], 1, 0.0f,
                                     0.0f, 0.0f, 0.0f, 0.15f, lm);
@@ -116,7 +116,7 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
             float f4 = (float) (d4 - d9);
             float f5 = (float) (d5 - d10) + f3;
             float f6 = (float) (d6 - d8);
-            submitNodeCollector.submitCustomGeometry(poseStack, RenderType.lineStrip(),
+            submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(),
                     (pose, consumer) -> {
                         int v = 16;
                         for (int k = 0; k <= v; ++k) {

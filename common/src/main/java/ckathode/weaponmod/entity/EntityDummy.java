@@ -29,8 +29,8 @@ import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
@@ -124,7 +124,7 @@ public class EntityDummy extends Entity {
         } else {
             playRandomHitSound();
         }
-        if (durability <= 0 && serverLevel.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+        if (durability <= 0 && serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
             dropAsItem(serverLevel, true, true);
         }
         markHurt();

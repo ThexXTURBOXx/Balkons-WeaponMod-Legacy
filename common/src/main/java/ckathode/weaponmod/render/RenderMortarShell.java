@@ -4,9 +4,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityMortarShell;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ public class RenderMortarShell extends WMRenderer<EntityMortarShell, RenderMorta
         poseStack.scale(0.2f, 0.2f, 0.2f);
         poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         submitNodeCollector.submitCustomGeometry(poseStack,
-                RenderType.entityCutout(WeaponModResources.Entity.CANNONBALL),
+                RenderTypes.entityCutout(WeaponModResources.Entity.CANNONBALL),
                 (pose, consumer) -> {
                     drawVertex(pose, consumer, -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);
                     drawVertex(pose, consumer, 0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.05625f, lm);

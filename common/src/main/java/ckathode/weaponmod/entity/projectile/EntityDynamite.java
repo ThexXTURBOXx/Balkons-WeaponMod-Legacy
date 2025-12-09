@@ -152,7 +152,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
                     1.2f / (random.nextFloat() * 0.2f + 0.9f));
         }
         if (inBlockState != null) {
-            WMUtil.entityInside(inBlockState, level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
+            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
         }
     }
 

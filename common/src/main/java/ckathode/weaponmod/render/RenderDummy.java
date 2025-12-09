@@ -4,9 +4,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityDummy;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
@@ -40,7 +40,7 @@ public class RenderDummy extends WMRenderer<EntityDummy, RenderDummy.DummyRender
         poseStack.scale(-1.0f, -1.0f, 1.0f);
         poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
         submitNodeCollector.submitModel(modelDummy, entityRenderState, poseStack,
-                RenderType.entityCutout(WeaponModResources.Entity.DUMMY), lm, OverlayTexture.NO_OVERLAY,
+                RenderTypes.entityCutout(WeaponModResources.Entity.DUMMY), lm, OverlayTexture.NO_OVERLAY,
                 -1, null, entityRenderState.outlineColor, null);
         poseStack.popPose();
         super.submit(entityRenderState, poseStack, submitNodeCollector, cameraRenderState);

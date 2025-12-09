@@ -4,9 +4,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBlunderShot;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot, RenderBlund
         poseStack.pushPose();
         poseStack.scale(0.04f, 0.04f, 0.04f);
         submitNodeCollector.submitCustomGeometry(poseStack,
-                RenderType.entityCutout(WeaponModResources.Entity.BULLET),
+                RenderTypes.entityCutout(WeaponModResources.Entity.BULLET),
                 (pose, consumer) -> {
                     drawVertex(pose, consumer, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.05625f, 0.0f, 0.0f, lm);
                     drawVertex(pose, consumer, 0.0f, -1.0f, 1.0f, 0.3125f, 0.0f, 0.05625f, 0.0f, 0.0f, lm);
@@ -37,7 +37,7 @@ public class RenderBlunderShot extends WMRenderer<EntityBlunderShot, RenderBlund
         for (int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
             submitNodeCollector.submitCustomGeometry(poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.BULLET),
+                    RenderTypes.entityCutout(WeaponModResources.Entity.BULLET),
                     (pose, consumer) -> {
                         drawVertex(pose, consumer, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
                         drawVertex(pose, consumer, 1.0f, -1.0f, 0.0f, 0.3125f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);

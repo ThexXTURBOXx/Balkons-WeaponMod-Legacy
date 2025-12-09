@@ -6,7 +6,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperty;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class WMItemProperties {
 
-    public static final ResourceLocation RELOAD_GETTER_ID = BalkonsWeaponMod.id("reload");
+    public static final Identifier RELOAD_GETTER_ID = BalkonsWeaponMod.id("reload");
 
     public record Reload() implements ConditionalItemModelProperty {
         public static final MapCodec<Reload> MAP_CODEC = MapCodec.unit(new Reload());
@@ -33,7 +33,7 @@ public final class WMItemProperties {
         }
     }
 
-    public static final ResourceLocation RELOADED_GETTER_ID = BalkonsWeaponMod.id("reloaded");
+    public static final Identifier RELOADED_GETTER_ID = BalkonsWeaponMod.id("reloaded");
 
     public record Reloaded() implements ConditionalItemModelProperty {
         public static final MapCodec<Reloaded> MAP_CODEC = MapCodec.unit(new Reloaded());
@@ -49,7 +49,7 @@ public final class WMItemProperties {
         }
     }
 
-    public static final ResourceLocation FLAIL_THROWN_GETTER_ID = BalkonsWeaponMod.id("flail-thrown");
+    public static final Identifier FLAIL_THROWN_GETTER_ID = BalkonsWeaponMod.id("flail-thrown");
 
     public record FlailThrown() implements ConditionalItemModelProperty {
         public static final MapCodec<FlailThrown> MAP_CODEC = MapCodec.unit(new FlailThrown());
@@ -66,7 +66,7 @@ public final class WMItemProperties {
         }
     }
 
-    public static final ResourceLocation HALBERD_STATE_GETTER_ID = BalkonsWeaponMod.id("halberd-state");
+    public static final Identifier HALBERD_STATE_GETTER_ID = BalkonsWeaponMod.id("halberd-state");
 
     public record HalberdState() implements ConditionalItemModelProperty {
         public static final MapCodec<HalberdState> MAP_CODEC = MapCodec.unit(new HalberdState());

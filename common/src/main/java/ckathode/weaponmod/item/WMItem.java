@@ -5,7 +5,7 @@ import ckathode.weaponmod.WMItemBuilder;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import java.util.Collection;
 import java.util.Collections;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -44,7 +44,7 @@ public class WMItem extends Item {
     public static final WMItem MORTAR_IRON_PART_ITEM =
             WMItemBuilder.createWMItem(BalkonsWeaponMod.id(MORTAR_IRON_PART_ID));
 
-    public WMItem(@NotNull ResourceLocation id) {
+    public WMItem(@NotNull Identifier id) {
         this(getBaseProperties(id));
     }
 
@@ -52,11 +52,11 @@ public class WMItem extends Item {
         super(properties.arch$tab(CreativeModeTabs.COMBAT));
     }
 
-    public static Properties getBaseProperties(@NotNull ResourceLocation id) {
+    public static Properties getBaseProperties(@NotNull Identifier id) {
         return getBaseProperties(null, id);
     }
 
-    public static Properties getBaseProperties(@Nullable ToolMaterial tier, @NotNull ResourceLocation id) {
+    public static Properties getBaseProperties(@Nullable ToolMaterial tier, @NotNull Identifier id) {
         Properties properties = new Properties().setId(WMItemBuilder.id(id));
         if (tier == ToolMaterial.NETHERITE) {
             properties = properties.fireResistant();

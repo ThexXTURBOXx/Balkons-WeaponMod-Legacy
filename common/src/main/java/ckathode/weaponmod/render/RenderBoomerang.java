@@ -5,9 +5,9 @@ import ckathode.weaponmod.entity.projectile.EntityBoomerang;
 import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +30,7 @@ public class RenderBoomerang extends WMItemEntityRenderer<EntityBoomerang, Rende
         float[] color = entityRenderState.materialColor;
         poseStack.translate(-0.5f, 0.0f, -0.5f);
         submitNodeCollector.submitCustomGeometry(poseStack,
-                RenderType.entityCutout(WeaponModResources.Entity.BOOMERANG),
+                RenderTypes.entityCutout(WeaponModResources.Entity.BOOMERANG),
                 (pose, consumer) -> {
                     drawVertex(pose, consumer, 0.0f, 0.0f, 1.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, lm);
                     drawVertex(pose, consumer, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, lm);

@@ -15,7 +15,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -320,7 +320,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         public List<Item> getAmmoItems() {
             if (ammoItems == null) {
                 ammoItems = Arrays.stream(ammoItemTags)
-                        .map(t -> BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(t)))
+                        .map(t -> BuiltInRegistries.ITEM.getValue(Identifier.parse(t)))
                         .collect(Collectors.toList());
                 BalkonsWeaponMod.LOGGER.debug("Found items {} for {} @{}",
                         ammoItems, Arrays.toString(ammoItemTags), this);

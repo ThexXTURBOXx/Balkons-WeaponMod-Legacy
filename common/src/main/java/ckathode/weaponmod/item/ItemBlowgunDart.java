@@ -13,7 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.dispenser.BlockSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,7 +34,7 @@ public class ItemBlowgunDart extends WMItem implements WMDispenserExtension {
     @NotNull
     private final DartType dartType;
 
-    public ItemBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
+    public ItemBlowgunDart(@NotNull DartType dartType, @NotNull Identifier id) {
         super(getBaseProperties(id)
                 .component(DataComponents.POTION_CONTENTS, dartType.potionContents())
         );

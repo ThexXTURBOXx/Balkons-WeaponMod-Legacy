@@ -139,7 +139,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                           @NotNull LivingEntity attacker) {
-        if (entityliving.invulnerableTime == entityliving.invulnerableDuration) {
+        if (entityliving.invulnerableTime == 20) { // == invulnerableDuration
             float kb = getKnockBack(itemstack, entityliving, attacker);
             PhysHelper.knockBack(entityliving, attacker, kb);
             if (meleeSpecs.attackDelay >= 3.0f) {

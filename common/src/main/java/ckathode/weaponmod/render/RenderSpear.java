@@ -4,9 +4,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntitySpear;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
@@ -37,7 +37,7 @@ public class RenderSpear extends WMItemEntityRenderer<EntitySpear, RenderSpear.S
         poseStack.scale(0.05625f, 0.05625f, 0.05625f);
         poseStack.translate(-4.0f, 0.0f, 0.0f);
         submitNodeCollector.submitCustomGeometry(poseStack,
-                RenderType.entityCutout(WeaponModResources.Entity.SPEAR),
+                RenderTypes.entityCutout(WeaponModResources.Entity.SPEAR),
                 (pose, consumer) -> {
                     drawVertex(pose, consumer, -length, -2.0f, -2.0f, 0.0f, 0.15625f, 0.05625f, 0.0f, 0.0f, lm);
                     drawVertex(pose, consumer, -length, -2.0f, 2.0f, 0.15625f, 0.15625f, 0.05625f, 0.0f, 0.0f, lm);
@@ -51,7 +51,7 @@ public class RenderSpear extends WMItemEntityRenderer<EntitySpear, RenderSpear.S
         for (int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
             submitNodeCollector.submitCustomGeometry(poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.SPEAR),
+                    RenderTypes.entityCutout(WeaponModResources.Entity.SPEAR),
                     (pose, consumer) -> {
                         drawVertex(pose, consumer, -length, -2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
                         drawVertex(pose, consumer, length, -2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);

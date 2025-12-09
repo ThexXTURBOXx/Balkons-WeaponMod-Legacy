@@ -6,7 +6,7 @@ import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -58,7 +58,7 @@ public class ItemFlail extends ItemMelee {
 
     private final float flailDamage;
 
-    public ItemFlail(MeleeComponent meleecomponent, @NotNull ResourceLocation id) {
+    public ItemFlail(MeleeComponent meleecomponent, @NotNull Identifier id) {
         super(meleecomponent, id);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.attackDamageBonus();
     }

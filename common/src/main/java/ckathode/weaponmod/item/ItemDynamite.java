@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +24,7 @@ public class ItemDynamite extends WMItem implements WMDispenserExtension {
     public static final String ID = "dynamite";
     public static final ItemDynamite ITEM = WMItemBuilder.createStandardDynamite(BalkonsWeaponMod.id(ID));
 
-    public ItemDynamite(@NotNull ResourceLocation id) {
+    public ItemDynamite(@NotNull Identifier id) {
         super(WMItem.getBaseProperties(id).stacksTo(64));
     }
 

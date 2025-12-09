@@ -1,7 +1,7 @@
 package ckathode.weaponmod.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -25,7 +25,7 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
 
-    public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent, @NotNull ResourceLocation id) {
+    public ItemShooter(RangedComponent rangedcomponent, MeleeComponent meleecomponent, @NotNull Identifier id) {
         this(rangedcomponent, meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial, id));
     }
 

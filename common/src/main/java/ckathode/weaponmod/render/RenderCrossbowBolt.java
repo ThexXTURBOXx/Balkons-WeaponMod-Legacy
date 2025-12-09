@@ -4,9 +4,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityCrossbowBolt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt, RenderCro
         poseStack.scale(0.05625f, 0.05625f, 0.05625f);
         poseStack.translate(-1.0f, 0.0f, 0.0f);
         submitNodeCollector.submitCustomGeometry(poseStack,
-                RenderType.entityCutout(WeaponModResources.Entity.BOLT),
+                RenderTypes.entityCutout(WeaponModResources.Entity.BOLT),
                 (pose, consumer) -> {
                     drawVertex(pose, consumer, -5.0f, -2.0f, -2.0f, 0.0f, 0.15625f, 0.05625f, 0.0f, 0.0f, lm);
                     drawVertex(pose, consumer, -5.0f, -2.0f, 2.0f, 0.15625f, 0.15625f, 0.05625f, 0.0f, 0.0f, lm);
@@ -47,7 +47,7 @@ public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt, RenderCro
         for (int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
             submitNodeCollector.submitCustomGeometry(poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.BOLT),
+                    RenderTypes.entityCutout(WeaponModResources.Entity.BOLT),
                     (pose, consumer) -> {
                         drawVertex(pose, consumer, -6.0f, -2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
                         drawVertex(pose, consumer, 6.0f, -2.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);

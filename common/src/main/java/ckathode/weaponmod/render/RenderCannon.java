@@ -5,9 +5,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.EntityCannon;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
@@ -53,7 +53,7 @@ public class RenderCannon extends WMRenderer<EntityCannon, RenderCannon.CannonRe
             poseStack.scale(-1.0f, -1.0f, 1.0f);
             poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
             submitNodeCollector.submitModel(modelLegacy, entityRenderState, poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.CANNON_LEGACY), lm, OverlayTexture.NO_OVERLAY,
+                    RenderTypes.entityCutout(WeaponModResources.Entity.CANNON_LEGACY), lm, OverlayTexture.NO_OVERLAY,
                     color, null, entityRenderState.outlineColor, null);
         } else {
             float rot = Math.min(entityRenderState.xRot, 20.0f);
@@ -63,11 +63,11 @@ public class RenderCannon extends WMRenderer<EntityCannon, RenderCannon.CannonRe
             poseStack.mulPose(Axis.XP.rotationDegrees(rot));
             poseStack.translate(0.0f, -1.0f, 0.0f);
             submitNodeCollector.submitModel(modelBarrel, entityRenderState, poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.CANNON), lm, OverlayTexture.NO_OVERLAY,
+                    RenderTypes.entityCutout(WeaponModResources.Entity.CANNON), lm, OverlayTexture.NO_OVERLAY,
                     color, null, entityRenderState.outlineColor, null);
             poseStack.popPose();
             submitNodeCollector.submitModel(modelStandard, entityRenderState, poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.CANNON), lm, OverlayTexture.NO_OVERLAY,
+                    RenderTypes.entityCutout(WeaponModResources.Entity.CANNON), lm, OverlayTexture.NO_OVERLAY,
                     color, null, entityRenderState.outlineColor, null);
         }
 

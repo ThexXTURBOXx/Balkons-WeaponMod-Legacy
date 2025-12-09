@@ -4,9 +4,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityDynamite;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ public class RenderDynamite extends WMRenderer<EntityDynamite, RenderDynamite.Dy
         poseStack.scale(0.05625f, 0.05625f, 0.05625f);
         poseStack.translate(-4.0f, 0.0f, 0.0f);
         submitNodeCollector.submitCustomGeometry(poseStack,
-                RenderType.entityCutout(WeaponModResources.Entity.DYNAMITE),
+                RenderTypes.entityCutout(WeaponModResources.Entity.DYNAMITE),
                 (pose, consumer) -> {
                     drawVertex(pose, consumer, -7.0f, -2.0f, -2.0f, 0.0f, 0.15625f, 0.05625f, 0.0f, 0.0f, lm);
                     drawVertex(pose, consumer, -7.0f, -2.0f, 2.0f, 0.15625f, 0.15625f, 0.05625f, 0.0f, 0.0f, lm);
@@ -47,7 +47,7 @@ public class RenderDynamite extends WMRenderer<EntityDynamite, RenderDynamite.Dy
         for (int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
             submitNodeCollector.submitCustomGeometry(poseStack,
-                    RenderType.entityCutout(WeaponModResources.Entity.DYNAMITE),
+                    RenderTypes.entityCutout(WeaponModResources.Entity.DYNAMITE),
                     (pose, consumer) -> {
                         drawVertex(pose, consumer, -8.0f, -2.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);
                         drawVertex(pose, consumer, 8.0f, -2.0f, 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 0.05625f, lm);

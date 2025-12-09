@@ -12,7 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -77,7 +77,7 @@ public class ItemMusket extends ItemShooter {
     protected final Item bayonetItem;
     private final int bayonetDurability;
 
-    public ItemMusket(MeleeComponent meleecomponent, @Nullable Item bayonetitem, @NotNull ResourceLocation id) {
+    public ItemMusket(MeleeComponent meleecomponent, @Nullable Item bayonetitem, @NotNull Identifier id) {
         super(new RangedCompMusket(), meleecomponent, id);
         bayonetItem = bayonetitem;
         bayonetDurability =
@@ -109,7 +109,7 @@ public class ItemMusket extends ItemShooter {
     public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                           @NotNull LivingEntity attacker) {
         if (hasBayonet()) {
-            if (entityliving.invulnerableTime == entityliving.invulnerableDuration) {
+            if (entityliving.invulnerableTime == 20) { // == invulnerableDuration
                 float kb = meleeComponent.getKnockBack(itemstack, entityliving, attacker);
                 PhysHelper.knockBack(entityliving, attacker, kb);
                 entityliving.invulnerableTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);

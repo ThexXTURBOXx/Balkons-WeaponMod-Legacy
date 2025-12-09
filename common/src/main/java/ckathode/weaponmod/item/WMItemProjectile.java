@@ -13,7 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -114,7 +114,7 @@ public abstract class WMItemProjectile extends WMItem implements WMDispenserExte
                 }
             }, BalkonsWeaponMod.id(MORTAR_SHELL_ID));
 
-    public WMItemProjectile(@NotNull ResourceLocation id) {
+    public WMItemProjectile(@NotNull Identifier id) {
         this(WMItemProjectile.getBaseProperties(id));
     }
 

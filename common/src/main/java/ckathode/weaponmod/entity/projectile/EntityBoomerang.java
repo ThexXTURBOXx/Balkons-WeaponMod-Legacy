@@ -195,7 +195,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         beenInGround = true;
         floatStrength = 0.0f;
         if (inBlockState != null) {
-            WMUtil.entityInside(inBlockState, level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
+            inBlockState.entityInside(level(), blockpos, this, InsideBlockEffectApplier.NOOP, true);
         }
     }
 

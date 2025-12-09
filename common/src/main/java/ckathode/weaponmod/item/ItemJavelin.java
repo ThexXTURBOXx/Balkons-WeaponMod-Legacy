@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.BlockSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -26,7 +26,7 @@ public class ItemJavelin extends WMItem implements WMDispenserExtension {
     public static final String ID = "javelin";
     public static final ItemJavelin ITEM = WMItemBuilder.createStandardJavelin(BalkonsWeaponMod.id(ID));
 
-    public ItemJavelin(@NotNull ResourceLocation id) {
+    public ItemJavelin(@NotNull Identifier id) {
         super(WMItem.getBaseProperties(id).stacksTo(16));
     }
 

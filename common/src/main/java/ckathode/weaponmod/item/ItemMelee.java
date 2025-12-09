@@ -3,7 +3,7 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -54,7 +54,7 @@ public class ItemMelee extends Item implements IItemWeapon {
 
     public final MeleeComponent meleeComponent;
 
-    public ItemMelee(@NotNull MeleeComponent meleecomponent, @NotNull ResourceLocation id) {
+    public ItemMelee(@NotNull MeleeComponent meleecomponent, @NotNull Identifier id) {
         this(meleecomponent, WMItem.getBaseProperties(meleecomponent.weaponMaterial, id));
     }
 

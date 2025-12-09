@@ -5,7 +5,7 @@ import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.entity.EntityDummy;
 import java.util.List;
 import java.util.function.Predicate;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +30,7 @@ public class ItemDummy extends WMItem {
 
     private static final Predicate<Entity> PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
 
-    public ItemDummy(@NotNull ResourceLocation id) {
+    public ItemDummy(@NotNull Identifier id) {
         super(WMItem.getBaseProperties(id).stacksTo(1));
     }
 
