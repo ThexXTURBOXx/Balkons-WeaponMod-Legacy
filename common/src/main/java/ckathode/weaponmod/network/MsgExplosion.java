@@ -3,8 +3,6 @@ package ckathode.weaponmod.network;
 import ckathode.weaponmod.AdvancedExplosion;
 import dev.architectury.networking.NetworkManager;
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -45,7 +43,6 @@ public record MsgExplosion(Vec3 center, float size, List<BlockPos> blocks, boole
         return EXPLOSION_PACKET_TYPE;
     }
 
-    @Environment(EnvType.CLIENT)
     public static void handleClientSide(MsgExplosion msg, NetworkManager.PacketContext ctx) {
         Level level = ctx.getPlayer().level();
         AdvancedExplosion.doParticleExplosion(level, msg.center, msg.blocks, msg.size, msg.smallParticles,

@@ -3,14 +3,11 @@ package ckathode.weaponmod.neoforge;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMClientEventHandler;
 import ckathode.weaponmod.render.GuiOverlayReloaded;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-@OnlyIn(Dist.CLIENT)
 public class WMClientEventHandlerForge {
 
     public static class MainEvents {
