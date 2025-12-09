@@ -38,8 +38,6 @@ import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,7 +56,6 @@ public class BalkonsWeaponMod {
         EnvExecutor.runInEnv(Env.CLIENT, () -> Client::initializeClient);
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Client {
 
         public static void registerRenderers() {
@@ -87,7 +84,6 @@ public class BalkonsWeaponMod {
             EntityRendererRegistry.register(() -> EntityMortarShell.TYPE, RenderMortarShell::new);
         }
 
-        @Environment(EnvType.CLIENT)
         public static void initializeClient() {
             registerRenderers();
             WMClientEventHandler.init();
