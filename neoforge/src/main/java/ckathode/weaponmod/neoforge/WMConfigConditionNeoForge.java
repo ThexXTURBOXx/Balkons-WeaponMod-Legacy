@@ -9,12 +9,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import org.jetbrains.annotations.NotNull;
 
-public record WMConfigConditionForge(String weapon) implements ICondition {
+public record WMConfigConditionNeoForge(String weapon) implements ICondition {
 
-    public static final MapCodec<WMConfigConditionForge> CODEC = RecordCodecBuilder.mapCodec(
+    public static final MapCodec<WMConfigConditionNeoForge> CODEC = RecordCodecBuilder.mapCodec(
             builder -> builder
-                    .group(Codec.STRING.fieldOf("weapon").forGetter(WMConfigConditionForge::weapon))
-                    .apply(builder, WMConfigConditionForge::new));
+                    .group(Codec.STRING.fieldOf("weapon").forGetter(WMConfigConditionNeoForge::weapon))
+                    .apply(builder, WMConfigConditionNeoForge::new));
     public static final ResourceLocation CONDITION_ID =
             ResourceLocation.fromNamespaceAndPath(BalkonsWeaponMod.MOD_ID, "config_conditional");
 
