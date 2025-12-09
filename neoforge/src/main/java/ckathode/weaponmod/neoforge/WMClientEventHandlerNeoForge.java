@@ -8,7 +8,7 @@ import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
-public class WMClientEventHandlerForge {
+public class WMClientEventHandlerNeoForge {
 
     public static class MainEvents {
 
