@@ -1,7 +1,5 @@
 package ckathode.weaponmod.item;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -10,7 +8,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-@Environment(EnvType.CLIENT)
 public final class ExtendedReachHelper {
 
     private static final Minecraft mc = Minecraft.getInstance();

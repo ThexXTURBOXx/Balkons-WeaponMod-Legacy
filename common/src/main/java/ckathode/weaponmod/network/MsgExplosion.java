@@ -4,8 +4,6 @@ import ckathode.weaponmod.AdvancedExplosion;
 import dev.architectury.networking.NetworkManager;
 import java.util.ArrayList;
 import java.util.List;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -97,7 +95,6 @@ public class MsgExplosion implements CustomPacketPayload {
         return EXPLOSION_PACKET_TYPE;
     }
 
-    @Environment(EnvType.CLIENT)
     public static void handleClientSide(MsgExplosion msg, NetworkManager.PacketContext ctx) {
         Level level = ctx.getPlayer().level();
         AdvancedExplosion expl = new AdvancedExplosion(level, null, msg.x, msg.y, msg.z, msg.size,
