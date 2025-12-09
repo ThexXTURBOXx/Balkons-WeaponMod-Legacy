@@ -20,15 +20,15 @@ public class BalkonsWeaponModNeoForge {
     public static final DeferredRegister<MapCodec<? extends ICondition>> DATA_COMPONENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.CONDITION_SERIALIZERS, MOD_ID);
 
-    public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<WMConfigConditionForge>> CONFIG_CONDITION =
-            DATA_COMPONENT_TYPES.register(WMConfigConditionForge.CONDITION_ID.getPath(),
-                    () -> WMConfigConditionForge.CODEC);
+    public static final DeferredHolder<MapCodec<? extends ICondition>, MapCodec<WMConfigConditionNeoForge>> CONFIG_CONDITION =
+            DATA_COMPONENT_TYPES.register(WMConfigConditionNeoForge.CONDITION_ID.getPath(),
+                    () -> WMConfigConditionNeoForge.CODEC);
 
     public BalkonsWeaponModNeoForge(IEventBus modEventBus) {
         EnvExecutor.runInEnv(Env.CLIENT,
-                () -> () -> NeoForge.EVENT_BUS.register(new WMClientEventHandlerForge.MainEvents()));
+                () -> () -> NeoForge.EVENT_BUS.register(new WMClientEventHandlerNeoForge.MainEvents()));
         EnvExecutor.runInEnv(Env.CLIENT,
-                () -> () -> modEventBus.register(new WMClientEventHandlerForge.ModEvents()));
+                () -> () -> modEventBus.register(new WMClientEventHandlerNeoForge.ModEvents()));
 
         DATA_COMPONENT_TYPES.register(modEventBus);
 
