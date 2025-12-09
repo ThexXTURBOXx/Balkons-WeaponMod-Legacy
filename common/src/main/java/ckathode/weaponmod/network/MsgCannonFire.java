@@ -4,8 +4,6 @@ import ckathode.weaponmod.entity.EntityCannon;
 import dev.architectury.networking.NetworkManager;
 import io.netty.buffer.ByteBuf;
 import java.util.function.Supplier;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
@@ -31,7 +29,6 @@ public class MsgCannonFire implements WMMessage<MsgCannonFire> {
         buf.writeInt(cannonEntityID);
     }
 
-    @Environment(EnvType.CLIENT)
     @Override
     public void handleClientSide(MsgCannonFire msg, Supplier<NetworkManager.PacketContext> ctx) {
     }
