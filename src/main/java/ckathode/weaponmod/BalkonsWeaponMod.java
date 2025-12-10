@@ -193,8 +193,12 @@ public class BalkonsWeaponMod {
         modConfig.addReloadTimeSetting("mortar", 50);
         modConfig.loadConfig(ModLoadingContext.get());
 
-        configConditional = CraftingHelper.register(new ResourceLocation(MOD_ID, "config_conditional"),
+        configConditional = CraftingHelper.register(id("config_conditional"),
                 json -> () -> modConfig.isEnabled(JsonUtils.getString(json, "weapon")));
+    }
+
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     public void setup(FMLCommonSetupEvent event) {
@@ -224,7 +228,7 @@ public class BalkonsWeaponMod {
             builder.tracker(range, updateFrequency, velocityUpdates);
         return (EntityType<T>) builder
                 .customSpawning(null, false) // Workaround for weird issues with getShooter()
-                .build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
+                .build(name).setRegistryName(id(name));
     }
 
     @SubscribeEvent
