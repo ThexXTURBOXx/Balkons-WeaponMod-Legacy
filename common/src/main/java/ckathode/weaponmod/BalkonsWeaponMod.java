@@ -38,6 +38,7 @@ import dev.architectury.registry.client.level.entity.EntityModelLayerRegistry;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.utils.Env;
 import dev.architectury.utils.EnvExecutor;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,6 +54,10 @@ public class BalkonsWeaponMod {
         WMRegistries.init();
         WMMessagePipeline.init();
         EnvExecutor.runInEnv(Env.CLIENT, () -> Client::initializeClient);
+    }
+
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     public static class Client {
