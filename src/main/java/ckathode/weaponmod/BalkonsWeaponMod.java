@@ -198,6 +198,10 @@ public class BalkonsWeaponMod {
         configConditional = CraftingHelper.register(new WMConfigCondition.Serializer(modConfig));
     }
 
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
+    }
+
     public void setup(FMLCommonSetupEvent event) {
         messagePipeline = new WMMessagePipeline();
         proxy.registerEventHandlers();
@@ -226,7 +230,7 @@ public class BalkonsWeaponMod {
         return (EntityType<T>) builder
                 .size(size.width, size.height)
                 .setShouldReceiveVelocityUpdates(velocityUpdates)
-                .build(name).setRegistryName(new ResourceLocation(MOD_ID, name));
+                .build(name).setRegistryName(id(name));
     }
 
     @SubscribeEvent

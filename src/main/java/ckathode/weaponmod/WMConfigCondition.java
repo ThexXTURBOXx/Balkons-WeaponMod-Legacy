@@ -7,8 +7,7 @@ import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 public class WMConfigCondition implements ICondition {
-    private static final ResourceLocation CONDITION_ID =
-            new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional");
+    private static final ResourceLocation CONDITION_ID = BalkonsWeaponMod.id("config_conditional");
     private final WeaponModConfig config;
     private final String weapon;
 

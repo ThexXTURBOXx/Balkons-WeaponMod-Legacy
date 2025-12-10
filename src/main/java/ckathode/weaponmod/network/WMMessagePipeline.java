@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
@@ -22,7 +21,7 @@ public class WMMessagePipeline {
 
     private final String protocolVersion = Integer.toString(1);
     private final SimpleChannel handler = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "main"))
+            .named(BalkonsWeaponMod.id("main"))
             .clientAcceptedVersions(protocolVersion::equals)
             .serverAcceptedVersions(protocolVersion::equals)
             .networkProtocolVersion(() -> protocolVersion)

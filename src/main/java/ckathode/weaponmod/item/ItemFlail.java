@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -28,7 +27,7 @@ public class ItemFlail extends ItemMelee {
     public ItemFlail(String modId, String id, MeleeComponent meleecomponent) {
         super(modId, id, meleecomponent);
         flailDamage = 4.0f + meleecomponent.weaponMaterial.getAttackDamage();
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "thrown"), (stack, worldIn, entityIn) ->
+        addPropertyOverride(BalkonsWeaponMod.id("thrown"), (stack, worldIn, entityIn) ->
                 entityIn instanceof PlayerEntity && entityIn.getHeldItemMainhand() == stack && isThrown((PlayerEntity) entityIn) ? 1.0f : 0.0f);
     }
 
