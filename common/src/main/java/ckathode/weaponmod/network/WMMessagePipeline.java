@@ -9,18 +9,14 @@ import java.util.LinkedList;
 import java.util.function.Supplier;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
-
 public final class WMMessagePipeline {
 
-    public static final NetworkChannel CHANNEL = NetworkChannel.create(
-            new ResourceLocation(MOD_ID, "main"));
+    public static final NetworkChannel CHANNEL = NetworkChannel.create(BalkonsWeaponMod.id("main"));
     private static final LinkedList<Class<? extends WMMessage<?>>> ID_TO_PACKET = new LinkedList<>();
 
     public static <T extends WMMessage<T>> void registerPacket(Class<T> messageType) {
