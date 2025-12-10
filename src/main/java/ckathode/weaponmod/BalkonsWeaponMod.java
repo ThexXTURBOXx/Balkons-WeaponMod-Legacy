@@ -146,7 +146,11 @@ public class BalkonsWeaponMod {
         MinecraftForge.EVENT_BUS.register(this);
 
         configConditional = new WMConfigCondition();
-        CraftingHelper.register(new ResourceLocation(MOD_ID, "config_conditional"), configConditional);
+        CraftingHelper.register(id("config_conditional"), configConditional);
+    }
+
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     @Mod.EventHandler
@@ -204,33 +208,33 @@ public class BalkonsWeaponMod {
     }
 
     private void registerWeapons() {
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "spear"), EntitySpear.class, "spear",
+        EntityRegistry.registerModEntity(id("spear"), EntitySpear.class, "spear",
                 1, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "knife"), EntityKnife.class, "knife",
+        EntityRegistry.registerModEntity(id("knife"), EntityKnife.class, "knife",
                 2, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "javelin"), EntityJavelin.class, "javelin",
+        EntityRegistry.registerModEntity(id("javelin"), EntityJavelin.class, "javelin",
                 3, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "bullet"), EntityMusketBullet.class,
-                "bullet", 4, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "bolt"), EntityCrossbowBolt.class, "bolt",
+        EntityRegistry.registerModEntity(id("bullet"), EntityMusketBullet.class, "bullet",
+                4, this, 16, 20, true);
+        EntityRegistry.registerModEntity(id("bolt"), EntityCrossbowBolt.class, "bolt",
                 5, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "dart"), EntityBlowgunDart.class, "dart",
+        EntityRegistry.registerModEntity(id("dart"), EntityBlowgunDart.class, "dart",
                 6, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "dynamite"), EntityDynamite.class,
-                "dynamite", 7, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "flail"), EntityFlail.class, "flail",
+        EntityRegistry.registerModEntity(id("dynamite"), EntityDynamite.class, "dynamite",
+                7, this, 64, 20, true);
+        EntityRegistry.registerModEntity(id("flail"), EntityFlail.class, "flail",
                 8, this, 32, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "cannon"), EntityCannon.class, "cannon",
+        EntityRegistry.registerModEntity(id("cannon"), EntityCannon.class, "cannon",
                 9, this, 64, 128, false);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "cannonball"), EntityCannonBall.class,
+        EntityRegistry.registerModEntity(id("cannonball"), EntityCannonBall.class,
                 "cannonball", 10, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "shot"), EntityBlunderShot.class, "shot",
+        EntityRegistry.registerModEntity(id("shot"), EntityBlunderShot.class, "shot",
                 11, this, 16, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "dummy"), EntityDummy.class, "dummy",
+        EntityRegistry.registerModEntity(id("dummy"), EntityDummy.class, "dummy",
                 12, this, 64, 20, false);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "boomerang"), EntityBoomerang.class,
+        EntityRegistry.registerModEntity(id("boomerang"), EntityBoomerang.class,
                 "boomerang", 13, this, 64, 20, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "shell"), EntityMortarShell.class, "shell",
+        EntityRegistry.registerModEntity(id("shell"), EntityMortarShell.class, "shell",
                 14, this, 64, 20, true);
 
         if (modConfig.isEnabled("spear")) {
