@@ -10,8 +10,7 @@ import net.minecraft.util.GsonHelper;
 
 public class WMConfigConditionFabric implements ConditionJsonProvider {
 
-    private static final ResourceLocation CONFIG_CONDITION =
-            new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional");
+    private static final ResourceLocation CONFIG_CONDITION = BalkonsWeaponMod.id("config_conditional");
     private final String weapon;
 
     public WMConfigConditionFabric(String weapon) {
