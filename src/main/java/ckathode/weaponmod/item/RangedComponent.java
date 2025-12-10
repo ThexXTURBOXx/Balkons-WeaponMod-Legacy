@@ -31,8 +31,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
-
 public abstract class RangedComponent extends AbstractWeaponComponent {
     protected static final int MAX_DELAY = 72000;
     public final RangedSpecs rangedSpecs;
@@ -282,12 +280,12 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public enum RangedSpecs {
-        BLOWGUN("blowgun", 250, new ResourceLocation(MOD_ID, "dart").toString()),
-        CROSSBOW("crossbow", 250, new ResourceLocation(MOD_ID, "bolt").toString()),
-        MUSKET("musket", 80, new ResourceLocation(MOD_ID, "bullet").toString()),
-        BLUNDERBUSS("blunderbuss", 80, new ResourceLocation(MOD_ID, "shot").toString()),
-        FLINTLOCK("flintlock", 8, new ResourceLocation(MOD_ID, "bullet").toString()),
-        MORTAR("mortar", 40, new ResourceLocation(MOD_ID, "shell").toString());
+        BLOWGUN("blowgun", 250, BalkonsWeaponMod.id("dart").toString()),
+        CROSSBOW("crossbow", 250, BalkonsWeaponMod.id("bolt").toString()),
+        MUSKET("musket", 80, BalkonsWeaponMod.id("bullet").toString()),
+        BLUNDERBUSS("blunderbuss", 80, BalkonsWeaponMod.id("shot").toString()),
+        FLINTLOCK("flintlock", 8, BalkonsWeaponMod.id("bullet").toString()),
+        MORTAR("mortar", 40, BalkonsWeaponMod.id("shell").toString());
 
         private int reloadTime;
         private List<Item> ammoItems;
