@@ -1,5 +1,6 @@
 package ckathode.weaponmod.render;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.EntityDummy;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -9,14 +10,11 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
-
-import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
 public class ModelDummy extends WMModel<EntityDummy> {
 
     public static final ModelLayerLocation MAIN_LAYER =
-            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, EntityDummy.ID), "main");
+            new ModelLayerLocation(BalkonsWeaponMod.id(EntityDummy.ID), "main");
 
     private static final String ARM_LEFT_ID = "armLeft";
     private static final String ARM_RIGHT_ID = "armRight";

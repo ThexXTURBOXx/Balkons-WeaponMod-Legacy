@@ -1,14 +1,12 @@
 package ckathode.weaponmod.neoforge;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMClientEventHandler;
 import ckathode.weaponmod.render.GuiOverlayReloaded;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-
-import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
 public class WMClientEventHandlerNeoForge {
 
@@ -26,7 +24,7 @@ public class WMClientEventHandlerNeoForge {
 
         @SubscribeEvent
         public void registerGameOverlay(RegisterGuiLayersEvent e) {
-            e.registerBelow(VanillaGuiLayers.HOTBAR, ResourceLocation.fromNamespaceAndPath(MOD_ID, "overlay"),
+            e.registerBelow(VanillaGuiLayers.HOTBAR, BalkonsWeaponMod.id("overlay"),
                     (guiGraphics, partialTicks) -> GuiOverlayReloaded.renderGUIOverlay(guiGraphics));
         }
 
