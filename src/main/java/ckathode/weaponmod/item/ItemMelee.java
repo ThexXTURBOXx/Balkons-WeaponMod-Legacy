@@ -36,11 +36,11 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.COMBAT);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "ready-to-throw"), (stack, world, entity) ->
+        addPropertyOverride(BalkonsWeaponMod.id("ready-to-throw"), (stack, world, entity) ->
                 (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack) ? 1.0f : 0.0f);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "state"), (stack, world, entity) ->
+        addPropertyOverride(BalkonsWeaponMod.id("state"), (stack, world, entity) ->
                 MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "block"), (stack, world, entity) ->
+        addPropertyOverride(BalkonsWeaponMod.id("block"), (stack, world, entity) ->
                 entity != null && entity.getActiveItemStack() == stack ? 1.0f : 0.0f);
     }
 

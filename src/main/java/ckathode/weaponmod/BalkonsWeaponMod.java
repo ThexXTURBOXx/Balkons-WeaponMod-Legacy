@@ -40,6 +40,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -143,6 +144,10 @@ public class BalkonsWeaponMod {
         instance = this;
         messagePipeline = new WMMessagePipeline();
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     @Mod.EventHandler

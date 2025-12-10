@@ -37,9 +37,9 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
         rangedcomponent.setThisItemProperties();
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reload"), (stack, world, entity) ->
+        addPropertyOverride(BalkonsWeaponMod.id("reload"), (stack, world, entity) ->
                 (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f);
-        addPropertyOverride(new ResourceLocation(BalkonsWeaponMod.MOD_ID, "reloaded"), (stack, world, entity) ->
+        addPropertyOverride(BalkonsWeaponMod.id("reloaded"), (stack, world, entity) ->
                 RangedComponent.isReloaded(stack) ? 1.0f : 0.0f);
     }
 
