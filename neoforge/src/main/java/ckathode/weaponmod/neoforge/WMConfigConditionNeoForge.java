@@ -15,8 +15,7 @@ public record WMConfigConditionNeoForge(String weapon) implements ICondition {
             builder -> builder
                     .group(Codec.STRING.fieldOf("weapon").forGetter(WMConfigConditionNeoForge::weapon))
                     .apply(builder, WMConfigConditionNeoForge::new));
-    public static final ResourceLocation CONDITION_ID =
-            new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional");
+    public static final ResourceLocation CONDITION_ID = BalkonsWeaponMod.id("config_conditional");
 
     @Override
     public boolean test(@NotNull IContext context) {

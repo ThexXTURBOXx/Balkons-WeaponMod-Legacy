@@ -1,22 +1,19 @@
 package ckathode.weaponmod.network;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.entity.EntityCannon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
-import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
-
 public class MsgCannonFire implements CustomPacketPayload {
 
-    public static final Type<MsgCannonFire> CANNON_FIRE_PACKET_TYPE =
-            new Type<>(new ResourceLocation(MOD_ID, "cannon_fire"));
+    public static final Type<MsgCannonFire> CANNON_FIRE_PACKET_TYPE = new Type<>(BalkonsWeaponMod.id("cannon_fire"));
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgCannonFire> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, p -> p.cannonEntityID,
             MsgCannonFire::new);
