@@ -11,8 +11,7 @@ import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 // TODO: Find something that works on Fabric...
 public class WMConfigConditionForge implements ICondition {
 
-    private static final ResourceLocation CONDITION_ID =
-            new ResourceLocation(BalkonsWeaponMod.MOD_ID, "config_conditional");
+    private static final ResourceLocation CONDITION_ID = BalkonsWeaponMod.id("config_conditional");
     private final String weapon;
 
     public WMConfigConditionForge(String weapon) {

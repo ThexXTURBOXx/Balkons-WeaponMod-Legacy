@@ -33,6 +33,7 @@ import ckathode.weaponmod.render.RenderSpear;
 import me.shedaniel.architectury.registry.entity.EntityRenderers;
 import me.shedaniel.architectury.utils.Env;
 import me.shedaniel.architectury.utils.EnvExecutor;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,6 +49,10 @@ public class BalkonsWeaponMod {
         WMRegistries.init();
         WMMessagePipeline.init();
         EnvExecutor.runInEnv(Env.CLIENT, () -> Client::initializeClient);
+    }
+
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     public static class Client {
