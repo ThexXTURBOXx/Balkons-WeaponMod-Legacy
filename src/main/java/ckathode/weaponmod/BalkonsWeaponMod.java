@@ -49,6 +49,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Logger;
@@ -138,6 +139,10 @@ public class BalkonsWeaponMod {
     public BalkonsWeaponMod() {
         instance = this;
         messagePipeline = new WMMessagePipeline();
+    }
+
+    public static ResourceLocation id(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 
     @Mod.EventHandler
