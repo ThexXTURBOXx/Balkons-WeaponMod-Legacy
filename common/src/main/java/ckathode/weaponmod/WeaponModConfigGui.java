@@ -1,7 +1,7 @@
 package ckathode.weaponmod;
 
 import java.util.Map;
-import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfigClient;
 import me.shedaniel.autoconfig.gui.registry.GuiRegistry;
 import me.shedaniel.autoconfig.util.Utils;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -43,7 +43,7 @@ public class WeaponModConfigGui {
     }
 
     public static void init() {
-        GuiRegistry registry = AutoConfig.getGuiRegistry(WeaponModConfig.class);
+        GuiRegistry registry = AutoConfigClient.getGuiRegistry(WeaponModConfig.class);
         registerStringBooleanMapProvider(registry);
         registerStringIntMapProvider(registry);
     }
