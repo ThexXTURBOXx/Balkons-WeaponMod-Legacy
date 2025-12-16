@@ -2,6 +2,7 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityFlail;
+import ckathode.weaponmod.item.ItemFlail;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -78,71 +79,69 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
                         });
             }
             poseStack.popPose();
-            int i = shooter.getMainArm() == HumanoidArm.RIGHT ? 1 : -1;
 
-            float f = shooter.getAttackAnim(entityRenderState.partialTicks);
-            float f1 = Mth.sin(Mth.sqrt(f) * 3.1415927F);
-            float f2 = Mth.lerp(entityRenderState.partialTicks, shooter.yBodyRotO, shooter.yBodyRot) * 0.017453292F;
-            double d0 = Mth.sin(f2);
-            double d1 = Mth.cos(f2);
-            double d2 = (double) i * 0.35;
-            double d3 = 0.8;
-            double d4;
-            double d5;
-            double d6;
-            float f3;
-            double d9;
-            if ((entityRenderDispatcher.options == null || entityRenderDispatcher.options.getCameraType().isFirstPerson()) && shooter == Minecraft.getInstance().player) {
-                d9 = 960.0 / entityRenderDispatcher.options.fov().get();
-                Vec3 vec3d = this.entityRenderDispatcher.camera.getNearPlane()
-                        .getPointOnPlane((float) i * 0.525f, -0.1f);
-                vec3d = vec3d.scale(d9);
-                vec3d = vec3d.yRot(f1 * 0.5F);
-                vec3d = vec3d.xRot(-f1 * 0.7F);
-                d4 = Mth.lerp(entityRenderState.partialTicks, shooter.xo, shooter.getX()) + vec3d.x;
-                d5 = Mth.lerp(entityRenderState.partialTicks, shooter.yo, shooter.getY()) + vec3d.y;
-                d6 = Mth.lerp(entityRenderState.partialTicks, shooter.zo, shooter.getZ()) + vec3d.z;
-                f3 = shooter.getEyeHeight();
-            } else {
-                d4 = Mth.lerp(entityRenderState.partialTicks, shooter.xo, shooter.getX()) - d1 * d2 - d0 * d3;
-                d5 = shooter.yo + (double) shooter.getEyeHeight() + (shooter.getY() - shooter.yo) * (double) entityRenderState.partialTicks - 0.45;
-                d6 = Mth.lerp(entityRenderState.partialTicks, shooter.zo, shooter.getZ()) - d0 * d2 + d1 * d3;
-                f3 = shooter.isCrouching() ? -0.1875F : 0.0F;
-            }
-
-            d9 = entityRenderState.x;
-            double d10 = entityRenderState.y + 0.25;
-            double d8 = entityRenderState.z;
-            float f4 = (float) (d4 - d9);
-            float f5 = (float) (d5 - d10) + f3;
-            float f6 = (float) (d6 - d8);
-            submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(),
-                    (pose, consumer) -> {
-                        int v = 16;
-                        for (int k = 0; k <= v; ++k) {
-                            stringVertex(f4, f5, f6, consumer, pose, fraction(k, v), fraction(k + 1, v));
-                        }
-                    });
+            float f = (float) entityRenderState.lineOriginOffset.x;
+            float g = (float) entityRenderState.lineOriginOffset.y;
+            float h = (float) entityRenderState.lineOriginOffset.z;
+            float i = Minecraft.getInstance().getWindow().getAppropriateLineWidth();
+            submitNodeCollector.submitCustomGeometry(poseStack, RenderTypes.lines(), (pose, consumer) -> {
+                int v = 16;
+                for (int k = 0; k < v; ++k) {
+                    float l = fraction(k, v);
+                    float m = fraction(k + 1, v);
+                    stringVertex(f, g, h, consumer, pose, l, m, i);
+                    stringVertex(f, g, h, consumer, pose, m, l, i);
+                }
+            });
 
             poseStack.popPose();
             super.submit(entityRenderState, poseStack, submitNodeCollector, cameraRenderState);
         }
     }
 
-    private static float fraction(int part, int total) {
-        return (float) part / (float) total;
+    public static HumanoidArm getHoldingArm(LivingEntity le) {
+        return le.getMainHandItem().getItem() instanceof ItemFlail
+                ? le.getMainArm()
+                : le.getMainArm().getOpposite();
     }
 
-    private static void stringVertex(float f, float g, float h, VertexConsumer builder, PoseStack.Pose pose, float i,
-                                     float j) {
-        float k = f * i;
-        float l = g * (i * i + i) * 0.5f + 0.25f;
-        float m = h * i;
-        float n = f * j - k;
-        float o = g * (j * j + j) * 0.5f + 0.25f - l;
-        float p = h * j - m;
-        float q = Mth.sqrt(n * n + o * o + p * p);
-        builder.addVertex(pose.pose(), k, l, m).setColor(0, 0, 0, 255).setNormal(pose, n /= q, o /= q, p /= q);
+    private Vec3 getHandPos(LivingEntity le, float f, float g) {
+        int i = getHoldingArm(le) == HumanoidArm.RIGHT ? 1 : -1;
+        if (this.entityRenderDispatcher.options.getCameraType().isFirstPerson() && le == Minecraft.getInstance().player) {
+            double n = 960.0 / this.entityRenderDispatcher.options.fov().get();
+            Vec3 vec3 = this.entityRenderDispatcher.camera.getNearPlane()
+                    .getPointOnPlane(i * 0.525F, -0.1F).scale(n).yRot(f * 0.5F).xRot(-f * 0.7F);
+            return le.getEyePosition(g).add(vec3);
+        } else {
+            float h = Mth.lerp(g, le.yBodyRotO, le.yBodyRot) * (float) (Math.PI / 180.0);
+            double d = Mth.sin(h);
+            double e = Mth.cos(h);
+            float j = le.getScale();
+            double k = i * 0.35 * j;
+            double l = 0.8 * j;
+            float m = le.isCrouching() ? -0.1875F : 0.0F;
+            return le.getEyePosition(g).add(-e * k - d * l, m - 0.45 * j, -d * k + e * l);
+        }
+    }
+
+    private static float fraction(int part, int total) {
+        return (float) part / total;
+    }
+
+    private static void stringVertex(float f, float g, float h, VertexConsumer vertexConsumer, PoseStack.Pose pose,
+                                     float i, float j, float k) {
+        float l = f * i;
+        float m = g * (i * i + i) * 0.5F + 0.25F;
+        float n = h * i;
+        float o = f * j - l;
+        float p = g * (j * j + j) * 0.5F + 0.25F - m;
+        float q = h * j - n;
+        float r = Mth.sqrt(o * o + p * p + q * q);
+        o /= r;
+        p /= r;
+        q /= r;
+        vertexConsumer.addVertex(pose, l, m, n).setColor(0, 0, 0, 255)
+                .setNormal(pose, o, p, q).setLineWidth(k);
     }
 
     @NotNull
@@ -156,11 +155,22 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
         super.extractRenderState(entity, entityRenderState, f);
         entityRenderState.materialColor = entity.getMaterialColor();
         entityRenderState.owner = entity.getOwner();
+
+        if (entityRenderState.owner instanceof LivingEntity le) {
+            float g = le.getAttackAnim(f);
+            float h = Mth.sin(Mth.sqrt(g) * (float) Math.PI);
+            Vec3 vec3 = this.getHandPos(le, h, f);
+            Vec3 vec32 = entity.getPosition(f).add(0.0, 0.25, 0.0);
+            entityRenderState.lineOriginOffset = vec3.subtract(vec32);
+        } else {
+            entityRenderState.lineOriginOffset = Vec3.ZERO;
+        }
     }
 
     public static class FlailRenderState extends WMRendererState {
         public float[] materialColor;
         public Entity owner;
+        public Vec3 lineOriginOffset;
     }
 
 }
