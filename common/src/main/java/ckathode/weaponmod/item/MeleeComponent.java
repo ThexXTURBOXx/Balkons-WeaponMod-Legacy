@@ -68,6 +68,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         return new Tool(List.of(
                 Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()),
                         meleeSpecs.blockDamage * 10),
+                Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
                 1.0F, 2, false);
     }
