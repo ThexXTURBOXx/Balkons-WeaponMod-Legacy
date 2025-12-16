@@ -9,16 +9,21 @@ import ckathode.weaponmod.network.MsgCannonFire;
 import ckathode.weaponmod.network.WMMessagePipeline;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientRawInputEvent;
+import dev.architectury.event.events.client.ClientTooltipEvent;
 import dev.architectury.event.events.common.TickEvent;
 import dev.architectury.platform.Platform;
 import dev.architectury.utils.Env;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
@@ -83,11 +88,19 @@ public class WMClientEventHandler {
         return newFov;
     }
 
+    public static void onTooltip(ItemStack itemStack, List<Component> list,
+                                 TooltipContext tooltipContext, TooltipFlag tooltipFlag) {
+        if (itemStack.getItem() instanceof IItemWeapon weapon) {
+            weapon.modifyTooltip(itemStack, list, tooltipContext, tooltipFlag);
+        }
+    }
+
     public static void init() {
         if (Platform.getEnvironment() != Env.CLIENT) return;
 
         TickEvent.PLAYER_PRE.register(WMClientEventHandler::onPlayerTick);
         ClientRawInputEvent.MOUSE_CLICKED_PRE.register(WMClientEventHandler::onMouseClick);
+        ClientTooltipEvent.ITEM.register(WMClientEventHandler::onTooltip);
     }
 
 }

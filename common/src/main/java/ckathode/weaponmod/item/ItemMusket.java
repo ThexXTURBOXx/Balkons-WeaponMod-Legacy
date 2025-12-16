@@ -6,8 +6,8 @@ import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMRegistries;
 import com.mojang.serialization.Codec;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
@@ -22,7 +22,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -92,14 +91,12 @@ public class ItemMusket extends ItemShooter {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
-                                Consumer<Component> consumer, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipDisplay, consumer, tooltipFlag);
+    public void modifyTooltip(ItemStack stack, List<Component> lines,
+                              TooltipContext tooltipContext, TooltipFlag flag) {
         if (hasBayonet() && stack.has(BAYONET_DAMAGE_TYPE)) {
             short dmg = Objects.requireNonNull(stack.get(BAYONET_DAMAGE_TYPE));
             if (dmg != 0) {
-                consumer.accept(Component.translatable("tooltip.bayonetdurability",
+                lines.add(Component.translatable("tooltip.bayonetdurability",
                         bayonetDurability - dmg, bayonetDurability));
             }
         }
