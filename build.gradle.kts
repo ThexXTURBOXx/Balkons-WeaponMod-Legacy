@@ -7,9 +7,9 @@ import java.time.format.DateTimeFormatter
 plugins {
     idea
     java
-    id("gg.essential.loom") version "1.10.9999-fg1"
+    id("gg.essential.loom") version "1.13.9999-fg1"
     id("dev.architectury.architectury-pack200") version "0.1.3"
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.3.1"
 }
 
 val minecraft_version: String by project
@@ -65,17 +65,20 @@ repositories {
     maven("https://maven.minecraftforge.net/")
 }
 
+tasks.test {
+    enabled = false
+}
+
 val shadowImpl: Configuration by configurations.creating {
     configurations.implementation.get().extendsFrom(this)
 }
 
 tasks.shadowJar {
     archiveClassifier.set("dev")
-    configurations = listOf(shadowImpl)
+    configurations.set(listOf(shadowImpl))
+    val shadowFiles = shadowImpl.incoming.files
     doLast {
-        configurations.get().forEach {
-            println("Copying jars into mod: ${it.files}")
-        }
+        println("Copying jars into mod: ${shadowFiles.files}")
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     fun relocate(name: String) = relocate(name, "$maven_group.repackage.$name")
