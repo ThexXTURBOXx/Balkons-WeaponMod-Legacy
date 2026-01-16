@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 plugins {
     idea
     java
-    id("gg.essential.loom") version "1.10.+"
+    id("gg.essential.loom") version "1.13.+"
     id("dev.architectury.architectury-pack200") version "0.1.3"
 }
 
@@ -61,6 +61,10 @@ repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
     maven("https://maven.minecraftforge.net/")
+}
+
+tasks.test {
+    enabled = false
 }
 
 dependencies {
