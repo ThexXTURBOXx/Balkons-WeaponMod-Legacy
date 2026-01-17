@@ -47,7 +47,7 @@ public abstract class WMItemEntityRenderer<T extends Entity, S extends WMItemEnt
         super.extractRenderState(entity, entityRenderState, f);
         ItemStack weapon = getRenderStack(entity, entityRenderState, f);
         itemModelResolver.updateForTopItem(entityRenderState.itemRender, weapon,
-                ItemDisplayContext.FIXED, entity.level(), null, 0);
+                ItemDisplayContext.NONE, entity.level(), null, 0);
     }
 
     public static class WMItemEntityRendererState extends WMRenderer.WMRendererState {
