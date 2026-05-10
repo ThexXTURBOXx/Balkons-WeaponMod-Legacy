@@ -19,8 +19,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class WMClientEventHandler {
     @SubscribeEvent
     public void onMouseClick(final MouseEvent e) {
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
-        if (player == null || !player.world.isRemote || Minecraft.getMinecraft().currentScreen != null) {
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayerSP player = mc.player;
+        if (player == null || !player.world.isRemote || mc.currentScreen != null) {
             return;
         }
         if (e.getButton() == 0 && e.isButtonstate()) {
@@ -31,8 +32,7 @@ public class WMClientEventHandler {
                     float reach = ieri.getExtendedReach(player.world, player, itemstack);
                     RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
                     if (raytraceResult != null && raytraceResult.entityHit != null && raytraceResult.entityHit != player && raytraceResult.entityHit.hurtResistantTime == 0) {
-                        Minecraft.getMinecraft().playerController.attackEntity(player,
-                                raytraceResult.entityHit);
+                        mc.playerController.attackEntity(player, raytraceResult.entityHit);
                     }
                 }
             }
