@@ -25,6 +25,8 @@ public class WMCommonEventHandler {
         ItemStack stack = entity.getActiveItemStack();
         Item item = stack.isEmpty() ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return;
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative() &&
+            !event.getSource().canHarmInCreative()) return;
 
         entity.resetActiveHand();
     }
