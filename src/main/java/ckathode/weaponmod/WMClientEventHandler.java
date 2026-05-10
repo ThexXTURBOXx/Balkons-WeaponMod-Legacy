@@ -20,8 +20,9 @@ import org.lwjgl.glfw.GLFW;
 public class WMClientEventHandler {
     @SubscribeEvent
     public void onMouseClick(InputEvent.MouseInputEvent e) {
-        EntityPlayerSP player = Minecraft.getInstance().player;
-        if (player == null || !player.world.isRemote || Minecraft.getInstance().currentScreen != null) {
+        Minecraft mc = Minecraft.getInstance();
+        EntityPlayerSP player = mc.player;
+        if (player == null || !player.world.isRemote || mc.currentScreen != null) {
             return;
         }
         if (e.getButton() == 0 && e.getAction() == GLFW.GLFW_PRESS) {
@@ -32,8 +33,7 @@ public class WMClientEventHandler {
                     float reach = ieri.getExtendedReach(player.world, player, itemstack);
                     RayTraceResult raytraceResult = ExtendedReachHelper.getMouseOver(0.0f, reach);
                     if (raytraceResult != null && raytraceResult.entity != null && raytraceResult.entity != player && raytraceResult.entity.hurtResistantTime == 0) {
-                        Minecraft.getInstance().playerController.attackEntity(player,
-                                raytraceResult.entity);
+                        mc.playerController.attackEntity(player, raytraceResult.entity);
                     }
                 }
             }
