@@ -29,9 +29,10 @@ public class WMCommonEventHandler {
         EntityLivingBase entity = event.getEntityLiving();
         ItemStack stack = entity.getActiveItemStack();
         if (stack == null) return;
-        if (!entity.isActiveItemStackBlocking()) return;
+        if (event.getSource().isUnblockable() || !entity.isActiveItemStackBlocking()) return;
         if (!(stack.getItem() instanceof ItemMelee) && !(stack.getItem() instanceof ItemShooter) &&
             !(stack.getItem() instanceof WMItem)) return;
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) return;
 
         int i = 1 + MathHelper.floor_float(event.getAmount());
         stack.damageItem(i, entity);
@@ -46,6 +47,8 @@ public class WMCommonEventHandler {
         ItemStack stack = entity.getActiveItemStack();
         Item item = stack == null ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return;
+        if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative() &&
+            !event.getSource().canHarmInCreative()) return;
 
         entity.resetActiveHand();
     }
