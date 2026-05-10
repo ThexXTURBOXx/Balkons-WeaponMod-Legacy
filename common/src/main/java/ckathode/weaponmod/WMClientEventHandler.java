@@ -37,8 +37,9 @@ public class WMClientEventHandler {
     }
 
     public static InteractionResult onMouseClick(Minecraft client, int button, int action, int mods) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null || !player.level.isClientSide || Minecraft.getInstance().screen != null) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null || !player.level.isClientSide || mc.screen != null) {
             return InteractionResult.PASS;
         }
         if (button == 0 && action == GLFW.GLFW_PRESS) {
@@ -52,7 +53,7 @@ public class WMClientEventHandler {
                     EntityHitResult ertr = (EntityHitResult) raytraceResult;
                     Entity entity = ertr.getEntity();
                     if (entity != null && entity != player && entity.invulnerableTime == 0) {
-                        Minecraft.getInstance().gameMode.attack(player, entity);
+                        mc.gameMode.attack(player, entity);
                         return InteractionResult.SUCCESS;
                     }
                 }
