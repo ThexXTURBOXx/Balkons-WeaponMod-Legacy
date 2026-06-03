@@ -53,6 +53,7 @@ public class RangedCompBlowgun extends RangedComponent {
             }
         }
         ItemStack dartStackCopy = dartstack.copy();
+        dartStackCopy.setCount(1);
         if (!entityplayer.isCreative()
             && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemstack) == 0) {
             consumeAmmo(entityplayer);
