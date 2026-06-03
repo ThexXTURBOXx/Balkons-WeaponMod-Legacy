@@ -28,7 +28,7 @@
   ],
   "accessWidener": "weaponmod.accesswidener",
   "depends": {
-    "fabric": "*",
+    "fabric-api": "*",
     "minecraft": "${minecraft_version_condition}",
     "architectury": ">=${architectury_version}",
     "cloth-config2": ">=${cloth_config_version}"

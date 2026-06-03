@@ -25,7 +25,7 @@ public class WMClientEventHandlerNeoForge {
         @SubscribeEvent
         public void registerGameOverlay(RegisterGuiLayersEvent e) {
             e.registerBelow(VanillaGuiLayers.HOTBAR, BalkonsWeaponMod.id("overlay"),
-                    (guiGraphics, partialTicks) -> GuiOverlayReloaded.renderGUIOverlay(guiGraphics));
+                    (guiGraphics, _) -> GuiOverlayReloaded.renderGUIOverlay(guiGraphics));
         }
 
     }

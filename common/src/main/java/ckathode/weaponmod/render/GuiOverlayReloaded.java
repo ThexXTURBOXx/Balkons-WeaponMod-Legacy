@@ -6,7 +6,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.MeleeComponent;
 import ckathode.weaponmod.item.RangedComponent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -16,18 +16,18 @@ import net.minecraft.world.item.ItemStack;
 
 public class GuiOverlayReloaded {
 
-    public static void renderGUIOverlay(GuiGraphics guiGraphics) {
+    public static void renderGUIOverlay(GuiGraphicsExtractor extractor) {
         if (!WeaponModConfig.get().guiOverlayReloaded) return;
 
         Minecraft mc = Minecraft.getInstance();
         Player p = mc.player;
         if (p == null) return;
 
-        renderForHand(InteractionHand.MAIN_HAND, p, guiGraphics);
-        renderForHand(InteractionHand.OFF_HAND, p, guiGraphics);
+        renderForHand(InteractionHand.MAIN_HAND, p, extractor);
+        renderForHand(InteractionHand.OFF_HAND, p, extractor);
     }
 
-    private static void renderForHand(InteractionHand hand, Player p, GuiGraphics guiGraphics) {
+    private static void renderForHand(InteractionHand hand, Player p, GuiGraphicsExtractor extractor) {
         int currentItem = p.getInventory().getSelectedSlot();
 
         IItemWeapon item = null;
@@ -64,18 +64,18 @@ public class GuiOverlayReloaded {
         if (!set) return;
 
         HumanoidArm offHandSide = p.getMainArm().getOpposite();
-        int x0 = guiGraphics.guiWidth() / 2 + (hand == InteractionHand.OFF_HAND ?
+        int x0 = extractor.guiWidth() / 2 + (hand == InteractionHand.OFF_HAND ?
                 (offHandSide == HumanoidArm.LEFT ? -120 : 91)
                 : -91 - 1 + currentItem * 20);
-        int y0 = guiGraphics.guiHeight() + 1;
+        int y0 = extractor.guiHeight() + 1;
         int tx = hand == InteractionHand.OFF_HAND ? (offHandSide == HumanoidArm.LEFT ? 24 : 53) : 0;
         int width = hand == InteractionHand.OFF_HAND ? 29 : 24;
         int height = (int) (f * 24);
 
-        guiGraphics.pose().pushMatrix();
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, WeaponModResources.Gui.OVERLAY, x0, y0 - height,
+        extractor.pose().pushMatrix();
+        extractor.blit(RenderPipelines.GUI_TEXTURED, WeaponModResources.Gui.OVERLAY, x0, y0 - height,
                 tx, offset + 24 - height, width, height, 256, 256);
-        guiGraphics.pose().popMatrix();
+        extractor.pose().popMatrix();
     }
 
 }

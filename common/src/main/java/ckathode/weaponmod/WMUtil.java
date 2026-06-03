@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 
 public class WMUtil {
 
-    public static final RandomSource RANDOM = RandomSource.createNewThreadLocalInstance();
+    public static final RandomSource RANDOM = RandomSource.createThreadLocalInstance();
 
     @SuppressWarnings("deprecation")
     public static void hurt(Entity entity, DamageSource damageSource, float amount) {

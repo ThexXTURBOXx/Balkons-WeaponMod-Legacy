@@ -1,5 +1,5 @@
 plugins {
-    id 'dev.architectury.loom' version '1.14-SNAPSHOT' apply false
+    id 'dev.architectury.loom-no-remap' version '1.14-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.5-SNAPSHOT'
     id 'com.gradleup.shadow' version '9.4.1' apply false
 }
@@ -18,7 +18,7 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'dev.architectury.loom-no-remap'
     apply plugin: 'architectury-plugin'
     apply plugin: 'maven-publish'
 
@@ -37,20 +37,12 @@ subprojects {
         // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
         // See https://docs.gradle.org/current/userguide/declaring_repositories.html
         // for more information about repositories.
-        maven {
-            name = 'ParchmentMC'
-            url = 'https://maven.parchmentmc.org'
-        }
     }
 
     test.enabled = false
 
     dependencies {
-        minecraft("net.minecraft:minecraft:$rootProject.minecraft_version")
-        mappings loom.layered() {
-            officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-${rootProject.minecraft_version}:${rootProject.parchment_mappings}@zip")
-        }
+        minecraft("com.mojang:minecraft:$rootProject.minecraft_version")
     }
 
     java {
@@ -59,7 +51,7 @@ subprojects {
         // If you remove this line, sources will not be generated.
         withSourcesJar()
 
-        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+        toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     }
 
     tasks.withType(JavaCompile).configureEach {

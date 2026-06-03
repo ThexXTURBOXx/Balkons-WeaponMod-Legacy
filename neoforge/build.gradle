@@ -28,9 +28,9 @@ repositories {
 
 dependencies {
     neoForge("net.neoforged:neoforge:$rootProject.neoforge_version")
-    modApi("dev.architectury:architectury-neoforge:$rootProject.architectury_version")
-    modApi("me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}")
-    common(project(path: ":common", configuration: "namedElements")) { transitive = false }
+    api("dev.architectury:architectury-neoforge:$rootProject.architectury_version")
+    api("me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}")
+    common(project(path: ":common")) { transitive = false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 }
 
@@ -52,12 +52,15 @@ processResources {
     }
 }
 
-shadowJar {
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier.set 'dev-shadow'
+jar {
+    archiveClassifier = "raw"
 }
 
-remapJar {
-    inputFile.set shadowJar.archiveFile
-    atAccessWideners.add loom.accessWidenerPath.get().asFile.name
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()
+    from(zipTree(jar.archiveFile))
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = null
 }

@@ -352,7 +352,7 @@ public class EntityCannon extends Boat {
 
     @NotNull
     @Override
-    public InteractionResult interact(Player entityplayer, @NotNull InteractionHand hand) {
+    public InteractionResult interact(Player entityplayer, @NotNull InteractionHand hand, Vec3 location) {
         ItemStack itemstack = entityplayer.getItemInHand(hand);
         if (itemstack.getItem() == WMRegistries.ITEM_CANNON_BALL.get() && !isLoaded() && !isLoading()
             && (entityplayer.isCreative() || consumeAmmo(entityplayer, Items.GUNPOWDER))) {

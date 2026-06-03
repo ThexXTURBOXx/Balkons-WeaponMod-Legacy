@@ -215,7 +215,7 @@ public class EntityDummy extends Entity {
 
     @NotNull
     @Override
-    public InteractionResult interact(Player entityplayer, @NotNull InteractionHand hand) {
+    public InteractionResult interact(Player entityplayer, @NotNull InteractionHand hand, Vec3 location) {
         ItemStack itemstack = entityplayer.getInventory().getSelectedItem();
         if (!itemstack.isEmpty()) {
             if (itemstack.getItem() instanceof IItemWeapon || itemstack.is(ItemTags.SWORDS) || itemstack.getItem() instanceof BowItem || itemstack.getItem() instanceof ShieldItem) {

@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -108,8 +108,9 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
     private Vec3 getHandPos(LivingEntity le, float f, float g) {
         int i = getHoldingArm(le) == HumanoidArm.RIGHT ? 1 : -1;
         if (this.entityRenderDispatcher.options.getCameraType().isFirstPerson() && le == Minecraft.getInstance().player) {
-            double n = 960.0 / this.entityRenderDispatcher.options.fov().get();
-            Vec3 vec3 = this.entityRenderDispatcher.camera.getNearPlane()
+            int fov = this.entityRenderDispatcher.options.fov().get();
+            double n = 960.0 / fov;
+            Vec3 vec3 = this.entityRenderDispatcher.camera.getNearPlane(fov)
                     .getPointOnPlane(i * 0.525F, -0.1F).scale(n).yRot(f * 0.5F).xRot(-f * 0.7F);
             return le.getEyePosition(g).add(vec3);
         } else {
