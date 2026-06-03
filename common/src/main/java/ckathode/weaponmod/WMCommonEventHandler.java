@@ -22,6 +22,8 @@ public class WMCommonEventHandler {
         ItemStack stack = entity.getUseItem();
         Item item = stack.isEmpty() ? null : stack.getItem();
         if (!(item instanceof IItemWeapon)) return EventResult.pass();
+        if (entity instanceof Player && ((Player) entity).isCreative() &&
+            !source.isBypassInvul()) return EventResult.pass();
 
         entity.stopUsingItem();
         return EventResult.pass();
