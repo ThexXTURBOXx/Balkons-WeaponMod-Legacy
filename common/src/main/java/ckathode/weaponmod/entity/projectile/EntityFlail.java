@@ -3,7 +3,6 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.ItemFlail;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
@@ -149,11 +148,16 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         Entity shooter = getDamagingEntity();
         return shooter instanceof LivingEntity livingEntity
                 ? damageSources().mobAttack(livingEntity)
                 : damageSources().source(WMDamageSources.WEAPON, this, shooter);
+    }
+
+    @Override
+    public float getDamage(@Nullable Entity entity) {
+        return applyEnchantmentBonus(entity, flailDamage);
     }
 
     @Override
@@ -162,7 +166,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         if (entity.equals(getOwner())) {
             return;
         }
-        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), applyEnchantmentBonus(entity, flailDamage))) {
+        if (hurtOrSimulate(entity)) {
             applyEntityHitEffects(entity);
             playHitSound();
             returnToOwner(true);

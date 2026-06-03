@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
 import com.mojang.serialization.Codec;
 import dev.architectury.extensions.network.EntitySpawnExtension;
@@ -318,8 +319,16 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     }
 
     @NotNull
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().arrow(this, shooter);
+    }
+
+    public float getDamage(@Nullable Entity entity) {
+        return 0;
+    }
+
+    public boolean hurtOrSimulate(@NotNull Entity entity) {
+        return WMUtil.hurtOrSimulate(entity, getDamageSource(entity), getDamage(entity));
     }
 
     public void applyEntityHitEffects(Entity entity) {
@@ -327,10 +336,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             entity.igniteForSeconds(5);
         }
         if (entity instanceof LivingEntity livingEntity) {
-            doKnockback(livingEntity, getDamageSource());
+            doKnockback(livingEntity, getDamageSource(entity));
             if (level() instanceof ServerLevel serverLevel) {
                 EnchantmentHelper.doPostAttackEffectsWithItemSource(serverLevel, livingEntity,
-                        getDamageSource(), getWeaponItem());
+                        getDamageSource(entity), getWeaponItem());
             }
             Entity shooter = getOwner();
             if (shooter instanceof ServerPlayer sp && !entity.equals(getOwner()) && entity instanceof Player) {
@@ -434,7 +443,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     }
 
     @Override
-    protected void doKnockback(LivingEntity livingEntity, DamageSource damageSource) {
+    protected void doKnockback(@NotNull LivingEntity livingEntity, @NotNull DamageSource damageSource) {
         float f;
         Level level = this.level();
         if (firedFromWeapon != null && level instanceof ServerLevel serverLevel) {

@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
@@ -124,8 +123,20 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
+    @Override
+    public float getDamage(@Nullable Entity entity) {
+        ItemStack thrownItem = getWeapon();
+        if (thrownItem.isEmpty() || !(thrownItem.getItem() instanceof IItemWeapon iiw)) return 0.0f;
+        float damage = iiw.getMeleeComponent().getEntityDamage() + 2.0f + extraDamage;
+        damage = applyEnchantmentBonus(entity, damage);
+        if (isCritArrow()) {
+            damage += 2.0f;
+        }
+        return damage;
     }
 
     @Override
@@ -151,13 +162,8 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             return;
         }
         ItemStack thrownItem = getWeapon();
-        if (thrownItem.isEmpty() || !(thrownItem.getItem() instanceof IItemWeapon iiw)) return;
-        float damage = iiw.getMeleeComponent().getEntityDamage() + 2.0f + extraDamage;
-        damage = applyEnchantmentBonus(entity, damage);
-        if (isCritArrow()) {
-            damage += 2.0f;
-        }
-        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
+        if (thrownItem.isEmpty() || !(thrownItem.getItem() instanceof IItemWeapon)) return;
+        if (hurtOrSimulate(entity)) {
             applyEntityHitEffects(entity);
             playHitSound();
             if (thrownItem.getDamageValue() + 1 >= thrownItem.getMaxDamage()) {

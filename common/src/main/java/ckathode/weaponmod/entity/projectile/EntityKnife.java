@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
@@ -88,8 +87,18 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
+    @Override
+    public float getDamage(@Nullable Entity entity) {
+        ItemStack thrownItem = getWeapon();
+        if (thrownItem.isEmpty()) return 0.0f;
+        Item item = thrownItem.getItem();
+        if (!(item instanceof IItemWeapon iweapon)) return 0.0f;
+        float damage = iweapon.getMeleeComponent().getEntityDamage();
+        return applyEnchantmentBonus(entity, damage);
     }
 
     @Override
@@ -100,14 +109,12 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty()) return;
         Item item = thrownItem.getItem();
-        if (!(item instanceof IItemWeapon iweapon)) {
+        if (!(item instanceof IItemWeapon)) {
             bounceBack();
             return;
         }
         Entity entity = result.getEntity();
-        float damage = iweapon.getMeleeComponent().getEntityDamage();
-        damage = applyEnchantmentBonus(entity, damage);
-        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
+        if (hurtOrSimulate(entity)) {
             applyEntityHitEffects(entity);
             if (thrownItem.getDamageValue() + 2 >= thrownItem.getMaxDamage()) {
                 thrownItem.shrink(1);

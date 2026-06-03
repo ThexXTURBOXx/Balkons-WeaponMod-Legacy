@@ -3,7 +3,6 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.EntityCannon;
 import dev.architectury.networking.NetworkManager;
@@ -100,13 +99,18 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
     }
 
     @Override
+    public float getDamage(@Nullable Entity entity) {
+        return 30.0f;
+    }
+
+    @Override
     public void onHitEntity(EntityHitResult result) {
-        if (WMUtil.hurtOrSimulate(result.getEntity(), getDamageSource(), 30.0f)) {
+        if (hurtOrSimulate(result.getEntity())) {
             playSound(SoundEvents.PLAYER_HURT, 1.0f, 1.2f / (random.nextFloat() * 0.4f + 0.7f));
         }
     }

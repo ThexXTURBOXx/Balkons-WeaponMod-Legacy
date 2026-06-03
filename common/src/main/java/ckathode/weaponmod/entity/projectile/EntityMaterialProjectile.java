@@ -70,7 +70,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
         ItemStack weaponItem = getWeaponItem();
         if (weaponItem != null && shooter instanceof LivingEntity && entity instanceof LivingEntity &&
             level() instanceof ServerLevel serverLevel) {
-            baseDamage = EnchantmentHelper.modifyDamage(serverLevel, weaponItem, entity, getDamageSource(), baseDamage);
+            baseDamage = EnchantmentHelper.modifyDamage(serverLevel, weaponItem, entity, getDamageSource(entity),
+                    baseDamage);
         }
         return baseDamage;
     }

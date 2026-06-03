@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -63,19 +62,24 @@ public class EntityJavelin extends EntityProjectile<EntityJavelin> {
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
     }
 
     @Override
-    public void onHitEntity(EntityHitResult result) {
+    public float getDamage(@Nullable Entity entity) {
         double vel = getTotalVelocity();
         int damage = Mth.ceil(vel * (3.0 + extraDamage));
         if (isCritArrow()) {
             damage += random.nextInt(damage / 2 + 2);
         }
+        return damage;
+    }
+
+    @Override
+    public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
-        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), (float) damage)) {
+        if (hurtOrSimulate(entity)) {
             applyEntityHitEffects(entity);
             playHitSound();
             remove(RemovalReason.DISCARDED);

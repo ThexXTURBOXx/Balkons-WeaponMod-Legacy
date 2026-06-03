@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.RangedComponent;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
@@ -70,16 +69,20 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
+    @Override
+    public float getDamage(@Nullable Entity entity) {
+        return 4.0f + extraDamage;
     }
 
     @Override
     public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
-        float damage = 4.0f + extraDamage;
         int prevhurtrestime = entity.invulnerableTime;
-        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
+        if (hurtOrSimulate(entity)) {
             entity.invulnerableTime = prevhurtrestime;
             applyEntityHitEffects(entity);
             playHitSound();

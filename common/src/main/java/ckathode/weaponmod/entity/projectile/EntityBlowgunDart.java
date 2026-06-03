@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
@@ -68,14 +67,19 @@ public class EntityBlowgunDart extends EntityMaterialProjectile<EntityBlowgunDar
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
+    @Override
+    public float getDamage(@Nullable Entity entity) {
+        return 1.0f + extraDamage;
     }
 
     @Override
     public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
-        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), 1.0f + extraDamage)) {
+        if (hurtOrSimulate(entity)) {
             if (entity instanceof LivingEntity living && level() instanceof ServerLevel level) {
                 if (living.isAffectedByPotions()) {
                     for (MobEffectInstance mei : ItemBlowgunDart.getEffects(getWeapon())) {

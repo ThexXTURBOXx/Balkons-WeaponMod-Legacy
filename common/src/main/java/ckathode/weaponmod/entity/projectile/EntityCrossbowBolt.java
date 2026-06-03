@@ -2,7 +2,6 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import ckathode.weaponmod.WMUtil;
 import dev.architectury.networking.NetworkManager;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -63,16 +62,20 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
 
     @NotNull
     @Override
-    public DamageSource getDamageSource() {
+    public DamageSource getDamageSource(@Nullable Entity entity) {
         return damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
+    }
+
+    @Override
+    public float getDamage(@Nullable Entity entity) {
+        float vel = (float) getTotalVelocity();
+        return vel * 4.0f + extraDamage;
     }
 
     @Override
     public void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
-        float vel = (float) getTotalVelocity();
-        float damage = vel * 4.0f + extraDamage;
-        if (WMUtil.hurtOrSimulate(entity, getDamageSource(), damage)) {
+        if (hurtOrSimulate(entity)) {
             if (entity instanceof LivingEntity livingEntity && level().isClientSide()) {
                 livingEntity.setArrowCount(livingEntity.getArrowCount() + 1);
             }
