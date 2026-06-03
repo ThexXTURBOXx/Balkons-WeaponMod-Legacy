@@ -57,6 +57,7 @@ public class RangedCompBlowgun extends RangedComponent {
             }
         }
         ItemStack dartStackCopy = dartstack.copy();
+        dartStackCopy.setCount(1);
         Holder<Enchantment> infinity =
                 entityplayer.registryAccess().registryOrThrow(Registries.ENCHANTMENT)
                         .getHolder(Enchantments.INFINITY).orElse(null);
