@@ -43,8 +43,9 @@ public class WMClientEventHandler {
     }
 
     public static EventResult onMouseClick(Minecraft client, MouseButtonInfo mouseButtonInfo, int action) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null || !player.level().isClientSide() || Minecraft.getInstance().screen != null) {
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null || !player.level().isClientSide() || mc.screen != null) {
             return EventResult.pass();
         }
         if (mouseButtonInfo.button() == 0 && action == GLFW.GLFW_PRESS) {
@@ -57,7 +58,7 @@ public class WMClientEventHandler {
                     if (!(raytraceResult instanceof EntityHitResult ertr)) return EventResult.pass();
                     Entity entity = ertr.getEntity();
                     if (entity != player && entity.invulnerableTime == 0) {
-                        Minecraft.getInstance().gameMode.attack(player, entity);
+                        mc.gameMode.attack(player, entity);
                         return EventResult.interruptTrue();
                     }
                 }
