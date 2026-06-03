@@ -4,11 +4,9 @@ import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
@@ -74,7 +72,6 @@ public class RenderKnife extends WMItemEntityRenderer<EntityKnife, RenderKnife.K
     @Override
     public void submitItemRender(KnifeRenderState entityRenderState, PoseStack poseStack,
                                  SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
-        ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
         poseStack.pushPose();
         poseStack.scale(0.85f, 0.85f, 0.85f);
         poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
