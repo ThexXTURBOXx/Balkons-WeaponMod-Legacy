@@ -73,6 +73,8 @@ jobs:
           loaders: neoforge
           game-versions: |
             26.1
+            26.1.1
+            26.1.2
           java: 25
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)
@@ -94,6 +96,8 @@ jobs:
           loaders: fabric
           game-versions: |
             26.1
+            26.1.1
+            26.1.2
           java: 25
           dependencies: |
             architectury-api(required){modrinth:lhGA9TYQ}{curseforge:419699}#(ignore:github)
