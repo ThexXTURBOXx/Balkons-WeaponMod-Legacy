@@ -8,6 +8,9 @@ architectury {
 }
 
 loom {
+    neoForge {
+        convertAccessWideners(tasks.named('shadowJar'), 'weaponmod.accesswidener')
+    }
     accessWidenerPath = project(":common").loom.accessWidenerPath
 }
 
