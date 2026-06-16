@@ -14,7 +14,7 @@ public class AbstractClientPlayerMixin {
 
     @Inject(method = "getFieldOfViewModifier", at = @At(value = "RETURN"), cancellable = true)
     public void getFieldOfViewModifier(boolean bl, float f, CallbackInfoReturnable<Float> cir,
-                                       @Local(ordinal = 1) float g) {
+                                       @Local(name = "modifier") float g) {
         cir.setReturnValue(WMClientEventHandler.getNewFOV((LivingEntity) (Object) this, g, cir.getReturnValueF()));
     }
 
