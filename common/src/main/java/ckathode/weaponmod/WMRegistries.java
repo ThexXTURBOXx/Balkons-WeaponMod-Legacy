@@ -65,14 +65,37 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 public class WMRegistries {
 
     // Registries
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(MOD_ID, Registries.ITEM);
-    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
-            DeferredRegister.create(MOD_ID, Registries.ENTITY_TYPE);
     public static final DeferredRegister<Attribute> ATTRIBUTES =
             DeferredRegister.create(MOD_ID, Registries.ATTRIBUTE);
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
             DeferredRegister.create(MOD_ID, Registries.DATA_COMPONENT_TYPE);
+    public static final DeferredRegister<Item> ITEMS =
+            DeferredRegister.create(MOD_ID, Registries.ITEM);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
+            DeferredRegister.create(MOD_ID, Registries.ENTITY_TYPE);
+
+    // Attributes
+    public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
+            ATTRIBUTES.register(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getDescriptionId(),
+                    () -> WeaponModAttributes.IGNORE_ARMOUR_DAMAGE);
+    public static final RegistrySupplier<Attribute> WEAPON_KNOCKBACK =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_KNOCKBACK.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_KNOCKBACK);
+    public static final RegistrySupplier<Attribute> RELOAD_TIME =
+            ATTRIBUTES.register(WeaponModAttributes.RELOAD_TIME.getDescriptionId(),
+                    () -> WeaponModAttributes.RELOAD_TIME);
+    public static final RegistrySupplier<Attribute> WEAPON_REACH =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_REACH.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_REACH);
+
+    // Data Component Types
+    public static final RegistrySupplier<DataComponentType<ReloadState>> RELOAD_STATE_TYPE =
+            DATA_COMPONENT_TYPES.register(ReloadState.TYPE_ID, () -> ReloadState.TYPE);
+    public static final RegistrySupplier<DataComponentType<Short>> BAYONET_DAMAGE_TYPE =
+            DATA_COMPONENT_TYPES.register(ItemMusket.BAYONET_DAMAGE_TYPE_ID, () -> ItemMusket.BAYONET_DAMAGE_TYPE);
+    public static final RegistrySupplier<DataComponentType<Boolean>> HALBERD_STATE_TYPE =
+            DATA_COMPONENT_TYPES.register(MeleeCompHalberd.HALBERD_STATE_TYPE_ID,
+                    () -> MeleeCompHalberd.HALBERD_STATE_TYPE);
 
     // Items
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_WOOD =
@@ -259,29 +282,6 @@ public class WMRegistries {
     public static final RegistrySupplier<EntityType<EntityMortarShell>> ENTITY_MORTAR_SHELL =
             ENTITY_TYPES.register(EntityMortarShell.ID, () -> EntityMortarShell.TYPE);
 
-    // Attributes
-    public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
-            ATTRIBUTES.register(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getDescriptionId(),
-                    () -> WeaponModAttributes.IGNORE_ARMOUR_DAMAGE);
-    public static final RegistrySupplier<Attribute> WEAPON_KNOCKBACK =
-            ATTRIBUTES.register(WeaponModAttributes.WEAPON_KNOCKBACK.getDescriptionId(),
-                    () -> WeaponModAttributes.WEAPON_KNOCKBACK);
-    public static final RegistrySupplier<Attribute> RELOAD_TIME =
-            ATTRIBUTES.register(WeaponModAttributes.RELOAD_TIME.getDescriptionId(),
-                    () -> WeaponModAttributes.RELOAD_TIME);
-    public static final RegistrySupplier<Attribute> WEAPON_REACH =
-            ATTRIBUTES.register(WeaponModAttributes.WEAPON_REACH.getDescriptionId(),
-                    () -> WeaponModAttributes.WEAPON_REACH);
-
-    // Data Component Types
-    public static final RegistrySupplier<DataComponentType<ReloadState>> RELOAD_STATE_TYPE =
-            DATA_COMPONENT_TYPES.register(ReloadState.TYPE_ID, () -> ReloadState.TYPE);
-    public static final RegistrySupplier<DataComponentType<Short>> BAYONET_DAMAGE_TYPE =
-            DATA_COMPONENT_TYPES.register(ItemMusket.BAYONET_DAMAGE_TYPE_ID, () -> ItemMusket.BAYONET_DAMAGE_TYPE);
-    public static final RegistrySupplier<DataComponentType<Boolean>> HALBERD_STATE_TYPE =
-            DATA_COMPONENT_TYPES.register(MeleeCompHalberd.HALBERD_STATE_TYPE_ID,
-                    () -> MeleeCompHalberd.HALBERD_STATE_TYPE);
-
     private static void registerDispenserBehaviors() {
         ITEM_JAVELIN.listen(item -> DispenserBlock.registerBehavior(item,
                 new DispenseWeaponProjectile(item, item)));
@@ -302,10 +302,10 @@ public class WMRegistries {
     }
 
     public static void init() {
-        ITEMS.register();
-        ENTITY_TYPES.register();
         ATTRIBUTES.register();
         DATA_COMPONENT_TYPES.register();
+        ITEMS.register();
+        ENTITY_TYPES.register();
         registerDispenserBehaviors();
     }
 
