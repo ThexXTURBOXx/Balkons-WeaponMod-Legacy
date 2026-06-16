@@ -90,7 +90,7 @@ dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     mappings("net.minecraftforge:forge:$forge_version:userdev")
     forgeLegacy("net.minecraftforge:forge:$forge_version")
-    shadowImpl("com.github.makamys:MCLib:0.3.7.7") {
+    shadowImpl("com.github.makamys:MCLib:0.3.7.8") {
         exclude(group = "codechicken")
     }
 }
