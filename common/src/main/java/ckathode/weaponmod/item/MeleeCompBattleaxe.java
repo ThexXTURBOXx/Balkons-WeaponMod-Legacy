@@ -89,8 +89,8 @@ public class MeleeCompBattleaxe extends MeleeComponent {
         attributeBuilder = super.setAttributes(attributeBuilder);
         if (getIgnoreArmorAmount(weaponMaterial) != 0.0f) {
             attributeBuilder = attributeBuilder
-                    .add(WMRegistries.IGNORE_ARMOUR_DAMAGE, new AttributeModifier(
-                                    WeaponModAttributes.IGNORE_ARMOUR_DAMAGE_ID,
+                    .add(WMRegistries.IGNORE_ARMOUR_DAMAGE.asHolder(),
+                            new AttributeModifier(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE_ID,
                                     getIgnoreArmorAmount(weaponMaterial), AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND);
         }

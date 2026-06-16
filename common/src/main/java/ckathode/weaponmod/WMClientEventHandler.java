@@ -45,7 +45,7 @@ public class WMClientEventHandler {
     public static EventResult onMouseClick(Minecraft client, MouseButtonInfo mouseButtonInfo, int action) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
-        if (player == null || !player.level().isClientSide() || mc.screen != null) {
+        if (player == null || !player.level().isClientSide() || mc.gui.screen() != null) {
             return EventResult.pass();
         }
         if (mouseButtonInfo.button() == 0 && action == GLFW.GLFW_PRESS) {

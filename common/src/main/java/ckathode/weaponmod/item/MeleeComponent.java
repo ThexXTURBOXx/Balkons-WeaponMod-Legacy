@@ -87,7 +87,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
         }
         if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
             attributeBuilder = attributeBuilder
-                    .add(WMRegistries.WEAPON_KNOCKBACK, new AttributeModifier(WeaponModAttributes.WEAPON_KNOCKBACK_ID,
+                    .add(WMRegistries.WEAPON_KNOCKBACK.asHolder(),
+                            new AttributeModifier(WeaponModAttributes.WEAPON_KNOCKBACK_ID,
                                     meleeSpecs.getKnockBack(weaponMaterial) - 0.4f,
                                     AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND);
@@ -95,7 +96,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
         if (this instanceof IExtendedReachItem ieri) {
             try {
                 attributeBuilder = attributeBuilder
-                        .add(WMRegistries.WEAPON_REACH, new AttributeModifier(WeaponModAttributes.WEAPON_REACH_ID,
+                        .add(WMRegistries.WEAPON_REACH.asHolder(),
+                                new AttributeModifier(WeaponModAttributes.WEAPON_REACH_ID,
                                         ieri.getExtendedReach(null, null, null) - 3.0f,
                                         AttributeModifier.Operation.ADD_VALUE),
                                 EquipmentSlotGroup.MAINHAND);

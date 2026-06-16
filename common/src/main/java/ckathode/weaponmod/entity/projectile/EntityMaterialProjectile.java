@@ -105,7 +105,8 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
             if (i != 0) {
                 livingEntity.knockback(i * 0.4f,
                         -Mth.sin(getYRot() * 0.017453292f),
-                        -Mth.cos(getYRot() * 0.017453292f));
+                        -Mth.cos(getYRot() * 0.017453292f),
+                        getDamageSource(entity), getDamage(entity));
             }
         }
         Holder<Enchantment> fireAspect = enchRegistry.get(Enchantments.FIRE_ASPECT).orElse(null);

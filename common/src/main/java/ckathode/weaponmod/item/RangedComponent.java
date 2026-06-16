@@ -7,6 +7,7 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
+import com.mojang.datafixers.util.Pair;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +20,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -69,7 +69,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder) {
         attributeBuilder = attributeBuilder
-                .add(WMRegistries.RELOAD_TIME, new AttributeModifier(WeaponModAttributes.RELOAD_TIME_ID,
+                .add(WMRegistries.RELOAD_TIME.asHolder(),
+                        new AttributeModifier(WeaponModAttributes.RELOAD_TIME_ID,
                                 rangedSpecs.getReloadTime(), AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.MAINHAND);
         return attributeBuilder;
@@ -238,10 +239,10 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     protected ItemStack findAmmo(Player entityplayer) {
-        Tuple<EquipmentSlot, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoItems());
+        Pair<EquipmentSlot, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoItems());
         if (slot == null) return ItemStack.EMPTY;
-        return slot.getA() == EquipmentSlot.MAINHAND ? entityplayer.getInventory().getItem(slot.getB()) :
-                entityplayer.getItemBySlot(slot.getA());
+        return slot.getFirst() == EquipmentSlot.MAINHAND ? entityplayer.getInventory().getItem(slot.getSecond()) :
+                entityplayer.getItemBySlot(slot.getFirst());
     }
 
     protected boolean consumeAmmo(Player entityplayer) {

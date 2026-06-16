@@ -84,8 +84,8 @@ public class EntityBlowgunDart extends EntityMaterialProjectile<EntityBlowgunDar
                 if (living.isAffectedByPotions()) {
                     for (MobEffectInstance mei : ItemBlowgunDart.getEffects(getWeapon())) {
                         MobEffect effect = mei.getEffect().value();
-                        if (effect.isInstantenous()) {
-                            effect.applyInstantenousEffect(level, this, getOwner(), living, mei.getAmplifier(), 1);
+                        if (effect.isInstantaneous()) {
+                            effect.applyInstantaneousEffect(level, this, getOwner(), living, mei.getAmplifier(), 1);
                         } else {
                             living.addEffect(new MobEffectInstance(mei), getEffectSource());
                         }

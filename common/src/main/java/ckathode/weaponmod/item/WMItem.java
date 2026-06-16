@@ -2,11 +2,11 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
+import com.mojang.datafixers.util.Pair;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import java.util.Collection;
 import java.util.Collections;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,15 +81,15 @@ public class WMItem extends Item {
     }
 
     @Nullable
-    public static Tuple<EquipmentSlot, Integer> findAnyItemSlot(Player player, Collection<Item> item) {
+    public static Pair<EquipmentSlot, Integer> findAnyItemSlot(Player player, Collection<Item> item) {
         if (isItemInList(player.getMainHandItem(), item))
-            return new Tuple<>(EquipmentSlot.MAINHAND, player.getInventory().getSelectedSlot());
+            return new Pair<>(EquipmentSlot.MAINHAND, player.getInventory().getSelectedSlot());
         if (isItemInList(player.getOffhandItem(), item))
-            return new Tuple<>(EquipmentSlot.OFFHAND, 0);
+            return new Pair<>(EquipmentSlot.OFFHAND, 0);
         for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
             ItemStack itemstack = player.getInventory().getItem(i);
             if (isItemInList(itemstack, item))
-                return new Tuple<>(EquipmentSlot.MAINHAND, i);
+                return new Pair<>(EquipmentSlot.MAINHAND, i);
         }
         return null;
     }
@@ -99,10 +99,10 @@ public class WMItem extends Item {
     }
 
     public static boolean consumeAnyInventoryItem(Player player, Collection<Item> item) {
-        Tuple<EquipmentSlot, Integer> slot = findAnyItemSlot(player, item);
+        Pair<EquipmentSlot, Integer> slot = findAnyItemSlot(player, item);
         if (slot == null) return false;
-        ItemStack stack = slot.getA() == EquipmentSlot.MAINHAND ? player.getInventory().getItem(slot.getB()) :
-                player.getItemBySlot(slot.getA());
+        ItemStack stack = slot.getFirst() == EquipmentSlot.MAINHAND ? player.getInventory().getItem(slot.getSecond()) :
+                player.getItemBySlot(slot.getFirst());
         stack.shrink(1);
         return true;
     }
