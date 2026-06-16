@@ -9,7 +9,7 @@ plugins {
     java
     id("gg.essential.loom") version "1.13.9999-fg1"
     id("dev.architectury.architectury-pack200") version "0.1.3"
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.4.2"
 }
 
 val minecraft_version: String by project
