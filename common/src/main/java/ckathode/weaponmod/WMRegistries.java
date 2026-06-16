@@ -66,12 +66,26 @@ import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 public class WMRegistries {
 
     // Registries
+    public static final DeferredRegister<Attribute> ATTRIBUTES =
+            DeferredRegister.create(MOD_ID, Registries.ATTRIBUTE);
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(MOD_ID, Registries.ITEM);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(MOD_ID, Registries.ENTITY_TYPE);
-    public static final DeferredRegister<Attribute> ATTRIBUTES =
-            DeferredRegister.create(MOD_ID, Registries.ATTRIBUTE);
+
+    // Attributes
+    public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
+            ATTRIBUTES.register(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getDescriptionId(),
+                    () -> WeaponModAttributes.IGNORE_ARMOUR_DAMAGE);
+    public static final RegistrySupplier<Attribute> WEAPON_KNOCKBACK =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_KNOCKBACK.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_KNOCKBACK);
+    public static final RegistrySupplier<Attribute> RELOAD_TIME =
+            ATTRIBUTES.register(WeaponModAttributes.RELOAD_TIME.getDescriptionId(),
+                    () -> WeaponModAttributes.RELOAD_TIME);
+    public static final RegistrySupplier<Attribute> WEAPON_REACH =
+            ATTRIBUTES.register(WeaponModAttributes.WEAPON_REACH.getDescriptionId(),
+                    () -> WeaponModAttributes.WEAPON_REACH);
 
     // Items
     public static final RegistrySupplier<ItemMelee> ITEM_SPEAR_WOOD =
@@ -258,20 +272,6 @@ public class WMRegistries {
     public static final RegistrySupplier<EntityType<EntityMortarShell>> ENTITY_MORTAR_SHELL =
             ENTITY_TYPES.register(EntityMortarShell.ID, () -> EntityMortarShell.TYPE);
 
-    // Attributes
-    public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
-            ATTRIBUTES.register(WeaponModAttributes.IGNORE_ARMOUR_DAMAGE.getDescriptionId(),
-                    () -> WeaponModAttributes.IGNORE_ARMOUR_DAMAGE);
-    public static final RegistrySupplier<Attribute> WEAPON_KNOCKBACK =
-            ATTRIBUTES.register(WeaponModAttributes.WEAPON_KNOCKBACK.getDescriptionId(),
-                    () -> WeaponModAttributes.WEAPON_KNOCKBACK);
-    public static final RegistrySupplier<Attribute> RELOAD_TIME =
-            ATTRIBUTES.register(WeaponModAttributes.RELOAD_TIME.getDescriptionId(),
-                    () -> WeaponModAttributes.RELOAD_TIME);
-    public static final RegistrySupplier<Attribute> WEAPON_REACH =
-            ATTRIBUTES.register(WeaponModAttributes.WEAPON_REACH.getDescriptionId(),
-                    () -> WeaponModAttributes.WEAPON_REACH);
-
     private static void registerDispenserBehaviors() {
         ITEM_JAVELIN.listen(item -> DispenserBlock.registerBehavior(item, new DispenseJavelin()));
         ITEM_CROSSBOW_BOLT.listen(item -> DispenserBlock.registerBehavior(item, new DispenseCrossbowBolt()));
@@ -287,9 +287,9 @@ public class WMRegistries {
     }
 
     public static void init() {
+        ATTRIBUTES.register();
         ITEMS.register();
         ENTITY_TYPES.register();
-        ATTRIBUTES.register();
         registerDispenserBehaviors();
     }
 
