@@ -9,6 +9,9 @@ architectury {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+    neoForge {
+        convertAccessWideners(tasks.named('remapJar'), accessWidenerPath.get().asFile.name)
+    }
 }
 
 configurations {
@@ -59,5 +62,4 @@ shadowJar {
 
 remapJar {
     inputFile.set shadowJar.archiveFile
-    atAccessWideners.add loom.accessWidenerPath.get().asFile.name
 }
