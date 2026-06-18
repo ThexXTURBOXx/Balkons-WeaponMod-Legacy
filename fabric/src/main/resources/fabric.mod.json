@@ -26,7 +26,6 @@
   "mixins": [
     "weaponmod.mixins.json"
   ],
-  "accessWidener": "weaponmod.accesswidener",
   "depends": {
     "fabric": "*",
     "minecraft": "${minecraft_version_condition}",
