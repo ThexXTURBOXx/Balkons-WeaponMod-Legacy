@@ -26,7 +26,6 @@
   "mixins": [
     "weaponmod.mixins.json"
   ],
-  "accessWidener": "weaponmod.accesswidener",
   "depends": {
     "fabricloader": ">=0.15.7",
     "fabric": "*",
