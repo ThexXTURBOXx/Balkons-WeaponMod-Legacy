@@ -2,7 +2,8 @@
   "parent": "weaponmod:root",
   "rewards": {
     "recipes": [
-      "weaponmod:spear.diamond"
+      "weaponmod:spear.diamond",
+      "weaponmod:spear.diamond.a"
     ]
   },
   "criteria": {
@@ -22,6 +23,16 @@
         "items": [
           {
             "items": "#c:diamonds"
+          }
+        ]
+      }
+    },
+    "has_c_gems/diamond": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:gems/diamond"
           }
         ]
       }
@@ -87,6 +98,7 @@
     [
       "has_minecraft_diamond",
       "has_c_diamonds",
+      "has_c_gems/diamond",
       "has_forge_gems/diamond",
       "has_the_recipe"
     ],
