@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "X  ",
+    " # ",
+    "  #"
+  ],
+  "key": {
+    "X": "#minecraft:gold_tool_materials",
+    "#": "#c:rods/wooden"
+  },
+  "result": {
+    "id": "weaponmod:spear.gold"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "spear"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "spear"
+    }
+  ]
+}
