@@ -2,10 +2,7 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
-import dev.architectury.networking.NetworkManager;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.server.level.ServerEntity;
+import ckathode.weaponmod.WeaponModConfig;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -42,10 +39,9 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
         setPickupStatusFromEntity(shooter);
     }
 
-    @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
-        return NetworkManager.createAddEntityPacket(this, serverEntity);
+    protected boolean isDisabled() {
+        return !WeaponModConfig.get().isEnabled("crossbow");
     }
 
     @Override

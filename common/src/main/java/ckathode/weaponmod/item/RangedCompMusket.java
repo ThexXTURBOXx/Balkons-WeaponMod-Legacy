@@ -2,6 +2,7 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.WMUtil;
+import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -47,7 +48,12 @@ public class RangedCompMusket extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isClientSide) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving, itemstack);
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving, itemstack) {
+                @Override
+                protected boolean isDisabled() {
+                    return !WeaponModConfig.get().isEnabled("musket");
+                }
+            };
             entitymusketbullet.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 1.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
