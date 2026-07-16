@@ -5,14 +5,10 @@ import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModConfig;
-import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -60,10 +56,9 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
         explodefuse = i;
     }
 
-    @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
-        return NetworkManager.createAddEntityPacket(this, serverEntity);
+    protected boolean isDisabled() {
+        return !WeaponModConfig.get().isEnabled("dynamite");
     }
 
     @Override
