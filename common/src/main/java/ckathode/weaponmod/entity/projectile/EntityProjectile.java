@@ -3,12 +3,15 @@ package ckathode.weaponmod.entity.projectile;
 import ckathode.weaponmod.WeaponModConfig;
 import dev.architectury.extensions.network.EntitySpawnExtension;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -99,6 +102,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         return super.getOwner();
     }
 
+    protected boolean isDisabled() {
+        return false;
+    }
+
     protected void setPickupStatusFromEntity(LivingEntity entityliving) {
         if (entityliving instanceof Player player) {
             if (player.isCreative()) {
@@ -114,6 +121,12 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     public Entity getDamagingEntity() {
         Entity shooter = getOwner();
         return shooter != null ? shooter : this;
+    }
+
+    @NotNull
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkManager.createAddEntityPacket(this);
     }
 
     @Override
@@ -153,6 +166,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void tick() {
+        if (isDisabled()) {
+            remove(RemovalReason.DISCARDED);
+            return;
+        }
         baseTick();
     }
 

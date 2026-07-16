@@ -2,10 +2,8 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMDamageSources;
 import ckathode.weaponmod.WMRegistries;
+import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.item.RangedComponent;
-import dev.architectury.networking.NetworkManager;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -39,10 +37,9 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
         setOwner(shooter);
     }
 
-    @NotNull
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    protected boolean isDisabled() {
+        return !WeaponModConfig.get().isEnabled("blunderbuss");
     }
 
     @Override
