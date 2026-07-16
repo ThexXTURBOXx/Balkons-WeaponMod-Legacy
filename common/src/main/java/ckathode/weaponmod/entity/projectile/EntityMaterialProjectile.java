@@ -16,6 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -55,14 +56,16 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     public void saveAdditionalSpawnData(FriendlyByteBuf buf) {
         super.saveAdditionalSpawnData(buf);
         buf.writeInt(getWeaponMaterialId());
-        ItemStack.STREAM_CODEC.encode(new RegistryFriendlyByteBuf(buf, registryAccess()), getWeapon());
+        ItemStackTemplate.STREAM_CODEC.encode(new RegistryFriendlyByteBuf(buf, registryAccess()),
+                ItemStackTemplate.fromNonEmptyStack(getWeapon()));
     }
 
     @Override
     public void loadAdditionalSpawnData(FriendlyByteBuf buf) {
         super.loadAdditionalSpawnData(buf);
         entityData.set(WEAPON_MATERIAL, buf.readInt());
-        entityData.set(WEAPON_ITEM, ItemStack.STREAM_CODEC.decode(new RegistryFriendlyByteBuf(buf, registryAccess())));
+        entityData.set(WEAPON_ITEM, ItemStackTemplate.STREAM_CODEC.decode(
+                new RegistryFriendlyByteBuf(buf, registryAccess())).create());
     }
 
     public float applyEnchantmentBonus(Entity entity, float baseDamage) {
@@ -158,13 +161,14 @@ public class EntityMaterialProjectile<T extends EntityMaterialProjectile<T>> ext
     protected void addAdditionalSaveData(ValueOutput valueOutput) {
         super.addAdditionalSaveData(valueOutput);
         ItemStack thrownItem = getWeapon();
-        valueOutput.store("thrI", ItemStack.CODEC, thrownItem);
+        valueOutput.store("thrI", ItemStackTemplate.CODEC, ItemStackTemplate.fromNonEmptyStack(thrownItem));
     }
 
     @Override
     protected void readAdditionalSaveData(ValueInput valueInput) {
         super.readAdditionalSaveData(valueInput);
-        setThrownItemStack(valueInput.read("thrI", ItemStack.CODEC).orElse(ItemStack.EMPTY));
+        setThrownItemStack(valueInput.read("thrI", ItemStackTemplate.CODEC)
+                .map(ItemStackTemplate::create).orElse(ItemStack.EMPTY));
     }
 
 }

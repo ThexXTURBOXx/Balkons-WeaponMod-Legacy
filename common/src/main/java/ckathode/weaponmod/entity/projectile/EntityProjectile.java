@@ -26,6 +26,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.ClipContext;
@@ -518,7 +519,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         valueOutput.putBoolean("beenInGround", beenInGround);
         valueOutput.putByte("pickup", (byte) pickupStatus.ordinal());
         if (firedFromWeapon != null) {
-            valueOutput.store("weapon", ItemStack.CODEC, firedFromWeapon);
+            valueOutput.store("weapon", ItemStackTemplate.CODEC, WMUtil.templateFromStack(firedFromWeapon));
         }
     }
 
@@ -533,7 +534,8 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         inGround = valueInput.getBooleanOr("inGround", false);
         beenInGround = valueInput.getBooleanOr("beenInGround", false);
         pickupStatus = valueInput.read("pickup", PickupStatus.CODEC).orElse(PickupStatus.DISALLOWED);
-        firedFromWeapon = valueInput.read("weapon", ItemStack.CODEC).orElse(null);
+        firedFromWeapon = valueInput.read("weapon", ItemStackTemplate.CODEC)
+                .map(ItemStackTemplate::create).orElse(null);
     }
 
     public enum PickupStatus {
