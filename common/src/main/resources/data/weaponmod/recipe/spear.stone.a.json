@@ -2,25 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "#",
-    "X"
+    "X  ",
+    " # ",
+    "  #"
   ],
   "key": {
+    "X": {
+      "tag": "minecraft:stone_tool_materials"
+    },
     "#": [
-      {
-        "item": "minecraft:diamond"
-      },
-      {
-        "tag": "c:diamonds"
-      },
-      {
-        "tag": "c:gems/diamond"
-      },
-      {
-        "tag": "forge:gems/diamond"
-      }
-    ],
-    "X": [
       {
         "item": "minecraft:stick"
       },
@@ -36,18 +26,18 @@
     ]
   },
   "result": {
-    "id": "weaponmod:knife.diamond"
+    "id": "weaponmod:spear.stone"
   },
   "neoforge:conditions": [
     {
       "type": "weaponmod:config_conditional",
-      "weapon": "knife"
+      "weapon": "spear"
     }
   ],
   "fabric:load_conditions": [
     {
       "condition": "weaponmod:config_conditional",
-      "weapon": "knife"
+      "weapon": "spear"
     }
   ]
 }
