@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:battleaxe.gold",
+    "weaponmod:boomerang.gold",
+    "weaponmod:flail.gold",
+    "weaponmod:halberd.gold",
+    "weaponmod:katana.gold",
+    "weaponmod:knife.gold",
+    "weaponmod:musketbayonet.gold",
+    "weaponmod:spear.gold",
+    "weaponmod:warhammer.gold"
+  ]
+}
