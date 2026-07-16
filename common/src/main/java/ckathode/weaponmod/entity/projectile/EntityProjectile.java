@@ -4,6 +4,7 @@ import ckathode.weaponmod.WeaponModConfig;
 import com.mojang.serialization.Codec;
 import dev.architectury.extensions.network.EntitySpawnExtension;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -11,11 +12,14 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -82,9 +86,8 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
             if (this.firedFromWeapon.isEmpty()) {
                 throw new IllegalArgumentException("Invalid weapon firing an arrow");
             }
-            EnchantmentHelper.onProjectileSpawned(serverLevel, this.firedFromWeapon, this, item -> {
-                this.firedFromWeapon = null;
-            });
+            EnchantmentHelper.onProjectileSpawned(serverLevel, this.firedFromWeapon, this,
+                    item -> this.firedFromWeapon = null);
         }
     }
 
@@ -119,6 +122,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         return super.getOwner();
     }
 
+    protected boolean isDisabled() {
+        return false;
+    }
+
     protected void setPickupStatusFromEntity(LivingEntity entityliving) {
         if (entityliving instanceof Player player) {
             if (player.isCreative()) {
@@ -134,6 +141,12 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     public Entity getDamagingEntity() {
         Entity shooter = getOwner();
         return shooter != null ? shooter : this;
+    }
+
+    @NotNull
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket(@NotNull ServerEntity serverEntity) {
+        return NetworkManager.createAddEntityPacket(this, serverEntity);
     }
 
     @Override
@@ -173,6 +186,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void tick() {
+        if (isDisabled()) {
+            remove(RemovalReason.DISCARDED);
+            return;
+        }
         baseTick();
     }
 

@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WMUtil;
+import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityCannonBall;
 import ckathode.weaponmod.item.WMItem;
 import dev.architectury.networking.NetworkManager;
@@ -171,6 +172,10 @@ public class EntityCannon extends Boat {
 
     @Override
     public void tick() {
+        if (!WeaponModConfig.get().isEnabled("cannon")) {
+            remove(RemovalReason.DISCARDED);
+            return;
+        }
         baseTick();
     }
 
