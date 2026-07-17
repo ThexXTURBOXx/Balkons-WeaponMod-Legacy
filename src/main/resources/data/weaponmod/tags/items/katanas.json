@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:katana.diamond",
+    "weaponmod:katana.iron",
+    "weaponmod:katana.gold",
+    "weaponmod:katana.stone",
+    "weaponmod:katana.wood"
+  ]
+}

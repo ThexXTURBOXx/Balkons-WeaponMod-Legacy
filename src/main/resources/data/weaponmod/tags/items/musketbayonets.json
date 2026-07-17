@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:musketbayonet.diamond",
+    "weaponmod:musketbayonet.iron",
+    "weaponmod:musketbayonet.gold",
+    "weaponmod:musketbayonet.stone",
+    "weaponmod:musketbayonet.wood"
+  ]
+}
