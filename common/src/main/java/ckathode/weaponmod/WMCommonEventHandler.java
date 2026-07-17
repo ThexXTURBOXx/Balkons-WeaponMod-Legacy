@@ -4,6 +4,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,9 +22,16 @@ public class WMCommonEventHandler {
     public static EventResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source, float amount) {
         ItemStack stack = entity.getUseItem();
         Item item = stack.isEmpty() ? null : stack.getItem();
+        if (Float.isFinite(amount) && amount <= 0) return EventResult.pass();
         if (!(item instanceof IItemWeapon)) return EventResult.pass();
-        if (entity instanceof Player player && player.isCreative() &&
-            !source.isBypassInvul()) return EventResult.pass();
+        if (entity.isInvulnerableTo(source)) return EventResult.pass();
+        if (entity.isDeadOrDying()) return EventResult.pass();
+        if (source.isFire() && entity.hasEffect(MobEffects.FIRE_RESISTANCE))
+            return EventResult.pass();
+        if (entity instanceof Player player) {
+            if (player.getAbilities().invulnerable && !source.isBypassInvul())
+                return EventResult.pass();
+        }
 
         entity.stopUsingItem();
         return EventResult.pass();
