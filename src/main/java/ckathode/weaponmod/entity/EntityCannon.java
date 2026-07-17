@@ -168,6 +168,10 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public void onUpdate() {
+        if (!BalkonsWeaponMod.instance.modConfig.isEnabled("cannon")) {
+            setDead();
+            return;
+        }
         onEntityUpdate();
     }
 

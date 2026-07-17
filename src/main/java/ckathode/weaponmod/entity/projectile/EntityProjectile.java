@@ -100,6 +100,10 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         shootingEntity = entity;
     }
 
+    protected boolean isDisabled() {
+        return false;
+    }
+
     protected void setPickupStatusFromEntity(EntityLivingBase entityliving) {
         if (entityliving instanceof EntityPlayer) {
             if (((EntityPlayer) entityliving).isCreative()) {
@@ -163,6 +167,10 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
 
     @Override
     public void onUpdate() {
+        if (isDisabled()) {
+            setDead();
+            return;
+        }
         onEntityUpdate();
     }
 
