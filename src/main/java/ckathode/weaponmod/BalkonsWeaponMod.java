@@ -42,6 +42,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import java.util.Arrays;
 import makamys.mclib.core.MCLib;
 import makamys.mclib.core.MCLibModules;
 import net.minecraft.block.BlockDispenser;
@@ -576,12 +577,19 @@ public class BalkonsWeaponMod {
     }
 
     private void registerLootTableEntries() {
-        for (Item item : new Item[]{battleaxeSteel, boomerangSteel, flailSteel, katanaSteel, halberdSteel,
-                knifeSteel, bayonetSteel, spearSteel, warhammerSteel}) {
+        if (!modConfig.enableLootTables) return;
+
+        Item[] steelItems = new Item[]{battleaxeSteel, boomerangSteel, flailSteel, katanaSteel, halberdSteel,
+                knifeSteel, bayonetSteel, spearSteel, warhammerSteel};
+        String[][] configs = new String[][]{{"battleaxe"}, {"boomerang"}, {"flail"}, {"katana"}, {"halberd"},
+                {"knife"}, {"musket", "knife"}, {"spear"}, {"warhammer"}};
+
+        for (int i = 0; i < steelItems.length; i++) {
+            if (Arrays.stream(configs[i]).anyMatch(cfg -> !modConfig.isEnabled(cfg))) continue;
             ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CORRIDOR,
-                    new WeightedRandomChestContent(item, 0, 1, 1, 5));
+                    new WeightedRandomChestContent(steelItems[i], 0, 1, 1, 5));
             ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH,
-                    new WeightedRandomChestContent(item, 0, 1, 1, 5));
+                    new WeightedRandomChestContent(steelItems[i], 0, 1, 1, 5));
         }
     }
 
