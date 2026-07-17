@@ -205,6 +205,7 @@ public class BalkonsWeaponMod {
         registerRecipes();
         registerDispenseBehavior();
         registerLootTableEntries();
+        registerZombieWeapons();
     }
 
     @Mod.EventHandler
@@ -591,6 +592,16 @@ public class BalkonsWeaponMod {
             ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH,
                     new WeightedRandomChestContent(steelItems[i], 0, 1, 1, 5));
         }
+    }
+
+    private void registerZombieWeapons() {
+        WMCommonEventHandler.registerZombieWeapon(battleaxeSteel, "battleaxe");
+        WMCommonEventHandler.registerZombieWeapon(katanaSteel, "katana");
+        WMCommonEventHandler.registerZombieWeapon(halberdSteel, "halberd");
+        WMCommonEventHandler.registerZombieWeapon(knifeSteel, "knife");
+        WMCommonEventHandler.registerZombieWeapon(spearSteel, "spear");
+        WMCommonEventHandler.registerZombieWeapon(warhammerSteel, "warhammer");
+        WMCommonEventHandler.registerZombieWeapon(fireRod, "firerod");
     }
 
 }

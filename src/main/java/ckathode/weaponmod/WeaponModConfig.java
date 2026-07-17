@@ -35,6 +35,7 @@ public class WeaponModConfig {
     public boolean itemModelForEntity;
     public boolean legacyCannonModel;
     public boolean enableLootTables;
+    public boolean zombiesSpawnWithWeapons;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
     private final Map<String, DataWatcherIdSetting> dataWatcherIds;
@@ -118,6 +119,8 @@ public class WeaponModConfig {
                 "Changes the cannon to the legacy model from older versions of BWM!").getBoolean(true);
         enableLootTables = config.get(CATEGORY_SETTINGS, "enable-loot-tables", true,
                 "Weapons can sometimes be found in loot chests.").getBoolean(true);
+        zombiesSpawnWithWeapons = config.get(CATEGORY_SETTINGS, "zombies-spawn-with-weapons", true,
+                "Zombies sometimes hold this mod's weapons when they spawn.").getBoolean(true);
 
         for (final EnableSetting es : enableSettings.values()) {
             es.enabled = config.get(CATEGORY_ENABLE, es.settingName, es.enabled).getBoolean(es.enabled);
