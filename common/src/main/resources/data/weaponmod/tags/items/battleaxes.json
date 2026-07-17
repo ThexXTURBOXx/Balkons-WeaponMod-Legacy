@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:battleaxe.netherite",
+    "weaponmod:battleaxe.diamond",
+    "weaponmod:battleaxe.iron",
+    "weaponmod:battleaxe.gold",
+    "weaponmod:battleaxe.stone",
+    "weaponmod:battleaxe.wood"
+  ]
+}
