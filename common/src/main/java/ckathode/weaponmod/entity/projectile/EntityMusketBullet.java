@@ -2,9 +2,8 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
-import me.shedaniel.architectury.networking.NetworkManager;
+import ckathode.weaponmod.WeaponModConfig;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -39,8 +38,9 @@ public class EntityMusketBullet extends EntityProjectile<EntityMusketBullet> {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    protected boolean isDisabled() {
+        return !WeaponModConfig.get().isEnabled("musket") &&
+               !WeaponModConfig.get().isEnabled("flintlock");
     }
 
     @Override

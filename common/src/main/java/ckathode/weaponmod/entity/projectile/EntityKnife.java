@@ -2,9 +2,8 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
+import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.item.IItemWeapon;
-import me.shedaniel.architectury.networking.NetworkManager;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -45,8 +44,8 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    protected boolean isDisabled() {
+        return !WeaponModConfig.get().isEnabled("knife");
     }
 
     @Override

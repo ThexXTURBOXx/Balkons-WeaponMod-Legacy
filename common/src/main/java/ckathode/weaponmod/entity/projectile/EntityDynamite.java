@@ -4,12 +4,10 @@ import ckathode.weaponmod.PhysHelper;
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.WeaponModConfig;
-import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -53,8 +51,8 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    protected boolean isDisabled() {
+        return !WeaponModConfig.get().isEnabled("dynamite");
     }
 
     @Override

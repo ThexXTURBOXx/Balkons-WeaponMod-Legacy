@@ -2,6 +2,7 @@ package ckathode.weaponmod.entity;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
+import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.item.IItemWeapon;
 import java.util.List;
 import me.shedaniel.architectury.networking.NetworkManager;
@@ -145,6 +146,10 @@ public class EntityDummy extends Entity {
 
     @Override
     public void tick() {
+        if (!WeaponModConfig.get().isEnabled("dummy")) {
+            remove();
+            return;
+        }
         super.tick();
         int i = getTimeSinceHit();
         if (i > 0) {

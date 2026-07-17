@@ -2,11 +2,10 @@ package ckathode.weaponmod.entity.projectile;
 
 import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponDamageSource;
+import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.item.IItemWeapon;
-import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -56,10 +55,9 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
         soundTimer = 0.0f;
     }
 
-    @NotNull
     @Override
-    public Packet<?> getAddEntityPacket() {
-        return NetworkManager.createAddEntityPacket(this);
+    protected boolean isDisabled() {
+        return !WeaponModConfig.get().isEnabled("boomerang");
     }
 
     @Override
