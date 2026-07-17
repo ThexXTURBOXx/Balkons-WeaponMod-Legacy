@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import net.minecraft.entity.Entity;
@@ -29,6 +30,11 @@ public class EntitySpear extends EntityMaterialProjectile {
         setThrower(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("spear");
     }
 
     @Override
