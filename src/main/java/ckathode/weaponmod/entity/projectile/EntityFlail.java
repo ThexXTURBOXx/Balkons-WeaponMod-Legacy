@@ -52,6 +52,11 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
     }
 
     @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("flail");
+    }
+
+    @Override
     public void shoot(Entity entity, float f, float f1, float f2, float f3, float f4) {
         Vec3d entityMotion = entity.getMotion();
         setMotion(getMotion().add(entityMotion.x, entity.onGround ? 0 : entityMotion.y, entityMotion.z));

@@ -107,6 +107,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
         return super.getShooter();
     }
 
+    protected boolean isDisabled() {
+        return false;
+    }
+
     protected void setPickupStatusFromEntity(LivingEntity entityliving) {
         if (entityliving instanceof PlayerEntity) {
             if (((PlayerEntity) entityliving).isCreative()) {
@@ -162,6 +166,10 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void tick() {
+        if (isDisabled()) {
+            remove();
+            return;
+        }
         baseTick();
     }
 

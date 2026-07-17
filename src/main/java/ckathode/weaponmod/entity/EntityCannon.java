@@ -180,6 +180,10 @@ public class EntityCannon extends BoatEntity {
 
     @Override
     public void tick() {
+        if (!BalkonsWeaponMod.instance.modConfig.isEnabled("cannon")) {
+            remove();
+            return;
+        }
         baseTick();
     }
 
