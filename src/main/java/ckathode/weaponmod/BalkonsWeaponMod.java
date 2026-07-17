@@ -234,6 +234,16 @@ public class BalkonsWeaponMod {
                     'X', "stickWood", '#', "gemDiamond"));
             GameRegistry.addRecipe(new ShapedOreRecipe(spearGold, "  #", " X ", "X  ",
                     'X', "stickWood", '#', "ingotGold"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearWood, "#  ", " X ", "  X",
+                    'X', "stickWood", '#', "plankWood"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearStone, "#  ", " X ", "  X",
+                    'X', "stickWood", '#', "cobblestone"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearSteel, "#  ", " X ", "  X",
+                    'X', "stickWood", '#', "ingotIron"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearDiamond, "#  ", " X ", "  X",
+                    'X', "stickWood", '#', "gemDiamond"));
+            GameRegistry.addRecipe(new ShapedOreRecipe(spearGold, "#  ", " X ", "  X",
+                    'X', "stickWood", '#', "ingotGold"));
             GameRegistry.addSmelting(spearGold, new ItemStack(Items.GOLD_NUGGET), 0.1f);
         }
         if (modConfig.isEnabled("halberd")) {
