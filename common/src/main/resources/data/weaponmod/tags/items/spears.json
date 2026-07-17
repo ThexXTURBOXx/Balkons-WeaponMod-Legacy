@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:spear.netherite",
+    "weaponmod:spear.diamond",
+    "weaponmod:spear.iron",
+    "weaponmod:spear.gold",
+    "weaponmod:spear.stone",
+    "weaponmod:spear.wood"
+  ]
+}

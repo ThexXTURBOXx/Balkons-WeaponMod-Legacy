@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:warhammer.netherite",
+    "weaponmod:warhammer.diamond",
+    "weaponmod:warhammer.iron",
+    "weaponmod:warhammer.gold",
+    "weaponmod:warhammer.stone",
+    "weaponmod:warhammer.wood"
+  ]
+}
