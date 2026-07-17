@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.RangedComponent;
 import net.minecraft.entity.Entity;
@@ -26,6 +27,11 @@ public class EntityBlunderShot extends EntityProjectile {
     public EntityBlunderShot(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setThrower(shooter);
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("blunderbuss");
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.IItemWeapon;
 import javax.annotation.Nonnull;
@@ -40,6 +41,11 @@ public class EntityBoomerang extends EntityMaterialProjectile {
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
         soundTimer = 0.0f;
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("boomerang");
     }
 
     @Override

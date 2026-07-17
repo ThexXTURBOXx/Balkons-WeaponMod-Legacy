@@ -31,6 +31,11 @@ public class EntityCrossbowBolt extends EntityProjectile {
     }
 
     @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("crossbow");
+    }
+
+    @Override
     public void setAim(Entity entity, float f, float f1, float f2, float f3, float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
         float y = -MathHelper.sin(f * 0.017453292f);

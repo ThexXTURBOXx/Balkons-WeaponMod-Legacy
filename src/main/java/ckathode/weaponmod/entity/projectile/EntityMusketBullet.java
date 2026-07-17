@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,6 +26,12 @@ public class EntityMusketBullet extends EntityProjectile {
     public EntityMusketBullet(World world, EntityLivingBase shooter) {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1, shooter.posZ);
         setThrower(shooter);
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("musket") &&
+               !BalkonsWeaponMod.instance.modConfig.isEnabled("flintlock");
     }
 
     @Override

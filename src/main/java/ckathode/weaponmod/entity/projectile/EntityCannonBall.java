@@ -50,6 +50,11 @@ public class EntityCannonBall extends EntityProjectile {
     }
 
     @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("cannon");
+    }
+
+    @Override
     public void onUpdate() {
         super.onUpdate();
         double speed = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);

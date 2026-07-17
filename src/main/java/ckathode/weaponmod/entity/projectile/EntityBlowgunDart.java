@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.ItemBlowgunDart;
 import net.minecraft.entity.Entity;
@@ -30,6 +31,11 @@ public class EntityBlowgunDart extends EntityMaterialProjectile {
         setThrower(shooter);
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("blowgun");
     }
 
     @Override
