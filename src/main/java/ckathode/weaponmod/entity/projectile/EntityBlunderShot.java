@@ -31,6 +31,11 @@ public class EntityBlunderShot extends EntityProjectile<EntityBlunderShot> {
     }
 
     @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("blunderbuss");
+    }
+
+    @Override
     public void shoot(Entity entity, float f, float f1, float f2, float f3,
                       float f4) {
         float x = -MathHelper.sin(f1 * 0.017453292f) * MathHelper.cos(f * 0.017453292f);
