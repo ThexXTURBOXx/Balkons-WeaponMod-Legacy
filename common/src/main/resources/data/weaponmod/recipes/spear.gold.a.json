@@ -1,0 +1,54 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "X  ",
+    " # ",
+    "  #"
+  ],
+  "key": {
+    "X": [
+      {
+        "item": "minecraft:gold_ingot"
+      },
+      {
+        "tag": "c:ingots/gold"
+      },
+      {
+        "tag": "c:gold_ingots"
+      },
+      {
+        "tag": "forge:ingots/gold"
+      }
+    ],
+    "#": [
+      {
+        "item": "minecraft:stick"
+      },
+      {
+        "tag": "c:rods/wooden"
+      },
+      {
+        "tag": "c:wooden_rods"
+      },
+      {
+        "tag": "forge:rods/wooden"
+      }
+    ]
+  },
+  "result": {
+    "item": "weaponmod:spear.gold"
+  },
+  "conditions": [
+    {
+      "type": "weaponmod:config_conditional",
+      "weapon": "spear"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "weaponmod:config_conditional",
+      "weapon": "spear"
+    }
+  ]
+}
