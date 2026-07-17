@@ -141,6 +141,10 @@ public class EntityDummy extends Entity {
 
     @Override
     public void onUpdate() {
+        if (!BalkonsWeaponMod.instance.modConfig.isEnabled("dummy")) {
+            setDead();
+            return;
+        }
         super.onUpdate();
         int i = getTimeSinceHit();
         if (i > 0) {

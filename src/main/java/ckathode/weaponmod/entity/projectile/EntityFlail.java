@@ -1,5 +1,6 @@
 package ckathode.weaponmod.entity.projectile;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WeaponDamageSource;
 import ckathode.weaponmod.item.ItemFlail;
@@ -46,6 +47,11 @@ public class EntityFlail extends EntityMaterialProjectile {
         setPickupStatusFromEntity(shooter);
         setThrownItemStack(itemstack);
         distanceTotal = 0.0;
+    }
+
+    @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("flail");
     }
 
     @Override
