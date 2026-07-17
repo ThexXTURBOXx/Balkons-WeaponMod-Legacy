@@ -83,6 +83,10 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
         shootingEntity = entity;
     }
 
+    protected boolean isDisabled() {
+        return false;
+    }
+
     public void setAim(Entity entity, float f, float f1, float f2, float f3, float f4) {
     }
 
@@ -149,6 +153,10 @@ public class EntityProjectile extends EntityArrow implements IThrowableEntity, I
 
     @Override
     public void onUpdate() {
+        if (isDisabled()) {
+            setDead();
+            return;
+        }
         onEntityUpdate();
     }
 

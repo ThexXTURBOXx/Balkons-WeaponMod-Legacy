@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
 import ckathode.weaponmod.entity.projectile.EntityMusketBullet;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,7 +41,12 @@ public class RangedCompMusket extends RangedComponent {
         }
         f += 0.02f;
         if (!world.isRemote) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving);
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving) {
+                @Override
+                protected boolean isDisabled() {
+                    return !BalkonsWeaponMod.instance.modConfig.isEnabled("musket");
+                }
+            };
             entitymusketbullet.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f,
                     1.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
