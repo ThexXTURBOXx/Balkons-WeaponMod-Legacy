@@ -4,6 +4,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import me.shedaniel.architectury.event.events.EntityEvent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -22,9 +23,17 @@ public class WMCommonEventHandler {
                                                                   float amount) {
         ItemStack stack = entity.getUseItem();
         Item item = stack.isEmpty() ? null : stack.getItem();
+        if (Float.isFinite(amount) && amount <= 0) return InteractionResult.PASS;
         if (!(item instanceof IItemWeapon)) return InteractionResult.PASS;
-        if (entity instanceof Player && ((Player) entity).isCreative() &&
-            !source.isBypassInvul()) return InteractionResult.PASS;
+        if (entity.isInvulnerableTo(source)) return InteractionResult.PASS;
+        if (entity.isDeadOrDying()) return InteractionResult.PASS;
+        if (source.isFire() && entity.hasEffect(MobEffects.FIRE_RESISTANCE))
+            return InteractionResult.PASS;
+        if (entity instanceof Player) {
+            Player player = (Player) entity;
+            if (player.abilities.invulnerable && !source.isBypassInvul())
+                return InteractionResult.PASS;
+        }
 
         entity.stopUsingItem();
         return InteractionResult.PASS;
