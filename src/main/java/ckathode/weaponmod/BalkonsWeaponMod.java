@@ -541,8 +541,6 @@ public class BalkonsWeaponMod {
         GameRegistry.register(mortar = WMItemBuilder.createStandardMortar("mortar"));
         GameRegistry.register(mortarIronPart = WMItemBuilder.createWMItem("mortar-ironpart"));
         GameRegistry.register(mortarShell = WMItemBuilder.createWMItem("shell"));
-
-        registerDispenseBehavior();
     }
 
     private void registerDispenseBehavior() {
