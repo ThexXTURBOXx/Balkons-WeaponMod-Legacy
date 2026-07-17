@@ -145,6 +145,10 @@ public class EntityDummy extends Entity {
 
     @Override
     public void tick() {
+        if (!BalkonsWeaponMod.instance.modConfig.isEnabled("dummy")) {
+            remove();
+            return;
+        }
         super.tick();
         int i = getTimeSinceHit();
         if (i > 0) {

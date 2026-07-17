@@ -53,6 +53,11 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     @Override
+    protected boolean isDisabled() {
+        return !BalkonsWeaponMod.instance.modConfig.isEnabled("cannon");
+    }
+
+    @Override
     public void tick() {
         super.tick();
         double speed = getMotion().length();
