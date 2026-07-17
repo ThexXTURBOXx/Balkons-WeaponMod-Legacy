@@ -47,9 +47,12 @@ import makamys.mclib.core.MCLibModules;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Logger;
@@ -200,6 +203,7 @@ public class BalkonsWeaponMod {
         messagePipeline.initialize();
         registerRecipes();
         registerDispenseBehavior();
+        registerLootTableEntries();
     }
 
     @Mod.EventHandler
@@ -540,8 +544,6 @@ public class BalkonsWeaponMod {
         mortar = WMItemBuilder.createStandardMortar("mortar");
         mortarIronPart = WMItemBuilder.createWMItem("mortar-ironpart");
         mortarShell = WMItemBuilder.createWMItem("shell");
-
-        registerDispenseBehavior();
     }
 
     private void registerDispenseBehavior() {
@@ -570,6 +572,16 @@ public class BalkonsWeaponMod {
         }
         if (mortarShell != null) {
             BlockDispenser.dispenseBehaviorRegistry.putObject(mortarShell, new DispenseMortarShell());
+        }
+    }
+
+    private void registerLootTableEntries() {
+        for (Item item : new Item[]{battleaxeSteel, boomerangSteel, flailSteel, katanaSteel, halberdSteel,
+                knifeSteel, bayonetSteel, spearSteel, warhammerSteel}) {
+            ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CORRIDOR,
+                    new WeightedRandomChestContent(item, 0, 1, 1, 5));
+            ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH,
+                    new WeightedRandomChestContent(item, 0, 1, 1, 5));
         }
     }
 
