@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:dart",
+    "weaponmod:dart.hunger",
+    "weaponmod:dart.slow",
+    "weaponmod:dart.damage"
+  ]
+}

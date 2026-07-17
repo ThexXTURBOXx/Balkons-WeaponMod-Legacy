@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:boomerang.diamond",
+    "weaponmod:boomerang.iron",
+    "weaponmod:boomerang.gold",
+    "weaponmod:boomerang.stone",
+    "weaponmod:boomerang.wood"
+  ]
+}

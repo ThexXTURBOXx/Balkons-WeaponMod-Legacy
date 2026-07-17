@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:battleaxe.diamond",
+    "weaponmod:battleaxe.iron",
+    "weaponmod:battleaxe.gold",
+    "weaponmod:battleaxe.stone",
+    "weaponmod:battleaxe.wood"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "weaponmod:knife.diamond",
+    "weaponmod:knife.iron",
+    "weaponmod:knife.gold",
+    "weaponmod:knife.stone",
+    "weaponmod:knife.wood"
+  ]
+}
