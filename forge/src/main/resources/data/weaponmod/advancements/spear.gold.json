@@ -2,7 +2,8 @@
   "parent": "weaponmod:root",
   "rewards": {
     "recipes": [
-      "weaponmod:spear.gold"
+      "weaponmod:spear.gold",
+      "weaponmod:spear.gold.a"
     ]
   },
   "criteria": {
