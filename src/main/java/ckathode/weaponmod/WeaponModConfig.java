@@ -33,6 +33,7 @@ public class WeaponModConfig {
     public boolean guiOverlayReloaded;
     public boolean itemModelForEntity;
     public boolean legacyCannonModel;
+    public boolean enableLootTables;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
 
@@ -69,11 +70,14 @@ public class WeaponModConfig {
     public void syncConfig(boolean load) {
         if (load) config.load();
 
-        config.addCustomCategoryComment(CATEGORY_SETTINGS, "Miscellaneous mod settings");
-        config.addCustomCategoryComment(CATEGORY_ENABLE, "Enable or disable certain weapons "
-                                                         + "(only disables their recipes; they are still obtainable "
-                                                         + "through Creative mode!)");
-        config.addCustomCategoryComment(CATEGORY_RELOADTIME, "The reload durations of the reloadable weapons");
+        config.addCustomCategoryComment(CATEGORY_SETTINGS,
+                "Miscellaneous mod settings");
+        config.addCustomCategoryComment(CATEGORY_ENABLE,
+                "Enable or disable certain weapons " +
+                "(only disables their recipes; they are still obtainable " +
+                "through Creative mode!)");
+        config.addCustomCategoryComment(CATEGORY_RELOADTIME,
+                "The reload durations of the reloadable weapons");
 
         config.setCategoryRequiresMcRestart(CATEGORY_ENABLE, true);
         config.setCategoryRequiresWorldRestart(CATEGORY_ENABLE, true);
@@ -85,17 +89,17 @@ public class WeaponModConfig {
         mortarDoesBlockDamage = config.get(CATEGORY_SETTINGS, "mortar-block-damage", true).getBoolean(true);
         canThrowKnife = config.get(CATEGORY_SETTINGS, "can-throw-knife", true).getBoolean(true);
         canThrowSpear = config.get(CATEGORY_SETTINGS, "can-throw-spear", true).getBoolean(true);
-        allCanPickup = config.get(CATEGORY_SETTINGS, "pickup-all", true, "Change this to 'false' to allow only the"
-                                                                         + " thrower/shooter of the projectile to "
-                                                                         + "pick the item up. If set to 'true' "
-                                                                         + "everyone can pick the item up.").getBoolean(true);
-        guiOverlayReloaded = config.get(CATEGORY_SETTINGS, "reload-progress", true, "Show reload progress in "
-                                                                                    + "hotbar.").getBoolean(true);
-        itemModelForEntity = config.get(CATEGORY_SETTINGS, "render-entity-model", true, "Item model for entity "
-                                                                                        + "(knife, spear, etc).").getBoolean(true);
-        legacyCannonModel = config.get(CATEGORY_SETTINGS, "legacy-cannon-model", false, "Changes the cannon to the "
-                                                                                        + "legacy model from older "
-                                                                                        + "versions of BWM!").getBoolean(true);
+        allCanPickup = config.get(CATEGORY_SETTINGS, "pickup-all", true,
+                "Change this to 'false' to allow only the thrower/shooter of the projectile to " +
+                "pick the item up. If set to 'true' everyone can pick the item up.").getBoolean(true);
+        guiOverlayReloaded = config.get(CATEGORY_SETTINGS, "reload-progress", true,
+                "Show reload progress in hotbar.").getBoolean(true);
+        itemModelForEntity = config.get(CATEGORY_SETTINGS, "render-entity-model", true,
+                "Item model for entity (knife, spear, etc).").getBoolean(true);
+        legacyCannonModel = config.get(CATEGORY_SETTINGS, "legacy-cannon-model", false,
+                "Changes the cannon to the legacy model from older versions of BWM!").getBoolean(true);
+        enableLootTables = config.get(CATEGORY_SETTINGS, "enable-loot-tables", true,
+                "Weapons can sometimes be found in loot chests.").getBoolean(true);
 
         for (final EnableSetting es : enableSettings.values()) {
             es.enabled = config.get(CATEGORY_ENABLE, es.settingName, es.enabled).getBoolean(es.enabled);
