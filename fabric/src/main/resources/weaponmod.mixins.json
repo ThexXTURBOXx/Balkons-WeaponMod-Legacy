@@ -11,6 +11,7 @@
     "EnchantmentHelperMixin",
     "EnchantmentMixin",
     "EntityMixin",
+    "ZombieMixin",
     "PlayerMixin"
   ],
   "server": [],
