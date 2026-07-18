@@ -51,12 +51,12 @@ public class WMCommonEventHandler {
 
     @SubscribeEvent
     public void onEntityAttack(LivingAttackEvent event) {
-        Entity source = event.getSource().getSourceOfDamage();
+        Entity source = event.getSource().getEntity();
         if (!(source instanceof EntityLivingBase)) return;
         if (source instanceof EntityPlayer) return; // Already handled in MeleeCompFirerod
 
         EntityLivingBase living = (EntityLivingBase) source;
-        ItemStack stack = living.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+        ItemStack stack = living.getHeldItemMainhand();
         if (stack == null) return;
         Item item = stack.getItem();
         if (item == BalkonsWeaponMod.fireRod) {
