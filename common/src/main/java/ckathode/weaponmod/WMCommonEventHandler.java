@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
@@ -51,6 +52,10 @@ public class WMCommonEventHandler {
         return EventResult.pass();
     }
 
+    private static LootItemCondition cfgCondition(String... configs) {
+        return new WMLootConfigCondition(configs);
+    }
+
     public static LootPool.Builder getIronWeaponsLootPool() {
         return addIronWeapons(LootPool.lootPool(), b -> b);
     }
@@ -59,22 +64,31 @@ public class WMCommonEventHandler {
                                                   Function<LootItem.Builder<?>, LootItem.Builder<?>> mod) {
         return lootPool
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_BATTLEAXE_IRON.get())
+                        .when(() -> cfgCondition("battleaxe"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_BOOMERANG_IRON.get())
+                        .when(() -> cfgCondition("boomerang"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_FLAIL_IRON.get())
+                        .when(() -> cfgCondition("flail"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_KATANA_IRON.get())
+                        .when(() -> cfgCondition("katana"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_HALBERD_IRON.get())
+                        .when(() -> cfgCondition("halberd"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_KNIFE_IRON.get())
+                        .when(() -> cfgCondition("knife"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_MUSKET_IRON.get())
+                        .when(() -> cfgCondition("musket", "knife"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_SPEAR_IRON.get())
+                        .when(() -> cfgCondition("spear"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_WARHAMMER_IRON.get())
+                        .when(() -> cfgCondition("warhammer"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))));
     }
 
@@ -86,22 +100,31 @@ public class WMCommonEventHandler {
                                                   Function<LootItem.Builder<?>, LootItem.Builder<?>> mod) {
         return lootPool
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_BATTLEAXE_GOLD.get())
+                        .when(() -> cfgCondition("battleaxe"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_BOOMERANG_GOLD.get())
+                        .when(() -> cfgCondition("boomerang"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_FLAIL_GOLD.get())
+                        .when(() -> cfgCondition("flail"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_KATANA_GOLD.get())
+                        .when(() -> cfgCondition("katana"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_HALBERD_GOLD.get())
+                        .when(() -> cfgCondition("halberd"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_KNIFE_GOLD.get())
+                        .when(() -> cfgCondition("knife"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_MUSKET_GOLD.get())
+                        .when(() -> cfgCondition("musket", "knife"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_SPEAR_GOLD.get())
+                        .when(() -> cfgCondition("spear"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_WARHAMMER_GOLD.get())
+                        .when(() -> cfgCondition("warhammer"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))));
     }
 
@@ -113,28 +136,38 @@ public class WMCommonEventHandler {
                                                      Function<LootItem.Builder<?>, LootItem.Builder<?>> mod) {
         return lootPool
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_BATTLEAXE_DIAMOND.get())
+                        .when(() -> cfgCondition("battleaxe"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_BOOMERANG_DIAMOND.get())
+                        .when(() -> cfgCondition("boomerang"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_FLAIL_DIAMOND.get())
+                        .when(() -> cfgCondition("flail"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_KATANA_DIAMOND.get())
+                        .when(() -> cfgCondition("katana"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_HALBERD_DIAMOND.get())
+                        .when(() -> cfgCondition("halberd"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_KNIFE_DIAMOND.get())
+                        .when(() -> cfgCondition("knife"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_MUSKET_DIAMOND.get())
+                        .when(() -> cfgCondition("musket", "knife"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_SPEAR_DIAMOND.get())
+                        .when(() -> cfgCondition("spear"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))))
                 .add(mod.apply(LootItem.lootTableItem(WMRegistries.ITEM_WARHAMMER_DIAMOND.get())
+                        .when(() -> cfgCondition("warhammer"))
                         .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))));
     }
 
     public static void registerLootTableAdditions(LootDataManager lootDataManager, ResourceLocation id,
                                                   LootEvent.LootTableModificationContext context, boolean builtIn) {
         if (!builtIn) return;
+        if (!WeaponModConfig.get().enableLootTables) return;
 
         if (BuiltInLootTables.BASTION_BRIDGE.equals(id)) {
             context.addPool(getGoldWeaponsLootPool().setRolls(UniformGenerator.between(0, 1)));
