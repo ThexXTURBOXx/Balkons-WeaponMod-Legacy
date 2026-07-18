@@ -9,6 +9,7 @@
   ],
   "mixins": [
     "EntityMixin",
+    "ZombieMixin",
     "PlayerMixin"
   ],
   "server": [],

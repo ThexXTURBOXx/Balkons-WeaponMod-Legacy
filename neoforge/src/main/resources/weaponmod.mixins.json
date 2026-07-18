@@ -5,7 +5,8 @@
   "minVersion": "0.8",
   "client": [],
   "mixins": [
-    "EntityMixin"
+    "EntityMixin",
+    "ZombieMixin"
   ],
   "server": [],
   "injectors": {
