@@ -1,6 +1,7 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import java.util.Arrays;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,101 +54,108 @@ public class WMCommonEventHandler {
         entity.resetActiveHand();
     }
 
+    private static LootCondition cfgCondition(String... configs) {
+        return (rand, context) -> Arrays.stream(configs).allMatch(cfg ->
+                BalkonsWeaponMod.instance.modConfig.isEnabled(cfg));
+    }
+
     public static LootPool addIronWeapons(LootPool lootPool, LootFunction... lootFunctions) {
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.battleaxeSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("battleaxe")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i0"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.boomerangSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("boomerang")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i1"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.flailSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("flail")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i2"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.katanaSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("katana")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i3"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.halberdSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("halberd")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i4"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.knifeSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("knife")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i5"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.bayonetSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("musket", "knife")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i6"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.spearSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("spear")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i7"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.warhammerSteel,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("warhammer")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#i8"));
         return lootPool;
     }
 
     public static LootPool addGoldWeapons(LootPool lootPool, LootFunction... lootFunctions) {
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.battleaxeGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("battleaxe")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g0"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.boomerangGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("boomerang")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g1"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.flailGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("flail")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g2"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.katanaGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("katana")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g3"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.halberdGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("halberd")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g4"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.knifeGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("knife")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g5"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.bayonetGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("musket", "knife")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g6"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.spearGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("spear")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g7"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.warhammerGold,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("warhammer")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#g8"));
         return lootPool;
     }
 
     public static LootPool addDiamondWeapons(LootPool lootPool, LootFunction... lootFunctions) {
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.battleaxeDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("battleaxe")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d0"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.boomerangDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("boomerang")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d1"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.flailDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("flail")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d2"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.katanaDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("katana")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d3"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.halberdDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("halberd")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d4"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.knifeDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("knife")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d5"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.bayonetDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("musket", "knife")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d6"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.spearDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("spear")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d7"));
         lootPool.addEntry(new LootEntryItem(BalkonsWeaponMod.warhammerDiamond,
-                1, 0, lootFunctions, new LootCondition[0],
+                1, 0, lootFunctions, new LootCondition[]{cfgCondition("warhammer")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#d8"));
         return lootPool;
     }
 
     @SubscribeEvent
     public void registerLootTableAdditions(LootTableLoadEvent event) {
+        if (!BalkonsWeaponMod.instance.modConfig.enableLootTables.get()) return;
+
         ResourceLocation id = event.getName();
         LootTable lootTable = event.getTable();
 
