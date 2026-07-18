@@ -390,6 +390,7 @@ public class BalkonsWeaponMod {
         registry.register(mortarShell = WMItemBuilder.createWMItem("shell"));
 
         registerDispenseBehavior();
+        registerZombieWeapons();
     }
 
     @SubscribeEvent
@@ -424,6 +425,16 @@ public class BalkonsWeaponMod {
         if (mortarShell != null) {
             DispenserBlock.registerDispenseBehavior(mortarShell, new DispenseMortarShell());
         }
+    }
+
+    private void registerZombieWeapons() {
+        WMCommonEventHandler.registerZombieWeapon(battleaxeSteel, "battleaxe");
+        WMCommonEventHandler.registerZombieWeapon(katanaSteel, "katana");
+        WMCommonEventHandler.registerZombieWeapon(halberdSteel, "halberd");
+        WMCommonEventHandler.registerZombieWeapon(knifeSteel, "knife");
+        WMCommonEventHandler.registerZombieWeapon(spearSteel, "spear");
+        WMCommonEventHandler.registerZombieWeapon(warhammerSteel, "warhammer");
+        WMCommonEventHandler.registerZombieWeapon(fireRod, "firerod");
     }
 
 }
