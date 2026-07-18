@@ -43,6 +43,7 @@ import ckathode.weaponmod.item.RangedCompMortar;
 import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.item.WMItemProjectile;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import java.util.Map;
@@ -59,6 +60,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
@@ -73,6 +75,8 @@ public class WMRegistries {
             DeferredRegister.create(MOD_ID, Registries.ITEM);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(MOD_ID, Registries.ENTITY_TYPE);
+    public static final DeferredRegister<MapCodec<? extends LootItemCondition>> LOOT_CONDITION_TYPES =
+            DeferredRegister.create(MOD_ID, Registries.LOOT_CONDITION_TYPE);
 
     // Attributes
     public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
@@ -300,6 +304,10 @@ public class WMRegistries {
     public static final RegistrySupplier<EntityType<EntityMortarShell>> ENTITY_MORTAR_SHELL =
             ENTITY_TYPES.register(EntityMortarShell.ID, () -> EntityMortarShell.TYPE);
 
+    // Loot Item Condition Types
+    public static final RegistrySupplier<MapCodec<? extends LootItemCondition>> LOOT_CONFIG_CONDITION =
+            LOOT_CONDITION_TYPES.register(WMLootConfigCondition.ID, () -> WMLootConfigCondition.CODEC);
+
     private static void registerDispenserBehaviors() {
         ITEM_JAVELIN.listen(item -> DispenserBlock.registerBehavior(item,
                 new DispenseWeaponProjectile(item, item)));
@@ -324,6 +332,7 @@ public class WMRegistries {
         DATA_COMPONENT_TYPES.register();
         ITEMS.register();
         ENTITY_TYPES.register();
+        LOOT_CONDITION_TYPES.register();
         registerDispenserBehaviors();
     }
 
