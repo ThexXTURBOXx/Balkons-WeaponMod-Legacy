@@ -192,6 +192,7 @@ public class BalkonsWeaponMod {
         proxy.registerEventHandlers();
         registerWeapons();
         registerDispenseBehavior();
+        registerZombieWeapons();
     }
 
     @Mod.EventHandler
@@ -582,6 +583,16 @@ public class BalkonsWeaponMod {
         if (mortarShell != null) {
             BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(mortarShell, new DispenseMortarShell());
         }
+    }
+
+    private void registerZombieWeapons() {
+        WMCommonEventHandler.registerZombieWeapon(battleaxeSteel, "battleaxe");
+        WMCommonEventHandler.registerZombieWeapon(katanaSteel, "katana");
+        WMCommonEventHandler.registerZombieWeapon(halberdSteel, "halberd");
+        WMCommonEventHandler.registerZombieWeapon(knifeSteel, "knife");
+        WMCommonEventHandler.registerZombieWeapon(spearSteel, "spear");
+        WMCommonEventHandler.registerZombieWeapon(warhammerSteel, "warhammer");
+        WMCommonEventHandler.registerZombieWeapon(fireRod, "firerod");
     }
 
 }
