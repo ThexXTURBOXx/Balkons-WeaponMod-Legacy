@@ -1,16 +1,24 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.MeleeCompFirerod;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.function.Function;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.storage.loot.ConstantRange;
 import net.minecraft.world.storage.loot.ItemLootEntry;
 import net.minecraft.world.storage.loot.LootPool;
@@ -23,15 +31,61 @@ import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class WMCommonEventHandler {
+
+    private static final Map<ItemStack, Collection<String>> ZOMBIE_WEAPONS = new HashMap<>();
+
     @SubscribeEvent
     public void initPlayerWeaponData(EntityEvent.EntityConstructing event) {
         Entity entity = event.getEntity();
         if (entity instanceof PlayerEntity) {
             PlayerWeaponData.initPlayerWeaponData((PlayerEntity) entity);
         }
+    }
+
+    @SubscribeEvent
+    public void onEntityAttack(LivingAttackEvent event) {
+        Entity source = event.getSource().getTrueSource();
+        if (!(source instanceof ZombieEntity)) return;
+
+        ZombieEntity zombie = (ZombieEntity) source;
+        ItemStack stack = zombie.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+        if (stack.isEmpty()) return;
+        Item item = stack.getItem();
+        if (item == BalkonsWeaponMod.fireRod) {
+            ((MeleeCompFirerod) BalkonsWeaponMod.fireRod.meleeComponent).applyFire(event.getEntityLiving(), stack);
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntitySpawn(LivingSpawnEvent.SpecialSpawn event) {
+        if (!BalkonsWeaponMod.instance.modConfig.zombiesSpawnWithWeapons.get()) return;
+        if (event.getWorld().isRemote()) return;
+        if (!(event.getEntityLiving() instanceof ZombieEntity)) return;
+
+        ZombieEntity entity = (ZombieEntity) event.getEntityLiving();
+        if (entity.rand.nextFloat() < (event.getWorld().getDifficulty() == Difficulty.HARD ? 0.05F : 0.01F)) {
+            ZOMBIE_WEAPONS.entrySet()
+                    .stream()
+                    .skip(entity.rand.nextInt(ZOMBIE_WEAPONS.size()))
+                    .findFirst()
+                    .ifPresent(e -> {
+                        if (e.getValue().stream().anyMatch(cfg ->
+                                !BalkonsWeaponMod.instance.modConfig.isEnabled(cfg))) return;
+                        entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, e.getKey());
+                    });
+        }
+    }
+
+    public static void registerZombieWeapon(ItemStack stack, String... configs) {
+        ZOMBIE_WEAPONS.put(stack, new HashSet<>(Arrays.asList(configs)));
+    }
+
+    public static void registerZombieWeapon(Item item, String... configs) {
+        registerZombieWeapon(new ItemStack(item), configs);
     }
 
     @SubscribeEvent
@@ -198,4 +252,5 @@ public class WMCommonEventHandler {
             lootTable.addPool(getIronWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
         }
     }
+
 }

@@ -18,6 +18,7 @@ public class WeaponModConfig {
     public ForgeConfigSpec.BooleanValue itemModelForEntity;
     public ForgeConfigSpec.BooleanValue legacyCannonModel;
     public ForgeConfigSpec.BooleanValue enableLootTables;
+    public ForgeConfigSpec.BooleanValue zombiesSpawnWithWeapons;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
 
@@ -69,6 +70,9 @@ public class WeaponModConfig {
         enableLootTables = builder
                 .comment("Weapons can sometimes be found in loot chests.")
                 .define("enable-loot-tables", true);
+        zombiesSpawnWithWeapons = builder
+                .comment("Zombies sometimes hold this mod's weapons when they spawn.")
+                .define("zombies-spawn-with-weapons", true);
         builder.pop();
 
         context.registerConfig(ModConfig.Type.COMMON, builder.build());
