@@ -293,12 +293,23 @@ public class WMRegistries {
         ITEM_MORTAR_SHELL.listen(item -> DispenserBlock.registerBehavior(item, new DispenseMortarShell()));
     }
 
+    private static void registerZombieWeapons() {
+        ITEM_BATTLEAXE_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "battleaxe"));
+        ITEM_KATANA_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "katana"));
+        ITEM_HALBERD_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "halberd"));
+        ITEM_KNIFE_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "knife"));
+        ITEM_SPEAR_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "spear"));
+        ITEM_WARHAMMER_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "warhammer"));
+        ITEM_FIREROD.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "firerod"));
+    }
+
     public static void init() {
         ATTRIBUTES.register();
         ITEMS.register();
         ENTITY_TYPES.register();
         LOOT_CONDITION_TYPES.register();
         registerDispenserBehaviors();
+        registerZombieWeapons();
     }
 
     public static <T extends Entity> EntityType<T> createEntityType(String name, EntityDimensions size,
