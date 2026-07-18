@@ -122,6 +122,7 @@
   "text.autoconfig.weaponmod.option.guiOverlayReloaded": "Show reload overlay?",
   "text.autoconfig.weaponmod.option.itemModelForEntity": "Render entities as items?",
   "text.autoconfig.weaponmod.option.legacyCannonModel": "Use legacy cannon model?",
+  "text.autoconfig.weaponmod.option.enableLootTables": "Find weapons in loot chests?",
   "text.autoconfig.weaponmod.option.enableSettings.battleaxe": "Battleaxe",
   "text.autoconfig.weaponmod.option.enableSettings.blowgun": "Blowgun",
   "text.autoconfig.weaponmod.option.enableSettings.blunderbuss": "Blunderbuss",
