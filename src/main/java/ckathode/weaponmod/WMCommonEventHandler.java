@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -32,10 +33,11 @@ public class WMCommonEventHandler {
     @SubscribeEvent
     public void onEntityAttack(LivingAttackEvent event) {
         Entity source = event.source.getSourceOfDamage();
-        if (!(source instanceof EntityZombie)) return;
+        if (!(source instanceof EntityLivingBase)) return;
+        if (source instanceof EntityPlayer) return; // Already handled in MeleeCompFirerod
 
-        EntityZombie zombie = (EntityZombie) source;
-        ItemStack stack = zombie.getEquipmentInSlot(0);
+        EntityLivingBase living = (EntityLivingBase) source;
+        ItemStack stack = living.getEquipmentInSlot(0);
         if (stack == null) return;
         Item item = stack.getItem();
         if (item == BalkonsWeaponMod.fireRod) {
