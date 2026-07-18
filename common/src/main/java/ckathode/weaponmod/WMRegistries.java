@@ -291,6 +291,16 @@ public class WMRegistries {
         DispenserBlock.registerBehavior(WMItem.MORTAR_SHELL_ITEM, new DispenseMortarShell());
     }
 
+    private static void registerZombieWeapons() {
+        WMCommonEventHandler.registerZombieWeapon(MeleeCompBattleaxe.IRON_ITEM, "battleaxe");
+        WMCommonEventHandler.registerZombieWeapon(ItemMelee.KATANA_IRON_ITEM, "katana");
+        WMCommonEventHandler.registerZombieWeapon(MeleeCompHalberd.IRON_ITEM, "halberd");
+        WMCommonEventHandler.registerZombieWeapon(MeleeCompKnife.IRON_ITEM, "knife");
+        WMCommonEventHandler.registerZombieWeapon(MeleeCompSpear.IRON_ITEM, "spear");
+        WMCommonEventHandler.registerZombieWeapon(MeleeCompWarhammer.IRON_ITEM, "warhammer");
+        WMCommonEventHandler.registerZombieWeapon(MeleeCompFirerod.ITEM, "firerod");
+    }
+
     public static void init() {
         ATTRIBUTES.register();
         ITEMS.register();
@@ -299,6 +309,7 @@ public class WMRegistries {
         //  because apparently Forge was not yet ready for this?!
         // LOOT_ITEM_CONDITIONS.register();
         registerDispenserBehaviors();
+        registerZombieWeapons();
     }
 
     public static <T extends Entity> EntityType<T> createEntityType(String name, EntityDimensions size,

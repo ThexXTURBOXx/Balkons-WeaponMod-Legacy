@@ -50,6 +50,9 @@ public class WeaponModConfig implements ConfigData {
     @Category("settings")
     @Comment("Weapons can sometimes be found in loot chests.")
     public volatile boolean enableLootTables = true;
+    @Category("settings")
+    @Comment("Zombies sometimes hold this mod's weapons when they spawn.")
+    public volatile boolean zombiesSpawnWithWeapons = true;
 
     @Category("enable")
     @StringBooleanMap
