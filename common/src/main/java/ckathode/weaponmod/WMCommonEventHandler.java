@@ -1,6 +1,7 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.MeleeCompFirerod;
 import dev.architectury.event.Event;
 import dev.architectury.event.EventFactory;
 import dev.architectury.event.EventResult;
@@ -72,6 +73,20 @@ public class WMCommonEventHandler {
         if (entity instanceof Player player) {
             PlayerWeaponData.initPlayerWeaponData(player);
         }
+    }
+
+    public static EventResult onEntityAttack(LivingEntity entity, DamageSource damageSource, float amount) {
+        Entity source = damageSource.getEntity();
+        if (!(source instanceof LivingEntity living)) return EventResult.pass();
+
+        ItemStack stack = living.getMainHandItem();
+        if (stack.isEmpty()) return EventResult.pass();
+        Item item = stack.getItem();
+        if (item == MeleeCompFirerod.ITEM) {
+            ((MeleeCompFirerod) MeleeCompFirerod.ITEM.meleeComponent).applyFire(entity, stack);
+        }
+
+        return EventResult.pass();
     }
 
     public static EventResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source, float amount) {
@@ -262,6 +277,7 @@ public class WMCommonEventHandler {
 
     public static void init() {
         EntityEvent.LIVING_HURT.register(WMCommonEventHandler::cancelBlockingOfRangedWeapons);
+        EntityEvent.LIVING_HURT.register(WMCommonEventHandler::onEntityAttack);
         MODIFY_LOOT_TABLE.register(WMCommonEventHandler::registerLootTableAdditions);
     }
 
