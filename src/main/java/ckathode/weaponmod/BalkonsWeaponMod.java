@@ -34,6 +34,7 @@ import ckathode.weaponmod.item.ItemMusket;
 import ckathode.weaponmod.item.ItemShooter;
 import ckathode.weaponmod.item.WMItem;
 import ckathode.weaponmod.network.WMMessagePipeline;
+import java.util.Arrays;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -591,17 +592,28 @@ public class BalkonsWeaponMod {
     }
 
     private void registerLootTableEntries() {
-        for (Item item : new Item[]{battleaxeSteel, boomerangSteel, flailSteel, katanaSteel, halberdSteel,
-                knifeSteel, bayonetSteel, spearSteel, warhammerSteel}) {
+        if (!modConfig.enableLootTables) return;
+
+        Item[] steelItems = new Item[]{battleaxeSteel, boomerangSteel, flailSteel, katanaSteel, halberdSteel,
+                knifeSteel, bayonetSteel, spearSteel, warhammerSteel};
+        Item[] goldItems = new Item[]{battleaxeGold, boomerangGold, flailGold, katanaGold, halberdGold,
+                knifeGold, bayonetGold, spearGold, warhammerGold};
+
+        String[][] configs = new String[][]{{"battleaxe"}, {"boomerang"}, {"flail"}, {"katana"}, {"halberd"},
+                {"knife"}, {"musket", "knife"}, {"spear"}, {"warhammer"}};
+
+        for (int i = 0; i < steelItems.length; i++) {
+            if (Arrays.stream(configs[i]).anyMatch(cfg -> !modConfig.isEnabled(cfg))) continue;
             ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CORRIDOR,
-                    new WeightedRandomChestContent(item, 0, 1, 1, 5));
+                    new WeightedRandomChestContent(steelItems[i], 0, 1, 1, 5));
             ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH,
-                    new WeightedRandomChestContent(item, 0, 1, 1, 5));
+                    new WeightedRandomChestContent(steelItems[i], 0, 1, 1, 5));
         }
-        for (Item item : new Item[]{battleaxeGold, boomerangGold, flailGold, katanaGold, halberdGold,
-                knifeGold, bayonetGold, spearGold, warhammerGold}) {
+
+        for (int i = 0; i < goldItems.length; i++) {
+            if (Arrays.stream(configs[i]).anyMatch(cfg -> !modConfig.isEnabled(cfg))) continue;
             ChestGenHooks.addItem(ChestGenHooks.NETHER_FORTRESS,
-                    new WeightedRandomChestContent(item, 0, 1, 1, 5));
+                    new WeightedRandomChestContent(goldItems[i], 0, 1, 1, 5));
         }
     }
 
