@@ -6,25 +6,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 
 public class WeaponDamageSource extends EntityDamageSourceIndirect {
-    private final EntityProjectile<?> projectileEntity;
-    private final Entity shooterEntity;
 
     public WeaponDamageSource(String s, EntityProjectile<?> projectile, Entity entity) {
         super(s, projectile, entity);
-        projectileEntity = projectile;
-        shooterEntity = entity;
     }
 
-    public Entity getProjectile() {
-        return projectileEntity;
-    }
-
-    @Override
-    public Entity getTrueSource() {
-        return shooterEntity;
+    public EntityProjectile<?> getProjectile() {
+        return damageSourceEntity instanceof EntityProjectile ? (EntityProjectile<?>) damageSourceEntity : null;
     }
 
     public static DamageSource causeProjectileWeaponDamage(EntityProjectile<?> projectile, Entity entity) {
         return new WeaponDamageSource("weapon", projectile, entity).setProjectile();
     }
+
 }
