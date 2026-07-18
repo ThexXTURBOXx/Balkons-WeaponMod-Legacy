@@ -59,6 +59,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import static ckathode.weaponmod.BalkonsWeaponMod.MOD_ID;
 
@@ -71,6 +72,8 @@ public class WMRegistries {
             DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(MOD_ID, Registry.ENTITY_TYPE_REGISTRY);
+    public static final DeferredRegister<LootItemConditionType> LOOT_ITEM_CONDITIONS =
+            DeferredRegister.create(MOD_ID, Registry.LOOT_ITEM_REGISTRY);
 
     // Attributes
     public static final RegistrySupplier<Attribute> IGNORE_ARMOUR_DAMAGE =
@@ -270,6 +273,10 @@ public class WMRegistries {
     public static final RegistrySupplier<EntityType<EntityMortarShell>> ENTITY_MORTAR_SHELL =
             ENTITY_TYPES.register(EntityMortarShell.ID, () -> EntityMortarShell.TYPE);
 
+    // Loot Item Condition Types
+    public static final RegistrySupplier<LootItemConditionType> LOOT_CONFIG_CONDITION =
+            LOOT_ITEM_CONDITIONS.register(WMLootConfigCondition.ID, () -> WMLootConfigCondition.TYPE);
+
     private static void registerDispenserBehaviors() {
         DispenserBlock.registerBehavior(ItemJavelin.ITEM, new DispenseJavelin());
         DispenserBlock.registerBehavior(WMItem.CROSSBOW_BOLT_ITEM, new DispenseCrossbowBolt());
@@ -288,6 +295,9 @@ public class WMRegistries {
         ATTRIBUTES.register();
         ITEMS.register();
         ENTITY_TYPES.register();
+        // TODO: Works without registering - crashes when trying to register
+        //  because apparently Forge was not yet ready for this?!
+        // LOOT_ITEM_CONDITIONS.register();
         registerDispenserBehaviors();
     }
 
