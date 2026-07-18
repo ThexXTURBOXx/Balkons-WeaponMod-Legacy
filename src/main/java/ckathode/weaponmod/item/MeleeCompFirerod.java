@@ -4,6 +4,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
@@ -30,6 +31,8 @@ public class MeleeCompFirerod extends MeleeComponent {
         entity.setFire(Math.max(entity.fire, 0) + 12 +
                        2 * EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack) +
                        weapon.getItemRand().nextInt(3));
+        if (entity instanceof CreeperEntity && !entity.world.isRemote)
+            ((CreeperEntity) entity).ignite();
     }
 
     @Override

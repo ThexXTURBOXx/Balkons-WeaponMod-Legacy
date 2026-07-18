@@ -106,11 +106,13 @@ public class EntityDummy extends Entity {
             durability -= (int) damage;
         } else if (damagesource instanceof WeaponDamageSource) {
             Entity entity = ((WeaponDamageSource) damagesource).getProjectile();
-            if (entity.getMotion().length() > 0.5) {
-                entity.setMotion(entity.getMotion().scale(0.10000000149011612));
-                playRandomHitSound();
-            } else {
-                entity.setMotion(rand.nextFloat() - 0.5f, rand.nextFloat() - 0.5f, rand.nextFloat() - 0.5f);
+            if (entity != null) {
+                if (entity.getMotion().length() > 0.5) {
+                    entity.setMotion(entity.getMotion().scale(0.10000000149011612));
+                    playRandomHitSound();
+                } else {
+                    entity.setMotion(rand.nextFloat() - 0.5f, rand.nextFloat() - 0.5f, rand.nextFloat() - 0.5f);
+                }
             }
         } else {
             playRandomHitSound();
