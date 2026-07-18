@@ -1,6 +1,7 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.MeleeCompFirerod;
 import java.util.function.Function;
 import me.shedaniel.architectury.event.Event;
 import me.shedaniel.architectury.event.EventFactory;
@@ -72,6 +73,21 @@ public class WMCommonEventHandler {
         if (entity instanceof Player) {
             PlayerWeaponData.initPlayerWeaponData((Player) entity);
         }
+    }
+
+    public static InteractionResult onEntityAttack(LivingEntity entity, DamageSource damageSource, float amount) {
+        Entity source = damageSource.getEntity();
+        if (!(source instanceof LivingEntity)) return InteractionResult.PASS;
+
+        LivingEntity living = (LivingEntity) source;
+        ItemStack stack = living.getMainHandItem();
+        if (stack.isEmpty()) return InteractionResult.PASS;
+        Item item = stack.getItem();
+        if (item == MeleeCompFirerod.ITEM) {
+            ((MeleeCompFirerod) MeleeCompFirerod.ITEM.meleeComponent).applyFire(entity, stack);
+        }
+
+        return InteractionResult.PASS;
     }
 
     public static InteractionResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source,
@@ -264,6 +280,7 @@ public class WMCommonEventHandler {
 
     public static void init() {
         EntityEvent.LIVING_ATTACK.register(WMCommonEventHandler::cancelBlockingOfRangedWeapons);
+        EntityEvent.LIVING_ATTACK.register(WMCommonEventHandler::onEntityAttack);
         MODIFY_LOOT_TABLE.register(WMCommonEventHandler::registerLootTableAdditions);
     }
 
