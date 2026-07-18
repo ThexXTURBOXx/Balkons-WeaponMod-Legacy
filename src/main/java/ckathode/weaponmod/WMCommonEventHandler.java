@@ -1,6 +1,7 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import java.util.Arrays;
 import java.util.function.Function;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,6 +17,7 @@ import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTables;
 import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraft.world.storage.loot.functions.EnchantWithLevels;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -53,6 +55,11 @@ public class WMCommonEventHandler {
         entity.resetActiveHand();
     }
 
+    private static ILootCondition cfgCondition(String... configs) {
+        return context -> Arrays.stream(configs).allMatch(cfg ->
+                BalkonsWeaponMod.instance.modConfig.isEnabled(cfg));
+    }
+
     public static LootPool.Builder getIronWeaponsLootPool() {
         return addIronWeapons(LootPool.builder(), b -> b);
     }
@@ -61,22 +68,31 @@ public class WMCommonEventHandler {
                                                   Function<ItemLootEntry.Builder<?>, ItemLootEntry.Builder<?>> mod) {
         return lootPool
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.battleaxeSteel)
+                        .acceptCondition(() -> cfgCondition("battleaxe"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.boomerangSteel)
+                        .acceptCondition(() -> cfgCondition("boomerang"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.flailSteel)
+                        .acceptCondition(() -> cfgCondition("flail"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.katanaSteel)
+                        .acceptCondition(() -> cfgCondition("katana"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.halberdSteel)
+                        .acceptCondition(() -> cfgCondition("halberd"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.knifeSteel)
+                        .acceptCondition(() -> cfgCondition("knife"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.bayonetSteel)
+                        .acceptCondition(() -> cfgCondition("musket", "knife"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.spearSteel)
+                        .acceptCondition(() -> cfgCondition("spear"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.warhammerSteel)
+                        .acceptCondition(() -> cfgCondition("warhammer"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))));
     }
 
@@ -88,22 +104,31 @@ public class WMCommonEventHandler {
                                                   Function<ItemLootEntry.Builder<?>, ItemLootEntry.Builder<?>> mod) {
         return lootPool
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.battleaxeGold)
+                        .acceptCondition(() -> cfgCondition("battleaxe"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.boomerangGold)
+                        .acceptCondition(() -> cfgCondition("boomerang"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.flailGold)
+                        .acceptCondition(() -> cfgCondition("flail"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.katanaGold)
+                        .acceptCondition(() -> cfgCondition("katana"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.halberdGold)
+                        .acceptCondition(() -> cfgCondition("halberd"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.knifeGold)
+                        .acceptCondition(() -> cfgCondition("knife"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.bayonetGold)
+                        .acceptCondition(() -> cfgCondition("musket", "knife"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.spearGold)
+                        .acceptCondition(() -> cfgCondition("spear"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.warhammerGold)
+                        .acceptCondition(() -> cfgCondition("warhammer"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))));
     }
 
@@ -115,27 +140,38 @@ public class WMCommonEventHandler {
                                                      Function<ItemLootEntry.Builder<?>, ItemLootEntry.Builder<?>> mod) {
         return lootPool
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.battleaxeDiamond)
+                        .acceptCondition(() -> cfgCondition("battleaxe"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.boomerangDiamond)
+                        .acceptCondition(() -> cfgCondition("boomerang"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.flailDiamond)
+                        .acceptCondition(() -> cfgCondition("flail"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.katanaDiamond)
+                        .acceptCondition(() -> cfgCondition("katana"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.halberdDiamond)
+                        .acceptCondition(() -> cfgCondition("halberd"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.knifeDiamond)
+                        .acceptCondition(() -> cfgCondition("knife"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.bayonetDiamond)
+                        .acceptCondition(() -> cfgCondition("musket", "knife"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.spearDiamond)
+                        .acceptCondition(() -> cfgCondition("spear"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))))
                 .addEntry(mod.apply(ItemLootEntry.builder(BalkonsWeaponMod.warhammerDiamond)
+                        .acceptCondition(() -> cfgCondition("warhammer"))
                         .acceptFunction(SetCount.builder(ConstantRange.of(1)))));
     }
 
     @SubscribeEvent
     public void registerLootTableAdditions(LootTableLoadEvent event) {
+        if (!BalkonsWeaponMod.instance.modConfig.enableLootTables.get()) return;
+
         ResourceLocation id = event.getName();
         LootTable lootTable = event.getTable();
 

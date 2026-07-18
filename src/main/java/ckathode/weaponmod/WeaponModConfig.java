@@ -17,6 +17,7 @@ public class WeaponModConfig {
     public ForgeConfigSpec.BooleanValue guiOverlayReloaded;
     public ForgeConfigSpec.BooleanValue itemModelForEntity;
     public ForgeConfigSpec.BooleanValue legacyCannonModel;
+    public ForgeConfigSpec.BooleanValue enableLootTables;
     private final Map<String, EnableSetting> enableSettings;
     private final Map<String, ReloadTimeSetting> reloadTimeSettings;
 
@@ -65,6 +66,9 @@ public class WeaponModConfig {
         legacyCannonModel = builder
                 .comment("Changes the cannon to the legacy model from older versions of BWM!")
                 .define("legacy-cannon-model", false);
+        enableLootTables = builder
+                .comment("Weapons can sometimes be found in loot chests.")
+                .define("enable-loot-tables", true);
         builder.pop();
 
         context.registerConfig(ModConfig.Type.COMMON, builder.build());
