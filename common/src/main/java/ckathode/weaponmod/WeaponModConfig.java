@@ -47,6 +47,9 @@ public class WeaponModConfig implements ConfigData {
     @Category("settings")
     @Comment("Changes the cannon to the legacy model from older versions of BWM!")
     public volatile boolean legacyCannonModel = false;
+    @Category("settings")
+    @Comment("Weapons can sometimes be found in loot chests.")
+    public volatile boolean enableLootTables = true;
 
     @Category("enable")
     @StringBooleanMap
