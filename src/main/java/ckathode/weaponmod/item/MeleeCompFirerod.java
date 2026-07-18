@@ -22,12 +22,14 @@ public class MeleeCompFirerod extends MeleeComponent {
     @Override
     public boolean hitEntity(ItemStack itemstack, EntityLivingBase entityliving, EntityLivingBase attacker) {
         boolean flag = super.hitEntity(itemstack, entityliving, attacker);
-        if (flag) {
-            entityliving.setFire(12 +
-                                 2 * EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, itemstack) +
-                                 weapon.getItemRand().nextInt(3));
-        }
+        if (flag) applyFire(entityliving, itemstack);
         return flag;
+    }
+
+    public void applyFire(EntityLivingBase entity, ItemStack stack) {
+        entity.setFire(Math.max(entity.fire, 0) + 12 +
+                       2 * EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack) +
+                       weapon.getItemRand().nextInt(3));
     }
 
     @Override
