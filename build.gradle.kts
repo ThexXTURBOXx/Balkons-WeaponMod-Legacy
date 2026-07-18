@@ -49,6 +49,7 @@ loom {
     }
     forge {
         pack200Provider.set(Pack200Adapter())
+        accessTransformer(file("src/main/resources/META-INF/weaponmod_at.cfg"))
     }
 }
 
@@ -104,6 +105,7 @@ tasks.withType(Jar::class) {
         this["Implementation-Vendor"] = mod_authors
         this["Implementation-Timestamp"] =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ").format(OffsetDateTime.now())
+        this["FMLAT"] = "${mod_id}_at.cfg"
     }
 }
 
