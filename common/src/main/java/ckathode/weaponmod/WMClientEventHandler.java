@@ -7,6 +7,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import ckathode.weaponmod.item.RangedComponent;
 import ckathode.weaponmod.network.MsgCannonFire;
 import ckathode.weaponmod.network.WMMessagePipeline;
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.client.ClientRawInputEvent;
 import dev.architectury.event.events.common.TickEvent;
@@ -22,7 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
 public class WMClientEventHandler {
 
@@ -43,7 +43,7 @@ public class WMClientEventHandler {
         if (player == null || !player.level().isClientSide() || mc.screen != null) {
             return EventResult.pass();
         }
-        if (mouseButtonInfo.button() == 0 && action == GLFW.GLFW_PRESS) {
+        if (mouseButtonInfo.button() == 0 && action == InputConstants.PRESS) {
             ItemStack itemstack = player.getMainHandItem();
             if (!itemstack.isEmpty()) {
                 IExtendedReachItem ieri = getExtendedReachItem(itemstack);

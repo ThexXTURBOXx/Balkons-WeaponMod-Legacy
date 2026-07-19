@@ -2,7 +2,6 @@ package ckathode.weaponmod.render;
 
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
-import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.RenderType;
@@ -60,7 +59,6 @@ public class RenderBoomerang extends WMItemEntityRenderer<EntityBoomerang, Rende
                         drawVertex(pose, consumer, 0.0f, 0.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.5f, 0.0f,
                                 0.0f, -1.0f, 0.0f, lm);
                     }
-                    GlStateManager._disableCull();
                     drawVertex(pose, consumer, 0.2f, -0.08f, 0.8f, 0.5f, 0.5f, -SQRT2, 0.0f, SQRT2, lm);
                     drawVertex(pose, consumer, 0.2f, 0.08f, 0.8f, 0.5f, 0.65625f, -SQRT2, 0.0f, SQRT2, lm);
                     drawVertex(pose, consumer, 0.9f, 0.08f, 0.8f, 0.0f, 0.65625f, -SQRT2, 0.0f, SQRT2, lm);
@@ -89,7 +87,6 @@ public class RenderBoomerang extends WMItemEntityRenderer<EntityBoomerang, Rende
                         drawVertex(pose, consumer, 0.2f, -0.08f, 0.2f, color[0], color[1], color[2], 1.0f, 0.5f, 0.5f,
                                 -SQRT2, 0.0f, SQRT2, lm);
                     }
-                    GlStateManager._enableCull();
                 });
         poseStack.popPose();
     }
