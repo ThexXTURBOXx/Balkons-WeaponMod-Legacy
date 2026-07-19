@@ -1,6 +1,7 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import ckathode.weaponmod.item.MeleeCompFirerod;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LootEvent;
@@ -12,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -32,6 +34,18 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 public class WMCommonEventHandler {
+
+    public static EventResult onEntityAttack(LivingEntity entity, DamageSource damageSource, float amount) {
+        Entity source = damageSource.getEntity();
+        if (!(source instanceof LivingEntity living)) return EventResult.pass();
+
+        ItemStack stack = living.getMainHandItem();
+        if (stack.is(MeleeCompFirerod.ITEM)) {
+            ((MeleeCompFirerod) MeleeCompFirerod.ITEM.meleeComponent).applyFire(entity, stack);
+        }
+
+        return EventResult.pass();
+    }
 
     public static EventResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source, float amount) {
         ItemStack stack = entity.getUseItem();
@@ -239,6 +253,7 @@ public class WMCommonEventHandler {
 
     public static void init() {
         EntityEvent.LIVING_HURT.register(WMCommonEventHandler::cancelBlockingOfRangedWeapons);
+        EntityEvent.LIVING_HURT.register(WMCommonEventHandler::onEntityAttack);
         LootEvent.MODIFY_LOOT_TABLE.register(WMCommonEventHandler::registerLootTableAdditions);
     }
 
