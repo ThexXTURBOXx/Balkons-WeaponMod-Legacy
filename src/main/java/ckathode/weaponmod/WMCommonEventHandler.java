@@ -54,7 +54,6 @@ public class WMCommonEventHandler {
 
         LivingEntity living = (LivingEntity) source;
         ItemStack stack = living.getHeldItemMainhand();
-        if (stack.isEmpty()) return;
         Item item = stack.getItem();
         if (item == BalkonsWeaponMod.fireRod) {
             ((MeleeCompFirerod) BalkonsWeaponMod.fireRod.meleeComponent).applyFire(event.getEntityLiving(), stack);
@@ -71,7 +70,7 @@ public class WMCommonEventHandler {
         if (entity.rand.nextFloat() < (event.getWorld().getDifficulty() == Difficulty.HARD ? 0.05F : 0.01F)) {
             ZOMBIE_WEAPONS.entrySet()
                     .stream()
-                    .skip(entity.rand.nextInt(ZOMBIE_WEAPONS.size()))
+                    .skip(entity.rand.nextInt(Math.max(1, ZOMBIE_WEAPONS.size())))
                     .findFirst()
                     .ifPresent(e -> {
                         if (e.getValue().stream().anyMatch(cfg ->
@@ -111,8 +110,10 @@ public class WMCommonEventHandler {
     }
 
     private static ILootCondition cfgCondition(String... configs) {
-        return context -> Arrays.stream(configs).allMatch(cfg ->
-                BalkonsWeaponMod.instance.modConfig.isEnabled(cfg));
+        return context ->
+                BalkonsWeaponMod.instance.modConfig.enableLootTables.get() &&
+                Arrays.stream(configs).allMatch(cfg ->
+                        BalkonsWeaponMod.instance.modConfig.isEnabled(cfg));
     }
 
     public static LootPool.Builder getIronWeaponsLootPool() {
@@ -225,8 +226,6 @@ public class WMCommonEventHandler {
 
     @SubscribeEvent
     public void registerLootTableAdditions(LootTableLoadEvent event) {
-        if (!BalkonsWeaponMod.instance.modConfig.enableLootTables.get()) return;
-
         ResourceLocation id = event.getName();
         LootTable lootTable = event.getTable();
 
