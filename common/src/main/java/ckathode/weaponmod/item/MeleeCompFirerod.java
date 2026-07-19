@@ -9,6 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
@@ -31,15 +32,18 @@ public class MeleeCompFirerod extends MeleeComponent {
     @Override
     public boolean hurtEnemy(ItemStack itemstack, LivingEntity entityliving, LivingEntity attacker) {
         boolean flag = super.hurtEnemy(itemstack, entityliving, attacker);
-        if (flag) {
-            Holder<Enchantment> fireAspect = entityliving.registryAccess()
-                    .lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.FIRE_ASPECT).orElse(null);
-            int enchBonus = fireAspect != null
-                    ? 2 * EnchantmentHelper.getItemEnchantmentLevel(fireAspect, itemstack) : 0;
-            entityliving.igniteForSeconds(12 + enchBonus +
-                                          entityliving.getRandom().nextInt(3));
-        }
+        if (flag) applyFire(entityliving, itemstack);
         return flag;
+    }
+
+    public void applyFire(LivingEntity entity, ItemStack stack) {
+        Holder<Enchantment> fireAspect = entity.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.FIRE_ASPECT).orElse(null);
+        int enchBonus = fireAspect != null ? 2 * EnchantmentHelper.getItemEnchantmentLevel(fireAspect, stack) : 0;
+        entity.igniteForSeconds(Math.max(entity.getRemainingFireTicks(), 0) + 12 + enchBonus +
+                                entity.getRandom().nextInt(3));
+        if (entity instanceof Creeper && !entity.level().isClientSide())
+            ((Creeper) entity).ignite();
     }
 
     @Override
