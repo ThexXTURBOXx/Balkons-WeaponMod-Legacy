@@ -3,7 +3,6 @@ package ckathode.weaponmod.render;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.WeaponModResources;
 import ckathode.weaponmod.entity.projectile.EntityBoomerang;
-import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -62,7 +61,6 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang, RenderBoomerang
                 drawVertex(last, builder, 0.0f, 0.0f, 0.0f, color[0], color[1], color[2], 1.0f, 0.5f, 0.0f, 0.0f,
                         -1.0f, 0.0f, lm);
             }
-            GlStateManager._disableCull();
             drawVertex(last, builder, 0.2f, -0.08f, 0.8f, 0.5f, 0.5f, -SQRT2, 0.0f, SQRT2, lm);
             drawVertex(last, builder, 0.2f, 0.08f, 0.8f, 0.5f, 0.65625f, -SQRT2, 0.0f, SQRT2, lm);
             drawVertex(last, builder, 0.9f, 0.08f, 0.8f, 0.0f, 0.65625f, -SQRT2, 0.0f, SQRT2, lm);
@@ -91,7 +89,6 @@ public class RenderBoomerang extends WMRenderer<EntityBoomerang, RenderBoomerang
                 drawVertex(last, builder, 0.2f, -0.08f, 0.2f, color[0], color[1], color[2], 1.0f, 0.5f, 0.5f, -SQRT2,
                         0.0f, SQRT2, lm);
             }
-            GlStateManager._enableCull();
             ms.popPose();
         } else {
             ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
