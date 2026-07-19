@@ -38,10 +38,10 @@ public class MeleeCompFirerod extends MeleeComponent {
         Holder<Enchantment> fireAspect = entity.registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.FIRE_ASPECT).orElse(null);
         int enchBonus = fireAspect != null ? 2 * EnchantmentHelper.getItemEnchantmentLevel(fireAspect, stack) : 0;
-        entity.igniteForSeconds(Math.max(entity.getRemainingFireTicks(), 0) + 12 + enchBonus +
-                                entity.getRandom().nextInt(3));
-        if (entity instanceof Creeper && !entity.level().isClientSide())
-            ((Creeper) entity).ignite();
+        entity.igniteForTicks(Math.max(entity.getRemainingFireTicks(), 0) +
+                              (12 + enchBonus + entity.getRandom().nextInt(3)) * 20);
+        if (entity instanceof Creeper creeper && !entity.level().isClientSide())
+            creeper.ignite();
     }
 
     @Override
