@@ -5,7 +5,9 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.function.Predicate;
 import net.minecraft.core.NonNullList;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -83,19 +85,33 @@ public class WMItem extends Item {
         }
     }
 
+    public static boolean isItemInTag(ItemStack stack, Tag<Item> tag) {
+        return stack != null && tag.contains(stack.getItem());
+    }
+
     public static boolean isItemInList(ItemStack stack, Collection<Item> items) {
         return stack != null && items.contains(stack.getItem());
     }
 
     @Nullable
-    public static Tuple<InteractionHand, Integer> findAnyItemSlot(Player player, Collection<Item> item) {
-        if (isItemInList(player.getMainHandItem(), item))
+    public static Tuple<InteractionHand, Integer> findAnyItemSlot(Player player, Tag<Item> tag) {
+        return findAnyItemSlot(player, is -> isItemInTag(is, tag));
+    }
+
+    @Nullable
+    public static Tuple<InteractionHand, Integer> findAnyItemSlot(Player player, Collection<Item> items) {
+        return findAnyItemSlot(player, is -> isItemInList(is, items));
+    }
+
+    @Nullable
+    public static Tuple<InteractionHand, Integer> findAnyItemSlot(Player player, Predicate<ItemStack> matcher) {
+        if (matcher.test(player.getMainHandItem()))
             return new Tuple<>(InteractionHand.MAIN_HAND, player.inventory.selected);
-        if (isItemInList(player.getOffhandItem(), item))
+        if (matcher.test(player.getOffhandItem()))
             return new Tuple<>(InteractionHand.OFF_HAND, 0);
         for (int i = 0; i < player.inventory.getContainerSize(); ++i) {
             ItemStack itemstack = player.inventory.getItem(i);
-            if (isItemInList(itemstack, item))
+            if (matcher.test(itemstack))
                 return new Tuple<>(InteractionHand.MAIN_HAND, i);
         }
         return null;
@@ -105,8 +121,26 @@ public class WMItem extends Item {
         return consumeAnyInventoryItem(player, Collections.singletonList(item));
     }
 
-    public static boolean consumeAnyInventoryItem(Player player, Collection<Item> item) {
+    public static boolean consumeAnyInventoryItem(Player player, Tag<Item> item) {
         Tuple<InteractionHand, Integer> slot = findAnyItemSlot(player, item);
+        if (slot == null) return false;
+        NonNullList<ItemStack> inv = slot.getA() == InteractionHand.OFF_HAND ? player.inventory.offhand :
+                player.inventory.items;
+        inv.get(slot.getB()).shrink(1);
+        return true;
+    }
+
+    public static boolean consumeAnyInventoryItem(Player player, Collection<Item> items) {
+        Tuple<InteractionHand, Integer> slot = findAnyItemSlot(player, items);
+        if (slot == null) return false;
+        NonNullList<ItemStack> inv = slot.getA() == InteractionHand.OFF_HAND ? player.inventory.offhand :
+                player.inventory.items;
+        inv.get(slot.getB()).shrink(1);
+        return true;
+    }
+
+    public static boolean consumeAnyInventoryItem(Player player, Predicate<ItemStack> matcher) {
+        Tuple<InteractionHand, Integer> slot = findAnyItemSlot(player, matcher);
         if (slot == null) return false;
         NonNullList<ItemStack> inv = slot.getA() == InteractionHand.OFF_HAND ? player.inventory.offhand :
                 player.inventory.items;
