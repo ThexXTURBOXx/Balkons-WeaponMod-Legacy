@@ -55,7 +55,7 @@ public class WMCommonEventHandler {
         if (entity.rand.nextFloat() < (event.world.difficultySetting == EnumDifficulty.HARD ? 0.05F : 0.01F)) {
             ZOMBIE_WEAPONS.entrySet()
                     .stream()
-                    .skip(entity.rand.nextInt(ZOMBIE_WEAPONS.size()))
+                    .skip(entity.rand.nextInt(Math.max(1, ZOMBIE_WEAPONS.size())))
                     .findFirst()
                     .ifPresent(e -> {
                         if (e.getValue().stream().anyMatch(cfg ->
