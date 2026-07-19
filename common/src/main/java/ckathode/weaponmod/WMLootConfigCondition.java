@@ -22,7 +22,8 @@ public class WMLootConfigCondition implements LootItemCondition {
 
     @Override
     public boolean test(LootContext lootContext) {
-        return Arrays.stream(weapons).allMatch(cfg -> WeaponModConfig.get().isEnabled(cfg));
+        return WeaponModConfig.get().enableLootTables &&
+               Arrays.stream(weapons).allMatch(cfg -> WeaponModConfig.get().isEnabled(cfg));
     }
 
     @Override
