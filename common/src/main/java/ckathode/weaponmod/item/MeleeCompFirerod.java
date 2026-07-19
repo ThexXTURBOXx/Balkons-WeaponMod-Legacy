@@ -32,11 +32,11 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     public void applyFire(LivingEntity entity, ItemStack stack) {
-        entity.setSecondsOnFire(Math.max(entity.getRemainingFireTicks(), 0) + 12 +
+        entity.setSecondsOnFire(Math.max(entity.getRemainingFireTicks() / 20, 0) + 12 +
                                 2 * EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FIRE_ASPECT, stack) +
                                 entity.getRandom().nextInt(3));
-        if (entity instanceof Creeper && !entity.level().isClientSide())
-            ((Creeper) entity).ignite();
+        if (entity instanceof Creeper creeper && !entity.level().isClientSide())
+            creeper.ignite();
     }
 
     @Override
