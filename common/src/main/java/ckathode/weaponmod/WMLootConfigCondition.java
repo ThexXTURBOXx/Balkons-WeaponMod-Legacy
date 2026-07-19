@@ -19,7 +19,8 @@ public record WMLootConfigCondition(List<String> weapons) implements LootItemCon
 
     @Override
     public boolean test(LootContext lootContext) {
-        return weapons.stream().allMatch(cfg -> WeaponModConfig.get().isEnabled(cfg));
+        return WeaponModConfig.get().enableLootTables &&
+               weapons.stream().allMatch(cfg -> WeaponModConfig.get().isEnabled(cfg));
     }
 
     @NotNull
