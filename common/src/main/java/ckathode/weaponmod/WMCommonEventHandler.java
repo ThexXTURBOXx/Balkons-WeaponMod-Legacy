@@ -50,13 +50,37 @@ public class WMCommonEventHandler {
         if (!(source instanceof LivingEntity living)) return EventResult.pass();
 
         ItemStack stack = living.getMainHandItem();
-        if (stack.isEmpty()) return EventResult.pass();
-        Item item = stack.getItem();
-        if (item == MeleeCompFirerod.ITEM) {
+        if (stack.is(MeleeCompFirerod.ITEM)) {
             ((MeleeCompFirerod) MeleeCompFirerod.ITEM.meleeComponent).applyFire(entity, stack);
         }
 
         return EventResult.pass();
+    }
+
+    public static void equipZombies(LivingEntity living, LevelAccessor level) {
+        if (!WeaponModConfig.get().zombiesSpawnWithWeapons) return;
+        if (level.isClientSide()) return;
+        if (!(living instanceof Zombie entity)) return;
+
+        if (entity.getRandom().nextFloat() < (level.getDifficulty() == Difficulty.HARD ? 0.05F : 0.01F)) {
+            ZOMBIE_WEAPONS.entrySet()
+                    .stream()
+                    .skip(entity.getRandom().nextInt(Math.max(1, ZOMBIE_WEAPONS.size())))
+                    .findFirst()
+                    .ifPresent(e -> {
+                        if (e.getValue().stream().anyMatch(cfg ->
+                                !WeaponModConfig.get().isEnabled(cfg))) return;
+                        entity.setItemSlot(EquipmentSlot.MAINHAND, e.getKey());
+                    });
+        }
+    }
+
+    public static void registerZombieWeapon(ItemStack stack, String... configs) {
+        ZOMBIE_WEAPONS.put(stack, new HashSet<>(Arrays.asList(configs)));
+    }
+
+    public static void registerZombieWeapon(Item item, String... configs) {
+        registerZombieWeapon(new ItemStack(item), configs);
     }
 
     public static EventResult cancelBlockingOfRangedWeapons(LivingEntity entity, DamageSource source, float amount) {
@@ -192,7 +216,6 @@ public class WMCommonEventHandler {
     public static void registerLootTableAdditions(LootTables lootTables, ResourceLocation id,
                                                   LootEvent.LootTableModificationContext context, boolean builtIn) {
         if (!builtIn) return;
-        if (!WeaponModConfig.get().enableLootTables) return;
 
         if (BuiltInLootTables.BASTION_BRIDGE.equals(id)) {
             context.addPool(getGoldWeaponsLootPool().setRolls(UniformGenerator.between(0, 1)));
@@ -244,32 +267,6 @@ public class WMCommonEventHandler {
         if (BuiltInLootTables.VILLAGE_WEAPONSMITH.equals(id)) {
             context.addPool(getIronWeaponsLootPool().setRolls(UniformGenerator.between(0, 1)));
         }
-    }
-
-    public static void equipZombies(LivingEntity living, LevelAccessor level) {
-        if (!WeaponModConfig.get().zombiesSpawnWithWeapons) return;
-        if (level.isClientSide()) return;
-        if (!(living instanceof Zombie entity)) return;
-
-        if (entity.getRandom().nextFloat() < (level.getDifficulty() == Difficulty.HARD ? 0.05F : 0.01F)) {
-            ZOMBIE_WEAPONS.entrySet()
-                    .stream()
-                    .skip(entity.getRandom().nextInt(ZOMBIE_WEAPONS.size()))
-                    .findFirst()
-                    .ifPresent(e -> {
-                        if (e.getValue().stream().anyMatch(cfg ->
-                                !WeaponModConfig.get().isEnabled(cfg))) return;
-                        entity.setItemSlot(EquipmentSlot.MAINHAND, e.getKey());
-                    });
-        }
-    }
-
-    public static void registerZombieWeapon(ItemStack stack, String... configs) {
-        ZOMBIE_WEAPONS.put(stack, new HashSet<>(Arrays.asList(configs)));
-    }
-
-    public static void registerZombieWeapon(Item item, String... configs) {
-        registerZombieWeapon(new ItemStack(item), configs);
     }
 
     public static void init() {
