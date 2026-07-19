@@ -8,6 +8,7 @@
     "GuiMixin"
   ],
   "mixins": [
+    "ZombieMixin",
     "PlayerMixin"
   ],
   "server": [],
