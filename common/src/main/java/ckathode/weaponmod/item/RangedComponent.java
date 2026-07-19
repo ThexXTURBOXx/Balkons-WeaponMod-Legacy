@@ -3,19 +3,16 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
+import ckathode.weaponmod.WMItemTags;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -236,12 +233,12 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return rangedSpecs.getReloadTime();
     }
 
-    public List<Item> getAmmoItems() {
-        return rangedSpecs.getAmmoItems();
+    public TagKey<Item> getAmmoTag() {
+        return rangedSpecs.getAmmoTag();
     }
 
     protected ItemStack findAmmo(Player entityplayer) {
-        Tuple<InteractionHand, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoItems());
+        Tuple<InteractionHand, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoTag());
         if (slot == null) return ItemStack.EMPTY;
         NonNullList<ItemStack> inv = slot.getA() == InteractionHand.OFF_HAND ? entityplayer.getInventory().offhand :
                 entityplayer.getInventory().items;
@@ -249,7 +246,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     protected boolean consumeAmmo(Player entityplayer) {
-        return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoItems());
+        return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoTag());
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, Level world, LivingEntity entityliving) {
@@ -283,26 +280,22 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public enum RangedSpecs {
-        BLOWGUN("blowgun", 250, DartType.DART_TYPES.stream()
-                .map(t -> BalkonsWeaponMod.id(t.typeName()).toString())
-                .toArray(String[]::new)),
-        CROSSBOW("crossbow", 250, BalkonsWeaponMod.id("bolt").toString()),
-        MUSKET("musket", 80, BalkonsWeaponMod.id("bullet").toString()),
-        BLUNDERBUSS("blunderbuss", 80, BalkonsWeaponMod.id("shot").toString()),
-        FLINTLOCK("flintlock", 8, BalkonsWeaponMod.id("bullet").toString()),
-        MORTAR("mortar", 40, BalkonsWeaponMod.id("shell").toString());
+        BLOWGUN("blowgun", 250, WMItemTags.DARTS),
+        CROSSBOW("crossbow", 250, WMItemTags.BOLTS),
+        MUSKET("musket", 80, WMItemTags.BULLETS),
+        BLUNDERBUSS("blunderbuss", 80, WMItemTags.SHOTS),
+        FLINTLOCK("flintlock", 8, WMItemTags.BULLETS),
+        MORTAR("mortar", 40, WMItemTags.SHELLS);
 
         private int reloadTime;
-        private List<Item> ammoItems;
-        private final String[] ammoItemTags;
+        private final TagKey<Item> ammoTag;
         public final String reloadTimeTag;
         public final int durability;
 
-        RangedSpecs(String reloadtimetag, int durability, String... ammoitemtags) {
-            ammoItemTags = ammoitemtags;
+        RangedSpecs(String reloadtimetag, int durability, TagKey<Item> ammoTag) {
             reloadTimeTag = reloadtimetag;
             this.durability = durability;
-            ammoItems = null;
+            this.ammoTag = ammoTag;
             reloadTime = -1;
         }
 
@@ -315,15 +308,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             return reloadTime;
         }
 
-        public List<Item> getAmmoItems() {
-            if (ammoItems == null) {
-                ammoItems = Arrays.stream(ammoItemTags)
-                        .map(t -> Registry.ITEM.get(new ResourceLocation(t)))
-                        .collect(Collectors.toList());
-                BalkonsWeaponMod.LOGGER.debug("Found items {} for {} @{}",
-                        ammoItems, Arrays.toString(ammoItemTags), this);
-            }
-            return ammoItems;
+        public TagKey<Item> getAmmoTag() {
+            return ammoTag;
         }
     }
 
