@@ -8,6 +8,7 @@
     "HudMixin"
   ],
   "mixins": [
+    "ZombieMixin",
     "PlayerMixin"
   ],
   "server": [],
