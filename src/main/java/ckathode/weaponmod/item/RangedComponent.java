@@ -3,13 +3,10 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.ReloadHelper;
 import ckathode.weaponmod.ReloadHelper.ReloadState;
+import ckathode.weaponmod.WMItemTags;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import com.google.common.collect.Multimap;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -21,17 +18,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class RangedComponent extends AbstractWeaponComponent {
     protected static final int MAX_DELAY = 72000;
@@ -233,12 +229,12 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
         return rangedSpecs.getReloadTime();
     }
 
-    public List<Item> getAmmoItems() {
-        return rangedSpecs.getAmmoItems();
+    public Tag<Item> getAmmoTag() {
+        return rangedSpecs.getAmmoTag();
     }
 
     protected ItemStack findAmmo(PlayerEntity entityplayer) {
-        Tuple<Hand, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoItems());
+        Tuple<Hand, Integer> slot = WMItem.findAnyItemSlot(entityplayer, getAmmoTag());
         if (slot == null) return ItemStack.EMPTY;
         NonNullList<ItemStack> inv = slot.getA() == Hand.OFF_HAND ? entityplayer.inventory.offHandInventory :
                 entityplayer.inventory.mainInventory;
@@ -246,7 +242,7 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     protected boolean consumeAmmo(PlayerEntity entityplayer) {
-        return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoItems());
+        return WMItem.consumeAnyInventoryItem(entityplayer, getAmmoTag());
     }
 
     public boolean hasAmmoAndConsume(ItemStack itemstack, World world, LivingEntity entityliving) {
@@ -281,26 +277,22 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     }
 
     public enum RangedSpecs {
-        BLOWGUN("blowgun", 250, DartType.DART_TYPES.stream()
-                .map(t -> BalkonsWeaponMod.id(t.typeName).toString())
-                .toArray(String[]::new)),
-        CROSSBOW("crossbow", 250, BalkonsWeaponMod.id("bolt").toString()),
-        MUSKET("musket", 80, BalkonsWeaponMod.id("bullet").toString()),
-        BLUNDERBUSS("blunderbuss", 80, BalkonsWeaponMod.id("shot").toString()),
-        FLINTLOCK("flintlock", 8, BalkonsWeaponMod.id("bullet").toString()),
-        MORTAR("mortar", 40, BalkonsWeaponMod.id("shell").toString());
+        BLOWGUN("blowgun", 250, WMItemTags.DARTS),
+        CROSSBOW("crossbow", 250, WMItemTags.BOLTS),
+        MUSKET("musket", 80, WMItemTags.BULLETS),
+        BLUNDERBUSS("blunderbuss", 80, WMItemTags.SHOTS),
+        FLINTLOCK("flintlock", 8, WMItemTags.BULLETS),
+        MORTAR("mortar", 40, WMItemTags.SHELLS);
 
         private int reloadTime;
-        private List<Item> ammoItems;
-        private final String[] ammoItemTags;
+        private final Tag<Item> ammoTag;
         public final String reloadTimeTag;
         public final int durability;
 
-        RangedSpecs(String reloadtimetag, int durability, String... ammoitemtags) {
-            ammoItemTags = ammoitemtags;
+        RangedSpecs(String reloadtimetag, int durability, Tag<Item> ammoTag) {
             reloadTimeTag = reloadtimetag;
             this.durability = durability;
-            ammoItems = null;
+            this.ammoTag = ammoTag;
             reloadTime = -1;
         }
 
@@ -313,16 +305,8 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             return reloadTime;
         }
 
-        public List<Item> getAmmoItems() {
-            if (ammoItems == null) {
-                ammoItems = Arrays.stream(ammoItemTags)
-                        .map(t -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(t)))
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList());
-                BalkonsWeaponMod.modLog.debug("Found items {} for {} @{}",
-                        ammoItems, Arrays.toString(ammoItemTags), this);
-            }
-            return ammoItems;
+        public Tag<Item> getAmmoTag() {
+            return ammoTag;
         }
     }
 }
