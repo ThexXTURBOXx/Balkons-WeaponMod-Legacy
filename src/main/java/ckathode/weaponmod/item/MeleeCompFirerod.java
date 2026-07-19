@@ -28,7 +28,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     }
 
     public void applyFire(LivingEntity entity, ItemStack stack) {
-        entity.setFire(Math.max(entity.fire, 0) + 12 +
+        entity.setFire(Math.max(entity.getFireTimer() / 20, 0) + 12 +
                        2 * EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack) +
                        weapon.getItemRand().nextInt(3));
         if (entity instanceof CreeperEntity && !entity.world.isRemote)
