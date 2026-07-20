@@ -20,8 +20,8 @@ public class WMCommonEventHandlerForge {
 
     @SubscribeEvent
     public void registerLootTableAdditions(LootTableLoadEvent event) {
-        WMCommonEventHandler.MODIFY_LOOT_TABLE.invoker().modifyLootTable(event.getLootTableManager(), event.getName(),
-                (pool) -> event.getTable().addPool(pool), true);
+        WMCommonEventHandler.MODIFY_LOOT_TABLE.invoker().modifyLootTable(
+                event.getLootTableManager(), event.getName(), (pool) -> event.getTable().addPool(pool));
     }
 
 }

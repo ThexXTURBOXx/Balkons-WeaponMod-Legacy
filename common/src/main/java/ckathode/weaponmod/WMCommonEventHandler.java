@@ -51,11 +51,9 @@ public class WMCommonEventHandler {
          * @param registries the registries provider
          * @param id         the loot table id
          * @param context    the context used to modify the loot table
-         * @param builtin    if {@code true}, the loot table is built-in;
-         *                   if {@code false}, it is from a user data pack
          */
         void modifyLootTable(LootTables registries, ResourceLocation id,
-                             LootTableModificationContext context, boolean builtin);
+                             LootTableModificationContext context);
     }
 
     /**
@@ -255,9 +253,7 @@ public class WMCommonEventHandler {
     }
 
     public static void registerLootTableAdditions(LootTables lootTables, ResourceLocation id,
-                                                  LootTableModificationContext context, boolean builtIn) {
-        if (!builtIn) return;
-
+                                                  LootTableModificationContext context) {
         if (BuiltInLootTables.BASTION_BRIDGE.equals(id)) {
             context.addPool(getGoldWeaponsLootPool().setRolls(UniformGenerator.between(0, 1)));
         }
