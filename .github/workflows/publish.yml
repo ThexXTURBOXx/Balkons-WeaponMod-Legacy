@@ -72,6 +72,7 @@ jobs:
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: forge
+          environment: client | server
           game-versions: 1.16.5
           java: 8
           dependencies: |
@@ -92,6 +93,7 @@ jobs:
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: fabric
+          environment: client | server
           game-versions: 1.16.5
           java: 8
           dependencies: |
