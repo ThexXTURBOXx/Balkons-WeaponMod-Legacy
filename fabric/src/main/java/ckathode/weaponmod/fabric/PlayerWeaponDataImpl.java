@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.player.Player;
 
-@SuppressWarnings("UnstableApiUsage")
 public class PlayerWeaponDataImpl {
 
     private static AttachmentType<Integer> WARHAMMER_SMASH_TICKS;
