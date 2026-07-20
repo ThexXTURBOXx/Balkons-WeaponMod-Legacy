@@ -72,5 +72,6 @@ jobs:
           changelog: |
             Full changelog can be found on [GitHub](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/releases)
           loaders: forge
+          environment: client | server
           game-versions: 1.15.2
           java: 8
