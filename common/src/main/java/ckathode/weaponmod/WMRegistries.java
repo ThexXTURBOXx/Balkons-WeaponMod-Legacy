@@ -292,13 +292,13 @@ public class WMRegistries {
     }
 
     private static void registerZombieWeapons() {
-        WMCommonEventHandler.registerZombieWeapon(MeleeCompBattleaxe.IRON_ITEM, "battleaxe");
-        WMCommonEventHandler.registerZombieWeapon(ItemMelee.KATANA_IRON_ITEM, "katana");
-        WMCommonEventHandler.registerZombieWeapon(MeleeCompHalberd.IRON_ITEM, "halberd");
-        WMCommonEventHandler.registerZombieWeapon(MeleeCompKnife.IRON_ITEM, "knife");
-        WMCommonEventHandler.registerZombieWeapon(MeleeCompSpear.IRON_ITEM, "spear");
-        WMCommonEventHandler.registerZombieWeapon(MeleeCompWarhammer.IRON_ITEM, "warhammer");
-        WMCommonEventHandler.registerZombieWeapon(MeleeCompFirerod.ITEM, "firerod");
+        WMMobEquipment.registerZombieWeapon(MeleeCompBattleaxe.IRON_ITEM, "battleaxe");
+        WMMobEquipment.registerZombieWeapon(ItemMelee.KATANA_IRON_ITEM, "katana");
+        WMMobEquipment.registerZombieWeapon(MeleeCompHalberd.IRON_ITEM, "halberd");
+        WMMobEquipment.registerZombieWeapon(MeleeCompKnife.IRON_ITEM, "knife");
+        WMMobEquipment.registerZombieWeapon(MeleeCompSpear.IRON_ITEM, "spear");
+        WMMobEquipment.registerZombieWeapon(MeleeCompWarhammer.IRON_ITEM, "warhammer");
+        WMMobEquipment.registerZombieWeapon(MeleeCompFirerod.ITEM, "firerod");
     }
 
     public static void init() {
