@@ -49,7 +49,19 @@ public class WMCommonEventHandler {
 
     public static void init() {
         EntityEvent.LIVING_HURT.register(WMCommonEventHandler::cancelBlockingOfRangedWeapons);
-        LootEvent.MODIFY_LOOT_TABLE.register(WMCommonEventHandler::registerLootTableAdditions);
+        LootEvent.MODIFY_LOOT_TABLE.register(new LootEvent.ModifyLootTable() {
+            @Override
+            @SuppressWarnings("removal")
+            public void modifyLootTable(ResourceKey<LootTable> key,
+                                        LootEvent.LootTableModificationContext context, boolean builtin) {
+            }
+
+            @Override
+            public void modifyLootTable(HolderLookup.Provider registries, ResourceKey<LootTable> key,
+                                        LootEvent.LootTableModificationContext context, boolean builtin) {
+                registerLootTableAdditions(registries, key, context, builtin);
+            }
+        });
     }
 
 }
