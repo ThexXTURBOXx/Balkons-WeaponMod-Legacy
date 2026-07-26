@@ -6,6 +6,7 @@
   "client": [],
   "mixins": [
     "EntityMixin",
+    "ReloadableServerRegistriesMixin",
     "ZombieMixin"
   ],
   "server": [],

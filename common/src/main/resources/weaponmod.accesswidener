@@ -1,5 +1,6 @@
 accessWidener v2 named
 accessible class net/minecraft/world/level/ServerExplosion$StackCollector
+accessible class net/minecraft/resources/RegistryOps$HolderLookupAdapter
 
 accessible method net/minecraft/world/level/ServerExplosion addOrAppendStack (Ljava/util/List;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/BlockPos;)V
 accessible method net/minecraft/world/damagesource/DamageSources source (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/world/damagesource/DamageSource;
@@ -11,3 +12,5 @@ accessible field net/minecraft/core/dispenser/ProjectileDispenseBehavior project
 accessible field net/minecraft/core/dispenser/ProjectileDispenseBehavior dispenseConfig Lnet/minecraft/world/item/ProjectileItem$DispenseConfig;
 accessible field net/minecraft/world/level/ServerExplosion$StackCollector pos Lnet/minecraft/core/BlockPos;
 accessible field net/minecraft/world/level/ServerExplosion$StackCollector stack Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/resources/RegistryOps lookupProvider Lnet/minecraft/resources/RegistryOps$RegistryInfoLookup;
+accessible field net/minecraft/resources/RegistryOps$HolderLookupAdapter lookupProvider Lnet/minecraft/core/HolderLookup$Provider;
