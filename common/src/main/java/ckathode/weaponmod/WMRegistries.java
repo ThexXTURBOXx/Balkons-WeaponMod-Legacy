@@ -328,13 +328,13 @@ public class WMRegistries {
     }
 
     private static void registerZombieWeapons() {
-        ITEM_BATTLEAXE_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "battleaxe"));
-        ITEM_KATANA_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "katana"));
-        ITEM_HALBERD_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "halberd"));
-        ITEM_KNIFE_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "knife"));
-        ITEM_SPEAR_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "spear"));
-        ITEM_WARHAMMER_IRON.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "warhammer"));
-        ITEM_FIREROD.listen(item -> WMCommonEventHandler.registerZombieWeapon(item, "firerod"));
+        ITEM_BATTLEAXE_IRON.listen(item -> WMMobEquipment.registerZombieWeapon(item, "battleaxe"));
+        ITEM_KATANA_IRON.listen(item -> WMMobEquipment.registerZombieWeapon(item, "katana"));
+        ITEM_HALBERD_IRON.listen(item -> WMMobEquipment.registerZombieWeapon(item, "halberd"));
+        ITEM_KNIFE_IRON.listen(item -> WMMobEquipment.registerZombieWeapon(item, "knife"));
+        ITEM_SPEAR_IRON.listen(item -> WMMobEquipment.registerZombieWeapon(item, "spear"));
+        ITEM_WARHAMMER_IRON.listen(item -> WMMobEquipment.registerZombieWeapon(item, "warhammer"));
+        ITEM_FIREROD.listen(item -> WMMobEquipment.registerZombieWeapon(item, "firerod"));
     }
 
     public static void init() {
