@@ -1,6 +1,8 @@
 package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.IItemWeapon;
+import dev.architectury.event.Event;
+import dev.architectury.event.EventFactory;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LootEvent;
@@ -18,6 +20,23 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 public class WMCommonEventHandler {
+
+    public static final Event<ModifyLootTable> MODIFY_LOOT_TABLE = EventFactory.createLoop();
+
+    @FunctionalInterface
+    public interface ModifyLootTable {
+        /**
+         * Modifies a loot table.
+         *
+         * @param registries the registries provider
+         * @param key        the loot table key
+         * @param context    the context used to modify the loot table
+         * @param builtin    if {@code true}, the loot table is built-in;
+         *                   if {@code false}, it is from a user data pack
+         */
+        void modifyLootTable(HolderLookup.Provider registries, ResourceKey<LootTable> key,
+                             LootEvent.LootTableModificationContext context, boolean builtin);
+    }
 
     public static void equipZombies(LivingEntity living, LevelAccessor level) {
         WMMobEquipment.equipZombies(living, level);
@@ -49,7 +68,7 @@ public class WMCommonEventHandler {
 
     public static void init() {
         EntityEvent.LIVING_HURT.register(WMCommonEventHandler::cancelBlockingOfRangedWeapons);
-        LootEvent.MODIFY_LOOT_TABLE.register(WMCommonEventHandler::registerLootTableAdditions);
+        MODIFY_LOOT_TABLE.register(WMCommonEventHandler::registerLootTableAdditions);
     }
 
 }
