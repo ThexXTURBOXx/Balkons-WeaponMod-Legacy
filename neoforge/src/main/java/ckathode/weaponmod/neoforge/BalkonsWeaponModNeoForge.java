@@ -29,6 +29,7 @@ public class BalkonsWeaponModNeoForge {
                 () -> () -> NeoForge.EVENT_BUS.register(new WMClientEventHandlerNeoForge.MainEvents()));
         EnvExecutor.runInEnv(Env.CLIENT,
                 () -> () -> modEventBus.register(new WMClientEventHandlerNeoForge.ModEvents()));
+        NeoForge.EVENT_BUS.register(new WMCommonEventHandlerNeoForge.MainEvents());
 
         DATA_COMPONENT_TYPES.register(modEventBus);
         PlayerWeaponDataImpl.init(modEventBus);
