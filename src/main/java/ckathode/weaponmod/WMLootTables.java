@@ -278,10 +278,14 @@ public class WMLootTables {
     public static void registerLootTableAdditions(ResourceLocation id, LootTable lootTable) {
         if (LootTables.CHESTS_BURIED_TREASURE.equals(id)) {
             lootTable.addPool(getIronWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
-            lootTable.addPool(getExplosiveLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getExplosiveLootPool()
+                    .acceptFunction(SetCount.builder(RandomValueRange.of(4, 9)))
+                    .rolls(RandomValueRange.of(0, 1)).build());
         }
         if (LootTables.CHESTS_DESERT_PYRAMID.equals(id)) {
-            lootTable.addPool(getExplosiveLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getExplosiveLootPool()
+                    .acceptFunction(SetCount.builder(RandomValueRange.of(4, 9)))
+                    .rolls(RandomValueRange.of(0, 1)).build());
         }
         if (LootTables.CHESTS_END_CITY_TREASURE.equals(id)) {
             LootPool.Builder lootPool = LootPool.builder();
@@ -302,7 +306,9 @@ public class WMLootTables {
             lootTable.addPool(getGoldWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
         }
         if (LootTables.CHESTS_SHIPWRECK_SUPPLY.equals(id)) {
-            lootTable.addPool(getExplosiveLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getExplosiveLootPool()
+                    .acceptFunction(SetCount.builder(RandomValueRange.of(4, 9)))
+                    .rolls(RandomValueRange.of(0, 1)).build());
         }
         if (LootTables.CHESTS_STRONGHOLD_CORRIDOR.equals(id)) {
             lootTable.addPool(getIronWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
