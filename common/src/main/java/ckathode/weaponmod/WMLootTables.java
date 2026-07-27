@@ -358,10 +358,14 @@ public class WMLootTables {
         }
         if (BuiltInLootTables.BURIED_TREASURE.equals(id)) {
             context.addPool(getIronWeaponsLootPool().setRolls(UniformGenerator.between(0, 1)));
-            context.addPool(getExplosiveLootPool().setRolls(UniformGenerator.between(0, 1)));
+            context.addPool(getExplosiveLootPool()
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 9)))
+                    .setRolls(UniformGenerator.between(0, 1)));
         }
         if (BuiltInLootTables.DESERT_PYRAMID.equals(id)) {
-            context.addPool(getExplosiveLootPool().setRolls(UniformGenerator.between(0, 1)));
+            context.addPool(getExplosiveLootPool()
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 9)))
+                    .setRolls(UniformGenerator.between(0, 1)));
         }
         if (BuiltInLootTables.END_CITY_TREASURE.equals(id)) {
             LootPool.Builder lootPool = LootPool.lootPool();
@@ -389,7 +393,9 @@ public class WMLootTables {
             context.addPool(lootPool.setRolls(UniformGenerator.between(0, 1)));
         }
         if (BuiltInLootTables.SHIPWRECK_SUPPLY.equals(id)) {
-            context.addPool(getExplosiveLootPool().setRolls(UniformGenerator.between(0, 1)));
+            context.addPool(getExplosiveLootPool()
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(4, 9)))
+                    .setRolls(UniformGenerator.between(0, 1)));
         }
         if (BuiltInLootTables.STRONGHOLD_CORRIDOR.equals(id)) {
             context.addPool(getIronWeaponsLootPool().setRolls(UniformGenerator.between(0, 1)));
