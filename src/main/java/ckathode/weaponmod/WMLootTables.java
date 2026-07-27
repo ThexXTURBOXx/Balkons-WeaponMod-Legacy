@@ -111,7 +111,7 @@ public class WMLootTables {
         for (int i = 0; i < explosives.length; i++) {
             if (Arrays.stream(explosiveConfigs[i]).anyMatch(cfg -> !instance.modConfig.isEnabled(cfg))) continue;
             ChestGenHooks.addItem(ChestGenHooks.PYRAMID_DESERT_CHEST,
-                    new WeightedRandomChestContent(explosives[i], 0, 1, 1, 5));
+                    new WeightedRandomChestContent(explosives[i], 0, 4, 9, 5));
         }
 
         for (int i = 0; i < projectiles.length; i++) {
