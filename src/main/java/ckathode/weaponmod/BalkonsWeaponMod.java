@@ -578,13 +578,13 @@ public class BalkonsWeaponMod {
     }
 
     private void registerZombieWeapons() {
-        WMCommonEventHandler.registerZombieWeapon(battleaxeSteel, "battleaxe");
-        WMCommonEventHandler.registerZombieWeapon(katanaSteel, "katana");
-        WMCommonEventHandler.registerZombieWeapon(halberdSteel, "halberd");
-        WMCommonEventHandler.registerZombieWeapon(knifeSteel, "knife");
-        WMCommonEventHandler.registerZombieWeapon(spearSteel, "spear");
-        WMCommonEventHandler.registerZombieWeapon(warhammerSteel, "warhammer");
-        WMCommonEventHandler.registerZombieWeapon(fireRod, "firerod");
+        WMMobEquipment.registerZombieWeapon(battleaxeSteel, "battleaxe");
+        WMMobEquipment.registerZombieWeapon(katanaSteel, "katana");
+        WMMobEquipment.registerZombieWeapon(halberdSteel, "halberd");
+        WMMobEquipment.registerZombieWeapon(knifeSteel, "knife");
+        WMMobEquipment.registerZombieWeapon(spearSteel, "spear");
+        WMMobEquipment.registerZombieWeapon(warhammerSteel, "warhammer");
+        WMMobEquipment.registerZombieWeapon(fireRod, "firerod");
     }
 
 }
