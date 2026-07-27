@@ -42,18 +42,14 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import java.util.Arrays;
 import makamys.mclib.core.MCLib;
 import makamys.mclib.core.MCLibModules;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Logger;
@@ -578,30 +574,17 @@ public class BalkonsWeaponMod {
     }
 
     private void registerLootTableEntries() {
-        if (!modConfig.enableLootTables) return;
-
-        Item[] steelItems = new Item[]{battleaxeSteel, boomerangSteel, flailSteel, katanaSteel, halberdSteel,
-                knifeSteel, bayonetSteel, spearSteel, warhammerSteel};
-        String[][] configs = new String[][]{{"battleaxe"}, {"boomerang"}, {"flail"}, {"katana"}, {"halberd"},
-                {"knife"}, {"musket", "knife"}, {"spear"}, {"warhammer"}};
-
-        for (int i = 0; i < steelItems.length; i++) {
-            if (Arrays.stream(configs[i]).anyMatch(cfg -> !modConfig.isEnabled(cfg))) continue;
-            ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CORRIDOR,
-                    new WeightedRandomChestContent(steelItems[i], 0, 1, 1, 5));
-            ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH,
-                    new WeightedRandomChestContent(steelItems[i], 0, 1, 1, 5));
-        }
+        WMLootTables.registerLootTableAdditions();
     }
 
     private void registerZombieWeapons() {
-        WMCommonEventHandler.registerZombieWeapon(battleaxeSteel, "battleaxe");
-        WMCommonEventHandler.registerZombieWeapon(katanaSteel, "katana");
-        WMCommonEventHandler.registerZombieWeapon(halberdSteel, "halberd");
-        WMCommonEventHandler.registerZombieWeapon(knifeSteel, "knife");
-        WMCommonEventHandler.registerZombieWeapon(spearSteel, "spear");
-        WMCommonEventHandler.registerZombieWeapon(warhammerSteel, "warhammer");
-        WMCommonEventHandler.registerZombieWeapon(fireRod, "firerod");
+        WMMobEquipment.registerZombieWeapon(battleaxeSteel, "battleaxe");
+        WMMobEquipment.registerZombieWeapon(katanaSteel, "katana");
+        WMMobEquipment.registerZombieWeapon(halberdSteel, "halberd");
+        WMMobEquipment.registerZombieWeapon(knifeSteel, "knife");
+        WMMobEquipment.registerZombieWeapon(spearSteel, "spear");
+        WMMobEquipment.registerZombieWeapon(warhammerSteel, "warhammer");
+        WMMobEquipment.registerZombieWeapon(fireRod, "firerod");
     }
 
 }
