@@ -262,7 +262,9 @@ public class WMLootTables {
             lootPool = new LootPool(new LootEntry[0], new LootCondition[0],
                     new RandomValueRange(0, 1), new RandomValueRange(0, 0),
                     "custom#weaponmod#cbt1");
-            addExplosives(lootPool);
+            addExplosives(lootPool,
+                    new SetCount(new LootCondition[0], new RandomValueRange(4, 9))
+            );
             lootTable.addPool(lootPool);
         }
 
@@ -270,7 +272,9 @@ public class WMLootTables {
             LootPool lootPool = new LootPool(new LootEntry[0], new LootCondition[0],
                     new RandomValueRange(0, 1), new RandomValueRange(0, 0),
                     "custom#weaponmod#cdp0");
-            addExplosives(lootPool);
+            addExplosives(lootPool,
+                    new SetCount(new LootCondition[0], new RandomValueRange(4, 9))
+            );
             lootTable.addPool(lootPool);
         }
 
@@ -309,7 +313,9 @@ public class WMLootTables {
             LootPool lootPool = new LootPool(new LootEntry[0], new LootCondition[0],
                     new RandomValueRange(0, 1), new RandomValueRange(0, 0),
                     "custom#weaponmod#css0");
-            addExplosives(lootPool);
+            addExplosives(lootPool,
+                    new SetCount(new LootCondition[0], new RandomValueRange(4, 9))
+            );
             lootTable.addPool(lootPool);
         }
 
