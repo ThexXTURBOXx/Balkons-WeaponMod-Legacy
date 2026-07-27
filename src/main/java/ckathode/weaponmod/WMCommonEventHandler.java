@@ -9,6 +9,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -67,7 +68,12 @@ public class WMCommonEventHandler {
 
     @SubscribeEvent
     public void registerLootTableAdditions(LootTableLoadEvent event) {
-        WMLootTables.registerLootTableAdditions(event.getName(), event.getTable());
+        ResourceLocation oldId = event.getName();
+        ResourceLocation newId = new ResourceLocation(oldId.getNamespace(),
+                oldId.getPath()
+                        .replaceFirst("^loot_tables/", "")
+                        .replaceAll("\\.json$", ""));
+        WMLootTables.registerLootTableAdditions(newId, event.getTable());
     }
 
 }
