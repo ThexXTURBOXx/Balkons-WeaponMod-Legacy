@@ -2,6 +2,7 @@ package ckathode.weaponmod;
 
 import ckathode.weaponmod.item.DartType;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.Stream;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
@@ -15,8 +16,24 @@ import net.minecraft.world.storage.loot.functions.EnchantWithLevels;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.functions.SetMetadata;
+import org.jetbrains.annotations.NotNull;
 
 public class WMLootTables {
+
+    private static class DartTypeRandomValueRange extends RandomValueRange {
+
+        public DartTypeRandomValueRange() {
+            super(0, DartType.DART_TYPES.size() - 1);
+        }
+
+        @Override
+        public int generateInt(@NotNull Random rand) {
+            int r = super.generateInt(rand);
+            return DartType.DART_TYPES.valueCollection().stream().skip(r).findFirst()
+                    .map(t -> (int) t.typeID).orElse(0);
+        }
+
+    }
 
     private static LootCondition cfgCondition(String... configs) {
         return (rand, context) ->
@@ -232,7 +249,7 @@ public class WMLootTables {
                 1, 0,
                 Stream.of(lootFunctions,
                                 new LootFunction[]{new SetMetadata(new LootCondition[0],
-                                        new RandomValueRange(0, DartType.DART_TYPES.size() - 1))})
+                                        new DartTypeRandomValueRange())})
                         .flatMap(Stream::of).toArray(LootFunction[]::new),
                 new LootCondition[]{cfgCondition("blowgun")},
                 "custom#weaponmod#" + lootPool.hashCode() + "#p3"));
@@ -257,7 +274,9 @@ public class WMLootTables {
             LootPool lootPool = new LootPool(new LootEntry[0], new LootCondition[0],
                     new RandomValueRange(0, 1), new RandomValueRange(0, 0),
                     "custom#weaponmod#cdp0");
-            addExplosives(lootPool);
+            addExplosives(lootPool,
+                    new SetCount(new LootCondition[0], new RandomValueRange(4, 9))
+            );
             lootTable.addPool(lootPool);
         }
 
