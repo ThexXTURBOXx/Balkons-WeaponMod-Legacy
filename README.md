@@ -163,11 +163,12 @@ Below is a list of all the resource packs and patches for this mod I know of.
 If you know of one that I forgot, feel free
 to [open an issue](https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/issues/new) and let me know!
 
-| Resource Pack          | Patch link                                                           |
-|:-----------------------|:---------------------------------------------------------------------|
-| Balkon's Gets Reforged | <https://modrinth.com/resourcepack/balkons-gets-reforged>            |
-| Balkon's Revised       | <https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/issues/52> |
-| Sphax BDCraft          | <https://bdcraft.net/community/viewtopic.php?t=222>                  |
+| Resource Pack          | Patch link                                                            |
+|:-----------------------|:----------------------------------------------------------------------|
+| Balkon's Gets Reforged | <https://modrinth.com/resourcepack/balkons-gets-reforged>             |
+| Balkon's Revised       | <https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/issues/52>  |
+| Sphax BDCraft          | <https://bdcraft.net/community/viewtopic.php?t=222>                   |
+| Faithful 32x           | <https://github.com/ThexXTURBOXx/Balkons-WeaponMod-Legacy/issues/127> |
 
 ---
 
