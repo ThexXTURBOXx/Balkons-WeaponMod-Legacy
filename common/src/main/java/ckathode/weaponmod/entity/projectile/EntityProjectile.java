@@ -26,7 +26,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -350,7 +350,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
     }
 
     public void applyEntityHitEffects(Entity entity) {
-        if (isOnFire() && !(entity instanceof EnderMan)) {
+        if (isOnFire() && !(entity instanceof Enderman)) {
             entity.igniteForSeconds(5);
         }
         if (entity instanceof LivingEntity livingEntity) {

@@ -35,40 +35,40 @@ public class RenderCannon extends WMRenderer<EntityCannon, RenderCannon.CannonRe
 
         if (WeaponModConfig.get().legacyCannonModel) {
             poseStack.translate(0, 0.1, 0);
-            poseStack.mulPose(Axis.YP.rotationDegrees(-entityRenderState.yRot));
+            poseStack.rotateDegrees(Axis.YP, -entityRenderState.yRot);
         } else {
             poseStack.translate(0, 2.375f, 0);
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - entityRenderState.yRot));
+            poseStack.rotateDegrees(Axis.YP, 180.0f - entityRenderState.yRot);
         }
 
         float f2 = entityRenderState.hurtTime;
         float f3 = entityRenderState.currentDamage;
         if (f3 < 0.0f) f3 = 0.0f;
         if (f2 > 0.0f)
-            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entityRenderState.rockDirection / 5.0f));
+            poseStack.rotateDegrees(Axis.ZP, Mth.sin(f2) * f2 * f3 / 10.0f * entityRenderState.rockDirection / 5.0f);
         int color = 0xFFCCCCCC;
         if (entityRenderState.superPowered && entityRenderState.tickCount % 5 < 2) color = 0xFFFFFFFF;
 
         if (WeaponModConfig.get().legacyCannonModel) {
             poseStack.scale(-1.0f, -1.0f, 1.0f);
-            poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
+            poseStack.rotateDegrees(Axis.XP, 180.0f);
             submitNodeCollector.submitModel(modelLegacy, entityRenderState, poseStack,
                     RenderTypes.entityCutout(WeaponModResources.Entity.CANNON_LEGACY), lm, OverlayTexture.NO_OVERLAY,
-                    color, null, entityRenderState.outlineColor, null);
+                    color, null, entityRenderState.outlineColor);
         } else {
             float rot = Math.min(entityRenderState.xRot, 20.0f);
             poseStack.scale(-1.6f, -1.6f, 1.6f);
             poseStack.pushPose();
             poseStack.translate(0.0f, 1.0f, 0.0f);
-            poseStack.mulPose(Axis.XP.rotationDegrees(rot));
+            poseStack.rotateDegrees(Axis.XP, rot);
             poseStack.translate(0.0f, -1.0f, 0.0f);
             submitNodeCollector.submitModel(modelBarrel, entityRenderState, poseStack,
                     RenderTypes.entityCutout(WeaponModResources.Entity.CANNON), lm, OverlayTexture.NO_OVERLAY,
-                    color, null, entityRenderState.outlineColor, null);
+                    color, null, entityRenderState.outlineColor);
             poseStack.popPose();
             submitNodeCollector.submitModel(modelStandard, entityRenderState, poseStack,
                     RenderTypes.entityCutout(WeaponModResources.Entity.CANNON), lm, OverlayTexture.NO_OVERLAY,
-                    color, null, entityRenderState.outlineColor, null);
+                    color, null, entityRenderState.outlineColor);
         }
 
         poseStack.popPose();

@@ -26,7 +26,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
 
     @Override
     public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
-        entityliving.swing(InteractionHand.MAIN_HAND);
+        entityliving.swing(InteractionHand.MAIN_HAND, itemstack.getInteractAnimation(), true);
         world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.WOODEN_DOOR_CLOSE, SoundSource.PLAYERS, 0.8f,
                 1.0f / (entityliving.getRandom().nextFloat() * 0.2f + 0.0f));

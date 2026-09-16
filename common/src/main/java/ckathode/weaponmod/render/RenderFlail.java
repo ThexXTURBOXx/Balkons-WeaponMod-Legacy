@@ -32,15 +32,15 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
         if (shooterEntity instanceof LivingEntity shooter) {
             poseStack.pushPose();
             poseStack.pushPose();
-            poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+            poseStack.rotateDegrees(Axis.YP, entityRenderState.yRot - 90.0f);
+            poseStack.rotateDegrees(Axis.ZP, entityRenderState.xRot);
             float[] color = entityRenderState.materialColor;
             float f11 = -entityRenderState.partialTicks;
             if (f11 > 0.0f) {
                 float f12 = -Mth.sin(f11 * 3.0f) * f11;
-                poseStack.mulPose(Axis.ZP.rotationDegrees(f12));
+                poseStack.rotateDegrees(Axis.ZP, f12);
             }
-            poseStack.mulPose(Axis.XP.rotationDegrees(45.0f));
+            poseStack.rotateDegrees(Axis.XP, 45.0f);
             poseStack.scale(0.15f, 0.15f, 0.15f);
             poseStack.translate(-4.0f, 0.0f, 0.0f);
             submitNodeCollector.submitCustomGeometry(poseStack,
@@ -64,7 +64,7 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
                                 -0.15f, 0.0f, 0.0f, lm);
                     });
             for (int j = 0; j < 4; ++j) {
-                poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
+                poseStack.rotateDegrees(Axis.XP, 90.0f);
                 submitNodeCollector.submitCustomGeometry(poseStack,
                         RenderTypes.entityCutout(WeaponModResources.Entity.FLAIL),
                         (pose, consumer) -> {
@@ -158,7 +158,7 @@ public class RenderFlail extends WMRenderer<EntityFlail, RenderFlail.FlailRender
         entityRenderState.owner = entity.getOwner();
 
         if (entityRenderState.owner instanceof LivingEntity le) {
-            float g = le.getAttackAnim(f);
+            float g = le.getSwingAnimation(f);
             float h = Mth.sin(Mth.sqrt(g) * (float) Math.PI);
             Vec3 vec3 = this.getHandPos(le, h, f);
             Vec3 vec32 = entity.getPosition(f).add(0.0, 0.25, 0.0);

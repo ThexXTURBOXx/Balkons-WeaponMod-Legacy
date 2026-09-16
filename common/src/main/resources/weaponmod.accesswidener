@@ -6,6 +6,7 @@ accessible method net/minecraft/world/damagesource/DamageSources source (Lnet/mi
 accessible method net/minecraft/world/damagesource/DamageSources source (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
 accessible method net/minecraft/world/damagesource/DamageSources source (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
 
+accessible field net/minecraft/world/entity/Entity invulnerableTime I
 accessible field net/minecraft/world/entity/Entity xRot F
 accessible field net/minecraft/core/dispenser/ProjectileDispenseBehavior projectileItem Lnet/minecraft/world/item/ProjectileItem;
 accessible field net/minecraft/core/dispenser/ProjectileDispenseBehavior dispenseConfig Lnet/minecraft/world/item/ProjectileItem$DispenseConfig;

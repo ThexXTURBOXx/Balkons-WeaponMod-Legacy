@@ -29,7 +29,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:halberd.copper"
+        "recipes": "weaponmod:halberd.copper"
       }
     }
   },

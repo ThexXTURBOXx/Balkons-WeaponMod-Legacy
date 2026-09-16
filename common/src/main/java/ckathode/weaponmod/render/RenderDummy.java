@@ -28,20 +28,20 @@ public class RenderDummy extends WMRenderer<EntityDummy, RenderDummy.DummyRender
         int lm = entityRenderState.lightCoords;
         poseStack.pushPose();
         poseStack.translate(0, -0.025f, 0);
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - entityRenderState.yRot));
+        poseStack.rotateDegrees(Axis.YP, 180.0f - entityRenderState.yRot);
         float f2 = entityRenderState.timeSinceHit;
         float f3 = entityRenderState.currentDamage;
         if (f3 < 0.0f) {
             f3 = 0.0f;
         }
         if (f2 > 0.0f) {
-            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin(f2) * f2 * f3 / 10.0f * entityRenderState.rockDirection / 5.0f));
+            poseStack.rotateDegrees(Axis.ZP, Mth.sin(f2) * f2 * f3 / 10.0f * entityRenderState.rockDirection / 5.0f);
         }
         poseStack.scale(-1.0f, -1.0f, 1.0f);
-        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
+        poseStack.rotateDegrees(Axis.XP, 180.0f);
         submitNodeCollector.submitModel(modelDummy, entityRenderState, poseStack,
                 RenderTypes.entityCutout(WeaponModResources.Entity.DUMMY), lm, OverlayTexture.NO_OVERLAY,
-                -1, null, entityRenderState.outlineColor, null);
+                -1, null, entityRenderState.outlineColor);
         poseStack.popPose();
         super.submit(entityRenderState, poseStack, submitNodeCollector, cameraRenderState);
     }

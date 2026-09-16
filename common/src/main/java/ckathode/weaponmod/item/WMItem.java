@@ -74,7 +74,8 @@ public class WMItem extends Item {
     public static void decrStackSize(ItemStack stack, int amount, LivingEntity entity) {
         stack.shrink(amount);
         if (stack.isEmpty() && entity instanceof Player player) {
-            onPlayerDestroyItem(player, stack, player.swingingArm);
+            LivingEntity.SwingDescription currentSwing = player.getCurrentSwing();
+            onPlayerDestroyItem(player, stack, currentSwing != null ? currentSwing.hand() : null);
         }
     }
 

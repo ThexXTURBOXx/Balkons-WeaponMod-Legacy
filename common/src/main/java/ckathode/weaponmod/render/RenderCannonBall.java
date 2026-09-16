@@ -22,10 +22,10 @@ public class RenderCannonBall extends WMRenderer<EntityCannonBall, RenderCannonB
                        SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         int lm = entityRenderState.lightCoords;
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - entityRenderState.yRot));
+        poseStack.rotateDegrees(Axis.YP, 180.0f - entityRenderState.yRot);
         poseStack.scale(-1.0f, -1.0f, 1.0f);
         poseStack.scale(0.7f, 0.7f, 0.7f);
-        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
+        poseStack.rotateDegrees(Axis.XP, 180.0f);
         submitNodeCollector.submitCustomGeometry(poseStack,
                 RenderTypes.entityCutout(WeaponModResources.Entity.CANNONBALL),
                 (pose, consumer) -> {

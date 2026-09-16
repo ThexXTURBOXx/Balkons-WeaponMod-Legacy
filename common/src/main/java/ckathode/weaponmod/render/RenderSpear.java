@@ -24,16 +24,16 @@ public class RenderSpear extends WMItemEntityRenderer<EntitySpear, RenderSpear.S
                                    SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         int lm = entityRenderState.lightCoords;
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+        poseStack.rotateDegrees(Axis.YP, entityRenderState.yRot - 90.0f);
+        poseStack.rotateDegrees(Axis.ZP, entityRenderState.xRot);
         float[] color = entityRenderState.materialColor;
         float length = 20.0f;
         float f13 = entityRenderState.shakeTime;
         if (f13 > 0.0f) {
             float f14 = -Mth.sin(f13 * 3.0f) * f13;
-            poseStack.mulPose(Axis.ZP.rotationDegrees(f14));
+            poseStack.rotateDegrees(Axis.ZP, f14);
         }
-        poseStack.mulPose(Axis.XP.rotationDegrees(45.0f));
+        poseStack.rotateDegrees(Axis.XP, 45.0f);
         poseStack.scale(0.05625f, 0.05625f, 0.05625f);
         poseStack.translate(-4.0f, 0.0f, 0.0f);
         submitNodeCollector.submitCustomGeometry(poseStack,
@@ -49,7 +49,7 @@ public class RenderSpear extends WMItemEntityRenderer<EntitySpear, RenderSpear.S
                     drawVertex(pose, consumer, -length, -2.0f, -2.0f, 0.0f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
                 });
         for (int j = 0; j < 4; ++j) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
+            poseStack.rotateDegrees(Axis.XP, 90.0f);
             submitNodeCollector.submitCustomGeometry(poseStack,
                     RenderTypes.entityCutout(WeaponModResources.Entity.SPEAR),
                     (pose, consumer) -> {
@@ -75,12 +75,12 @@ public class RenderSpear extends WMItemEntityRenderer<EntitySpear, RenderSpear.S
                                  SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
         poseStack.scale(1.7f, 1.7f, 1.7f);
-        poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot - 45.0f));
+        poseStack.rotateDegrees(Axis.YP, entityRenderState.yRot - 90.0f);
+        poseStack.rotateDegrees(Axis.ZP, entityRenderState.xRot - 45.0f);
         float f15 = entityRenderState.shakeTime;
         if (f15 > 0.0f) {
             float f16 = -Mth.sin(f15 * 3.0f) * f15;
-            poseStack.mulPose(Axis.ZP.rotationDegrees(f16));
+            poseStack.rotateDegrees(Axis.ZP, f16);
         }
         poseStack.translate(-0.35f, -0.35f, 0.0f);
         entityRenderState.itemRender.submit(poseStack, submitNodeCollector, entityRenderState.lightCoords,

@@ -76,7 +76,7 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     protected void superSmash(ItemStack itemstack, Level world, LivingEntity entityLiving) {
-        entityLiving.swing(InteractionHand.MAIN_HAND);
+        entityLiving.swing(InteractionHand.MAIN_HAND, itemstack.getInteractAnimation(), true);
         float f = getEntityDamage() / 2.0f;
         if (world instanceof ServerLevel serverLevel) {
             WarhammerExplosion expl = new WarhammerExplosion(serverLevel, entityLiving, entityLiving.position(), f,

@@ -22,14 +22,14 @@ public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt, RenderCro
                        SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         int lm = entityRenderState.lightCoords;
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
+        poseStack.rotateDegrees(Axis.YP, entityRenderState.yRot - 90.0f);
+        poseStack.rotateDegrees(Axis.ZP, entityRenderState.xRot);
         float f11 = entityRenderState.shakeTime;
         if (f11 > 0.0f) {
             float f12 = -Mth.sin(f11 * 3.0f) * f11;
-            poseStack.mulPose(Axis.ZP.rotationDegrees(f12));
+            poseStack.rotateDegrees(Axis.ZP, f12);
         }
-        poseStack.mulPose(Axis.XP.rotationDegrees(45.0f));
+        poseStack.rotateDegrees(Axis.XP, 45.0f);
         poseStack.scale(0.05625f, 0.05625f, 0.05625f);
         poseStack.translate(-1.0f, 0.0f, 0.0f);
         submitNodeCollector.submitCustomGeometry(poseStack,
@@ -45,7 +45,7 @@ public class RenderCrossbowBolt extends WMRenderer<EntityCrossbowBolt, RenderCro
                     drawVertex(pose, consumer, -5.0f, -2.0f, -2.0f, 0.0f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
                 });
         for (int j = 0; j < 4; ++j) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
+            poseStack.rotateDegrees(Axis.XP, 90.0f);
             submitNodeCollector.submitCustomGeometry(poseStack,
                     RenderTypes.entityCutout(WeaponModResources.Entity.BOLT),
                     (pose, consumer) -> {

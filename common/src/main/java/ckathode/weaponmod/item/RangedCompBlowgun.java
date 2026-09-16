@@ -31,7 +31,7 @@ public class RangedCompBlowgun extends RangedComponent {
 
     @Override
     public void effectReloadDone(ItemStack itemstack, Level world, LivingEntity entityliving) {
-        entityliving.swing(InteractionHand.MAIN_HAND);
+        entityliving.swing(InteractionHand.MAIN_HAND, itemstack.getInteractAnimation(), true);
         world.playSound(null, entityliving.getX(), entityliving.getY(), entityliving.getZ(),
                 SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 0.8f,
                 1.0f / (entityliving.getRandom().nextFloat() * 0.4f + 0.4f));

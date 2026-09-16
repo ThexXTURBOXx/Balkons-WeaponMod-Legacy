@@ -39,7 +39,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:spear.netherite"
+        "recipes": "weaponmod:spear.netherite"
       }
     }
   },

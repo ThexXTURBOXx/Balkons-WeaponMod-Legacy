@@ -4,7 +4,7 @@ import ckathode.weaponmod.item.IItemWeapon;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.LootEvent;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -42,26 +42,14 @@ public class WMCommonEventHandler {
         return EventResult.pass();
     }
 
-    public static void registerLootTableAdditions(HolderLookup.Provider registries, ResourceKey<LootTable> key,
+    public static void registerLootTableAdditions(HolderGetter.Provider registries, ResourceKey<LootTable> key,
                                                   LootEvent.LootTableModificationContext context, boolean builtIn) {
         WMLootTables.registerLootTableAdditions(registries, key, context, builtIn);
     }
 
     public static void init() {
         EntityEvent.LIVING_HURT.register(WMCommonEventHandler::cancelBlockingOfRangedWeapons);
-        LootEvent.MODIFY_LOOT_TABLE.register(new LootEvent.ModifyLootTable() {
-            @Override
-            @SuppressWarnings("removal")
-            public void modifyLootTable(ResourceKey<LootTable> key,
-                                        LootEvent.LootTableModificationContext context, boolean builtin) {
-            }
-
-            @Override
-            public void modifyLootTable(HolderLookup.Provider registries, ResourceKey<LootTable> key,
-                                        LootEvent.LootTableModificationContext context, boolean builtin) {
-                registerLootTableAdditions(registries, key, context, builtin);
-            }
-        });
+        LootEvent.MODIFY_LOOT_TABLE.register(WMCommonEventHandler::registerLootTableAdditions);
     }
 
 }

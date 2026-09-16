@@ -30,7 +30,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:spear.iron"
+        "recipes": "weaponmod:spear.iron"
       }
     }
   },

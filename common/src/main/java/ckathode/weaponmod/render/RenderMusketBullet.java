@@ -35,7 +35,7 @@ public class RenderMusketBullet extends WMRenderer<EntityMusketBullet, RenderMus
                     drawVertex(pose, consumer, 0.0f, -1.0f, -1.0f, 0.0f, 0.3125f, -0.05625f, 0.0f, 0.0f, lm);
                 });
         for (int j = 0; j < 4; ++j) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
+            poseStack.rotateDegrees(Axis.XP, 90.0f);
             submitNodeCollector.submitCustomGeometry(poseStack,
                     RenderTypes.entityCutout(WeaponModResources.Entity.BULLET),
                     (pose, consumer) -> {

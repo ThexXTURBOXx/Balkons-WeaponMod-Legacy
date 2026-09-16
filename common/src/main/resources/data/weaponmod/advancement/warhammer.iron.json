@@ -29,7 +29,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:warhammer.iron"
+        "recipes": "weaponmod:warhammer.iron"
       }
     }
   },

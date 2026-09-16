@@ -22,10 +22,10 @@ public class RenderMortarShell extends WMRenderer<EntityMortarShell, RenderMorta
                        SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         int lm = entityRenderState.lightCoords;
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(180.0f - entityRenderState.yRot));
+        poseStack.rotateDegrees(Axis.YP, 180.0f - entityRenderState.yRot);
         poseStack.scale(-1.0f, -1.0f, 1.0f);
         poseStack.scale(0.2f, 0.2f, 0.2f);
-        poseStack.mulPose(Axis.XP.rotationDegrees(180.0f));
+        poseStack.rotateDegrees(Axis.XP, 180.0f);
         submitNodeCollector.submitCustomGeometry(poseStack,
                 RenderTypes.entityCutout(WeaponModResources.Entity.CANNONBALL),
                 (pose, consumer) -> {

@@ -98,7 +98,7 @@ public class ItemFlail extends ItemMelee {
             return InteractionResult.FAIL;
         }
         removePreviousFlail(world, entityplayer);
-        entityplayer.swing(hand);
+        entityplayer.swing(hand, itemstack.getInteractAnimation(), true);
         if (!entityplayer.isCreative()) {
             Level level = entityplayer.level();
             if (level instanceof ServerLevel serverLevel) {

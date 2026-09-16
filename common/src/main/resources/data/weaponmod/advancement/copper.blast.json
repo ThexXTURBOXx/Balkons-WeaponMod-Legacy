@@ -89,7 +89,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:copper.blast"
+        "recipes": "weaponmod:copper.blast"
       }
     }
   },

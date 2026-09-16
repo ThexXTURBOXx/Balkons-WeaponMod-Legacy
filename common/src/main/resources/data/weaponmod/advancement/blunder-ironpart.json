@@ -29,7 +29,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:blunder-ironpart"
+        "recipes": "weaponmod:blunder-ironpart"
       }
     }
   },

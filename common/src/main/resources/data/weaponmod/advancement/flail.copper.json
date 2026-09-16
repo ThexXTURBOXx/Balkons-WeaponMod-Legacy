@@ -39,7 +39,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:flail.copper"
+        "recipes": "weaponmod:flail.copper"
       }
     }
   },

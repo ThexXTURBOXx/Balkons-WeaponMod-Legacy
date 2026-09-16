@@ -29,7 +29,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "weaponmod:knife.stone.a"
+        "recipes": "weaponmod:knife.stone.a"
       }
     }
   },

@@ -23,8 +23,8 @@ public class RenderBoomerang extends WMItemEntityRenderer<EntityBoomerang, Rende
                                    SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         int lm = entityRenderState.lightCoords;
         poseStack.pushPose();
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
-        poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
+        poseStack.rotateDegrees(Axis.ZP, entityRenderState.xRot);
+        poseStack.rotateDegrees(Axis.YP, entityRenderState.yRot - 90.0f);
         int material = entityRenderState.weaponMaterialId;
         float[] color = entityRenderState.materialColor;
         poseStack.translate(-0.5f, 0.0f, -0.5f);
@@ -96,9 +96,9 @@ public class RenderBoomerang extends WMItemEntityRenderer<EntityBoomerang, Rende
                                  SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
         poseStack.scale(0.85f, 0.85f, 0.85f);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(entityRenderState.xRot));
-        poseStack.mulPose(Axis.YP.rotationDegrees(entityRenderState.yRot - 90.0f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(90.0f));
+        poseStack.rotateDegrees(Axis.ZP, entityRenderState.xRot);
+        poseStack.rotateDegrees(Axis.YP, entityRenderState.yRot - 90.0f);
+        poseStack.rotateDegrees(Axis.XP, 90.0f);
         entityRenderState.itemRender.submit(poseStack, submitNodeCollector, entityRenderState.lightCoords,
                 OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
