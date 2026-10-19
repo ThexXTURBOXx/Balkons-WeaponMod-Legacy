@@ -135,6 +135,8 @@ public class EntityBoomerang extends EntityMaterialProjectile {
             }
             return;
         }
+
+        propagateHitEntity(raytraceResult);
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty() || !(thrownItem.getItem() instanceof IItemWeapon)) return;
@@ -160,6 +162,8 @@ public class EntityBoomerang extends EntityMaterialProjectile {
 
     @Override
     public void onHitBlock(RayTraceResult raytraceResult) {
+        propagateHitBlock(raytraceResult);
+
         BlockPos blockpos = raytraceResult.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
