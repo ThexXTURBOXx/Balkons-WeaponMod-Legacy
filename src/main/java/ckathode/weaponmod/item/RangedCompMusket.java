@@ -40,15 +40,10 @@ public class RangedCompMusket extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isRemote) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving) {
-                @Override
-                protected boolean isDisabled() {
-                    return !BalkonsWeaponMod.instance.modConfig.isEnabled("musket");
-                }
-            };
-            entitymusketbullet.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f,
-                    1.0f / f);
+        if (!world.isRemote && BalkonsWeaponMod.instance.modConfig.isEnabled("musket")) {
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving);
+            entitymusketbullet.setAim(entityliving, entityliving.rotationPitch, entityliving.rotationYaw,
+                    0.0f, 5.0f, 1.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
             world.spawnEntityInWorld(entitymusketbullet);
         }
