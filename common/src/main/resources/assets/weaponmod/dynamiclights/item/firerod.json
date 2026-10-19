@@ -1,0 +1,8 @@
+{
+  "match": {
+    "items": "weaponmod:firerod"
+  },
+  "item": "weaponmod:firerod",
+  "luminance": 15,
+  "water_sensitive": true
+}
