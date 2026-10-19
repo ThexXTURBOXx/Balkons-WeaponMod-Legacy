@@ -127,7 +127,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
                             "Weapon attack damage modifier", dmg, 0));
             multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
                     new AttributeModifier(IItemWeapon.ATTACK_SPEED_MODIFIER,
-                            "Weapon attack speed modifier", -translateToAttackSpeed(meleeSpecs.attackDelay), 0));
+                            "Weapon attack speed modifier", -meleeSpecs.attackDelay, 0));
         }
         if (meleeSpecs.getKnockBack(weaponMaterial) != 0.4f) {
             multimap.put(WeaponModAttributes.WEAPON_KNOCKBACK.getAttributeUnlocalizedName(),
