@@ -77,6 +77,7 @@ public class EntityKnife extends EntityMaterialProjectile {
         if (worldObj.isRemote) {
             return;
         }
+        propagateHitEntity(raytraceResult);
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         ItemStack thrownItem = getWeapon().orNull();
         if (thrownItem == null) return;
