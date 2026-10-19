@@ -55,6 +55,7 @@ public class EntityBlowgunDart extends EntityMaterialProjectile {
 
     @Override
     public void onHitEntity(RayTraceResult raytraceResult) {
+        propagateHitEntity(raytraceResult);
         Entity entity = raytraceResult.entityHit;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f + extraDamage)) {
