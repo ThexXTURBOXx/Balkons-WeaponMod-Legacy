@@ -1,5 +1,6 @@
 package ckathode.weaponmod.item;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -49,21 +50,31 @@ public class MeleeCompFirerod extends MeleeComponent {
         boolean mainHand = player.getHeldItemMainhand() == itemstack;
         boolean offHand = player.getHeldItemOffhand() == itemstack;
         if (!mainHand && !offHand) return;
+        if (!world.isRemote || Minecraft.getInstance().gameSettings.thirdPersonView != 0) return;
 
-        float f = 1.0f;
-        float f1 = offHand ^ (player.getPrimaryHand() == EnumHandSide.LEFT) ? -28.0f : 28.0f;
-        float particleX =
-                -MathHelper.sin(((player.rotationYaw + f1) / 180F) * 3.141593F) * MathHelper.cos((player.rotationPitch / 180F) * 3.141593F) * f;
-        float particleY = -MathHelper.sin((player.rotationPitch / 180F) * 3.141593F) + player.getEyeHeight();
-        float particleZ =
-                MathHelper.cos(((player.rotationYaw + f1) / 180F) * 3.141593F) * MathHelper.cos((player.rotationPitch / 180F) * 3.141593F) * f;
+        float yaw = player.rotationYaw * (float) Math.PI / 180F;
+        float pitch = player.rotationPitch * (float) Math.PI / 180F;
+
+        float sy = MathHelper.sin(yaw), cy = MathHelper.cos(yaw);
+        float sp = MathHelper.sin(pitch), cp = MathHelper.cos(pitch);
+
+        double fx = -sy * cp, fy = -sp, fz = cy * cp; // forward (look)
+        double rx = -cy, ry = 0, rz = -sy; // right
+        double ux = -sy * sp, uy = cp, uz = cy * sp; // up
+
+        double forward = 0.8;
+        double right = offHand ^ (player.getPrimaryHand() == EnumHandSide.LEFT) ? -0.45 : 0.45;
+        double up = -0.05;
+
+        double px = player.posX + fx * forward + rx * right + ux * up;
+        double py = player.posY + player.getEyeHeight() + fy * forward + ry * right + uy * up;
+        double pz = player.posZ + fz * forward + rz * right + uz * up;
+
         if (weapon.getItemRand().nextInt(5) == 0) {
-            world.addParticle(Particles.FLAME, player.posX + particleX, player.posY + particleY,
-                    player.posZ + particleZ, 0.0D, 0.0D, 0.0D);
+            world.addParticle(Particles.FLAME, px, py, pz, 0.0D, 0.0D, 0.0D);
         }
         if (weapon.getItemRand().nextInt(5) == 0) {
-            world.addParticle(Particles.SMOKE, player.posX + particleX, player.posY + particleY,
-                    player.posZ + particleZ, 0.0D, 0.0D, 0.0D);
+            world.addParticle(Particles.SMOKE, px, py, pz, 0.0D, 0.0D, 0.0D);
         }
     }
 }
