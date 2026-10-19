@@ -53,6 +53,7 @@ public class EntityBlowgunDart extends EntityMaterialProjectile {
 
     @Override
     public void onHitEntity(MovingObjectPosition mop) {
+        propagateHitEntity(mop);
         Entity entity = mop.entityHit;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, 1.0f + extraDamage)) {
