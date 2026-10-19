@@ -91,7 +91,7 @@ dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     mappings("net.minecraftforge:forge:$forge_version:userdev")
     forgeLegacy("net.minecraftforge:forge:$forge_version")
-    shadowImpl("com.github.makamys:MCLib:0.3.7.8") {
+    shadowImpl("com.github.makamys:MCLib:0.4") {
         exclude(group = "codechicken")
     }
     api("curse.maven:angelica-988067:9252478")
