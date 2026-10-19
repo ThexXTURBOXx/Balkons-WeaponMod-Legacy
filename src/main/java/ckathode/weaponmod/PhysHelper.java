@@ -18,10 +18,10 @@ public final class PhysHelper {
     private static Vec3d kbMotion = Vec3d.ZERO;
     private static int knockBackModifier = 0;
 
-    public static AdvancedExplosion createStandardExplosion(World world, Entity entity, double d,
-                                                            double d1, double d2, float size,
+    public static AdvancedExplosion createStandardExplosion(World world, Entity entity,
+                                                            double x, double y, double z, float size,
                                                             boolean flame, Explosion.Mode mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, x, y, z, size, flame, mode);
         explosion.doEntityExplosion();
         explosion.doBlockExplosion();
         explosion.doParticleExplosion(true, true);
@@ -29,13 +29,13 @@ public final class PhysHelper {
         return explosion;
     }
 
-    public static AdvancedExplosion createAdvancedExplosion(World world, Entity entity, double d,
-                                                            double d1, double d2, float size,
+    public static AdvancedExplosion createAdvancedExplosion(World world, Entity entity,
+                                                            double x, double y, double z, float size,
                                                             boolean destroyBlocks,
                                                             boolean spawnSmallParticles,
-                                                            boolean spawnBigParticles, boolean flame,
-                                                            Explosion.Mode mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
+                                                            boolean spawnBigParticles,
+                                                            boolean flame, Explosion.Mode mode) {
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, x, y, z, size, flame, mode);
         explosion.doEntityExplosion();
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -49,13 +49,13 @@ public final class PhysHelper {
     }
 
     public static AdvancedExplosion createAdvancedExplosion(World world, Entity entity,
-                                                            DamageSource damagesource, double d,
-                                                            double d1, double d2, float size,
+                                                            DamageSource damagesource,
+                                                            double x, double y, double z, float size,
                                                             boolean destroyBlocks,
                                                             boolean spawnSmallParticles,
-                                                            boolean spawnBigParticles, boolean flame,
-                                                            Explosion.Mode mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
+                                                            boolean spawnBigParticles,
+                                                            boolean flame, Explosion.Mode mode) {
+        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, x, y, z, size, flame, mode);
         explosion.doEntityExplosion(damagesource);
         if (destroyBlocks) {
             explosion.doBlockExplosion();
@@ -68,26 +68,18 @@ public final class PhysHelper {
         return explosion;
     }
 
-    public static AdvancedExplosion createAdvancedExplosion(World world, Entity entity, double d,
-                                                            double d1, double d2, float size,
+    public static AdvancedExplosion createAdvancedExplosion(World world, Entity entity,
+                                                            double x, double y, double z, float size,
                                                             boolean destroyBlocks, boolean spawnParticles,
                                                             boolean flame, Explosion.Mode mode) {
-        AdvancedExplosion explosion = new AdvancedExplosion(world, entity, d, d1, d2, size, flame, mode);
-        explosion.doEntityExplosion();
-        if (destroyBlocks) {
-            explosion.doBlockExplosion();
-        }
-        if (flame) {
-            explosion.doFlaming();
-        }
-        explosion.doParticleExplosion(spawnParticles, spawnParticles);
-        sendExplosion(world, explosion, spawnParticles, spawnParticles);
-        return explosion;
+        return createAdvancedExplosion(world, entity, x, y, z, size, destroyBlocks,
+                spawnParticles, spawnParticles, flame, mode);
     }
 
-    public static void sendExplosion(World world, AdvancedExplosion explosion, boolean smallparts, boolean bigparts) {
+    public static void sendExplosion(World world, AdvancedExplosion explosion,
+                                     boolean spawnSmallParticles, boolean spawnBigParticles) {
         if (world instanceof ServerWorld && !world.isRemote) {
-            MsgExplosion msg = new MsgExplosion(explosion, smallparts, bigparts);
+            MsgExplosion msg = new MsgExplosion(explosion, spawnSmallParticles, spawnBigParticles);
             BalkonsWeaponMod.instance.messagePipeline.sendToAllAround(msg,
                     new PacketDistributor.TargetPoint(explosion.explosionX, explosion.explosionY,
                             explosion.explosionZ, 64.0, world.getDimension().getType()));
