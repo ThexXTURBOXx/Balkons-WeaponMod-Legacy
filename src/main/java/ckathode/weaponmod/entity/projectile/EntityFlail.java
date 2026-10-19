@@ -159,6 +159,8 @@ public class EntityFlail extends EntityMaterialProjectile {
         if (entity == shootingEntity) {
             return;
         }
+
+        propagateHitEntity(mop);
         Entity shooter = getDamagingEntity();
         DamageSource damagesource = shooter instanceof EntityLivingBase
                 ? DamageSource.causeMobDamage((EntityLivingBase) shooter)
