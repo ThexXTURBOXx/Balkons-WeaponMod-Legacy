@@ -4,6 +4,8 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemVariants;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.gtnewhorizons.angelica.api.IDynamicLightProducer;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemShooter extends ItemBow implements IItemWeapon {
+@Optional.Interface(modid = "angelica", iface = "com.gtnewhorizons.angelica.api.IDynamicLightProducer")
+public class ItemShooter extends ItemBow implements IItemWeapon, IDynamicLightProducer {
     protected static final int MAX_DELAY = 72000;
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
@@ -168,5 +171,16 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         List<IIcon> icons = WMItemVariants.registerItemVariants(register, this, "_reload", "-loaded");
         reloadIcon = icons.get(0);
         loadedIcon = icons.get(1);
+    }
+
+    public int getLuminance() {
+        // Compat for older versions of Angelica
+        return getLuminance(null);
+    }
+
+    @Override
+    public int getLuminance(ItemStack itemStack) {
+        return Math.max(meleeComponent.getDynamicLightsValue(itemStack),
+                rangedComponent.getDynamicLightsValue(itemStack));
     }
 }

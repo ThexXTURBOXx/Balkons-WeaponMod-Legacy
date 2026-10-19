@@ -10,6 +10,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractWeaponComponent {
     public Item item;
@@ -67,4 +68,8 @@ public abstract class AbstractWeaponComponent {
     public abstract void onUpdate(ItemStack stack, World world, Entity entity, int i, boolean flag);
 
     public abstract boolean shouldRotateAroundWhenRendering();
+
+    public int getDynamicLightsValue(@Nullable ItemStack stack) {
+        return 0;
+    }
 }

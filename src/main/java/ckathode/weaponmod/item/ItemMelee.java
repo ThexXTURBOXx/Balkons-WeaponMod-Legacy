@@ -4,6 +4,8 @@ import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemVariants;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.gtnewhorizons.angelica.api.IDynamicLightProducer;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import java.util.List;
 import java.util.Random;
@@ -22,7 +24,8 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemMelee extends ItemSword implements IItemWeapon {
+@Optional.Interface(modid = "angelica", iface = "com.gtnewhorizons.angelica.api.IDynamicLightProducer")
+public class ItemMelee extends ItemSword implements IItemWeapon, IDynamicLightProducer {
     public final MeleeComponent meleeComponent;
     public final String rawId;
     private IIcon readyIcon, halberdStateIcon;
@@ -165,5 +168,15 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
         List<IIcon> icons = WMItemVariants.registerItemVariants(register, this, "_ready", "_state");
         readyIcon = icons.get(0);
         halberdStateIcon = icons.get(1);
+    }
+
+    public int getLuminance() {
+        // Compat for older versions of Angelica
+        return getLuminance(null);
+    }
+
+    @Override
+    public int getLuminance(ItemStack itemStack) {
+        return meleeComponent.getDynamicLightsValue(itemStack);
     }
 }

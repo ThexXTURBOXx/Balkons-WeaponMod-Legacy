@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeCompFirerod extends MeleeComponent {
     public MeleeCompFirerod() {
@@ -61,5 +62,10 @@ public class MeleeCompFirerod extends MeleeComponent {
             world.spawnParticle("smoke", player.posX + particleX, player.posY + particleY,
                     player.posZ + particleZ, 0.0D, 0.0D, 0.0D);
         }
+    }
+
+    @Override
+    public int getDynamicLightsValue(@Nullable ItemStack stack) {
+        return 15;
     }
 }

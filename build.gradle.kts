@@ -63,6 +63,7 @@ repositories {
     maven("https://repo.spongepowered.org/maven/")
     maven("https://jitpack.io/")
     maven("https://maven.minecraftforge.net/")
+    maven("https://cursemaven.com")
 }
 
 tasks.test {
@@ -93,6 +94,7 @@ dependencies {
     shadowImpl("com.github.makamys:MCLib:0.3.7.8") {
         exclude(group = "codechicken")
     }
+    api("curse.maven:angelica-988067:9252478")
 }
 
 // Genius approach to replace @VERSION@ from https://stackoverflow.com/a/54094378/5894824
