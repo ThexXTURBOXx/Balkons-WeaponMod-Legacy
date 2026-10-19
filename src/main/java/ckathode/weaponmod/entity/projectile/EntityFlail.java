@@ -161,6 +161,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         if (entity.getUniqueID().equals(shootingEntity)) {
             return;
         }
+
+        propagateHitEntity(raytraceResult);
         Entity shooter = getDamagingEntity();
         DamageSource damagesource = shooter instanceof EntityLivingBase
                 ? DamageSource.causeMobDamage((EntityLivingBase) shooter)

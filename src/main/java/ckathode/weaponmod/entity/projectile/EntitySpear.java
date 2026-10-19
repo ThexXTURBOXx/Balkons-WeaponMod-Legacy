@@ -57,6 +57,8 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         if (world.isRemote) {
             return;
         }
+
+        propagateHitEntity(raytraceResult);
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty()) return;
