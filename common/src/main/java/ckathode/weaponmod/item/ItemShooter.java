@@ -95,6 +95,13 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
+    public void inventoryTickClient(@NotNull ItemStack itemStack, @NotNull Level level,
+                                    @NotNull Player player, @Nullable EquipmentSlot equipmentSlot) {
+        meleeComponent.inventoryTickClient(itemStack, level, player, equipmentSlot);
+        rangedComponent.inventoryTickClient(itemStack, level, player, equipmentSlot);
+    }
+
+    @Override
     public MeleeComponent getMeleeComponent() {
         return meleeComponent;
     }

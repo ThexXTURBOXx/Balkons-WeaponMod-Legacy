@@ -16,6 +16,7 @@ import dev.architectury.utils.Env;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -70,6 +71,15 @@ public class WMClientEventHandler {
                 MsgCannonFire msg = new MsgCannonFire(cannon);
                 WMMessagePipeline.sendToServer(msg);
             }
+        }
+
+        propagateClientTick(player.getMainHandItem(), player, EquipmentSlot.MAINHAND);
+        propagateClientTick(player.getOffhandItem(), player, EquipmentSlot.OFFHAND);
+    }
+
+    private static void propagateClientTick(ItemStack stack, Player player, EquipmentSlot slot) {
+        if (!stack.isEmpty() && stack.getItem() instanceof IItemWeapon iiw) {
+            iiw.inventoryTickClient(stack, player.level(), player, slot);
         }
     }
 
