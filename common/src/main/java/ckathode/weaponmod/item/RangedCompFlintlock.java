@@ -40,13 +40,8 @@ public class RangedCompFlintlock extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isClientSide) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving) {
-                @Override
-                protected boolean isDisabled() {
-                    return !WeaponModConfig.get().isEnabled("flintlock");
-                }
-            };
+        if (!world.isClientSide && WeaponModConfig.get().isEnabled("flintlock")) {
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving);
             entitymusketbullet.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 4.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
