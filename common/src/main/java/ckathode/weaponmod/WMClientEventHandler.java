@@ -40,7 +40,7 @@ public class WMClientEventHandler {
     public static EventResult onMouseClick(Minecraft client, int button, int action, int mods) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
-        if (player == null || !player.level().isClientSide || mc.screen != null) {
+        if (player == null || !player.level().isClientSide() || mc.screen != null) {
             return EventResult.pass();
         }
         if (button == 0 && action == InputConstants.PRESS) {
@@ -63,7 +63,7 @@ public class WMClientEventHandler {
     }
 
     public static void onPlayerTick(Player player) {
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             return;
         }
         if (player instanceof LocalPlayer entity) {

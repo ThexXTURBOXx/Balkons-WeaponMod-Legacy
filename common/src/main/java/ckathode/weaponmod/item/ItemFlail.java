@@ -118,7 +118,7 @@ public class ItemFlail extends ItemMelee {
     public void throwFlail(ItemStack itemstack, Level world, Player entityplayer) {
         world.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.ARROW_SHOOT,
                 SoundSource.PLAYERS, 0.5f, 0.4f / (entityplayer.getRandom().nextFloat() * 0.4f + 0.8f));
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityFlail entityflail = new EntityFlail(world, entityplayer, itemstack);
             entityflail.shootFromRotation(entityplayer, entityplayer.getXRot(), entityplayer.getYRot(),
                     0.0f, 0.75f, 3.0f);

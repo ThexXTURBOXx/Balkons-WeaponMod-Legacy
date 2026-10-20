@@ -280,7 +280,7 @@ public class EntityCannon extends Boat {
             return;
         }
         Entity entityPassenger = getControllingPassenger();
-        if (entityPassenger != null && !level().isClientSide) {
+        if (entityPassenger != null && !level().isClientSide()) {
             EntityCannonBall entitycannonball = new EntityCannonBall(level(), this,
                     entityPassenger.getXRot(), entityPassenger.getYRot(), isSuperPowered(), null);
             level().addFreshEntity(entitycannonball);
@@ -368,7 +368,7 @@ public class EntityCannon extends Boat {
             if (isVehicle() && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return InteractionResult.PASS;
             }
-            if (!level().isClientSide && !entityplayer.isShiftKeyDown()) {
+            if (!level().isClientSide() && !entityplayer.isShiftKeyDown()) {
                 entityplayer.startRiding(this);
             }
         }

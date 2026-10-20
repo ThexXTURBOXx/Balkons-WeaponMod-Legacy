@@ -34,7 +34,7 @@ public class RangedCompBlunderbuss extends RangedComponent {
 
     @Override
     public void fire(ItemStack itemstack, Level world, LivingEntity entityliving, int i) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityBlunderShot.fireSpreadShot(world, entityliving, this, itemstack);
         }
         int damage = 1;
