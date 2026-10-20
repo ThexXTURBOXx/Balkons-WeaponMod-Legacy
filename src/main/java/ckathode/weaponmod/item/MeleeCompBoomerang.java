@@ -35,7 +35,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             crit = true;
         }
         f *= 1.5f;
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             EntityBoomerang entityboomerang = new EntityBoomerang(world, entityliving, itemstack.copy());
             entityboomerang.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, f, 5.0f);
             applyProjectileEnchantments(entityboomerang, itemstack);

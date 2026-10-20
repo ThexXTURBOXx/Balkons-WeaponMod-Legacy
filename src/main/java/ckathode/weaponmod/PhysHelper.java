@@ -78,7 +78,7 @@ public final class PhysHelper {
 
     public static void sendExplosion(World world, AdvancedExplosion explosion,
                                      boolean spawnSmallParticles, boolean spawnBigParticles) {
-        if (world instanceof ServerWorld && !world.isRemote) {
+        if (world instanceof ServerWorld && !world.isRemote()) {
             MsgExplosion msg = new MsgExplosion(explosion, spawnSmallParticles, spawnBigParticles);
             BalkonsWeaponMod.instance.messagePipeline.sendToAllAround(msg,
                     new PacketDistributor.TargetPoint(explosion.explosionX, explosion.explosionY,

@@ -67,7 +67,7 @@ public class ItemDummy extends WMItem {
                 if (!world.isCollisionBoxesEmpty(entitydummy, entitydummy.getBoundingBox().grow(-0.1))) {
                     return new ActionResult<>(ActionResultType.FAIL, itemstack);
                 } else {
-                    if (!world.isRemote) {
+                    if (!world.isRemote()) {
                         world.addEntity(entitydummy);
                     }
 

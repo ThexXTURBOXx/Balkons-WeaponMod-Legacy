@@ -24,7 +24,7 @@ public class WMClientEventHandler {
     public void onMouseClick(InputEvent.MouseInputEvent e) {
         Minecraft mc = Minecraft.getInstance();
         ClientPlayerEntity player = mc.player;
-        if (player == null || !player.world.isRemote || mc.currentScreen != null) {
+        if (player == null || !player.world.isRemote() || mc.currentScreen != null) {
             return;
         }
         if (e.getButton() == 0 && e.getAction() == GLFW.GLFW_PRESS) {
@@ -58,7 +58,7 @@ public class WMClientEventHandler {
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent e) {
-        if (!e.player.world.isRemote) {
+        if (!e.player.world.isRemote()) {
             return;
         }
         if (e.phase == TickEvent.Phase.START && e.player instanceof ClientPlayerEntity) {

@@ -206,7 +206,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
                 setMotion(motion.mul(rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f, rand.nextFloat() * 0.2f));
                 ticksInGround = 0;
                 ticksInAir = 0;
-            } else if (!world.isRemote) {
+            } else if (!world.isRemote()) {
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {
@@ -449,7 +449,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void onCollideWithPlayer(@NotNull PlayerEntity entityplayer) {
-        if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote) {
+        if (inGround && arrowShake <= 0 && canPickup(entityplayer) && !world.isRemote()) {
             ItemStack item = getPickupItem();
             if (item == null) {
                 return;

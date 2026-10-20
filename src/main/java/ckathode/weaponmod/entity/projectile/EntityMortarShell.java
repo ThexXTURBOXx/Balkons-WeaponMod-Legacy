@@ -71,7 +71,7 @@ public class EntityMortarShell extends EntityProjectile<EntityMortarShell> {
     }
 
     public void createCrater() {
-        if (world.isRemote || !inGround || isInWater()) {
+        if (world.isRemote() || !inGround || isInWater()) {
             return;
         }
         remove();

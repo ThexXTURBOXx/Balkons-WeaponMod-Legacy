@@ -72,7 +72,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     public void createCrater() {
-        if (world.isRemote || !inGround || isInWater()) {
+        if (world.isRemote() || !inGround || isInWater()) {
             return;
         }
         remove();

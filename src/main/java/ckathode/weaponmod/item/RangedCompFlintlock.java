@@ -35,7 +35,7 @@ public class RangedCompFlintlock extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isRemote && BalkonsWeaponMod.instance.modConfig.isEnabled("flintlock")) {
+        if (!world.isRemote() && BalkonsWeaponMod.instance.modConfig.isEnabled("flintlock")) {
             EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving);
             entitymusketbullet.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw,
                     0.0f, 5.0f, 4.0f / f);
