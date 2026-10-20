@@ -13,9 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class AbstractClientPlayerMixin {
 
     @Inject(method = "getFieldOfViewModifier", at = @At(value = "RETURN"), cancellable = true)
-    public void getFieldOfViewModifier(boolean bl, float f, CallbackInfoReturnable<Float> cir,
-                                       @Local(name = "modifier") float g) {
-        cir.setReturnValue(WMClientEventHandler.getNewFOV((LivingEntity) (Object) this, g, cir.getReturnValueF()));
+    public void getFieldOfViewModifier(boolean firstPerson, float effectScale, CallbackInfoReturnable<Float> cir,
+                                       @Local(name = "modifier") float modifier) {
+        cir.setReturnValue(WMClientEventHandler.getNewFOV((LivingEntity) (Object) this,
+                modifier, cir.getReturnValueF()));
     }
 
 }

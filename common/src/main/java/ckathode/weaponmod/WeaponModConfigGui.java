@@ -12,7 +12,7 @@ public class WeaponModConfigGui {
 
     @SuppressWarnings({"rawtypes"})
     public static void registerStringBooleanMapProvider(GuiRegistry registry) {
-        registry.registerAnnotationProvider((i, f, c, d, r) -> {
+        registry.registerAnnotationProvider((i, f, c, d, _) -> {
             Map<String, Boolean> map = Utils.getUnsafely(f, c);
             Map<String, Boolean> defaults = Utils.getUnsafely(f, d);
             return map.entrySet().stream().sorted(Map.Entry.comparingByKey())
@@ -28,7 +28,7 @@ public class WeaponModConfigGui {
 
     @SuppressWarnings({"rawtypes"})
     public static void registerStringIntMapProvider(GuiRegistry registry) {
-        registry.registerAnnotationProvider((i, f, c, d, r) -> {
+        registry.registerAnnotationProvider((i, f, c, d, _) -> {
             Map<String, Integer> map = Utils.getUnsafely(f, c);
             Map<String, Integer> defaults = Utils.getUnsafely(f, d);
             return map.entrySet().stream().sorted(Map.Entry.comparingByKey())

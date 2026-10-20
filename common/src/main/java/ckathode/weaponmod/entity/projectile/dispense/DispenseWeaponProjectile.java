@@ -36,7 +36,7 @@ public class DispenseWeaponProjectile extends ProjectileDispenseBehavior {
     }
 
     public double getYVel(@NotNull BlockSource blockSource, @NotNull ItemStack item) {
-        return extension.getYVel((bs, i) -> 0.1, blockSource, item);
+        return extension.getYVel((_, _) -> 0.1, blockSource, item);
     }
 
     @Override

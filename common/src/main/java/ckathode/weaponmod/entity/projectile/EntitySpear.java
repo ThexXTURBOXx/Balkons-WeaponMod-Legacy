@@ -102,7 +102,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
                 Level level = level();
                 if (level instanceof ServerLevel serverLevel) {
                     thrownItem.hurtAndBreak(1, serverLevel, shooter instanceof ServerPlayer player ? player : null,
-                            i -> {
+                            _ -> {
                             });
                 }
                 lerpMotion(Vec3.ZERO);
