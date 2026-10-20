@@ -59,7 +59,7 @@ public class MeleeCompFirerod extends MeleeComponent {
         super.inventoryTickClient(itemStack, level, player, equipmentSlot);
         if (player.isInWater()) return;
         if (equipmentSlot == null || equipmentSlot.getType() != EquipmentSlot.Type.HAND) return;
-        if (!level.isClientSide || !Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
+        if (!level.isClientSide() || !Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
 
         float yaw = player.getYRot() * (float) Math.PI / 180F;
         float pitch = player.getXRot() * (float) Math.PI / 180F;
