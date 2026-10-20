@@ -103,7 +103,7 @@ public class ItemFlail extends ItemMelee {
             Level level = entityplayer.level();
             if (level instanceof ServerLevel serverLevel) {
                 itemstack.hurtAndBreak(1, serverLevel, entityplayer instanceof ServerPlayer player ? player : null,
-                        i -> setThrown(entityplayer, false));
+                        _ -> setThrown(entityplayer, false));
             }
         }
         if (!itemstack.isEmpty()) {

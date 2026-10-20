@@ -9,7 +9,7 @@ public class BalkonsWeaponModConfigIntegration {
 
     public static void registerConfigScreen() {
         ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class,
-                () -> (client, parent) -> AutoConfigClient.getConfigScreen(WeaponModConfig.class, parent).get());
+                () -> (_, parent) -> AutoConfigClient.getConfigScreen(WeaponModConfig.class, parent).get());
     }
 
 }
