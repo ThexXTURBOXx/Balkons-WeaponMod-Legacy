@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -57,7 +58,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     public void inventoryTickClient(@NotNull ItemStack itemStack, @NotNull Level level,
                                     @NotNull Player player, @Nullable EquipmentSlot equipmentSlot) {
         super.inventoryTickClient(itemStack, level, player, equipmentSlot);
-        if (player.isInWater()) return;
+        if (player.isEyeInFluid(FluidTags.WATER)) return;
         if (equipmentSlot == null || equipmentSlot.getType() != EquipmentSlot.Type.HAND) return;
         if (!level.isClientSide() || !Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
 
