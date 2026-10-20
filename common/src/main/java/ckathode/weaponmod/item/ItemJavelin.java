@@ -41,7 +41,7 @@ public class ItemJavelin extends WMItem {
             f = 1.0f;
         }
         boolean crit = !entityLiving.isOnGround() && !entityLiving.isInWater();
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityJavelin entityjavelin = new EntityJavelin(world, entityLiving);
             entityjavelin.shootFromRotation(entityLiving, entityLiving.getXRot(), entityLiving.getYRot(),
                     0.0f, f * (1.0f + (crit ? 0.5f : 0.0f)), 3.0f);
