@@ -45,7 +45,7 @@ public class MeleeCompKnife extends MeleeComponent {
         if (!WeaponModConfig.get().canThrowKnife) {
             return super.use(itemstack, world, entityplayer, hand);
         }
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());
             entityknife.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.8f, 3.0f);
             applyProjectileEnchantments(entityknife, itemstack);

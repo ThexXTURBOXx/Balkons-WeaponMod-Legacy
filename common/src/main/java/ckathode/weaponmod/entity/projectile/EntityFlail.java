@@ -79,7 +79,7 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
                     pickUpByOwner();
                 }
             }
-        } else if (!level.isClientSide) {
+        } else if (!level.isClientSide()) {
             remove();
         }
         if (inGround) {

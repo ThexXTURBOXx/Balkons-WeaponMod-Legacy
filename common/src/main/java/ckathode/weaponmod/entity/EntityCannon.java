@@ -125,7 +125,7 @@ public class EntityCannon extends Boat {
 
     @Override
     public boolean hurt(@NotNull DamageSource damagesource, float damage) {
-        if (level.isClientSide || !isAlive()) {
+        if (level.isClientSide() || !isAlive()) {
             return true;
         }
         if (damagesource instanceof IndirectEntityDamageSource && damagesource.getEntity() != null) {
@@ -252,7 +252,7 @@ public class EntityCannon extends Boat {
             if (onGround) {
                 if (fallDistance > 3.0F) {
                     causeFallDamage(fallDistance, 1.0F);
-                    if (!level.isClientSide && !removed) {
+                    if (!level.isClientSide() && !removed) {
                         remove();
                         if (level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                             for (int j = 0; j < 5; ++j) {
@@ -295,7 +295,7 @@ public class EntityCannon extends Boat {
             return;
         }
         Entity entityPassenger = getControllingPassenger();
-        if (entityPassenger != null && !level.isClientSide) {
+        if (entityPassenger != null && !level.isClientSide()) {
             EntityCannonBall entitycannonball = new EntityCannonBall(level, this,
                     entityPassenger.xRot, entityPassenger.yRot, isSuperPowered());
             level.addFreshEntity(entitycannonball);
@@ -377,7 +377,7 @@ public class EntityCannon extends Boat {
             if (isVehicle() && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return InteractionResult.PASS;
             }
-            if (!level.isClientSide && !entityplayer.isShiftKeyDown()) {
+            if (!level.isClientSide() && !entityplayer.isShiftKeyDown()) {
                 entityplayer.startRiding(this);
             }
         }

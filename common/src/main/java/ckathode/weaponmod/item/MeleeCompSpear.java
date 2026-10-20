@@ -46,7 +46,7 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
         if (!WeaponModConfig.get().canThrowSpear) {
             return super.use(itemstack, world, entityplayer, hand);
         }
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntitySpear entityspear = new EntitySpear(world, entityplayer, itemstack.copy());
             entityspear.shootFromRotation(entityplayer, entityplayer.xRot, entityplayer.yRot, 0.0f, 0.8f, 3.0f);
             applyProjectileEnchantments(entityspear, itemstack);
