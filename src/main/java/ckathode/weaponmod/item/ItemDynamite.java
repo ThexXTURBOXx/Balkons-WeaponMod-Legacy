@@ -36,7 +36,7 @@ public class ItemDynamite extends WMItem {
         }
         world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_TNT_PRIMED,
                 SoundCategory.PLAYERS, 1.0f, 1.0f / (random.nextFloat() * 0.4f + 0.8f));
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             EntityDynamite entitydynamite = new EntityDynamite(world, entityplayer,
                     40 + random.nextInt(10));
             entitydynamite.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.7f, 4.0f);

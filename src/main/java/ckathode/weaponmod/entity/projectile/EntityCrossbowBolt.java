@@ -56,7 +56,7 @@ public class EntityCrossbowBolt extends EntityProjectile<EntityCrossbowBolt> {
         float damage = vel * 4.0f + extraDamage;
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         if (entity.attackEntityFrom(damagesource, damage)) {
-            if (entity instanceof LivingEntity && world.isRemote) {
+            if (entity instanceof LivingEntity && world.isRemote()) {
                 ((LivingEntity) entity).setArrowCountInEntity(((LivingEntity) entity).getArrowCountInEntity() + 1);
             }
             applyEntityHitEffects(entity);

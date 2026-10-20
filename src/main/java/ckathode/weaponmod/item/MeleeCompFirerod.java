@@ -32,7 +32,7 @@ public class MeleeCompFirerod extends MeleeComponent {
         entity.setFire(Math.max(entity.getFireTimer() / 20, 0) + 12 +
                        2 * EnchantmentHelper.getEnchantmentLevel(Enchantments.FIRE_ASPECT, stack) +
                        weapon.getItemRand().nextInt(3));
-        if (entity instanceof CreeperEntity && !entity.world.isRemote)
+        if (entity instanceof CreeperEntity && !entity.world.isRemote())
             ((CreeperEntity) entity).ignite();
     }
 
@@ -50,7 +50,7 @@ public class MeleeCompFirerod extends MeleeComponent {
         boolean mainHand = player.getHeldItemMainhand() == itemstack;
         boolean offHand = player.getHeldItemOffhand() == itemstack;
         if (!mainHand && !offHand) return;
-        if (!world.isRemote || Minecraft.getInstance().gameSettings.thirdPersonView != 0) return;
+        if (!world.isRemote() || Minecraft.getInstance().gameSettings.thirdPersonView != 0) return;
 
         float yaw = player.rotationYaw * (float) Math.PI / 180F;
         float pitch = player.rotationPitch * (float) Math.PI / 180F;

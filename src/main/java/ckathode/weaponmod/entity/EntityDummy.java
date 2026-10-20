@@ -90,7 +90,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean attackEntityFrom(@NotNull DamageSource damagesource, float damage) {
-        if (world.isRemote || !isAlive() || damage <= 0.0f) {
+        if (world.isRemote() || !isAlive() || damage <= 0.0f) {
             return false;
         }
         setRockDirection(-getRockDirection());
@@ -198,7 +198,7 @@ public class EntityDummy extends Entity {
     }
 
     public void dropAsItem(boolean destroyed, boolean noCreative) {
-        if (world.isRemote) {
+        if (world.isRemote()) {
             return;
         }
         if (destroyed) {

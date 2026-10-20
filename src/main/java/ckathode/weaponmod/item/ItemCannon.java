@@ -72,7 +72,7 @@ public class ItemCannon extends WMItem {
                 if (!world.hasNoCollisions(entitycannon, entitycannon.getBoundingBox().grow(-0.1))) {
                     return new ActionResult<>(ActionResultType.FAIL, itemstack);
                 } else {
-                    if (!world.isRemote) {
+                    if (!world.isRemote()) {
                         world.addEntity(entitycannon);
                     }
 
