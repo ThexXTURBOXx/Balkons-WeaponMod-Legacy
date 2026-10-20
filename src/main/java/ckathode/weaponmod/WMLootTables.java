@@ -277,15 +277,19 @@ public class WMLootTables {
 
     public static void registerLootTableAdditions(ResourceLocation id, LootTable lootTable) {
         if (LootTables.CHESTS_BURIED_TREASURE.equals(id)) {
-            lootTable.addPool(getIronWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getIronWeaponsLootPool()
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cbt0").build());
             lootTable.addPool(getExplosiveLootPool()
                     .acceptFunction(SetCount.builder(RandomValueRange.of(4, 9)))
-                    .rolls(RandomValueRange.of(0, 1)).build());
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cbt1").build());
         }
         if (LootTables.CHESTS_DESERT_PYRAMID.equals(id)) {
             lootTable.addPool(getExplosiveLootPool()
                     .acceptFunction(SetCount.builder(RandomValueRange.of(4, 9)))
-                    .rolls(RandomValueRange.of(0, 1)).build());
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cdp0").build());
         }
         if (LootTables.CHESTS_END_CITY_TREASURE.equals(id)) {
             LootPool.Builder lootPool = LootPool.builder();
@@ -295,37 +299,52 @@ public class WMLootTables {
             addIronWeapons(lootPool, b -> b
                     .acceptFunction(EnchantWithLevels.func_215895_a(RandomValueRange.of(20, 39)))
             );
-            lootTable.addPool(lootPool.rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(lootPool
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cect0").build());
         }
         if (LootTables.CHESTS_JUNGLE_TEMPLE_DISPENSER.equals(id)) {
             lootTable.addPool(getProjectileLootPool()
                     .acceptFunction(SetCount.builder(RandomValueRange.of(2, 7)))
-                    .rolls(RandomValueRange.of(0, 1)).build());
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cjtd0").build());
         }
         if (LootTables.CHESTS_NETHER_BRIDGE.equals(id)) {
-            lootTable.addPool(getGoldWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getGoldWeaponsLootPool()
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cnb0").build());
         }
         if (LootTables.CHESTS_SHIPWRECK_SUPPLY.equals(id)) {
             lootTable.addPool(getExplosiveLootPool()
                     .acceptFunction(SetCount.builder(RandomValueRange.of(4, 9)))
-                    .rolls(RandomValueRange.of(0, 1)).build());
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#css0").build());
         }
         if (LootTables.CHESTS_STRONGHOLD_CORRIDOR.equals(id)) {
-            lootTable.addPool(getIronWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getIronWeaponsLootPool()
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#csc0").build());
         }
         if (LootTables.CHESTS_UNDERWATER_RUIN_BIG.equals(id)) {
-            lootTable.addPool(getStoneWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getStoneWeaponsLootPool()
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#curb0").build());
         }
         if (LootTables.CHESTS_UNDERWATER_RUIN_SMALL.equals(id)) {
-            lootTable.addPool(getStoneWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getStoneWeaponsLootPool()
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#curs0").build());
         }
         if (LootTables.CHESTS_VILLAGE_VILLAGE_FLETCHER.equals(id)) {
             lootTable.addPool(getProjectileLootPool()
                     .acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))
-                    .rolls(RandomValueRange.of(0, 1)).build());
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cvf0").build());
         }
         if (LootTables.CHESTS_VILLAGE_VILLAGE_WEAPONSMITH.equals(id)) {
-            lootTable.addPool(getIronWeaponsLootPool().rolls(RandomValueRange.of(0, 1)).build());
+            lootTable.addPool(getIronWeaponsLootPool()
+                    .rolls(RandomValueRange.of(0, 1))
+                    .name("custom#weaponmod#cvw0").build());
         }
     }
 
