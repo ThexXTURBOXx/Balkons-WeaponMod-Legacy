@@ -144,6 +144,8 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
             }
             return;
         }
+
+        propagateHitEntity(result);
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty() || !(thrownItem.getItem() instanceof IItemWeapon iiw)) return;
         float damage = iiw.getMeleeComponent().getEntityDamage() + 2.0f + extraDamage;
@@ -173,6 +175,8 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void onHitBlock(BlockHitResult result) {
+        propagateHitBlock(result);
+
         BlockPos blockpos = result.getBlockPos();
         xTile = blockpos.getX();
         yTile = blockpos.getY();
