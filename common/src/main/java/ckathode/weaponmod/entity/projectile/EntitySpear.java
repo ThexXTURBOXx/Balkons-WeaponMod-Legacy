@@ -72,6 +72,8 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
         if (level().isClientSide) {
             return;
         }
+
+        propagateHitEntity(result);
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty()) return;
         Item item = thrownItem.getItem();
