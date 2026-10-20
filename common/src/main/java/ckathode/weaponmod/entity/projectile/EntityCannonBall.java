@@ -80,7 +80,7 @@ public class EntityCannonBall extends EntityProjectile<EntityCannonBall> {
     }
 
     public void createCrater() {
-        if (level().isClientSide || !inGround || isInWater()) {
+        if (level().isClientSide() || !inGround || isInWater()) {
             return;
         }
         remove(RemovalReason.DISCARDED);

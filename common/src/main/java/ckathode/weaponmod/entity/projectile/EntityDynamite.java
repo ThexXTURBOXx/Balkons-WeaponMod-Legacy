@@ -148,7 +148,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     private void detonate() {
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         if (extinguished && (ticksInGround >= 200 || ticksInAir >= 200)) {

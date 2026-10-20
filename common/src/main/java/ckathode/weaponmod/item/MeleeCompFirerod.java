@@ -58,7 +58,7 @@ public class MeleeCompFirerod extends MeleeComponent {
         boolean mainHand = player.getMainHandItem() == itemstack;
         boolean offHand = player.getOffhandItem() == itemstack;
         if (!mainHand && !offHand) return;
-        if (!world.isClientSide || !Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
+        if (!world.isClientSide() || !Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
 
         float yaw = player.getYRot() * (float) Math.PI / 180F;
         float pitch = player.getXRot() * (float) Math.PI / 180F;

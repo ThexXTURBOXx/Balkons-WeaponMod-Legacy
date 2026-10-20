@@ -89,7 +89,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     @Override
     public void onHitEntity(EntityHitResult result) {
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         propagateHitEntity(result);

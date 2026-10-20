@@ -68,7 +68,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
     @Override
     public void onHitEntity(EntityHitResult result) {
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
 

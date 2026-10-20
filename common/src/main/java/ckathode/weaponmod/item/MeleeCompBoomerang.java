@@ -52,7 +52,7 @@ public class MeleeCompBoomerang extends MeleeComponent {
             crit = true;
         }
         f *= 1.5f;
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityBoomerang entityboomerang = new EntityBoomerang(world, entityliving, itemstack.copy());
             entityboomerang.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, f, 5.0f);
