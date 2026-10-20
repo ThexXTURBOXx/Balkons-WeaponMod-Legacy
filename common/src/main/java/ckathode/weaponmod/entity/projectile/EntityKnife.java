@@ -83,6 +83,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
         if (level.isClientSide) {
             return;
         }
+        propagateHitEntity(result);
         DamageSource damagesource = WeaponDamageSource.causeProjectileWeaponDamage(this, getDamagingEntity());
         ItemStack thrownItem = getWeapon();
         if (thrownItem.isEmpty()) return;
