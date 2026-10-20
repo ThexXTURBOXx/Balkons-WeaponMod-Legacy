@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WMItemBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -52,21 +53,31 @@ public class MeleeCompFirerod extends MeleeComponent {
         boolean mainHand = player.getMainHandItem() == itemstack;
         boolean offHand = player.getOffhandItem() == itemstack;
         if (!mainHand && !offHand) return;
+        if (!world.isClientSide || !Minecraft.getInstance().options.getCameraType().isFirstPerson()) return;
 
-        float f = 1.0f;
-        float f1 = offHand ^ (player.getMainArm() == HumanoidArm.LEFT) ? -28.0f : 28.0f;
-        float particleX =
-                -Mth.sin(((player.getYRot() + f1) / 180F) * 3.141593F) * Mth.cos((player.getXRot() / 180F) * 3.141593F) * f;
-        float particleY = -Mth.sin((player.getXRot() / 180F) * 3.141593F) + player.getEyeHeight();
-        float particleZ =
-                Mth.cos(((player.getYRot() + f1) / 180F) * 3.141593F) * Mth.cos((player.getXRot() / 180F) * 3.141593F) * f;
+        float yaw = player.getYRot() * (float) Math.PI / 180F;
+        float pitch = player.getXRot() * (float) Math.PI / 180F;
+
+        float sy = Mth.sin(yaw), cy = Mth.cos(yaw);
+        float sp = Mth.sin(pitch), cp = Mth.cos(pitch);
+
+        double fx = -sy * cp, fy = -sp, fz = cy * cp; // forward (look)
+        double rx = -cy, ry = 0, rz = -sy; // right
+        double ux = -sy * sp, uy = cp, uz = cy * sp; // up
+
+        double forward = 0.8;
+        double right = offHand ^ (player.getMainArm() == HumanoidArm.LEFT) ? -0.45 : 0.45;
+        double up = -0.05;
+
+        double px = player.getX() + fx * forward + rx * right + ux * up;
+        double py = player.getY() + player.getEyeHeight() + fy * forward + ry * right + uy * up;
+        double pz = player.getZ() + fz * forward + rz * right + uz * up;
+
         if (player.getRandom().nextInt(5) == 0) {
-            world.addParticle(ParticleTypes.FLAME, player.getX() + particleX, player.getY() + particleY,
-                    player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
+            world.addParticle(ParticleTypes.FLAME, px, py, pz, 0.0D, 0.0D, 0.0D);
         }
         if (player.getRandom().nextInt(5) == 0) {
-            world.addParticle(ParticleTypes.SMOKE, player.getX() + particleX, player.getY() + particleY,
-                    player.getZ() + particleZ, 0.0D, 0.0D, 0.0D);
+            world.addParticle(ParticleTypes.SMOKE, px, py, pz, 0.0D, 0.0D, 0.0D);
         }
     }
 
