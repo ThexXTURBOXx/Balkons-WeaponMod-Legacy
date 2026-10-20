@@ -93,12 +93,8 @@ public class MeleeComponent extends AbstractWeaponComponent {
         if (entityliving.invulnerableTime == entityliving.invulnerableDuration) {
             float kb = getKnockBack(itemstack, entityliving, attacker);
             PhysHelper.knockBack(entityliving, attacker, kb);
-            if (meleeSpecs.attackDelay >= 3.0f) {
-                entityliving.invulnerableTime += (int) getAttackDelay(itemstack, entityliving, attacker);
-            } else {
-                float f = (meleeSpecs.attackDelay < 1.0f) ? 1.2f : 2.0f;
-                entityliving.invulnerableTime -= (int) (f / getAttackDelay(itemstack, entityliving, attacker));
-            }
+            float ad = getAttackDelay(itemstack, entityliving, attacker);
+            entityliving.invulnerableTime += translateToAttackSpeed(ad);
         }
         itemstack.hurtAndBreak(meleeSpecs.dmgFromEntity, attacker,
                 s -> s.broadcastBreakEvent(InteractionHand.MAIN_HAND));
@@ -109,6 +105,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
     public float getAttackDelay(ItemStack itemstack, LivingEntity entityliving,
                                 LivingEntity attacker) {
         return meleeSpecs.attackDelay;
+    }
+
+    private int translateToAttackSpeed(float ad) {
+        if (ad <= 0.0f) return 0;
+        int delta = Math.round(10f * (ad / 2.5f - 1.0f));
+        return (int) Math.max(-9f, Math.min(10f, delta));
     }
 
     @Override
@@ -217,7 +219,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         BATTLEAXE(0, 1.0f, 3.0f, 1.0f, 1.5f, 0.5f, 1, 2, 3.0f),
         WARHAMMER(0, 1.0f, 4.0f, 1.0f, 1.0f, 0.7f, 1, 2, 3.0f),
         KNIFE(0, 0.5f, 3.0f, 1.0f, 1.5f, 0.2f, 1, 2, 2.0f),
-        KATANA(0, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1, 2, 0.2f),
+        KATANA(0, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1, 2, 1.5f),
         FIREROD(1, 0.0f, 1.0f, 0.0f, 1.0f, 0.4f, 2, 0, 0.0f),
         BOOMERANG(0, 0.5f, 2.0f, 1.0f, 1.0f, 0.4f, 1, 1, 2.0f),
         NONE(0, 1.0f, 1.0f, 0.0f, 1.0f, 0.4f, 0, 0, 0.0f);
