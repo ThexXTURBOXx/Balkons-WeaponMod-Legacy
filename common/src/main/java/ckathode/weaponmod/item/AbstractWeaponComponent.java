@@ -74,4 +74,8 @@ public abstract class AbstractWeaponComponent {
     public abstract void inventoryTick(@NotNull ItemStack itemstack, @NotNull ServerLevel world,
                                        @NotNull Entity entity, @Nullable EquipmentSlot slot);
 
+    public void inventoryTickClient(@NotNull ItemStack itemstack, @NotNull Level world,
+                                    @NotNull Player player, @Nullable EquipmentSlot slot) {
+    }
+
 }
