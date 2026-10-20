@@ -158,6 +158,8 @@ public class EntityFlail extends EntityMaterialProjectile<EntityFlail> {
         if (entity.equals(getOwner())) {
             return;
         }
+
+        propagateHitEntity(result);
         if (WMUtil.hurtOrSimulate(entity, getDamageSource(), applyEnchantmentBonus(entity, flailDamage))) {
             applyEntityHitEffects(entity);
             playHitSound();
