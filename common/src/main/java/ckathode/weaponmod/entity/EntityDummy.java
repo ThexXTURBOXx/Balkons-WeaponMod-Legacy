@@ -95,7 +95,7 @@ public class EntityDummy extends Entity {
 
     @Override
     public boolean hurt(@NotNull DamageSource damagesource, float damage) {
-        if (level.isClientSide || !isAlive() || damage <= 0.0f) {
+        if (level.isClientSide() || !isAlive() || damage <= 0.0f) {
             return false;
         }
         setRockDirection(-getRockDirection());
@@ -204,7 +204,7 @@ public class EntityDummy extends Entity {
     }
 
     public void dropAsItem(boolean destroyed, boolean noCreative) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return;
         }
         if (destroyed) {
