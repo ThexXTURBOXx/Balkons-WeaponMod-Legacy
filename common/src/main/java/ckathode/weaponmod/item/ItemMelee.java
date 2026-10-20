@@ -124,6 +124,12 @@ public class ItemMelee extends Item implements IItemWeapon {
     }
 
     @Override
+    public void inventoryTickClient(@NotNull ItemStack itemStack, @NotNull Level level,
+                                    @NotNull Player player, @Nullable EquipmentSlot equipmentSlot) {
+        meleeComponent.inventoryTickClient(itemStack, level, player, equipmentSlot);
+    }
+
+    @Override
     public MeleeComponent getMeleeComponent() {
         return meleeComponent;
     }
