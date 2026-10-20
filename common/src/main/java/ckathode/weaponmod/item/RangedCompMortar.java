@@ -41,7 +41,7 @@ public class RangedCompMortar extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
             EntityMortarShell entitymortarshell = new EntityMortarShell(world, entityliving, itemstack);
             entitymortarshell.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 1.4f, 1.0f / f);

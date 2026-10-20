@@ -82,7 +82,7 @@ public final class PhysHelper {
 
     public static void sendExplosion(Level level, AdvancedExplosion explosion,
                                      boolean spawnSmallParticles, boolean spawnBigParticles) {
-        if (level instanceof ServerLevel serverLevel && !level.isClientSide) {
+        if (level instanceof ServerLevel serverLevel && !level.isClientSide()) {
             MsgExplosion msg = new MsgExplosion(explosion, spawnSmallParticles, spawnBigParticles);
             WMMessagePipeline.sendToAround(msg, serverLevel, explosion.center.x, explosion.center.y,
                     explosion.center.z, 64.0, level.dimension());

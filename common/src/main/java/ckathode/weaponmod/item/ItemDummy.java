@@ -65,7 +65,7 @@ public class ItemDummy extends WMItem {
             if (!world.noCollision(entitydummy, entitydummy.getBoundingBox().inflate(-0.1))) {
                 return InteractionResult.FAIL;
             } else {
-                if (!world.isClientSide) {
+                if (!world.isClientSide()) {
                     world.addFreshEntity(entitydummy);
                 }
 
