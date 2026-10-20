@@ -13,14 +13,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerMixin {
 
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
-    public void leftClickEntity(Entity target, CallbackInfo ci) {
+    public void leftClickEntity(Entity entity, CallbackInfo ci) {
         Player player = (Player) (Object) this;
         ItemStack stack = player.getMainHandItem();
 
         if (stack.isEmpty() || !(stack.getItem() instanceof IItemWeapon weapon))
             return;
 
-        if (weapon.leftClickEntity(stack, player, target))
+        if (weapon.leftClickEntity(stack, player, entity))
             ci.cancel();
     }
 

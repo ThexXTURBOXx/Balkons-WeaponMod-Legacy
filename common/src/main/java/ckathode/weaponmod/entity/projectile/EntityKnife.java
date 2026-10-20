@@ -121,7 +121,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
                 Level level = level();
                 if (level instanceof ServerLevel serverLevel) {
                     thrownItem.hurtAndBreak(2, serverLevel, shooter instanceof ServerPlayer player ? player : null,
-                            i -> {
+                            _ -> {
                             });
                 }
                 lerpMotion(Vec3.ZERO);
