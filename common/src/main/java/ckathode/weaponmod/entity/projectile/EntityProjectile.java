@@ -214,7 +214,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
                         random.nextFloat() * 0.2f));
                 ticksInGround = 0;
                 ticksInAir = 0;
-            } else if (!level.isClientSide) {
+            } else if (!level.isClientSide()) {
                 ++ticksInGround;
                 int t = getMaxLifetime();
                 if (t != 0 && ticksInGround >= t) {
@@ -458,7 +458,7 @@ public class EntityProjectile<T extends EntityProjectile<T>> extends AbstractArr
 
     @Override
     public void playerTouch(@NotNull Player entityplayer) {
-        if (inGround && shakeTime <= 0 && canPickup(entityplayer) && !level.isClientSide) {
+        if (inGround && shakeTime <= 0 && canPickup(entityplayer) && !level.isClientSide()) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) return;
             if ((pickupStatus == PickupStatus.CREATIVE_ONLY && entityplayer.isCreative()) ||

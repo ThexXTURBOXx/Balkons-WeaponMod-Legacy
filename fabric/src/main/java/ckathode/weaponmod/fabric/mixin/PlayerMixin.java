@@ -29,7 +29,7 @@ public class PlayerMixin {
         Item useItem = useItemStack.getItem();
 
         if (useItem instanceof ItemMelee || useItem instanceof ItemShooter || useItem instanceof WMItem) {
-            if (!player.level.isClientSide) {
+            if (!player.level.isClientSide()) {
                 player.awardStat(Stats.ITEM_USED.get(useItem));
             }
 
