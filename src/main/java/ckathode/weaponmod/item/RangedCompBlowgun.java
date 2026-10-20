@@ -55,7 +55,7 @@ public class RangedCompBlowgun extends RangedComponent {
             && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, itemstack) == 0) {
             consumeAmmo(entityplayer);
         }
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             EntityBlowgunDart entityblowgundart = new EntityBlowgunDart(world, entityplayer, dartStackCopy);
             entityblowgundart.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f,
                     f * 1.5f, 1.0f);

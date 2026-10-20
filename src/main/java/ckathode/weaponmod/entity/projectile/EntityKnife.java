@@ -76,7 +76,7 @@ public class EntityKnife extends EntityMaterialProjectile<EntityKnife> {
 
     @Override
     public void onHitEntity(RayTraceResult raytraceResult) {
-        if (world.isRemote) {
+        if (world.isRemote()) {
             return;
         }
         propagateHitEntity(raytraceResult);

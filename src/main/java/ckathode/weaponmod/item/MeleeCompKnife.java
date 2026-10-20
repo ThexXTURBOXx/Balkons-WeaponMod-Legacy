@@ -24,7 +24,7 @@ public class MeleeCompKnife extends MeleeComponent {
         if (!BalkonsWeaponMod.instance.modConfig.canThrowKnife.get()) {
             return super.onItemRightClick(itemstack, world, entityplayer, hand);
         }
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             EntityKnife entityknife = new EntityKnife(world, entityplayer, itemstack.copy());
             entityknife.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0f, 0.8f, 3.0f);
             applyProjectileEnchantments(entityknife, itemstack);

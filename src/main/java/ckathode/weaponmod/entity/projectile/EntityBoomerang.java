@@ -116,7 +116,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void onHitEntity(RayTraceResult raytraceResult) {
-        if (world.isRemote || floatStrength < MIN_FLOAT_STRENGTH) {
+        if (world.isRemote() || floatStrength < MIN_FLOAT_STRENGTH) {
             return;
         }
         Entity entity = raytraceResult.entity;
@@ -229,7 +229,7 @@ public class EntityBoomerang extends EntityMaterialProjectile<EntityBoomerang> {
 
     @Override
     public void onCollideWithPlayer(@Nonnull EntityPlayer entityplayer) {
-        if (!beenInGround && ticksInAir > 5 && !world.isRemote && floatStrength >= MIN_FLOAT_STRENGTH &&
+        if (!beenInGround && ticksInAir > 5 && !world.isRemote() && floatStrength >= MIN_FLOAT_STRENGTH &&
             entityplayer.getUniqueID().equals(shootingEntity)) {
             ItemStack item = getPickupItem();
             if (item.isEmpty()) {

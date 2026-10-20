@@ -36,7 +36,7 @@ public class RangedCompCrossbow extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             EntityCrossbowBolt entitybolt = new EntityCrossbowBolt(world, entityliving);
             entitybolt.shoot(entityliving, entityliving.rotationPitch, entityliving.rotationYaw, 0.0f, 5.0f, 1.5f / f);
             applyProjectileEnchantments(entitybolt, itemstack);

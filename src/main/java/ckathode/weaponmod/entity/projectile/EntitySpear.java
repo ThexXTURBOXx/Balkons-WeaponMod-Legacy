@@ -54,7 +54,7 @@ public class EntitySpear extends EntityMaterialProjectile<EntitySpear> {
 
     @Override
     public void onHitEntity(RayTraceResult raytraceResult) {
-        if (world.isRemote) {
+        if (world.isRemote()) {
             return;
         }
 

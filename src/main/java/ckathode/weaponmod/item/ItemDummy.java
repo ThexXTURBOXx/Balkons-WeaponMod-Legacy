@@ -66,7 +66,7 @@ public class ItemDummy extends WMItem {
         if (world.getCollisionBoxes(entitydummy, entitydummy.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
             return EnumActionResult.FAIL;
         }
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             world.spawnEntity(entitydummy);
         }
         if (!entityplayer.isCreative()) {

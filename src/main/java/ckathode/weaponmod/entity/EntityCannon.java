@@ -113,7 +113,7 @@ public class EntityCannon extends EntityBoat {
 
     @Override
     public boolean attackEntityFrom(@NotNull DamageSource damagesource, float damage) {
-        if (world.isRemote || !isAlive()) {
+        if (world.isRemote() || !isAlive()) {
             return true;
         }
         if (damagesource instanceof EntityDamageSourceIndirect && damagesource.getTrueSource() != null) {
@@ -241,7 +241,7 @@ public class EntityCannon extends EntityBoat {
             if (isOnGround) {
                 if (fallDistance > 3.0F) {
                     fall(fallDistance, 1.0F);
-                    if (!world.isRemote && isAlive()) {
+                    if (!world.isRemote() && isAlive()) {
                         remove();
                         if (world.getGameRules().getBoolean("doEntityDrops")) {
                             for (int j = 0; j < 5; ++j) {
@@ -283,7 +283,7 @@ public class EntityCannon extends EntityBoat {
             return;
         }
         Entity entityPassenger = getControllingPassenger();
-        if (entityPassenger != null && !world.isRemote) {
+        if (entityPassenger != null && !world.isRemote()) {
             EntityCannonBall entitycannonball = new EntityCannonBall(world, this,
                     entityPassenger.rotationPitch, entityPassenger.rotationYaw, isSuperPowered());
             world.spawnEntity(entitycannonball);
@@ -364,7 +364,7 @@ public class EntityCannon extends EntityBoat {
             if (isBeingRidden() && riddenByPlayer() && notThisPlayer(entityplayer)) {
                 return true;
             }
-            if (!world.isRemote && !entityplayer.isSneaking()) {
+            if (!world.isRemote() && !entityplayer.isSneaking()) {
                 entityplayer.startRiding(this);
             }
         }

@@ -140,7 +140,7 @@ public class EntityDynamite extends EntityProjectile<EntityDynamite> {
     }
 
     private void detonate() {
-        if (world.isRemote) {
+        if (world.isRemote()) {
             return;
         }
         if (extinguished && (ticksInGround >= 200 || ticksInAir >= 200)) {

@@ -68,7 +68,7 @@ public class ItemCannon extends WMItem {
         if (world.getCollisionBoxes(entitycannon, entitycannon.getBoundingBox().grow(-0.1)).findAny().isPresent()) {
             return EnumActionResult.FAIL;
         }
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             world.spawnEntity(entitycannon);
         }
         if (!entityplayer.isCreative()) {
