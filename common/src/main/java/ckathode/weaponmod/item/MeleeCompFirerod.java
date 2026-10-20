@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -54,7 +55,7 @@ public class MeleeCompFirerod extends MeleeComponent {
     public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int i, boolean flag) {
         super.inventoryTick(itemstack, world, entity, i, flag);
         if (!(entity instanceof Player player)) return; // render particles only for players
-        if (player.isInWater()) return;
+        if (player.isEyeInFluid(FluidTags.WATER)) return;
         boolean mainHand = player.getMainHandItem() == itemstack;
         boolean offHand = player.getOffhandItem() == itemstack;
         if (!mainHand && !offHand) return;
