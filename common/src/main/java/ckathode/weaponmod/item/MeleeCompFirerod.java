@@ -3,6 +3,7 @@ package ckathode.weaponmod.item;
 import ckathode.weaponmod.WMItemBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
@@ -50,7 +51,7 @@ public class MeleeCompFirerod extends MeleeComponent {
         super.inventoryTick(itemstack, world, entity, i, flag);
         if (!(entity instanceof Player)) return; // render particles only for players
         Player player = (Player) entity;
-        if (player.isInWater()) return;
+        if (player.isEyeInFluid(FluidTags.WATER)) return;
         boolean mainHand = player.getMainHandItem() == itemstack;
         boolean offHand = player.getOffhandItem() == itemstack;
         if (!mainHand && !offHand) return;
