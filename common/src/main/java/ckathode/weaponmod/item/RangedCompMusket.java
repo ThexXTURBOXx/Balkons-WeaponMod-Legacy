@@ -47,13 +47,8 @@ public class RangedCompMusket extends RangedComponent {
             f = 1.0f;
         }
         f += 0.02f;
-        if (!world.isClientSide) {
-            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving, itemstack) {
-                @Override
-                protected boolean isDisabled() {
-                    return !WeaponModConfig.get().isEnabled("musket");
-                }
-            };
+        if (!world.isClientSide && WeaponModConfig.get().isEnabled("musket")) {
+            EntityMusketBullet entitymusketbullet = new EntityMusketBullet(world, entityliving, itemstack);
             entitymusketbullet.shootFromRotation(entityliving, entityliving.getXRot(), entityliving.getYRot(),
                     0.0f, 5.0f, 1.0f / f);
             applyProjectileEnchantments(entitymusketbullet, itemstack);
