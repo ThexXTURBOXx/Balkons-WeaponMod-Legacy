@@ -61,6 +61,7 @@ public class EntityBlowgunDart extends EntityMaterialProjectile<EntityBlowgunDar
 
     @Override
     public void onHitEntity(EntityHitResult result) {
+        propagateHitEntity(result);
         Entity entity = result.getEntity();
         DamageSource damagesource = damageSources().source(WMDamageSources.WEAPON, this, getDamagingEntity());
         if (entity.hurt(damagesource, 1.0f + extraDamage)) {
