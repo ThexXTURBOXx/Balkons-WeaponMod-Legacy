@@ -136,6 +136,8 @@ public class BalkonsWeaponMod {
     public WeaponModConfig modConfig;
     public WMMessagePipeline messagePipeline;
 
+    private boolean setupMCLib = false;
+
     public BalkonsWeaponMod() {
         instance = this;
         messagePipeline = new WMMessagePipeline();
@@ -147,14 +149,26 @@ public class BalkonsWeaponMod {
 
     @Mod.EventHandler
     public void constructMod(final FMLConstructionEvent event) {
-        MCLib.init();
+        try {
+            MCLib.init();
+            setupMCLib = true;
+        } catch (Throwable ignored) {
+        }
     }
 
     @Mod.EventHandler
     public void preInitMod(final FMLPreInitializationEvent event) {
         modLog = event.getModLog();
 
-        MCLibModules.updateCheckAPI.submitModTask(MOD_ID, MOD_VERSION, UPDATE_JSON);
+        if (setupMCLib) {
+            try {
+                MCLibModules.updateCheckAPI.submitModTask(MOD_ID, MOD_VERSION, UPDATE_JSON);
+            } catch (Throwable t) {
+                modLog.warn("Could not execute update checker.", t);
+            }
+        } else {
+            modLog.warn("Cannot setup MCLib - update checker won't work.");
+        }
 
         modConfig = new WeaponModConfig(new Configuration(event.getSuggestedConfigurationFile()));
         modConfig.addEnableSetting("spear");
