@@ -62,7 +62,7 @@ public class MeleeCompBattleaxe extends MeleeComponent {
         return new Tool(List.of(
                 Tool.Rule.deniesDrops(weaponMaterial.getIncorrectBlocksForDrops()),
                 Tool.Rule.minesAndDrops(BlockTags.MINEABLE_WITH_AXE, weaponMaterial.getSpeed())),
-                0.75f, 1);
+                0.75f, meleeSpecs.dmgFromBlock);
     }
 
     @Override

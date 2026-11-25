@@ -1,23 +1,21 @@
 package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.WMItemBuilder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemMelee extends SwordItem implements IItemWeapon {
+public class ItemMelee extends Item implements IItemWeapon {
 
     public static final String KATANA_WOOD_ID = "katana.wood";
     public static final ItemMelee KATANA_WOOD_ITEM = WMItemBuilder.createStandardKatana(Tiers.WOOD);
@@ -44,7 +42,7 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     }
 
     public ItemMelee(@NotNull MeleeComponent meleecomponent, Properties properties) {
-        super(meleecomponent.getWeaponMaterial(), meleecomponent.setProperties(properties
+        super(meleecomponent.setProperties(properties
                 .attributes(meleecomponent.setAttributes(ItemAttributeModifiers.builder()).build())
                 .arch$tab(CreativeModeTabs.COMBAT)));
         (meleeComponent = meleecomponent).setItem(this);
@@ -59,13 +57,6 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     public boolean hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                              @NotNull LivingEntity attacker) {
         return meleeComponent.hurtEnemy(itemstack, entityliving, attacker);
-    }
-
-    @Override
-    public boolean mineBlock(@NotNull ItemStack itemstack, @NotNull Level world,
-                             @NotNull BlockState block, @NotNull BlockPos pos,
-                             @NotNull LivingEntity entityliving) {
-        return meleeComponent.mineBlock(itemstack, world, block, pos, entityliving);
     }
 
     @Override
