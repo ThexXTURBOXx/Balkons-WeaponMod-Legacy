@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemShooter extends ItemBow implements IItemWeapon {
+
     protected static final int MAX_DELAY = 72000;
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
@@ -43,6 +44,18 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
         rangedcomponent.setItem(this);
         meleecomponent.setItem(this);
         rangedcomponent.setThisItemProperties();
+    }
+
+    @Override
+    public boolean isRepairable() {
+        return super.isRepairable() &&
+               (meleeComponent.isRepairableInCraft() || rangedComponent.isRepairableInCraft());
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial)
+               || rangedComponent.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
@@ -152,4 +165,5 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
 
         return super.getModel(stack, player, useRemaining);
     }
+
 }

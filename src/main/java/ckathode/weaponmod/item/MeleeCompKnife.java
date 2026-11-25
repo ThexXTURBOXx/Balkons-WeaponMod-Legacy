@@ -9,8 +9,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class MeleeCompKnife extends MeleeComponent {
+
+    private final boolean bayonet;
+
     public MeleeCompKnife(Item.ToolMaterial toolmaterial) {
+        this(toolmaterial, false);
+    }
+
+    public MeleeCompKnife(Item.ToolMaterial toolmaterial, boolean bayonet) {
         super(MeleeSpecs.KNIFE, toolmaterial);
+        this.bayonet = bayonet;
+    }
+
+    @Override
+    public boolean isRepairableInAnvil(ItemStack toRepair, ItemStack repairMaterial) {
+        return !bayonet && super.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
@@ -40,4 +53,5 @@ public class MeleeCompKnife extends MeleeComponent {
     public EnumAction getItemUseAction(ItemStack itemstack) {
         return BalkonsWeaponMod.instance.modConfig.canThrowKnife ? EnumAction.NONE : super.getItemUseAction(itemstack);
     }
+
 }

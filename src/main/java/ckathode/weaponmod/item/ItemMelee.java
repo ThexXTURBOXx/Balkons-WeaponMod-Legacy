@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMelee extends ItemSword implements IItemWeapon {
+
     public final MeleeComponent meleeComponent;
     public final String rawId;
     private final String modId;
@@ -42,6 +43,16 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
         (meleeComponent = meleecomponent).setItem(this);
         meleecomponent.setThisItemProperties();
         setCreativeTab(CreativeTabs.tabCombat);
+    }
+
+    @Override
+    public boolean isRepairable() {
+        return super.isRepairable() && meleeComponent.isRepairableInCraft();
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
@@ -149,4 +160,5 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
 
         return super.getModel(stack, player, useRemaining);
     }
+
 }

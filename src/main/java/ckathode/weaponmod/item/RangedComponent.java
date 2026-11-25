@@ -25,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public abstract class RangedComponent extends AbstractWeaponComponent {
+
     protected static final int MAX_DELAY = 72000;
     public final RangedSpecs rangedSpecs;
 
@@ -311,4 +312,5 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             return ammoItems;
         }
     }
+
 }
