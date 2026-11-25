@@ -19,7 +19,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompWarhammer extends MeleeComponent {
 
@@ -48,8 +47,9 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public @NotNull Tool getToolComponent() {
+    public Tool getToolComponent() {
         Tool orig = super.getToolComponent();
+        if (orig == null) return null;
         return new Tool(orig.rules(), orig.defaultMiningSpeed() * (weaponMaterial.getAttackDamageBonus() + 2.0f),
                 meleeSpecs.dmgFromBlock);
     }
