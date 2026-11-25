@@ -11,10 +11,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachItem {
+public class MeleeCompHalberd extends MeleeComponent {
 
     public static final String WOOD_ID = "halberd.wood";
     public static final ItemMelee WOOD_ITEM =
@@ -61,6 +62,11 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
     }
 
     @Override
+    public AttackRange getAttackRangeComponent() {
+        return new AttackRange(0.0F, 4.0F, 0.0F, 6.0F, 0.3F, 1.0F);
+    }
+
+    @Override
     public float getAttackDelay(ItemStack itemstack, LivingEntity entityliving,
                                 LivingEntity attacker) {
         float ad = super.getAttackDelay(itemstack, entityliving, attacker);
@@ -79,11 +85,6 @@ public class MeleeCompHalberd extends MeleeComponent implements IExtendedReachIt
                                           Player entityplayer, InteractionHand hand) {
         setHalberdState(itemstack, !getHalberdState(itemstack));
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public float getExtendedReach(Level world, LivingEntity living, ItemStack itemstack) {
-        return 4.0f;
     }
 
 }

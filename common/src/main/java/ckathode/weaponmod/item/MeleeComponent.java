@@ -29,6 +29,7 @@ import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.Weapon;
@@ -80,6 +81,11 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Nullable
+    public AttackRange getAttackRangeComponent() {
+        return null;
+    }
+
+    @Nullable
     public TagKey<Item> getRepairTag() {
         return weaponMaterial != null ? weaponMaterial.repairItems() : null;
     }
@@ -103,15 +109,13 @@ public class MeleeComponent extends AbstractWeaponComponent {
                                     AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND);
         }
-        if (this instanceof IExtendedReachItem ieri) {
-            try {
-                attributeBuilder = attributeBuilder
-                        .add(WMRegistries.WEAPON_REACH, new AttributeModifier(WeaponModAttributes.WEAPON_REACH_ID,
-                                        ieri.getExtendedReach(null, null, null) - 3.0f,
-                                        AttributeModifier.Operation.ADD_VALUE),
-                                EquipmentSlotGroup.MAINHAND);
-            } catch (NullPointerException ignored) {
-            }
+        AttackRange ar = getAttackRangeComponent();
+        if (ar != null && ar.maxReach() != 3.0f) {
+            attributeBuilder = attributeBuilder
+                    .add(WMRegistries.WEAPON_REACH, new AttributeModifier(WeaponModAttributes.WEAPON_REACH_ID,
+                                    ar.maxReach() - 3.0f,
+                                    AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.MAINHAND);
         }
         return attributeBuilder;
     }
@@ -135,6 +139,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
         Weapon weapon = getWeaponComponent();
         if (weapon != null)
             properties = properties.component(DataComponents.WEAPON, weapon);
+
+        AttackRange attackRange = getAttackRangeComponent();
+        if (attackRange != null)
+            properties = properties.component(DataComponents.ATTACK_RANGE, attackRange);
 
         return properties;
     }

@@ -8,15 +8,15 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.AttackRange;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem {
+public class MeleeCompSpear extends MeleeComponent {
 
     public static final String WOOD_ID = "spear.wood";
     public static final ItemMelee WOOD_ITEM =
@@ -51,6 +51,11 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     }
 
     @Override
+    public AttackRange getAttackRangeComponent() {
+        return new AttackRange(0.0F, 4.0F, 0.0F, 6.0F, 0.3F, 1.0F);
+    }
+
+    @Override
     public @NotNull InteractionResult use(ItemStack itemstack, Level world,
                                           Player entityplayer, InteractionHand hand) {
         if (!WeaponModConfig.get().canThrowSpear) {
@@ -74,11 +79,6 @@ public class MeleeCompSpear extends MeleeComponent implements IExtendedReachItem
     @Override
     public @NotNull ItemUseAnimation getUseAnimation(ItemStack itemstack) {
         return WeaponModConfig.get().canThrowSpear ? ItemUseAnimation.NONE : super.getUseAnimation(itemstack);
-    }
-
-    @Override
-    public float getExtendedReach(Level world, LivingEntity living, ItemStack itemstack) {
-        return 4.0f;
     }
 
 }
