@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class RangedComponent extends AbstractWeaponComponent {
+
     protected static final int MAX_DELAY = 72000;
     public final RangedSpecs rangedSpecs;
 
@@ -322,4 +323,5 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
             return ammoItems;
         }
     }
+
 }

@@ -25,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemMelee extends ItemSword implements IItemWeapon {
+
     public final MeleeComponent meleeComponent;
 
     public ItemMelee(String id, MeleeComponent meleecomponent) {
@@ -44,6 +45,16 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
                 MeleeCompHalberd.getHalberdState(stack) ? 1.0f : 0.0f);
         addPropertyOverride(BalkonsWeaponMod.id("block"), (stack, world, entity) ->
                 entity != null && entity.getActiveItemStack() == stack ? 1.0f : 0.0f);
+    }
+
+    @Override
+    public boolean isRepairable() {
+        return super.isRepairable() && meleeComponent.isRepairableInCraft();
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
@@ -160,4 +171,5 @@ public class ItemMelee extends ItemSword implements IItemWeapon {
             return true;
         return super.isShield(stack, entity);
     }
+
 }

@@ -111,7 +111,7 @@ public class WMItemBuilder {
 
     public static ItemMusket createStandardMusketWithBayonet(String id, @NotNull Item.ToolMaterial tier,
                                                              @NotNull Item bayonetItem) {
-        return createItemMusket(id, new MeleeCompKnife(tier), bayonetItem);
+        return createItemMusket(id, new MeleeCompKnife(tier, true), bayonetItem);
     }
 
     public static ItemMelee createStandardSpear(String id, @NotNull Item.ToolMaterial tier) {
@@ -202,7 +202,7 @@ public class WMItemBuilder {
 
     public static ItemMusket createStandardMusketWithBayonet(String modId, String id, @NotNull Item.ToolMaterial tier,
                                                              @NotNull Item bayonetItem) {
-        return createItemMusket(modId, id, new MeleeCompKnife(tier), bayonetItem);
+        return createItemMusket(modId, id, new MeleeCompKnife(tier, true), bayonetItem);
     }
 
     public static ItemMelee createStandardSpear(String modId, String id, @NotNull Item.ToolMaterial tier) {
