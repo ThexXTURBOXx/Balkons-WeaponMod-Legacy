@@ -76,13 +76,6 @@ public class ItemMelee extends Item implements IItemWeapon {
         return meleeComponent.hurtEnemy(itemstack, entityliving, attacker);
     }
 
-    @Override
-    public boolean mineBlock(@NotNull ItemStack itemstack, @NotNull Level world,
-                             @NotNull BlockState block, @NotNull BlockPos pos,
-                             @NotNull LivingEntity entityliving) {
-        return meleeComponent.mineBlock(itemstack, world, block, pos, entityliving);
-    }
-
     @NotNull
     @Override
     public ItemUseAnimation getUseAnimation(@NotNull ItemStack itemstack) {

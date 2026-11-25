@@ -5,7 +5,6 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import java.util.List;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -37,7 +36,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +59,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     protected void onSetItem() {
     }
 
-    @NotNull
+    @Nullable
     @SuppressWarnings("deprecation")
     public Tool getToolComponent() {
         HolderGetter<Block> holderGetter =
@@ -70,7 +68,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()),
                         meleeSpecs.blockDamage * 10),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
-                1.0F, 2);
+                1.0F, meleeSpecs.dmgFromBlock);
     }
 
     @Nullable
@@ -113,7 +111,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public Properties setProperties(Properties properties) {
         properties = properties
-                .component(DataComponents.TOOL, getToolComponent())
                 .durability(weaponMaterial == null
                         ? meleeSpecs.durabilityBase
                         : (int) (meleeSpecs.durabilityBase
@@ -122,6 +119,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
         TagKey<Item> repairTag = getRepairTag();
         if (repairTag != null)
             properties = properties.repairable(repairTag);
+
+        Tool tool = getToolComponent();
+        if (tool != null)
+            properties = properties.component(DataComponents.TOOL, tool);
 
         return properties;
     }
@@ -137,15 +138,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public float getEntityDamage() {
         return meleeSpecs.damageBase + getDamage();
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack itemstack, Level world, BlockState block,
-                             BlockPos pos, LivingEntity entityliving) {
-        if (block.getDestroySpeed(world, pos) != 0.0f) {
-            itemstack.hurtAndBreak(meleeSpecs.dmgFromBlock, entityliving, EquipmentSlot.MAINHAND);
-        }
-        return true;
     }
 
     @Override
