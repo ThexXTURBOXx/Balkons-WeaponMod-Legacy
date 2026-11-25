@@ -47,7 +47,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlowgun() {
-        return createItemShooter(new RangedCompBlowgun(), new MeleeCompNone(null));
+        return createItemShooter(new RangedCompBlowgun(), new MeleeCompNone());
     }
 
     public static ItemBlowgunDart createStandardBlowgunDart(@NotNull DartType dartType) {
@@ -55,7 +55,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlunderbuss() {
-        return createItemShooter(new RangedCompBlunderbuss(), new MeleeCompNone(null));
+        return createItemShooter(new RangedCompBlunderbuss(), new MeleeCompNone());
     }
 
     public static ItemMelee createStandardBoomerang(@NotNull Tier tier) {
@@ -67,7 +67,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardCrossbow() {
-        return createItemShooter(new RangedCompCrossbow(), new MeleeCompNone(null));
+        return createItemShooter(new RangedCompCrossbow(), new MeleeCompNone());
     }
 
     public static ItemDummy createStandardDummy() {
@@ -87,7 +87,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardFlintlock() {
-        return createItemShooter(new RangedCompFlintlock(), new MeleeCompNone(null));
+        return createItemShooter(new RangedCompFlintlock(), new MeleeCompNone());
     }
 
     public static ItemMelee createStandardHalberd(@NotNull Tier tier) {
@@ -107,7 +107,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardMortar() {
-        return createItemShooter(new RangedCompMortar(), new MeleeCompNone(null));
+        return createItemShooter(new RangedCompMortar(), new MeleeCompNone());
     }
 
     public static ItemMusket createStandardMusket() {
@@ -173,7 +173,7 @@ public class WMItemBuilder {
     }
 
     public static ItemMusket createItemMusket() {
-        return createItemMusket(new MeleeCompNone(null), null);
+        return createItemMusket(new MeleeCompNone(), null);
     }
 
     @ExpectPlatform
