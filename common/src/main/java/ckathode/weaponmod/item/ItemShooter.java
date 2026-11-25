@@ -41,6 +41,12 @@ public class ItemShooter extends BowItem implements IItemWeapon {
     }
 
     @Override
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial)
+               || rangedComponent.isRepairableInAnvil(toRepair, repairMaterial);
+    }
+
+    @Override
     public float getDestroySpeed(@NotNull ItemStack itemstack, @NotNull BlockState block) {
         return meleeComponent.getDestroySpeed(itemstack, block);
     }

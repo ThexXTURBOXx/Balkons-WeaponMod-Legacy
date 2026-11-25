@@ -56,6 +56,11 @@ public class ItemMelee extends SwordItem implements IItemWeapon {
     }
 
     @Override
+    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial);
+    }
+
+    @Override
     public float getDamage() {
         return meleeComponent.getDamage();
     }

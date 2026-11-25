@@ -35,8 +35,20 @@ public class MeleeCompKnife extends MeleeComponent {
     public static final String NETHERITE_ID = "knife.netherite";
     public static final ItemMelee NETHERITE_ITEM = WMItemBuilder.createStandardKnife(Tiers.NETHERITE);
 
+    private final boolean bayonet;
+
     public MeleeCompKnife(Tier itemTier) {
+        this(itemTier, false);
+    }
+
+    public MeleeCompKnife(Tier itemTier, boolean bayonet) {
         super(MeleeSpecs.KNIFE, itemTier);
+        this.bayonet = bayonet;
+    }
+
+    @Override
+    public boolean isRepairableInAnvil(ItemStack toRepair, ItemStack repairMaterial) {
+        return !bayonet && super.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
