@@ -10,10 +10,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractWeaponComponent {
 
@@ -37,6 +39,11 @@ public abstract class AbstractWeaponComponent {
     public abstract ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder);
 
     public abstract Properties setProperties(Properties properties);
+
+    @Nullable
+    public ToolMaterial getWeaponMaterial() {
+        return null;
+    }
 
     public abstract float getDamage();
 
