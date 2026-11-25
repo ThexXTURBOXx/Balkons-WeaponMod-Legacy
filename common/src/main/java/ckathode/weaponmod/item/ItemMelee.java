@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -63,11 +62,6 @@ public class ItemMelee extends Item implements IItemWeapon {
     @Override
     public boolean canAttackBlock(BlockState blockState, Level level, BlockPos blockPos, Player player) {
         return !player.isCreative();
-    }
-
-    @Override
-    public void postHurtEnemy(ItemStack itemStack, LivingEntity livingEntity, LivingEntity livingEntity2) {
-        itemStack.hurtAndBreak(1, livingEntity2, EquipmentSlot.MAINHAND);
     }
 
     @Override
