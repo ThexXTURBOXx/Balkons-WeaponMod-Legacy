@@ -1,6 +1,7 @@
 package ckathode.weaponmod.item;
 
 import java.util.List;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -36,7 +37,7 @@ public class MeleeCompNone extends MeleeComponent {
     }
 
     @Override
-    public Tool getToolComponent() {
+    public Tool getToolComponent(HolderLookup.Provider provider) {
         return new Tool(List.of(), 1.0F, meleeSpecs.dmgFromBlock, false);
     }
 

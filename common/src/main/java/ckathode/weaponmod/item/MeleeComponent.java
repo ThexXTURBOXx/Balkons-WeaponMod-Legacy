@@ -6,11 +6,10 @@ import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import java.util.List;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -37,7 +36,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,15 +61,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Nullable
-    @SuppressWarnings("deprecation")
-    public Tool getToolComponent() {
-        HolderGetter<Block> holderGetter =
-                BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+    public Tool getToolComponent(HolderLookup.Provider provider) {
         return new Tool(List.of(
-                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()),
+                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.arch$holder()),
                         meleeSpecs.blockDamage * 10),
-                Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
-                Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
+                Tool.Rule.overrideSpeed(provider.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
+                Tool.Rule.overrideSpeed(provider.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
                 1.0F, meleeSpecs.dmgFromBlock, false);
     }
 
@@ -134,9 +129,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
         if (repairTag != null)
             properties = properties.repairable(repairTag);
 
-        Tool tool = getToolComponent();
-        if (tool != null)
-            properties = properties.component(DataComponents.TOOL, tool);
+        properties = properties.delayedComponent(DataComponents.TOOL, this::getToolComponent);
 
         Weapon weapon = getWeaponComponent();
         if (weapon != null)
