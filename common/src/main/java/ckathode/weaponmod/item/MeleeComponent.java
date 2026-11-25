@@ -14,6 +14,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -38,6 +39,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeComponent extends AbstractWeaponComponent {
 
@@ -49,9 +51,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
         weaponMaterial = itemTier;
     }
 
-    @NotNull
+    @Nullable
+    @Override
     public ToolMaterial getWeaponMaterial() {
-        return weaponMaterial == null ? ToolMaterial.WOOD : weaponMaterial;
+        return weaponMaterial;
     }
 
     @Override
@@ -68,6 +71,11 @@ public class MeleeComponent extends AbstractWeaponComponent {
                         meleeSpecs.blockDamage * 10),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
                 1.0F, 2);
+    }
+
+    @Nullable
+    public TagKey<Item> getRepairTag() {
+        return weaponMaterial != null ? weaponMaterial.repairItems() : null;
     }
 
     @Override
@@ -104,12 +112,18 @@ public class MeleeComponent extends AbstractWeaponComponent {
 
     @Override
     public Properties setProperties(Properties properties) {
-        return properties
+        properties = properties
                 .component(DataComponents.TOOL, getToolComponent())
                 .durability(weaponMaterial == null
                         ? meleeSpecs.durabilityBase
                         : (int) (meleeSpecs.durabilityBase
                                  + weaponMaterial.durability() * meleeSpecs.durabilityMult));
+
+        TagKey<Item> repairTag = getRepairTag();
+        if (repairTag != null)
+            properties = properties.repairable(repairTag);
+
+        return properties;
     }
 
     @Override

@@ -6,9 +6,11 @@ import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityKnife;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
@@ -41,8 +43,20 @@ public class MeleeCompKnife extends MeleeComponent {
     public static final ItemMelee NETHERITE_ITEM =
             WMItemBuilder.createStandardKnife(ToolMaterial.NETHERITE, BalkonsWeaponMod.id(NETHERITE_ID));
 
+    private final boolean bayonet;
+
     public MeleeCompKnife(ToolMaterial itemTier) {
+        this(itemTier, false);
+    }
+
+    public MeleeCompKnife(ToolMaterial itemTier, boolean bayonet) {
         super(MeleeSpecs.KNIFE, itemTier);
+        this.bayonet = bayonet;
+    }
+
+    @Override
+    public TagKey<Item> getRepairTag() {
+        return bayonet ? null : super.getRepairTag();
     }
 
     @Override
