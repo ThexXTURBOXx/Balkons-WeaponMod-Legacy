@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemShooter extends ItemBow implements IItemWeapon {
+
     protected static final int MAX_DELAY = 72000;
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
@@ -53,6 +54,18 @@ public class ItemShooter extends ItemBow implements IItemWeapon {
                 (entity != null && entity.isHandActive() && entity.getActiveItemStack() == stack && !RangedComponent.isReloaded(stack)) ? 1.0f : 0.0f);
         addPropertyOverride(BalkonsWeaponMod.id("reloaded"), (stack, world, entity) ->
                 RangedComponent.isReloaded(stack) ? 1.0f : 0.0f);
+    }
+
+    @Override
+    public boolean isRepairable() {
+        return super.isRepairable() &&
+               (meleeComponent.isRepairableInCraft() || rangedComponent.isRepairableInCraft());
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial)
+               || rangedComponent.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
