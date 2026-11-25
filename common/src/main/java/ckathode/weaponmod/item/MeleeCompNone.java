@@ -18,6 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class MeleeCompNone extends MeleeComponent {
 
+    public MeleeCompNone() {
+        this(null);
+    }
+
     public MeleeCompNone(Tier itemTier) {
         super(MeleeSpecs.NONE, itemTier);
     }
