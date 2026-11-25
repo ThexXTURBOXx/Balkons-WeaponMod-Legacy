@@ -119,7 +119,7 @@ public class WMItemBuilder {
 
     public static ItemMusket createStandardMusketWithBayonet(@NotNull ToolMaterial tier, @NotNull Item bayonetItem,
                                                              @NotNull ResourceLocation id) {
-        return createItemMusket(new MeleeCompKnife(tier), bayonetItem, id);
+        return createItemMusket(new MeleeCompKnife(tier, true), bayonetItem, id);
     }
 
     public static ItemMelee createStandardSpear(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
