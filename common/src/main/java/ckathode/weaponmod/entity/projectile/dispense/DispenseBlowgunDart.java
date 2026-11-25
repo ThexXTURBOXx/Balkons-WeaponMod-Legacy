@@ -17,7 +17,9 @@ public class DispenseBlowgunDart extends DispenseWeaponProjectile {
     protected Projectile getProjectile(@NotNull Level world, Position pos,
                                        @NotNull ItemStack itemstack) {
         EntityBlowgunDart dart = new EntityBlowgunDart(world, pos.x(), pos.y(), pos.z());
-        dart.setThrownItemStack(itemstack);
+        ItemStack stack = itemstack.copy();
+        stack.setCount(1);
+        dart.setThrownItemStack(stack);
         return dart;
     }
 
