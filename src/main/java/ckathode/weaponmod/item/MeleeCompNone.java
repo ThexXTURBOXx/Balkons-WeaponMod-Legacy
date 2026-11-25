@@ -16,6 +16,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class MeleeCompNone extends MeleeComponent {
+
+    public MeleeCompNone() {
+        this(null);
+    }
+
     public MeleeCompNone(IItemTier itemTier) {
         super(MeleeSpecs.NONE, itemTier);
     }
@@ -82,4 +87,5 @@ public class MeleeCompNone extends MeleeComponent {
                                                     PlayerEntity entityplayer, Hand hand) {
         return new ActionResult<>(ActionResultType.PASS, itemstack);
     }
+
 }
