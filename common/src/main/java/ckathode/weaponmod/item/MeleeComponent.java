@@ -5,7 +5,6 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
 import java.util.List;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -32,13 +31,13 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,7 +61,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     protected void onSetItem() {
     }
 
-    @NotNull
+    @Nullable
     @SuppressWarnings("deprecation")
     public Tool getToolComponent() {
         HolderGetter<Block> holderGetter =
@@ -72,7 +71,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
                         meleeSpecs.blockDamage * 10),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
-                1.0F, 2, false);
+                1.0F, meleeSpecs.dmgFromBlock, false);
+    }
+
+    @Nullable
+    public Weapon getWeaponComponent() {
+        return new Weapon(meleeSpecs.dmgFromEntity);
     }
 
     @Nullable
@@ -115,7 +119,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
     @Override
     public Properties setProperties(Properties properties) {
         properties = properties
-                .component(DataComponents.TOOL, getToolComponent())
                 .durability(weaponMaterial == null
                         ? meleeSpecs.durabilityBase
                         : (int) (meleeSpecs.durabilityBase
@@ -124,6 +127,14 @@ public class MeleeComponent extends AbstractWeaponComponent {
         TagKey<Item> repairTag = getRepairTag();
         if (repairTag != null)
             properties = properties.repairable(repairTag);
+
+        Tool tool = getToolComponent();
+        if (tool != null)
+            properties = properties.component(DataComponents.TOOL, tool);
+
+        Weapon weapon = getWeaponComponent();
+        if (weapon != null)
+            properties = properties.component(DataComponents.WEAPON, weapon);
 
         return properties;
     }
@@ -142,15 +153,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Override
-    public boolean mineBlock(ItemStack itemstack, Level world, BlockState block,
-                             BlockPos pos, LivingEntity entityliving) {
-        if (block.getDestroySpeed(world, pos) != 0.0f) {
-            itemstack.hurtAndBreak(meleeSpecs.dmgFromBlock, entityliving, EquipmentSlot.MAINHAND);
-        }
-        return true;
-    }
-
-    @Override
     public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                           @NotNull LivingEntity attacker) {
         if (entityliving.invulnerableTime == 20) { // == invulnerableDuration
@@ -159,7 +161,6 @@ public class MeleeComponent extends AbstractWeaponComponent {
             float ad = getAttackDelay(itemstack, entityliving, attacker);
             entityliving.invulnerableTime += translateToAttackSpeed(ad);
         }
-        itemstack.hurtAndBreak(meleeSpecs.dmgFromEntity, attacker, EquipmentSlot.MAINHAND);
     }
 
     @Override

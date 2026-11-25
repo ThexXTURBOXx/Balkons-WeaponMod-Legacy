@@ -1,6 +1,5 @@
 package ckathode.weaponmod.item;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,9 +48,6 @@ public abstract class AbstractWeaponComponent {
     public abstract float getDamage();
 
     public abstract float getEntityDamage();
-
-    public abstract boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos,
-                                      LivingEntity entity);
 
     public abstract void hurtEnemy(@NotNull ItemStack stack, @NotNull LivingEntity victim,
                                    @NotNull LivingEntity attacker);

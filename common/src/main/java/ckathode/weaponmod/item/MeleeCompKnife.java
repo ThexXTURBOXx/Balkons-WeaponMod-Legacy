@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +57,11 @@ public class MeleeCompKnife extends MeleeComponent {
     public MeleeCompKnife(ToolMaterial itemTier, boolean bayonet) {
         super(MeleeSpecs.KNIFE, itemTier);
         this.bayonet = bayonet;
+    }
+
+    @Override
+    public Weapon getWeaponComponent() {
+        return bayonet ? new Weapon(0) : super.getWeaponComponent();
     }
 
     @Override
