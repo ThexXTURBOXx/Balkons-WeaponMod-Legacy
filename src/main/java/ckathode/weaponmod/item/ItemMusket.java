@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -64,7 +63,7 @@ public class ItemMusket extends ItemShooter {
                 entityliving.hurtResistantTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);
             }
             if (attacker instanceof EntityPlayer && !((EntityPlayer) attacker).capabilities.isCreativeMode) {
-                bayonetDamage(itemstack, attacker, 1);
+                bayonetDamage(itemstack, attacker, meleeComponent.meleeSpecs.dmgFromEntity);
             }
         }
         return true;
@@ -73,13 +72,9 @@ public class ItemMusket extends ItemShooter {
     @Override
     public boolean onBlockDestroyed(ItemStack itemstack, World world, Block block,
                                     int x, int y, int z, EntityLivingBase entityliving) {
-        if (hasBayonet()) {
-            Material material = block.getMaterial();
-            boolean flag =
-                    material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd;
-            if (entityliving instanceof EntityPlayer && !((EntityPlayer) entityliving).capabilities.isCreativeMode && flag) {
-                bayonetDamage(itemstack, entityliving, 2);
-            }
+        if (hasBayonet() && entityliving instanceof EntityPlayer &&
+            !((EntityPlayer) entityliving).capabilities.isCreativeMode) {
+            bayonetDamage(itemstack, entityliving, meleeComponent.meleeSpecs.dmgFromBlock);
         }
         return true;
     }
