@@ -1,7 +1,6 @@
 package ckathode.weaponmod.item;
 
-import java.util.Collections;
-import net.minecraft.core.BlockPos;
+import java.util.List;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -12,8 +11,8 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompNone extends MeleeComponent {
@@ -36,16 +35,14 @@ public class MeleeCompNone extends MeleeComponent {
         return 1.0f;
     }
 
-    @NotNull
     @Override
     public Tool getToolComponent() {
-        return new Tool(Collections.emptyList(), 1, 1, false);
+        return new Tool(List.of(), 1.0F, meleeSpecs.dmgFromBlock, false);
     }
 
     @Override
-    public boolean mineBlock(ItemStack itemstack, Level world, BlockState block,
-                             BlockPos pos, LivingEntity entityliving) {
-        return true;
+    public Weapon getWeaponComponent() {
+        return null;
     }
 
     @Override
