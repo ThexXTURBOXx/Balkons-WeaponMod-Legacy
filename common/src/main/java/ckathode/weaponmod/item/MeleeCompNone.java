@@ -18,6 +18,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class MeleeCompNone extends MeleeComponent {
 
+    public MeleeCompNone() {
+        this(null);
+    }
+
     public MeleeCompNone(ToolMaterial itemTier) {
         super(MeleeSpecs.NONE, itemTier);
     }
