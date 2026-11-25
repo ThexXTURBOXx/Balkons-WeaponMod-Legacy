@@ -7,16 +7,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.Properties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractWeaponComponent {
+
     public Item item;
     IItemWeapon weapon;
 
@@ -34,7 +38,23 @@ public abstract class AbstractWeaponComponent {
 
     protected abstract void onSetItem();
 
+    public boolean isRepairableInCraft(ItemStack stack) {
+        return true;
+    }
+
+    public boolean isRepairableInAnvil(ItemStack toRepair, ItemStack repairMaterial) {
+        IItemTier weaponMaterial = getWeaponMaterial();
+        if (weaponMaterial == null) return false;
+        Ingredient mat = weaponMaterial.getRepairMaterial();
+        return mat != null && mat.test(repairMaterial);
+    }
+
     public abstract Properties setProperties(Properties properties);
+
+    @Nullable
+    public IItemTier getWeaponMaterial() {
+        return null;
+    }
 
     public abstract float getEntityDamageMaterialPart();
 
@@ -75,4 +95,5 @@ public abstract class AbstractWeaponComponent {
     public abstract void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int i);
 
     public abstract void inventoryTick(ItemStack stack, World world, Entity entity, int i, boolean flag);
+
 }

@@ -14,8 +14,21 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class MeleeCompKnife extends MeleeComponent {
+
+    private final boolean bayonet;
+
     public MeleeCompKnife(IItemTier itemTier) {
+        this(itemTier, false);
+    }
+
+    public MeleeCompKnife(IItemTier itemTier, boolean bayonet) {
         super(MeleeSpecs.KNIFE, itemTier);
+        this.bayonet = bayonet;
+    }
+
+    @Override
+    public boolean isRepairableInAnvil(ItemStack toRepair, ItemStack repairMaterial) {
+        return !bayonet && super.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
@@ -44,4 +57,5 @@ public class MeleeCompKnife extends MeleeComponent {
         return BalkonsWeaponMod.instance.modConfig.canThrowKnife.get()
                 ? UseAction.NONE : super.getUseAction(itemstack);
     }
+
 }
