@@ -6,6 +6,7 @@ import ckathode.weaponmod.PlayerWeaponData;
 import ckathode.weaponmod.WMItemBuilder;
 import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WarhammerExplosion;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -58,8 +59,8 @@ public class MeleeCompWarhammer extends MeleeComponent {
     }
 
     @Override
-    public @NotNull Tool getToolComponent() {
-        Tool orig = super.getToolComponent();
+    public @NotNull Tool getToolComponent(HolderLookup.Provider provider) {
+        Tool orig = super.getToolComponent(provider);
         return new Tool(orig.rules(), orig.defaultMiningSpeed() * (weaponMaterial.attackDamageBonus() + 2.0f),
                 meleeSpecs.dmgFromBlock, false);
     }

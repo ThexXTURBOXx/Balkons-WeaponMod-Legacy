@@ -7,8 +7,7 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WMUtil;
 import ckathode.weaponmod.WeaponModAttributes;
 import java.util.List;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -20,7 +19,6 @@ import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.Weapon;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,12 +72,10 @@ public class MeleeCompBattleaxe extends MeleeComponent {
 
     @NotNull
     @Override
-    public Tool getToolComponent() {
-        HolderGetter<Block> holderGetter =
-                BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+    public Tool getToolComponent(HolderLookup.Provider provider) {
         return new Tool(
-                List.of(Tool.Rule.deniesDrops(holderGetter.getOrThrow(weaponMaterial.incorrectBlocksForDrops())),
-                        Tool.Rule.minesAndDrops(holderGetter.getOrThrow(BlockTags.MINEABLE_WITH_AXE),
+                List.of(Tool.Rule.deniesDrops(provider.getOrThrow(weaponMaterial.incorrectBlocksForDrops())),
+                        Tool.Rule.minesAndDrops(provider.getOrThrow(BlockTags.MINEABLE_WITH_AXE),
                                 weaponMaterial.speed())),
                 0.75f, meleeSpecs.dmgFromBlock, false
         );
