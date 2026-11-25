@@ -2,7 +2,6 @@ package ckathode.weaponmod.item;
 
 import ckathode.weaponmod.BalkonsWeaponMod;
 import ckathode.weaponmod.WMItemBuilder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +17,6 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,21 +65,9 @@ public class ItemMelee extends Item implements IItemWeapon {
     }
 
     @Override
-    public void postHurtEnemy(ItemStack itemStack, LivingEntity livingEntity, LivingEntity livingEntity2) {
-        itemStack.hurtAndBreak(1, livingEntity2, EquipmentSlot.MAINHAND);
-    }
-
-    @Override
     public void hurtEnemy(@NotNull ItemStack itemstack, @NotNull LivingEntity entityliving,
                           @NotNull LivingEntity attacker) {
         meleeComponent.hurtEnemy(itemstack, entityliving, attacker);
-    }
-
-    @Override
-    public boolean mineBlock(@NotNull ItemStack itemstack, @NotNull Level world,
-                             @NotNull BlockState block, @NotNull BlockPos pos,
-                             @NotNull LivingEntity entityliving) {
-        return meleeComponent.mineBlock(itemstack, world, block, pos, entityliving);
     }
 
     @NotNull
