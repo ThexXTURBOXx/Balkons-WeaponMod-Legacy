@@ -173,7 +173,7 @@ public class MeleeComponent extends AbstractWeaponComponent {
     private int translateToAttackSpeed(float ad) {
         if (ad <= 0.0f) return 0;
         int delta = Math.round(10f * (ad / 2.5f - 1.0f));
-        return (int) Math.max(-9f, Math.min(10f, delta));
+        return (int) Math.clamp(delta, -9f, 10f);
     }
 
     @Override
