@@ -8,7 +8,6 @@ import ckathode.weaponmod.item.RangedComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
@@ -50,13 +49,13 @@ public class GuiOverlayReloaded {
                     f = 1.0f;
                     offset = RangedComponent.isReadyToFire(is) ? 48 : 24;
                 } else {
-                    f = Mth.clamp(p.getTicksUsingItem() / (float) rc.getReloadDuration(is), 0, 1);
+                    f = Math.clamp(p.getTicksUsingItem() / (float) rc.getReloadDuration(is), 0, 1);
                 }
                 set = true;
             }
         } else if (mec != null) {
             if (mec.shouldRenderCooldown()) {
-                f = Mth.clamp(mec.getCooldown(), 0, 1);
+                f = Math.clamp(mec.getCooldown(), 0, 1);
                 set = true;
             }
         }
