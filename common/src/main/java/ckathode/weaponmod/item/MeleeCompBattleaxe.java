@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -80,8 +81,14 @@ public class MeleeCompBattleaxe extends MeleeComponent {
                 List.of(Tool.Rule.deniesDrops(holderGetter.getOrThrow(weaponMaterial.incorrectBlocksForDrops())),
                         Tool.Rule.minesAndDrops(holderGetter.getOrThrow(BlockTags.MINEABLE_WITH_AXE),
                                 weaponMaterial.speed())),
-                0.75f, 1, false
+                0.75f, meleeSpecs.dmgFromBlock, false
         );
+    }
+
+    @NotNull
+    @Override
+    public Weapon getWeaponComponent() {
+        return new Weapon(meleeSpecs.dmgFromEntity, Weapon.AXE_DISABLES_BLOCKING_FOR_SECONDS);
     }
 
     @Override
