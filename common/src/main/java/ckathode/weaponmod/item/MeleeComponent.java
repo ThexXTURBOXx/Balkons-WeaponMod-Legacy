@@ -26,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeComponent extends AbstractWeaponComponent {
 
@@ -47,6 +48,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 ? meleeSpecs.durabilityBase
                 : (int) (meleeSpecs.durabilityBase
                          + weaponMaterial.getUses() * meleeSpecs.durabilityMult));
+    }
+
+    @Nullable
+    @Override
+    public Tier getWeaponMaterial() {
+        return weaponMaterial;
     }
 
     @Override
