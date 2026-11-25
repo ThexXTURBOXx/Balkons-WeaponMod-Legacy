@@ -6,7 +6,6 @@ import ckathode.weaponmod.ReloadHelper;
 import java.util.List;
 import javax.annotation.Nullable;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
@@ -74,7 +73,7 @@ public class ItemMusket extends ItemShooter {
                 entityliving.hurtResistantTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);
             }
             if (attacker instanceof PlayerEntity && !((PlayerEntity) attacker).isCreative()) {
-                bayonetDamage(itemstack, attacker, 1);
+                bayonetDamage(itemstack, attacker, meleeComponent.meleeSpecs.dmgFromEntity);
             }
         }
         return true;
@@ -84,13 +83,9 @@ public class ItemMusket extends ItemShooter {
     public boolean onBlockDestroyed(@NotNull ItemStack itemstack, @NotNull World world,
                                     @NotNull BlockState block, @NotNull BlockPos pos,
                                     @NotNull LivingEntity entityliving) {
-        if (hasBayonet()) {
-            Material material = block.getMaterial();
-            boolean flag =
-                    material != Material.PLANTS && material != Material.TALL_PLANTS && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD;
-            if (entityliving instanceof PlayerEntity && !((PlayerEntity) entityliving).isCreative() && flag) {
-                bayonetDamage(itemstack, entityliving, 2);
-            }
+        if (hasBayonet() && entityliving instanceof PlayerEntity &&
+            !((PlayerEntity) entityliving).isCreative()) {
+            bayonetDamage(itemstack, entityliving, meleeComponent.meleeSpecs.dmgFromBlock);
         }
         return true;
     }
