@@ -50,7 +50,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlowgun(@NotNull ResourceLocation id) {
-        return createItemShooter(new RangedCompBlowgun(), new MeleeCompNone(null), id);
+        return createItemShooter(new RangedCompBlowgun(), new MeleeCompNone(), id);
     }
 
     public static ItemBlowgunDart createStandardBlowgunDart(@NotNull DartType dartType, @NotNull ResourceLocation id) {
@@ -58,7 +58,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlunderbuss(@NotNull ResourceLocation id) {
-        return createItemShooter(new RangedCompBlunderbuss(), new MeleeCompNone(null), id);
+        return createItemShooter(new RangedCompBlunderbuss(), new MeleeCompNone(), id);
     }
 
     public static ItemMelee createStandardBoomerang(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
@@ -70,7 +70,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardCrossbow(@NotNull ResourceLocation id) {
-        return createItemShooter(new RangedCompCrossbow(), new MeleeCompNone(null), id);
+        return createItemShooter(new RangedCompCrossbow(), new MeleeCompNone(), id);
     }
 
     public static ItemDummy createStandardDummy(@NotNull ResourceLocation id) {
@@ -90,7 +90,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardFlintlock(@NotNull ResourceLocation id) {
-        return createItemShooter(new RangedCompFlintlock(), new MeleeCompNone(null), id);
+        return createItemShooter(new RangedCompFlintlock(), new MeleeCompNone(), id);
     }
 
     public static ItemMelee createStandardHalberd(@NotNull ToolMaterial tier, @NotNull ResourceLocation id) {
@@ -110,7 +110,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardMortar(@NotNull ResourceLocation id) {
-        return createItemShooter(new RangedCompMortar(), new MeleeCompNone(null), id);
+        return createItemShooter(new RangedCompMortar(), new MeleeCompNone(), id);
     }
 
     public static ItemMusket createStandardMusket(@NotNull ResourceLocation id) {
@@ -177,7 +177,7 @@ public class WMItemBuilder {
     }
 
     public static ItemMusket createItemMusket(@NotNull ResourceLocation id) {
-        return createItemMusket(new MeleeCompNone(null), null, id);
+        return createItemMusket(new MeleeCompNone(), null, id);
     }
 
     @ExpectPlatform
