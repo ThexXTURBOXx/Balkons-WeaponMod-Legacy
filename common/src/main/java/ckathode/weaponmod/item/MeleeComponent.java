@@ -63,12 +63,11 @@ public class MeleeComponent extends AbstractWeaponComponent {
     }
 
     @Nullable
-    @SuppressWarnings("deprecation")
     public Tool getToolComponent() {
         HolderGetter<Block> holderGetter =
                 BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         return new Tool(List.of(
-                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()),
+                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.arch$holder()),
                         meleeSpecs.blockDamage * 10),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), meleeSpecs.blockDamage)),
