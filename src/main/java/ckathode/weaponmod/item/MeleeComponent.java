@@ -18,8 +18,10 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeComponent extends AbstractWeaponComponent {
+
     public final MeleeSpecs meleeSpecs;
     public final Item.ToolMaterial weaponMaterial;
 
@@ -38,6 +40,12 @@ public class MeleeComponent extends AbstractWeaponComponent {
                 ? meleeSpecs.durabilityBase
                 : (int) (meleeSpecs.durabilityBase
                          + weaponMaterial.getMaxUses() * meleeSpecs.durabilityMult));
+    }
+
+    @Nullable
+    @Override
+    public Item.ToolMaterial getWeaponMaterial() {
+        return weaponMaterial;
     }
 
     @Override
@@ -240,4 +248,5 @@ public class MeleeComponent extends AbstractWeaponComponent {
             return (material == Item.ToolMaterial.GOLD) ? (knockback * 1.5f) : knockback;
         }
     }
+
 }

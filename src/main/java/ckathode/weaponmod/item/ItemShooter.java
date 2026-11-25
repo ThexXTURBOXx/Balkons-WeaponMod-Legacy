@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 
 @Optional.Interface(modid = "angelica", iface = "com.gtnewhorizons.angelica.api.IDynamicLightProducer")
 public class ItemShooter extends ItemBow implements IItemWeapon, IDynamicLightProducer {
+
     protected static final int MAX_DELAY = 72000;
     public final RangedComponent rangedComponent;
     public final MeleeComponent meleeComponent;
@@ -49,6 +50,18 @@ public class ItemShooter extends ItemBow implements IItemWeapon, IDynamicLightPr
         loadedIcon = null;
         reloadIconExists = null;
         loadedIconExists = null;
+    }
+
+    @Override
+    public boolean isRepairable() {
+        return super.isRepairable() &&
+               (meleeComponent.isRepairableInCraft() || rangedComponent.isRepairableInCraft());
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial)
+               || rangedComponent.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
@@ -183,4 +196,5 @@ public class ItemShooter extends ItemBow implements IItemWeapon, IDynamicLightPr
         return Math.max(meleeComponent.getDynamicLightsValue(itemStack),
                 rangedComponent.getDynamicLightsValue(itemStack));
     }
+
 }

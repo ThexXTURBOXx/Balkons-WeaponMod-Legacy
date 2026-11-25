@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 
 @Optional.Interface(modid = "angelica", iface = "com.gtnewhorizons.angelica.api.IDynamicLightProducer")
 public class ItemMelee extends ItemSword implements IItemWeapon, IDynamicLightProducer {
+
     public final MeleeComponent meleeComponent;
     public final String rawId;
     private IIcon readyIcon, halberdStateIcon;
@@ -48,6 +49,16 @@ public class ItemMelee extends ItemSword implements IItemWeapon, IDynamicLightPr
         halberdStateIcon = null;
         readyIconExists = null;
         halberdStateIconExists = null;
+    }
+
+    @Override
+    public boolean isRepairable() {
+        return super.isRepairable() && meleeComponent.isRepairableInCraft();
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repairMaterial) {
+        return meleeComponent.isRepairableInAnvil(toRepair, repairMaterial);
     }
 
     @Override
@@ -179,4 +190,5 @@ public class ItemMelee extends ItemSword implements IItemWeapon, IDynamicLightPr
     public int getLuminance(ItemStack itemStack) {
         return meleeComponent.getDynamicLightsValue(itemStack);
     }
+
 }

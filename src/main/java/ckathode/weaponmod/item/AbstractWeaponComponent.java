@@ -10,9 +10,11 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractWeaponComponent {
+
     public Item item;
     IItemWeapon weapon;
 
@@ -30,7 +32,23 @@ public abstract class AbstractWeaponComponent {
 
     protected abstract void onSetItem();
 
+    public boolean isRepairableInCraft() {
+        return true;
+    }
+
+    public boolean isRepairableInAnvil(ItemStack toRepair, ItemStack repairMaterial) {
+        Item.ToolMaterial weaponMaterial = getWeaponMaterial();
+        if (weaponMaterial == null) return false;
+        ItemStack mat = weaponMaterial.getRepairItemStack();
+        return mat != null && OreDictionary.itemMatches(mat, repairMaterial, false);
+    }
+
     public abstract void setThisItemProperties();
+
+    @Nullable
+    public Item.ToolMaterial getWeaponMaterial() {
+        return null;
+    }
 
     public abstract float getEntityDamageMaterialPart();
 
@@ -72,4 +90,5 @@ public abstract class AbstractWeaponComponent {
     public int getDynamicLightsValue(@Nullable ItemStack stack) {
         return 0;
     }
+
 }
