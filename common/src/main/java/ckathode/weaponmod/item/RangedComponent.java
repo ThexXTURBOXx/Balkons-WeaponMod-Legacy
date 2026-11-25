@@ -8,7 +8,6 @@ import ckathode.weaponmod.WMRegistries;
 import ckathode.weaponmod.WeaponModAttributes;
 import ckathode.weaponmod.WeaponModConfig;
 import ckathode.weaponmod.entity.projectile.EntityProjectile;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -34,7 +33,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,12 +83,6 @@ public abstract class RangedComponent extends AbstractWeaponComponent {
     @Override
     public float getEntityDamage() {
         return 0.0f;
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack itemstack, Level world, BlockState block,
-                             BlockPos pos, LivingEntity entityliving) {
-        return false;
     }
 
     @Override
