@@ -44,7 +44,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlowgun(String id) {
-        return createItemShooter(id, new RangedCompBlowgun(), new MeleeCompNone(null));
+        return createItemShooter(id, new RangedCompBlowgun(), new MeleeCompNone());
     }
 
     public static ItemBlowgunDart createStandardBlowgunDart(String id, @NotNull DartType dartType) {
@@ -52,7 +52,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlunderbuss(String id) {
-        return createItemShooter(id, new RangedCompBlunderbuss(), new MeleeCompNone(null));
+        return createItemShooter(id, new RangedCompBlunderbuss(), new MeleeCompNone());
     }
 
     public static ItemMelee createStandardBoomerang(String id, @NotNull IItemTier tier) {
@@ -64,7 +64,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardCrossbow(String id) {
-        return createItemShooter(id, new RangedCompCrossbow(), new MeleeCompNone(null));
+        return createItemShooter(id, new RangedCompCrossbow(), new MeleeCompNone());
     }
 
     public static ItemDummy createStandardDummy(String id) {
@@ -84,7 +84,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardFlintlock(String id) {
-        return createItemShooter(id, new RangedCompFlintlock(), new MeleeCompNone(null));
+        return createItemShooter(id, new RangedCompFlintlock(), new MeleeCompNone());
     }
 
     public static ItemMelee createStandardHalberd(String id, @NotNull IItemTier tier) {
@@ -104,7 +104,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardMortar(String id) {
-        return createItemShooter(id, new RangedCompMortar(), new MeleeCompNone(null));
+        return createItemShooter(id, new RangedCompMortar(), new MeleeCompNone());
     }
 
     public static ItemMusket createStandardMusket(String id) {
@@ -135,7 +135,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlowgun(String modId, String id) {
-        return createItemShooter(modId, id, new RangedCompBlowgun(), new MeleeCompNone(null));
+        return createItemShooter(modId, id, new RangedCompBlowgun(), new MeleeCompNone());
     }
 
     public static ItemBlowgunDart createStandardBlowgunDart(String modId, String id, @NotNull DartType dartType) {
@@ -143,7 +143,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardBlunderbuss(String modId, String id) {
-        return createItemShooter(modId, id, new RangedCompBlunderbuss(), new MeleeCompNone(null));
+        return createItemShooter(modId, id, new RangedCompBlunderbuss(), new MeleeCompNone());
     }
 
     public static ItemMelee createStandardBoomerang(String modId, String id, @NotNull IItemTier tier) {
@@ -155,7 +155,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardCrossbow(String modId, String id) {
-        return createItemShooter(modId, id, new RangedCompCrossbow(), new MeleeCompNone(null));
+        return createItemShooter(modId, id, new RangedCompCrossbow(), new MeleeCompNone());
     }
 
     public static ItemDummy createStandardDummy(String modId, String id) {
@@ -175,7 +175,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardFlintlock(String modId, String id) {
-        return createItemShooter(modId, id, new RangedCompFlintlock(), new MeleeCompNone(null));
+        return createItemShooter(modId, id, new RangedCompFlintlock(), new MeleeCompNone());
     }
 
     public static ItemMelee createStandardHalberd(String modId, String id, @NotNull IItemTier tier) {
@@ -195,7 +195,7 @@ public class WMItemBuilder {
     }
 
     public static ItemShooter createStandardMortar(String modId, String id) {
-        return createItemShooter(modId, id, new RangedCompMortar(), new MeleeCompNone(null));
+        return createItemShooter(modId, id, new RangedCompMortar(), new MeleeCompNone());
     }
 
     public static ItemMusket createStandardMusket(String modId, String id) {
@@ -254,7 +254,7 @@ public class WMItemBuilder {
     }
 
     public static ItemMusket createItemMusket(String id) {
-        return createItemMusket(id, new MeleeCompNone(null), null);
+        return createItemMusket(id, new MeleeCompNone(), null);
     }
 
     public static ItemMusket createItemMusket(String id, MeleeComponent meleeComponent, @Nullable Item bayonetItem) {
@@ -319,7 +319,7 @@ public class WMItemBuilder {
     }
 
     public static ItemMusket createItemMusket(String modId, String id) {
-        return createItemMusket(modId, id, new MeleeCompNone(null), null);
+        return createItemMusket(modId, id, new MeleeCompNone(), null);
     }
 
     public static ItemMusket createItemMusket(String modId, String id, MeleeComponent meleeComponent,
