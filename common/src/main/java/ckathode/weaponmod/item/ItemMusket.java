@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,7 +110,7 @@ public class ItemMusket extends ItemShooter {
                 entityliving.invulnerableTime -= (int) (2.0f / meleeComponent.meleeSpecs.attackDelay);
             }
             if (attacker instanceof Player player && !player.isCreative()) {
-                bayonetDamage(itemstack, attacker, 1);
+                bayonetDamage(itemstack, attacker, meleeComponent.meleeSpecs.dmgFromEntity);
             }
         }
     }
@@ -121,11 +119,8 @@ public class ItemMusket extends ItemShooter {
     public boolean mineBlock(@NotNull ItemStack itemstack, @NotNull Level world,
                              @NotNull BlockState block, @NotNull BlockPos pos,
                              @NotNull LivingEntity entityliving) {
-        if (hasBayonet()) {
-            boolean flag = block.is(BlockTags.SWORD_EFFICIENT) || block.is(Blocks.COBWEB);
-            if (entityliving instanceof Player player && !player.isCreative() && !flag) {
-                bayonetDamage(itemstack, player, 2);
-            }
+        if (hasBayonet() && entityliving instanceof Player player && !player.isCreative()) {
+            bayonetDamage(itemstack, entityliving, meleeComponent.meleeSpecs.dmgFromBlock);
         }
         return true;
     }
