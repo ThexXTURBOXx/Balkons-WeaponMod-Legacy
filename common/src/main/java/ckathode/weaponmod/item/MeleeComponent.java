@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MeleeComponent extends AbstractWeaponComponent {
 
@@ -42,9 +43,10 @@ public class MeleeComponent extends AbstractWeaponComponent {
         weaponMaterial = itemTier;
     }
 
-    @NotNull
+    @Nullable
+    @Override
     public Tier getWeaponMaterial() {
-        return weaponMaterial == null ? Tiers.WOOD : weaponMaterial;
+        return weaponMaterial;
     }
 
     @Override

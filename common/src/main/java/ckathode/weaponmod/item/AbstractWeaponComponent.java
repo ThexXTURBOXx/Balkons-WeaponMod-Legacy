@@ -9,10 +9,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractWeaponComponent {
 
@@ -33,9 +35,20 @@ public abstract class AbstractWeaponComponent {
 
     protected abstract void onSetItem();
 
+    public boolean isRepairableInAnvil(ItemStack toRepair, ItemStack repairMaterial) {
+        Tier weaponMaterial = getWeaponMaterial();
+        if (weaponMaterial == null) return false;
+        return weaponMaterial.getRepairIngredient().test(repairMaterial);
+    }
+
     public abstract ItemAttributeModifiers.Builder setAttributes(ItemAttributeModifiers.Builder attributeBuilder);
 
     public abstract Properties setProperties(Properties properties);
+
+    @Nullable
+    public Tier getWeaponMaterial() {
+        return null;
+    }
 
     public abstract float getDamage();
 
